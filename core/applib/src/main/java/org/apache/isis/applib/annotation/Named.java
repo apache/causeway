@@ -33,5 +33,10 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Named {
+
+    /**
+     * @deprecated - use instead {@link DomainServiceLayout#named()}, {@link DomainObjectLayout#named()}, {@link PropertyLayout#named()}, {@link CollectionLayout#named()}, {@link ActionLayout#named()} and {@link ParameterLayout#named()}.
+     */
+    @Deprecated
     String value();
 }

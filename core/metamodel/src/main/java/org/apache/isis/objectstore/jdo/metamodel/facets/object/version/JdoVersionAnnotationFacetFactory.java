@@ -73,8 +73,10 @@ public class JdoVersionAnnotationFacetFactory extends FacetFactoryAbstract imple
                 ObjectSpecification superclassSpec = objectSpec.superclass();
                 while(superclassSpec != null) {
                     if(declaresVersionAnnotation(superclassSpec)) {
-                        validationFailures.add("Cannot have @Version annotated on subclass and any of its supertypes; "
-                                + "subclass: %s, superclass: %s", objectSpec.getFullIdentifier(), superclassSpec.getFullIdentifier() );
+                        validationFailures.add(
+                                "%s: cannot have @Version annotated on this subclass and any of its supertypes; superclass: %s",
+                                objectSpec.getFullIdentifier(),
+                                superclassSpec.getFullIdentifier() );
                         return;
                     }
                     superclassSpec = superclassSpec.superclass();

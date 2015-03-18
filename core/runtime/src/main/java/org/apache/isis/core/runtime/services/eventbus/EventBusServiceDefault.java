@@ -22,8 +22,8 @@ import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent;
-import org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.facets.Annotations;
@@ -54,6 +54,7 @@ public class EventBusServiceDefault extends EventBusService {
      *     registrations are in effect ignored.
      * </p>
      */
+    @Programmatic
     @Override
     public void register(final Object domainService) {
         if(domainService instanceof RequestScopedService) {
@@ -71,6 +72,8 @@ public class EventBusServiceDefault extends EventBusService {
         super.register(domainService);
     }
 
+    // //////////////////////////////////////
+
     @Override
     protected EventBus newEventBus() {
         return new EventBus(newEventBusSubscriberExceptionHandler());
@@ -81,14 +84,14 @@ public class EventBusServiceDefault extends EventBusService {
             @Override
             public void handleException(Throwable exception, SubscriberExceptionContext context) {
                 Object event = context.getEvent();
-                if(!(event instanceof AbstractInteractionEvent)) {
+                if(!(event instanceof AbstractDomainEvent)) {
                     if(LOG.isDebugEnabled()) {
-                        LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractInteractionEvent", exception.getMessage(), exception.getClass().getName());
+                        LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent", exception.getMessage(), exception.getClass().getName());
                     }
                     return;
                 } 
-                final AbstractInteractionEvent<?> interactionEvent = (AbstractInteractionEvent<?>) event;
-                final Phase phase = interactionEvent.getPhase();
+                final AbstractDomainEvent<?> interactionEvent = (AbstractDomainEvent<?>) event;
+                final AbstractDomainEvent.Phase phase = interactionEvent.getEventPhase();
                 switch (phase) {
                 case HIDE:
                     LOG.warn("Exception thrown during HIDE phase, to be safe will veto (hide) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
@@ -107,7 +110,7 @@ public class EventBusServiceDefault extends EventBusService {
                     abortTransaction(exception);
                     break;
                 case EXECUTED:
-                    LOG.warn("Exception '%s' (%s) thrown during EXECUTED phase, to be safe will abort the transaction");
+                    LOG.warn("Exception thrown during EXECUTED phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
                     abortTransaction(exception);
                     break;
                 }
@@ -123,9 +126,6 @@ public class EventBusServiceDefault extends EventBusService {
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
-
-    //endregion
-
 
 }
 

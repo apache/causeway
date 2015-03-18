@@ -29,7 +29,10 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to annotating the
  * action method using <tt>@Exploration</tt>.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface ExplorationFacet extends Facet, HidingInteractionAdvisor {
 
 }

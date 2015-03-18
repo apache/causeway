@@ -29,10 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetAnnotation;
-import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFallback;
-import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupsFacetAnnotation;
 
 public class MemberGroupLayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 

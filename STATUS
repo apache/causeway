@@ -21,6 +21,9 @@ Description
 
 TLP releases:
 
+  * isis-1.8.0                                     : 23 Feb 2014
+  * simpleapp-archetype-1.8.0                      : 23 Feb 2014
+
   * isis-1.7.0                                     : 18 Oct 2014
   * isis-viewer-wicket-1.7.0                       : 18 Oct 2014
   * todoapp-archetype-1.7.0                        : 18 Oct 2014
@@ -124,3 +127,4 @@ Team:
   PMC, Committer       dslaughter   David Slaughter (CLA on file)
   PMC, Committer       madytyoo     Maurizio Taverna (CLA on file)
   PMC, Committer       oscarbou     Oscar Bou (CLA on file)
+  PMC, Committer       mgrigorov    Martin Grigorov (CLA on file)

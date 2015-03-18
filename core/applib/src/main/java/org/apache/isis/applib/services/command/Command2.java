@@ -24,21 +24,22 @@ import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
  * An extension to {@link org.apache.isis.applib.services.command.Command} that makes the
  * relationship with {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} bi-directional.
  */
+@Deprecated
 public interface Command2 extends Command {
 
     /**
      * The current (most recently pushed) {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
      *
      * <p>
-     *     Note that the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent} itself is mutable,
-     *     as its {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent#getPhase() phase} changes from
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTING executing} to
-     *     {@link org.apache.isis.applib.services.eventbus.AbstractInteractionEvent.Phase#EXECUTED executed}.  The
-     *     event returned from this method will always be in one or other of these phases.
+     *     Deprecation note: this will throw an exception if the most recently pushed event was a
+     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
+     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
      * </p>
-     * @return
+     *
+     * @deprecated - use {@link Command3#peekActionDomainEvent()} instead.
      */
     @Programmatic
+    @Deprecated
     ActionInteractionEvent<?> peekActionInteractionEvent();
 
     /**
@@ -48,7 +49,10 @@ public interface Command2 extends Command {
      * Push a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
      * onto the stack of events held by the command.
      * </p>
+     *
+     * @deprecated - use {@link org.apache.isis.applib.services.command.Command3#pushActionDomainEvent(org.apache.isis.applib.services.eventbus.ActionDomainEvent)} instead.
      */
+    @Deprecated
     @Programmatic
     void pushActionInteractionEvent(ActionInteractionEvent<?> event);
 
@@ -56,17 +60,36 @@ public interface Command2 extends Command {
      * <b>NOT API</b>: intended to be called only by the framework.
      *
      * <p>
-     * Push a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
-     * onto the stack of events held by the command.
+     * Pops a new {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}
+     * from the stack of events held by the command.
      * </p>
+     *
+     * <p>
+     *     Deprecation note: this will throw an exception if the most recently pushed event was a
+     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
+     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     * </p>
+     *
+     * @deprecated - use {@link Command3#popActionDomainEvent()} instead.
      */
+    @Deprecated
     @Programmatic
     ActionInteractionEvent<?> popActionInteractionEvent();
 
     /**
      * Returns the {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}s in the order that they
      * were {@link #pushActionInteractionEvent(org.apache.isis.applib.services.eventbus.ActionInteractionEvent) pushed}.
+     *
+     * <p>
+     *     Deprecation note: this will throw an exception if any of the list are
+     *     {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent} but not a
+     *     {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent}.
+     * </p>
+     *
+     * @deprecated - use {@link Command3#flushActionDomainEvents()} instead.
      */
+    @Deprecated
     @Programmatic
     List<ActionInteractionEvent<?>> flushActionInteractionEvents();
+
 }

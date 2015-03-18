@@ -20,27 +20,50 @@
 package org.apache.isis.core.metamodel.facets.object.named.annotation;
 
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NamedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class NamedFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Named.class);
+
 
     public NamedFacetOnTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final Named annotation = Annotations.getAnnotation(processClassContaxt.getCls(), Named.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final Named annotation = Annotations.getAnnotation(processClassContext.getCls(), Named.class);
+        final NamedFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, null));
     }
 
     private NamedFacet create(final Named annotation, final FacetHolder holder) {
         return annotation != null ? new NamedFacetOnTypeAnnotation(annotation.value(), holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

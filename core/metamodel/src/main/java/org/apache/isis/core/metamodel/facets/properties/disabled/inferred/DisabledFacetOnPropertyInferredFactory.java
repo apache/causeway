@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 
 /**
@@ -51,7 +50,7 @@ public class DisabledFacetOnPropertyInferredFactory extends FacetFactoryAbstract
         }
 
         // else, infer that this is not modifiable
-        FacetUtil.addFacet(new DisabledFacetAlwaysEverywhere(property));
+        FacetUtil.addFacet(new DisabledFacetOnPropertyInferred(property));
     }
 
 }

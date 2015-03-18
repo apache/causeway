@@ -101,6 +101,21 @@ public final class MethodFinderUtils {
         return method;
     }
 
+    public static Method findMethod(
+            final Class<?> type,
+            final MethodScope methodScope,
+            final String name,
+            final Class<?>[] returnTypes,
+            final Class<?>[] paramTypes) {
+        for (Class<?> returnType : returnTypes) {
+            final Method method = findMethod(type, methodScope, name, returnType, paramTypes);
+            if(method != null) {
+                return method;
+            }
+        }
+        return null;
+    }
+
     protected static boolean doesNotMatchScope(final MethodScope methodScope, final Method method) {
         return methodScope.doesNotMatchScope(method);
     }

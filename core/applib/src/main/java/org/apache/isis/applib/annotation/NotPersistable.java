@@ -32,6 +32,11 @@ import org.apache.isis.applib.util.Enums;
 /**
  * Indicates that an instance cannot be persisted by a user, but only
  * programmatically.
+ *
+ * <p>
+ *     This annotation is only partly supported by the framework, and may be deprecated
+ *     in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })

@@ -18,22 +18,20 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.version;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import javax.jdo.annotations.Version;
-
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting.Visitor;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
 
@@ -172,7 +170,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         newValidatorVisitor.visit(mockChildType, validationFailures);
         
         assertThat(validationFailures.getNumberOfMessages(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), is("Cannot have @Version annotated on subclass and any of its supertypes; subclass: mockChildType, superclass: mockParentType"));
+        assertThat(validationFailures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockParentType"));
     }
 
 
@@ -224,7 +222,7 @@ public class JdoVersionAnnotationFacetFactoryTest_refineMetaModel {
         newValidatorVisitor.visit(mockChildType, validationFailures);
         
         assertThat(validationFailures.getNumberOfMessages(), is(1));
-        assertThat(validationFailures.getMessages().iterator().next(), is("Cannot have @Version annotated on subclass and any of its supertypes; subclass: mockChildType, superclass: mockGrandParentType"));
+        assertThat(validationFailures.getMessages().iterator().next(), is("mockChildType: cannot have @Version annotated on this subclass and any of its supertypes; superclass: mockGrandParentType"));
     }
 
 }

@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;

@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.mandatory.staticmethod;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetAbstract;
 
 /**
  * Derived by presence of an <tt>optionalXxx</tt> method.
@@ -28,7 +28,10 @@ import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetA
  * <p>
  * This implementation indicates that the {@link FacetHolder} is <i>not</i>
  * mandatory, as per {@link #isInvertedSemantics()}.
+ *
+ * @deprecated
  */
+@Deprecated
 public class MandatoryFacetOnPropertyStaticMethod extends MandatoryFacetAbstract {
 
     public MandatoryFacetOnPropertyStaticMethod(final FacetHolder holder) {

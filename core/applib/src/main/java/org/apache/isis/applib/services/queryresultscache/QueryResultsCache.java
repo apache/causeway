@@ -19,15 +19,12 @@ package org.apache.isis.applib.services.queryresultscache;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
-
 import javax.enterprise.context.RequestScoped;
-
 import com.google.common.collect.Maps;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -40,7 +37,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService
+@DomainService(nature = NatureOfService.DOMAIN)
 @RequestScoped
 public class QueryResultsCache {
 

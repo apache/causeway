@@ -20,23 +20,45 @@ package org.apache.isis.applib.services.bookmark;
 
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 /**
  * Domain service that contributes a property (named '<tt>Object</tt>') to
  * any class that implements {@link org.apache.isis.applib.services.bookmark.BookmarkHolder}.
  *
- * <p>
- * Alternatively, can use {@link org.apache.isis.applib.services.bookmark.BookmarkHolderActionContributions}
- * to contribute an action.
  *
  * <p>
- * The service must be explicitly registered, typically in <tt>isis.properties</tt>.
+ *     This service is automatically registered.  However, if not required then its contributions can be hidden using
+ *     a subscribed on its domain events.
+ * </p>
+ *
+ * @see org.apache.isis.applib.services.bookmark.BookmarkHolderActionContributions
  */
+@DomainService(
+        nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
+)
 public class BookmarkHolderAssociationContributions {
 
+    public static abstract class PropertyDomainEvent<T> extends IsisApplibModule.PropertyDomainEvent<BookmarkHolderAssociationContributions, T> {
+        public PropertyDomainEvent(final BookmarkHolderAssociationContributions source, final Identifier identifier) {
+            super(source, identifier);
+        }
+
+        public PropertyDomainEvent(final BookmarkHolderAssociationContributions source, final Identifier identifier, final T oldValue, final T newValue) {
+            super(source, identifier, oldValue, newValue);
+        }
+    }
+
+    // //////////////////////////////////////
 
     //region > init
     @Programmatic
@@ -52,12 +74,30 @@ public class BookmarkHolderAssociationContributions {
     }
     //endregion
 
-    @NotInServiceMenu
-    @NotContributed(NotContributed.As.ACTION)
+    // //////////////////////////////////////
+
+    public static class ObjectDomainEvent extends PropertyDomainEvent<Object> {
+        public ObjectDomainEvent(final BookmarkHolderAssociationContributions source, final Identifier identifier) {
+            super(source, identifier);
+        }
+
+        public ObjectDomainEvent(final BookmarkHolderAssociationContributions source, final Identifier identifier, final Object oldValue, final Object newValue) {
+            super(source, identifier, oldValue, newValue);
+        }
+    }
+
+    @Action(semantics = SemanticsOf.SAFE)
+    @ActionLayout(
+        contributed = Contributed.AS_ASSOCIATION
+    )
+    @Property(
+        domainEvent = ObjectDomainEvent.class
+    )
     public Object object(final BookmarkHolder bookmarkHolder) {
         return bookmarkService.lookup(bookmarkHolder);
     }
 
+    // //////////////////////////////////////
 
     @javax.inject.Inject
     private BookmarkService bookmarkService;

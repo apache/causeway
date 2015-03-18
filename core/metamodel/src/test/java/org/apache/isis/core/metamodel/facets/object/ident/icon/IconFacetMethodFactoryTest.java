@@ -28,6 +28,11 @@ import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
 
     private IconFacetMethodFactory facetFactory;
@@ -57,8 +62,8 @@ public class IconFacetMethodFactoryTest extends AbstractFacetFactoryTest {
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(IconFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof IconFacetMethod);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(IconFacetMethod.class)));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(iconNameMethod));
     }

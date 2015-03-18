@@ -20,9 +20,9 @@
 package org.apache.isis.core.runtime.services;
 
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import javax.annotation.PreDestroy;
@@ -65,15 +65,16 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
      *     with the first service found used.
      * </p>
      */
-    public final static String PACKAGE_PREFIX_STANDARD =
-                                         ",org.apache.isis.applib" +
-                                         ",org.apache.isis.core.wrapper" +
-                                         ",org.apache.isis.core.metamodel.services" +
-                                         ",org.apache.isis.core.runtime.services" +
-                                         ",org.apache.isis.objectstore.jdo.applib.service" +
-                                         ",org.apache.isis.viewer.restfulobjects.rendering.service" +
-                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.support" +
-                                         ",org.apache.isis.objectstore.jdo.datanucleus.service.eventbus";
+    public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(
+                                        "org.apache.isis.applib",
+                                        "org.apache.isis.core.wrapper" ,
+                                        "org.apache.isis.core.metamodel.services" ,
+                                        "org.apache.isis.core.runtime.services" ,
+                                        "org.apache.isis.objectstore.jdo.applib.service" ,
+                                        "org.apache.isis.viewer.restfulobjects.rendering.service" ,
+                                        "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
+                                        "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
+                                        "org.apache.isis.viewer.wicket.viewer.services");
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -96,12 +97,12 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
      *     Otherwise these are read from the {@link org.apache.isis.core.commons.config.IsisConfiguration}
      * </p>
      */
-    public void withPackagePrefixes(String... packagePrefixes) {
+    public void withPackagePrefixes(final String... packagePrefixes) {
         this.packagePrefixes = Joiner.on(",").join(packagePrefixes);
     }
 
     @Override
-    public void setIgnoreFailures(boolean ignoreFailures) {
+    public void setIgnoreFailures(final boolean ignoreFailures) {
         // no-op
     }
 
@@ -126,12 +127,12 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
             serviceInstantiator.setConfiguration(getConfiguration());
 
             if(packagePrefixes == null) {
-                String packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
+                this.packagePrefixes = getConfiguration().getString(PACKAGE_PREFIX_KEY);
                 if(Strings.isNullOrEmpty(packagePrefixes)) {
                     throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
                 }
-                this.packagePrefixes = packagePrefixes + PACKAGE_PREFIX_STANDARD;
             }
+            this.packagePrefixes = PACKAGE_PREFIX_STANDARD + "," + this.packagePrefixes;
 
         } finally {
             initialized = true;
@@ -151,7 +152,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     private static Function<String,String> trim() {
         return new Function<String,String>(){
             @Override
-            public String apply(String input) {
+            public String apply(final String input) {
                 return input.trim();
             }
         };
@@ -161,7 +162,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         return new Predicate<Class<?>>() {
 
             @Override
-            public boolean apply(Class<?> input) {
+            public boolean apply(final Class<?> input) {
                 return input == null;
             }
         };
@@ -171,7 +172,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         return new Predicate<Class<?>>() {
 
             @Override
-            public boolean apply(Class<?> input) {
+            public boolean apply(final Class<?> input) {
                 return Modifier.isAbstract(input.getModifiers());
             }
         };
@@ -183,7 +184,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
 
     @Override
-    public List<Object> getServices(DeploymentType deploymentType) {
+    public List<Object> getServices(final DeploymentType deploymentType) {
         initIfRequired();
 
         List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
@@ -202,8 +203,8 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     // //////////////////////////////////////
 
     public void appendServices(
-            DeploymentType deploymentType,
-            SortedMap<String, SortedSet<String>> positionedServices) {
+            final DeploymentType deploymentType,
+            final SortedMap<String, SortedSet<String>> positionedServices) {
         initIfRequired();
 
         final List<String> packagePrefixList = asList(packagePrefixes);
@@ -211,20 +212,21 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
         final Reflections reflections = new Reflections(packagePrefixList);
 
-        final Iterable<Class<?>> domainServiceClasses = Iterables.filter(
-                reflections.getTypesAnnotatedWith(DomainService.class), instantiatable());
+        final Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(DomainService.class);
+        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(typesAnnotatedWith, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
+            final String name = nameOf(cls);
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
     }
 
-    private static String orderOf(Class<?> cls) {
+    private static String orderOf(final Class<?> cls) {
         final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
         String order = domainServiceLayout != null ? domainServiceLayout.menuOrder(): null;
         if(order == null || order.equals("" + Integer.MAX_VALUE)) {
@@ -234,8 +236,17 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         return order;
     }
 
-    protected ArrayList<String> asList(String packagePrefixes1) {
-        return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes1), trim()));
+    private static String nameOf(final Class<?> cls) {
+        final DomainServiceLayout domainServiceLayout = cls.getAnnotation(DomainServiceLayout.class);
+        String name = domainServiceLayout != null ? domainServiceLayout.named(): null;
+        if(name == null) {
+            name = cls.getName();
+        }
+        return name;
+    }
+
+    protected List<String> asList(final String csv) {
+        return Lists.newArrayList(Iterables.transform(Splitter.on(",").split(csv), trim()));
     }
 
 

@@ -18,25 +18,48 @@
  */
 package org.apache.isis.applib.services.bookmark;
 
+import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.IsisApplibModule;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Contributed;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.annotation.SemanticsOf;
 
 /**
  * Domain service that contributes an action (named '<tt>lookup</tt>') to
  * any class that implements {@link org.apache.isis.applib.services.bookmark.BookmarkHolder}.
  *
  * <p>
- * Alternatively, can use {@link BookmarkHolderAssociationContributions}
- * to contribute an property.
+ *     This service is automatically registered.  However, if not required then its contributions can be hidden using
+ *     a subscribed on its domain events.
+ * </p>
  *
- * <p>
- * The service must be explicitly registered, typically in <tt>isis.properties</tt>.
+ * @see org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions
  */
+@DomainService(
+        nature = NatureOfService.VIEW_CONTRIBUTIONS_ONLY
+)
 public class BookmarkHolderActionContributions  {
 
+    public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<BookmarkHolderActionContributions> {
+        public ActionDomainEvent(final BookmarkHolderActionContributions source, final Identifier identifier) {
+            super(source, identifier);
+        }
+
+        public ActionDomainEvent(final BookmarkHolderActionContributions source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+
+        public ActionDomainEvent(final BookmarkHolderActionContributions source, final Identifier identifier, final List<Object> arguments) {
+            super(source, identifier, arguments);
+        }
+    }
 
     //region > init
     @Programmatic
@@ -52,12 +75,29 @@ public class BookmarkHolderActionContributions  {
     }
     //endregion
 
+    // //////////////////////////////////////
 
-    @NotInServiceMenu
-    @NotContributed(NotContributed.As.ASSOCIATION)
+    public static class LookupDomainEvent extends ActionDomainEvent {
+        public LookupDomainEvent(final BookmarkHolderActionContributions source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+
+    @Action(
+            domainEvent = LookupDomainEvent.class,
+            semantics = SemanticsOf.SAFE
+    )
+    @ActionLayout(
+            contributed = Contributed.AS_ACTION,
+            cssClassFa = "fa-bookmark"
+    )
     public Object lookup(final BookmarkHolder bookmarkHolder) {
         return bookmarkService.lookup(bookmarkHolder);
     }
+
+
+    // //////////////////////////////////////
 
 
     @javax.inject.Inject

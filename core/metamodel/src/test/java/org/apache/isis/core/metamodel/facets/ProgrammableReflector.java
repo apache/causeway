@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
 
@@ -123,11 +122,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
 
     @Override
     public void setServiceInjector(final ServicesInjectorSpi serviceInjector) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
-    public void validateSpecifications(ValidationFailures validationFailures) {
         throw new NotYetImplementedException();
     }
 

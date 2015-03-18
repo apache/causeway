@@ -45,7 +45,10 @@ import java.lang.annotation.Target;
  * is unable to do so.
  * 
  * @see Optional
+ * 
+ * @deprecated - use {@link Property#optionality()} and {@link Parameter#optionality()}  (with {@link Optionality#MANDATORY}) instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)

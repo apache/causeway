@@ -20,9 +20,9 @@
 package org.apache.isis.applib;
 
 import java.util.List;
-
+import com.google.common.base.Function;
+import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
-
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
@@ -257,6 +257,13 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     String validate(Object domainObject);
+
+    //endregion
+
+    //region > isViewModel
+
+    @Programmatic
+    boolean isViewModel(Object domainObject);
 
     //endregion
 
@@ -649,6 +656,18 @@ public interface DomainObjectContainer {
     @Programmatic
     <T> T uniqueMatch(Query<T> query);
 
+
     //endregion
 
+
+    public static class Functions {
+        public static <T> Function<T, String> titleOfUsing(final DomainObjectContainer container) {
+            return new Function<T, String>() {
+                @Override
+                public String apply(final T input) {
+                    return container.titleOf(input);
+                }
+            };
+        }
+    }
 }

@@ -23,7 +23,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.9.0-SNAPSHOT</version>
 
     <name>Simple App</name>
 
@@ -34,8 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.8.0-SNAPSHOT</isis.version>
-        <isis-viewer-wicket.version>1.8.0-SNAPSHOT</isis-viewer-wicket.version>
+        <isis.version>1.9.0-SNAPSHOT</isis.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
@@ -196,8 +195,7 @@
                 <plugin>
                     <groupId>org.simplericity.jettyconsole</groupId>
                     <artifactId>jetty-console-maven-plugin</artifactId>
-                    <!-- update to 1.54 reversed,since seems compiled against 1.7 (major.minor version 51.0) -->
-                    <version>1.43</version>
+                    <version>1.56</version>
                 </plugin>
 
                 <!-- Apache Release Audit Tool -->
@@ -228,6 +226,9 @@
                             <exclude>**/*.json</exclude>
                             <exclude>**/*.min.js</exclude>
                             <exclude>**/*.js</exclude>
+
+                            <exclude>**/translations.pot</exclude>
+                            <exclude>**/translations*.po</exclude>
                         </excludes>
                         <licenses>
                             <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
@@ -333,7 +334,7 @@
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>isis-viewer-wicket</artifactId>
-                <version>${isis-viewer-wicket.version}</version>
+                <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

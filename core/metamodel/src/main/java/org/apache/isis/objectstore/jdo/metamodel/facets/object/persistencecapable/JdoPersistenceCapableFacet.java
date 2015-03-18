@@ -25,12 +25,21 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 /**
- * Corresponds to annotating the class with the {@link PersistenceCapable} annotation.
+ * Corresponds to annotating the class with the {@link javax.jdo.annotations.PersistenceCapable} annotation.
  */
 public interface JdoPersistenceCapableFacet extends Facet {
 
     IdentityType getIdentityType();
-    
+
+    /**
+     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#schema()}, or null if not specified.
+     */
+    String getSchema();
+
+    /**
+     * Corresponds to {@link javax.jdo.annotations.PersistenceCapable#table()}, or to the
+     * class' {@link Class#getSimpleName() simple name} if no table specified.
+     */
     String getTable();
 
 }

@@ -21,23 +21,34 @@ package org.apache.isis.core.metamodel.specloader.validator;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
-
+import java.util.SortedSet;
 import com.google.common.collect.Sets;
 
 public final class ValidationFailures implements Iterable<String> {
 
     private final Set<String> messages = Sets.newLinkedHashSet();
     
-    public void add(String pattern, Object... arguments) {
+    public void add(final String pattern, final Object... arguments) {
         final String message = String.format(pattern, arguments);
         messages.add(message);
+    }
+
+    public void addAll(final Iterable<String> messages) {
+        for (final String message : messages) {
+            this.messages.add(message);
+        }
+    }
+
+    public void add(final ValidationFailures validationFailures) {
+        addAll(validationFailures.getMessages());
     }
 
     public void assertNone() {
         if (!occurred()) {
             return;
         }
-        throw new MetaModelInvalidException(messages);
+        final SortedSet<String> sortedMessages = Sets.newTreeSet(messages);
+        throw new MetaModelInvalidException(sortedMessages);
     }
 
     public boolean occurred() {

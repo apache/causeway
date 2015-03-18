@@ -26,14 +26,10 @@ public class MetaModelValidatorDefault extends MetaModelValidatorAbstract {
 
     /**
      * Does nothing.
+     * @param validationFailures
      */
     @Override
     public void validate(ValidationFailures validationFailures) {
-        validateSpecifications(validationFailures);
-    }
-
-    private void validateSpecifications(ValidationFailures validationFailures) {
-        getSpecificationLoaderSpi().validateSpecifications(validationFailures);
     }
 
 }

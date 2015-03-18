@@ -20,18 +20,22 @@
 package org.apache.isis.core.metamodel.facets.members.disabled.method;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DISABLE_PREFIX };
 
@@ -52,13 +56,17 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         attachDisabledFacetIfDisabledMethodIsFound(processMethodContext);
     }
 
-    public static void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
+    private void attachDisabledFacetIfDisabledMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method disableMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DISABLE_PREFIX + capitalizedName, String.class, method.getParameterTypes());
+        Method disableMethod = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                method.getParameterTypes());
         if (disableMethod == null) {
             return;
         }
@@ -66,7 +74,16 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         processMethodContext.removeMethod(disableMethod);
 
         final FacetHolder facetHolder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, facetHolder));
+        final TranslationService translationService = this.servicesInjector.lookupService(TranslationService.class);
+        // sadness: same logic as in I18nFacetFactory
+        final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassAndNameIdentityString();
+        FacetUtil.addFacet(new DisableForContextFacetViaMethod(disableMethod, translationService, translationContext, facetHolder));
     }
 
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }

@@ -92,7 +92,10 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 final int numCollections = numCollectionsOf(objectSpec);
 
                 if(columnSpans.getMiddle() == 0 && !middle.isEmpty()) {
-                    validationFailures.add("%s MemberGroupLayout: middle (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), middle);
+                    validationFailures.add(
+                            "%s: @MemberGroupLayout: middle (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.",
+                            objectSpec.getIdentifier().getClassName(),
+                            columnSpans.name(), middle);
                 }
                 if(columnSpans.getMiddle() > 0 && middle.isEmpty()) {
                     // ignore; may want a gap, or there may just not be any properties to put in this column.
@@ -100,7 +103,8 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 }
                 
                 if(columnSpans.getRight() == 0 && !right.isEmpty()) {
-                    validationFailures.add("%s MemberGroupLayout: right (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), right);
+                    validationFailures.add(
+                            "%s: @MemberGroupLayout: right (property) column is 0 for ColumnSpans (%s), but groups have been listed (%s).  NB: ColumnSpans may have been defaulted if could not be parsed.", objectSpec.getIdentifier().getClassName(), columnSpans.name(), right);
                 }
                 if(columnSpans.getRight() > 0 && right.isEmpty()) {
                     // ignore; may want a gap, or there may just not be any properties to put in this column.
@@ -108,7 +112,9 @@ public class MemberGroupLayoutFacetFactory extends FacetFactoryAbstract implemen
                 }
                 
                 if(columnSpans.getCollections() == 0 && numCollections>0) {
-                    validationFailures.add("%s MemberGroupLayout: collections column is 0 for ColumnSpans (%s), but there are (up to) %d visible collections", objectSpec.getIdentifier().getClassName(), columnSpans.name(), numCollections);
+                    validationFailures.add(
+                            "%s: @MemberGroupLayout: collections column is 0 for ColumnSpans (%s), but there are (up to) %d visible collections",
+                            objectSpec.getIdentifier().getClassName(), columnSpans.name(), numCollections);
                 }
                 return true;
             }

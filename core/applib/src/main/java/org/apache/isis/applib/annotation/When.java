@@ -25,7 +25,12 @@ import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.applib.util.Enums;
 
+/**
+ * @deprecated - the concept of evaluating whether a feature is hidden/disabled based on the object's persistence is deprecated and will (probably) be removed in a future version; use only {@link #ALWAYS}.
+ */
+@Deprecated
 public enum When {
+
     /**
      * If annotated on a member, then that member should be disabled/hidden for persisted objects, but should be
      * visible for transient objects.
@@ -33,7 +38,9 @@ public enum When {
      * <p>
      * If annotated on an class, then applies to all members of that class.
      */
+    @Deprecated
     ONCE_PERSISTED,
+
     /**
      * If annotated on a member, then that member should be disabled/hidden for transient objects, but should be
      * visible for persisted objects.
@@ -41,7 +48,9 @@ public enum When {
      * <p>
      * If annotated on an class, then applies to all members of that class.
      */
+    @Deprecated
     UNTIL_PERSISTED,
+
     /**
      * If annotated on a member, then that member should be disabled/hidden both for objects that are persisted
      * and for objects that are not persisted.
@@ -52,7 +61,9 @@ public enum When {
      * <p>
      * If annotated on an class, then applies to all members of that class.
      */
+    @Deprecated
     ALWAYS,
+
     /**
      * If annotated on a member, then that member should not be disabled/hidden.
      * 
@@ -61,6 +72,7 @@ public enum When {
      */
     NEVER;
 
+    @Deprecated
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);
     }
@@ -69,6 +81,7 @@ public enum When {
      * As an alternative to annotating an object with {@link Disabled}, can instead have the
      * class implement a marker interface.   
      */
+    @Deprecated
     public static When lookupForMarkerInterface(final Class<?> cls) {
         if (AlwaysImmutable.class.isAssignableFrom(cls)) {
             return ALWAYS;
@@ -82,10 +95,12 @@ public enum When {
         return null;
     }
 
+    @Deprecated
     public interface Persistable {
         public boolean isTransient();
     }
-    
+
+    @Deprecated
     public boolean appliesTo(final Persistable persistable) {
         final boolean isTransient = persistable.isTransient();
         return this == When.ALWAYS || 

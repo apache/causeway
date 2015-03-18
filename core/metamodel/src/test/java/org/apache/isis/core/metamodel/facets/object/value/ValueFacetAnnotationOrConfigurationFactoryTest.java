@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.annotcfg.ValueFacetAnnotationOrConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.value.vsp.ValueSemanticsProviderUtil;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.defaults.DefaultedFacet;

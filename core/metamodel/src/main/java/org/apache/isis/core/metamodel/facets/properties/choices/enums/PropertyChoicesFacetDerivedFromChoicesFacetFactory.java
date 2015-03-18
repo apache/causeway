@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacetFactory extends FacetFactoryAbstract implements AdapterManagerAware {
 

@@ -203,12 +203,12 @@ public interface AdapterManager extends Injectable {
 
 
     /**
-     * Enable viewModelFacetAnnotation to 'temporarily' map an existing pojo to an oid.
+     * Enable RecreatableObjectFacet to 'temporarily' map an existing pojo to an oid.
      */
     ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo);
 
     /**
-     * Enable viewModelFacetAnnotation to remove a 'temporarily' mapped an adapter for a pojo.
+     * Enable RecreatableObjectFacet to remove a 'temporarily' mapped an adapter for a pojo.
      */
     void removeAdapter(ObjectAdapter adapter);
 

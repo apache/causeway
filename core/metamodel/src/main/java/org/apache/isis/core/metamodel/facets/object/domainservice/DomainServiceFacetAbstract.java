@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice;
 
 
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,14 +34,22 @@ public abstract class DomainServiceFacetAbstract
     }
 
     private final Class<?> repositoryFor;
+    private final NatureOfService natureOfService;
 
-    public DomainServiceFacetAbstract(final FacetHolder facetHolder, final Class<?> repositoryFor) {
+    public DomainServiceFacetAbstract(
+            final FacetHolder facetHolder,
+            final Class<?> repositoryFor,
+            final NatureOfService natureOfService) {
         super(DomainServiceFacetAbstract.type(), facetHolder, Derivation.NOT_DERIVED);
         this.repositoryFor = repositoryFor;
+        this.natureOfService = natureOfService;
     }
-
 
     public Class<?> getRepositoryFor() {
         return repositoryFor;
+    }
+
+    public NatureOfService getNatureOfService() {
+        return natureOfService;
     }
 }

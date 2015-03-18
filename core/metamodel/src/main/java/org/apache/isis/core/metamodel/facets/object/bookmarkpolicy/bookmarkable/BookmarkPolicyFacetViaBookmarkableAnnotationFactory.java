@@ -20,11 +20,11 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
 import java.util.List;
-
 import org.apache.isis.applib.annotation.ActionSemantics.Of;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -38,10 +38,17 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFactoryAbstract implements  MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Bookmarkable.class);
 
     public BookmarkPolicyFacetViaBookmarkableAnnotationFactory() {
         super(FeatureType.OBJECTS_AND_ACTIONS);
@@ -50,17 +57,18 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
     @Override
     public void process(final ProcessClassContext processClassContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processClassContext.getCls(), Bookmarkable.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
+        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder(), null));
     }
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final Bookmarkable annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Bookmarkable.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final BookmarkPolicyFacet facet = create(annotation, processMethodContext.getFacetHolder(), processMethodContext);
+        FacetUtil.addFacet(facet);
     }
 
-    private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder) {
-        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : new BookmarkPolicyFacetViaBookmarkableAnnotation(holder, annotation.value());
+    private BookmarkPolicyFacet create(final Bookmarkable annotation, final FacetHolder holder, final ProcessMethodContext processMethodContext) {
+        return annotation == null ? new BookmarkPolicyFacetFallback(holder) : validator.flagIfPresent(new BookmarkPolicyFacetViaBookmarkableAnnotation(annotation.value(), holder), processMethodContext);
     }
 
 
@@ -84,13 +92,21 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
                     if(semanticsFacet == null || semanticsFacet.isNoop() || semanticsFacet.value() != Of.SAFE) {
                       validationFailures.add(
-                      "Action %s is bookmarkable but action semantics are not explicitly indicated as being safe.  Either add @ActionSemantics(Of.Safe), or remove @Bookmarkable.", 
+                          "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
+                          "Either add @Action(semantics=SemanticsOf.SAFE), or remove @ActionLayout(bookmarking=...).",
                       objectAction.getIdentifier().toClassAndNameIdentityString());
                     }
                 }
                 return true;
             }
         }));
+        metaModelValidator.add(validator);
     }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 
 }

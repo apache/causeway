@@ -36,7 +36,7 @@ class PojoRecreatorDefault implements PojoRecreator {
             
             final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
             if(facet == null) {
-                throw new IllegalArgumentException("spec does not have ViewModelFacet; " + oid.toString() + "; spec is " + spec.getFullIdentifier());
+                throw new IllegalArgumentException("spec does not have RecreatableObjectFacet; " + oid.toString() + "; spec is " + spec.getFullIdentifier());
             }
 
             // a slight compromise? close enough.

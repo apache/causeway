@@ -21,15 +21,31 @@ package org.apache.isis.core.metamodel.facets.all.named;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 
-public abstract class NamedFacetAbstract extends SingleStringValueFacetAbstract implements NamedFacet {
+public abstract class NamedFacetAbstract extends MultipleValueFacetAbstract implements NamedFacet {
+
+    private final String value;
+    private final boolean escaped;
 
     public static Class<? extends Facet> type() {
         return NamedFacet.class;
     }
 
-    public NamedFacetAbstract(final String value, final FacetHolder holder) {
-        super(type(), holder, value);
+    public NamedFacetAbstract(final String value, final boolean escaped, final FacetHolder holder) {
+        super(type(), holder);
+
+        this.value = value;
+        this.escaped = escaped;
+    }
+
+    @Override
+    public String value() {
+        return value;
+    }
+
+    @Override
+    public boolean escaped() {
+        return escaped;
     }
 }

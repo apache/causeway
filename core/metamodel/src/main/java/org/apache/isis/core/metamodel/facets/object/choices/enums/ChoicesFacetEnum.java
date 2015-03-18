@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 
 public class ChoicesFacetEnum extends ChoicesFacetAbstract {
 

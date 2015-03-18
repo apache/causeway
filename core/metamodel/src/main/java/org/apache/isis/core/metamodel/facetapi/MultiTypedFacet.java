@@ -37,4 +37,6 @@ public interface MultiTypedFacet extends Facet {
     public Class<? extends Facet>[] facetTypes();
 
     public <T extends Facet> T getFacet(Class<T> facet);
+
+    boolean containsFacetTypeOf(Class<? extends Facet> facetType);
 }

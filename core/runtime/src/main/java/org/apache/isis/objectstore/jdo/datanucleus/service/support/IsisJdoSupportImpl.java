@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -54,22 +54,21 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService
-@Hidden
+@DomainService(nature = NatureOfService.DOMAIN)
 public class IsisJdoSupportImpl implements IsisJdoSupport {
     
     @Programmatic
     @Override
-    public <T> T refresh(T domainObject) {
-        DataNucleusObjectStore objectStore = getObjectStore();
-        ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+    public <T> T refresh(final T domainObject) {
+        final DataNucleusObjectStore objectStore = getObjectStore();
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         objectStore.refreshRoot(adapter);
         return domainObject;
     }
 
     @Programmatic
     @Override
-    public void ensureLoaded(Collection<?> domainObjects) {
+    public void ensureLoaded(final Collection<?> domainObjects) {
         getObjectStore().getPersistenceManager().retrieveAll(domainObjects);
     }
 
@@ -77,14 +76,14 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     @Programmatic
     @Override
-    public List<Map<String, Object>> executeSql(String sql) {
+    public List<Map<String, Object>> executeSql(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
                 return null;
             } 
-            java.sql.Connection connection = (java.sql.Connection) connectionObj;
+            final java.sql.Connection connection = (java.sql.Connection) connectionObj;
             return executeSql(connection, sql);
         } finally {
             dataStoreConnection.close();
@@ -93,30 +92,28 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     @Programmatic
     @Override
-    public Integer executeUpdate(String sql) {
+    public Integer executeUpdate(final String sql) {
         final JDOConnection dataStoreConnection = getJdoPersistenceManager().getDataStoreConnection();
         try {
             final Object connectionObj = dataStoreConnection.getNativeConnection();
             if(!(connectionObj instanceof java.sql.Connection)) {
                 return null;
             } 
-            java.sql.Connection connection = (java.sql.Connection) connectionObj;
+            final java.sql.Connection connection = (java.sql.Connection) connectionObj;
             return executeUpdate(connection, sql);
         } finally {
             dataStoreConnection.close();
         }
     }
 
-    private static List<Map<String, Object>> executeSql(java.sql.Connection connection, String sql) {
+    private static List<Map<String, Object>> executeSql(final java.sql.Connection connection, final String sql) {
         final List<Map<String,Object>> rows = Lists.newArrayList();
 
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try(Statement statement = connection.createStatement()) {
             final ResultSet rs = statement.executeQuery(sql);
             final ResultSetMetaData rsmd = rs.getMetaData();
             while(rs.next()) {
-                Map<String,Object> row = Maps.newLinkedHashMap(); 
+                final Map<String,Object> row = Maps.newLinkedHashMap();
                 final int columnCount = rsmd.getColumnCount();
                 for(int i=0; i<columnCount; i++) {
                     final Object val = rs.getObject(i+1);
@@ -125,45 +122,29 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
                 rows.add(row);
             }
             
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             throw new ObjectPersistenceException("Failed to executeSql: " + sql, ex);
-        } finally {
-            closeSafely(statement);
         }
 
         return rows;
     }
 
-    private static int executeUpdate(java.sql.Connection connection, String sql) {
+    private static int executeUpdate(final java.sql.Connection connection, final String sql) {
         
-        Statement statement = null;
-        try {
-            statement = connection.createStatement();
+        try(Statement statement = connection.createStatement()){
             return statement.executeUpdate(sql);
             
-        } catch (SQLException ex) {
+        } catch (final SQLException ex) {
             throw new ObjectPersistenceException("Failed to executeSql: " + sql, ex);
-        } finally {
-            closeSafely(statement);
         }
     }
 
-    private static void closeSafely(Statement statement) {
-        if(statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                // ignore
-            }
-        }
-    }
-    
     // //////////////////////////////////////
 
     @Programmatic
     @Override
-    public void deleteAll(Class<?>... pcClasses) {
-        for (Class<?> pcClass : pcClasses) {
+    public void deleteAll(final Class<?>... pcClasses) {
+        for (final Class<?> pcClass : pcClasses) {
             final Extent<?> extent = getJdoPersistenceManager().getExtent(pcClass);
             final List<Object> instances = Lists.newArrayList(extent.iterator());
             
@@ -206,9 +187,4 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     public PersistenceManager getJdoPersistenceManager() {
         return getObjectStore().getPersistenceManager();
     }
-
-
-
-
-
 }

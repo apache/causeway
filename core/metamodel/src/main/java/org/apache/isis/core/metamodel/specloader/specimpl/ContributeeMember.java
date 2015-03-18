@@ -17,15 +17,15 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import com.google.common.base.Predicate;
-
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 
 /**
- * Marker interface indicating an a contributed association or action.
+ * Interface indicating an a contributed association or action.
  */
-public interface ContributeeMember {
+public interface ContributeeMember extends ObjectMember {
     
     public static class Predicates {
         
@@ -60,4 +60,10 @@ public interface ContributeeMember {
 
     }
 
+    boolean isContributedBy(ObjectAction serviceAction);
+
+    /**
+     * Which parameter of the original contributed action was contributed to (zero-based).
+     */
+    int getContributeeParamPosition();
 }

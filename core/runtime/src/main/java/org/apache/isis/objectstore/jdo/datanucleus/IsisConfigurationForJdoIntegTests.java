@@ -79,10 +79,17 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
 
         add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
+
+        add("isis.deploymentType", "server_prototype");
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
         add(DataNucleusObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        return this;
+    }
+
+    public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
+        put(DataNucleusObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
@@ -93,6 +100,16 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     public final IsisConfigurationForJdoIntegTests addRegisterEntitiesPackagePrefix(final String... packagePrefix) {
         final String commaSeparated = Joiner.on(',').join(packagePrefix);
         add(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
+        return this;
+    }
+
+    /**
+     * Typically integration tests should set the {@link RegisterEntities} package prefix(es); this method makes it
+     * easy to do so.
+     */
+    public final IsisConfigurationForJdoIntegTests putRegisterEntitiesPackagePrefix(final String... packagePrefix) {
+        final String commaSeparated = Joiner.on(',').join(packagePrefix);
+        put(RegisterEntities.PACKAGE_PREFIX_KEY, commaSeparated);
         return this;
     }
 

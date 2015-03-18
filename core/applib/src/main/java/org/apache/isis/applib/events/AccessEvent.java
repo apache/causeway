@@ -22,7 +22,7 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents an access (reading) of a property, collection or title.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a property, collection or title.
  * 
  * <p>
  * Analogous to {@link ValidityEvent} (which corresponds to modifying a property
@@ -33,7 +33,10 @@ import org.apache.isis.applib.Identifier;
  * @see UsabilityEvent
  * @see VisibilityEvent
  * @see ValidityEvent
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public abstract class AccessEvent extends InteractionEvent {
 
     /**

@@ -58,7 +58,7 @@ public interface FacetHolder {
 
 
     /**
-     * Returns all {@link Facet}s matching the specified {@link FacetFilter}.
+     * Returns all {@link Facet}s matching the specified {@link Filter}.
      * 
      * @param filter
      * @return

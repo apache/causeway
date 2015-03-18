@@ -18,12 +18,11 @@
  */
 package org.apache.isis.core.metamodel.feature;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.util.Arrays;
 import java.util.Collection;
-
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -32,14 +31,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(Parameterized.class)
 public class ObjectAssociationFiltersTest_visibleWhere {
@@ -91,7 +93,8 @@ public class ObjectAssociationFiltersTest_visibleWhere {
                 });
     }
 
-    public ObjectAssociationFiltersTest_visibleWhere(When when, Where where, Where context, boolean visible) {
+    public ObjectAssociationFiltersTest_visibleWhere(
+            final When when, final Where where, final Where context, final boolean visible) {
         this.when = when;
         this.where = where;
         this.whereContext = context;
@@ -101,7 +104,7 @@ public class ObjectAssociationFiltersTest_visibleWhere {
     @Before
     public void setUp() throws Exception {
         context.checking(new Expectations(){{
-            one(mockObjectAssociation).getFacet(HiddenFacet.class);
+            one(mockObjectAssociation).getFacet(with(subclassOf(HiddenFacet.class)));
             will(returnValue(mockHiddenFacet));
             
             allowing(mockHiddenFacet).where();
@@ -111,7 +114,21 @@ public class ObjectAssociationFiltersTest_visibleWhere {
             will(returnValue(when));
         }});
     }
-    
+
+    private Matcher<Class<? extends Facet>> subclassOf(final Class<?> cls) {
+        return new TypeSafeMatcher<Class<? extends Facet>>() {
+            @Override
+            protected boolean matchesSafely(final Class<? extends Facet> item) {
+                return cls.isAssignableFrom(cls);
+            }
+
+            @Override
+            public void describeTo(final Description description) {
+                description.appendText("subclass of " + cls.getName());
+            }
+        };
+    }
+
     @Test
     public void test() {
         final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.staticallyVisible(whereContext);

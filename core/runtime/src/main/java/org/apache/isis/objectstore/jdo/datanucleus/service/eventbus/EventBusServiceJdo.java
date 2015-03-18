@@ -17,6 +17,8 @@
 package org.apache.isis.objectstore.jdo.datanucleus.service.eventbus;
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
@@ -35,7 +37,9 @@ import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because it is implemented in the core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class EventBusServiceJdo extends EventBusServiceDefault {
 
     /**
@@ -45,6 +49,7 @@ public class EventBusServiceJdo extends EventBusServiceDefault {
      * The {@link JDOStateManagerForIsis} sets a {@link JDOStateManagerForIsis#hint threadlocal}
      * if it has been called.
      */
+    @Programmatic
     @Override
     protected boolean skip(Object event) {
         return JDOStateManagerForIsis.hint.get() != Hint.NONE;

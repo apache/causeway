@@ -19,28 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.naming.named;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 import java.util.Collection;
-
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.members.named.annotprop.NamedFacetOnMemberFactory;
 import org.apache.isis.core.metamodel.facets.object.named.annotation.NamedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.param.named.annotation.NamedFacetOnParameterAnnotationFactory;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -152,7 +150,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         expectNoMethodsRemoved();
 
-        facetFactory.processParams(new ProcessParameterContext(actionMethod, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, actionMethod, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(NamedFacet.class);
         assertThat(facet, is(not(nullValue())));

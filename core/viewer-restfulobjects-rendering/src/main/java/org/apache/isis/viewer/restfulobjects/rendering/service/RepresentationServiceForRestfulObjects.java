@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -30,7 +31,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
 
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class RepresentationServiceForRestfulObjects implements RepresentationService {
 
     private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");

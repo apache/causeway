@@ -47,7 +47,7 @@ public abstract class InjectServiceMethodMustBeFinalContractTestAbstract extends
 
     @Override
     protected void applyContractTest(Class<?> entityType) {
-        final Set<Method> injectMethods = Reflections.getAllMethods(entityType, ReflectionUtils.withPrefix("inject"));
+        final Set<Method> injectMethods = ReflectionUtils.getAllMethods(entityType, ReflectionUtils.withPrefix("inject"));
         for (Method injectMethod : injectMethods) {
             try {
                 final String desc = desc(entityType, injectMethod);

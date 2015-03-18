@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractFacetFactoryTest {

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.propparam.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;

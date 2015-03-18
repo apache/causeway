@@ -22,6 +22,7 @@ import java.util.Map;
 import javax.enterprise.context.RequestScoped;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -30,11 +31,13 @@ import org.apache.isis.applib.annotation.Programmatic;
  * action.
  *
  * <p>
- * This implementation has no UI and there is only one implementation (this class) in applib, so it is annotated with
+ * This implementation has only one implementation (this class) in applib, so it is annotated with
  * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
  * available for use; no further configuration is required.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 @RequestScoped
 public class Scratchpad {
     

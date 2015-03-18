@@ -81,14 +81,6 @@ public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollect
         return false;
     }
 
-    /**
-     * The method way well represent a value property, but this facet factory
-     * does not have any opinion on the matter.
-     */
-    public boolean isValuePropertyAccessor(final Method method) {
-        return false;
-    }
-
     @Override
     public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         final Class<?>[] collectionClasses = getCollectionTypeRepository().getCollectionType();

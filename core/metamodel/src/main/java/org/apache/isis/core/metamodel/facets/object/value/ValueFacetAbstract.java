@@ -162,6 +162,16 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         return facetHolder.getFacet(facetType);
     }
 
+    @Override
+    public boolean containsFacetTypeOf(final Class<? extends Facet> requiredFacetType) {
+        for (final Class<? extends Facet> facetType : facetTypes()) {
+            if(facetType == requiredFacetType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // /////////////////////////////////////////
     // Dependencies (from constructor)
     // /////////////////////////////////////////

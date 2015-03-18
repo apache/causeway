@@ -22,7 +22,7 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a particular object to be added to a
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular object to be added to a
  * collection is valid or not.
  * 
  * <p>
@@ -30,7 +30,10 @@ import org.apache.isis.applib.Identifier;
  * object is invalid; otherwise the object is valid.
  * 
  * @see CollectionRemoveFromEvent
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class CollectionAddToEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;

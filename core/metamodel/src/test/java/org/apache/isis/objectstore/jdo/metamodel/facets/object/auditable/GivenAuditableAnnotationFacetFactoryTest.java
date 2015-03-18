@@ -18,19 +18,17 @@
  */
 package org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable;
 
-import java.util.List;
-
-import javax.jdo.annotations.PersistenceCapable;
-
 import junit.framework.Assert;
 
+import java.util.List;
+import javax.jdo.annotations.PersistenceCapable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
-import org.apache.isis.core.metamodel.facets.object.audit.annotation.AuditableFacetAuditedAnnotation;
+import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.objectstore.jdo.applib.annotations.Auditable;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class GivenAuditableAnnotationFacetFactoryTest extends
@@ -71,7 +69,7 @@ public class GivenAuditableAnnotationFacetFactoryTest extends
 
         final Facet facet = facetHolder.getFacet(AuditableFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof AuditableFacetAuditedAnnotation);
+        assertTrue(facet instanceof AuditableFacetForAuditedAnnotation);
     }
 
     public void testIfNoAuditableAnnotationThenNoFacet() {

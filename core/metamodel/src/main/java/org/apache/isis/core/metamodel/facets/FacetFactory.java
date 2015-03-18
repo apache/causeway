@@ -46,7 +46,73 @@ public interface FacetFactory {
             return facetHolder;
         }
     }
-    
+
+    static class AbstractProcessWithClsContext<T extends FacetHolder> extends AbstractProcessContext<T>{
+
+        private final Class<?> cls;
+
+        AbstractProcessWithClsContext(final Class<?> cls, final T facetHolder) {
+            super(facetHolder);
+            this.cls = cls;
+        }
+
+        /**
+         * The class being introspected upon.
+         */
+        public Class<?> getCls() {
+            return cls;
+        }
+    }
+
+    static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T> implements MethodRemover{
+
+        private final Method method;
+        protected final MethodRemover methodRemover;
+
+        AbstractProcessWithMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover, final T facetHolder) {
+            super(cls, facetHolder);
+            this.method = method;
+            this.methodRemover = methodRemover;
+        }
+
+        /**
+         * The class being introspected upon.
+         *
+         * <p>
+         *     This isn't necessarily the same as the {@link java.lang.reflect.Method#getDeclaringClass() declaring class} of the {@link #getMethod() method}; the method might have been inherited.
+         * </p>
+         */
+        public Class<?> getCls() {
+            return super.getCls();
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+
+
+        @Override
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+            return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
+        }
+
+        @Override
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
+        }
+
+        @Override
+        public void removeMethod(final Method method) {
+            methodRemover.removeMethod(method);
+        }
+
+        @Override
+        public void removeMethods(final List<Method> methods) {
+            methodRemover.removeMethods(methods);
+        }
+
+    }
+
     public interface ProcessContextWithMetadataProperties<T extends FacetHolder> {
         public Properties metadataProperties(String subKey);
         public T getFacetHolder();
@@ -68,8 +134,7 @@ public interface FacetFactory {
     // process class
     // //////////////////////////////////////
 
-    public static class ProcessClassContext extends AbstractProcessContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
-        private final Class<?> cls;
+    public static class ProcessClassContext extends AbstractProcessWithClsContext<FacetHolder> implements MethodRemover, ProcessContextWithMetadataProperties<FacetHolder> {
         private final MethodRemover methodRemover;
         private final Properties metadataProperties;
 
@@ -85,18 +150,11 @@ public interface FacetFactory {
                 final Properties metadataProperties, 
                 final MethodRemover methodRemover, 
                 final FacetHolder facetHolder) {
-            super(facetHolder);
-            this.cls = cls;
+            super(cls, facetHolder);
             this.methodRemover = methodRemover;
             this.metadataProperties = metadataProperties;
         }
 
-        /**
-         * The class being processed.
-         */
-        public Class<?> getCls() {
-            return cls;
-        }
 
         @Override
         public void removeMethod(final Method method) {
@@ -118,7 +176,7 @@ public interface FacetFactory {
             methodRemover.removeMethods(methods);
         }
 
-        public Properties metadataProperties(String subKey) {
+        public Properties metadataProperties(final String subKey) {
             if(metadataProperties == null) {
                 return null;
             }
@@ -137,12 +195,10 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext extends AbstractProcessContext<FacetedMethod> implements MethodRemover, ProcessContextWithMetadataProperties<FacetedMethod> {
-        private final Class<?> cls;
+    public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements  ProcessContextWithMetadataProperties<FacetedMethod> {
         private final FeatureType featureType;
         private final Properties metadataProperties;
-        private final Method method;
-        private final MethodRemover methodRemover;
+
 
         public ProcessMethodContext(
                 final Class<?> cls, 
@@ -151,48 +207,21 @@ public interface FacetFactory {
                 final Method method, 
                 final MethodRemover methodRemover, 
                 final FacetedMethod facetedMethod) {
-            super(facetedMethod);
-            this.cls = cls;
+            super(cls, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.metadataProperties = metadataProperties;
-            this.method = method;
-            this.methodRemover = methodRemover;
         }
 
-        public Class<?> getCls() {
-            return cls;
+        public FeatureType getFeatureType() {
+            return featureType;
         }
 
-        public Method getMethod() {
-            return method;
-        }
-
-        @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
-            return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
-        }
-
-        @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
-        }
-
-        @Override
-        public void removeMethod(final Method method) {
-            methodRemover.removeMethod(method);
-        }
-
-        @Override
-        public void removeMethods(final List<Method> methods) {
-            methodRemover.removeMethods(methods);
-        }
-
-        public Properties metadataProperties(String subKey) {
+        public Properties metadataProperties(final String subKey) {
             
             if(metadataProperties == null) {
                 return null;
             }
-            Identifier identifier = featureType.identifierFor(getCls(), getMethod());
+            final Identifier identifier = featureType.identifierFor(getCls(), getMethod());
             final String id = identifier.getMemberName();
             
             // build list of keys to search for... 
@@ -229,26 +258,21 @@ public interface FacetFactory {
 
 
 
-
     // //////////////////////////////////////
     // process param
     // //////////////////////////////////////
 
-    public static class ProcessParameterContext extends AbstractProcessContext<FacetedMethodParameter> {
-        private final Method method;
+    public static class ProcessParameterContext extends AbstractProcessWithMethodContext<FacetedMethodParameter> {
         private final int paramNum;
 
         public ProcessParameterContext(
-                final Method method, 
-                final int paramNum, 
+                final Class<?> cls,
+                final Method method,
+                final int paramNum,
+                final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
-            super(facetedMethodParameter);
-            this.method = method;
+            super(cls, method, methodRemover, facetedMethodParameter);
             this.paramNum = paramNum;
-        }
-
-        public Method getMethod() {
-            return method;
         }
 
         public int getParamNum() {

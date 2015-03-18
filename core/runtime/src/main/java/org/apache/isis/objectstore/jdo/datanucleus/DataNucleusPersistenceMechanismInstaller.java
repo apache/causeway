@@ -61,7 +61,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
  * </ul>
  * 
  * <p>
- * With respect to configuration, all properties under {@value #ISIS_CONFIG_PREFIX} prefix are passed 
+ * With respect to configuration, all properties under {@value #DATANUCLEUS_CONFIG_PREFIX} prefix are passed
  * through verbatim to the DataNucleus runtime. For example:
  * <table>
  * <tr><th>Isis Property</th><th>DataNucleus Property</th></tr>
@@ -75,7 +75,11 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     public static final String NAME = "datanucleus";
 
-    private static final String ISIS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl";
+    public static final String CLASS_METADATA_LOADED_LISTENER_KEY = "classMetadataLoadedListener";
+    static final String CLASS_METADATA_LOADED_LISTENER_DEFAULT = CreateSchemaObjectFromClassMetadata.class.getName();
+
+    private static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
+    private static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
     public DataNucleusPersistenceMechanismInstaller() {
         super(NAME);
@@ -100,16 +104,15 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
         if (applicationComponents == null || applicationComponents.isStale()) {
 
-            // this is, perhaps doing more work than necessary...
-            // maybe retain the applicationComponents and just tell it to discard its PMF?
-            // (doubt will make much different in terms of the amount of time to process, though)
+            final IsisConfiguration jdoObjectstoreConfig = configuration.createSubset(JDO_OBJECTSTORE_CONFIG_PREFIX);
 
-            final IsisConfiguration dataNucleusConfig = configuration.createSubset(ISIS_CONFIG_PREFIX);
-            final Map<String, String> props = dataNucleusConfig.asMap();
-            addDataNucleusPropertiesIfRequired(props);
+            final IsisConfiguration dataNucleusConfig = configuration.createSubset(DATANUCLEUS_CONFIG_PREFIX);
+            final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
+            addDataNucleusPropertiesIfRequired(datanucleusProps);
 
             final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
-            applicationComponents = new DataNucleusApplicationComponents(props, classesToBePersisted);
+
+            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);
         }
 
         return applicationComponents;
@@ -188,7 +191,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
-        programmingModel.addFactory(JdoPersistenceCapableAnnotationFacetFactory.class);
+        programmingModel.addFactory(
+                JdoPersistenceCapableAnnotationFacetFactory.class, ProgrammingModel.Position.BEGINNING);
         programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
         programmingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
         
@@ -202,6 +206,8 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         programmingModel.addFactory(BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
         programmingModel.addFactory(MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class);
         // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
+        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
+        // and also PropertyAnnotationFactory
         programmingModel.addFactory(MandatoryFromJdoColumnAnnotationFacetFactory.class);
         
         programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);

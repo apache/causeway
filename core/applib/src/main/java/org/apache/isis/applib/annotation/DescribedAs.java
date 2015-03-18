@@ -34,5 +34,12 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DescribedAs {
+
+    /**
+     * @deprecated - see {@link DomainObjectLayout#describedAs()}, {@link PropertyLayout#describedAs()},
+     * {@link CollectionLayout#describedAs()}, {@link ActionLayout#describedAs()} and {@link ParameterLayout#describedAs()}.
+     * @return
+     */
+    @Deprecated
     String value();
 }

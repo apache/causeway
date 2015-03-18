@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-    license agreements. See the NOTICE file distributed with this work for additional 
-    information regarding copyright ownership. The ASF licenses this file to 
-    you under the Apache License, Version 2.0 (the "License"); you may not use 
-    this file except in compliance with the License. You may obtain a copy of 
-    the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
-    by applicable law or agreed to in writing, software distributed under the 
-    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
-    OF ANY KIND, either express or implied. See the License for the specific 
-    language governing permissions and limitations under the License. -->
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,7 +29,7 @@
 
     <groupId>org.apache.isis.core</groupId>
     <artifactId>isis</artifactId>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.9.0-SNAPSHOT</version>
     
     <packaging>pom</packaging>
 
@@ -95,7 +103,7 @@
 
         <shiro.version>1.2.3</shiro.version>
 
-        <slf4j.version>1.7.7</slf4j.version>
+        <slf4j.version>1.7.10</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
 
         <joda-time.version>2.3</joda-time.version>
@@ -105,22 +113,33 @@
 
         <objenesis.version>1.4</objenesis.version>
         <javassist.version>3.18.1-GA</javassist.version>
-        <reflections.version>0.9.8</reflections.version>
+        <reflections.version>0.9.9</reflections.version>
 
         <commons-logging.version>1.1.2</commons-logging.version>
         <commons-cli.version>1.2</commons-cli.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons-codec.version>1.9</commons-codec.version>
 
-        <jackson.version>2.4.4</jackson.version>
-        <gson.version>2.2.4</gson.version>
+        <jackson.version>2.5.0</jackson.version>
+        <gson.version>2.3.1</gson.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
         <hsqldb.version>2.3.1</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>2.3.7.Final</resteasy-jaxrs.version>
+        <resteasy-jaxrs.version>3.0.10.Final</resteasy-jaxrs.version>
 
         <jetty.version>6.1.26</jetty.version>
+
+        <wicket.version>6.17.0</wicket.version>
+        <wicketstuff.version>6.17.0</wicketstuff.version>
+
+        <wicket-webjars.version>0.4.3</wicket-webjars.version>
+        <wicket-bootstrap.version>0.9.7</wicket-bootstrap.version>
+        <wicket-source.version>6.0.0.8</wicket-source.version>
+
+        <wicket-select2.version>2.2.3</wicket-select2.version>
+        <select2.version>3.5.1</select2.version>
+        <jquery-ui.version>1.10.4</jquery-ui.version>
 
         <guice.version>3.0</guice.version>
         <picocontainer.version>2.14.3</picocontainer.version>
@@ -130,7 +149,7 @@
         <xstream.version>1.4.7</xstream.version>
         <htmlparser.version>2.1</htmlparser.version>
 
-        <junit.version>4.11</junit.version>
+        <junit.version>4.12</junit.version>
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.1.5</cucumber.version>
@@ -445,6 +464,14 @@
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
+
+                            <exclude>**/jquery.zclip.js</exclude>
+                            <exclude>**/bootstrap-growl.js</exclude>
+                            <exclude>**/moment.js</exclude>
+
+                            <exclude>**/bootstrap-datetimepicker.min.css</exclude>
+                            <exclude>**/bootstrap-datetimepicker.css</exclude>
+                            <exclude>**/select2-bootstrap.css</exclude>
 
                             <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
                             <exclude>**/datanucleus.log</exclude>
@@ -965,7 +992,7 @@
                                 <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
                             </resourceBundles>
                             <properties>
-                                <projectTimespan>2010~2013</projectTimespan>
+                                <projectTimespan>2010~2015</projectTimespan>
                                 <postDepListText>
 The above (auto-generated) list aggregates the dependencies (either directly
 or transitively) of all the modules that make up ${project.name}. You can use 
@@ -1032,13 +1059,13 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-unittestsupport</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1047,14 +1074,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-applib</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1063,7 +1090,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-log4j</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
@@ -1072,14 +1099,14 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>jar</type>
                 <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-metamodel</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1088,40 +1115,40 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-runtime</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-wrapper</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
 
             <!-- webserver -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-webserver</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
 
             <!-- specsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-specsupport</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
 
             <!-- integtestsupport -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-integtestsupport</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <!-- not scope=test, because referenced by some sql-tests-common under compile scope -->
             </dependency>
 
@@ -1129,36 +1156,36 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-applib</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-rendering</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
                 <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
@@ -1167,19 +1194,64 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis-core-security-shiro</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
+
+            
+            <!-- also for benefit of application developers, using scope=import -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-applib</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-model</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-model</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-ui</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-ui</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-impl</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>isis-viewer-wicket-impl</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+
 
             <!-- Maven plugin -->
             <dependency>
                 <groupId>org.apache.isis.tool</groupId>
                 <artifactId>isis-maven-plugin</artifactId>
-                <version>1.8.0-SNAPSHOT</version>
+                <version>1.9.0-SNAPSHOT</version>
             </dependency>
 
             <!-- JodaTime -->
@@ -1384,6 +1456,270 @@ ${license.additional-notes}
                 </exclusions>
             </dependency>
 
+
+
+            <!-- Wicket -->
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket</artifactId>
+                <version>${wicket.version}</version>
+                <type>pom</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-core</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-request</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-util</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-extensions</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-datetime</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-auth-roles</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-guice</artifactId>
+                <version>${wicket.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <!-- for Java7 compatibility (we don't use the proxying capability of this component) -->
+                        <groupId>cglib</groupId>
+                        <artifactId>cglib</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Wicket-Select2 -->
+            <dependency>
+                <groupId>com.vaynberg.wicket.select2</groupId>
+                <artifactId>wicket-select2</artifactId>
+                <version>${wicket-select2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>select2</artifactId>
+                <version>${select2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery-ui</artifactId>
+                <version>${jquery-ui.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Webjars -->
+            <dependency>
+                <groupId>de.agilecoders.wicket.webjars</groupId>
+                <artifactId>wicket-webjars</artifactId>
+                <version>${wicket-webjars.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-core</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-util</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-extensions</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-extensions</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-util</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-request</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-extensions</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>bootstrap</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery</artifactId>
+                    </exclusion>
+                    <!-- exclude unused extensions -->
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquerypp</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>jquery-ui</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>typeaheadjs</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>x-editable-bootstrap</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.webjars</groupId>
+                        <artifactId>spin-js</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.google.javascript</groupId>
+                        <artifactId>closure-compiler</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>de.agilecoders.wicket</groupId>
+                <artifactId>wicket-bootstrap-themes</artifactId>
+                <version>${wicket-bootstrap.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>net.ftlines.wicket-source</groupId>
+                <artifactId>wicket-source</artifactId>
+                <version>${wicket-source.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <!-- for dependency convergence -->
+                        <groupId>org.apache.wicket</groupId>
+                        <artifactId>wicket-core</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            
+            
             <!-- predicate libraries -->
             <dependency>
                 <groupId>org.hamcrest</groupId>
@@ -1879,6 +2215,8 @@ ${license.additional-notes}
         <module>viewer-restfulobjects-applib</module>
         <module>viewer-restfulobjects-rendering</module>
         <module>viewer-restfulobjects-server</module>
+
+        <module>viewer-wicket</module>
 
         <module>maven-plugin</module>
     </modules>

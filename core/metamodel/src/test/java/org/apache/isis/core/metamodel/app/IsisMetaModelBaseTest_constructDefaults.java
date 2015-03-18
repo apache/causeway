@@ -19,19 +19,18 @@
 
 package org.apache.isis.core.metamodel.app;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class IsisMetaModelBaseTest_constructDefaults {
 
@@ -48,6 +47,7 @@ public class IsisMetaModelBaseTest_constructDefaults {
 
     @Before
     public void setUp() {
+        context.ignoring(mockProgrammingModel);
         metaModel = new IsisMetaModel(mockContext, mockProgrammingModel);
     }
 

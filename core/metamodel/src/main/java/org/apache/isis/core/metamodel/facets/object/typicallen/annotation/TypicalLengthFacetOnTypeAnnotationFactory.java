@@ -20,14 +20,25 @@
 package org.apache.isis.core.metamodel.facets.object.typicallen.annotation;
 
 import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class TypicalLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class TypicalLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(TypicalLength.class);
 
     public TypicalLengthFacetOnTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -36,11 +47,22 @@ public class TypicalLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstr
     @Override
     public void process(final ProcessClassContext processClassContaxt) {
         final TypicalLength annotation = Annotations.getAnnotation(processClassContaxt.getCls(), TypicalLength.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+        final TypicalLengthFacet facet = create(annotation, processClassContaxt.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private TypicalLengthFacet create(final TypicalLength annotation, final FacetHolder holder) {
         return annotation != null ? new TypicalLengthFacetOnTypeAnnotation(annotation.value(), holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

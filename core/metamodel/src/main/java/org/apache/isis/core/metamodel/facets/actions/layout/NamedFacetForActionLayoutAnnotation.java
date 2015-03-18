@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
 
-    public static NamedFacet create(ActionLayout actionLayout, FacetHolder holder) {
+    public static NamedFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }
@@ -35,8 +35,9 @@ public class NamedFacetForActionLayoutAnnotation extends NamedFacetAbstract {
         return named != null ? new NamedFacetForActionLayoutAnnotation(named, holder) : null;
     }
 
-    private NamedFacetForActionLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+    private NamedFacetForActionLayoutAnnotation(final String value, final FacetHolder holder) {
+
+        super(value, /*escaped*/ true, holder);
     }
 
 }

@@ -16,12 +16,24 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
+import java.lang.reflect.Method;
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 
-public class FacetedMethodParameter extends TypedHolderDefault {
+public class FacetedMethodParameter extends TypedHolderDefault implements IdentifiedHolder {
 
-    public FacetedMethodParameter(final Class<?> type) {
+    private final Identifier identifier;
+
+    public FacetedMethodParameter(final Class<?> declaringType, final Method method, final Class<?> type) {
         super(FeatureType.ACTION_PARAMETER, type);
+
+        // best we can do...
+        this.identifier = FeatureType.ACTION.identifierFor(declaringType, method);
     }
 
+    @Override
+    public Identifier getIdentifier() {
+        return identifier;
+    }
 }

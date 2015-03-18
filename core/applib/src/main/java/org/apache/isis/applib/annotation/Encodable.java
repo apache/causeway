@@ -34,6 +34,11 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
  * @see Defaulted
  * @see Parseable
  * @see Value
+ *
+ *
+ * <p>
+ *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })

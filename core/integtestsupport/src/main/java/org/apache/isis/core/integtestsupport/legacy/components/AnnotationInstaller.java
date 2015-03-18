@@ -77,15 +77,15 @@ public class AnnotationInstaller {
     // {{ PersistenceMechanismInstaller
     public PersistenceMechanismInstaller addPersistorAnnotatedOn(final Class<?> javaClass) throws InstantiationException, IllegalAccessException {
         final Persistor annotation = javaClass.getAnnotation(Persistor.class);
-        if (annotation != null) {
-            return addPersistorRepresentedBy(annotation);
-        } else {
-            return new InMemoryPersistenceMechanismInstaller();
-        }
+        return annotation != null
+                ? addPersistorRepresentedBy(annotation)
+                : new InMemoryPersistenceMechanismInstaller();
 
     }
 
-    private PersistenceMechanismInstaller addPersistorRepresentedBy(final Persistor annotation) throws InstantiationException, IllegalAccessException {
+    private PersistenceMechanismInstaller addPersistorRepresentedBy(
+            final Persistor annotation)
+            throws InstantiationException, IllegalAccessException {
         final Class<?> fixtureClass = annotation.value();
         return (PersistenceMechanismInstaller) fixtureClass.newInstance();
     }

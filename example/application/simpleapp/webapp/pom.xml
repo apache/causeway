@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.apache.isis.example.application</groupId>
         <artifactId>simpleapp</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>simpleapp-webapp</artifactId>
@@ -336,14 +336,14 @@
             </build>
         </profile>
         <profile>
-        	<id>neo4j</id>
-        	<dependencies>
-		        <dependency>
-		        	<groupId>org.datanucleus</groupId>
-		        	<artifactId>datanucleus-neo4j</artifactId>
-		        	<version>3.2.3</version>
-		        </dependency>
-        	</dependencies>
+            <id>neo4j</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-neo4j</artifactId>
+                    <version>3.2.3</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 

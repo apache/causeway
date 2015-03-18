@@ -57,7 +57,8 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     private boolean cachedRepositoryObject = false;
     private Object repository;
 
-    public AutoCompleteFacetAbstract(FacetHolder holder, Class<?> repositoryClass, String actionName, SpecificationLoader specificationLoader, AdapterManager adapterManager, ServicesInjector servicesInjector) {
+    public AutoCompleteFacetAbstract(
+            final FacetHolder holder, final Class<?> repositoryClass, final String actionName, final SpecificationLoader specificationLoader, final AdapterManager adapterManager, final ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;

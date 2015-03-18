@@ -20,23 +20,35 @@
 package org.apache.isis.core.metamodel.facets.object.regex.annotation;
 
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.regex.RegExFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(RegEx.class);
 
     public RegExFacetOnTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final RegEx annotation = Annotations.getAnnotation(processClassContaxt.getCls(), RegEx.class);
-        FacetUtil.addFacet(createRegexFacet(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final RegEx annotation = Annotations.getAnnotation(processClassContext.getCls(), RegEx.class);
+        final RegExFacet facet = createRegexFacet(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, null));
     }
 
     private RegExFacet createRegexFacet(final RegEx annotation, final FacetHolder holder) {
@@ -50,4 +62,15 @@ public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
 
         return new RegExFacetOnTypeAnnotation(validationExpression, formatExpression, caseSensitive, holder);
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

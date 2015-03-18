@@ -25,13 +25,16 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents an interaction with a domain object or a particular feature
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a domain object or a particular feature
  * (property, collection, action) of a domain object.
  * 
  * <p>
  * Many of the interactions are checks for {@link VisibilityEvent visibility},
  * {@link UsabilityEvent usability} and {@link ValidityEvent validity}.
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public abstract class InteractionEvent extends EventObject {
 
     private static final long serialVersionUID = 1L;

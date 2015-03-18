@@ -36,9 +36,9 @@ import java.util.Comparator;
 public @interface SortedBy {
 
     /**
-     * The comparator to use to sort this collection; must be a {@link Comparator} able to
-     * compare the types.
+     * @deprecated - use {@link CollectionLayout#sortedBy()} instead.
      */
+    @Deprecated
     @SuppressWarnings("rawtypes")
     Class value() default Comparator.class;
 }

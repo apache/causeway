@@ -31,11 +31,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * A successor to {@link MemberGroups}, specifying the (groups of) members in a page,
- * column by column. 
+ * Specifies the positioning of an entity's (groups of) properties and of its collections, on a page, column by column.
  * 
  * <p>
- * The left column and middle column determine the ordering of the entity's properties.  The
+ * The left column and middle column determine the ordering of the entity's (groups of) properties.  The
  * value of the {@link #left() left} list and {@link #middle() middle} list specify the order
  * of the property groups (inferred from each property's {@link MemberOrder#name() MemberOrder.name} attribute.
  * 
@@ -46,6 +45,10 @@ import com.google.common.collect.Lists;
  * <p>
  * If both this annotation, {@link MemberGroupLayout}, and {@link MemberGroups} annotation
  * are present on an entity, then this one takes precedence.
+ *
+ * <p>
+ *     An alternative is to use the <code>Xxx.layout.json</code> file, where <code>Xxx</code> is the domain object name.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })
@@ -172,9 +175,8 @@ public @interface MemberGroupLayout {
      * As {@link #left()}, but for the middle column in a page.
      * 
      * <p>
-     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
-     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
-     * a meta-model validation exception. 
+     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
+     * framework will not boot and will instead indicate a meta-model validation exception.
      */
     String[] middle() default {};
 
@@ -182,9 +184,8 @@ public @interface MemberGroupLayout {
      * As {@link #right()}, but for the right column in a page.
      * 
      * <p>
-     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size
-     * (eg {@link ColumnSpans#_2_0_0_10}, then the framework will not boot and will instead indicate 
-     * a meta-model validation exception.
+     * If the value of this attribute is non-empty but the {@link #columnSpans()} specifies a zero size, then the
+     * framework will not boot and will instead indicate a meta-model validation exception.
      */
     String[] right() default {};
 

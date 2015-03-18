@@ -37,12 +37,12 @@ import org.apache.isis.core.metamodel.facets.value.ValueSemanticsProviderAbstrac
 
 public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static Map<String, DateFormat> formats = Maps.newHashMap();
+    private static final Map<String, DateFormat> FORMATS = Maps.newHashMap();
 
     static {
-        formats.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));
-        formats.put("iso", createDateFormat("yyyy-MM-dd"));
-        formats.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
+        FORMATS.put(ISO_ENCODING_FORMAT, createDateEncodingFormat("yyyyMMdd"));
+        FORMATS.put("iso", createDateFormat("yyyy-MM-dd"));
+        FORMATS.put("medium", DateFormat.getDateInstance(DateFormat.MEDIUM));
     }
 
     public JodaDateTimeValueSemanticsProviderAbstract(final FacetHolder holder, final Class<T> adaptedClass, final T defaultValue, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
@@ -83,7 +83,7 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
 
     @Override
     protected Map<String, DateFormat> formats() {
-        return formats;
+        return FORMATS;
     }
 
     @Override
@@ -99,7 +99,7 @@ public abstract class JodaDateTimeValueSemanticsProviderAbstract<T> extends Valu
     }
 
     protected List<DateFormat> formatsToTry(Localization localization) {
-        List<DateFormat> formats = new ArrayList<DateFormat>();
+        List<DateFormat> formats = new ArrayList<>();
 
         Locale locale = localization == null ? Locale.getDefault() : localization.getLocale();
         formats.add(DateFormat.getDateInstance(DateFormat.LONG, locale));

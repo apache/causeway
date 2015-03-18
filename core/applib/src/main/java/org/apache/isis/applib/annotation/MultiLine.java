@@ -26,7 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @deprecated - use instead {@link PropertyLayout#multiLine()} and {@link ParameterLayout#multiLine()}.
+ * @deprecated - use {@link PropertyLayout#multiLine()} and {@link ParameterLayout#multiLine()} instead .
  */
 @Deprecated
 @Inherited

@@ -29,11 +29,16 @@ public class NamedFacetOnActionFromLayoutProperties extends NamedFacetAbstract {
 
     public static NamedFacet create(Properties properties, FacetHolder holder) {
         final String named = named(properties);
-        return named != null? new NamedFacetOnActionFromLayoutProperties(named, holder): null;
+        final boolean namedEscaped = namedEscaped(properties);
+        return named != null? new NamedFacetOnActionFromLayoutProperties(named, namedEscaped, holder): null;
     }
 
-    private NamedFacetOnActionFromLayoutProperties(String named, FacetHolder holder) {
-        super(named, holder);
+    private NamedFacetOnActionFromLayoutProperties(
+        final String named,
+        final boolean namedEscaped,
+        final FacetHolder holder) {
+
+        super(named, namedEscaped, holder);
     }
 
     private static String named(Properties properties) {
@@ -46,6 +51,17 @@ public class NamedFacetOnActionFromLayoutProperties extends NamedFacetAbstract {
             named = Strings.emptyToNull(properties.getProperty("name"));
         }
         return named;
+    }
+
+    private static boolean namedEscaped(Properties properties) {
+        boolean escaped = true;
+        if(properties != null) {
+            String namedEscapedValue = Strings.emptyToNull(properties.getProperty("namedEscaped"));
+            if("false".equalsIgnoreCase(namedEscapedValue)) {
+                escaped = false;
+            }
+        }
+        return escaped;
     }
 
 }

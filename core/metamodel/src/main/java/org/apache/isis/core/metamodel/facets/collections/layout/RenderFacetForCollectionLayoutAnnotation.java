@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
@@ -30,12 +31,12 @@ public class RenderFacetForCollectionLayoutAnnotation extends RenderFacetAbstrac
         if (collectionLayout == null) {
             return null;
         }
-        final CollectionLayout.RenderType renderType = collectionLayout.render();
+        final RenderType renderType = collectionLayout.render();
         return renderType != null ? new RenderFacetForCollectionLayoutAnnotation(renderType, holder) : null;
     }
 
-    private RenderFacetForCollectionLayoutAnnotation(final CollectionLayout.RenderType renderType, final FacetHolder holder) {
-        super(CollectionLayout.RenderType.typeOf(renderType), holder);
+    private RenderFacetForCollectionLayoutAnnotation(final RenderType renderType, final FacetHolder holder) {
+        super(RenderType.typeOf(renderType), holder);
     }
 
 }

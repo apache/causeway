@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.isis.core</groupId>
         <artifactId>isis</artifactId>
-        <version>1.8.0-SNAPSHOT</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>isis-core-metamodel</artifactId>
@@ -105,10 +105,10 @@
             <scope>provided</scope>
         </dependency>
 
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>

@@ -21,8 +21,8 @@ package org.apache.isis.core.metamodel.facets.param.layout;
 
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetForParameterLayoutAnnotation extends TypicalLengthFacetAbstract {
 

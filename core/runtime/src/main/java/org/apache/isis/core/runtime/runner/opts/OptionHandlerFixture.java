@@ -25,20 +25,15 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.optionhandler.BootPrinter;
-import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
-import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_LONG_OPT;
 import static org.apache.isis.core.runtime.runner.Constants.FIXTURE_OPT;
 
-public class OptionHandlerFixture extends OptionHandlerAbstract {
+public class OptionHandlerFixture extends OptionHandlerFixtureAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixture.class);
-
-    private String fixtureClassName;
 
     public OptionHandlerFixture() {
         super();
@@ -47,7 +42,11 @@ public class OptionHandlerFixture extends OptionHandlerAbstract {
     @Override
     @SuppressWarnings("static-access")
     public void addOption(final Options options) {
-        final Option option = OptionBuilder.withArgName("class name").hasArg().withLongOpt(FIXTURE_LONG_OPT).withDescription("fully qualified fixture class").create(FIXTURE_OPT);
+        final Option option = OptionBuilder
+                                    .withArgName("class name").hasArg()
+                                    .withLongOpt(FIXTURE_LONG_OPT)
+                                    .withDescription("fully qualified fixture class")
+                                    .create(FIXTURE_OPT);
         options.addOption(option);
     }
 
@@ -57,15 +56,5 @@ public class OptionHandlerFixture extends OptionHandlerAbstract {
         return true;
     }
 
-    @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        prime(isisConfigurationBuilder, SystemConstants.FIXTURE_KEY, fixtureClassName);
-        prime(isisConfigurationBuilder, "isis.persistor.datanucleus.install-fixtures", "true");
-    }
-
-    private static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {
-        LOG.info("priming: " + key + "=" + value);
-        isisConfigurationBuilder.add(key, value);
-    }
 
 }

@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /**
  * Mix-in interface for objects (usually created by service implementations) that are be persistable, 
- * and so can be associated with the the GUID of the Isis transaction in which they were
+ * and so can be associated with the GUID of the Isis transaction in which they were
  * created.
  * 
  * <p>

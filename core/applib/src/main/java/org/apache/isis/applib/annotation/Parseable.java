@@ -30,6 +30,10 @@ import org.apache.isis.applib.adapters.Parser;
 /**
  * Indicates that the class can be parsed either by delegating to an
  * {@link Parser} or through some externally-configured mechanism.
+ *
+ * <p>
+ *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })

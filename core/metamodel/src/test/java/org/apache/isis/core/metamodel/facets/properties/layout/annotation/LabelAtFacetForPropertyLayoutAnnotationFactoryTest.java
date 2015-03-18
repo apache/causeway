@@ -25,14 +25,20 @@ import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.properties.layout.LabelAtFacetForPropertyLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.properties.layout.PropertyLayoutFactory;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.PropertyLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPropertyLayoutAnnotationPickedUp() {
-        final PropertyLayoutFactory facetFactory = new PropertyLayoutFactory();
+        final PropertyLayoutFacetFactory facetFactory = new PropertyLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -46,10 +52,9 @@ public class LabelAtFacetForPropertyLayoutAnnotationFactoryTest extends Abstract
         facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(LabelAtFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof LabelAtFacetForPropertyLayoutAnnotation);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(LabelAtFacetForPropertyLayoutAnnotation.class)));
         final LabelAtFacetForPropertyLayoutAnnotation layoutAnnotation = (LabelAtFacetForPropertyLayoutAnnotation) facet;
-        assertEquals(LabelPosition.LEFT, layoutAnnotation.label());
+        assertThat(layoutAnnotation.label(), is(equalTo(LabelPosition.LEFT)));
     }
-
 }

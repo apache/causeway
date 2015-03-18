@@ -20,17 +20,20 @@
 package org.apache.isis.core.metamodel.facets.properties.validating.method;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.VALIDATE_PREFIX };
 
@@ -53,14 +56,31 @@ public class PropertyValidateFacetViaMethodFactory extends MethodPrefixBasedFace
         final Class<?>[] paramTypes = new Class[] { returnType };
 
         final Class<?> cls = processMethodContext.getCls();
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName, String.class, paramTypes);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                MethodPrefixConstants.VALIDATE_PREFIX + capitalizedName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                paramTypes);
         if (method == null) {
             return;
         }
         processMethodContext.removeMethod(method);
 
-        final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyValidateFacetViaMethod(method, property));
+        final FacetedMethod facetHolder = processMethodContext.getFacetHolder();
+
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+        final PropertyValidateFacetViaMethod facet = new PropertyValidateFacetViaMethod(method, translationService, translationContext, facetHolder);
+        FacetUtil.addFacet(facet);
     }
 
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+
+        this.servicesInjector = servicesInjector;
+    }
 }

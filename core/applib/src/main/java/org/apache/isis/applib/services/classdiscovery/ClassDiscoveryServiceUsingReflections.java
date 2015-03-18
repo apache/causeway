@@ -22,7 +22,10 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import com.google.common.collect.Lists;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
@@ -31,6 +34,8 @@ import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
@@ -42,12 +47,15 @@ import org.apache.isis.applib.annotation.DomainService;
  * available for use; no further configuration is required.
  * </p>
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class ClassDiscoveryServiceUsingReflections
             extends AbstractService 
             implements ClassDiscoveryService2 {
 
 
+    @Programmatic
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type) {
         Vfs.setDefaultURLTypes(getUrlTypes());
@@ -60,6 +68,7 @@ public class ClassDiscoveryServiceUsingReflections
         return reflections.getSubTypesOf(type);
     }
 
+    @Programmatic
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
         Vfs.setDefaultURLTypes(getUrlTypes());

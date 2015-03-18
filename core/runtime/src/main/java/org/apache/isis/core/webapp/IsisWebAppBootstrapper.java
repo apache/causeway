@@ -42,6 +42,7 @@ import org.apache.isis.core.runtime.runner.opts.OptionHandlerInitParameters;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
@@ -86,10 +87,10 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
                     new ResourceStreamSourceForWebInf(servletContext)) ;
 
             if ( configLocation != null ) {
-              LOG.info( "Config override location: " + configLocation );
-              compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
+                LOG.info( "Config override location: " + configLocation );
+                compositeSource.addResourceStreamSource(ResourceStreamSourceFileSystem.create(configLocation));
             } else {
-              LOG.info( "Config override location: No override location configured" );
+                LOG.info( "Config override location: No override location configured" );
             }
             
             // will load either from WEB-INF, from the classpath or from config directory.
@@ -197,6 +198,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
             if (system != null) {
                 LOG.info("calling system shutdown");
                 system.shutdown();
+                IsisContext.shutdown();
             }
         } finally {
             servletContext.removeAttribute(WebAppConstants.ISIS_SYSTEM_KEY);

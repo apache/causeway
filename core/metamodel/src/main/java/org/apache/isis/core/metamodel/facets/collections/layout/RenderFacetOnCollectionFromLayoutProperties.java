@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Properties;
 import com.google.common.base.Strings;
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
@@ -29,15 +29,15 @@ import org.apache.isis.core.metamodel.facets.members.render.RenderFacetAbstract;
 public class RenderFacetOnCollectionFromLayoutProperties extends RenderFacetAbstract {
 
     public static RenderFacet create(Properties properties, FacetHolder holder) {
-        final CollectionLayout.RenderType renderType = render(properties);
+        final RenderType renderType = render(properties);
         return renderType != null? new RenderFacetOnCollectionFromLayoutProperties(renderType, holder): null;
     }
 
-    private RenderFacetOnCollectionFromLayoutProperties(CollectionLayout.RenderType renderType, FacetHolder holder) {
-        super(CollectionLayout.RenderType.typeOf(renderType), holder);
+    private RenderFacetOnCollectionFromLayoutProperties(RenderType renderType, FacetHolder holder) {
+        super(RenderType.typeOf(renderType), holder);
     }
 
-    private static CollectionLayout.RenderType render(Properties properties) {
+    private static RenderType render(Properties properties) {
         if(properties == null) {
             return null;
         }
@@ -45,7 +45,7 @@ public class RenderFacetOnCollectionFromLayoutProperties extends RenderFacetAbst
         if(renderType == null) {
             return null;
         }
-        return CollectionLayout.RenderType.valueOf(renderType);
+        return RenderType.valueOf(renderType);
     }
 
 }

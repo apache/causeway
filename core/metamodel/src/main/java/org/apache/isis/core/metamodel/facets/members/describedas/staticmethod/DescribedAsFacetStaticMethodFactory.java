@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.describedas.staticmethod;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
@@ -28,19 +29,27 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedMethodPrefix;
 
 /**
  * Sets up a {@link DescribedAsFacet} if a
  * {@value MethodPrefixConstants#DESCRIPTION_PREFIX}-prefixed method is present.
+ *
+ * @deprecated
  */
-public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+@Deprecated
+public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.DESCRIPTION_PREFIX };
+
+    private final MetaModelValidatorForDeprecatedMethodPrefix validator = new MetaModelValidatorForDeprecatedMethodPrefix(PREFIXES[0]);
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from
@@ -59,7 +68,7 @@ public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetF
         attachDescribedAsFacetIfDescriptionMethodIsFound(processMethodContext);
     }
 
-    public static void attachDescribedAsFacetIfDescriptionMethodIsFound(final ProcessMethodContext processMethodContext) {
+    public void attachDescribedAsFacetIfDescriptionMethodIsFound(final ProcessMethodContext processMethodContext) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
@@ -74,7 +83,8 @@ public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetF
         final String description = invokeDescriptionMethod(descriptionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DescribedAsFacetStaticMethod(description, descriptionMethod, facetedMethod));
+        final DescribedAsFacetStaticMethod facet = new DescribedAsFacetStaticMethod(description, descriptionMethod, facetedMethod);
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private static String invokeDescriptionMethod(final Method descriptionMethod) {
@@ -88,6 +98,17 @@ public class DescribedAsFacetStaticMethodFactory extends MethodPrefixBasedFacetF
             throw new MetaModelException("method " + descriptionMethod + "must return a string");
         }
         return description;
+    }
+
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

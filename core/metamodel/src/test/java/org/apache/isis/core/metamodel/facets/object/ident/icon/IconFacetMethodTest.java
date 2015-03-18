@@ -22,12 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.ident.icon;
 import java.lang.reflect.Method;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethod;
@@ -36,7 +34,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-@RunWith(JMock.class)
 public class IconFacetMethodTest {
 
     private final Mockery mockery = new JUnit4Mockery();

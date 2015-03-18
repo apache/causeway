@@ -22,8 +22,11 @@ package org.apache.isis.core.metamodel.facets.actions.debug;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public abstract class DebugFacetAbstract extends MarkerFacetAbstract implements DebugFacet {
 
     public static Class<? extends Facet> type() {

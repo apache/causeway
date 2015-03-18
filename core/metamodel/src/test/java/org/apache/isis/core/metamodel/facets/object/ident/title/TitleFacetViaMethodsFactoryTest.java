@@ -21,25 +21,43 @@ package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
+import org.jmock.Expectations;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaMethodsFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaToStringMethod;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class TitleFacetViaMethodsFactoryTest extends AbstractFacetFactoryTest {
 
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    private ServicesInjector mockServicesInjector;
+    private TranslationService mockTranslationService;
+
     private TitleFacetViaMethodsFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
+    public void setUp() throws Exception {
         super.setUp();
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
 
         facetFactory = new TitleFacetViaMethodsFactory();
+
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
+
 
     @Override
     protected void tearDown() throws Exception {

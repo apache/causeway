@@ -29,8 +29,17 @@ import java.lang.annotation.*;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CssClassFa {
+
+    /**
+     * @deprecated - see {@link ActionLayout#cssClassFa()}
+     */
+    @Deprecated
     String value();
 
+    /**
+     * @deprecated - see {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFaPosition()}
+     */
+    @Deprecated
     ActionLayout.CssClassFaPosition position() default ActionLayout.CssClassFaPosition.LEFT;
 }
 

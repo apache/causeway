@@ -21,14 +21,19 @@ package org.apache.isis.core.metamodel.facets.object.validating.validateobject.m
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String VALIDATE_PREFIX = "validate";
 
@@ -43,10 +48,23 @@ public class ValidateObjectFacetMethodFactory extends MethodPrefixBasedFacetFact
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
+        final Method method = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                VALIDATE_PREFIX,
+                new Class<?>[]{String.class, TranslatableString.class},
+                NO_PARAMETERS_TYPES);
         if (method != null) {
-            FacetUtil.addFacet(new ValidateObjectFacetMethod(method, facetHolder));
+            final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+            // sadness: same as in TranslationFactory
+            final String translationContext = ((IdentifiedHolder)facetHolder).getIdentifier().toClassIdentityString();
+            FacetUtil.addFacet(new ValidateObjectFacetMethod(method, translationService, translationContext, facetHolder));
             processClassContext.removeMethod(method);
         }
+    }
+
+    private ServicesInjector servicesInjector;
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 }

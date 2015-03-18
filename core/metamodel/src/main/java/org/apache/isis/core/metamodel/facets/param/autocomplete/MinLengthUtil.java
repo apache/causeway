@@ -20,13 +20,15 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.MinLength;
+import org.apache.isis.applib.annotation.Parameter;
 
 public final class MinLengthUtil {
 
     private MinLengthUtil(){}
 
     /**
-     * Finds the value of the {@link MinLength} annotation on the first parameter of the
+     * Finds the value of the minimum length, from either the {@link MinLength} annotation or the
+     * {@link org.apache.isis.applib.annotation.Parameter#minLength()} annotation, on the first parameter of the
      * supplied method.
      */
     public static int determineMinLength(final Method method) {
@@ -37,6 +39,10 @@ public final class MinLengthUtil {
                 if(annotation instanceof MinLength) {
                     MinLength minLength = (MinLength) annotation;
                     return minLength.value();
+                }
+                if(annotation instanceof Parameter) {
+                    Parameter parameter = (Parameter) annotation;
+                    return parameter.minLength();
                 }
             }
         }

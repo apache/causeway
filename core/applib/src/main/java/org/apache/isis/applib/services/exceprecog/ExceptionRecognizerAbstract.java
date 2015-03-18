@@ -20,19 +20,15 @@ package org.apache.isis.applib.services.exceprecog;
 
 import java.util.List;
 import java.util.Map;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks 
@@ -44,7 +40,6 @@ import org.apache.isis.applib.annotation.Hidden;
  * If a messaging-parsing {@link Function} is provided through the constructor,
  * then the message can be altered.  Otherwise the exception's {@link Throwable#getMessage() message} is returned as-is.
  */
-@Hidden
 public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer2 {
 
     public static final Logger LOG = LoggerFactory.getLogger(ExceptionRecognizerAbstract.class);
@@ -127,6 +122,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
 
     // //////////////////////////////////////
 
+    @Programmatic
     public String recognize(Throwable ex) {
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
         for (Throwable throwable : causalChain) {
@@ -143,6 +139,7 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
         return null;
     }
 
+    @Programmatic
     @Override
     public Recognition recognize2(Throwable ex) {
         return Recognition.of(category, recognize(ex));

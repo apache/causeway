@@ -25,79 +25,76 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.background.BackgroundCommandService;
-import org.apache.isis.applib.services.command.spi.CommandService;
-
 /**
- * Indicates how the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
- * (request-scoped) {@link org.apache.isis.applib.services.command.CommandContext command context} service should be
- * used.
- * 
+ * @deprecated - use {@link Action#command()} instead
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Command {
 
+    /**
+     * @deprecated - see {@link CommandPersistence}
+     */
+    @Deprecated
     public static enum Persistence {
         /**
-         * (If the configured {@link CommandService} supports it), indicates that the 
-         * {@link org.apache.isis.applib.services.command.Command Command} object should be persisted.
+         * @deprecated - see {@link CommandPersistence#PERSISTED}
          */
+        @Deprecated
         PERSISTED,
         /**
-         * (If the configured {@link CommandService} supports it), indicates that the 
-         * {@link org.apache.isis.applib.services.command.Command Command} object should only be persisted if
-         * another service, such as the {@link BackgroundCommandService}, hints that it should.
+         * @deprecated - see {@link CommandPersistence#IF_HINTED}
          */
+        @Deprecated
         IF_HINTED,
         /**
-         * (Even if the configured {@link CommandService} supports it), indicates that the 
-         * {@link org.apache.isis.applib.services.command.Command Command} object should <i>not</i> be persisted (even if
-         * another service, such as the {@link BackgroundCommandService}, hints that it should).
+         * @deprecated - see {@link CommandPersistence#NOT_PERSISTED}
          */
+        @Deprecated
         NOT_PERSISTED
     }
     
     /**
-     * How the {@link org.apache.isis.applib.services.command.Command Command} object provided by the
-     * {@link org.apache.isis.applib.services.command.CommandContext CommandContext} domain service should be persisted.
+     * @deprecated - see {@link org.apache.isis.applib.annotation.Action#commandPersistence()}.
      */
+    @Deprecated
     Persistence persistence() default Persistence.PERSISTED;
 
     
     // //////////////////////////////////////
 
-    
+
+    /**
+     * @deprecated - use {@link CommandExecuteIn}
+     */
+    @Deprecated
     public static enum ExecuteIn {
         /**
-         * Execute synchronously in the &quot;foreground&quot;, wait for the results.
+         * @deprecated - use {@link CommandExecuteIn#FOREGROUND}
          */
+        @Deprecated
         FOREGROUND,
         /**
-         * Execute &quot;asynchronously&quot; through the {@link BackgroundCommandService}, returning (if possible) the
-         * persisted {@link org.apache.isis.applib.services.command.Command command} object as a placeholder to the
-         * result.
+         * @deprecated - use {@link CommandExecuteIn#BACKGROUND}
          */
+        @Deprecated
         BACKGROUND
     }
 
 
     /**
-     * How the command/action should be executed.
-     * 
-     * <p>
-     * If the corresponding {@link org.apache.isis.applib.services.command.Command Command} object is persisted, 
-     * then its {@link org.apache.isis.applib.services.command.Command#getExecuteIn() invocationType} property 
-     * will be set to this value.
+     * @deprecated - use {@link Action#commandExecuteIn()}
      */
+    @Deprecated
     ExecuteIn executeIn() default ExecuteIn.FOREGROUND;
 
     
     /**
-     * If set to <tt>true</tt>, acts as an override to <i>disable</i> command semantics for the action when it is 
-     * otherwise (eg through configuration) configured as the default.
+     * @deprecated - use {@link Action#command()} to specify if the action is handled as a command or not.
      */
+    @Deprecated
     boolean disabled() default false;
 
 }

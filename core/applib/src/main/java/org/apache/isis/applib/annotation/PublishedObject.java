@@ -24,31 +24,55 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import org.apache.isis.applib.services.publish.EventPayload;
-import org.apache.isis.applib.services.publish.PublishingService;
 
 /**
- * Indicates that changes to an object should be published.
- * 
- * <p>
- * Requires that an implementation of the {@link PublishingService} is registered with the framework.
+ * @deprecated - use {@link org.apache.isis.applib.annotation.DomainObject#publishingPayloadFactory()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PublishedObject {
-    
+
+    /**
+     * @deprecated - use {@link PublishingChangeKind} instead.
+     */
+    @Deprecated
     public enum ChangeKind {
+        /**
+         * @deprecated - use {@link PublishingChangeKind#CREATE} instead.
+         */
+        @Deprecated
         CREATE,
+        /**
+         * @deprecated - use {@link PublishingChangeKind#UPDATE} instead.
+         */
+        @Deprecated
         UPDATE,
+        /**
+         * @deprecated - use {@link PublishingChangeKind#DELETE} instead.
+         */
+        @Deprecated
         DELETE
     }
-    
+
+    /**
+     * @deprecated - use {@link PublishingPayloadFactoryForObject} instead.
+     */
+    @Deprecated
     public interface PayloadFactory {
+        /**
+         * @deprecated - use {@link PublishingPayloadFactoryForObject#payloadFor(Object, PublishingChangeKind)} instead.
+         */
+        @Deprecated
         @Programmatic
         public EventPayload payloadFor(Object changedObject, ChangeKind changeKind);
     }
-    
+
+    /**
+     * @deprecated - use {@link DomainObject#publishingPayloadFactory()} instead.
+     */
+    @Deprecated
     Class<? extends PayloadFactory> value() default PayloadFactory.class;
 }

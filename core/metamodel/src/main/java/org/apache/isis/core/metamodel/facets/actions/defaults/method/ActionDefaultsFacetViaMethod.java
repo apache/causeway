@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetForInteractionAbstract;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetForDomainEventAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 
 public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract implements ImperativeFacet {
 
@@ -46,8 +46,8 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     private static Method determineActionMethod(final FacetHolder holder) {
         Method method2;
         final Facet actionInvocationFacet = holder.getFacet(ActionInvocationFacet.class);
-        if (actionInvocationFacet instanceof ActionInvocationFacetForInteractionAbstract) {
-            final ActionInvocationFacetForInteractionAbstract facetViaMethod = (ActionInvocationFacetForInteractionAbstract) actionInvocationFacet;
+        if (actionInvocationFacet instanceof ActionInvocationFacetForDomainEventAbstract) {
+            final ActionInvocationFacetForDomainEventAbstract facetViaMethod = (ActionInvocationFacetForDomainEventAbstract) actionInvocationFacet;
             method2 = facetViaMethod.getMethods().get(0);
         } else {
             method2 = null;

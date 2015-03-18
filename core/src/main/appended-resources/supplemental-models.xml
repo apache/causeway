@@ -113,4 +113,42 @@
         </project>
     </supplement>
   
+    <supplement>
+        <project>
+            <groupId>org.sonatype.spice</groupId>
+            <artifactId>model-builder</artifactId>
+            <version>1.3</version>
+            <name>Maven Shared Model</name>
+            <organization>
+                <name>Sonatype, Inc</name>
+                <url>http://www.sonatype.org/</url>
+            </organization>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
+    <supplement>
+        <project>
+            <groupId>de.agilecoders.maven</groupId>
+            <artifactId>maven-parent-config</artifactId>
+            <version>0.3.5</version>
+            <name>Maven Parent Config</name>
+            <organization>
+                <name>AgileCoders</name>
+                <url>https://github.com/agile-coders</url>
+            </organization>
+            <licenses>
+                <license>
+                    <name>The Apache Software License, Version 2.0</name>
+                    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+                </license>
+            </licenses>
+        </project>
+    </supplement>
+
 </supplementalDataModels>

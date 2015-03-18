@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 /**

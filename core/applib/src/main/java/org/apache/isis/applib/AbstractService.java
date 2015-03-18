@@ -19,11 +19,11 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 
 public abstract class AbstractService extends AbstractContainedObject {
 
-    @Hidden
+    @Programmatic
     public String getId() {
         return getClassName();
     }

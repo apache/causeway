@@ -40,10 +40,16 @@ public @interface CollectionLayout {
      */
     String cssClass() default "";
 
+    // //////////////////////////////////////
+
+
     /**
      * Description of this collection, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
+
+
+    // //////////////////////////////////////
 
     /**
      * Indicates where in the UI the collection should <i>not</i>not be visible.
@@ -55,10 +61,21 @@ public @interface CollectionLayout {
      */
     Where hidden() default Where.NOT_SPECIFIED;
 
+
+    // //////////////////////////////////////
+
     /**
      * Name of this collection (overriding the name derived from its name in code).
      */
     String named() default "";
+
+
+    // //////////////////////////////////////
+
+    /**
+     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     */
+    boolean namedEscaped() default true;
 
     /**
      * The page size for instances of this class when rendered within
@@ -74,18 +91,8 @@ public @interface CollectionLayout {
      */
     public int paged() default -1;
 
-    public enum RenderType {
-        EAGERLY,
-        LAZILY;
 
-        public static Render.Type typeOf(RenderType renderType) {
-            if (renderType == EAGERLY) {
-                return Render.Type.EAGERLY;
-            } else { // (renderType == CollectionLayout.RenderType.LAZILY)
-                return Render.Type.LAZILY;
-            }
-        }
-    }
+    // //////////////////////////////////////
 
     /**
      * Indicates that the rendering of a collection should be performed lazily or eagerly.
@@ -94,7 +101,7 @@ public @interface CollectionLayout {
      * By default, collections are rendered lazily, meaning its contents is not shown automatically.
      *
      * <p>
-     * Using this attribute, an <tt>Order#lineItems</tt> collection might berendered eagerly.  A viewer might use this
+     * Using this attribute, an <tt>Order#lineItems</tt> collection might be rendered eagerly.  A viewer might use this
      * hint to &quot;open&quot; the collection automatically so that the user could see a list of line items
      * immediately when the order is rendered.
      * </p>
@@ -103,8 +110,10 @@ public @interface CollectionLayout {
      * There is some similarity between this concept and that of eager-loading as supported by some object stores.
      * </p>
      */
-    public RenderType render() default RenderType.EAGERLY;
+    public RenderType render() default RenderType.LAZILY;
 
+
+    // //////////////////////////////////////
 
     /**
      * Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the

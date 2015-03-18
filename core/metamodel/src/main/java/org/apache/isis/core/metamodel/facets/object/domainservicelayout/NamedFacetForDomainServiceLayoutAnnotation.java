@@ -37,6 +37,6 @@ public class NamedFacetForDomainServiceLayoutAnnotation extends NamedFacetAbstra
     }
 
     private NamedFacetForDomainServiceLayoutAnnotation(String value, FacetHolder holder) {
-        super(value, holder);
+        super(value, /*escaped*/ true, holder);
     }
 }

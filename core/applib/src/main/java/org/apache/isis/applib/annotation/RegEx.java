@@ -26,20 +26,30 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provides a regular expression that a value entry should conform to, and can
- * be formatted as.
- * 
- * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types.
- * To apply, the value must have string semantics.
+ *
+ * @deprecated - use {@link Property#regexPattern()} or {@link Parameter#regexPattern()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RegEx {
+
+    /**
+     * @deprecated - use {@link Property#regexPattern()} or {@link Parameter#regexPattern()} instead.
+     */
+    @Deprecated
     String validation();
 
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.annotation.Property#regexPatternReplacement()} or {@link Parameter#regexPatternReplacement()} instead.
+     */
     String format() default "";
 
+    /**
+     /**
+     * @deprecated - use {@link Property#regexPatternFlags()} or {@link Parameter#regexPatternFlags()} instead.
+     */
+    @Deprecated
     boolean caseSensitive() default true;
 }

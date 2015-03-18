@@ -42,19 +42,24 @@ public class MetaModelValidatorComposite extends MetaModelValidatorAbstract {
         return this;
     }
 
-    public List<MetaModelValidator> getValidators() {
-        return Collections.unmodifiableList(validators);
+    public MetaModelValidatorComposite addAll(
+            final MetaModelValidator... validators) {
+
+        for (final MetaModelValidator validator : validators) {
+            add(validator);
+        }
+        return this;
     }
 
     @Override
-    public void setSpecificationLoaderSpi(SpecificationLoaderSpi specificationLoader) {
+    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
         super.setSpecificationLoaderSpi(specificationLoader);
         for (final MetaModelValidator validator : validators) {
             validator.setSpecificationLoaderSpi(specificationLoader);
         }
     }
 
-    public static MetaModelValidatorComposite asComposite(MetaModelValidator baseMetaModelValidator) {
+    public static MetaModelValidatorComposite asComposite(final MetaModelValidator baseMetaModelValidator) {
         final MetaModelValidatorComposite metaModelValidatorComposite = new MetaModelValidatorComposite();
         metaModelValidatorComposite.add(baseMetaModelValidator);
         return metaModelValidatorComposite;

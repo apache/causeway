@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetOnParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetOnParameterAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeAnnotationOnPropertyFacetFactory;
 import org.apache.isis.core.metamodel.facets.properties.renderedasdaybefore.annotation.RenderedAsDayBeforeFacetAnnotationOnProperty;
@@ -67,7 +67,7 @@ public class RenderedAsDayBeforeAnnotationFacetFactoryTest extends AbstractFacet
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { LocalDate.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RenderedAdjustedFacet.class);
         assertNotNull(facet);

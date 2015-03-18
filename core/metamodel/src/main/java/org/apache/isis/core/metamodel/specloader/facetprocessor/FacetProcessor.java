@@ -90,7 +90,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * <p>
      * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<ContributeeMemberFacetFactory> cachedMemberOrderingFactories;
+    private List<ContributeeMemberFacetFactory> cachedContributeeMemberFacetFactories;
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -318,8 +318,10 @@ public class FacetProcessor implements RuntimeContextAware {
             final FeatureType featureType, 
             final Properties metadataProperties) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
+        final ProcessMethodContext processMethodContext =
+                new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.process(new ProcessMethodContext(cls, featureType, metadataProperties, method, removerElseNullRemover(methodRemover), facetedMethod));
+            facetFactory.process(processMethodContext);
         }
     }
 
@@ -327,9 +329,11 @@ public class FacetProcessor implements RuntimeContextAware {
     public void processMemberOrder(
             final Properties metadataProperties, 
             final ObjectMember facetHolder) {
-        cacheMemberOrderingFacetFactoriesIfRequired();
-        for (final ContributeeMemberFacetFactory facetFactory : cachedMemberOrderingFactories) {
-            facetFactory.process(new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder));
+        cacheContributeeMemberFacetFactoriesIfRequired();
+        final ContributeeMemberFacetFactory.ProcessContributeeMemberContext processMemberContext =
+                new ContributeeMemberFacetFactory.ProcessContributeeMemberContext(metadataProperties, facetHolder);
+        for (final ContributeeMemberFacetFactory facetFactory : cachedContributeeMemberFacetFactories) {
+            facetFactory.process(processMemberContext);
         }
     }
 
@@ -343,21 +347,26 @@ public class FacetProcessor implements RuntimeContextAware {
      * for each appropriate factory.
      * 
      * @see FacetFactory#processParams(ProcessParameterContext)
-     * 
+     *
+     * @param introspectedClass
      * @param method
      *            - action method to process
      * @param paramNum
-     *            - 0-based
+*            - 0-based
+     * @param methodRemover
      * @param facetedMethodParameter
-     *            - holder to attach facets to.
      */
     public void processParams(
-            final Method method, 
-            final int paramNum, 
+            final Class<?> introspectedClass,
+            final Method method,
+            final int paramNum,
+            final MethodRemover methodRemover,
             final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
+        final ProcessParameterContext processParameterContext =
+                new ProcessParameterContext(introspectedClass, method, paramNum, methodRemover, facetedMethodParameter);
         for (final FacetFactory facetFactory : factoryList) {
-            facetFactory.processParams(new ProcessParameterContext(method, paramNum, facetedMethodParameter));
+            facetFactory.processParams(processParameterContext);
         }
     }
 
@@ -417,15 +426,15 @@ public class FacetProcessor implements RuntimeContextAware {
         }
     }
 
-    private synchronized void cacheMemberOrderingFacetFactoriesIfRequired() {
-        if (cachedMemberOrderingFactories != null) {
+    private synchronized void cacheContributeeMemberFacetFactoriesIfRequired() {
+        if (cachedContributeeMemberFacetFactories != null) {
             return;
         }
-        cachedMemberOrderingFactories = Lists.newArrayList();
+        cachedContributeeMemberFacetFactories = Lists.newArrayList();
         for (final FacetFactory factory : factories) {
             if (factory instanceof ContributeeMemberFacetFactory) {
                 final ContributeeMemberFacetFactory memberOrderingFacetFactory = (ContributeeMemberFacetFactory) factory;
-                cachedMemberOrderingFactories.add(memberOrderingFacetFactory);
+                cachedContributeeMemberFacetFactories.add(memberOrderingFacetFactory);
             }
         }
     }

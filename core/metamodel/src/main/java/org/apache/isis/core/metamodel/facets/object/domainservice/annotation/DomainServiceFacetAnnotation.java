@@ -19,6 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.domainservice.annotation;
 
 
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacetAbstract;
 
@@ -27,7 +28,8 @@ public class DomainServiceFacetAnnotation extends DomainServiceFacetAbstract {
 
     public DomainServiceFacetAnnotation(
             final FacetHolder facetHolder,
-            final Class<?> repositoryFor) {
-        super(facetHolder, repositoryFor);
+            final Class<?> repositoryFor,
+            final NatureOfService natureOfService) {
+        super(facetHolder, repositoryFor, natureOfService);
     }
 }

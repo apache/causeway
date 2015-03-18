@@ -20,13 +20,18 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.lang.reflect.Method;
+import org.jmock.Expectations;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -34,10 +39,18 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
+public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
+    ActionLayoutFacetFactory facetFactory;
+
+    @Before
+    public void setUp() throws Exception {
+        facetFactory = new ActionLayoutFacetFactory();
+        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+    }
+
+    @Test
     public void testActionLayoutAnnotationPickedUp() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -48,17 +61,26 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
         final Method method = findMethod(Customer.class, "foz");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            will(returnValue(mockObjSpec));
+
+            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+            will(returnValue(null));
+        }});
+
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
+        Assert.assertNotNull(facet);
+        Assert.assertTrue(facet instanceof ActionPositionFacetForActionLayoutAnnotation);
         final ActionPositionFacetForActionLayoutAnnotation actionLayoutFacetAnnotation = (ActionPositionFacetForActionLayoutAnnotation) facet;
-        assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
+        Assert.assertEquals(ActionLayout.Position.PANEL, actionLayoutFacetAnnotation.position());
     }
 
+    @Test
     public void testActionLayoutFallbackPickedUp() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -69,55 +91,84 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
         final Method method = findMethod(Customer.class, "foo");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+            will(returnValue(mockObjSpec));
+
+            allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+            will(returnValue(null));
+        }});
+
+        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(ActionPositionFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ActionPositionFacetFallback);
+        Assert.assertNotNull(facet);
+        Assert.assertTrue(facet instanceof ActionPositionFacetFallback);
     }
 
-    public void testCssClassFaLeftPositionIsDefault() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
+    public static class CssClassFa extends ActionLayoutAnnotationFacetFactoryTest {
 
-        class Customer {
-            @SuppressWarnings("unused")
-            @ActionLayout(cssClassFa = "font-awesome")
-            public String foz() {
-                return null;
+        @Test
+        public void testDefaultPosition() {
+
+            class Customer {
+                @SuppressWarnings("unused")
+                @ActionLayout(cssClassFa = "font-awesome")
+                public String foz() {
+                    return null;
+                }
             }
+            final Method method = findMethod(Customer.class, "foz");
+
+            context.checking(new Expectations() {{
+                allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                will(returnValue(mockObjSpec));
+
+                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+                will(returnValue(null));
+            }});
+
+            facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover, facetedMethod));
+
+            Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
+            CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw fa-font-awesome")));
+            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.CssClassFaPosition.LEFT));
         }
-        final Method method = findMethod(Customer.class, "foz");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
+        @Test
+        public void testRightPosition() {
 
-        Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-        CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
-        assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw font-awesome")));
-        assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.CssClassFaPosition.LEFT));
-    }
-
-    public void testCssClassFaRightPosition() {
-        final ActionLayoutFactory facetFactory = new ActionLayoutFactory();
-
-        class Customer {
-            @SuppressWarnings("unused")
-            @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = ActionLayout.CssClassFaPosition.RIGHT)
-            public String foz() {
-                return null;
+            class Customer {
+                @SuppressWarnings("unused")
+                @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = ActionLayout.CssClassFaPosition.RIGHT)
+                public String foz() {
+                    return null;
+                }
             }
+            final Method method = findMethod(Customer.class, "foz");
+
+            context.checking(new Expectations() {{
+                allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
+                will(returnValue(mockObjSpec));
+
+                allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
+                will(returnValue(null));
+            }});
+
+            facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, mockMethodRemover, facetedMethod));
+
+            Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
+            assertThat(facet, is(notNullValue()));
+            assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
+            CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
+            assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw fa-font-awesome")));
+            assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.CssClassFaPosition.RIGHT));
         }
-        final Method method = findMethod(Customer.class, "foz");
 
-        facetFactory.process(new ProcessMethodContext(Customer.class, null, null, method, methodRemover, facetedMethod));
-
-        Facet facet = facetedMethod.getFacet(CssClassFaFacet.class);
-        assertThat(facet, is(notNullValue()));
-        assertThat(facet, is(instanceOf(CssClassFaFacetForActionLayoutAnnotation.class)));
-        CssClassFaFacetForActionLayoutAnnotation classFaFacetForActionLayoutAnnotation = (CssClassFaFacetForActionLayoutAnnotation) facet;
-        assertThat(classFaFacetForActionLayoutAnnotation.value(), is(equalTo("fa fa-fw font-awesome")));
-        assertThat(classFaFacetForActionLayoutAnnotation.getPosition(), is(ActionLayout.CssClassFaPosition.RIGHT));
     }
+
 
 }

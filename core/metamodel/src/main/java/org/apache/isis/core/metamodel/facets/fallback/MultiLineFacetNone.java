@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.fallback;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetNone extends MultiLineFacetAbstract {
 
