@@ -60,6 +60,11 @@ public @interface ParameterLayout {
     String named() default "";
 
     /**
+     * A flag indicating whether the value of {@linkplain #named()} should be HTML escaped or not.
+     */
+    boolean namedEscaped() default true;
+
+    /**
      * For string parameters (and properties), whether to render as a text area over multiple lines.
      */
     int multiLine() default -1;

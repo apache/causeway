@@ -22,7 +22,7 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check as to whether a particular argument for an action is valid
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check as to whether a particular argument for an action is valid
  * or not.
  * 
  * <p>
@@ -31,7 +31,10 @@ import org.apache.isis.applib.Identifier;
  * 
  * <p>
  * Called after each of the {@link ActionArgumentEvent}s.
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class ActionInvocationEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;

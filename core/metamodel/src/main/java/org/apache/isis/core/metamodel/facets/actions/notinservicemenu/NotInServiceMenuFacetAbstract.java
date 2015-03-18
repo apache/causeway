@@ -20,17 +20,21 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public abstract class NotInServiceMenuFacetAbstract extends MarkerFacetAbstract implements NotInServiceMenuFacet {
+public abstract class NotInServiceMenuFacetAbstract extends FacetAbstract implements NotInServiceMenuFacet {
 
     public static Class<? extends Facet> type() {
         return NotInServiceMenuFacet.class;
     }
 
     public NotInServiceMenuFacetAbstract(final FacetHolder holder) {
-        super(type(), holder);
+        this(holder, Derivation.NOT_DERIVED);
+    }
+
+    public NotInServiceMenuFacetAbstract(final FacetHolder holder, final Derivation derivation) {
+        super(type(), holder, derivation);
     }
 
 }

@@ -22,6 +22,10 @@ package org.apache.isis.core.metamodel.facets.object.plural.annotation;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class PluralFacetAnnotation extends PluralFacetAbstract {
 
     public PluralFacetAnnotation(final String value, final FacetHolder holder) {

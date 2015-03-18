@@ -87,9 +87,6 @@ public final class FacetUtil {
     /**
      * Bit nasty, for use only by {@link FacetHolder}s that index their
      * {@link Facet}s in a Map.
-     * 
-     * @param facetsByClass
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static Class<? extends Facet>[] getFacetTypes(final Map<Class<? extends Facet>, Facet> facetsByClass) {
@@ -99,16 +96,13 @@ public final class FacetUtil {
     /**
      * Bit nasty, for use only by {@link FacetHolder}s that index their
      * {@link Facet}s in a Map.
-     * 
-     * @param facetsByClass
-     * @return
      */
     public static List<Facet> getFacets(final Map<Class<? extends Facet>, Facet> facetsByClass, final Filter<Facet> filter) {
         final List<Facet> filteredFacets = Lists.newArrayList();
-        final List<Facet> allFacets = new ArrayList<Facet>(facetsByClass.values());
-        for (int i = 0; i < allFacets.size(); i++) {
-            final Facet facet = allFacets.get(i);
-            if (filter.accept(facet)) {
+        final List<Facet> allFacets = new ArrayList<>(facetsByClass.values());
+        for (final Facet facet : allFacets) {
+            // facets that implement MultiTypedFacet will be held more than once.  The 'contains' check ensures they are only returned once, however.
+            if (filter.accept(facet) && !filteredFacets.contains(facet)) {
                 filteredFacets.add(facet);
             }
         }

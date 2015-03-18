@@ -20,8 +20,12 @@
 package org.apache.isis.core.metamodel.facets.properties.typicallen.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objpropparam.typicallen.TypicalLengthFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class TypicalLengthFacetOnPropertyAnnotation extends TypicalLengthFacetAbstract {
 
     private final int value;

@@ -20,14 +20,25 @@
 package org.apache.isis.core.metamodel.facets.object.maxlen.annotation;
 
 import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MaxLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class MaxLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
 
     public MaxLengthFacetOnTypeAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -37,12 +48,24 @@ public class MaxLengthFacetOnTypeAnnotationFactory extends FacetFactoryAbstract 
      * In readiness for supporting <tt>@Value</tt> in the future.
      */
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final MaxLength annotation = Annotations.getAnnotation(processClassContaxt.getCls(), MaxLength.class);
-        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final MaxLength annotation = Annotations.getAnnotation(processClassContext.getCls(), MaxLength.class);
+        final MaxLengthFacet facet = create(annotation, processClassContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet));
     }
 
     private MaxLengthFacet create(final MaxLength annotation, final FacetHolder holder) {
         return annotation == null ? null : new MaxLengthFacetOnTypeAnnotation(annotation.value(), holder);
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
+    }
+
 }

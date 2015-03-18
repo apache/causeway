@@ -31,7 +31,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.Reques
 import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.jboss.resteasy.client.ClientExecutor;
 import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.specimpl.UriBuilderImpl;
+import org.jboss.resteasy.specimpl.ResteasyUriBuilder;
 
 /**
  * Configures the body, query string etc of a {@link ClientRequest}.
@@ -40,13 +40,13 @@ import org.jboss.resteasy.specimpl.UriBuilderImpl;
  * Needed because, unfortunately, {@link ClientRequest} does not seem to allow
  * the query string to be set directly (only
  * {@link ClientRequest#getQueryParameters() query parameters}). Instead, it is
- * necessary to {@link UriBuilderImpl#replaceQuery(String) use} its underlying
- * {@link UriBuilderImpl}.
+ * necessary to {@link ResteasyUriBuilder#replaceQuery(String) use} its underlying
+ * {@link ResteasyUriBuilder}.
  */
 public class ClientRequestConfigurer {
 
     public static ClientRequestConfigurer create(final ClientExecutor executor, final String uriTemplate) {
-        final UriBuilder uriBuilder = new UriBuilderImpl().uriTemplate(uriTemplate);
+        final UriBuilder uriBuilder = new ResteasyUriBuilder().uriTemplate(uriTemplate);
         final ClientRequest clientRequest = executor.createRequest(uriBuilder);
         return new ClientRequestConfigurer(clientRequest, uriBuilder);
     }

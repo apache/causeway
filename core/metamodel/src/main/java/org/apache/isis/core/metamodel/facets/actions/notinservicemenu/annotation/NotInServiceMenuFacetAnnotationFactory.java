@@ -20,14 +20,25 @@
 package org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation;
 
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NotInServiceMenuFacetAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class NotInServiceMenuFacetAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(NotInServiceMenu.class);
 
     public NotInServiceMenuFacetAnnotationFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -36,11 +47,22 @@ public class NotInServiceMenuFacetAnnotationFactory extends FacetFactoryAbstract
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         final NotInServiceMenu annotation = Annotations.getAnnotation(processMethodContext.getMethod(), NotInServiceMenu.class);
-        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
+        final NotInServiceMenuFacet facet = create(annotation, processMethodContext.getFacetHolder());
+        FacetUtil.addFacet(validator.flagIfPresent(facet, processMethodContext));
     }
 
     private NotInServiceMenuFacet create(final NotInServiceMenu annotation, final FacetHolder holder) {
         return annotation == null ? null : new NotInServiceMenuFacetAnnotation(holder);
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

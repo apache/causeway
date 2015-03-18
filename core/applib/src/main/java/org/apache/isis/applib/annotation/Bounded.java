@@ -26,10 +26,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the class has a bounded, or finite, set of instances.
+ * @deprecated - use {@link DomainObject#bounded()} instead.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Bounded {
 }

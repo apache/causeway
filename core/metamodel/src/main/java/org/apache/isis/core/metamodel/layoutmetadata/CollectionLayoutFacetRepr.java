@@ -17,7 +17,7 @@
 package org.apache.isis.core.metamodel.layoutmetadata;
 
 
-import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.RenderType;
 import org.apache.isis.applib.annotation.Where;
 
 public class CollectionLayoutFacetRepr {
@@ -26,8 +26,9 @@ public class CollectionLayoutFacetRepr {
     public String describedAs;
     public Where hidden;
     public String named;
+    public boolean namedEscaped = true;
     public int paged;
-    public CollectionLayout.RenderType render;
+    public RenderType render;
     public String sortedBy;
 
 }

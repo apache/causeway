@@ -20,7 +20,6 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 import org.apache.isis.viewer.restfulobjects.applib.client.ClientRequestConfigurer;
 import org.jboss.resteasy.client.ClientRequest;
-import org.jboss.resteasy.specimpl.UriBuilderImpl;
 
 public enum RestfulHttpMethod {
     GET(javax.ws.rs.HttpMethod.GET, ArgStrategy.QUERY_STRING), 
@@ -69,14 +68,12 @@ public enum RestfulHttpMethod {
     }
 
     /**
-     * It's a bit nasty that we need to ask for the {@link UriBuilderImpl} as
+     * It's a bit nasty that we need to ask for the {@link org.jboss.resteasy.specimpl.ResteasyUriBuilder} as
      * well as the {@link ClientRequest}, but that's because the
      * {@link ClientRequest} does not allow us to setup raw query strings (only
      * query name/arg pairs)
      * 
-     * @param restEasyRequest
-     * @param uriBuilder
-     *            - that sits underneath the restEasyRequest
+     * @param clientRequestConfigurer
      * @param requestArgs
      */
     public void setUpArgs(final ClientRequestConfigurer clientRequestConfigurer, final JsonRepresentation requestArgs) {

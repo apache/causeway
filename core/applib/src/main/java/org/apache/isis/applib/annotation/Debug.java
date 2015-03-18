@@ -27,9 +27,12 @@ import java.lang.annotation.Target;
 
 /**
  * Indicates the an action should be only available for debugging.
+ * 
+ * @deprecated - use {@link org.apache.isis.applib.annotation.Action#restrictTo()} for prototype-mode
  */
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Debug {
 }

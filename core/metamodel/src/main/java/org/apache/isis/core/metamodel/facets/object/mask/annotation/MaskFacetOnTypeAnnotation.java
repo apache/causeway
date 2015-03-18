@@ -24,6 +24,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.mask.MaskEvaluator;
 import org.apache.isis.core.metamodel.facets.object.mask.MaskFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class MaskFacetOnTypeAnnotation extends MaskFacetAbstract {
     private final MaskEvaluator evaluator;
 

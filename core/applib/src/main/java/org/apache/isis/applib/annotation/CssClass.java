@@ -33,5 +33,11 @@ import java.lang.annotation.Target;
 @Target({ ElementType.METHOD, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CssClass {
+
+    /**
+     * @deprecated - see {@link DomainObjectLayout#cssClass()}, {@link PropertyLayout#cssClass()}, {@link CollectionLayout#cssClass()}, {@link ActionLayout#cssClass()} and {@link ParameterLayout#cssClass()}
+     * @return
+     */
+    @Deprecated
     String value();
 }

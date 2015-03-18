@@ -490,25 +490,19 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     public ObjectSpecification introspectIfRequired(final ObjectSpecification spec) {
+
         final ObjectSpecificationAbstract specSpi = (ObjectSpecificationAbstract)spec;
         final IntrospectionState introspectionState = specSpi.getIntrospectionState();
 
+        // REVIEW: can't remember why this is done in multiple passes, could it be simplified?
         if (introspectionState == IntrospectionState.NOT_INTROSPECTED) {
-            specSpi.setIntrospectionState(IntrospectionState.BEING_INTROSPECTED);
-            
-            specSpi.introspectTypeHierarchyAndMembers();
-            facetDecoratorSet.decorate(spec);
-            specSpi.updateFromFacetValues();
-            
-            specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
-        } else if (introspectionState == IntrospectionState.BEING_INTROSPECTED) {
-            // nothing to do
 
-            specSpi.introspectTypeHierarchyAndMembers();
-            facetDecoratorSet.decorate(spec);
-            specSpi.updateFromFacetValues();
-            
-            specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+            specSpi.setIntrospectionState(IntrospectionState.BEING_INTROSPECTED);
+            introspect(specSpi);
+
+        } else if (introspectionState == IntrospectionState.BEING_INTROSPECTED) {
+
+            introspect(specSpi);
 
         } else if (introspectionState == IntrospectionState.INTROSPECTED) {
             // nothing to do
@@ -516,9 +510,21 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return spec;
     }
 
+    private void introspect(final ObjectSpecificationAbstract specSpi) {
+        specSpi.introspectTypeHierarchyAndMembers();
+        facetDecoratorSet.decorate(specSpi);
+        specSpi.updateFromFacetValues();
+        specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+    }
+
     @Override
     public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
-        return getCache().getByObjectType(objectSpecId);
+        final ObjectSpecification objectSpecification = getCache().getByObjectType(objectSpecId);
+        if(objectSpecification == null) {
+            // fallback
+            return loadSpecification(objectSpecId.asString());
+        }
+        return objectSpecification;
     }
 
 
@@ -628,7 +634,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
                 return o.getClass();
             }
         });
-        return Collections.unmodifiableList(serviceClasses);
+        // take a copy, to allow eg I18nFacetFactory to add in default implementations of missing services.
+        return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
     }
 
     @Override
@@ -644,21 +651,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return metaModelValidator;
     }
 
-    @Override
-    public void validateSpecifications(ValidationFailures validationFailures) {
-        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
-        for (final ObjectSpecification objSpec : allSpecifications()) {
-            final ObjectSpecId objectSpecId = objSpec.getSpecId();
-            if (objectSpecId == null) {
-                continue;
-            }
-            final ObjectSpecification existingSpec = specById.put(objectSpecId, objSpec);
-            if (existingSpec == null) {
-                continue;
-            }
-            validationFailures.add("Cannot have two entities with same object type (@ObjectType facet or equivalent) Value; " + "both %s and %s are annotated with value of ''%s''.", existingSpec.getFullIdentifier(), objSpec.getFullIdentifier(), objectSpecId);
-        }
-    }
 
 
 

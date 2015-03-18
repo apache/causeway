@@ -19,17 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.all.hide;
 
+import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
  * Hide a property, collection or action.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the
- * member with <tt>@Hidden</tt>.
  */
-public interface HiddenFacet extends WhenAndWhereValueFacet, HidingInteractionAdvisor {
+public interface HiddenFacet extends WhenAndWhereValueFacet, HidingInteractionAdvisor, MultiTypedFacet {
 
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
+import java.util.List;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -74,7 +75,8 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
 
     private void fakeRuntimeExceptionIfXFail() {
         final HttpHeaders httpHeaders = getResourceContext().getHttpHeaders();
-        if (httpHeaders.getRequestHeader("X-Fail") != null) {
+        final List<String> requestHeader = httpHeaders.getRequestHeader("X-Fail");
+        if (requestHeader != null && !requestHeader.isEmpty()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.METHOD_FAILURE);
         }
     }

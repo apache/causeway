@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
-import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -424,7 +423,7 @@ public class FacetedMethodsBuilder {
 
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
-            getFacetProcessor().processParams(actionMethod, j, actionParams.get(j));
+            getFacetProcessor().processParams(introspectedClass, actionMethod, j, methodRemover, actionParams.get(j));
         }
 
         return action;

@@ -28,27 +28,57 @@ import java.lang.annotation.Target;
 /**
  * Indicates the a (repository) action should not be contributed, either as
  * an object action, or as an association (property/collection), or as either.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * It may still be appear in the repository menu (unless it has been annotated
  * as {@link NotInServiceMenu}).
- * 
- * <p>
+ * <p/>
+ * <p/>
  * If annotated with {@link Hidden}, then also implies that the
  * menu should not be contributed.
- * 
- * <p>
+ * <p/>
+ * <p/>
  * Has no meaning for actions on regular entities.
+ *
+ * @deprecated - to not contribute at all, move action to a service whose {@link org.apache.isis.applib.annotation.DomainService#nature() nature} is {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_MENU_ONLY} or {@link org.apache.isis.applib.annotation.NatureOfService#DOMAIN}; to contribute only as an action or as an association, ensure action is in a service whose nature is {@link org.apache.isis.applib.annotation.NatureOfService#VIEW} or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}, and use {@link ActionLayout#contributed()} to specify whether the contribution should be  {@link Contributed#AS_ACTION as action} or {@link Contributed#AS_ASSOCIATION as association}.
  */
+@Deprecated
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NotContributed {
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     public enum As {
         ACTION,
         ASSOCIATION,
         EITHER;
+
+        /**
+         * @deprecated
+         */
+        @Deprecated
+        public static As from(final Contributed contributed) {
+            if(contributed == null) { return null; }
+            switch (contributed) {
+                case AS_ACTION: return As.ASSOCIATION;
+                case AS_ASSOCIATION: return As.ACTION;
+                case AS_NEITHER: return As.EITHER;
+                case AS_BOTH: return null;
+            }
+            return null;
+        }
+
     }
-    
-    As value() default As.EITHER; 
+
+    /**
+     * @deprecated
+     * @return
+     */
+    @Deprecated
+    As value() default As.EITHER;
+
 }

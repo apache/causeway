@@ -68,7 +68,7 @@ public class JavaxValidationDigitsAnnotationFacetFactoryTest extends AbstractFac
         }
         final Method method = findMethod(Order.class, "updateCost", new Class[] { BigDecimal.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(BigDecimalValueFacet.class);
         assertNotNull(facet);

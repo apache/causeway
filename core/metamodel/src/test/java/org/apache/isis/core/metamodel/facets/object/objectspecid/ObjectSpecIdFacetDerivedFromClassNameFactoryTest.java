@@ -48,9 +48,9 @@ public class ObjectSpecIdFacetDerivedFromClassNameFactoryTest extends AbstractFa
     public void installsFacet_passedThroughClassSubstitutor() {
         expectNoMethodsRemoved();
 
-        facetFactory.process(new ProcessClassContext(CustomerAsProxiedByDataNucleus.class, mockMethodRemover, facetHolderImpl));
+        facetFactory.process(new ProcessClassContext(CustomerAsProxiedByDataNucleus.class, mockMethodRemover, facetHolder));
 
-        final ObjectSpecIdFacet facet = facetHolderImpl.getFacet(ObjectSpecIdFacet.class);
+        final ObjectSpecIdFacet facet = facetHolder.getFacet(ObjectSpecIdFacet.class);
         
         assertThat(facet, is(not(nullValue())));
         assertThat(facet instanceof ObjectSpecIdFacetDerivedFromClassName, is(true));

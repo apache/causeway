@@ -22,10 +22,14 @@ package org.apache.isis.core.metamodel.facets.object.named.staticmethod;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NamedFacetStaticMethod extends NamedFacetAbstract {
 
     public NamedFacetStaticMethod(final String value, final FacetHolder holder) {
-        super(value, holder);
+        super(value, /*escaped*/ true, holder);
     }
 
 }

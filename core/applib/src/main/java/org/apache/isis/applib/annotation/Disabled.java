@@ -26,13 +26,29 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that a property/action is to be always unavailable to the user.
+ * @deprecated - see {@link Property#editing()} and {@link Collection#editing()}.
  */
 @Inherited
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Disabled {
+
+    /**
+     * @deprecated.  There is no corresponding attribute in {@link org.apache.isis.applib.annotation.Property}, {@link org.apache.isis.applib.annotation.Collection}; the feature is assumed to be disabled ALWAYS.
+     */
+    @Deprecated
     When when() default When.ALWAYS;
+
+    /**
+     * @deprecated - see {@link Property#editing()} and {@link Collection#editing()}.
+     */
+    @Deprecated
     Where where() default Where.ANYWHERE;
+
+    /**
+     * @deprecated - see {@link Property#editingDisabledReason()} and {@link Collection#editingDisabledReason()}.
+     */
+    @Deprecated
     String reason() default "";
 }

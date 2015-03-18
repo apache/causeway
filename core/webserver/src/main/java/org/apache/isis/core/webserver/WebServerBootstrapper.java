@@ -84,6 +84,9 @@ final class WebServerBootstrapper implements IsisBootstrapper {
         try {
             jettyServer.start();
             if (startupMode.isForeground()) {
+                System.in.read();
+                System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
+                jettyServer.stop();
                 jettyServer.join();
             }
         } catch (final Exception ex) {

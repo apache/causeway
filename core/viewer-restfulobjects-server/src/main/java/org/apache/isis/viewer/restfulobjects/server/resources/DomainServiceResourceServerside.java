@@ -21,9 +21,15 @@ import java.util.List;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -38,6 +44,21 @@ import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplication
 @Path("/services")
 public class DomainServiceResourceServerside extends ResourceAbstract implements DomainServiceResource {
 
+    private final static Predicate<ObjectAdapter> NATURE_OF_MENU = new Predicate<ObjectAdapter>() {
+        @Override
+        public boolean apply(final ObjectAdapter input) {
+            final ObjectSpecification specification = input.getSpecification();
+            final DomainServiceFacet facet = specification.getFacet(DomainServiceFacet.class);
+            if (facet == null) {
+                // not expected, because we know these are domain services.
+                return false;
+            }
+            final NatureOfService natureOfService = facet.getNatureOfService();
+            return  natureOfService == NatureOfService.VIEW ||
+                    natureOfService == NatureOfService.VIEW_MENU_ONLY;
+        }
+    };
+
     @Override
     @GET
     @Path("/")
@@ -45,7 +66,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     public Response services() {
         init(RepresentationType.LIST, Where.STANDALONE_TABLES);
 
-        final List<ObjectAdapter> serviceAdapters = getResourceContext().getServiceAdapters();
+        final List<ObjectAdapter> serviceAdapters =
+                Lists.newArrayList(
+                        Iterables.filter(
+                                getResourceContext().getServiceAdapters(), NATURE_OF_MENU));
 
         final DomainServicesListReprRenderer renderer = new DomainServicesListReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.usingLinkToBuilder(new DomainServiceLinkTo())

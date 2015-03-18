@@ -32,12 +32,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
      */
     void setServiceInjector(ServicesInjectorSpi services);
 
-    /**
-     * Populated as a result of running metamodel validation after all specs have been loaded.
-     * @param validationFailures 
-     */
-    void validateSpecifications(ValidationFailures validationFailures);
-
     void invalidateCacheFor(Object domainObject);
     
     void invalidateCache(Class<?> domainClass);

@@ -23,6 +23,10 @@ import org.apache.isis.applib.annotation.NotContributed.As;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class NotContributedFacetAnnotation extends NotContributedFacetAbstract {
 
     public NotContributedFacetAnnotation(As as, final FacetHolder holder) {

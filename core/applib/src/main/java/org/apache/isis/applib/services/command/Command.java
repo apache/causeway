@@ -20,7 +20,6 @@ import java.sql.Timestamp;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
-import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
@@ -32,7 +31,6 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 
 public interface Command extends HasTransactionId {
 
-    
     // //////////////////////////////////////
     // user (property)
     // //////////////////////////////////////
@@ -40,7 +38,7 @@ public interface Command extends HasTransactionId {
     /**
      * The user that initiated the action.
      */
-    @Disabled
+
     public abstract String getUser();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -57,7 +55,6 @@ public interface Command extends HasTransactionId {
     /**
      * The date/time at which this action was created.
      */
-    @Disabled
     public abstract Timestamp getTimestamp();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -79,7 +76,6 @@ public interface Command extends HasTransactionId {
      * <p>
      * Will only be populated if a {@link BookmarkService} has been configured.
      */
-    @Disabled
     public abstract Bookmark getTarget();
     /**
      * <b>NOT API</b>: intended to be called only by the framework.
@@ -103,7 +99,6 @@ public interface Command extends HasTransactionId {
      * consistency with other services (such as auditing and publishing) that may act on
      * properties rather than simply just actions.
      */
-    @Disabled
     public abstract String getMemberIdentifier();
 
     /**
@@ -121,7 +116,6 @@ public interface Command extends HasTransactionId {
     /**
      * A human-friendly description of the class of the target object.
      */
-    @Disabled
     public abstract String getTargetClass();
 
     /**
@@ -139,7 +133,6 @@ public interface Command extends HasTransactionId {
     /**
      * The human-friendly name of the action invoked on the target object.
      */
-    @Disabled
     public abstract String getTargetAction();
     
     /**
@@ -157,7 +150,6 @@ public interface Command extends HasTransactionId {
     /**
      * A human-friendly description of the arguments with which the action was invoked.
      */
-    @Disabled
     public String getArguments();
     
     /**
@@ -176,7 +168,6 @@ public interface Command extends HasTransactionId {
     /**
      * A formal (XML or similar) specification of the action to invoke/being invoked.
      */
-    @Disabled
     public String getMemento();
     
     /**
@@ -197,7 +188,6 @@ public interface Command extends HasTransactionId {
      * {@link ExecuteIn#FOREGROUND foreground}&quot; or is to be executed asynchronously &quot;in the 
      * {@link ExecuteIn#BACKGROUND background}&quot; through the {@link BackgroundCommandService}.
      */
-    @Disabled
     public ExecuteIn getExecuteIn();
     
     /**
@@ -245,7 +235,6 @@ public interface Command extends HasTransactionId {
      * </ul>
      * 
      */
-    @Disabled
     public Executor getExecutor();
 
     
@@ -270,7 +259,6 @@ public interface Command extends HasTransactionId {
      * {@link ExecuteIn#BACKGROUND background} actions, this will be populated only when the
      * action is executed by a background execution process.
      */
-    @Disabled
     public abstract Timestamp getStartedAt();
     
     /**
@@ -290,7 +278,6 @@ public interface Command extends HasTransactionId {
     /**
      * The date/time at which this action completed.
      */
-    @Disabled
     public abstract Timestamp getCompletedAt();
     
     /**
@@ -311,8 +298,6 @@ public interface Command extends HasTransactionId {
      * For actions created through the {@link BackgroundService} and {@link BackgroundCommandService},
      * captures the parent action.
      */
-    @Optional
-    @Disabled
     public Command getParent();
 
     /**
@@ -325,7 +310,6 @@ public interface Command extends HasTransactionId {
     // exception (property)
     // //////////////////////////////////////
 
-    @Disabled
     @Optional
     public String getException();
 
@@ -350,8 +334,6 @@ public interface Command extends HasTransactionId {
      * For <tt>void</tt> methods and for actions returning collections, the value
      * will be <tt>null</tt>.
      */
-    @Disabled
-    @Optional
     public Bookmark getResult();
     
     /**
@@ -386,7 +368,6 @@ public interface Command extends HasTransactionId {
      * {@link Command}.  The hinting mechanism allows the service to suggest that the parent command be persisted so
      * that the app can then provide a mechanism to find all child background commands for that original parent command.
      */
-    @Disabled
     public Persistence getPersistence();
     
     /**

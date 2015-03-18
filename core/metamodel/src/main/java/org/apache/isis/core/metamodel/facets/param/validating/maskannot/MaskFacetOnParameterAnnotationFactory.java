@@ -20,17 +20,28 @@
 package org.apache.isis.core.metamodel.facets.param.validating.maskannot;
 
 import org.apache.isis.applib.annotation.Mask;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.facets.object.mask.MaskFacet;
 import org.apache.isis.core.metamodel.facets.object.mask.TitleFacetBasedOnMask;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(Mask.class);
 
     public MaskFacetOnParameterAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -48,14 +59,15 @@ public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract 
         for (int i = 0; i < parameterAnnotations.length; i++) {
             if (parameterAnnotations[i] instanceof Mask) {
                 final Mask annotation = (Mask) parameterAnnotations[i];
-                addMaskFacetAndCorrespondingTitleFacet(processParameterContext.getFacetHolder(), annotation, parameterTypes[i]);
+                addMaskFacetAndCorrespondingTitleFacet(annotation, parameterTypes[i], processParameterContext);
                 return;
             }
         }
     }
 
-    private boolean addMaskFacetAndCorrespondingTitleFacet(final FacetHolder holder, final Mask annotation, final Class<?> cls) {
-        final MaskFacet maskFacet = createMaskFacet(annotation, holder);
+    private boolean addMaskFacetAndCorrespondingTitleFacet(final Mask annotation, final Class<?> cls, final AbstractProcessWithMethodContext processContext) {
+        final FacetHolder holder = processContext.getFacetHolder();
+        final MaskFacet maskFacet = validator.flagIfPresent(createMaskFacet(annotation, holder), processContext);
         if (maskFacet == null) {
             return false;
         }
@@ -72,6 +84,16 @@ public class MaskFacetOnParameterAnnotationFactory extends FacetFactoryAbstract 
 
     private MaskFacet createMaskFacet(final Mask annotation, final FacetHolder holder) {
         return annotation != null ? new MaskFacetOnParameterAnnotation(annotation.value(), null, holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

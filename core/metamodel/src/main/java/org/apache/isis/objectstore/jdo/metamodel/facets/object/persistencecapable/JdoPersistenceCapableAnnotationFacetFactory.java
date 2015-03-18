@@ -43,6 +43,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
         if (annotation == null) {
             return;
         }
+        final String annotationSchemaAttribute = annotation.schema();
         String annotationTableAttribute = annotation.table();
         if (Strings.isNullOrEmpty(annotationTableAttribute)) {
             annotationTableAttribute = cls.getSimpleName();
@@ -51,6 +52,7 @@ public class JdoPersistenceCapableAnnotationFacetFactory extends FacetFactoryAbs
         final IdentityType annotationIdentityType = annotation.identityType();
         
         FacetUtil.addFacet(new JdoPersistenceCapableFacetAnnotation(
+                annotationSchemaAttribute,
                 annotationTableAttribute, annotationIdentityType, processClassContext.getFacetHolder()));
         return;
     }

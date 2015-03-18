@@ -33,14 +33,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
-import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.*;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -57,6 +60,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
@@ -68,11 +72,18 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusUpdateObjectCommand;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.*;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByPatternProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByTitleProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.QueryUtil;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 
-import static org.apache.isis.core.commons.ensure.Ensure.*;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -84,7 +95,8 @@ public class DataNucleusObjectStore implements ObjectStore {
         NOT_YET_OPEN, OPEN, CLOSED;
     }
     
-    private static final String ROOT_KEY = ConfigurationConstants.ROOT + "persistor.datanucleus.";
+    private static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
+
     /**
      * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
      */
@@ -93,7 +105,7 @@ public class DataNucleusObjectStore implements ObjectStore {
     /**
      * @see #isFixturesInstalled()
      */
-    public static final String INSTALL_FIXTURES_KEY = ROOT_KEY + "install-fixtures";
+    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     static enum TransactionMode {

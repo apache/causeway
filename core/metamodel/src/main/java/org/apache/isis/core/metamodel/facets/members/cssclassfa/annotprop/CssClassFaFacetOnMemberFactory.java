@@ -35,12 +35,17 @@ import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, IsisConfigurationAware {
+public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(CssClassFa.class);
 
 
     public CssClassFaFacetOnMemberFactory() {
@@ -51,7 +56,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     public void process(final ProcessMethodContext processMethodContext) {
         CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(cssClassFaFacet == null) {
-            cssClassFaFacet = createFromAnnotationIfPossible(processMethodContext);
+            cssClassFaFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
         }
         if(cssClassFaFacet == null) {
             cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
@@ -166,12 +171,20 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     }
     //endregion
 
+    // //////////////////////////////////////
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
     //region > injected
     private IsisConfiguration configuration;
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
+        validator.setConfiguration(configuration);
     }
     //endregion
 }

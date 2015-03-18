@@ -26,13 +26,18 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.param.layout.LabelAtFacetForParameterLayoutAnnotation;
-import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFactory;
-import org.apache.isis.core.metamodel.facets.propparam.layout.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.param.layout.ParameterLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends AbstractFacetFactoryTest {
 
     public void testParameterLayoutAnnotationPickedUp() {
-        final ParameterLayoutFactory facetFactory = new ParameterLayoutFactory();
+        final ParameterLayoutFacetFactory facetFactory = new ParameterLayoutFacetFactory();
 
         class Customer {
             @SuppressWarnings("unused")
@@ -41,12 +46,12 @@ public class LabelAtFacetForParameterLayoutAnnotationFactoryTest extends Abstrac
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new FacetFactory.ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new FacetFactory.ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(LabelAtFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof LabelAtFacetForParameterLayoutAnnotation);
+        assertThat(facet, is(notNullValue()));
+        assertThat(facet, is(instanceOf(LabelAtFacetForParameterLayoutAnnotation.class)));
         final LabelAtFacetForParameterLayoutAnnotation layoutAnnotation = (LabelAtFacetForParameterLayoutAnnotation) facet;
-        assertEquals(LabelPosition.LEFT, layoutAnnotation.label());
+        assertThat(layoutAnnotation.label(), is(LabelPosition.LEFT));
     }
 }

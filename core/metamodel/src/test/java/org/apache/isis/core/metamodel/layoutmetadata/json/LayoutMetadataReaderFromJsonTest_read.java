@@ -50,7 +50,7 @@ public class LayoutMetadataReaderFromJsonTest_read {
         
         final Set<Object> expectedSet = expectedProperties.keySet();
         final Set<Object> actualSet = properties.keySet();
-        final SortedSet<Object> keys = new TreeSet<Object>();
+        final SortedSet<Object> keys = new TreeSet<>();
         keys.addAll(expectedSet);
         keys.addAll(actualSet);
         

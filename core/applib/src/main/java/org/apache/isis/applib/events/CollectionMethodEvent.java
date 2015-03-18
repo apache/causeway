@@ -22,9 +22,11 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents an interaction with a collection object itself.
- * 
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an interaction with a collection object itself.
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class CollectionMethodEvent extends AccessEvent {
 
     private static final long serialVersionUID = 1L;

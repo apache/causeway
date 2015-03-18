@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 

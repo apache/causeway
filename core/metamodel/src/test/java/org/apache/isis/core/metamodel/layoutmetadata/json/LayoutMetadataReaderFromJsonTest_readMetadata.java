@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.layoutmetadata.json;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -56,6 +57,8 @@ public class LayoutMetadataReaderFromJsonTest_readMetadata {
         assertThat(metadata.getColumns().get(0).memberGroups.get("General").members.get("complete").actions, is(not(nullValue())));
         assertThat(metadata.getColumns().get(0).memberGroups.get("General").members.get("complete").actions.size(), is(2));
         assertThat(metadata.getColumns().get(0).memberGroups.get("General").members.get("complete").actions.containsKey("completed"), is(true));
+        assertThat(metadata.getColumns().get(0).memberGroups.get("General").members.get("complete").propertyLayout.named, is(equalTo("the name of complete property")));
+        assertThat(metadata.getColumns().get(0).memberGroups.get("General").members.get("complete").propertyLayout.namedEscaped, is(true));
 
         assertThat(metadata.getColumns().get(3).collections, is(not(nullValue())));
         assertThat(metadata.getColumns().get(3).collections.containsKey("dependencies"), is(true));
@@ -74,6 +77,8 @@ public class LayoutMetadataReaderFromJsonTest_readMetadata {
         assertThat(metadata.getActions(), is(not(nullValue())));
         assertThat(metadata.getActions().size(), is(2));
         assertThat(metadata.getActions().containsKey("delete"), is(true));
+
+        assertThat(metadata.getColumns().get(0).memberGroups.get("Misc").members.get("versionSequence").propertyLayout.namedEscaped, is(false));
     }
 
 }

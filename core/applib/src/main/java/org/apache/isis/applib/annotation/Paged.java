@@ -33,6 +33,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Paged {
-    
+
+    /**
+     * @deprecated - use instead {@link DomainObjectLayout#paged()} or {@link CollectionLayout#paged()}.
+     */
+    @Deprecated
     int value();
 }

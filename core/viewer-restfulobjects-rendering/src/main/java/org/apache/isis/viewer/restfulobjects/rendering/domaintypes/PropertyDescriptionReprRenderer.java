@@ -16,7 +16,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.domaintypes;
 
-import org.apache.isis.core.metamodel.facets.propparam.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;

@@ -54,7 +54,7 @@ public abstract class FacetAbstract implements Facet {
             final Derivation derivation) {
         this.facetType = ensureThatArg(facetType, is(not(nullValue(Class.class))));
         setFacetHolder(ensureThatArg(holder, is(not(nullValue(FacetHolder.class)))));
-        this.derived = derivation == Derivation.DERIVED;
+        this.derived = (derivation == Derivation.DERIVED);
     }
 
     @Override
@@ -89,9 +89,33 @@ public abstract class FacetAbstract implements Facet {
     @Override
     public void setUnderlyingFacet(final Facet underlyingFacet) {
         if(underlyingFacet != null) {
-            Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+            if(underlyingFacet instanceof MultiTypedFacet) {
+                final MultiTypedFacet multiTypedFacet = (MultiTypedFacet) underlyingFacet;
+                final boolean matches = compatible(multiTypedFacet);
+                if(!matches) {
+                    throw new IllegalArgumentException("illegal argument, expected underlying facet (a multi-valued facet) to have equivalent to the facet type (or facet types) of this facet");
+                }
+            } else {
+                Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
+            }
         }
         this.underlyingFacet = underlyingFacet;
+    }
+
+    private boolean compatible(final MultiTypedFacet multiTypedFacet) {
+
+        if (!(this instanceof MultiTypedFacet)) {
+            return multiTypedFacet.containsFacetTypeOf(this.facetType);
+        }
+
+        final MultiTypedFacet thisAsMultiTyped = (MultiTypedFacet) this;
+        final Class<? extends Facet>[] facetTypes = thisAsMultiTyped.facetTypes();
+        for (final Class<? extends Facet> facetType : facetTypes) {
+            if(multiTypedFacet.containsFacetTypeOf(facetType)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

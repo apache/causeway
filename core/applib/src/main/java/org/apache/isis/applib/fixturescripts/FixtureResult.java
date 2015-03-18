@@ -21,7 +21,7 @@ package org.apache.isis.applib.fixturescripts;
 import org.apache.isis.applib.annotation.*;
 
 @ViewModel
-@DomainObjectLayout(paged=500)
+@ViewModelLayout(paged=500)
 public class FixtureResult {
 
 
@@ -30,7 +30,7 @@ public class FixtureResult {
     private String fixtureScriptClassName;
 
     @PropertyLayout(named="Fixture script")
-    @Optional
+    @Property(optionality = Optionality.OPTIONAL)
     @MemberOrder(sequence="1")
     public String getFixtureScriptClassName() {
         return fixtureScriptClassName;

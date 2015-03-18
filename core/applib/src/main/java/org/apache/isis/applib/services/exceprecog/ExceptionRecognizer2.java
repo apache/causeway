@@ -58,14 +58,14 @@ public interface ExceptionRecognizer2 extends ExceptionRecognizer {
         /**
          * Returns a recognition of the specified type (assuming a non-null reason); else null.
          */
-        public static Recognition of(Category category, String reason) {
+        public static Recognition of(final Category category, final String reason) {
             return reason != null? new Recognition(category, reason): null;
         }
 
         private final Category category;
         private final String reason;
 
-        public Recognition(Category category, String reason) {
+        public Recognition(final Category category, final String reason) {
             this.category = category;
             this.reason = reason;
         }

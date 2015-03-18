@@ -39,6 +39,11 @@ public @interface DomainService {
     Class<?> repositoryFor() default Object.class;
 
     /**
+     * The nature of this service, eg for menus, contributed actions, repository.
+     */
+    NatureOfService nature() default NatureOfService.VIEW;
+
+    /**
      * Number in Dewey Decimal format representing the order.
      *
      * <p>

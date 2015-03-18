@@ -20,16 +20,26 @@
 package org.apache.isis.core.metamodel.facets.param.renderedasdaybefore.annotation;
 
 import java.lang.annotation.Annotation;
-
 import org.apache.isis.applib.annotation.RenderedAsDayBefore;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.propparam.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetFactoryAbstract {
+/**
+ * @deprecated
+ */
+@Deprecated
+public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(RenderedAsDayBefore.class);
 
     public RenderedAsDayBeforeFacetOnParameterAnnotationFactory() {
         super(FeatureType.PARAMETERS_ONLY);
@@ -41,7 +51,8 @@ public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetF
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof RenderedAsDayBefore) {
                 final RenderedAsDayBefore annotation = (RenderedAsDayBefore) parameterAnnotation;
-                FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
+                final RenderedAdjustedFacet facet = create(annotation, processParameterContext.getFacetHolder());
+                FacetUtil.addFacet(validator.flagIfPresent(facet, processParameterContext));
                 return;
             }
         }
@@ -49,6 +60,16 @@ public class RenderedAsDayBeforeFacetOnParameterAnnotationFactory extends FacetF
 
     private RenderedAdjustedFacet create(final RenderedAsDayBefore annotation, final FacetHolder holder) {
         return annotation != null ? new RenderedAsDayBeforeFacetOnParameterAnnotation(holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(validator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        validator.setConfiguration(configuration);
     }
 
 }

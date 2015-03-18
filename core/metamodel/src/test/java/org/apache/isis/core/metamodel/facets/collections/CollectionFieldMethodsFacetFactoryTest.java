@@ -23,50 +23,75 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
+import org.jmock.Expectations;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
-import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
-import org.apache.isis.core.metamodel.facets.collections.modify.*;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
-import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.accessor.CollectionAccessorFacetViaAccessorFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.clear.CollectionClearFacetViaClearMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToRemoveFromAndValidateFacetFactory;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetViaAccessor;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.collections.modify.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
+import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.describedas.staticmethod.DescribedAsFacetStaticMethodFactory;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAlwaysEverywhere;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.forsession.DisableForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.disabled.staticmethod.DisabledFacetStaticMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAlwaysEverywhere;
+import org.apache.isis.core.metamodel.facets.members.hidden.forsession.HideForSessionFacetViaMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetOnStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.hidden.staticmethod.HiddenFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethod;
+import org.apache.isis.core.metamodel.facets.members.named.staticmethod.NamedFacetStaticMethodFactory;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    private ServicesInjector mockServicesInjector;
+    private TranslationService mockTranslationService;
+
+    public void setUp() throws Exception {
+        super.setUp();
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+    }
+
+
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -89,7 +114,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -112,7 +137,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings({ "rawtypes", "unused" })
@@ -135,7 +160,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -158,7 +183,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -184,7 +209,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -208,7 +233,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testCannotInferTypeOfFacetIfNoExplicitAddToOrRemoveFromMethods() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -228,7 +253,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testRemoveFromFacetIsInstalledViaAccessorIfNoExplicitRemoveFromMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -252,7 +277,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -283,7 +308,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -311,7 +336,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -342,7 +367,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -370,7 +395,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testClearFacetIsInstalledAndMethodRemoved() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -401,7 +426,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings({ "hiding", "unused" })
         class Order {
@@ -425,7 +450,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testValidateAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -461,7 +487,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testValidateRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -497,7 +524,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testMethodFoundInSuperclass() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -525,9 +552,10 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testMethodFoundInSuperclassButHelpeMethodsFoundInSubclasses() {
         final CollectionAccessorFacetViaAccessorFactory facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
-        facetFactoryForAccessor.setSpecificationLookup(reflector);
+        facetFactoryForAccessor.setSpecificationLookup(programmableReflector);
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactoryForHelpers = new CollectionAddToRemoveFromAndValidateFacetFactory();
-        facetFactoryForHelpers.setSpecificationLookup(reflector);
+        facetFactoryForHelpers.setSpecificationLookup(programmableReflector);
+        facetFactoryForHelpers.setServicesInjector(mockServicesInjector);
 
         @SuppressWarnings("hiding")
         class Order {
@@ -620,7 +648,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameOrders");
@@ -638,7 +666,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionOrders");
@@ -656,39 +684,37 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOrders");
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
+        final HiddenFacetOnStaticMethod facet = facetedMethod.getFacet(HiddenFacetOnStaticMethod.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof HiddenFacetAlwaysEverywhere);
-        final HiddenFacetAbstract hiddenFacetAlways = (HiddenFacetAlwaysEverywhere) facet;
-        assertEquals(When.ALWAYS, hiddenFacetAlways.when());
+        assertEquals(When.ALWAYS, facet.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideOtherOrders");
 
         facetFactory.process(new ProcessMethodContext(CustomerStatic.class, null, null, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetedMethod.getFacet(HiddenFacet.class));
+        assertNull(facetedMethod.getFacet(HiddenFacetOnStaticMethod.class));
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(alwaysHideMethod));
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOrders");
@@ -697,8 +723,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof DisabledFacetAlwaysEverywhere);
-        final DisabledFacetAlwaysEverywhere disabledFacetAlways = (DisabledFacetAlwaysEverywhere) facet;
+        assertTrue(facet instanceof DisabledFacetAbstractAlwaysEverywhere);
+        final DisabledFacetAbstractAlwaysEverywhere disabledFacetAlways = (DisabledFacetAbstractAlwaysEverywhere) facet;
         assertEquals(When.ALWAYS, disabledFacetAlways.when());
 
         assertTrue(methodRemover.getRemovedMethodMethodCalls().contains(protectMethod));
@@ -706,7 +732,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
         final Method protectMethod = findMethod(CustomerStatic.class, "protectOtherOrders");
@@ -720,7 +746,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideOrders", new Class[] { UserMemento.class });
@@ -738,7 +764,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableOrders", new Class[] { UserMemento.class });

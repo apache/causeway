@@ -45,12 +45,12 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     protected void setUp() throws Exception {
         super.setUp();
 
-        reflector.setLoadSpecificationStringReturn(customerNoSpec);
+        programmableReflector.setLoadSpecificationStringReturn(customerNoSpec);
     }
 
     public void testMaskAnnotationPickedUpOnClass() {
         final MaskFacetOnTypeAnnotationFactory facetFactory = new MaskFacetOnTypeAnnotationFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         @Mask("###")
         class Customer {
@@ -66,7 +66,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -88,7 +88,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -97,7 +97,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MaskFacet.class);
         assertNotNull(facet);
@@ -108,7 +108,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForNonStringsProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -126,7 +126,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLookup(reflector);
+        facetFactory.setSpecificationLookup(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -135,7 +135,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         assertNotNull(facetedMethodParameter.getFacet(MaskFacet.class));
     }

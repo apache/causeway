@@ -55,7 +55,7 @@ public class PropertyAutoCompleteFacetMethodFactory extends MethodPrefixBasedFac
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method autoCompleteMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.AUTO_COMPLETE_PREFIX + capitalizedName, null, new Class[]{String.class});
+        final Method autoCompleteMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.AUTO_COMPLETE_PREFIX + capitalizedName, (Class<?>)null, new Class[]{String.class});
         if (autoCompleteMethod == null) {
             return;
         }

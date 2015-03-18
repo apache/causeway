@@ -1,0 +1,222 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+{
+    "columns": [
+    {
+        "span": 6,
+        "memberGroups": {
+            "General": {
+                "members": {
+                    "description": {
+                        "propertyLayout": {
+                            "cssClass": "x-key",
+                            "labelPosition": "TOP"
+                        }
+                    },
+                    "category": {
+                        "propertyLayout": {
+                            "labelPosition": "TOP"
+                        }
+                    },
+                    "subcategory": {
+                        "propertyLayout": {
+                            "labelPosition": "NONE"
+                        },
+                        "actions": {
+                            "updateCategory": {
+                                "actionLayout": {
+                                    "named": "Update"
+                                }
+                            },
+                            "analyseCategory": {
+                                "actionLayout": {
+                                    "cssClass": "btn-default",
+                                    "cssClassFa": "fa fa-pie-chart"
+                                }
+                            }
+                        }
+                    },
+                    "ownedBy": {
+                        "propertyLayout": {
+                            "hidden": "EVERYWHERE"
+                        }
+                    },
+                    "complete": {
+                        "propertyLayout": {
+                            "named": "Whether this todo item has been <i>completed</i> or not.",
+                            "namedEscaped": false,
+                            "describedAs": "Whether this todo item has been completed, or not.",
+                            "labelPosition": "LEFT"
+                        },
+                        "actions": {
+                            "completed": {
+                                "actionLayout": {
+                                    "named": "Done",
+                                    "describedAs": "Update this todo item as complete",
+                                    "cssClass": "btn-success",
+                                    "cssClassFa": "fa fa-thumbs-up"
+                                }
+                            },
+                            "notYetCompleted": {
+                                "actionLayout": {
+                                    "named": "Not done",
+                                    "describedAs": "Update this todo item as not yet complete",
+                                    "cssClass": "btn-info",
+                                    "cssClassFa": "fa fa-thumbs-down"
+                                }
+                            },
+                            "scheduleExplicitly": {
+                            },
+                            "scheduleImplicitly": {
+                            }
+                        }
+                    }
+                }
+            },
+            "Misc": {
+                "members": {
+                    "versionSequence": {
+                        "propertyLayout": {
+                            "named": "Version",
+                            "hidden": "ALL_TABLES"
+                        },
+                        "disabled": {}
+                    }
+                }
+            }
+        }
+    },
+    {
+        "span": 6,
+        "memberGroups": {
+            "Priority": {
+                "members": {
+                     "relativePriority": {
+                        "actions": {
+                            "previous": {
+                                "actionLayout": {
+                                    "cssClassFa": "fa fa-step-backward"
+                                }
+                            },
+                            "next": {
+                                "actionLayout": {
+                                    "cssClassFa": "fa fa-step-forward",
+                                    "cssClassFaPosition": "right"
+                                }
+                            }
+                        }
+                    },
+                    "dueBy": {
+                        "propertyLayout": {
+                            "renderedAsDayBefore": "false"
+                        }
+                    }
+                }
+            },
+            "Other": {
+                "members": {
+                    "cost": {
+                        "actions": {
+                            "updateCost":{
+                                "actionLayout": {
+                                    "named": "Update",
+                                    "cssClassFa": "fa fa-dollar"
+                                }
+                            }
+                        }
+                    },
+                    "notes": {
+                        "propertyLayout": {
+                            "hidden": "ALL_TABLES",
+                            "labelPosition": "TOP",
+                            "multiLine": 5
+                        }
+                    },
+                    "attachment": {
+                        "propertyLayout": {
+                            "hidden": "STANDALONE_TABLES"
+                        }
+                    },
+                    "doc": {
+                        "propertyLayout": {
+                            "hidden": "STANDALONE_TABLES"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    {
+        "span": 0
+    },
+    {
+        "span": 6,
+        "collections": {
+            "dependencies": {
+                "collectionLayout": {
+                    "named": "Todo items that are <i>dependencies</i> of this item.",
+                    "namedEscaped": false,
+                    "describedAs": "Todo items that must be completed before this one",
+                    "paged": 5,
+                    "render": "EAGERLY"
+                },
+                "disabled": {},
+                "actions": {
+                    "add":{
+                        "actionLayout": {
+                            "cssClass": "btn-default",
+                            "cssClassFa": "fa fa-plus-square"
+                        }
+                    },
+                    "remove": {
+                        "actionLayout": {
+                            "cssClass": "x-caution btn-default",
+                            "cssClassFa": "fa fa-minus-square"
+                        }
+                    }
+                }
+            },
+            "similarTo": {
+                "collectionLayout": {
+                    "named": "Todo items that are <i>similar to</i> this one",
+                    "namedEscaped": false,
+                    "paged": 3,
+                    "render": "LAZILY"
+                },
+                "disabled": {}
+            }
+        }
+    }
+    ],
+    "actions": {
+        "totalCost": {},
+        "delete": {
+            "actionLayout": {
+                "cssClass": "btn btn-danger",
+                "cssClassFa": "fa fa-trash fa-lg"
+            }
+        },
+        "duplicate": {
+            "actionLayout": {
+                "named": "Clone",
+                "describedAs": "Create a new todo item from this one",
+                "cssClass": "btn-warn",
+                "cssClassFa": "fa fa-copy fa-lg"
+            }
+        }
+    }
+}

@@ -24,8 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.actions.interaction.ActionInvocationFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;

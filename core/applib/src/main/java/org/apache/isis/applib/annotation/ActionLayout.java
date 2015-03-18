@@ -33,6 +33,20 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ActionLayout {
 
+
+    /**
+     * Whether (and how) this action can be bookmarked in the UI.
+     *
+     * <p>
+     *     For bookmarkable actions, either {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT}
+     *     and {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated
+     *     identically).
+     * </p>
+     */
+    BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
+
+    // //////////////////////////////////////
+
     /**
      * Indicates the css class that an action should have.
      *
@@ -42,11 +56,15 @@ public @interface ActionLayout {
      */
     String cssClass() default "";
 
+    // //////////////////////////////////////
+
     /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * action (button or menu item).
      */
     String cssClassFa() default "";
+
+    // //////////////////////////////////////
 
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
@@ -58,20 +76,28 @@ public @interface ActionLayout {
         LEFT, RIGHT
     }
 
+    // //////////////////////////////////////
+
     /**
      * Description of this action, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
+
+    // //////////////////////////////////////
 
     /**
      * Indicates where in the UI the action should <i>not</i>not be visible.
      */
     Where hidden() default Where.NOT_SPECIFIED;
 
+    // //////////////////////////////////////
+
     /**
      * Name of this action (overriding the name derived from its name in code).
      */
     String named() default "";
+
+    // //////////////////////////////////////
 
     /**
      * For actions that are associated with a property, indicates the positioning of the
@@ -90,9 +116,19 @@ public @interface ActionLayout {
         PANEL_DROPDOWN
     }
 
+    // //////////////////////////////////////
+
     /**
-     * Whether an action is a prototype action, only available when running in prototype (development) mode.
+     * For actions of domain services that can be viewed and contributed (that is, whose
+     * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
+     * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
+     * contribution should be implemented, as an action, as an association, or as both.
+     *
+     * <p>
+     *     Has no meaning for actions of domain entities.
+     * </p>
      */
-    boolean prototype() default false;
+    Contributed contributed() default Contributed.AS_BOTH;
+
 
 }

@@ -29,11 +29,10 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
-public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerAbstract {
+public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerFixtureAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(OptionHandlerFixtureFromEnvironmentVariable.class);
 
-    private String fixtureClassName;
 
     @Override
     @SuppressWarnings("static-access")
@@ -51,19 +50,6 @@ public class OptionHandlerFixtureFromEnvironmentVariable extends OptionHandlerAb
             }
         }
         return true;
-    }
-
-    @Override
-    public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        if(fixtureClassName == null) {
-            return;
-        }
-        prime(isisConfigurationBuilder, SystemConstants.FIXTURE_KEY, fixtureClassName);
-    }
-
-    private static void prime(IsisConfigurationBuilder isisConfigurationBuilder, String key, String value) {
-        LOG.info("priming: " + key + "=" + value);
-        isisConfigurationBuilder.add(key, value);
     }
 
 }

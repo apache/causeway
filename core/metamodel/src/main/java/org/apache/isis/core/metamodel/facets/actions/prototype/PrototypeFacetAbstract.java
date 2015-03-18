@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
 import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
@@ -37,8 +38,11 @@ public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract impleme
 
     @Override
     public String hides(
-        VisibilityContext<? extends VisibilityEvent> ic) {
-        return ic.getDeploymentCategory().isPrototyping()? null: "Not visible";
+        final VisibilityContext<? extends VisibilityEvent> ic) {
+        final DeploymentCategory deploymentCategory = ic.getDeploymentCategory();
+        return deploymentCategory.isProduction()
+                ? "Prototyping action not visible in production mode"
+                : null;
     }
 
 }

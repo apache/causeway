@@ -20,17 +20,24 @@
 package org.apache.isis.core.metamodel.facets.members.named.annotprop;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.ContributeeMemberFacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory {
+public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+
+    private final MetaModelValidatorForDeprecatedAnnotation namedValidator = new MetaModelValidatorForDeprecatedAnnotation(Named.class);
+
 
     public NamedFacetOnMemberFactory() {
         super(FeatureType.MEMBERS);
@@ -40,7 +47,7 @@ public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements C
     public void process(final ProcessMethodContext processMethodContext) {
         NamedFacet namedFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
         if(namedFacet == null) {
-            namedFacet = createFromAnnotationIfPossible(processMethodContext);
+            namedFacet = namedValidator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext), processMethodContext);
         }
         // no-op if null
         FacetUtil.addFacet(namedFacet);
@@ -66,4 +73,15 @@ public class NamedFacetOnMemberFactory extends FacetFactoryAbstract implements C
         final Named annotation = Annotations.getAnnotation(processMethodContext.getMethod(), Named.class);
         return annotation != null ? new NamedFacetOnMemberAnnotation(annotation.value(), processMethodContext.getFacetHolder()) : null;
     }
+
+    @Override
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(namedValidator);
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        namedValidator.setConfiguration(configuration);
+    }
+
 }

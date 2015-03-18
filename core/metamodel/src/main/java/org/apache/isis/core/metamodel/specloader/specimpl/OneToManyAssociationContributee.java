@@ -17,7 +17,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -31,10 +30,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -42,8 +43,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 
@@ -77,17 +76,27 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
 
-        // copy over facets from contributed to own.
-        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
-        
+        //
+        // ensure the contributed collection cannot be modified, and derive its TypeOfFaccet
+        //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {}; 
-        
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {};
+
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
         FacetUtil.addFacet(typeOfFacet);
+
+
+        //
+        // in addition, copy over facets from contributed to own.
+        //
+        // These could include everything under @Collection(...) because the
+        // CollectionAnnotationFacetFactory is also run against actions.
+        //
+        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
         
+
         // calculate the identifier
         final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
@@ -104,7 +113,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
-        return new DisabledFacetImpl(When.ALWAYS, Where.ANYWHERE, "Contributed collection", this);
+        return new DisabledFacetForContributee("Contributed collection", this);
     }
 
     @Override
@@ -116,7 +125,18 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     public Identifier getIdentifier() {
         return identifier;
     }
-    
+
+    @Override
+    public boolean isContributedBy(final ObjectAction serviceAction) {
+        return serviceAction == this.serviceAction;
+    }
+
+    @Override
+    public int getContributeeParamPosition() {
+        // always 0 for contributed collections
+        return 0;
+    }
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
         final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);

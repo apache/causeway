@@ -31,7 +31,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.integtestsupport.legacy.sample.domain.Order;
-import org.apache.isis.core.metamodel.facets.members.disabled.annotprop.DisabledFacetAnnotation;
+import org.apache.isis.core.metamodel.facets.properties.property.disabled.DisabledFacetForDisabledAnnotationOnProperty;
 import org.apache.isis.core.metamodel.facets.members.disabled.method.DisableForContextFacetViaMethod;
 
 public class MemberDisabledTest extends AbstractTest {
@@ -96,7 +96,7 @@ public class MemberDisabledTest extends AbstractTest {
             custJsWO.addToMoreOrders(order);
             fail("Should have thrown exception");
         } catch (final DisabledException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(DisabledFacetForDisabledAnnotationOnProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("More Orders"));
             assertThat(ex.getMessage(), Matchers.containsString("Always disabled"));
         }

@@ -53,7 +53,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
             @Override
             public void summarize(ValidationFailures validationFailures) {
                 if(!found) {
-                    validationFailures.add("DataNucleus object store: no @PersistenceCapable found. " +
+                    validationFailures.add("No @PersistenceCapable entities found. " +
                             "(Are the entities referenced by the registered services? " + 
                             "are all services registered? " + 
                             "did the DataNucleus enhancer run?)");
@@ -85,7 +85,10 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
                 } else {
                     // in fact, at the time of writing there are no others, so this is theoretical in case there is 
                     // a future change to the JDO spec
-                    validationFailures.add("DataNucleus object store: %s is annotated with @PersistenceCapable but with an unrecognized identityType (%s)", objSpec.getFullIdentifier(), identityType);
+                    validationFailures.add(
+                            "%s: is annotated with @PersistenceCapable but with an unrecognized identityType (%s)",
+                            objSpec.getFullIdentifier(),
+                            identityType);
                 }
                 
                 return true;
@@ -99,7 +102,9 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
             @Override
             public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
                 if (objSpec.containsDoOpFacet(ParentedFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
-                    validationFailures.add("DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations: see %s", objSpec.getFullIdentifier());
+                    validationFailures.add(
+                            "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
+                            objSpec.getFullIdentifier());
                 }
                 return true;
             }};

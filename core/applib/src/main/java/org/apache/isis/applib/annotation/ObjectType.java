@@ -26,15 +26,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Provides a unique abbreviation for the object type, eg &quot;CUS&quot; for Customer.
- * 
- * <p>
- * This value, if specified, is used in the serialized form of the object's OID.  An OID is
- * used by the framework to unique identify an object over time (same concept as a URN). 
+ * @deprecated - use {@link DomainObject#objectType()} instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ObjectType {
+    /**
+     * @deprecated - use {@link DomainObject#objectType()} instead.
+     */
+    @Deprecated
     String value();
 }

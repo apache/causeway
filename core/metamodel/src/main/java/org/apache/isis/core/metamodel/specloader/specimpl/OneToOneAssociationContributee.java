@@ -17,7 +17,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -31,6 +30,9 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -39,8 +41,6 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetImpl;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember {
 
@@ -64,18 +64,27 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberContext);
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
-        
-        // copy over facets from contributed to own.
-        FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
-        
+
+        //
+        // ensure the contributed property cannot be modified
+        //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
         
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
-        
+
+        //
+        // in addition, copy over facets from contributed to own.
+        //
+        // These could include everything under @Property(...) because the
+        // PropertyAnnotationFacetFactory is also run against actions.
+        //
+        final FacetedMethod contributor = serviceAction.getFacetedMethod();
+        FacetUtil.copyFacets(contributor, facetHolder);
+
         // calculate the identifier
-        final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
+        final Identifier contributorIdentifier = contributor.getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
         List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
         
@@ -90,7 +99,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
             return originalFacet;
         }
         // ensure that the contributed association is always disabled
-        return new DisabledFacetImpl(When.ALWAYS, Where.ANYWHERE, "Contributed property", this);
+        return new DisabledFacetForContributee("Contributed property", this);
     }
 
     @Override
@@ -102,8 +111,18 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     public Identifier getIdentifier() {
         return identifier;
     }
-    
-    
+
+    @Override
+    public boolean isContributedBy(final ObjectAction serviceAction) {
+        return serviceAction == this.serviceAction;
+    }
+
+    @Override
+    public int getContributeeParamPosition() {
+        // always 0 for contributed properties
+        return 0;
+    }
+
     @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
         final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);

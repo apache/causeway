@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.app;
 
 import java.util.List;
 import org.jmock.auto.Mock;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
@@ -53,7 +54,12 @@ public class IsisMetaModelTest_constructWithServices {
 
     private static class SomeRepo {}
     private static class SomeOtherRepo {}
-    
+
+    @Before
+    public void setUp() throws Exception {
+        context.ignoring(mockProgrammingModel);
+    }
+
     @Test
     public void shouldSucceedWithoutThrowingAnyExceptions() {
         metaModel = new IsisMetaModel(mockContext, mockProgrammingModel);

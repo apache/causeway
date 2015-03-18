@@ -65,7 +65,6 @@ import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
  * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath; no further configuration is required.
  * </p>
  */
-@Hidden
 public interface WrapperFactory {
 
     /**

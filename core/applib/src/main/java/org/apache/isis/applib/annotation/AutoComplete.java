@@ -28,21 +28,18 @@ import java.lang.annotation.Target;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 
 /**
- * Specifies a repository action to use to support auto-complete.
+ * @deprecated - see {@link DomainObject#autoCompleteRepository()}.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface AutoComplete {
 
     /**
-     * A candidate match for the auto-complete.
-     * 
-     * <p>
-     * The auto-complete action is required to return a list of these instances.
-     * The title can be used by the viewer in the drop down, while the
-     * {@link #getBookmark()} identifies the object.
+     * @deprecated - never implemented, also not required.
      */
+    @Deprecated
     public static class Candidate {
         private final String title;
         private final Bookmark bookmark;
@@ -59,20 +56,15 @@ public @interface AutoComplete {
     }
     
     /**
-     * The class of the repository to use.
-     * 
-     * <p>
-     * It is sufficient to specify an interface rather than a concrete type.
+     * @deprecated - see {@link DomainObject#autoCompleteRepository()}.
      */
+    @Deprecated
     Class<?> repository();
     
     /**
-     * The action to use in order to perform the auto-complete search
-     * (defaults to &quot;autoComplete&quot;).
-     * 
-     * <p>
-     * The action is required to accept a single string parameter, and must return
-     * 
+     * @deprecated - see {@link DomainObject#autoCompleteAction()}.
      */
+    @Deprecated
     String action() default "autoComplete";
+
 }

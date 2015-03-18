@@ -23,10 +23,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 
+/**
+ * @deprecated
+ */
+@Deprecated
 public class BookmarkPolicyFacetViaBookmarkableAnnotation extends BookmarkPolicyFacetAbstract {
 
-    public BookmarkPolicyFacetViaBookmarkableAnnotation(FacetHolder facetHolder, BookmarkPolicy bookmarkPolicy) {
-        super(facetHolder, bookmarkPolicy);
+    public BookmarkPolicyFacetViaBookmarkableAnnotation(BookmarkPolicy bookmarkPolicy, FacetHolder facetHolder) {
+        super(bookmarkPolicy, facetHolder);
     }
 
 

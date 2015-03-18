@@ -203,7 +203,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
             serviceSpecification.markAsService();
             final RootOid existingOid = getOidForService(serviceSpecification);
-            ObjectAdapter serviceAdapter = 
+            final ObjectAdapter serviceAdapter =
                     existingOid == null
                             ? getAdapterManager().adapterFor(service) 
                             : getAdapterManager().mapRecreatedPojo(existingOid, service);
@@ -223,7 +223,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     /**
      * @return - the service, or <tt>null</tt> if no service registered of specified type.
      */
-    public <T> T getServiceOrNull(Class<T> serviceType) {
+    public <T> T getServiceOrNull(final Class<T> serviceType) {
         return servicesInjector.lookupService(serviceType);
     }
 
@@ -249,13 +249,13 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         
         try {
             objectStore.close();
-        } catch(RuntimeException ex) {
+        } catch(final RuntimeException ex) {
             // ignore
         }
 
         try {
             adapterManager.close();
-        } catch(RuntimeException ex) {
+        } catch(final RuntimeException ex) {
             // ignore
         }
 
@@ -315,12 +315,12 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return objectSpec.initialize(adapter);
     }
 
-    public ObjectAdapter createViewModelInstance(ObjectSpecification objectSpec, String memento) {
+    public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating view model instance of " + objectSpec);
         }
         final Object pojo = objectSpec.createObject();
-        ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+        final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
         facet.initialize(pojo, memento);
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
         return objectSpec.initialize(adapter);
@@ -500,7 +500,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * be given the same OID that it had when it was created in a different
      * session.
      */
-    protected RootOid getOidForService(ObjectSpecification serviceSpec) {
+    protected RootOid getOidForService(final ObjectSpecification serviceSpec) {
         return getOidForServiceFromPersistenceLayer(serviceSpec);
     }
 
@@ -530,7 +530,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return serviceAdapter;
     }
 
-    private RootOid getOidForServiceFromPersistenceLayer(ObjectSpecification serviceSpecification) {
+    private RootOid getOidForServiceFromPersistenceLayer(final ObjectSpecification serviceSpecification) {
         final ObjectSpecId objectSpecId = serviceSpecification.getSpecId();
         RootOid oid = servicesByObjectType.get(objectSpecId);
         if (oid == null) {
@@ -609,7 +609,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     private ObjectAdapter loadMappedObjectFromObjectStore(final TypedOid oid) {
-        ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+        final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
                 return objectStore.loadInstanceAndAdapt(oid);
@@ -813,7 +813,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * should be removed from the persistence mechanism.
      */
     public void destroyObject(final ObjectAdapter adapter) {
-        ObjectSpecification spec = adapter.getSpecification();
+        final ObjectSpecification spec = adapter.getSpecification();
         if (spec.isParented()) {
             return;
         }
@@ -884,7 +884,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * To support ISIS-234; keep track, for the duration of the transaction only,
      * of the old transient {@link Oid}s and their corresponding persistent {@link Oid}s.
      */
-    public Oid remappedFrom(Oid transientOid) {
+    public Oid remappedFrom(final Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
 
@@ -1052,7 +1052,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     // for testing only
-    void setTransactionManager(IsisTransactionManager transactionManager) {
+    void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 

@@ -17,6 +17,8 @@
 package org.apache.isis.core.runtime.services.xmlsnapshot;
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotService;
 import org.apache.isis.applib.services.xmlsnapshot.XmlSnapshotServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -36,7 +38,9 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
 
     static class XmlSnapshotServiceDefaultBuilder implements XmlSnapshotService.Builder{
@@ -66,6 +70,8 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
     /**
      * Creates a simple snapshot of the domain object.
      */
+    @Programmatic
+    @Override
     public XmlSnapshotService.Snapshot snapshotFor(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         return new XmlSnapshot(adapter, getOidMarshaller());
@@ -76,6 +82,8 @@ public class XmlSnapshotServiceDefault extends XmlSnapshotServiceAbstract {
      * properties or collections (using {@link Builder#includePath(String)} and 
      * {@link Builder#includePathAndAnnotation(String, String)}) - to be created.
      */
+    @Programmatic
+    @Override
     public Builder builderFor(final Object domainObject) {
         return new XmlSnapshotServiceDefaultBuilder(domainObject);
     }

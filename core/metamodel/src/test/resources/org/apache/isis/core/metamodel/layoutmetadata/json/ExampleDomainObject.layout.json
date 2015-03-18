@@ -15,46 +15,51 @@
  *  limitations under the License.
  */
 {
-    columns: [
+    "columns": [
     {
-        span: 3,
-        memberGroups: {
-            General: {
-                members: {
-                    description: {
-                        typicalLength: {
-                            value: 50
+        "span": 3,
+        "memberGroups": {
+            "General": {
+                "members": {
+                    "description": {
+                        "typicalLength": {
+                            "value": 50
                         }
                     },
-                    category: {},
-                    complete: {
-                        actions: {
-                            completed: {
-                                named: { value: "Done" },
-                                describedAs: {
-                                    value: "Mark this todo item as having been completed"
+                    "category": {},
+                    "complete": {
+                        "actions": {
+                            "completed": {
+                                "named": { "value": "Done" },
+                                "describedAs": {
+                                    "value": "Mark this todo item as having been completed"
                                 }
                             },
-                            notYetCompleted: {}
+                            "notYetCompleted": {}
                         },
-			            named: { value: "Done" },
-			            describedAs: {
-			                value: "Whether this todo item has been completed"
-			            },
-                        cssClass: { value: "x-highlight" },
-                        disabled: {
-                            where: ANYWHERE,
-                            when: ALWAYS
+                        "propertyLayout": {
+                            "named": "the name of complete property"
+                        },
+                        "describedAs": {
+                            "value": "Whether this todo item has been completed"
+                        },
+                        "cssClass": { "value": "x-highlight" },
+                        "disabled": {
+                            "where": "ANYWHERE",
+                            "when": "ALWAYS"
                         }
                     }
                 }
             },
-            Misc: {
-                members: {
-                    versionSequence: {
-                        hidden: {
-                            where: ALL_TABLES,
-                            when: ALWAYS 
+            "Misc": {
+                "members": {
+                    "versionSequence": {
+                        "hidden": {
+                            "where": "ALL_TABLES",
+                            "when": "ALWAYS"
+                        },
+                        "propertyLayout": {
+                            "namedEscaped": false
                         }
                     }
                 }
@@ -62,71 +67,70 @@
         }
     },
     {
-        span: 4,
-        memberGroups: {
-            Detail: {
-                members: {
-                    dueBy: {
-                        actions: {
-                            dueBy: {
-                                cssClass: { value: "x-key2" }
+        "span": 4,
+        "memberGroups": {
+            "Detail": {
+                "members": {
+                    "dueBy": {
+                        "actions": {
+                            "dueBy": {
+                                "cssClass": { "value": "x-key2" }
                             }
                         },
-                        cssClass: { value: "x-key" }
+                        "cssClass": { "value": "x-key" }
                     },
-                    cost: {
-                        actions: {
-                            updateCost:{}
+                    "cost": {
+                        "actions": {
+                            "updateCost":{}
                         }
                     },
-                    notes: {
-                        multiLine: {
-                            numberOfLines: 5
+                    "notes": {
+                        "multiLine": {
+                            "numberOfLines": 5
                         }
                     },
-                    attachment: {}
+                    "attachment": {}
                 }
             }
         }
     },
     {
-        span: 0
+        "span": 0
     },
     {
-        span: 5,
-        collections: {
-            dependencies: {
-                actions: {
-                    add:{},
-                    remove: {
-                        cssClass: { value: "x-caution" }
+        "span": 5,
+        "collections": {
+            "dependencies": {
+                "actions": {
+                    "add":{},
+                    "remove": {
+                        "cssClass": { "value": "x-caution" }
                     }
                 },
-                paged: {
-                    value: 5
+                "paged": {
+                    "value": 5
                 },
-                render: {}
+                "render": {}
             },
-            similarItems: {
-                render: {
-                    value: LAZILY
+            "similarItems": {
+                "render": {
+                    "value": "LAZILY"
                 }
             }
         }
     }
     ],
-    actions: {
-        delete: {
-            cssClass: { value: "x-caution" }
+    "actions": {
+        "delete": {
+            "cssClass": { "value": "x-caution" }
         },
-        duplicate: {
-            named: {
-                value: "Clone"
+        "duplicate": {
+            "named": {
+                "value": "Clone"
             },
-            describedAs: {
-                value: "Create a new todo item from this one"
+            "describedAs": {
+                "value": "Create a new todo item from this one"
             }
         }
     }
 }
- 

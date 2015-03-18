@@ -25,29 +25,19 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.apache.isis.applib.services.audit.AuditingService3;
-
 /**
- * Indicates that the entity should be audited.
- * 
- * <p>
- * Requires that an implementation of the {@link AuditingService3} is registered with the framework.
- * 
- * <p>
- * Check that the configured object store supports the annotation.  For example, the
- * JDO objectstore does support this annotation, but others may not.
- * 
- * <p>
- * Alternatively can use the similarly named {@link org.apache.isis.applib.marker.Auditable marker interface}.
+ * @deprecated - see {@link DomainObject#auditing()}.
  */
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Deprecated
 public @interface Audited {
+
     /**
-     * If set to <tt>true</tt>, acts as an override to <i>disable</i> auditing when it is otherwise (eg through 
-     * configuration) configured as the default.
+     * @deprecated - use {@link DomainObject#auditing()} instead.
      */
+    @Deprecated
     boolean disabled() default false;
 
 }

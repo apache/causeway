@@ -26,21 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Names of groups of properties, as they appear as the <tt>name</tt> attribute
- * of the {@link MemberOrder} annotation.
- * 
- * <p>
- * The order in this list determines the order that the property groups will be
- * rendered. By convention any {@link MemberOrder} that does not have a
- * {@link MemberOrder#name() name} is considered to be in the default group,
- * whose name is hard-coded as <i>General</i>.
- * 
- * <p>
- * In the case of the Wicket viewer, these property groups are rendered down the
- * left hand side.
- * 
- * @deprecated - use {@link MemberGroupLayout} instead. If both annotations are
- *             present, then {@link MemberGroupLayout} takes precedence.
+ * @deprecated - use {@link MemberGroupLayout} instead. If both annotations are present, then {@link MemberGroupLayout} takes precedence.
  */
 @Inherited
 @Target({ ElementType.TYPE })
@@ -49,8 +35,9 @@ import java.lang.annotation.Target;
 public @interface MemberGroups {
 
     /**
-     * Specifies the order of the member groups.
+     * @deprecated - use {@link org.apache.isis.applib.annotation.MemberGroupLayout#left()} instead.
      */
+    @Deprecated
     String[] value() default {};
 
 }

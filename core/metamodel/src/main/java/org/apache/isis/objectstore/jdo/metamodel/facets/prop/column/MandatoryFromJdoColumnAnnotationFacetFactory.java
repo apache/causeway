@@ -30,9 +30,10 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.properties.mandatory.annotation.mandatory.MandatoryFacetOnPropertyMandatoryAnnotation;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.facets.propparam.mandatory.MandatoryFacetDefault;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForMandatoryAnnotationOnProperty;
+import org.apache.isis.core.metamodel.facets.properties.property.mandatory.MandatoryFacetForPropertyAnnotation;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -65,9 +66,14 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 // we must keep an optional facet here for different reasons
                 return;
             }
-            if (existingFacet instanceof MandatoryFacetOnPropertyMandatoryAnnotation) {
+            if (existingFacet instanceof MandatoryFacetForMandatoryAnnotationOnProperty) {
                 // do not replace this facet; 
                 // an explicit @Mandatory annotation cannot be overridden by @Column annotation
+                return;
+            }
+            if (existingFacet instanceof MandatoryFacetForPropertyAnnotation.Required) {
+                // do not replace this facet;
+                // an explicit @Property(optional=FALSE) annotation cannot be overridden by @Column annotation
                 return;
             }
 
@@ -155,7 +161,9 @@ public class MandatoryFromJdoColumnAnnotationFacetFactory extends FacetFactoryAb
                 if(facet instanceof MandatoryFacetDerivedFromJdoColumn) {
 
                     if(association.isNotPersisted()) {
-                        validationFailures.add("%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)", association.getIdentifier().toClassAndNameIdentityString());
+                        validationFailures.add(
+                                "%s: @javax.jdo.annotations.Column found on non-persisted property; please remove)",
+                                association.getIdentifier().toClassAndNameIdentityString());
                         return;
                     }
 

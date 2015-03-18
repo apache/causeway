@@ -19,17 +19,26 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclass;
 
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
-public class CssClassFacetAbstract extends SingleStringValueFacetAbstract implements CssClassFacet {
-
-    public CssClassFacetAbstract(final String value, final FacetHolder holder) {
-        super(type(), holder, value);
-    }
+public abstract class CssClassFacetAbstract extends FacetAbstract implements CssClassFacet {
 
     public static Class<? extends Facet> type() {
         return CssClassFacet.class;
+    }
+
+    private final String value;
+
+    public CssClassFacetAbstract(final String value, final FacetHolder holder) {
+        super(type(), holder, Derivation.NOT_DERIVED);
+        this.value = value;
+    }
+
+    @Override
+    public String cssClass(final ObjectAdapter objectAdapter) {
+        return value;
     }
 }

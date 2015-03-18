@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContex
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLineFacetOnTypeAnnotation;
 import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLineFacetOnTypeAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.multiline.annotation.MultiLineFacetOnParameterAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.properties.multiline.annotation.MultiLineFacetOnPropertyFactory;
@@ -85,7 +86,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
@@ -138,7 +139,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MultiLineFacet.class));
     }

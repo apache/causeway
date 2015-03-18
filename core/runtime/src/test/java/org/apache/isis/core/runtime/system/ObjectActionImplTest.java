@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -81,7 +84,8 @@ public class ObjectActionImplTest {
 
     @Test
     public void testNameDefaultsToActionsMethodName() {
-        final NamedFacet facet = new NamedFacetAbstract("Reduceheadcount", mockFacetedMethod) {
+        final String name = "Reduceheadcount";
+        final NamedFacet facet = new NamedFacetAbstract(name, true, mockFacetedMethod) {
         };
         context.checking(new Expectations() {
             {
@@ -89,7 +93,7 @@ public class ObjectActionImplTest {
                 will(returnValue(facet));
             }
         });
-        assertEquals("Reduceheadcount", action.getName());
+        assertThat(action.getName(), is(equalTo(name)));
     }
 
     @Test

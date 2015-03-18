@@ -20,10 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.homepage.annotation;
 
 import java.util.List;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.services.homepage.AbstractHomePageDashboardService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -95,10 +93,14 @@ public class HomePageFacetAnnotationFactory extends FacetFactoryAbstract impleme
             @Override
             public void summarize(ValidationFailures validationFailures) {
                 if(annotated.size()>1) {
-                    final String nonServiceNamesStr = Joiner.on(", ").join(annotated);
-                    validationFailures.add(
-                            "Only one service action can be specified as the dashboard; "
-                            + "found HomePageFacet on these actions: %s", nonServiceNamesStr);
+                    for (String actionId : annotated) {
+                        final List<String> others = Lists.newArrayList(annotated);
+                        others.remove(actionId);
+                        final String nonServiceNamesStr = Joiner.on(", ").join(others);
+                        validationFailures.add(
+                            "%s: other actions also specified as home page: %s ",
+                            actionId, nonServiceNamesStr);
+                    }
                 }
             }
         };

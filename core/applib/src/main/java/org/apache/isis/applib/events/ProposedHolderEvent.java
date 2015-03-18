@@ -20,10 +20,13 @@
 package org.apache.isis.applib.events;
 
 /**
- * Makes it easier to process different events that hold a single proposed
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> makes it easier to process different events that hold a single proposed
  * argument (such as {@link CollectionAddToEvent} and
  * {@link PropertyModifyEvent}).
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public interface ProposedHolderEvent {
 
     Object getProposed();

@@ -38,7 +38,10 @@ import java.lang.annotation.Target;
  * rarely required; see the {@link Mandatory} annotation javadoc for further discussion.
  * 
  * @see Mandatory
+ *
+ * @deprecated - use {@link Property#optionality()} and {@link Parameter#optionality()}  (with {@link Optionality#OPTIONAL}) instead.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)

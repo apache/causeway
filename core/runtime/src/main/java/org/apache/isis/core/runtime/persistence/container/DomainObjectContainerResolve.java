@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.ResolveStateUtil;
 
 /**
  * Helper class that encapsulates the processing performed by domain object
@@ -55,6 +56,9 @@ public class DomainObjectContainerResolve {
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;
+        }
+        if(oid.isViewModel()) {
+            ResolveStateUtil.markAsResolved(adapter);
         }
         if (adapter.canTransitionToResolving()) {
             getPersistenceSession().resolveImmediately(adapter);

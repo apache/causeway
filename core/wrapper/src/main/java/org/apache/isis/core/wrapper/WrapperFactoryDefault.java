@@ -21,6 +21,7 @@ package org.apache.isis.core.wrapper;
 
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 
 /**
  * This service provides the ability to &quot;wrap&quot; of a domain object such that it can
@@ -33,7 +34,7 @@ import org.apache.isis.applib.annotation.DomainService;
  * <tt>o.a.i.core:isis-core-wrapper</tt> on the classpath, the service is automatically registered; no further
  * configuration is required.
  */
-@DomainService
+@DomainService(nature = NatureOfService.DOMAIN)
 public class WrapperFactoryDefault extends WrapperFactoryJavassist {
 
 }

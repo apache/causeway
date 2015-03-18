@@ -54,6 +54,10 @@ import org.apache.isis.applib.adapters.ValueSemanticsProvider;
  * @see Encodable
  * @see Immutable
  * @see EqualByContent
+ *
+ * <p>
+ *     Note: This annotation is only incompletely recognized by the framework, and may be deprecated in the future.
+ * </p>
  */
 @Inherited
 @Target({ ElementType.TYPE })

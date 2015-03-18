@@ -28,7 +28,6 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
@@ -40,10 +39,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -257,7 +254,8 @@ public interface ObjectAction extends ObjectMember {
         }
 
         public static String cssClassFaFor(final ObjectAction action) {
-            return facetValueIfAnyFor(action, CssClassFaFacet.class);
+            final CssClassFaFacet cssClassFaFacet = action.getFacet(CssClassFaFacet.class);
+            return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
         }
 
         public static ActionLayout.CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
@@ -265,13 +263,9 @@ public interface ObjectAction extends ObjectMember {
             return facet != null ? facet.getPosition() : ActionLayout.CssClassFaPosition.LEFT;
         }
 
-        public static String cssClassFor(final ObjectAction action) {
-            return facetValueIfAnyFor(action, CssClassFacet.class);
-        }
-
-        private static String facetValueIfAnyFor(ObjectAction action, Class<? extends SingleStringValueFacet> facetType) {
-            final SingleStringValueFacet singleStringValueFacet = action.getFacet(facetType);
-            return singleStringValueFacet != null ? singleStringValueFacet.value() : null;
+        public static String cssClassFor(final ObjectAction action, final ObjectAdapter objectAdapter) {
+            final CssClassFacet cssClassFacet = action.getFacet(CssClassFacet.class);
+            return cssClassFacet != null ? cssClassFacet.cssClass(objectAdapter) : null;
         }
 
     }
@@ -284,9 +278,6 @@ public interface ObjectAction extends ObjectMember {
     public static final class Predicates {
 
         private Predicates(){}
-
-        public static final Predicate<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES =
-                org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
 
         public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
@@ -326,18 +317,6 @@ public interface ObjectAction extends ObjectMember {
     public static final class Filters {
         
         private Filters(){}
-
-        /**
-         * @deprecated -use {@link com.google.common.base.Predicate equivalent}
-         */
-        @Deprecated
-        public static final Filter<ObjectAction> VISIBLE_AT_LEAST_SOMETIMES = new Filter<ObjectAction>() {
-            @Override
-            public boolean accept(final ObjectAction action) {
-                final HiddenFacet hiddenFacet = action.getFacet(HiddenFacet.class);
-                return hiddenFacet == null || hiddenFacet.when() != When.ALWAYS || hiddenFacet.where() != Where.ANYWHERE;
-            }
-        };
 
         /**
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
