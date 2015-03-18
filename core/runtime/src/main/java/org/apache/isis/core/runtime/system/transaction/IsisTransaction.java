@@ -85,7 +85,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionS
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -512,37 +511,31 @@ public class IsisTransaction implements TransactionScopedComponent {
         // with previous algorithm that always went through the execute phase at least once.
         //
         do {
-            // We take a copy of the commands to be executed (executing these
-            // might add to this.commands).
-            final List<PersistenceCommand> commandsPrior = 
-                    Collections.unmodifiableList(Lists.newArrayList(commands));
-            try {
-                objectStore.execute(commandsPrior);
-                for (final PersistenceCommand command : commandsPrior) {
+            // this algorithm ensures that we never execute the same command twice,
+            // and also allow new commands to be added to end
+            PersistenceCommand command = commands.isEmpty()? null: commands.get(0);
+
+            if(command != null) {
+                // so won't be processed again if a flush is encountered subsequently
+                commands.remove(command);
+                try {
+                    objectStore.execute(Collections.singletonList(command));
                     if (command instanceof DestroyObjectCommand) {
                         final ObjectAdapter adapter = command.onAdapter();
                         adapter.setVersion(null);
-                        if(!adapter.isDestroyed()) {
+                        if (!adapter.isDestroyed()) {
                             adapter.changeState(ResolveState.DESTROYED);
                         }
                     }
+                } catch (final RuntimeException ex) {
+                    // if there's an exception, we want to make sure that
+                    // all commands are cleared and propagate
+                    commands.clear();
+                    throw ex;
                 }
-                commands.removeAll(commandsPrior);
-            } catch(final RuntimeException ex) {
-                // if there's an exception, we want to make sure that 
-                // all commands are cleared and propagate
-                commands.clear();
-                throw ex;
             }
-        } while(!commands.isEmpty() && i++ < MAX_FLUSH_ATTEMPTS);
+        } while(!commands.isEmpty());
         
-        if(!commands.isEmpty()) {
-            // must have hit max flush
-            final List<PersistenceCommand> commandsStillToFlush = 
-                    Collections.unmodifiableList(Lists.newArrayList(commands));
-            commands.clear();
-            throw new ObjectPersistenceException("Failed to flush transaction after " + MAX_FLUSH_ATTEMPTS + " attempts; commands still to flush:\n " + commandsStillToFlush.toString());
-        }
     }
 
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
@@ -1330,7 +1323,10 @@ public class IsisTransaction implements TransactionScopedComponent {
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
     public void enlistDeleting(ObjectAdapter adapter) {
-        enlist(adapter, ChangeKind.DELETE);
+        final boolean enlisted = enlist(adapter, ChangeKind.DELETE);
+        if(!enlisted) {
+            return;
+        }
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
@@ -1346,8 +1342,42 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    private void enlist(ObjectAdapter adapter, ChangeKind changeKind) {
-        changeKindByEnlistedAdapter.put(adapter, changeKind);
+    /**
+     *
+     * @param adapter
+     * @param current
+     * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
+     */
+    private boolean enlist(final ObjectAdapter adapter, final ChangeKind current) {
+        final ChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
+        if(previous == null) {
+            changeKindByEnlistedAdapter.put(adapter, current);
+            return true;
+        }
+        switch (previous) {
+            case CREATE:
+                switch (current) {
+                    case DELETE:
+                        changeKindByEnlistedAdapter.remove(adapter);
+                    case CREATE:
+                    case UPDATE:
+                        return false;
+                }
+                break;
+            case UPDATE:
+                switch (current) {
+                    case DELETE:
+                        changeKindByEnlistedAdapter.put(adapter, current);
+                        return true;
+                    case CREATE:
+                    case UPDATE:
+                        return false;
+                }
+                break;
+            case DELETE:
+                return false;
+        }
+        return previous == null;
     }
     
     

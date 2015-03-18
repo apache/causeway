@@ -29,6 +29,7 @@ import javax.jdo.Query;
 import javax.jdo.spi.PersistenceCapable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -584,6 +585,17 @@ public class DataNucleusObjectStore implements ObjectStore {
         ensureOpened();
         return this.registeredServices.get(serviceSpec.getSpecId());
     }
+
+
+    // ///////////////////////////////////////////////////////////////////////
+    // Not API
+    // ///////////////////////////////////////////////////////////////////////
+
+
+    public boolean isDeleted(final ObjectAdapter adapter) {
+        return NucleusJDOHelper.isDeleted(adapter.getObject());
+    }
+
 
     // ///////////////////////////////////////////////////////////////////////
     // Helpers: ensure*
