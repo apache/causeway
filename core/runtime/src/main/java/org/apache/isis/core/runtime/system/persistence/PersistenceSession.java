@@ -685,7 +685,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have an
+     * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
      * the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault} as the object is implicitly 'in use'.
      *

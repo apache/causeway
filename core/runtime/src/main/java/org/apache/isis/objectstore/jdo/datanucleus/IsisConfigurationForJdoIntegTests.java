@@ -63,15 +63,18 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
         // run-in memory
         addDataNucleusProperty("javax.jdo.option.ConnectionURL", "jdbc:hsqldb:mem:test");
+        addDataNucleusProperty("javax.jdo.option.ConnectionDriverName", "org.hsqldb.jdbcDriver");
+        addDataNucleusProperty("javax.jdo.option.ConnectionUserName", "sa");
+        addDataNucleusProperty("javax.jdo.option.ConnectionPassword", "");
 
         // Don't do validations that consume setup time.
-        addDataNucleusProperty("datanucleus.autoCreateSchema", "true");
-        addDataNucleusProperty("datanucleus.validateTables", "false");
-        addDataNucleusProperty("datanucleus.validateConstraints", "false");
+        addDataNucleusProperty("datanucleus.schema.autoCreateAll", "true");
+        addDataNucleusProperty("datanucleus.schmema.validateTables", "true");
+        addDataNucleusProperty("datanucleus.schema.validateConstraints", "false");
 
         // other properties as per WEB-INF/persistor_datanucleus.properties
         addDataNucleusProperty("datanucleus.persistenceByReachabilityAtCommit", "false");
-        addDataNucleusProperty("datanucleus.identifier.case", "PreserveCase");
+        addDataNucleusProperty("datanucleus.identifier.case", "MixedCase");
         addDataNucleusProperty("datanucleus.cache.level2.type","none");
         addDataNucleusProperty("datanucleus.cache.level2.mode","ENABLE_SELECTIVE");
 

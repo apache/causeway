@@ -93,6 +93,8 @@ import org.apache.isis.core.metamodel.facets.object.hidden.annotation.HiddenFace
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveStaticGettersAndSettersFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.javalang.IteratorFilteringFacetFactory;
@@ -239,6 +241,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
         addFactory(RemoveJdoPrefixedMethodsFacetFactory.class);
+        // DN 4.x
+        addFactory(RemoveDatanucleusPersistableTypesFacetFactory.class);
+        addFactory(RemoveDnPrefixedMethodsFacetFactory.class);
 
         // must be before any other FacetFactories that install
         // MandatoryFacet.class facets

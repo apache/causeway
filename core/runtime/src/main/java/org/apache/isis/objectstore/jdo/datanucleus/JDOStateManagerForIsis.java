@@ -19,23 +19,19 @@
 
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import javax.jdo.spi.PersistenceCapable;
-import javax.jdo.spi.StateManager;
-
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
+import org.datanucleus.enhancer.Persistable;
 import org.datanucleus.metadata.AbstractClassMetaData;
-import org.datanucleus.state.JDOStateManager;
 import org.datanucleus.state.ObjectProvider;
-import org.datanucleus.state.ReferentialJDOStateManager;
+import org.datanucleus.state.ReferentialStateManagerImpl;
 import org.datanucleus.store.FieldValues;
 import org.datanucleus.store.fieldmanager.FieldManager;
-
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 
-public class JDOStateManagerForIsis extends ReferentialJDOStateManager implements StateManager, ObjectProvider {
+public class JDOStateManagerForIsis extends ReferentialStateManagerImpl {
 
     public JDOStateManagerForIsis(ExecutionContext ec, AbstractClassMetaData cmd) {
         super(ec, cmd);
@@ -56,55 +52,87 @@ public class JDOStateManagerForIsis extends ReferentialJDOStateManager implement
         };
     };
 
+    @Override
     public void initialiseForHollow(Object id, FieldValues fv, Class pcClass) {
         super.initialiseForHollow(id, fv, pcClass);
         mapIntoIsis(myPC);
     }
 
+    @Override
     public void initialiseForHollowAppId(FieldValues fv, Class pcClass) {
         super.initialiseForHollowAppId(fv, pcClass);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForHollowPreConstructed(Object id, Object pc) {
+    @Override
+    public void initialiseForHollowPreConstructed(Object id, Persistable pc) {
         super.initialiseForHollowPreConstructed(id, pc);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForPersistentClean(Object id, Object pc) {
+    @Override
+    public void initialiseForPersistentClean(Object id, Persistable pc) {
         super.initialiseForPersistentClean(id, pc);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForEmbedded(Object pc, boolean copyPc) {
+    @Override
+    public void initialiseForEmbedded(Persistable pc, boolean copyPc) {
         super.initialiseForEmbedded(pc, copyPc);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForPersistentNew(Object pc,
+    @Override
+    public void initialiseForPersistentNew(Persistable pc,
             FieldValues preInsertChanges) {
         super.initialiseForPersistentNew(pc, preInsertChanges);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForTransactionalTransient(Object pc) {
+    @Override
+    public void initialiseForTransactionalTransient(Persistable pc) {
         super.initialiseForTransactionalTransient(pc);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForDetached(Object pc, Object id, Object version) {
+    @Override
+    public void initialiseForDetached(Persistable pc, Object id, Object version) {
         super.initialiseForDetached(pc, id, version);
         mapIntoIsis(myPC);
     }
 
-    public void initialiseForPNewToBeDeleted(Object pc) {
+    @Override
+    public void initialiseForPNewToBeDeleted(Persistable pc) {
         super.initialiseForPNewToBeDeleted(pc);
         mapIntoIsis(myPC);
     }
 
+    @Override
     public void initialiseForCachedPC(CachedPC cachedPC, Object id) {
         super.initialiseForCachedPC(cachedPC, id);
         mapIntoIsis(myPC);
+    }
+
+    @Override
+    public void replaceField(Persistable pc, int fieldNumber, Object value) {
+        final Hint previous = hint.get();
+        try {
+            hint.set(Hint.REPLACE_FIELDS);
+            super.replaceField(pc, fieldNumber, value);
+        } finally {
+            hint.set(previous);
+        }
+    }
+
+    @Override
+    public void replaceFieldValue(int fieldNumber, Object value) {
+        final Hint previous = hint.get();
+        try {
+            hint.set(Hint.REPLACE_FIELDS);
+            super.replaceField(fieldNumber, value);
+        } finally {
+            hint.set(previous);
+        }
     }
 
     @Override
@@ -117,7 +145,29 @@ public class JDOStateManagerForIsis extends ReferentialJDOStateManager implement
             hint.set(previous);
         }
     }
-    
+
+    @Override
+    public void replaceFieldMakeDirty(int fieldNumber, Object value) {
+        final Hint previous = hint.get();
+        try {
+            hint.set(Hint.REPLACE_FIELDS);
+            super.replaceField(fieldNumber, value);
+        } finally {
+            hint.set(previous);
+        }
+    }
+
+    @Override
+    public void replaceField(Persistable pc, int fieldNumber, Object value, boolean makeDirty) {
+        final Hint previous = hint.get();
+        try {
+            hint.set(Hint.REPLACE_FIELDS);
+            super.replaceField(pc, fieldNumber, value, makeDirty);
+        } finally {
+            hint.set(previous);
+        }
+    }
+
     @Override
     public void replaceFields(int[] fieldNumbers, FieldManager fm) {
         final Hint previous = hint.get();
@@ -140,6 +190,17 @@ public class JDOStateManagerForIsis extends ReferentialJDOStateManager implement
         }
     }
 
+    @Override
+    public void replaceNonLoadedFields(int fieldNumbers[], FieldManager fm) {
+        final Hint previous = hint.get();
+        try {
+            hint.set(Hint.REPLACE_FIELDS);
+            super.replaceNonLoadedFields(fieldNumbers, fm);
+        } finally {
+            hint.set(previous);
+        }
+    }
+
     public void postCommit(org.datanucleus.Transaction tx) {
         final Hint previous = hint.get();
         try {
@@ -150,7 +211,7 @@ public class JDOStateManagerForIsis extends ReferentialJDOStateManager implement
         }
     }
 
-    protected void mapIntoIsis(PersistenceCapable pc) {
+    protected void mapIntoIsis(Persistable pc) {
         getServicesInjector().injectServicesInto(pc);
     }
 

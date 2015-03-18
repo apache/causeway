@@ -18,11 +18,10 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
 
-import org.datanucleus.store.rdbms.mapping.java.ObjectAsLongMapping;
-
 import org.apache.isis.applib.value.DateTime;
+import org.datanucleus.store.rdbms.mapping.java.ObjectMapping;
 
-public class IsisDateTimeMapping extends ObjectAsLongMapping {
+public class IsisDateTimeMapping extends ObjectMapping {
 
     private final IsisDateTimeConverter dateConverter = new IsisDateTimeConverter();
     
@@ -30,17 +29,17 @@ public class IsisDateTimeMapping extends ObjectAsLongMapping {
         
     }
     
+    //TODO: Configure mapping
+    
     @Override
     public Class<?> getJavaType() {
         return org.apache.isis.applib.value.DateTime.class;
     }
 
-    @Override
     protected Long objectToLong(Object object) {
         return dateConverter.toDatastoreType((DateTime) object);
     }
 
-    @Override
     protected Object longToObject(Long datastoreValue) {
         return dateConverter.toMemberType(datastoreValue);
     }

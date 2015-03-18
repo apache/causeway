@@ -94,9 +94,9 @@
 [6] https://github.com/moment/moment/blob/develop/LICENSE</license.additional-notes>
 
         <!-- from Datanucleus Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+        <datanucleus-accessplatform-jdo-rdbms.version>4.0.4</datanucleus-accessplatform-jdo-rdbms.version>
+        <datanucleus-jodatime.version>4.0.4</datanucleus-jodatime.version>
+        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
 
         <!-- ensure compatible with version aggregated in datanucleus-accessplatform-jdo-rdbms -->
         <jdo-api.version>3.1-rc1</jdo-api.version>

@@ -18,15 +18,23 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
+
 import org.datanucleus.NucleusContext;
+import org.datanucleus.NucleusContextHelper;
+import org.datanucleus.PersistenceNucleusContext;
+import org.datanucleus.PropertyNames;
+import org.datanucleus.StoreNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
@@ -72,10 +80,11 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     ///////////////////////////////////////////////////////////////////////////
-
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    
     private final Set<String> persistableClassNameSet;
-    private final IsisConfiguration jdoObjectstoreConfig;
-    private final Map<String, String> datanucleusProps;
+    private final Map<String, String> props;
     
     private final IsisLifecycleListener lifecycleListener;
     private final FrameworkSynchronizer synchronizer;
@@ -84,67 +93,77 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
-            final IsisConfiguration jdoObjectstoreConfig,
-            final Map<String, String> datanucleusProps,
+            final Map<String, String> props, 
             final Set<String> persistableClassNameSet) {
     
-        this.datanucleusProps = datanucleusProps;
+        this.props = props;
         this.persistableClassNameSet = persistableClassNameSet;
-        this.jdoObjectstoreConfig = jdoObjectstoreConfig;
 
         this.synchronizer = new FrameworkSynchronizer();
         this.lifecycleListener = new IsisLifecycleListener(synchronizer);
 
-        initialize();
+        init(props, persistableClassNameSet);
         
         // for JRebel plugin
         instance = this;
     }
 
-    private void initialize() {
+    private void init(final Map<String, String> props, final Set<String> persistableClassNameSet) {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
         
-        datanucleusProps.put("datanucleus.autoStartClassNames", persistableClassNames);
-        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+        props.put("datanucleus.autoStartClassNames", persistableClassNames);
+        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(props);
 
-        final boolean createSchema = Boolean.parseBoolean(datanucleusProps.get("datanucleus.autoCreateSchema"));
+        final boolean createSchema = Boolean.parseBoolean( props.get("datanucleus.autoCreateSchema") );
         if(createSchema) {
-            createSchema();
+            createSchema(props, persistableClassNameSet);
         }
 
         namedQueryByName = catalogNamedQueries(persistableClassNameSet);
+
     }
     
-    private void createSchema() {
-        final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
-        final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final StoreManager storeManager = nucleusContext.getStoreManager();
-        final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
-
-        registerMetadataListener(metaDataManager);
-        if (storeManager instanceof SchemaAwareStoreManager) {
-            final SchemaAwareStoreManager schemaAwareStoreManager = (SchemaAwareStoreManager) storeManager;
-            schemaAwareStoreManager.createSchema(persistableClassNameSet, asProperties(datanucleusProps));
-        }
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return persistenceManagerFactory;
     }
 
-    private void registerMetadataListener(final MetaDataManager metaDataManager) {
+    private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
+        final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
+        final NucleusContext nucleusContext = jdopmf.getNucleusContext();
+        if (nucleusContext instanceof StoreNucleusContext) {
+            final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
+            if (storeManager instanceof SchemaAwareStoreManager) {
+                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
+            }
+        }
+        registerMetadataListener(nucleusContext);
+    }
+
+    private void registerMetadataListener(final NucleusContext nucleusContext) {
+
+        final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
         final MetaDataListener listener = createMetaDataListener();
         if(listener instanceof PersistenceManagerFactoryAware) {
             ((PersistenceManagerFactoryAware) listener).setPersistenceManagerFactory(persistenceManagerFactory);
         }
 
         if(listener instanceof DataNucleusPropertiesAware) {
-            ((DataNucleusPropertiesAware) listener).setDataNucleusProperties(datanucleusProps);
+            ((DataNucleusPropertiesAware) listener).setDataNucleusProperties(props);
         }
         metaDataManager.registerListener(listener);
     }
 
     private MetaDataListener createMetaDataListener() {
-        final String classMetadataListenerClassName = jdoObjectstoreConfig.getString(
+    	
+    	// TODO: Fix this!
+        final String classMetadataListenerClassName = "I dont Know...";
+        		
+        		/*jdoObjectstoreConfig.getString(
                 DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_KEY,
-                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);
+                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);*/
         return InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class);
+
+
     }
 
 
@@ -154,7 +173,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return properties;
     }
 
-    private static Map<String, JdoNamedQuery> catalogNamedQueries(final Set<String> persistableClassNames) {
+    private static Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
             final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(persistableClassName);
@@ -167,10 +186,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
             }
         }
         return namedQueryByName;
-    }
-
-    public PersistenceManagerFactory getPersistenceManagerFactory() {
-        return persistenceManagerFactory;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -200,13 +215,13 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     ///////////////////////////////////////////////////////////////////////////
     
     public PersistenceManager createPersistenceManager() {
-        final PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
+        PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
         
         persistenceManager.addInstanceLifecycleListener(lifecycleListener, (Class[])null);
         return persistenceManager;
     }
 
-    public JdoNamedQuery getNamedQuery(final String queryName) {
+    public JdoNamedQuery getNamedQuery(String queryName) {
         return namedQueryByName.get(queryName);
     }
 

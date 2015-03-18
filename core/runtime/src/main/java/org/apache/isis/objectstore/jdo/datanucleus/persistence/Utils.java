@@ -21,32 +21,32 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 import java.util.Date;
 
 import javax.jdo.listener.InstanceLifecycleEvent;
-import javax.jdo.spi.PersistenceCapable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.datanucleus.enhancer.Persistable;
 
 public class Utils {
 
     @SuppressWarnings("unused")
     private static Object jdoObjectIdFor(InstanceLifecycleEvent event) {
-        PersistenceCapable persistenceCapable = Utils.persistenceCapableFor(event);
-        Object jdoObjectId = persistenceCapable.jdoGetObjectId();
+        Persistable persistenceCapable = Utils.persistenceCapableFor(event);
+        Object jdoObjectId = persistenceCapable.dnGetObjectId();
         return jdoObjectId;
     }
 
-    static PersistenceCapable persistenceCapableFor(InstanceLifecycleEvent event) {
-        return (PersistenceCapable)event.getSource();
+    static Persistable persistenceCapableFor(InstanceLifecycleEvent event) {
+        return (Persistable)event.getSource();
     }
 
     static void clearDirtyFor(final ObjectAdapter adapter) {
         adapter.getSpecification().clearDirty(adapter);
     }
 
-    static Version getVersionIfAny(final PersistenceCapable pojo, final AuthenticationSession authenticationSession) {
-        Object jdoVersion = pojo.jdoGetVersion();
+    static Version getVersionIfAny(final Persistable pojo, final AuthenticationSession authenticationSession) {
+        Object jdoVersion = pojo.dnGetVersion();
         if(jdoVersion instanceof Long) {
             return SerialNumberVersion.create((Long) jdoVersion, authenticationSession.getUserName(), null); 
         } 
