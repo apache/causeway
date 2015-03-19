@@ -125,27 +125,26 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     }
     
-    public PersistenceManagerFactory getPersistenceManagerFactory() {
-        return persistenceManagerFactory;
-    }
 
     private void createSchema() {
     	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
     	
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
+        
         if (nucleusContext instanceof StoreNucleusContext) {
+        	
             final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
+            final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
+            
+            registerMetadataListener(metaDataManager);
             if (storeManager instanceof SchemaAwareStoreManager) {
                 ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
             }
         }
-        registerMetadataListener(nucleusContext);
     }
 
-    private void registerMetadataListener(final NucleusContext nucleusContext) {
-
-        final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
+    private void registerMetadataListener(final MetaDataManager metaDataManager) {
         final MetaDataListener listener = createMetaDataListener();
         if(listener instanceof PersistenceManagerFactoryAware) {
             ((PersistenceManagerFactoryAware) listener).setPersistenceManagerFactory(persistenceManagerFactory);
@@ -184,6 +183,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
             }
         }
         return namedQueryByName;
+    }
+    
+    public PersistenceManagerFactory getPersistenceManagerFactory() {
+        return persistenceManagerFactory;
     }
 
     ///////////////////////////////////////////////////////////////////////////
