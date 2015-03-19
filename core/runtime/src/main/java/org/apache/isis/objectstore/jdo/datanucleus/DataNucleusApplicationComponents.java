@@ -80,11 +80,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    
+
     private final Set<String> persistableClassNameSet;
-    private final Map<String, String> props;
+    private final IsisConfiguration jdoObjectstoreConfig;
+    private final Map<String, String> datanucleusProps;
     
     private final IsisLifecycleListener lifecycleListener;
     private final FrameworkSynchronizer synchronizer;
@@ -93,30 +92,33 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private PersistenceManagerFactory persistenceManagerFactory;
 
     public DataNucleusApplicationComponents(
-            final Map<String, String> props, 
+            final IsisConfiguration jdoObjectstoreConfig,
+            final Map<String, String> datanucleusProps,
             final Set<String> persistableClassNameSet) {
     
-        this.props = props;
+        this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
+        this.jdoObjectstoreConfig = jdoObjectstoreConfig;
 
         this.synchronizer = new FrameworkSynchronizer();
         this.lifecycleListener = new IsisLifecycleListener(synchronizer);
 
-        init(props, persistableClassNameSet);
+        initialize();
         
         // for JRebel plugin
         instance = this;
     }
 
-    private void init(final Map<String, String> props, final Set<String> persistableClassNameSet) {
+    private void initialize() {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
         
-        props.put("datanucleus.autoStartClassNames", persistableClassNames);
-        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(props);
+        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
+        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
 
-        final boolean createSchema = Boolean.parseBoolean( props.get("datanucleus.autoCreateSchema") );
+        final boolean createSchema = (Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ) ||
+                Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL) ));
         if(createSchema) {
-            createSchema(props, persistableClassNameSet);
+            createSchema();
         }
 
         namedQueryByName = catalogNamedQueries(persistableClassNameSet);
@@ -127,13 +129,15 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return persistenceManagerFactory;
     }
 
-    private void createSchema(final Map<String, String> props, final Set<String> classesToBePersisted) {
+    private void createSchema() {
+    	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
+    	
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
         if (nucleusContext instanceof StoreNucleusContext) {
             final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
             if (storeManager instanceof SchemaAwareStoreManager) {
-                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(classesToBePersisted, asProperties(props));
+                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
             }
         }
         registerMetadataListener(nucleusContext);
@@ -148,22 +152,16 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         }
 
         if(listener instanceof DataNucleusPropertiesAware) {
-            ((DataNucleusPropertiesAware) listener).setDataNucleusProperties(props);
+            ((DataNucleusPropertiesAware) listener).setDataNucleusProperties(datanucleusProps);
         }
         metaDataManager.registerListener(listener);
     }
 
     private MetaDataListener createMetaDataListener() {
-    	
-    	// TODO: Fix this!
-        final String classMetadataListenerClassName = "I dont Know...";
-        		
-        		/*jdoObjectstoreConfig.getString(
+        final String classMetadataListenerClassName = jdoObjectstoreConfig.getString(
                 DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_KEY,
-                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);*/
+                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);
         return InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class);
-
-
     }
 
 

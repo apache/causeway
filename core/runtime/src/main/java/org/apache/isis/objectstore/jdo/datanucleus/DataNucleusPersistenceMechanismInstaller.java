@@ -116,7 +116,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
 
             final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
 
-            applicationComponents = new DataNucleusApplicationComponents(datanucleusProps, classesToBePersisted);
+            applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);
         }
 
         return applicationComponents;
