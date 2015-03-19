@@ -86,7 +86,7 @@
                                             datanucleus-maven-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [3.2.0-release,)
+                                            [4.0.0-release,)
                                         </versionRange>
                                         <goals>
                                             <goal>enhance</goal>

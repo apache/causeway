@@ -69,7 +69,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
 
         // Don't do validations that consume setup time.
         addDataNucleusProperty("datanucleus.schema.autoCreateAll", "true");
-        addDataNucleusProperty("datanucleus.schmema.validateTables", "true");
+        addDataNucleusProperty("datanucleus.schema.validateTables", "false");
         addDataNucleusProperty("datanucleus.schema.validateConstraints", "false");
 
         // other properties as per WEB-INF/persistor_datanucleus.properties

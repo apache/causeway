@@ -37,7 +37,6 @@ import org.apache.isis.applib.util.ObjectContracts;
 
 @javax.jdo.annotations.PersistenceCapable(
         identityType=IdentityType.DATASTORE,
-        schema = "simple",
         table = "SimpleObject"
 )
 @javax.jdo.annotations.DatastoreIdentity(
