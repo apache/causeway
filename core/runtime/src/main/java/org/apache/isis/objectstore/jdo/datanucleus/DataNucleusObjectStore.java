@@ -348,20 +348,9 @@ public class DataNucleusObjectStore implements ObjectStore {
         ensureOpened();
         ensureInTransaction();
 
-        // no longer check if there are no commands; it could be that
-        // DataNucleus has some dirty objects anyway that don't have
-        // commands wrapped around them...
-
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug("execute " + commands.size() + " commands");
-//        }
-//
-//        if (commands.size() <= 0) {
-//            if (LOG.isDebugEnabled()) {
-//                LOG.debug("no commands");
-//            }
-//            return;
-//        }
+        // previously we used to check that there were some commands, and skip processing otherwise.
+        // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
+        // don't have commands wrapped around them...
 
         executeCommands(commands);
     }

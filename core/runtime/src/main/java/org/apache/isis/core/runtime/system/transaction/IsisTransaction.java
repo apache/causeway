@@ -93,7 +93,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -231,7 +230,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
     private final TransactionalResource objectStore;
-    private final List<PersistenceCommand> commands = Lists.newArrayList();
+    private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
 
@@ -442,7 +441,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         if (LOG.isDebugEnabled()) {
             LOG.debug("add command " + command);
         }
-        commands.add(command);
+        persistenceCommands.add(command);
     }
 
 
@@ -513,28 +512,30 @@ public class IsisTransaction implements TransactionScopedComponent {
         do {
             // this algorithm ensures that we never execute the same command twice,
             // and also allow new commands to be added to end
-            PersistenceCommand command = commands.isEmpty()? null: commands.get(0);
+            final List<PersistenceCommand> persistenceCommandList = Lists.newArrayList(persistenceCommands);
 
-            if(command != null) {
+            if(!persistenceCommandList.isEmpty()) {
                 // so won't be processed again if a flush is encountered subsequently
-                commands.remove(command);
+                persistenceCommands.removeAll(persistenceCommandList);
                 try {
-                    objectStore.execute(Collections.singletonList(command));
-                    if (command instanceof DestroyObjectCommand) {
-                        final ObjectAdapter adapter = command.onAdapter();
-                        adapter.setVersion(null);
-                        if (!adapter.isDestroyed()) {
-                            adapter.changeState(ResolveState.DESTROYED);
+                    objectStore.execute(persistenceCommandList);
+                    for (PersistenceCommand persistenceCommand : persistenceCommandList) {
+                        if (persistenceCommand instanceof DestroyObjectCommand) {
+                            final ObjectAdapter adapter = persistenceCommand.onAdapter();
+                            adapter.setVersion(null);
+                            if (!adapter.isDestroyed()) {
+                                adapter.changeState(ResolveState.DESTROYED);
+                            }
                         }
                     }
                 } catch (final RuntimeException ex) {
                     // if there's an exception, we want to make sure that
                     // all commands are cleared and propagate
-                    commands.clear();
+                    persistenceCommands.clear();
                     throw ex;
                 }
             }
-        } while(!commands.isEmpty());
+        } while(!persistenceCommands.isEmpty());
         
     }
 
@@ -742,7 +743,31 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         try {
-            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
+            final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+            while(!changedObjectProperties.isEmpty()) {
+
+                final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
+                for (final AdapterAndProperty aap : keys) {
+
+                    final PreAndPostValues papv = changedObjectProperties.remove(aap);
+
+                    final ObjectAdapter adapter = aap.getAdapter();
+                    if(adapter.isDestroyed()) {
+                        // don't touch the object!!!
+                        // JDO, for example, will complain otherwise...
+                        papv.setPost(Placeholder.DELETED);
+                    } else {
+                        papv.setPost(aap.getPropertyValue());
+                    }
+
+                    // if we encounter the same objectProperty again, this will simply overwrite it
+                    processedObjectProperties.put(aap, papv);
+                }
+            }
+
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
+                    Collections.unmodifiableSet(
+                            Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
 
             ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(changedObjectProperties);
             preCommitServices(changedObjectProperties);
@@ -1012,7 +1037,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        for (final PersistenceCommand command : commands) {
+        for (final PersistenceCommand command : persistenceCommands) {
             if (command.onAdapter().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
@@ -1024,7 +1049,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private void removeCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
         final PersistenceCommand toDelete = getCommand(commandClass, onObject);
-        commands.remove(toDelete);
+        persistenceCommands.remove(toDelete);
     }
 
     private void removeCreate(final ObjectAdapter onObject) {
@@ -1046,7 +1071,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     protected ToString appendTo(final ToString str) {
         str.append("state", state);
-        str.append("commands", commands.size());
+        str.append("commands", persistenceCommands.size());
         return str;
     }
 
@@ -1262,8 +1287,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value. 
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
-     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
+     * The post-modification values are captured in {@link #preCommit()}.
      * 
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
@@ -1289,9 +1313,8 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing the pre-modification values of the properties of the {@link ObjectAdapter}.
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
-     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
-     * 
+     * The post-modification values are captured in {@link #preCommit()}.
+     *
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
@@ -1316,8 +1339,8 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing the pre-deletion value of the properties of the {@link ObjectAdapter}. 
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()}.
-     * In the case of deleted objects, a dummy value <tt>'[DELETED]'</tt> is used as the post-modification value. 
+     * The post-modification values are captured in {@link #preCommit()}.  In the case of deleted objects, a
+     * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
      * 
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
@@ -1379,42 +1402,8 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
         return previous == null;
     }
-    
-    
-    /**
-     * Returns the pre- and post-values of all {@link ObjectAdapter}s that were enlisted and dirtied
-     * in this transaction.
-     * 
-     * <p>
-     * This requires that the object store called {@link #enlistUpdating(ObjectAdapter)} for each object being
-     * enlisted.
-     * 
-     * <p>
-     * Supported by the JDO object store (since it calls {@link #enlistUpdating(ObjectAdapter)}); 
-     * check documentation for support in other object stores.
-     */
-    private Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
-        updatePostValues(changedObjectProperties.entrySet());
 
-        return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
-    }
 
-    private static void updatePostValues(Set<Entry<AdapterAndProperty, PreAndPostValues>> entrySet) {
-        for (Entry<AdapterAndProperty, PreAndPostValues> entry : entrySet) {
-            final AdapterAndProperty aap = entry.getKey();
-            final PreAndPostValues papv = entry.getValue();
-            ObjectAdapter adapter = aap.getAdapter();
-            if(adapter.isDestroyed()) {
-                // don't touch the object!!!
-                // JDO, for example, will complain otherwise...
-                papv.setPost(Placeholder.DELETED);
-            } else {
-                papv.setPost(aap.getPropertyValue());
-            }
-        }
-    }
-
-    
     ////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     ////////////////////////////////////////////////////////////////////////
