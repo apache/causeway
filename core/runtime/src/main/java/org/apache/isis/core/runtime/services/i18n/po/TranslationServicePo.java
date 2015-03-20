@@ -134,6 +134,34 @@ public class TranslationServicePo implements TranslationService {
         ((PoReader)po).clearCache();
     }
 
+    private PoReader previousPoReader;
+    private PoWriter previousPoWriter;
+
+    /**
+     * Not API
+     */
+    @Programmatic
+    public void toggleMode() {
+        if(getMode().isRead()) {
+            previousPoReader = (PoReader) po;
+            if (previousPoWriter != null) {
+                po = previousPoWriter;
+            } else {
+                po = new PoWriter(this);
+            }
+        } else {
+            previousPoWriter = (PoWriter)po;
+            if(previousPoReader != null) {
+                previousPoReader.clearCache();
+                po = previousPoReader;
+            } else {
+                final PoReader poReader = new PoReader(this);
+                poReader.init();
+                po = poReader;
+            }
+        }
+    }
+
     // //////////////////////////////////////
 
     DeploymentType getDeploymentType() {
