@@ -20,7 +20,6 @@ package org.apache.isis.core.metamodel.facets.all.i18n;
 
 
 import com.google.common.base.Strings;
-import org.apache.isis.applib.services.i18n.LocaleProvider;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -38,7 +37,6 @@ public class TranslationFacetFactory extends FacetFactoryAbstract implements Con
     private ServicesInjector servicesInjector;
 
     private TranslationService translationService;
-    private LocaleProvider localeProvider;
 
     public TranslationFacetFactory() {
         super(FeatureType.EVERYTHING);

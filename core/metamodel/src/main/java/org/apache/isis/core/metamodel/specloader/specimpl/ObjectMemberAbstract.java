@@ -184,7 +184,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         final String name = facet.value();
-        return name != null ? name : defaultName;
+        if (name != null) {
+            return name;
+        }
+        else {
+            // this should now be redundant, see NamedFacetDefault
+            return defaultName;
+        }
     }
 
     @Override

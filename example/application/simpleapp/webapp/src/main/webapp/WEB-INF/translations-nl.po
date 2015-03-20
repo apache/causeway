@@ -24,7 +24,7 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObjects#create()
 msgid "Create"
-msgstr ""
+msgstr "Creëren"
 
 
 #: org.apache.isis.applib.fixturescripts.FixtureScript#discoverable
@@ -45,7 +45,7 @@ msgstr ""
 #: domainapp.dom.modules.simple.SimpleObjects#findByName()
 #: java.lang.String#findByName()
 msgid "Find By Name"
-msgstr ""
+msgstr "Zoek op Naam"
 
 
 #: org.apache.isis.applib.fixturescripts.FixtureResult#fixtureScriptClassName
@@ -65,7 +65,7 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObjects#listAll()
 msgid "List All"
-msgstr ""
+msgstr "Lijst Alle"
 
 
 #: org.apache.isis.applib.fixturescripts.FixtureScript#localName
@@ -83,12 +83,12 @@ msgstr ""
 #: domainapp.dom.modules.simple.SimpleObjects#create(java.lang.String)
 #: domainapp.dom.modules.simple.SimpleObjects#findByName(java.lang.String)
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 
 #: domainapp.dom.modules.simple.SimpleObject#updateName(java.lang.String)
 msgid "New name"
-msgstr ""
+msgstr "Nieuwe naam"
 
 
 #: org.apache.isis.applib.services.bookmark.BookmarkHolderAssociationContributions#object()
@@ -177,7 +177,7 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObject#updateName()
 msgid "Update Name"
-msgstr ""
+msgstr "Updaten Naam"
 
 
 #: org.apache.isis.applib.fixturescripts.FixtureScript#withDiscoverability()

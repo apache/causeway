@@ -22,23 +22,12 @@ package org.apache.isis.core.metamodel.facets.fallback;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-/**
- * Has a name of <tt>null</tt>.
- *
- * <p>
- * TODO: should this instead be the empty string?
- */
-public class NamedFacetNone extends NamedFacetAbstract {
+public class NamedFacetDefault extends NamedFacetAbstract {
 
     public static final boolean ESCAPED = true;
 
-    public NamedFacetNone(final FacetHolder holder) {
-        super(null, ESCAPED, holder);
-    }
-
-    @Override
-    public boolean isNoop() {
-        return true;
+    public NamedFacetDefault(final String value, final FacetHolder holder) {
+        super(value, ESCAPED, holder);
     }
 
 }
