@@ -28,6 +28,7 @@ import org.junit.runners.model.Statement;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
@@ -106,6 +107,11 @@ public abstract class IntegrationTestAbstract {
         scenarioExecution().openSession();
         scenarioExecution().beginTran();
     }
+
+    protected FixtureClock getFixtureClock() {
+        return ((FixtureClock)FixtureClock.getInstance());
+    }
+
 
     // //////////////////////////////////////
 

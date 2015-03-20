@@ -832,6 +832,10 @@ public abstract class FixtureScript
         return wrapperFactory.wrap(domainObject);
     }
 
+    protected <T> T wrap(final T domainObject, final WrapperFactory.ExecutionMode executionMode) {
+        return wrapperFactory.wrap(domainObject, executionMode);
+    }
+
     /**
      * Unwraps domain object (no-arg if already wrapped).
      */
