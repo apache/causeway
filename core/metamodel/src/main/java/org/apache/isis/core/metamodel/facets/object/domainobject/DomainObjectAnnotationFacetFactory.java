@@ -242,9 +242,11 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         }
 
         // else check for @PersistenceCapable(schema=...)
-        final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
-        if(jdoPersistenceCapableFacet != null) {
-            facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
+        if(facet == null) {
+            final JdoPersistenceCapableFacet jdoPersistenceCapableFacet = facetHolder.getFacet(JdoPersistenceCapableFacet.class);
+            if(jdoPersistenceCapableFacet != null) {
+                facet = ObjectSpecIdFacetForJdoPersistenceCapableAnnotation.create(jdoPersistenceCapableFacet, facetHolder);
+            }
         }
 
         // then add
