@@ -18,21 +18,20 @@
  */
 package domainapp.integtests.tests.modules.simple;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.dom.modules.simple.SimpleObjects;
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
-import domainapp.integtests.tests.SimpleAppIntegTest;
-
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
-
+import domainapp.dom.modules.simple.SimpleObject;
+import domainapp.dom.modules.simple.SimpleObjects;
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
+import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -116,6 +115,9 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
     public static class Title extends SimpleObjectIntegTest {
 
+        @Inject
+        DomainObjectContainer container;
+
         @Test
         public void interpolatesName() throws Exception {
 
@@ -123,7 +125,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
             final String name = simpleObjectWrapped.getName();
 
             // when
-            final String title = container().titleOf(simpleObjectWrapped);
+            final String title = container.titleOf(simpleObjectWrapped);
 
             // then
             assertThat(title, is("Object: " + name));
