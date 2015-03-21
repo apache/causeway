@@ -10,6 +10,11 @@
 #     /WEB-INF/translations-fr.po
 #     /WEB-INF/translations.po
 #
+# If the app uses TranslatableString (eg for internationalized validation
+# messages), or if the app calls the TranslationService directly, then ensure
+# that all text to be translated has been captured by running a full
+# integration test suite that exercises all relevant behaviour
+#
 ##############################################################################
 
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
@@ -43,7 +48,6 @@ msgstr ""
 
 
 #: domainapp.dom.modules.simple.SimpleObjects#findByName()
-#: java.lang.String#findByName()
 msgid "Find By Name"
 msgstr "Buscar por Nombre"
 
@@ -112,11 +116,6 @@ msgid "Parameters"
 msgstr ""
 
 
-#: org.apache.isis.applib.fixturescripts.FixtureScript#parentPath
-msgid "Parent Path"
-msgstr ""
-
-
 #: domainapp.fixture.DomainAppFixturesService
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu
 msgid "Prototyping"
@@ -160,6 +159,11 @@ msgid "Script-specific parameters (if any).  The format depends on the script im
 msgstr ""
 
 
+#: domainapp.dom.modules.simple.SimpleObjects#title()
+msgid "Simple Objects"
+msgstr "Objetos básicos"
+
+
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
 msgid "Switch To Reading Translations"
 msgstr ""
@@ -179,10 +183,6 @@ msgstr ""
 msgid "Update Name"
 msgstr "Nombre de la Actualización"
 
-
-#: org.apache.isis.applib.fixturescripts.FixtureScript#withDiscoverability()
-msgid "With Discoverability"
-msgstr ""
 
 
 

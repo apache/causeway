@@ -188,10 +188,11 @@ public abstract class FixtureScript
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Programmatic
     public String getParentPath() {
         return parentPath;
     }
+    @Programmatic
     public void setParentPath(final String parentPath) {
         this.parentPath = parentPath;
     }
@@ -233,6 +234,8 @@ public abstract class FixtureScript
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
+
+    @Programmatic
     public FixtureScript withDiscoverability(final Discoverability discoverability) {
         this.discoverability = discoverability;
         return this;

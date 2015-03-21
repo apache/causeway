@@ -926,7 +926,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     private List<ObjectAssociation> createContributeeAssociations() {
-        if (isService()) {
+        if (isService() || isValue()) {
             return Collections.emptyList();
         }
         

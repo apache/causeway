@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.Programmatic;
 
 public final class TranslatableString {
 
@@ -177,6 +178,7 @@ public final class TranslatableString {
      * @param context
      * @return
      */
+    @Programmatic
     public String translate(final TranslationService translationService, final String context) {
         final String translatedText =
                 !isPluralForm()
