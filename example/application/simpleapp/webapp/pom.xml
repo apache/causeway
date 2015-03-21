@@ -203,10 +203,10 @@
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-servlet_3.0_spec</artifactId>
             <!--
-            removed so can run o.a.i.WebServer from within IntelliJ;
+            Use 'compile' so can run o.a.i.WebServer from within IntelliJ;
             can rely on servlet container to ignore this in war file
-            <scope>provided</scope>
             -->
+            <scope>compile</scope>
         </dependency>
 
         <!-- 
