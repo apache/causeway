@@ -34,10 +34,17 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 
 @DomainService(repositoryFor = SimpleObject.class)
 @DomainServiceLayout(menuOrder = "10")
 public class SimpleObjects {
+
+    //region > title
+    public TranslatableString title() {
+        return TranslatableString.tr("Simple Objects");
+    }
+    //endregion
 
     //region > listAll (action)
     @Action(
