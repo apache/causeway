@@ -43,11 +43,15 @@ public class LocaleProviderWicket implements LocaleProvider {
     @Programmatic
     @Override
     public Locale getLocale() {
-        if(!Application.exists()) {
+        
+        // Request Cycle can be null, at least on apps with a customized Wicket UI.
+        RequestCycle requestCycle = RequestCycle.get();    
+            
+        if(!Application.exists() || requestCycle == null) {
             // eg if request from RO viewer
             return null;
         }
-        return RequestCycle.get().getRequest().getLocale();
+        return requestCycle.getRequest().getLocale();
     }
 
     protected Session getSession() {
