@@ -18,31 +18,28 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.math.BigInteger;
 import java.util.Date;
-
 import org.datanucleus.identity.OIDImpl;
 import org.junit.Rule;
 import org.junit.Test;
-
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.integtestsupport.IsisSystemWithFixtures;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 public class JdoObjectIdSerializerTest {
 
-	@ObjectType("CUS")
-	public static class Customer {}
-	
-	public static class CustomerRepository {
-		public void foo(Customer x) {}
-	}
-	
+    @ObjectType("CUS")
+    public static class Customer {}
+    public static class CustomerRepository {
+        public void foo(Customer x) {}
+    }
+
     @Rule
     public IsisSystemWithFixtures iswf = IsisSystemWithFixtures.builder()
         .withServices(new CustomerRepository())

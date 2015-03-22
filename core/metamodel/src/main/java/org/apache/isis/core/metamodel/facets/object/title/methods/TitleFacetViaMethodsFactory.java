@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.title.methods;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -30,8 +32,10 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.fallback.FallbackFacetFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract {
+public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAbstract implements ServicesInjectorAware {
 
     private static final String TO_STRING = "toString";
     private static final String TITLE = "title";
@@ -51,10 +55,19 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE, String.class, null);
+        Method method = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                TITLE,
+                new Class<?>[]{String.class, TranslatableString.class},
+                null);
         if (method != null) {
             processClassContext.removeMethod(method);
-            FacetUtil.addFacet(new TitleFacetViaTitleMethod(method, facetHolder));
+            final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+            // sadness: same as in TranslationFactory
+            final String translationContext = method.getDeclaringClass().getName() + "#" + method.getName() + "()";
+
+            final TitleFacetViaTitleMethod facet = new TitleFacetViaTitleMethod(method, translationService, translationContext, facetHolder);
+            FacetUtil.addFacet(facet);
             return;
         }
 
@@ -78,5 +91,14 @@ public class TitleFacetViaMethodsFactory extends MethodPrefixBasedFacetFactoryAb
         } catch (final Exception e) {
             return;
         }
+    }
+
+    // //////////////////////////////////////
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 }

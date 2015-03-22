@@ -86,7 +86,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
@@ -139,7 +139,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MultiLineFacet.class));
     }

@@ -44,7 +44,7 @@ public class OptionalAnnotationOnParameterFacetFactoryTest extends AbstractFacet
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
@@ -60,7 +60,7 @@ public class OptionalAnnotationOnParameterFacetFactoryTest extends AbstractFacet
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParamsOptional(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }

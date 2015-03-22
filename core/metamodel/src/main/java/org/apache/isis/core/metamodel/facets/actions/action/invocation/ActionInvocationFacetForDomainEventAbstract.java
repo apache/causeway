@@ -46,8 +46,8 @@ import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -185,7 +185,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ActionDomainEvent<?> event =
                     domainEventHelper.postEventForAction(
                             eventType, existingEvent, command, AbstractDomainEvent.Phase.EXECUTING,
-                            owningAction, targetAdapter, arguments);
+                            owningAction, targetAdapter, arguments, null);
 
             // ... invoke the action
             final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
@@ -196,7 +196,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 // If invoked, then send the ActionInteractionEvent to the EventBus.
                 domainEventHelper.postEventForAction(
                         eventType, verify(event), command, AbstractDomainEvent.Phase.EXECUTED,
-                        owningAction, targetAdapter, arguments);
+                        owningAction, targetAdapter, arguments, invocationResult.getAdapter());
             }
 
             return invocationResult.getAdapter();
@@ -268,7 +268,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             if(command != null && command.getExecutor() == Command.Executor.USER && owningAction != null) {
 
                 if(command.getTarget() != null) {
-                    // already set up by a ObjectActionContributee;
+                    // already set up by a ObjectActionContributee or edit form;
                     // don't overwrite
                 } else {
                     command.setTargetClass(CommandUtil.targetClassNameFor(targetAdapter));
@@ -279,22 +279,28 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     command.setTarget(targetBookmark);
                 }
 
-                command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
+                if("(edit)".equals(command.getMemberIdentifier())) {
+                    // special case for edit properties
+                } else {
 
-                // the background service is used here merely as a means to capture an invocation memento
-                final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
-                if(backgroundService != null) {
-                    final Object targetObject = unwrap(targetAdapter);
-                    final Object[] args = CommandUtil.objectsFor(arguments);
-                    ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+                    command.setMemberIdentifier(CommandUtil.actionIdentifierFor(owningAction));
 
-                    if(aim != null) {
-                        command.setMemento(aim.asMementoString());
-                    } else {
-                        throw new IsisException(
-                                "Unable to build memento for action " +
-                                        owningAction.getIdentifier().toClassAndNameIdentityString());
+                    // the background service is used here merely as a means to capture an invocation memento
+                    final BackgroundService backgroundService = getServicesInjector().lookupService(BackgroundService.class);
+                    if(backgroundService != null) {
+                        final Object targetObject = unwrap(targetAdapter);
+                        final Object[] args = CommandUtil.objectsFor(arguments);
+                        final ActionInvocationMemento aim = backgroundService.asActionInvocationMemento(method, targetObject, args);
+
+                        if(aim != null) {
+                            command.setMemento(aim.asMementoString());
+                        } else {
+                            throw new IsisException(
+                                    "Unable to build memento for action " +
+                                            owningAction.getIdentifier().toClassAndNameIdentityString());
+                        }
                     }
+
                 }
 
                 // copy over the command execution 'context' (if available)
@@ -310,6 +316,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             }
 
 
+            // deal with background commands
             if( command != null &&
                     command.getExecutor() == Command.Executor.USER &&
                     command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
@@ -326,61 +333,61 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                                     + owningAction.getIdentifier().toClassAndNameIdentityString() + "' to run in background: "
                                     + "CommandService does not support persistent commands " );
                 }
-            } else {
-
-                // otherwise, go ahead and execute action in the 'foreground'
-
-                if(command != null) {
-                    command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
-                }
-
-                Object result = method.invoke(targetPojo, executionParameters);
-
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug(" action result " + result);
-                }
-                if (result == null) {
-                    if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
-                        // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
-                        // automatically do the clone and return the clone instead.
-                        final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
-                        final Object clone = cloneable.clone();
-                        final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
-                        return InvocationResult.forActionThatReturned(clonedAdapter);
-                    }
-                    return InvocationResult.forActionThatReturned(null);
-                }
-
-                ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
-
-                if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
-                    // if the object returned is a ViewModel.Cloneable, then
-                    // (to save boilerplate in the domain) automatically do the clone.
-                    final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) result;
-                    result = cloneable.clone();
-                    resultAdapter = getAdapterManager().adapterFor(result);
-                }
-
-
-                // copy over TypeOfFacet if required
-                final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-                resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
-
-                if(command != null) {
-                    if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
-                        final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
-                        command.setResult(bookmark);
-                    }
-                }
-
-                final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
-                currentInvocation.set(
-                        publishedActionFacet != null
-                                ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
-                                : null);
-
-                return InvocationResult.forActionThatReturned(resultAdapter);
             }
+
+
+            // otherwise, go ahead and execute action in the 'foreground'
+
+            if(command != null) {
+                command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
+            }
+
+            Object result = method.invoke(targetPojo, executionParameters);
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(" action result " + result);
+            }
+            if (result == null) {
+                if(targetAdapter.getSpecification().isViewModelCloneable(targetAdapter)) {
+                    // if this was a void method on a ViewModel.Cloneable, then (to save boilerplate in the domain)
+                    // automatically do the clone and return the clone instead.
+                    final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) targetAdapter.getObject();
+                    final Object clone = cloneable.clone();
+                    final ObjectAdapter clonedAdapter = getAdapterManager().adapterFor(clone);
+                    return InvocationResult.forActionThatReturned(clonedAdapter);
+                }
+                return InvocationResult.forActionThatReturned(null);
+            }
+
+            ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+
+            if(resultAdapter.getSpecification().isViewModelCloneable(resultAdapter)) {
+                // if the object returned is a ViewModel.Cloneable, then
+                // (to save boilerplate in the domain) automatically do the clone.
+                final ViewModel.Cloneable cloneable = (ViewModel.Cloneable) result;
+                result = cloneable.clone();
+                resultAdapter = getAdapterManager().adapterFor(result);
+            }
+
+
+            // copy over TypeOfFacet if required
+            final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
+            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+
+            if(command != null) {
+                if(!resultAdapter.getSpecification().containsDoOpFacet(ViewModelFacet.class)) {
+                    final Bookmark bookmark = CommandUtil.bookmarkFor(resultAdapter);
+                    command.setResult(bookmark);
+                }
+            }
+
+            final PublishedActionFacet publishedActionFacet = getIdentified().getFacet(PublishedActionFacet.class);
+            currentInvocation.set(
+                    publishedActionFacet != null
+                            ? new CurrentInvocation(targetAdapter, getIdentified(), arguments, resultAdapter, command)
+                            : null);
+
+            return InvocationResult.forActionThatReturned(resultAdapter);
 
         } catch (final IllegalArgumentException e) {
             throw e;

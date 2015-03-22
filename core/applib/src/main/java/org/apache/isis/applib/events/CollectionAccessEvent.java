@@ -22,14 +22,17 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents an access (reading) of a collection.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents an access (reading) of a collection.
  * 
  * <p>
  * Analogous to {@link CollectionAddToEvent} or
  * {@link CollectionRemoveFromEvent}, however the {@link #getReason()} will
  * always be <tt>null</tt>. (If access is not allowed then a vetoing
  * {@link CollectionVisibilityEvent} would have been fired).
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public class CollectionAccessEvent extends AccessEvent {
 
     private static final long serialVersionUID = 1L;

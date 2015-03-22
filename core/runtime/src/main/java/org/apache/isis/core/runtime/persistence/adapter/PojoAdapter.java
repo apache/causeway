@@ -59,8 +59,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private Oid oid;
     private ResolveState resolveState;
 
-    private String defaultTitle;
-
     private ElementSpecificationProvider elementSpecificationProvider;
 
     private AuthenticationSession authenticationSession;
@@ -92,7 +90,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     protected ObjectSpecification loadSpecification() {
         final ObjectSpecification specification = specificationLoader.loadSpecification(getObject().getClass());
-        this.defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
+        //String defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
         return specification;
     }
 
@@ -443,7 +441,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     protected String getDefaultTitle() {
-        return defaultTitle;
+        return "A" + (" " + getSpecification().getSingularName()).toLowerCase();
     }
 
     protected void toString(final ToString str) {

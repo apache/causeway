@@ -31,29 +31,67 @@ import com.google.common.base.Splitter;
  */
 public class Bookmark implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private static final char SEPARATOR = ':';
 
-    private static final long serialVersionUID = 1L;
-    
+    public static enum ObjectState {
+        PERSISTENT(""),
+        TRANSIENT("!"), // same as OidMarshaller
+        VIEW_MODEL("*"); // same as OidMarshaller
+
+        private final String code;
+        private ObjectState(final String code) {
+            this.code = code;
+        }
+
+        public boolean isTransient() {
+            return this == TRANSIENT;
+        }
+        public boolean isViewModel() {
+            return this == VIEW_MODEL;
+        }
+        public boolean isPersistent() {
+            return this == PERSISTENT;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public static ObjectState from(final String objectType) {
+            if(objectType.startsWith(TRANSIENT.code)) return TRANSIENT;
+            if(objectType.startsWith(VIEW_MODEL.code)) return VIEW_MODEL;
+            return PERSISTENT;
+        }
+    }
+
     private final String objectType;
     private final String identifier;
+    private final ObjectState state;
+
 
     /**
      * Round-trip with {@link #toString()} representation.
      */
-    public Bookmark(String toString) {
+    public Bookmark(final String toString) {
         this(Splitter.on(SEPARATOR).split(toString).iterator());
     }
 
-    private Bookmark(Iterator<String> split) {
+    private Bookmark(final Iterator<String> split) {
         this(split.next(), split.next());
     }
 
-    public Bookmark(String objectType, String identifier) {
-        this.objectType = objectType;
+    public Bookmark(final String objectType, final String identifier) {
+        this.state = ObjectState.from(objectType);
+        this.objectType = state != ObjectState.PERSISTENT ? objectType.substring(1): objectType;
         this.identifier = identifier;
     }
-    
+
+    public ObjectState getObjectState() {
+        return state;
+    }
+
     public String getObjectType() {
         return objectType;
     }
@@ -74,14 +112,14 @@ public class Bookmark implements Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj)
             return true;
         if (obj == null)
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Bookmark other = (Bookmark) obj;
+        final Bookmark other = (Bookmark) obj;
         if (identifier == null) {
             if (other.identifier != null)
                 return false;
@@ -103,6 +141,6 @@ public class Bookmark implements Serializable {
      */
     @Override
     public String toString() {
-        return objectType + SEPARATOR + identifier;
+        return state.getCode() + objectType + SEPARATOR + identifier;
     }
 }

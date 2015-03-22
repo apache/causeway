@@ -423,7 +423,7 @@ public class FacetedMethodsBuilder {
 
         final List<FacetedMethodParameter> actionParams = action.getParameters();
         for (int j = 0; j < actionParams.size(); j++) {
-            getFacetProcessor().processParams(introspectedClass, actionMethod, j, actionParams.get(j));
+            getFacetProcessor().processParams(introspectedClass, actionMethod, j, methodRemover, actionParams.get(j));
         }
 
         return action;

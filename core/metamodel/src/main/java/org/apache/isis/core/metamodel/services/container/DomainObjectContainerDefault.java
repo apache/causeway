@@ -271,6 +271,18 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         final InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
         return validityResult.getReason();
     }
+
+    //endregion
+
+
+    //region > isViewModel
+
+    @Programmatic
+    @Override
+    public boolean isViewModel(final Object domainObject) {
+        final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
+        return adapter.getSpecification().isViewModel();
+    }
     //endregion
 
     //region > persistence

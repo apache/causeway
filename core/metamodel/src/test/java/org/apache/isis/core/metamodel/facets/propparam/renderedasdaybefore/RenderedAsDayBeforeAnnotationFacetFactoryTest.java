@@ -67,7 +67,7 @@ public class RenderedAsDayBeforeAnnotationFacetFactoryTest extends AbstractFacet
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { LocalDate.class });
 
-        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, facetedMethodParameter));
+        facetFactory.processParams(new ProcessParameterContext(Customer.class, method, 0, null, facetedMethodParameter));
 
         final Facet facet = facetedMethodParameter.getFacet(RenderedAdjustedFacet.class);
         assertNotNull(facet);

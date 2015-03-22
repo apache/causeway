@@ -19,11 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.ident.title;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
-
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -32,10 +28,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.methods.TitleFacetViaTitleMethod;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 @RunWith(JMock.class)
 public class TitleFacetViaMethodTest {
@@ -62,7 +60,7 @@ public class TitleFacetViaMethodTest {
         mockFacetHolder = mockery.mock(FacetHolder.class);
         mockOwningAdapter = mockery.mock(ObjectAdapter.class);
         final Method iconNameMethod = DomainObjectWithProblemInItsTitleMethod.class.getMethod("title");
-        facet = new TitleFacetViaTitleMethod(iconNameMethod, mockFacetHolder);
+        facet = new TitleFacetViaTitleMethod(iconNameMethod, null, null, mockFacetHolder);
 
         mockery.checking(new Expectations() {
             {

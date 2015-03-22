@@ -94,6 +94,13 @@
                         <include>logging.properties</include>
                     </includes>
                 </fileSet>
+                <fileSet encoding="UTF-8">
+                    <directory/>
+                    <includes>
+                        <include>.gitignore</include>
+                        <include>translations.pot</include>
+                    </includes>
+                </fileSet>
             </fileSets>
         </module>
         <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
@@ -130,6 +137,7 @@
                     <includes>
                         <include>**/*.png</include>
                         <include>**/*.js</include>
+                        <include>**/*.po</include>
                         <include>**/*.ini</include>
                         <include>**/*.gif</include>
                         <include>**/*.css</include>

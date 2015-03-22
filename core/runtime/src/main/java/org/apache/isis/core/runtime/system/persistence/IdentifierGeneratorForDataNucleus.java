@@ -26,6 +26,7 @@ import javax.jdo.spi.PersistenceCapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -84,6 +85,7 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
             return recreatableObjectFacet.memento(pojo);
         }
         final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
+
         return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
     }
 
@@ -119,8 +121,6 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
     }
 
 
-
-
     // //////////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////////
@@ -131,9 +131,11 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
         return objectStore.getPersistenceManager();
     }
 
-
     protected DataNucleusObjectStore getDataNucleusObjectStore() {
         return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    }
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
     protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();

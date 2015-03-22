@@ -71,7 +71,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
      * </p>
      * @param injectorMethodEvaluator
      */
-    public ServicesInjectorDefault(InjectorMethodEvaluator injectorMethodEvaluator) {
+    public ServicesInjectorDefault(final InjectorMethodEvaluator injectorMethodEvaluator) {
         this.injectorMethodEvaluator = injectorMethodEvaluator != null ? injectorMethodEvaluator : new InjectorMethodEvaluatorDefault();
     }
 
@@ -187,7 +187,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
         final List<Field> fields = Arrays.asList(cls.getDeclaredFields());
         final Iterable<Field> injectFields = Iterables.filter(fields, new Predicate<Field>() {
             @Override
-            public boolean apply(Field input) {
+            public boolean apply(final Field input) {
                 final Inject annotation = input.getAnnotation(javax.inject.Inject.class);
                 return annotation != null;
             }
@@ -204,10 +204,10 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
         }
     }
 
-    private void autowire(Object object, Field field, List<Object> services) {
+    private void autowire(final Object object, final Field field, final List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            boolean canInject = isInjectorFieldFor(field, serviceClass);
+            final boolean canInject = isInjectorFieldFor(field, serviceClass);
             if(canInject) {
                 field.setAccessible(true);
                 invokeInjectorField(field, object, service);
@@ -219,7 +219,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
         final List<Method> methods = Arrays.asList(cls.getMethods());
         final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
-            public boolean apply(Method method) {
+            public boolean apply(final Method method) {
                 final String methodName = method.getName();
                 return methodName.startsWith(prefix);
             }
@@ -230,10 +230,10 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
         }
     }
 
-    private void autowire(Object object, Method prefixedMethod, List<Object> services) {
+    private void autowire(final Object object, final Method prefixedMethod, final List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
+            final boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
             if(isInjectorMethod) {
                 prefixedMethod.setAccessible(true);
                 invokeInjectorMethod(prefixedMethod, object, service);
@@ -271,9 +271,9 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private static void invokeInjectorField(final Field field, final Object target, final Object parameter) {
         try {
             field.set(target, parameter);
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             throw new MetaModelException(e);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new MetaModelException(String.format("Cannot access the %s field in %s", field.getName(), target.getClass().getName()));
         }
         if (LOG.isDebugEnabled()) {
@@ -299,38 +299,38 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     //region > lookupService, lookupServices
 
     @Override
-    public <T> T lookupService(Class<T> serviceClass) {
-        List<T> services = lookupServices(serviceClass);
+    public <T> T lookupService(final Class<T> serviceClass) {
+        final List<T> services = lookupServices(serviceClass);
         return !services.isEmpty() ? services.get(0) : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> List<T> lookupServices(Class<T> serviceClass) {
+    public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
         return (List<T>) servicesByType.get(serviceClass);
     };
 
-    private void locateAndCache(Class<?> serviceClass) {
+    private void locateAndCache(final Class<?> serviceClass) {
         if(servicesByType.containsKey(serviceClass)) {
            return; 
         }
 
-        List<Object> matchingServices = Lists.newArrayList();
+        final List<Object> matchingServices = Lists.newArrayList();
         addAssignableTo(serviceClass, services, matchingServices);
 
         servicesByType.put(serviceClass, matchingServices);
     }
 
-    private static void addAssignableTo(Class<?> type, List<Object> candidates, List<Object> filteredServicesAndContainer) {
-        Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
+    private static void addAssignableTo(final Class<?> type, final List<Object> candidates, final List<Object> filteredServicesAndContainer) {
+        final Iterable<Object> filteredServices = Iterables.filter(candidates, ofType(type));
         filteredServicesAndContainer.addAll(Lists.newArrayList(filteredServices));
     }
 
     private static final Predicate<Object> ofType(final Class<?> cls) {
         return new Predicate<Object>() {
             @Override
-            public boolean apply(Object input) {
+            public boolean apply(final Object input) {
                 return cls.isAssignableFrom(input.getClass());
             }
         };
@@ -343,7 +343,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private InjectorMethodEvaluator injectorMethodEvaluator;
 
     @Override
-    public void setSpecificationLookup(SpecificationLoader specificationLookup) {
+    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
         injectorMethodEvaluator = specificationLookup;
     }
 

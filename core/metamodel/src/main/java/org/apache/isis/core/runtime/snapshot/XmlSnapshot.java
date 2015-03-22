@@ -484,7 +484,7 @@ public class XmlSnapshot implements Snapshot {
         final Place fieldPlace = new Place(object, xmlFieldElement);
 
         if (field instanceof OneToOneAssociation) {
-            if (field.getSpecification().getAssociations(Contributed.EXCLUDED).size() == 0) {
+            if (field.getSpecification().getAssociations(Contributed.INCLUDED).size() == 0) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("includeField(Pl, Vec, Str): field is value; done");
                 }
@@ -638,7 +638,7 @@ public class XmlSnapshot implements Snapshot {
 
         isisMetaModel.setAttributesForClass(element, oidAsString(adapter).toString());
 
-        final List<ObjectAssociation> fields = nos.getAssociations(Contributed.EXCLUDED);
+        final List<ObjectAssociation> fields = nos.getAssociations(Contributed.INCLUDED);
         if (LOG.isDebugEnabled()) {
             LOG.debug("objectToElement(NO): processing fields");
         }

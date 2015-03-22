@@ -30,9 +30,14 @@ public interface ProgrammingModel extends MetaModelValidatorRefiner {
 
     List<FacetFactory> getList();
 
+    enum Position {
+        BEGINNING,END
+    }
     void addFactory(Class<? extends FacetFactory> facetFactoryClass);
+    void addFactory(FacetFactory facetFactory);
+    void addFactory(Class<? extends FacetFactory> facetFactoryClass, Position position);
+    void addFactory(FacetFactory facetFactory, Position position);
 
     void removeFactory(Class<? extends FacetFactory> facetFactoryClass);
 
-    void addFactory(FacetFactory facetFactory);
 }

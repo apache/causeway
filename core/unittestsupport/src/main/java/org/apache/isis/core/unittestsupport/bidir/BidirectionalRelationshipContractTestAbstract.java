@@ -18,6 +18,7 @@ package org.apache.isis.core.unittestsupport.bidir;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.junit.Assert.assertThat;
 
 import java.lang.reflect.Field;
@@ -78,7 +79,7 @@ public abstract class BidirectionalRelationshipContractTestAbstract extends Abst
         // getMethod
         final String getMethod = StringUtils.methodNamed("get", p.childField);
         final Set<Method> getMethods = ReflectionUtils.getAllMethods(p.entityType, withConcreteMethodNamed(getMethod));
-        assertThat(p.desc() + ": no unique getXxx() method:" + getMethods , getMethods.size(), is(1));
+        assertThat(p.desc() + ": no unique getXxx() method:" + getMethods , getMethods.size(), is(greaterThan(0)));
         p.getMethod = CollectUtils.firstIn(getMethods);
         
         final Child c = new Child();

@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.services.bookmarks;
 
 import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
@@ -37,19 +37,24 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
  * with {@link org.apache.isis.applib.annotation.DomainService}.  Because this class is implemented in core, this means
  * that it is automatically registered and available for use; no further configuration is required.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware {
 
-    private DomainObjectServices domainObjectServices;
-    
-    @Override
+
+    // //////////////////////////////////////
+
     @Programmatic
+    @Override
     public Object lookup(final BookmarkHolder bookmarkHolder) {
         Bookmark bookmark = bookmarkHolder.bookmark();
         return bookmark != null? lookup(bookmark): null;
     }
 
-    @Hidden
+    // //////////////////////////////////////
+
+    @Programmatic
     @Override
     public Object lookup(final Bookmark bookmark) {
         if(bookmark == null) {
@@ -62,14 +67,18 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         }
     }
 
+    // //////////////////////////////////////
+
     @SuppressWarnings("unchecked")
-    @Hidden
+    @Programmatic
     @Override
     public <T> T lookup(final Bookmark bookmark, Class<T> cls) {
         return (T) lookup(bookmark);
     }
 
-    @Hidden
+    // //////////////////////////////////////
+
+    @Programmatic
     @Override
     public Bookmark bookmarkFor(final Object domainObject) {
         if(domainObject == null) {
@@ -82,17 +91,26 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
         return wrapperFactory != null ? wrapperFactory.unwrap(domainObject) : domainObject;
     }
 
+    // //////////////////////////////////////
+
+    @Programmatic
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
         return domainObjectServices.bookmarkFor(cls, identifier);
     }
 
+    // //////////////////////////////////////
 
-    @Override
+
+    private DomainObjectServices domainObjectServices;
+
     @Programmatic
+    @Override
     public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
         this.domainObjectServices = domainObjectServices;
     }
+
+    // //////////////////////////////////////
 
 
     @javax.inject.Inject

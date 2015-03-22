@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.core.runtime.services.email;
 
 import java.util.List;
@@ -7,11 +25,11 @@ import javax.activation.DataSource;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
-import org.apache.commons.mail.MultiPartEmail;
+import org.apache.commons.mail.ImageHtmlEmail;
+import org.apache.commons.mail.resolver.DataSourceClassPathResolver;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -25,13 +43,14 @@ import com.google.common.base.Strings;
  * A service that sends email notifications when specific events occur
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class EmailServiceDefault implements EmailService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailServiceDefault.class);
 
     //region > constants
-
     private static final String ISIS_SERVICE_EMAIL_SENDER_ADDRESS = "isis.service.email.sender.address";
     private static final String ISIS_SERVICE_EMAIL_SENDER_PASSWORD = "isis.service.email.sender.password";
 
@@ -112,12 +131,12 @@ public class EmailServiceDefault implements EmailService {
                         final DataSource... attachments) {
 
         try {
-
-            final HtmlEmail email = new HtmlEmail();
+            final ImageHtmlEmail email = new ImageHtmlEmail();
             email.setAuthenticator(new DefaultAuthenticator(senderEmailAddress, senderEmailPassword));
             email.setHostName(getSenderEmailHostName());
             email.setSmtpPort(senderEmailPort);
             email.setStartTLSEnabled(getSenderEmailTlsEnabled());
+            email.setDataSourceResolver(new DataSourceClassPathResolver("/", true));
 
             final Properties properties = email.getMailSession().getProperties();
 

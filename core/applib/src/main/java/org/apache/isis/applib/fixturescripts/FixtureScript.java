@@ -18,17 +18,18 @@
  */
 package org.apache.isis.applib.fixturescripts;
 
-import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
-import com.google.common.io.CharSource;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.apache.isis.applib.AbstractViewModel;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
@@ -38,6 +39,7 @@ import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.services.wrapper.WrapperFactory;
 
 @ViewModelLayout(named="Script")
 public abstract class FixtureScript 
@@ -89,11 +91,11 @@ public abstract class FixtureScript
         // enable tracing by default, to stdout
         withTracing();
     }
-    protected String localNameElseDerived(String str) {
+    protected String localNameElseDerived(final String str) {
         return str != null ? str : StringUtil.asLowerDashed(friendlyNameElseDerived(str));
     }
 
-    protected String friendlyNameElseDerived(String str) {
+    protected String friendlyNameElseDerived(final String str) {
         return str != null ? str : StringUtil.asNaturalName2(getClass().getSimpleName());
     }
 
@@ -107,7 +109,7 @@ public abstract class FixtureScript
      * Enable tracing of the execution to the provided {@link java.io.PrintStream}.
      */
     @Programmatic
-    public FixtureScript withTracing(PrintStream tracePrintStream) {
+    public FixtureScript withTracing(final PrintStream tracePrintStream) {
         this.tracePrintStream = tracePrintStream;
         return this;
     }
@@ -132,7 +134,7 @@ public abstract class FixtureScript
 
     @Programmatic
     @Override
-    public void viewModelInit(String mementoStr) {
+    public void viewModelInit(final String mementoStr) {
         fixtureScripts.initOf(mementoStr, this);
     }
 
@@ -156,7 +158,7 @@ public abstract class FixtureScript
     public String getFriendlyName() {
         return friendlyName;
     }
-    public void setFriendlyName(String friendlyName) {
+    public void setFriendlyName(final String friendlyName) {
         this.friendlyName = friendlyName;
     }
 
@@ -173,7 +175,7 @@ public abstract class FixtureScript
     public String getLocalName() {
         return localName;
     }
-    public void setLocalName(String localName) {
+    public void setLocalName(final String localName) {
         this.localName = localName;
     }
 
@@ -186,10 +188,11 @@ public abstract class FixtureScript
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Programmatic
     public String getParentPath() {
         return parentPath;
     }
+    @Programmatic
     public void setParentPath(final String parentPath) {
         this.parentPath = parentPath;
     }
@@ -231,7 +234,9 @@ public abstract class FixtureScript
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
-    public FixtureScript withDiscoverability(Discoverability discoverability) {
+
+    @Programmatic
+    public FixtureScript withDiscoverability(final Discoverability discoverability) {
         this.discoverability = discoverability;
         return this;
     }
@@ -245,22 +250,22 @@ public abstract class FixtureScript
         /**
          * Null implementation, to assist with unit testing of {@link org.apache.isis.applib.fixturescripts.FixtureScript}s.
          */
-        public static final ExecutionContext NOOP = new ExecutionContext(null, null) {
+        public static final ExecutionContext NOOP = new ExecutionContext((String)null, null) {
             @Override
-            public <T> T add(FixtureScript script, T object) {
+            public <T> T add(final FixtureScript script, final T object) {
                 return object;
             }
             @Override
-            public <T> T addResult(FixtureScript script, T object) {
+            public <T> T addResult(final FixtureScript script, final T object) {
                 return object;
             }
 
             @Override
-            public <T> T add(FixtureScript script, String key, T object) {
+            public <T> T add(final FixtureScript script, final String key, final T object) {
                 return object;
             }
             @Override
-            public <T> T addResult(FixtureScript script, String key, T object) {
+            public <T> T addResult(final FixtureScript script, final String key, final T object) {
                 return object;
             }
 
@@ -270,67 +275,174 @@ public abstract class FixtureScript
             }
         };
 
-        private final static Pattern keyEqualsValuePattern = Pattern.compile("([^=]*)=(.*)");
-
-        private final String parameters;
+        private final ExecutionParameters executionParameters;
         private final FixtureScripts fixtureScripts;
         private final FixtureResultList fixtureResultList;
-        private final Map<String, String> parameterMap;
 
         public ExecutionContext(final String parameters, final FixtureScripts fixtureScripts) {
-            this.fixtureScripts = fixtureScripts;
-            fixtureResultList = new FixtureResultList(fixtureScripts, this);
-            this.parameters = parameters;
-            this.parameterMap = asKeyValueMap(parameters);
+            this(new ExecutionParameters(parameters), fixtureScripts);
         }
 
-        public static Map<String, String> asKeyValueMap(String parameters) {
-            Map<String,String> keyValues = Maps.newLinkedHashMap();
-            if(parameters != null) {
-                try {
-                    final ImmutableList<String> lines = CharSource.wrap(parameters).readLines();
-                    for (String line : lines) {
-                        if (line == null) {
-                            continue;
-                        }
-                        final Matcher matcher = keyEqualsValuePattern.matcher(line);
-                        if (matcher.matches()) {
-                            keyValues.put(matcher.group(1).trim(), matcher.group(2).trim());
-                        }
-                    }
-                } catch (IOException e) {
-                    // ignore, shouldn't happen
-                }
-            }
-            return keyValues;
+        @Programmatic
+        public static ExecutionContext create(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts) {
+            return new ExecutionContext(executionParameters, fixtureScripts);
+        }
+
+        private ExecutionContext(final ExecutionParameters executionParameters, final FixtureScripts fixtureScripts) {
+            this.fixtureScripts = fixtureScripts;
+            fixtureResultList = new FixtureResultList(fixtureScripts, this);
+            this.executionParameters = executionParameters;
+        }
+
+        /**
+         * @deprecated - this shouldn't have public visibility.
+         */
+        @Deprecated
+        public static Map<String, String> asKeyValueMap(final String parameters) {
+            return ExecutionParameters.asKeyValueMap(parameters);
         }
 
         public String getParameters() {
-            return parameters;
-        }
-
-        public String getParameter(String parameterName) {
-            return parameterMap.get(parameterName);
+            return executionParameters.getParameters();
         }
 
         public Map<String,String> getParameterMap() {
-            return Collections.unmodifiableMap(parameterMap);
+            return executionParameters.getParameterMap();
         }
 
-        public void setParameterIfNotPresent(String parameterName, String parameterValue) {
-            if(parameterName == null) {
-                throw new IllegalArgumentException("parameterName required");
-            }
-            if(parameterValue == null) {
-                // ignore
-                return;
-            }
-            if(parameterMap.containsKey(parameterName)) {
-                // ignore; the existing parameter take precedence
-                return;
-            }
-            parameterMap.put(parameterName, parameterValue);
+        public String getParameter(final String parameterName) {
+            return executionParameters.getParameter(parameterName);
         }
+
+        public <T> T getParameterAsT(final String parameterName, final Class<T> cls) {
+            return executionParameters.getParameterAsT(parameterName,cls);
+        }
+
+        public Boolean getParameterAsBoolean(final String parameterName) {
+            return executionParameters.getParameterAsBoolean(parameterName);
+        }
+
+        public Byte getParameterAsByte(final String parameterName) {
+            return executionParameters.getParameterAsByte(parameterName);
+        }
+
+        public Short getParameterAsShort(final String parameterName) {
+            return executionParameters.getParameterAsShort(parameterName);
+        }
+
+        public Integer getParameterAsInteger(final String parameterName) {
+            return executionParameters.getParameterAsInteger(parameterName);
+        }
+
+        public Long getParameterAsLong(final String parameterName) {
+            return executionParameters.getParameterAsLong(parameterName);
+        }
+
+        public Float getParameterAsFloat(final String parameterName) {
+            return executionParameters.getParameterAsFloat(parameterName);
+        }
+
+        public Double getParameterAsDouble(final String parameterName) {
+            return executionParameters.getParameterAsDouble(parameterName);
+        }
+
+        public Character getParameterAsCharacter(final String parameterName) {
+            return executionParameters.getParameterAsCharacter(parameterName);
+        }
+
+        public BigInteger getParameterAsBigInteger(final String parameterName) {
+            return executionParameters.getParameterAsBigInteger(parameterName);
+        }
+
+        public BigDecimal getParameterAsBigDecimal(final String parameterName) {
+            return executionParameters.getParameterAsBigDecimal(parameterName);
+        }
+
+        public LocalDate getParameterAsLocalDate(final String parameterName) {
+            return executionParameters.getParameterAsLocalDate(parameterName);
+        }
+
+        public LocalDateTime getParameterAsLocalDateTime(final String parameterName) {
+            return executionParameters.getParameterAsLocalDateTime(parameterName);
+        }
+
+        public <T extends Enum<T>> T getParameterAsEnum(final String parameterName, final Class<T> enumClass) {
+            return executionParameters.getParameterAsEnum(parameterName, enumClass);
+        }
+
+
+        public void setParameterIfNotPresent(final String parameterName, final String parameterValue) {
+            executionParameters.setParameterIfNotPresent(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Boolean parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Byte parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Short parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Integer parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Long parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Float parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Double parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Character parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final BigInteger parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final java.util.Date parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final java.sql.Date parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final LocalDate parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final LocalDateTime parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final org.joda.time.DateTime parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final BigDecimal parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final Enum<?> parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
+        public void setParameter(final String parameterName, final String parameterValue) {
+            executionParameters.setParameter(parameterName, parameterValue);
+        }
+
 
         public List<FixtureResult> getResults() {
             return fixtureResultList.getResults();
@@ -371,8 +483,19 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that is derived from the fixture's class name.
          */
-         public void executeChild(FixtureScript callingFixtureScript, FixtureScript childFixtureScript) {
-            executeChild(callingFixtureScript, null, childFixtureScript);
+        public void executeChild(final FixtureScript callingFixtureScript, final FixtureScript childFixtureScript) {
+            executeChildT(callingFixtureScript, childFixtureScript);
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that is derived from the fixture's class name.
+         *
+         * @return the child fixture script.
+         */
+        public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final T childFixtureScript) {
+             return executeChildT(callingFixtureScript, null, childFixtureScript);
         }
 
         /**
@@ -380,14 +503,31 @@ public abstract class FixtureScript
          * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
          * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
          */
-        public void executeChild(FixtureScript callingFixtureScript, String localNameOverride, FixtureScript childFixtureScript) {
+        public void executeChild(final FixtureScript callingFixtureScript, final String localNameOverride, final FixtureScript childFixtureScript) {
+
+            executeChildT(callingFixtureScript, localNameOverride, childFixtureScript);
+        }
+
+        /**
+         * Executes a child {@link FixtureScript fixture script}, injecting services into it first, and (for any results
+         * that are {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#addResult(FixtureScript, Object)} added),
+         * uses a key that overriding the default name of the fixture script with one more meaningful in the context of this fixture.
+         *
+         * @return the child fixture script.
+         */
+        public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
+            childFixtureScript.withTracing(callingFixtureScript.tracePrintStream); // cascade down
+
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
             callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
+
             executeChildIfNotAlready(childFixtureScript);
+
+            return childFixtureScript;
         }
 
 
@@ -399,11 +539,11 @@ public abstract class FixtureScript
          * @deprecated - should not be called directly, but has <code>public</code> visibility so there is scope for confusion.  Replaced by method with private visibility.
          */
         @Deprecated
-        public void executeIfNotAlready(FixtureScript fixtureScript) {
+        public void executeIfNotAlready(final FixtureScript fixtureScript) {
             executeChildIfNotAlready(fixtureScript);
         }
 
-        private void executeChildIfNotAlready(FixtureScript fixtureScript) {
+        private void executeChildIfNotAlready(final FixtureScript fixtureScript) {
             if(shouldExecute(fixtureScript)) {
                 trace(fixtureScript, As.EXEC);
                 fixtureScript.execute(this);
@@ -416,7 +556,7 @@ public abstract class FixtureScript
 
         private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
 
-        private boolean shouldExecute(FixtureScript fixtureScript) {
+        private boolean shouldExecute(final FixtureScript fixtureScript) {
             final boolean alreadyExecuted = fixtureScriptClasses.values().contains(fixtureScript.getClass());
             if(!alreadyExecuted) {
                 fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
@@ -430,12 +570,12 @@ public abstract class FixtureScript
         private int traceHighwatermark = 40;
         private PrintStream tracePrintStream;
 
-        public ExecutionContext withTracing(PrintStream tracePrintStream) {
+        public ExecutionContext withTracing(final PrintStream tracePrintStream) {
             this.tracePrintStream = tracePrintStream;
             return this;
         }
 
-        private void trace(FixtureScript fixtureScript, As as) {
+        private void trace(final FixtureScript fixtureScript, final As as) {
             if(tracePrintStream == null) {
                 return;
             }
@@ -455,34 +595,108 @@ public abstract class FixtureScript
             tracePrintStream.flush();
         }
 
-        private String pad(String key) {
+        private String pad(final String key) {
             traceHighwatermark = Math.max(key.length(), traceHighwatermark);
             return pad(key, roundup(traceHighwatermark, 20));
         }
         //endregion
 
-        private static String pad(String str, int padTo) {
+        private static String pad(final String str, final int padTo) {
             return Strings.padEnd(str, padTo, ' ');
         }
 
-        static int roundup(int n, int roundTo) {
+        static int roundup(final int n, final int roundTo) {
             return ((n / roundTo) + 1) * roundTo;
         }
 
 
         private Map<Class, Object> userData = Maps.newHashMap();
-        public void setUserData(Object object) {
+        public void setUserData(final Object object) {
             userData.put(object.getClass(), object);
         }
-        public <T> T getUserData(Class<T> cls) {
+        public <T> T getUserData(final Class<T> cls) {
             return (T) userData.get(cls);
         }
-        public <T> T clearUserData(Class<T> cls) {
+        public <T> T clearUserData(final Class<T> cls) {
             return (T) userData.remove(cls);
         }
 
     }
 
+    //endregion
+
+    //region > defaultParam, checkParam
+    protected <T> T defaultParam(final String parameterName, final ExecutionContext ec, final T defaultValue) {
+        final T value = valueFor(parameterName, ec, defaultValue);
+        setParam(parameterName, value);
+        return value;
+    }
+
+    private <T> T valueFor(final String parameterName, final ExecutionContext ec, final T defaultValue) {
+        final Class<T> cls = (Class<T>) defaultValue.getClass();
+
+        final T value = readParam(parameterName, ec, cls);
+        if(value != null) { return (T) value; }
+
+        // else default value
+        return defaultValue;
+    }
+
+    protected <T> T checkParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
+
+        final T value = readParam(parameterName, ec, cls);
+        if(value != null) { return (T) value; }
+
+        // else throw exception
+        throw new IllegalArgumentException(String.format("No value for '%s'", parameterName));
+    }
+
+    private <T> T readParam(final String parameterName, final ExecutionContext ec, final Class<T> cls) {
+
+        // read from ExecutionContext
+        T value = ec.getParameterAsT(parameterName, cls);
+        if(value != null) { return (T) value; }
+
+        // else from fixture script
+        Method method;
+        try {
+            method = this.getClass().getMethod("get" + uppercase(parameterName));
+            value = (T)method.invoke(this);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+
+        }
+        if(value != null) { return (T) value; }
+
+        if (cls == Boolean.class || cls == boolean.class) {
+            try {
+                method = this.getClass().getMethod("is" + uppercase(parameterName));
+                value = (T)method.invoke(this);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException ignored) {
+
+            }
+            if(value != null) { return (T) value; }
+        }
+
+        return null;
+    }
+
+    private <T> void setParam(final String parameterName, final T value) {
+        final String mutator = "set" + uppercase(parameterName);
+        final Method[] methods = this.getClass().getMethods();
+        for (Method method : methods) {
+            if(method.getName().equals(mutator) && method.getParameterTypes().length == 1) {
+                try {
+                    method.invoke(this, value);
+                } catch (InvocationTargetException | IllegalAccessException ignored) {
+                }
+                break;
+            }
+        }
+    }
+
+    private String uppercase(final String parameterName) {
+        return parameterName.substring(0, 1).toUpperCase() + parameterName.substring(1);
+    }
     //endregion
 
     //region > run (entry point for FixtureScripts service to call)
@@ -510,7 +724,7 @@ public abstract class FixtureScript
      * Use instead {@link org.apache.isis.applib.fixturescripts.FixtureScript.ExecutionContext#lookup(String, Class)} directly.
      */
     @Deprecated
-    public <T> T lookup(final String key, Class<T> cls) {
+    public <T> T lookup(final String key, final Class<T> cls) {
         if(executionContext == null) {
             throw new IllegalStateException("This fixture has not yet been run.");
         }
@@ -605,13 +819,31 @@ public abstract class FixtureScript
     //region > helpers (for subclasses)
 
     /**
-     * Returns the first non-null string; for convenience of subclass implementations
+     * Returns the first non-null vaulue; for convenience of subclass implementations
      */
-    protected static String coalesce(final String... strings) {
-        for (String string : strings) {
-            if(string != null) return string;
+    protected static <T> T coalesce(final T... ts) {
+        for (final T t : ts) {
+            if(t != null) return t;
         }
         return null;
+    }
+
+    /**
+     * Wraps domain object
+     */
+    protected <T> T wrap(final T domainObject) {
+        return wrapperFactory.wrap(domainObject);
+    }
+
+    protected <T> T wrap(final T domainObject, final WrapperFactory.ExecutionMode executionMode) {
+        return wrapperFactory.wrap(domainObject, executionMode);
+    }
+
+    /**
+     * Unwraps domain object (no-arg if already wrapped).
+     */
+    protected <T> T unwrap(final T possibleWrappedDomainObject) {
+        return wrapperFactory.unwrap(possibleWrappedDomainObject);
     }
 
     //endregion
@@ -619,7 +851,7 @@ public abstract class FixtureScript
     //region > helpers (local)
 
     @Programmatic
-    String pathWith(String subkey) {
+    String pathWith(final String subkey) {
         return (getQualifiedName() != null? getQualifiedName() + PATH_SEPARATOR: "") +  subkey;
     }
     //endregion
@@ -631,6 +863,10 @@ public abstract class FixtureScript
 
     @javax.inject.Inject
     protected DomainObjectContainer container;
+
+    @javax.inject.Inject
+    protected WrapperFactory wrapperFactory;
+
 
     //endregion
 }

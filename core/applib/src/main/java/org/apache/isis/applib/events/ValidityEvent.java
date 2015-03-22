@@ -22,7 +22,7 @@ package org.apache.isis.applib.events;
 import org.apache.isis.applib.Identifier;
 
 /**
- * Represents a check to determine whether a proposed change is valid.
+ * <i>Supported only by {@link org.apache.isis.applib.services.wrapper.WrapperFactory} service, </i> represents a check to determine whether a proposed change is valid.
  * 
  * <p>
  * Multiple subclasses, including:
@@ -41,7 +41,10 @@ import org.apache.isis.applib.Identifier;
  * @see AccessEvent
  * @see VisibilityEvent
  * @see UsabilityEvent
+ *
+ * @deprecated - superceded by <code>domainEvent</code> support ({@link org.apache.isis.applib.services.eventbus.PropertyDomainEvent}, {@link org.apache.isis.applib.IsisApplibModule.CollectionDomainEvent}, {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent}).
  */
+@Deprecated
 public abstract class ValidityEvent extends InteractionEvent implements ProposedHolderEvent {
 
     private static final long serialVersionUID = 1L;

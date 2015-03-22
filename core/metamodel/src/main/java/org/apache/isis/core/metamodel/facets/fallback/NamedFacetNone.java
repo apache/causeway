@@ -24,14 +24,16 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 /**
  * Has a name of <tt>null</tt>.
- * 
+ *
  * <p>
  * TODO: should this instead be the empty string?
  */
 public class NamedFacetNone extends NamedFacetAbstract {
 
+    public static final boolean ESCAPED = true;
+
     public NamedFacetNone(final FacetHolder holder) {
-        super(null, /*escaped*/ true, holder);
+        super(null, ESCAPED, holder);
     }
 
     @Override

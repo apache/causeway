@@ -255,7 +255,8 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @Disabled first
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder), processMethodContext);
+        final DisabledFacet disabledFacet = DisabledFacetForDisabledAnnotationOnProperty.create(annotation, holder);
+        DisabledFacet facet = disabledValidator.flagIfPresent(disabledFacet, processMethodContext);
 
         // else search for @Property(editing=...)
         final Property property = Annotations.getAnnotation(method, Property.class);

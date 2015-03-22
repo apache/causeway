@@ -20,7 +20,8 @@
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import java.lang.reflect.Method;
-
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
@@ -28,24 +29,26 @@ import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.metamodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
 /**
  * TODO: should probably split out into two {@link FacetFactory}s, one for
  * <tt>addTo()</tt>/<tt>removeFrom()</tt> and one for <tt>validateAddTo()</tt>/
  * <tt>validateRemoveFrom()</tt>.
  */
-public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements ObjectDirtierAware {
+public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements ObjectDirtierAware, ServicesInjectorAware {
 
     private static final String[] PREFIXES = {};
 
-    private ObjectDirtier objectDirtier;
 
     public CollectionAddToRemoveFromAndValidateFacetFactory() {
         super(FeatureType.COLLECTIONS_ONLY, OrphanValidation.VALIDATE, PREFIXES);
@@ -134,17 +137,30 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
-        Method validateAddToMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX + capitalizedName, String.class, paramTypes);
+        Method validateAddToMethod = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX + capitalizedName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                paramTypes);
         if (validateAddToMethod == null) {
-            validateAddToMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX_2 + capitalizedName, String.class, MethodFinderUtils.paramTypesOrNull(collectionType));
+            validateAddToMethod = MethodFinderUtils.findMethod(
+                    cls, MethodScope.OBJECT,
+                    MethodPrefixConstants.VALIDATE_ADD_TO_PREFIX_2 + capitalizedName,
+                    new Class<?>[]{String.class, TranslatableString.class},
+                    MethodFinderUtils.paramTypesOrNull(collectionType));
         }
         if (validateAddToMethod == null) {
             return;
         }
         processMethodContext.removeMethod(validateAddToMethod);
 
-        final FacetHolder collection = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new CollectionValidateAddToFacetViaMethod(validateAddToMethod, collection));
+        final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+
+        final CollectionValidateAddToFacetViaMethod facet = new CollectionValidateAddToFacetViaMethod(validateAddToMethod, translationService, translationContext, facetHolder);
+        FacetUtil.addFacet(facet);
     }
 
     private void attachValidateRemoveFacetIfValidateRemoveFromMethodIsFound(final ProcessMethodContext processMethodContext, final Class<?> collectionType) {
@@ -154,23 +170,37 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?>[] paramTypes = MethodFinderUtils.paramTypesOrNull(collectionType);
-        Method validateRemoveFromMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName, String.class, paramTypes);
+        Method validateRemoveFromMethod = MethodFinderUtils.findMethod(
+                cls, MethodScope.OBJECT,
+                MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX + capitalizedName,
+                new Class<?>[]{String.class, TranslatableString.class},
+                paramTypes);
         if (validateRemoveFromMethod == null) {
-            validateRemoveFromMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX_2 + capitalizedName, String.class, MethodFinderUtils.paramTypesOrNull(collectionType));
+            validateRemoveFromMethod = MethodFinderUtils.findMethod(
+                    cls, MethodScope.OBJECT,
+                    MethodPrefixConstants.VALIDATE_REMOVE_FROM_PREFIX_2 + capitalizedName,
+                    new Class<?>[]{String.class, TranslatableString.class},
+                    MethodFinderUtils.paramTypesOrNull(collectionType));
         }
         if (validateRemoveFromMethod == null) {
             return;
         }
         processMethodContext.removeMethod(validateRemoveFromMethod);
 
-        final FacetHolder collection = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new CollectionValidateRemoveFromFacetViaMethod(validateRemoveFromMethod, collection));
+        final IdentifiedHolder facetHolder = processMethodContext.getFacetHolder();
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = facetHolder.getIdentifier().toClassAndNameIdentityString();
+
+        final CollectionValidateRemoveFromFacetViaMethod facet = new CollectionValidateRemoveFromFacetViaMethod(validateRemoveFromMethod, translationService, translationContext, facetHolder);
+        FacetUtil.addFacet(facet);
     }
 
     // ///////////////////////////////////////////////////////
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
+    private ObjectDirtier objectDirtier;
     protected ObjectDirtier getObjectDirtier() {
         return objectDirtier;
     }
@@ -180,4 +210,9 @@ public class CollectionAddToRemoveFromAndValidateFacetFactory extends MethodPref
         this.objectDirtier = objectDirtier;
     }
 
+    private ServicesInjector servicesInjector;
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }

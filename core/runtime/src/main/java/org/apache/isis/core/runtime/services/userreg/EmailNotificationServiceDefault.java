@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.core.runtime.services.userreg;
 
 import java.io.IOException;
@@ -12,6 +30,7 @@ import com.google.common.io.Resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.applib.services.userreg.events.EmailEventAbstract;
@@ -26,7 +45,9 @@ import static java.util.regex.Pattern.quote;
  * A service that sends email notifications when specific events occur
  */
 @com.google.inject.Singleton // necessary because is registered in and injected by google guice
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class EmailNotificationServiceDefault implements EmailNotificationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(EmailNotificationServiceDefault.class);
@@ -75,6 +96,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
 
     //region > isConfigured
 
+    @Programmatic
     @Override
     public boolean isConfigured() {
         return emailService != null && emailService.isConfigured();
@@ -85,6 +107,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     //region > send
 
 
+    @Programmatic
     @Override
     public boolean send(final EmailRegistrationEvent emailRegistrationEvent) {
         ensureConfigured();
@@ -92,6 +115,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
         return sendEmail(emailRegistrationEvent, body);
     }
 
+    @Programmatic
     @Override
     public boolean send(final PasswordResetEvent passwordResetEvent) {
         ensureConfigured();
@@ -138,7 +162,7 @@ public class EmailNotificationServiceDefault implements EmailNotificationService
     protected String replace(final String template, final EmailEventAbstract emailEvent) {
         String message = template;
         message = EMAIL_PATTERN.matcher(message).replaceFirst(emailEvent.getEmail());
-        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceFirst(emailEvent.getConfirmationUrl());
+        message = CONFIRMATION_URL_PATTERN.matcher(message).replaceAll(emailEvent.getConfirmationUrl());
         message = APPLICATION_NAME_PATTERN.matcher(message).replaceAll(emailEvent.getApplicationName());
         return message;
     }

@@ -29,6 +29,7 @@ import javax.jdo.Query;
 import javax.jdo.spi.PersistenceCapable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
@@ -347,20 +348,9 @@ public class DataNucleusObjectStore implements ObjectStore {
         ensureOpened();
         ensureInTransaction();
 
-        // no longer check if there are no commands; it could be that
-        // DataNucleus has some dirty objects anyway that don't have
-        // commands wrapped around them...
-
-//        if (LOG.isDebugEnabled()) {
-//            LOG.debug("execute " + commands.size() + " commands");
-//        }
-//
-//        if (commands.size() <= 0) {
-//            if (LOG.isDebugEnabled()) {
-//                LOG.debug("no commands");
-//            }
-//            return;
-//        }
+        // previously we used to check that there were some commands, and skip processing otherwise.
+        // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
+        // don't have commands wrapped around them...
 
         executeCommands(commands);
     }
@@ -584,6 +574,17 @@ public class DataNucleusObjectStore implements ObjectStore {
         ensureOpened();
         return this.registeredServices.get(serviceSpec.getSpecId());
     }
+
+
+    // ///////////////////////////////////////////////////////////////////////
+    // Not API
+    // ///////////////////////////////////////////////////////////////////////
+
+
+    public boolean isDeleted(final ObjectAdapter adapter) {
+        return NucleusJDOHelper.isDeleted(adapter.getObject());
+    }
+
 
     // ///////////////////////////////////////////////////////////////////////
     // Helpers: ensure*

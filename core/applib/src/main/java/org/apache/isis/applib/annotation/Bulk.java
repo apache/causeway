@@ -64,7 +64,7 @@ public @interface Bulk {
      * @deprecated - see {@link org.apache.isis.applib.services.actinvoc.ActionInvocationContext}.
      */
     @Deprecated
-    @DomainService
+    @DomainService(nature = NatureOfService.DOMAIN)
     @RequestScoped
     public static class InteractionContext {
 

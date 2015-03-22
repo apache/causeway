@@ -85,7 +85,6 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionS
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -94,7 +93,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -232,7 +230,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
     private final TransactionalResource objectStore;
-    private final List<PersistenceCommand> commands = Lists.newArrayList();
+    private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
 
@@ -443,7 +441,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         if (LOG.isDebugEnabled()) {
             LOG.debug("add command " + command);
         }
-        commands.add(command);
+        persistenceCommands.add(command);
     }
 
 
@@ -512,37 +510,33 @@ public class IsisTransaction implements TransactionScopedComponent {
         // with previous algorithm that always went through the execute phase at least once.
         //
         do {
-            // We take a copy of the commands to be executed (executing these
-            // might add to this.commands).
-            final List<PersistenceCommand> commandsPrior = 
-                    Collections.unmodifiableList(Lists.newArrayList(commands));
-            try {
-                objectStore.execute(commandsPrior);
-                for (final PersistenceCommand command : commandsPrior) {
-                    if (command instanceof DestroyObjectCommand) {
-                        final ObjectAdapter adapter = command.onAdapter();
-                        adapter.setVersion(null);
-                        if(!adapter.isDestroyed()) {
-                            adapter.changeState(ResolveState.DESTROYED);
+            // this algorithm ensures that we never execute the same command twice,
+            // and also allow new commands to be added to end
+            final List<PersistenceCommand> persistenceCommandList = Lists.newArrayList(persistenceCommands);
+
+            if(!persistenceCommandList.isEmpty()) {
+                // so won't be processed again if a flush is encountered subsequently
+                persistenceCommands.removeAll(persistenceCommandList);
+                try {
+                    objectStore.execute(persistenceCommandList);
+                    for (PersistenceCommand persistenceCommand : persistenceCommandList) {
+                        if (persistenceCommand instanceof DestroyObjectCommand) {
+                            final ObjectAdapter adapter = persistenceCommand.onAdapter();
+                            adapter.setVersion(null);
+                            if (!adapter.isDestroyed()) {
+                                adapter.changeState(ResolveState.DESTROYED);
+                            }
                         }
                     }
+                } catch (final RuntimeException ex) {
+                    // if there's an exception, we want to make sure that
+                    // all commands are cleared and propagate
+                    persistenceCommands.clear();
+                    throw ex;
                 }
-                commands.removeAll(commandsPrior);
-            } catch(final RuntimeException ex) {
-                // if there's an exception, we want to make sure that 
-                // all commands are cleared and propagate
-                commands.clear();
-                throw ex;
             }
-        } while(!commands.isEmpty() && i++ < MAX_FLUSH_ATTEMPTS);
+        } while(!persistenceCommands.isEmpty());
         
-        if(!commands.isEmpty()) {
-            // must have hit max flush
-            final List<PersistenceCommand> commandsStillToFlush = 
-                    Collections.unmodifiableList(Lists.newArrayList(commands));
-            commands.clear();
-            throw new ObjectPersistenceException("Failed to flush transaction after " + MAX_FLUSH_ATTEMPTS + " attempts; commands still to flush:\n " + commandsStillToFlush.toString());
-        }
     }
 
     protected void doAudit(final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties) {
@@ -692,7 +686,10 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     public void auditChangedProperty(
-            final java.sql.Timestamp timestamp, final String user, final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+            final java.sql.Timestamp timestamp,
+            final String user,
+            final Entry<AdapterAndProperty, PreAndPostValues> auditEntry) {
+
         final AdapterAndProperty aap = auditEntry.getKey();
         final ObjectAdapter adapter = aap.getAdapter();
         
@@ -700,19 +697,17 @@ public class IsisTransaction implements TransactionScopedComponent {
         if(auditableFacet == null || auditableFacet.isDisabled()) {
             return;
         }
-        final RootOid oid = (RootOid) adapter.getOid();
-        final String objectType = oid.getObjectSpecId().asString();
-        final String identifier = oid.getIdentifier();
+
+        final Bookmark target = aap.getBookmark();
+        final String propertyId = aap.getPropertyId();
+        final String memberId = aap.getMemberId();
+
         final PreAndPostValues papv = auditEntry.getValue();
         final String preValue = papv.getPreString();
         final String postValue = papv.getPostString();
         
-        final ObjectAssociation property = aap.getProperty();
-        final String memberId = property.getIdentifier().toClassAndNameIdentityString();
-        final String propertyId = property.getId();
 
         final String targetClass = CommandUtil.targetClassNameFor(adapter);
-        final Bookmark target = new Bookmark(objectType, identifier);
 
         auditingService3.audit(getTransactionId(), targetClass, target, memberId, propertyId, preValue, postValue, user, timestamp);
     }
@@ -748,7 +743,31 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         try {
-            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties = getChangedObjectProperties();
+            final Map<AdapterAndProperty, PreAndPostValues> processedObjectProperties = Maps.newLinkedHashMap();
+            while(!changedObjectProperties.isEmpty()) {
+
+                final Set<AdapterAndProperty> keys = Sets.newLinkedHashSet(changedObjectProperties.keySet());
+                for (final AdapterAndProperty aap : keys) {
+
+                    final PreAndPostValues papv = changedObjectProperties.remove(aap);
+
+                    final ObjectAdapter adapter = aap.getAdapter();
+                    if(adapter.isDestroyed()) {
+                        // don't touch the object!!!
+                        // JDO, for example, will complain otherwise...
+                        papv.setPost(Placeholder.DELETED);
+                    } else {
+                        papv.setPost(aap.getPropertyValue());
+                    }
+
+                    // if we encounter the same objectProperty again, this will simply overwrite it
+                    processedObjectProperties.put(aap, papv);
+                }
+            }
+
+            final Set<Entry<AdapterAndProperty, PreAndPostValues>> changedObjectProperties =
+                    Collections.unmodifiableSet(
+                            Sets.filter(processedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
 
             ensureCommandsPersistedIfDirtyXactnAndAnySafeSemanticsHonoured(changedObjectProperties);
             preCommitServices(changedObjectProperties);
@@ -1018,7 +1037,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
-        for (final PersistenceCommand command : commands) {
+        for (final PersistenceCommand command : persistenceCommands) {
             if (command.onAdapter().equals(onObject)) {
                 if (commandClass.isAssignableFrom(command.getClass())) {
                     return command;
@@ -1030,7 +1049,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private void removeCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
         final PersistenceCommand toDelete = getCommand(commandClass, onObject);
-        commands.remove(toDelete);
+        persistenceCommands.remove(toDelete);
     }
 
     private void removeCreate(final ObjectAdapter onObject) {
@@ -1052,7 +1071,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     protected ToString appendTo(final ToString str) {
         str.append("state", state);
-        str.append("commands", commands.size());
+        str.append("commands", persistenceCommands.size());
         return str;
     }
 
@@ -1087,7 +1106,10 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         private final ObjectAdapter objectAdapter;
         private final ObjectAssociation property;
-        
+        private final Bookmark bookmark;
+        private final String propertyId;
+        private final String bookmarkStr;
+
         public static AdapterAndProperty of(ObjectAdapter adapter, ObjectAssociation property) {
             return new AdapterAndProperty(adapter, property);
         }
@@ -1095,6 +1117,15 @@ public class IsisTransaction implements TransactionScopedComponent {
         private AdapterAndProperty(ObjectAdapter adapter, ObjectAssociation property) {
             this.objectAdapter = adapter;
             this.property = property;
+
+            final RootOid oid = (RootOid) adapter.getOid();
+
+            final String objectType = oid.getObjectSpecId().asString();
+            final String identifier = oid.getIdentifier();
+            bookmark = new Bookmark(objectType, identifier);
+            bookmarkStr = bookmark.toString();
+
+            propertyId = property.getId();
         }
         
         public ObjectAdapter getAdapter() {
@@ -1104,40 +1135,40 @@ public class IsisTransaction implements TransactionScopedComponent {
             return property;
         }
 
+        public Bookmark getBookmark() {
+            return bookmark;
+        }
+        public String getPropertyId() {
+            return propertyId;
+        }
+
+        public String getMemberId() {
+            return property.getIdentifier().toClassAndNameIdentityString();
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            final AdapterAndProperty that = (AdapterAndProperty) o;
+
+            if (bookmarkStr != null ? !bookmarkStr.equals(that.bookmarkStr) : that.bookmarkStr != null) return false;
+            if (propertyId != null ? !propertyId.equals(that.propertyId) : that.propertyId != null) return false;
+
+            return true;
+        }
+
         @Override
         public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((objectAdapter == null) ? 0 : objectAdapter.hashCode());
-            result = prime * result + ((property == null) ? 0 : property.hashCode());
+            int result = propertyId != null ? propertyId.hashCode() : 0;
+            result = 31 * result + (bookmarkStr != null ? bookmarkStr.hashCode() : 0);
             return result;
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            AdapterAndProperty other = (AdapterAndProperty) obj;
-            if (objectAdapter == null) {
-                if (other.objectAdapter != null)
-                    return false;
-            } else if (!objectAdapter.equals(other.objectAdapter))
-                return false;
-            if (property == null) {
-                if (other.property != null)
-                    return false;
-            } else if (!property.equals(other.property))
-                return false;
-            return true;
-        }
-        
-        @Override
         public String toString() {
-            return getAdapter().getOid().enStringNoVersion(getMarshaller()) + " , " + getProperty().getId();
+            return bookmarkStr + " , " + getProperty().getId();
         }
 
         protected OidMarshaller getMarshaller() {
@@ -1256,8 +1287,7 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing a dummy value <tt>'[NEW]'</tt> for the pre-modification value. 
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
-     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
+     * The post-modification values are captured in {@link #preCommit()}.
      * 
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
@@ -1269,6 +1299,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             if(property.isNotPersisted()) {
                 continue;
             }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
+            }
             PreAndPostValues papv = PreAndPostValues.pre(Placeholder.NEW);
             changedObjectProperties.put(aap, papv);
         }
@@ -1279,9 +1313,8 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing the pre-modification values of the properties of the {@link ObjectAdapter}.
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()},
-     * which returns the pre- and post- values for each {@link ObjectAdapter} in a map. 
-     * 
+     * The post-modification values are captured in {@link #preCommit()}.
+     *
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
@@ -1291,6 +1324,10 @@ public class IsisTransaction implements TransactionScopedComponent {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
+            }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
@@ -1302,18 +1339,25 @@ public class IsisTransaction implements TransactionScopedComponent {
      * capturing the pre-deletion value of the properties of the {@link ObjectAdapter}. 
      * 
      * <p>
-     * The post-modification values are captured in as a side-effect of calling {@link #getChangedObjectProperties()}.
-     * In the case of deleted objects, a dummy value <tt>'[DELETED]'</tt> is used as the post-modification value. 
+     * The post-modification values are captured in {@link #preCommit()}.  In the case of deleted objects, a
+     * dummy value <tt>'[DELETED]'</tt> is used as the post-modification value.
      * 
      * <p>
      * Supported by the JDO object store; check documentation for support in other objectstores.
      */
     public void enlistDeleting(ObjectAdapter adapter) {
-        enlist(adapter, ChangeKind.DELETE);
+        final boolean enlisted = enlist(adapter, ChangeKind.DELETE);
+        if(!enlisted) {
+            return;
+        }
         for (ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             final AdapterAndProperty aap = AdapterAndProperty.of(adapter, property);
             if(property.isNotPersisted()) {
                 continue;
+            }
+            if(changedObjectProperties.containsKey(aap)) {
+                // already enlisted, so ignore
+                return;
             }
             PreAndPostValues papv = PreAndPostValues.pre(aap.getPropertyValue());
             changedObjectProperties.put(aap, papv);
@@ -1321,45 +1365,45 @@ public class IsisTransaction implements TransactionScopedComponent {
     }
 
 
-    private void enlist(ObjectAdapter adapter, ChangeKind changeKind) {
-        changeKindByEnlistedAdapter.put(adapter, changeKind);
-    }
-    
-    
     /**
-     * Returns the pre- and post-values of all {@link ObjectAdapter}s that were enlisted and dirtied
-     * in this transaction.
-     * 
-     * <p>
-     * This requires that the object store called {@link #enlistUpdating(ObjectAdapter)} for each object being
-     * enlisted.
-     * 
-     * <p>
-     * Supported by the JDO object store (since it calls {@link #enlistUpdating(ObjectAdapter)}); 
-     * check documentation for support in other object stores.
+     *
+     * @param adapter
+     * @param current
+     * @return <code>true</code> if successfully enlisted, <code>false</code> if was already enlisted
      */
-    private Set<Entry<AdapterAndProperty, PreAndPostValues>> getChangedObjectProperties() {
-        updatePostValues(changedObjectProperties.entrySet());
-
-        return Collections.unmodifiableSet(Sets.filter(changedObjectProperties.entrySet(), PreAndPostValues.Predicates.CHANGED));
-    }
-
-    private static void updatePostValues(Set<Entry<AdapterAndProperty, PreAndPostValues>> entrySet) {
-        for (Entry<AdapterAndProperty, PreAndPostValues> entry : entrySet) {
-            final AdapterAndProperty aap = entry.getKey();
-            final PreAndPostValues papv = entry.getValue();
-            ObjectAdapter adapter = aap.getAdapter();
-            if(adapter.isDestroyed()) {
-                // don't touch the object!!!
-                // JDO, for example, will complain otherwise...
-                papv.setPost(Placeholder.DELETED);
-            } else {
-                papv.setPost(aap.getPropertyValue());
-            }
+    private boolean enlist(final ObjectAdapter adapter, final ChangeKind current) {
+        final ChangeKind previous = changeKindByEnlistedAdapter.get(adapter);
+        if(previous == null) {
+            changeKindByEnlistedAdapter.put(adapter, current);
+            return true;
         }
+        switch (previous) {
+            case CREATE:
+                switch (current) {
+                    case DELETE:
+                        changeKindByEnlistedAdapter.remove(adapter);
+                    case CREATE:
+                    case UPDATE:
+                        return false;
+                }
+                break;
+            case UPDATE:
+                switch (current) {
+                    case DELETE:
+                        changeKindByEnlistedAdapter.put(adapter, current);
+                        return true;
+                    case CREATE:
+                    case UPDATE:
+                        return false;
+                }
+                break;
+            case DELETE:
+                return false;
+        }
+        return previous == null;
     }
 
-    
+
     ////////////////////////////////////////////////////////////////////////
     // Dependencies (from context)
     ////////////////////////////////////////////////////////////////////////

@@ -56,7 +56,17 @@ public @interface DomainObject {
      */
     Publishing publishing() default Publishing.AS_CONFIGURED;
 
-    // TODO: factor out PayloadFactory.Default so similar to interaction
+    /**
+     * The factory to construct the payload factory.
+     *
+     * <p>
+     *     If not specified then a default implementation will be used.
+     * </p>
+     *
+     * <p>
+     *     TODO: ??? factor out PayloadFactory.Default so similar to design similar to @Action(domainEvent=...)
+     * </p>
+     */
     Class<? extends PublishingPayloadFactoryForObject> publishingPayloadFactory() default PublishingPayloadFactoryForObject.class;
 
 

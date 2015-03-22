@@ -21,6 +21,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.clock.Clock;
 
@@ -30,11 +31,12 @@ import org.apache.isis.applib.clock.Clock;
  * co-ordinated time management through a centralized time service.
  *
  * <p>
- * This service has no UI and there is only one implementation (this class) in applib, so it is annotated with
- * {@link org.apache.isis.applib.annotation.DomainService}.  This means that it is automatically registered and
- * available for use; no further configuration is required.
+ * This service has only one implementation and so is automatically registered. and available for use; no further
+ * configuration is required.
  */
-@DomainService
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class ClockService {
     
     @Programmatic

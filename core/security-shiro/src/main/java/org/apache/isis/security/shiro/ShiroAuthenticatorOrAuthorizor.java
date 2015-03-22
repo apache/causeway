@@ -28,6 +28,7 @@ import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.CredentialsException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
@@ -143,6 +144,9 @@ public class ShiroAuthenticatorOrAuthorizor implements Authenticator, Authorizor
             LOG.debug("Unable to authenticate", uae);
             return null;
         } catch ( IncorrectCredentialsException ice ) {
+            LOG.debug("Unable to authenticate", ice);
+            return null;
+        } catch ( CredentialsException ice ) {
             LOG.debug("Unable to authenticate", ice);
             return null;
         } catch ( LockedAccountException lae ) {

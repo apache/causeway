@@ -926,7 +926,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     private List<ObjectAssociation> createContributeeAssociations() {
-        if (isService()) {
+        if (isService() || isValue()) {
             return Collections.emptyList();
         }
         
@@ -1014,7 +1014,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * then returns an empty list.
      */
     protected List<ObjectAction> createContributeeActions() {
-        if (isService()) {
+        if (isService() || isValue()) {
             return Collections.emptyList();
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();

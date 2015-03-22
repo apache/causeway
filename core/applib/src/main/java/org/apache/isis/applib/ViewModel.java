@@ -20,6 +20,7 @@
 package org.apache.isis.applib;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 
 
 /**
@@ -42,13 +43,13 @@ public interface ViewModel {
      * This method is called by the framework in order that the view model may be recreated subsequently
      * through {@link #viewModelInit(String)}.
      */
-    @Hidden
+    @Programmatic
     public String viewModelMemento();
     
     /**
      * Used to re-initialize a view model with a memento obtained from {@link #viewModelMemento()}.
      */
-    @Hidden
+    @Programmatic
     public void viewModelInit(String memento);
 
     /**

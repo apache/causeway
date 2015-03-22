@@ -140,13 +140,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
         final List<Object> services = sessionFactory.getServices();
         
-//        // autowire
-//        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
-//        servicesInjector.setSpecificationLookup(sessionFactory.getSpecificationLoader());
-//        servicesInjector.setServices(services);
-//        servicesInjector.init();
-
-        // validate 
+        // validate
         final ServiceInitializer serviceInitializer = new ServiceInitializer();
         serviceInitializer.validate(getConfiguration(), services);
 

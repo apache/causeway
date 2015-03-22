@@ -47,6 +47,7 @@ public class CommandDefault implements Command2, Command3 {
     public String getMemberIdentifier() {
         return actionIdentifier;
     }
+
     @Override
     public void setMemberIdentifier(String actionIdentifier) {
         this.actionIdentifier = actionIdentifier;
@@ -425,7 +426,7 @@ public class CommandDefault implements Command2, Command3 {
 
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "startedAt,user,actionIdentifier,target,guid");
+        return ObjectContracts.toString(this, "startedAt,user,memberIdentifier,target,transactionId");
     }
     
     

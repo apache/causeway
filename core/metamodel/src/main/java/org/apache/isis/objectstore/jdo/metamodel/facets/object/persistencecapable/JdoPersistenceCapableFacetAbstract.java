@@ -32,19 +32,28 @@ public abstract class JdoPersistenceCapableFacetAbstract extends FacetAbstract i
         return JdoPersistenceCapableFacet.class;
     }
 
+    private final String schema;
     private final String table;
     private final IdentityType identityType;
 
-    public JdoPersistenceCapableFacetAbstract(final String table, IdentityType identityType, final FacetHolder holder) {
+    public JdoPersistenceCapableFacetAbstract(
+            final String schemaName,
+            final String tableOrTypeName,
+            final IdentityType identityType,
+            final FacetHolder holder) {
         super(JdoPersistenceCapableFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
-        this.table = table;
+        this.schema = schemaName;
+        this.table = tableOrTypeName;
         this.identityType = identityType;
     }
 
     public IdentityType getIdentityType() {
         return identityType;
     }
-    
+
+    public String getSchema() {
+        return schema;
+    }
     public String getTable() {
         return table;
     }

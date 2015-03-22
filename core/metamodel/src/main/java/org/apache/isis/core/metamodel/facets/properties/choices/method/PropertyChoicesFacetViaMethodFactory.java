@@ -55,7 +55,7 @@ public class PropertyChoicesFacetViaMethodFactory extends MethodPrefixBasedFacet
 
         final Class<?> cls = processMethodContext.getCls();
         final Class<?> returnType = getMethod.getReturnType();
-        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX + capitalizedName, null, NO_PARAMETERS_TYPES);
+        final Method choicesMethod = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.CHOICES_PREFIX + capitalizedName, (Class<?>)null, NO_PARAMETERS_TYPES);
         if (choicesMethod == null) {
             return;
         }

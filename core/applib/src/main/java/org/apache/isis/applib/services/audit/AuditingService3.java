@@ -51,6 +51,7 @@ public interface AuditingService3 {
     
     public static class Stderr implements AuditingService3 {
 
+        @Programmatic
         @Override
         public void audit(
                 final UUID transactionId, final String targetClassName, final Bookmark target, 

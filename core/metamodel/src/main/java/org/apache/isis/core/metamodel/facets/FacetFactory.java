@@ -64,13 +64,15 @@ public interface FacetFactory {
         }
     }
 
-    static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T>{
+    static class AbstractProcessWithMethodContext<T extends FacetHolder> extends AbstractProcessWithClsContext<T> implements MethodRemover{
 
         private final Method method;
+        protected final MethodRemover methodRemover;
 
-        AbstractProcessWithMethodContext(final Class<?> cls, final Method method, final T facetHolder) {
+        AbstractProcessWithMethodContext(final Class<?> cls, final Method method, final MethodRemover methodRemover, final T facetHolder) {
             super(cls, facetHolder);
             this.method = method;
+            this.methodRemover = methodRemover;
         }
 
         /**
@@ -86,6 +88,27 @@ public interface FacetFactory {
 
         public Method getMethod() {
             return method;
+        }
+
+
+        @Override
+        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
+            return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
+        }
+
+        @Override
+        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
+            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
+        }
+
+        @Override
+        public void removeMethod(final Method method) {
+            methodRemover.removeMethod(method);
+        }
+
+        @Override
+        public void removeMethods(final List<Method> methods) {
+            methodRemover.removeMethods(methods);
         }
 
     }
@@ -172,10 +195,10 @@ public interface FacetFactory {
     // //////////////////////////////////////
 
 
-    public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements MethodRemover, ProcessContextWithMetadataProperties<FacetedMethod> {
+    public static class ProcessMethodContext extends AbstractProcessWithMethodContext<FacetedMethod> implements  ProcessContextWithMetadataProperties<FacetedMethod> {
         private final FeatureType featureType;
         private final Properties metadataProperties;
-        private final MethodRemover methodRemover;
+
 
         public ProcessMethodContext(
                 final Class<?> cls, 
@@ -184,34 +207,13 @@ public interface FacetFactory {
                 final Method method, 
                 final MethodRemover methodRemover, 
                 final FacetedMethod facetedMethod) {
-            super(cls, method, facetedMethod);
+            super(cls, method, methodRemover, facetedMethod);
             this.featureType = featureType;
             this.metadataProperties = metadataProperties;
-            this.methodRemover = methodRemover;
         }
 
         public FeatureType getFeatureType() {
             return featureType;
-        }
-
-        @Override
-        public List<Method> removeMethods(final MethodScope methodScope, final String prefix, final Class<?> returnType, final boolean canBeVoid, final int paramCount) {
-            return methodRemover.removeMethods(methodScope, prefix, returnType, canBeVoid, paramCount);
-        }
-
-        @Override
-        public void removeMethod(final MethodScope methodScope, final String methodName, final Class<?> returnType, final Class<?>[] parameterTypes) {
-            methodRemover.removeMethod(methodScope, methodName, returnType, parameterTypes);
-        }
-
-        @Override
-        public void removeMethod(final Method method) {
-            methodRemover.removeMethod(method);
-        }
-
-        @Override
-        public void removeMethods(final List<Method> methods) {
-            methodRemover.removeMethods(methods);
         }
 
         public Properties metadataProperties(final String subKey) {
@@ -267,8 +269,9 @@ public interface FacetFactory {
                 final Class<?> cls,
                 final Method method,
                 final int paramNum,
+                final MethodRemover methodRemover,
                 final FacetedMethodParameter facetedMethodParameter) {
-            super(cls, method, facetedMethodParameter);
+            super(cls, method, methodRemover, facetedMethodParameter);
             this.paramNum = paramNum;
         }
 

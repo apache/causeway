@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class FacetDecoratorSet implements ApplicationScopedComponent {
 
-    private final Map<Class<? extends Facet>, List<FacetDecorator>> facetDecoratorByFacetType = new HashMap<Class<? extends Facet>, List<FacetDecorator>>();
+    private final Map<Class<? extends Facet>, List<FacetDecorator>> facetDecoratorByFacetType = new HashMap<>();
     private final Set<FacetDecorator> facetDecoratorSet = new LinkedHashSet<FacetDecorator>();
 
     // ////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
     private List<FacetDecorator> getFacetDecoratorList(final Class<? extends Facet> decoratedFacetType) {
         List<FacetDecorator> facetDecoratorList = facetDecoratorByFacetType.get(decoratedFacetType);
         if (facetDecoratorList == null) {
-            facetDecoratorList = new ArrayList<FacetDecorator>();
+            facetDecoratorList = new ArrayList<>();
             facetDecoratorByFacetType.put(decoratedFacetType, facetDecoratorList);
         }
         return facetDecoratorList;

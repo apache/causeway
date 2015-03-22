@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+    <body>
+        <wicket:panel>
+
+            <footer class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-footer">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-collapse-footer">
+                    <form class="nav navbar-nav navbar-form navbar-left">
+                        <span wicket:id="breadcrumbs"></span>
+                    </form>
+
+                    <ul class="nav navbar-nav">
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <p class="navbar-text powered-by">Powered by:</p>
+                        <li><a href="http://isis.apache.org" target="_blank">Apache Isis &#8482;</a></li>
+                        <li>
+                            <a wicket:id="aboutLink" class="navbar-right">
+                                <span wicket:id="aboutMessage">About</span>
+                                <i wicket:id="devModeWarning" class="fa fa-lg fa-warning text-danger" title="Running in Prototype (Development) mode!"/>
+                            </a>
+
+                        </li>
+                        <li wicket:id="themePicker"></li>
+                    </ul>
+                </div>
+            </div>
+
+            </footer>
+        </wicket:panel>
+    </body>
+</html>

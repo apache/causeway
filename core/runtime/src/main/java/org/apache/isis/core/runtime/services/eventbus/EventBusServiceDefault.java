@@ -72,6 +72,8 @@ public class EventBusServiceDefault extends EventBusService {
         super.register(domainService);
     }
 
+    // //////////////////////////////////////
+
     @Override
     protected EventBus newEventBus() {
         return new EventBus(newEventBusSubscriberExceptionHandler());
@@ -124,9 +126,6 @@ public class EventBusServiceDefault extends EventBusService {
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
-
-    //endregion
-
 
 }
 

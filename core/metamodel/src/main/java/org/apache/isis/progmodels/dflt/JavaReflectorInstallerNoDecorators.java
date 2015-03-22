@@ -159,9 +159,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * <p>
      * By default, looks up implementation from provided
      * {@link IsisConfiguration} using
-     * {@link ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME}. If not
-     * specified, then defaults to
-     * {@value ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT}.
+     * {@link ReflectorConstants#META_MODEL_VALIDATOR_CLASS_NAME}.
      */
     protected MetaModelValidator createMetaModelValidator(final IsisConfiguration configuration) {
         final String metaModelValidatorClassName = configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME, ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);

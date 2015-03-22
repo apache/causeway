@@ -24,6 +24,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
 import org.apache.isis.applib.annotation.Value;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
@@ -83,6 +84,32 @@ public interface Oid extends Encodable {
 
         public String getCode() {
             return code;
+        }
+
+        public static State from(final Bookmark bookmark) {
+            final Bookmark.ObjectState objectState = bookmark.getObjectState();
+            return from(objectState);
+        }
+
+        public static State from(final Bookmark.ObjectState objectState) {
+            switch (objectState) {
+                case VIEW_MODEL:
+                    return VIEWMODEL;
+                case TRANSIENT:
+                    return TRANSIENT;
+                default:
+                    return PERSISTENT;
+            }
+        }
+        public Bookmark.ObjectState asBookmarkObjectState() {
+            switch (this) {
+                case VIEWMODEL:
+                    return Bookmark.ObjectState.VIEW_MODEL;
+                case TRANSIENT:
+                    return Bookmark.ObjectState.TRANSIENT;
+                default:
+                    return Bookmark.ObjectState.PERSISTENT;
+            }
         }
     }
 
