@@ -36,7 +36,6 @@ import domainapp.dom.modules.simple.SimpleObjects;
 import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.SimpleAppIntegTest;
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -51,34 +50,6 @@ public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
     SimpleObjects simpleObjects;
     @Inject
     DomainObjectContainer container;
-
-    public static class Title extends SimpleObjectsIntegTest {
-
-        @Test
-        public void happyCase() throws Exception {
-
-            // when
-            final String title = container.titleOf(wrap(simpleObjects));
-
-            // then
-            assertThat(title, equalTo("Simple Objects"));
-        }
-
-        @Test
-        public void whenNone() throws Exception {
-
-            // given
-            FixtureScript fs = new SimpleObjectsTearDown();
-            fixtureScripts.runFixtureScript(fs, null);
-            nextTransaction();
-
-            // when
-            final List<SimpleObject> all = wrap(simpleObjects).listAll();
-
-            // then
-            assertThat(all.size(), is(0));
-        }
-    }
 
     public static class ListAll extends SimpleObjectsIntegTest {
 

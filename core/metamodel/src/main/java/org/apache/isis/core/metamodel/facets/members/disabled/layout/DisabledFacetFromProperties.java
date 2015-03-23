@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.facets.members.disabled.layout;
 
 import java.util.Properties;
-
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,7 +32,7 @@ public class DisabledFacetFromProperties extends DisabledFacetAbstractImpl {
     }
 
     public DisabledFacetFromProperties(Properties properties, FacetHolder holder) {
-        super(disabledWhenFrom(properties), disabledWhereFrom(properties), disabledReasonFrom(properties), holder);
+        this(disabledWhenFrom(properties), disabledWhereFrom(properties), disabledReasonFrom(properties), holder);
     }
 
     private static When disabledWhenFrom(Properties properties) {

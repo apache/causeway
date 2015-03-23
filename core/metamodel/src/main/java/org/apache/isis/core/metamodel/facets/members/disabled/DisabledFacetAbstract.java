@@ -26,7 +26,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationContributee;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationContributee;
 
 public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstract implements DisabledFacet {
 
@@ -44,6 +47,10 @@ public abstract class DisabledFacetAbstract extends WhenAndWhereValueFacetAbstra
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
+        if(ic instanceof ActionUsabilityContext && (getFacetHolder() instanceof OneToOneAssociationContributee || getFacetHolder() instanceof OneToManyAssociationContributee)) {
+            // otherwise ends up vetoing the invocation of the contributing action
+            return null;
+        }
         final ObjectAdapter target = ic.getTarget();
         final String disabledReason = disabledReason(target);
         if (disabledReason != null) {

@@ -211,13 +211,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         initialized = true;
     }
 
-    @Override
-    public boolean isInitialized() {
-        return initialized;
-    }
-
     /**
-     * For benefit of <tt>IsisMetaModel</tt>.
+     * not API; <code>public</code> visibility for benefit of <tt>IsisMetaModel</tt>.
      */
     public ValidationFailures initAndValidate() {
         if (LOG.isDebugEnabled()) {
@@ -241,15 +236,21 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         facetProcessor.init();
         metaModelValidator.init();
 
-        primeCache();
-        
+        loadSpecificationsForServices();
+
         ValidationFailures validationFailures = new ValidationFailures();
         metaModelValidator.validate(validationFailures);
         return validationFailures;
     }
 
-	private void cacheBySpecId() {
-		final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
+    private void loadSpecificationsForServices() {
+        for (final Class<?> serviceClass : getServiceClasses()) {
+            internalLoadSpecification(serviceClass);
+        }
+    }
+
+    private void cacheBySpecId() {
+        final Map<ObjectSpecId, ObjectSpecification> specById = Maps.newHashMap();
         for (final ObjectSpecification objSpec : allSpecifications()) {
             final ObjectSpecId objectSpecId = objSpec.getSpecId();
             if (objectSpecId == null) {
@@ -259,17 +260,12 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
 
         getCache().setCacheBySpecId(specById);
-	}
-
-    /**
-     * load the service specifications.
-     */
-    private void primeCache() {
-        for (final Class<?> serviceClass : getServiceClasses()) {
-            internalLoadSpecification(serviceClass);
-        }
     }
 
+    @Override
+    public boolean isInitialized() {
+        return initialized;
+    }
 
     @Override
     public void shutdown() {
