@@ -38,12 +38,15 @@ import org.apache.isis.applib.services.i18n.LocaleProvider;
 )
 public class LocaleProviderWicket implements LocaleProvider {
 
-    public static Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
+    public static final Logger LOG = LoggerFactory.getLogger(LocaleProviderWicket.class);
 
     @Programmatic
     @Override
     public Locale getLocale() {
-        if(!Application.exists()) {
+        // Request Cycle can be null, e.g. during the start of an application
+        RequestCycle requestCycle = RequestCycle.get();
+
+        if (!Application.exists() || requestCycle == null) {
             // eg if request from RO viewer
             return null;
         }
