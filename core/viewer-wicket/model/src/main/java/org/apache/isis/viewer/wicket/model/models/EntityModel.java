@@ -162,7 +162,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         this.pendingModel = new PendingModel(this);
     }
 
-    private static String oidStr(final PageParameters pageParameters) {
+    public static String oidStr(final PageParameters pageParameters) {
         return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
     }
 

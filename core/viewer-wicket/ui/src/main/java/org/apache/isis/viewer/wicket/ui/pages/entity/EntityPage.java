@@ -20,10 +20,13 @@
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import java.util.List;
+import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -64,9 +67,24 @@ public class EntityPage extends PageAbstract {
      * {@link BookmarkablePageLink bookmarkable} links.
      */
     public EntityPage(final PageParameters pageParameters) {
-        this(pageParameters, new EntityModel(pageParameters));
+        this(pageParameters, createEntityModel(pageParameters));
     }
-    
+
+    /**
+     * Creates an EntityModel from the given page parameters.
+     * Redirects to the application home page if there is no OID in the parameters.
+     *
+     * @param parameters The page parameters with the OID
+     * @return An EntityModel for the requested OID
+     */
+    private static EntityModel createEntityModel(final PageParameters parameters) {
+        String oid = EntityModel.oidStr(parameters);
+        if (Strings.isEmpty(oid)) {
+            throw new RestartResponseException(Application.get().getHomePage());
+        }
+        return new EntityModel(parameters);
+    }
+
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
         this(pageParameters, entityModel, null);
     }
