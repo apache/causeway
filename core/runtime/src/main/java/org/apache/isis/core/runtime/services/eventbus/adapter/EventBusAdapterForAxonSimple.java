@@ -14,20 +14,24 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.eventbus;
+package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
+import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.runtime.services.eventbus.DefaultSubscriberExceptionHandler;
 
 /**
  * A wrapper for an Axon {@link org.axonframework.eventhandling.SimpleEventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class AxonSimpleEventBusAdapter extends EventBusAdapter {
+public class EventBusAdapterForAxonSimple extends EventBusAdapter {
 
     private static SimpleEventBus simpleEventBus = new SimpleEventBus();
 
@@ -44,7 +48,7 @@ public class AxonSimpleEventBusAdapter extends EventBusAdapter {
 
     @Override
     public void register(final Object domainService) {
-        AxonSimpleEventBusAdapter.simpleEventBus.subscribe(AxonSimpleEventBusAdapter.adapterFor(domainService));
+        EventBusAdapterForAxonSimple.simpleEventBus.subscribe(EventBusAdapterForAxonSimple.adapterFor(domainService));
 
     }
 
@@ -56,14 +60,36 @@ public class AxonSimpleEventBusAdapter extends EventBusAdapter {
     }
 
     /*
-     * {@inheritDoc} 
-     * <p> 
-     * Logic equivalent to Guava Event Bus. Despite that,
-     * event processing cannot be followed after an Exception is thrown.
+     * Logic equivalent to Guava Event Bus.
+     *
+     * <p>
+     *     Despite that, event processing cannot be followed after an Exception is thrown.
+     * </p>
      */
     @Override
+    @Programmatic
     public void post(final Object event) {
-        AxonSimpleEventBusAdapter.simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
+        EventBusAdapterForAxonSimple.simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
+    }
+
+
+    static class AxonEventListenerAdapter extends AnnotationEventListenerAdapter {
+
+        public AxonEventListenerAdapter(final Object annotatedEventListener) {
+            super(annotatedEventListener);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public void handle(@SuppressWarnings("rawtypes") final EventMessage event) {
+            try {
+                super.handle(event);
+            } catch (final Exception exception) {
+                DefaultSubscriberExceptionHandler.processException(exception, event);
+            }
+        }
     }
 
 }

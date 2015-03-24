@@ -16,38 +16,91 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBus;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusAdapterForAxonSimple;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusAdapterForGuava;
 
 /**
- * An Event Bus Service based on Guava.
- * <p>
- * @deprecated - but only because {@link org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo}
- * is annotated (with <code>@DomainService</code>) as the default implementation.  The functionality in this implementation
- * is still required.
+ * Holds common runtime logic for EventBusService implementations.
  */
-@Deprecated
-public class EventBusServiceDefault extends RuntimeEventBusService {
+public abstract class EventBusServiceDefault extends EventBusService {
+    
+    //region > register
+    /**
+     * {@inheritDoc}
+     *
+     * This service overrides the method to perform additional validation that (a) request-scoped services register
+     * their proxies, not themselves, and (b) that singleton services are never registered after the event bus has
+     * been created.
+     *
+     * <p>
+     *     Note that we <i>do</i> allow for request-scoped services to register (their proxies) multiple times, ie at
+     *     the beginning of each transaction.  Because the subscribers are stored in a set, these additional
+     *     registrations are in effect ignored.
+     * </p>
+     */
+    @Override
+    public void register(final Object domainService) {
+        if(domainService instanceof RequestScopedService) {
+            // ok; allow to be registered multiple times (each xactn) since stored in a set.
+        } else {
+            if (Annotations.getAnnotation(domainService.getClass(), RequestScoped.class) != null) {
+                throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
+            }
+            // a singleton
+            if(this.eventBus != null) {
+                // ... coming too late to the party.
+                throw new IllegalStateException("Event bus has already been created; too late to register any further (singleton) subscribers");
+            }
+        }
+        super.register(domainService);
+    }
+    
+    //endregion
+
+    //region > init, shutdown
+    @Programmatic
+    @PostConstruct
+    public void init(final Map<String, String> properties) {
+        final String implementation = properties.get("org.apache.isis.eventbus.implementation");
+
+        this.implementation =
+                "axon".equalsIgnoreCase(implementation)
+                        ? EventBusImplementation.AXON
+                        : EventBusImplementation.GUAVA;
+    }
+    //endregion
+
+    //region > newEventBus
+    enum EventBusImplementation {
+        GUAVA {
+            @Override
+            public EventBus create() {
+                return new EventBusAdapterForGuava();
+            }
+        },
+        AXON {
+            @Override
+            public EventBus create() {
+                return new EventBusAdapterForAxonSimple();
+            }
+        };
+
+        public abstract EventBus create();
+    }
+    private EventBusImplementation implementation;
 
     @Override
-    // //////////////////////////////////////
-
-    protected EventBus newEventBus() {
-        return new GuavaEventBusAdapter();
+    protected org.apache.isis.applib.services.eventbus.EventBus newEventBus() {
+        return implementation.create();
     }
+    //endregion
 
 }
-

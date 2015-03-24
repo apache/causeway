@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.eventbus;
+package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import org.apache.isis.applib.services.eventbus.EventBus;
 

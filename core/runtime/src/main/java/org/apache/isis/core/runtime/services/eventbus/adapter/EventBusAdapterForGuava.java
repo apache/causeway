@@ -14,25 +14,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.eventbus;
+package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
+import org.apache.isis.core.runtime.services.eventbus.DefaultSubscriberExceptionHandler;
 
 /**
  * A wrapper for a Guava {@link com.google.common.eventbus.EventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class GuavaEventBusAdapter extends EventBusAdapter {
+public class EventBusAdapterForGuava extends EventBusAdapter {
 
     private static final com.google.common.eventbus.EventBus eventBus = new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
 
     protected static SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
         return new SubscriberExceptionHandler() {
             @Override
-            public void handleException(Throwable exception,
-                    SubscriberExceptionContext context) {
-                Object event = context.getEvent();
+            public void handleException(final Throwable exception,
+                    final SubscriberExceptionContext context) {
+                final Object event = context.getEvent();
                 DefaultSubscriberExceptionHandler.processException(exception, event);
             }
 
@@ -41,7 +42,7 @@ public class GuavaEventBusAdapter extends EventBusAdapter {
 
     @Override
     public void register(final Object domainService) {
-        this.eventBus.register(domainService);
+        eventBus.register(domainService);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class GuavaEventBusAdapter extends EventBusAdapter {
 
     @Override
     public void post(final Object event) {
-        GuavaEventBusAdapter.eventBus.post(event);
+        EventBusAdapterForGuava.eventBus.post(event);
     }
 
 }
