@@ -25,7 +25,6 @@ import javax.jdo.spi.StateManager;
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
 import org.datanucleus.metadata.AbstractClassMetaData;
-import org.datanucleus.state.JDOStateManager;
 import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.state.ReferentialJDOStateManager;
 import org.datanucleus.store.FieldValues;
@@ -33,7 +32,6 @@ import org.datanucleus.store.fieldmanager.FieldManager;
 
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo;
 
 public class JDOStateManagerForIsis extends ReferentialJDOStateManager implements StateManager, ObjectProvider {
 
@@ -48,7 +46,7 @@ public class JDOStateManagerForIsis extends ReferentialJDOStateManager implement
     }
 
     /**
-     * Tunnel down the thread stack as a hint to the {@link EventBusServiceJdo}.
+     * Tunnel down the thread stack as a hint to the {@link org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo}.
      */
     public final static ThreadLocal<Hint> hint = new ThreadLocal<JDOStateManagerForIsis.Hint>() {
         protected Hint initialValue() {
