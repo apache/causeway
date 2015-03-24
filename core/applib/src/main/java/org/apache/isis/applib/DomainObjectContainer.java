@@ -21,13 +21,13 @@ package org.apache.isis.applib;
 
 import java.util.List;
 import com.google.common.base.Function;
-import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
  * A domain service that acts as a framework's container for managing the 
@@ -337,6 +337,7 @@ public interface DomainObjectContainer {
      * be displayed in transitory fashion, so is only suitable for useful but
      * optional information.
      * 
+     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #warnUser(String)
      * @see #raiseError(String)
      */
@@ -344,10 +345,27 @@ public interface DomainObjectContainer {
     void informUser(String message);
 
     /**
+     * Make the specified message available to the user, translated (if possible) to user's locale.
+     *
+     * <p>
+     *     More precisely, the locale is as provided by the configured
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
+     *     locale of the current request (ie the current user's locale).
+     * </p>
+     *
+     * @see #informUser(java.lang.String)
+     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     */
+    @Programmatic
+    String informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
+
+    /**
      * Warn the user about a situation with the specified message. The container
      * should guarantee to display this warning to the user, and will typically
      * require acknowledgement.
      * 
+     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
      * @see #raiseError(String)
      * @see #informUser(String)
      */
@@ -355,16 +373,48 @@ public interface DomainObjectContainer {
     void warnUser(String message);
 
     /**
+     * Warn the user about a situation with the specified message, translated (if possible) to user's locale.
+     *
+     * <p>
+     *     More precisely, the locale is as provided by the configured
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
+     *     locale of the current request (ie the current user's locale).
+     * </p>
+     *
+     * @see #warnUser(String)
+     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @see #raiseError(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     */
+    @Programmatic
+    String warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod);
+
+    /**
      * Notify the user of an application error with the specified message. Note
      * this will probably be displayed in an alarming fashion, so is only
      * suitable for errors. The user will typically be required to perform
      * additional steps after the error (eg to inform the helpdesk).
-     * 
+     *
      * @see #warnUser(String)
      * @see #informUser(String)
      */
     @Programmatic
     void raiseError(String message);
+
+    /**
+     * Notify the user of an application error with the specified message, , translated (if possible) to user's locale.
+     *
+     * <p>
+     *     More precisely, the locale is as provided by the configured
+     *     {@link org.apache.isis.applib.services.i18n.LocaleProvider} service.  This will most commonly be the
+     *     locale of the current request (ie the current user's locale).
+     * </p>
+     *
+     * @see #raiseError(String)
+     * @see #informUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     * @see #warnUser(org.apache.isis.applib.services.i18n.TranslatableString, Class, String)
+     */
+    @Programmatic
+    String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod);
 
     //endregion
 

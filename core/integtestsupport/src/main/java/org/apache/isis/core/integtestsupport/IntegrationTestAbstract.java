@@ -252,5 +252,8 @@ public abstract class IntegrationTestAbstract {
 
     @Rule
     public ExpectedException expectedExceptions = ExpectedException.none();
+
+    @Rule
+    public ExceptionRecognizerTranslate exceptionRecognizerTranslations = ExceptionRecognizerTranslate.create();
 }
 

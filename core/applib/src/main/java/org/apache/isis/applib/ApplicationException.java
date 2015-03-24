@@ -19,6 +19,8 @@
 
 package org.apache.isis.applib;
 
+import org.apache.isis.applib.services.i18n.TranslatableString;
+
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
  * 
@@ -51,6 +53,10 @@ public class ApplicationException extends RecoverableException {
         super(msg);
     }
 
+    public ApplicationException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod) {
+        super(translatableMessage, translationContextClass, translationContextMethod);
+    }
+
     public ApplicationException(final Throwable cause) {
         super(cause);
     }
@@ -59,4 +65,7 @@ public class ApplicationException extends RecoverableException {
         super(msg, cause);
     }
 
+    public ApplicationException(final TranslatableString translatableMessage, final Class<?> translationContextClass, final String translationContextMethod, final Throwable cause) {
+        super(translatableMessage, translationContextClass, translationContextMethod, cause);
+    }
 }
