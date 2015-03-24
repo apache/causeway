@@ -18,23 +18,25 @@ package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import com.google.common.eventbus.SubscriberExceptionContext;
 import com.google.common.eventbus.SubscriberExceptionHandler;
-import org.apache.isis.core.runtime.services.eventbus.DefaultSubscriberExceptionHandler;
+import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 /**
  * A wrapper for a Guava {@link com.google.common.eventbus.EventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class EventBusAdapterForGuava extends EventBusAdapter {
+public class EventBusImplementationForGuava extends EventBusImplementationAbstract {
 
+    // TODO: does this need to be static?
     private static final com.google.common.eventbus.EventBus eventBus = new com.google.common.eventbus.EventBus(newEventBusSubscriberExceptionHandler());
 
+    // TODO: does this need to be static?
     protected static SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
         return new SubscriberExceptionHandler() {
             @Override
             public void handleException(final Throwable exception,
                     final SubscriberExceptionContext context) {
                 final Object event = context.getEvent();
-                DefaultSubscriberExceptionHandler.processException(exception, event);
+                processException(exception, event);
             }
 
         };
@@ -53,7 +55,7 @@ public class EventBusAdapterForGuava extends EventBusAdapter {
 
     @Override
     public void post(final Object event) {
-        EventBusAdapterForGuava.eventBus.post(event);
+        eventBus.post(event);
     }
 
 }

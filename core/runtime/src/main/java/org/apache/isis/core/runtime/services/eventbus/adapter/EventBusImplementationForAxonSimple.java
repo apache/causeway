@@ -17,24 +17,23 @@
 package org.apache.isis.core.runtime.services.eventbus.adapter;
 
 import java.util.Map;
-
 import com.google.common.collect.Maps;
-
 import org.axonframework.domain.EventMessage;
 import org.axonframework.domain.GenericEventMessage;
 import org.axonframework.eventhandling.SimpleEventBus;
 import org.axonframework.eventhandling.annotation.AnnotationEventListenerAdapter;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.runtime.services.eventbus.DefaultSubscriberExceptionHandler;
+import org.apache.isis.core.runtime.services.eventbus.EventBusImplementationAbstract;
 
 /**
  * A wrapper for an Axon {@link org.axonframework.eventhandling.SimpleEventBus},
  * allowing arbitrary events to be posted and subscribed to.
  */
-public class EventBusAdapterForAxonSimple extends EventBusAdapter {
+public class EventBusImplementationForAxonSimple extends EventBusImplementationAbstract {
 
+    // TODO: does this need to be static?
     private static SimpleEventBus simpleEventBus = new SimpleEventBus();
 
+    // TODO: does this need to be static?
     private static Map<Object, AxonEventListenerAdapter> adapters = Maps.newConcurrentMap();
 
     private static AxonEventListenerAdapter adapterFor(final Object domainService) {
@@ -48,8 +47,7 @@ public class EventBusAdapterForAxonSimple extends EventBusAdapter {
 
     @Override
     public void register(final Object domainService) {
-        EventBusAdapterForAxonSimple.simpleEventBus.subscribe(EventBusAdapterForAxonSimple.adapterFor(domainService));
-
+        simpleEventBus.subscribe(EventBusImplementationForAxonSimple.adapterFor(domainService));
     }
 
     @Override
@@ -67,9 +65,8 @@ public class EventBusAdapterForAxonSimple extends EventBusAdapter {
      * </p>
      */
     @Override
-    @Programmatic
     public void post(final Object event) {
-        EventBusAdapterForAxonSimple.simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
+        simpleEventBus.publish(GenericEventMessage.asEventMessage(event));
     }
 
 
@@ -87,7 +84,7 @@ public class EventBusAdapterForAxonSimple extends EventBusAdapter {
             try {
                 super.handle(event);
             } catch (final Exception exception) {
-                DefaultSubscriberExceptionHandler.processException(exception, event);
+                processException(exception, event);
             }
         }
     }

@@ -19,13 +19,16 @@ package org.apache.isis.core.runtime.services.eventbus;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import com.google.common.base.Strings;
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.eventbus.EventBus;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusAdapterForAxonSimple;
-import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusAdapterForGuava;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava;
 
 /**
  * Holds common runtime logic for EventBusService implementations.
@@ -55,7 +58,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
                 throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
             }
             // a singleton
-            if(this.eventBus != null) {
+            if(this.eventBusImplementation != null) {
                 // ... coming too late to the party.
                 throw new IllegalStateException("Event bus has already been created; too late to register any further (singleton) subscribers");
             }
@@ -69,37 +72,44 @@ public abstract class EventBusServiceDefault extends EventBusService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
-        final String implementation = properties.get("org.apache.isis.eventbus.implementation");
+        final String implementation = properties.get("isis.services.eventbus.implementation");
 
-        this.implementation =
-                "axon".equalsIgnoreCase(implementation)
-                        ? EventBusImplementation.AXON
-                        : EventBusImplementation.GUAVA;
+        if(Strings.isNullOrEmpty(implementation) || "guava".equalsIgnoreCase(implementation)) {
+            this.implementation = "guava";
+            return;
+        }
+        if("axon".equalsIgnoreCase(implementation)) {
+            this.implementation = "axon";
+        }
+        this.implementation = implementation;
     }
     //endregion
 
-    //region > newEventBus
-    enum EventBusImplementation {
-        GUAVA {
-            @Override
-            public EventBus create() {
-                return new EventBusAdapterForGuava();
-            }
-        },
-        AXON {
-            @Override
-            public EventBus create() {
-                return new EventBusAdapterForAxonSimple();
-            }
-        };
-
-        public abstract EventBus create();
-    }
-    private EventBusImplementation implementation;
+    /**
+     * Either &lt;guava&gt; or &lt;axon&gt;, or else the fully qualified class name of an
+     * implementation of {@link org.apache.isis.applib.services.eventbus.EventBusImplementation}.
+     */
+    private String implementation;
 
     @Override
-    protected org.apache.isis.applib.services.eventbus.EventBus newEventBus() {
-        return implementation.create();
+    protected org.apache.isis.applib.services.eventbus.EventBusImplementation newEventBus() {
+        if("guava".equals(implementation)) {
+            return new EventBusImplementationForGuava();
+        }
+        if("axon".equals(implementation)) {
+            return new EventBusImplementationForAxonSimple();
+        }
+
+        final Class<?> aClass = ClassUtil.forName(implementation);
+        if(EventBusImplementation.class.isAssignableFrom(aClass)) {
+            try {
+                return (EventBusImplementation) aClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new NonRecoverableException(e);
+            }
+        }
+        throw new NonRecoverableException(
+                "Could not instantiate event bus implementation '" + implementation + "'");
     }
     //endregion
 

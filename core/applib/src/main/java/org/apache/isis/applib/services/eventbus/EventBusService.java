@@ -24,10 +24,6 @@ import javax.annotation.PreDestroy;
 
 import com.google.common.collect.Sets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
 
 /**
@@ -60,11 +56,11 @@ public abstract class EventBusService {
         @Override
         public void post(Object event) {}
         @Override
-        protected EventBus getEventBus() {
+        protected EventBusImplementation getEventBusImplementation() {
             return null;
         }
         @Override
-        protected EventBus newEventBus() { return null; }
+        protected EventBusImplementation newEventBus() { return null; }
     }
 
     public static final EventBusService NOOP = new Noop();
@@ -76,7 +72,7 @@ public abstract class EventBusService {
      * no guarantee of the order in which <code>@PostConstruct</code> is called on any request-scoped services.  We
      * therefore allow all services (singleton or request-scoped) to {@link #register(Object) register} themselves
      * with this service in their <code>@PostConstruct</code> and do the actual instantiation of the guava
-     * {@link com.google.common.eventbus.EventBus} and registering of subscribers lazily, in {@link #getEventBus()}.
+     * {@link com.google.common.eventbus.EventBus} and registering of subscribers lazily, in {@link #getEventBusImplementation()}.
      * This lifecycle method ({@link #init()}) is therefore a no-op.
      *
      * <p>
@@ -203,7 +199,7 @@ public abstract class EventBusService {
         if(skip(event)) {
             return;
         }
-        getEventBus().post(event);
+        getEventBusImplementation().post(event);
     }
 
     //endregion
@@ -212,17 +208,17 @@ public abstract class EventBusService {
     //region > getEventBus
 
     /**
-     * Lazily populated in {@link #getEventBus()}.
+     * Lazily populated in {@link #getEventBusImplementation()}.
      */
-    protected EventBus eventBus;
+    protected EventBusImplementation eventBusImplementation;
 
     /**
      * Lazily populates the event bus for the current {@link #getSubscribers() subscribers}.
      */
     @Programmatic
-    protected EventBus getEventBus() {
+    protected EventBusImplementation getEventBusImplementation() {
         setupEventBus();
-        return eventBus;
+        return eventBusImplementation;
     }
 
     /**
@@ -235,7 +231,7 @@ public abstract class EventBusService {
     private Set<Object> registeredSubscribers;
 
     /**
-     * Populates {@link #eventBus} with the {@link #registeredSubscribers currently registered subscribers}.
+     * Populates {@link #eventBusImplementation} with the {@link #registeredSubscribers currently registered subscribers}.
      *
      * <p>
      *     Guava event bus will throw an exception if attempt to unsubscribe any subscribers that were not subscribed.
@@ -251,26 +247,26 @@ public abstract class EventBusService {
      * </p>
      */
     protected void setupEventBus() {
-        if(eventBus != null) {
+        if(eventBusImplementation != null) {
             return;
         }
-        this.eventBus = newEventBus();
+        this.eventBusImplementation = newEventBus();
 
         registeredSubscribers = getSubscribers();
 
         for (Object subscriber : this.registeredSubscribers) {
-            eventBus.register(subscriber);
+            eventBusImplementation.register(subscriber);
         }
     }
 
     protected void teardownEventBus() {
         if(registeredSubscribers != null) {
             for (Object subscriber : this.registeredSubscribers) {
-                eventBus.unregister(subscriber);
+                eventBusImplementation.unregister(subscriber);
             }
         }
 
-        this.eventBus = null;
+        this.eventBusImplementation = null;
     }
 
     //endregion
@@ -280,7 +276,7 @@ public abstract class EventBusService {
     /**
      * Mandatory hook method for subclass to instantiate an appropriately configured Guava event bus.
      */
-    protected abstract EventBus newEventBus();
+    protected abstract EventBusImplementation newEventBus();
 
 
     /**

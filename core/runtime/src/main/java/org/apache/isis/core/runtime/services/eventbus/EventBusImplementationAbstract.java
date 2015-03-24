@@ -18,30 +18,26 @@ package org.apache.isis.core.runtime.services.eventbus;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
-/**
- * Default logic for handling Exceptions thrown while processing Events on an
- * {@link org.apache.isis.applib.services.eventbus.EventBusService}.
- */
-public class DefaultSubscriberExceptionHandler {
+public abstract class EventBusImplementationAbstract implements EventBusImplementation {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultSubscriberExceptionHandler.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventBusImplementationAbstract.class);
 
-    // region > exception handling
-
-    public static void processException(Throwable exception,
-            Object event) {
+    protected static void processException(
+            final Throwable exception,
+            final Object event) {
         if (!(event instanceof AbstractDomainEvent)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent", exception.getMessage(), exception.getClass().getName());
             }
             return;
         }
+
         final AbstractDomainEvent<?> interactionEvent = (AbstractDomainEvent<?>) event;
         final AbstractDomainEvent.Phase phase = interactionEvent.getEventPhase();
         switch (phase) {
@@ -68,12 +64,15 @@ public class DefaultSubscriberExceptionHandler {
         }
     }
 
-    private static void abortTransaction(Throwable exception) {
+
+    // region > exception handling
+
+    private static void abortTransaction(final Throwable exception) {
         getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
         return;
     }
 
-    protected static IsisTransactionManager getTransactionManager() {
+    private static IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
 
