@@ -48,16 +48,6 @@ public abstract class ActionDomainEventFacetAbstract
 
     private final DomainEventHelper domainEventHelper;
 
-    /**
-     * Pass event from validate to executing phases.
-     *
-     * <p>
-     * A new event is created for the hide, disable and validate phases.  But when the validate completes (and if does
-     * not invalidate), then the event is passed through to the executing phase using this thread-local.
-     * </p>
-     */
-    final static ThreadLocal<ActionDomainEvent<?>> currentInteraction = new ThreadLocal<>();
-
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
             final FacetHolder holder,
@@ -74,14 +64,14 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
-                        getIdentified(), ic.getTarget(), argumentAdapters, null);
+                        AbstractDomainEvent.Phase.HIDE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        null,
+                        null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -94,14 +84,14 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
-                        getIdentified(), ic.getTarget(), argumentAdapters, null);
+                        AbstractDomainEvent.Phase.DISABLE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        null,
+                        null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
@@ -119,20 +109,18 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.VALIDATE,
-                        getIdentified(), ic.getTarget(), aic.getArgs(), null);
+                        AbstractDomainEvent.Phase.VALIDATE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), aic.getArgs(),
+                        null,
+                        null);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }
 
-        // make available for next phases (executing/executed)
-        currentInteraction.set(event);
         return null;
     }
 

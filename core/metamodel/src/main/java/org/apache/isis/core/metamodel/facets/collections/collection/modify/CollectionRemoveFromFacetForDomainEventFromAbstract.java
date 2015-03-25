@@ -73,41 +73,42 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
         }
 
 
-        try {
+        final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
 
-            final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
+        // get hold of underlying collection
+        final Object collection = getterFacet.getProperty(targetAdapter);
 
-            // get hold of underlying collection
-            final Object collection = getterFacet.getProperty(targetAdapter);
-
-            // don't post event if the collections does not contain object
-            if (!((Collection<?>) collection).contains(referencedObject)) {
-                return;
-            }
-
-            // contains the element, so
-            // execute the remove wrapped between the executing and executed events ...
-
-            // pick up existing event (saved in thread local during the validation phase)
-            final CollectionDomainEvent<?, ?> existingEvent = collectionDomainEventFacet.currentInteraction.get();
-
-            // ... post the executing event
-            final CollectionDomainEvent<?, ?> event = domainEventHelper.postEventForCollection(
-                    value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
-                    getIdentified(), targetAdapter, CollectionDomainEvent.Of.REMOVE_FROM, referencedObject);
-
-            // ... perform remove
-            collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter);
-
-            // ... and post the executed event
-            domainEventHelper.postEventForCollection(
-                    value(), verify(event), AbstractDomainEvent.Phase.EXECUTED,
-                    getIdentified(), targetAdapter, CollectionDomainEvent.Of.REMOVE_FROM, referencedObject);
-
-        } finally {
-            // clean up
-            collectionDomainEventFacet.currentInteraction.set(null);
+        // don't post event if the collections does not contain object
+        if (!((Collection<?>) collection).contains(referencedObject)) {
+            return;
         }
+
+        // contains the element, so
+        // execute the remove wrapped between the executing and executed events ...
+
+        // ... post the executing event
+        final CollectionDomainEvent<?, ?> event =
+                domainEventHelper.postEventForCollection(
+                        AbstractDomainEvent.Phase.EXECUTING,
+                        eventType(), null,
+                        getIdentified(), targetAdapter,
+                        CollectionDomainEvent.Of.REMOVE_FROM,
+                        referencedObject);
+
+        // ... perform remove
+        collectionRemoveFromFacet.remove(targetAdapter, referencedObjectAdapter);
+
+        // ... and post the executed event
+        domainEventHelper.postEventForCollection(
+                AbstractDomainEvent.Phase.EXECUTED,
+                value(), verify(event),
+                getIdentified(), targetAdapter,
+                CollectionDomainEvent.Of.REMOVE_FROM,
+                referencedObject);
+    }
+
+    private Class<? extends CollectionDomainEvent<?, ?>> eventType() {
+        return value();
     }
 
     /**
