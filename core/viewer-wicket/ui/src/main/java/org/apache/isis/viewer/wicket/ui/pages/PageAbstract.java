@@ -81,6 +81,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
+import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -109,7 +110,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
     private static final String ID_PAGE_TITLE = "pageTitle";
-    
+
+    private static final String ID_FAVICON = "favicon";
+
     public static final String ID_MENU_LINK = "menuLink";
 
     /**
@@ -167,6 +170,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             getSession().bind();
             
             setTitle(title);
+
+            add(new Favicon(ID_FAVICON));
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -232,7 +237,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     protected void setTitle(final String title) {
         addOrReplace(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
     }
-
 
     private Class<? extends Page> getSignInPage() {
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
