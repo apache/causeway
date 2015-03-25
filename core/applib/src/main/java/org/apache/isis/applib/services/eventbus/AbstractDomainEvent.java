@@ -228,7 +228,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
      *
      * @param translatableReason - reason why the interaction is being invalidated (ignored if in {@link org.apache.isis.applib.services.eventbus.AbstractDomainEvent.Phase#HIDE hide} phase).
      *
-     * @see #veto(String)
+     * @see #veto(String, Object...)
      */
     @Programmatic
     public void veto(final TranslatableString translatableReason) {
