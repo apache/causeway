@@ -69,9 +69,6 @@ public class DomainEventHelper {
             if (existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
-
-                event.setEventPhase(phase);
-                event.setPhase(AbstractInteractionEvent.Phase.from(phase));
             } else {
                 // all other phases, create a new event
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
@@ -85,6 +82,9 @@ public class DomainEventHelper {
                     event.setActionSemantics(objectAction.getSemantics());
                 }
             }
+
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             if(phase.isExecuted()) {
                 event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
@@ -164,16 +164,16 @@ public class DomainEventHelper {
             if(existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
-
-                event.setEventPhase(phase);
-                event.setPhase(AbstractInteractionEvent.Phase.from(phase));
-
-                // just in case the actual new value held by the object is different from that applied
-                setEventNewValue(event, newValue);
             } else {
                 // all other phases, create a new event
                 event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
             }
+
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
+
+            // just in case the actual new value held by the object is different from that applied
+            setEventNewValue(event, newValue);
 
             this.getEventBusService().post(event);
             return event;
@@ -238,15 +238,15 @@ public class DomainEventHelper {
             if (existingEvent != null && phase.isExecuted()) {
                 // reuse existing event from the executing phase
                 event = existingEvent;
-
-                event.setEventPhase(phase);
-                event.setPhase(AbstractInteractionEvent.Phase.from(phase));
             } else {
                 // all other phases, create a new event
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }
+
+            event.setEventPhase(phase);
+            event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
             getEventBusService().post(event);
             return event;
