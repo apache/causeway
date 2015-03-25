@@ -24,7 +24,10 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
@@ -38,6 +41,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public abstract class CollectionDomainEventFacetAbstract extends SingleClassValueFacetAbstract implements CollectionDomainEventFacet {
 
     private final DomainEventHelper domainEventHelper;
+    private final TranslationService translationService;
+    private final String translationContext;
 
     public CollectionDomainEventFacetAbstract(
             final Class<? extends CollectionDomainEvent<?, ?>> eventType,
@@ -45,6 +50,11 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(CollectionDomainEventFacet.class, holder, eventType, specificationLoader);
+
+        this.translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+
         domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
@@ -81,6 +91,10 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                         CollectionDomainEvent.Of.ACCESS,
                         null);
         if (event != null && event.isDisabled()) {
+            final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getDisabledReason();
         }
         return null;
@@ -108,6 +122,10 @@ public abstract class CollectionDomainEventFacetAbstract extends SingleClassValu
                         of,
                         proposed);
         if (event != null && event.isInvalid()) {
+            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getInvalidityReason();
         }
 
