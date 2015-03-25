@@ -17,6 +17,7 @@
 package org.apache.isis.applib.services.eventbus;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -73,7 +74,7 @@ public abstract class EventBusService {
      * therefore allow all services (singleton or request-scoped) to {@link #register(Object) register} themselves
      * with this service in their <code>@PostConstruct</code> and do the actual instantiation of the guava
      * {@link com.google.common.eventbus.EventBus} and registering of subscribers lazily, in {@link #getEventBusImplementation()}.
-     * This lifecycle method ({@link #init()}) is therefore a no-op.
+     * This lifecycle method ({@link #init(Map)}) is therefore a no-op.
      *
      * <p>
      *     The guava {@link com.google.common.eventbus.EventBus} can however (and is) be torndown in the
@@ -82,7 +83,7 @@ public abstract class EventBusService {
      */
     @Programmatic
     @PostConstruct
-    public void init() {
+    public void init(final Map<String, String> properties) {
         // no-op
     }
 
