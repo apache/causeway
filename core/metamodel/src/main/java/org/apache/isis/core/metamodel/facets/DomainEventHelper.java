@@ -21,7 +21,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
@@ -52,13 +51,13 @@ public class DomainEventHelper {
     //region > postEventForAction, newActionDomainEvent
     @SuppressWarnings({ "rawtypes" })
     public ActionDomainEvent<?> postEventForAction(
+            final AbstractDomainEvent.Phase phase,
             final Class eventType,
             final ActionDomainEvent<?> existingEvent,
-            final Command command,
-            final AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters,
+            final Command command,
             final ObjectAdapter resultAdapter) {
 
         if(!hasEventBusService()) {
@@ -66,45 +65,48 @@ public class DomainEventHelper {
         }
         try {
             final ActionDomainEvent<?> event;
-            if (existingEvent != null && phase.isValidatingOrLater()) {
+
+            if (existingEvent != null && phase.isExecuted()) {
+                // reuse existing event from the executing phase
                 event = existingEvent;
-                final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
-                event.setArguments(Arrays.asList(arguments));
-                if(phase.isExecutingOrLater()) {
-
-                    // current event always references the command (originally created by the xactn)
-                    event.setCommand(command);
-                    if(command != null) {
-                        if(command instanceof Command3) {
-                            final Command3 command3 = (Command3) command;
-                            command3.pushActionDomainEvent(event);
-                        } else if(command instanceof Command2 && event instanceof ActionInteractionEvent) {
-                            final Command2 command2 = (Command3) command;
-                            final ActionInteractionEvent<?> aie = (ActionInteractionEvent<?>) event;
-                            command2.pushActionInteractionEvent(aie);
-                        }
-                    }
-                }
-
-                if(phase.isExecuted()) {
-                    event.setReturnValue(resultAdapter != null? resultAdapter.getObject(): null);
-                }
             } else {
+                // all other phases, create a new event
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Object[] arguments = ObjectAdapter.Util.unwrap(argumentAdapters);
                 final Identifier identifier = identified.getIdentifier();
                 event = newActionDomainEvent(eventType, identifier, source, arguments);
-            }
 
-            if(identified instanceof ObjectAction) {
-                // should always be the case...
-                final ObjectAction objectAction = (ObjectAction) identified;
-                event.setActionSemantics(objectAction.getSemantics());
+                if(identified instanceof ObjectAction) {
+                    // should always be the case...
+                    final ObjectAction objectAction = (ObjectAction) identified;
+                    event.setActionSemantics(objectAction.getSemantics());
+                }
             }
 
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
+            if(phase.isExecuted()) {
+                event.setReturnValue(ObjectAdapter.Util.unwrap(resultAdapter));
+            }
+
+            // associate event with command...
+            if(command != null) {
+                event.setCommand(command);
+            }
+            // ... and associate command with event
+            if(command != null) {
+                if(phase.isExecuting()) {
+                    if(command instanceof Command3) {
+                        final Command3 command3 = (Command3) command;
+                        command3.pushActionDomainEvent(event);
+                    } else if(command instanceof Command2 && event instanceof ActionInteractionEvent) {
+                        final Command2 command2 = (Command3) command;
+                        final ActionInteractionEvent<?> aie = (ActionInteractionEvent<?>) event;
+                        command2.pushActionInteractionEvent(aie);
+                    }
+                }
+            }
 
             getEventBusService().post(event);
             return event;
@@ -143,13 +145,14 @@ public class DomainEventHelper {
 
     //region > postEventForProperty, newPropertyInteraction
     public PropertyDomainEvent<?, ?> postEventForProperty(
+            final AbstractDomainEvent.Phase phase,
             final Class eventType,
             final PropertyDomainEvent<?, ?> existingEvent,
-            final AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final Object oldValue,
             final Object newValue) {
+
         if(!hasEventBusService()) {
             return null;
         }
@@ -158,27 +161,25 @@ public class DomainEventHelper {
             final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
             final Identifier identifier = identified.getIdentifier();
 
-            // because of guava event bus buffering, we always create a new property domain event
-            //
-            event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
+            if(existingEvent != null && phase.isExecuted()) {
+                // reuse existing event from the executing phase
+                event = existingEvent;
+            } else {
+                // all other phases, create a new event
+                event = newPropertyDomainEvent(eventType, identifier, source, oldValue, newValue);
+            }
+
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
 
-            // Old and New Values are populated only on the VALIDATION Phase and
-            // afterwards.
-            if (phase.isValidatingOrLater()) {
-                setEventOldValue(event, oldValue);
-                setEventNewValue(event, newValue);
-            }
+            // just in case the actual new value held by the object is different from that applied
+            setEventNewValue(event, newValue);
+
             this.getEventBusService().post(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
         }
-    }
-
-    private static <S,T> void setEventOldValue(PropertyDomainEvent<S, T> event, Object oldValue) {
-        event.setOldValue((T) oldValue);
     }
 
     private static <S,T> void setEventNewValue(PropertyDomainEvent<S, T> event, Object newValue) {
@@ -222,9 +223,9 @@ public class DomainEventHelper {
     //region > postEventForCollection, newCollectionDomainEvent
 
     public CollectionDomainEvent<?, ?> postEventForCollection(
+            AbstractDomainEvent.Phase phase,
             final Class eventType,
             final CollectionDomainEvent<?, ?> existingEvent,
-            AbstractDomainEvent.Phase phase,
             final IdentifiedHolder identified,
             final ObjectAdapter targetAdapter,
             final CollectionDomainEvent.Of of,
@@ -234,26 +235,24 @@ public class DomainEventHelper {
         }
         try {
             final CollectionDomainEvent<?, ?> event;
-            if (existingEvent != null && phase.isValidatingOrLater()) {
+            if (existingEvent != null && phase.isExecuted()) {
+                // reuse existing event from the executing phase
                 event = existingEvent;
-                event.setOf(of);
-                setEventValue(event, reference);
             } else {
+                // all other phases, create a new event
                 final Object source = ObjectAdapter.Util.unwrap(targetAdapter);
                 final Identifier identifier = identified.getIdentifier();
                 event = newCollectionDomainEvent(eventType, phase, identifier, source, of, reference);
             }
+
             event.setEventPhase(phase);
             event.setPhase(AbstractInteractionEvent.Phase.from(phase));
+
             getEventBusService().post(event);
             return event;
         } catch (Exception e) {
             throw new FatalException(e);
         }
-    }
-
-    private static <T,S> void setEventValue(CollectionDomainEvent<T, S> event, Object reference) {
-        event.setValue((S) reference);
     }
 
     @SuppressWarnings("unchecked")

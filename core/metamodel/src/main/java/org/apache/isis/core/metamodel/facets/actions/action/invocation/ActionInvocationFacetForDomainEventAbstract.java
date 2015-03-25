@@ -173,43 +173,35 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments) {
 
-        try {
+        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
+        final Command command = commandContext != null ? commandContext.getCommand() : null;
 
-            final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
-            final Command command = commandContext != null ? commandContext.getCommand() : null;
-
-            // pick up existing event (saved in thread local during the validation phase)
-            final ActionDomainEvent<?> existingEvent = ActionDomainEventFacetAbstract.currentInteraction.get();
-
-            // ... post the executing event
-            final ActionDomainEvent<?> event =
-                    domainEventHelper.postEventForAction(
-                            eventType, existingEvent, command, AbstractDomainEvent.Phase.EXECUTING,
-                            owningAction, targetAdapter, arguments, null);
-
-            // ... invoke the action
-            final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
-
-            // ... post the executed event
-            if (invocationResult.getWhetherInvoked()) {
-                // perhaps the Action was not properly invoked (i.e. an exception was raised).
-                // If invoked, then send the ActionInteractionEvent to the EventBus.
+        // ... post the executing event
+        final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType, verify(event), command, AbstractDomainEvent.Phase.EXECUTED,
-                        owningAction, targetAdapter, arguments, invocationResult.getAdapter());
-            }
+                        AbstractDomainEvent.Phase.EXECUTING,
+                        eventType, null,
+                        owningAction, targetAdapter, arguments,
+                        command,
+                        null);
 
-            return invocationResult.getAdapter();
+        // ... invoke the action
+        final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
 
-        } finally {
-
-            // clean up event on thread
-
-            // note that if the action invoked some other action via a wrapper then this will already have been cleared
-            // out.  That isn't a problem; we only need to pass the event from validate to pre-execute, not to formally
-            // "nest" the events.
-            ActionDomainEventFacetAbstract.currentInteraction.set(null);
+        // ... post the executed event
+        if (invocationResult.getWhetherInvoked()) {
+            // perhaps the Action was not properly invoked (i.e. an exception was raised).
+            // If invoked ok, then post to the event bus
+            domainEventHelper.postEventForAction(
+                    AbstractDomainEvent.Phase.EXECUTED,
+                    eventType, verify(event),
+                    owningAction, targetAdapter, arguments,
+                    command,
+                    invocationResult.getAdapter());
         }
+
+        return invocationResult.getAdapter();
+
     }
 
     /**

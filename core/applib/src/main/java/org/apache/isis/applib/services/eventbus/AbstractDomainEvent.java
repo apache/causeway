@@ -57,7 +57,11 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
          * via {@link org.apache.isis.applib.services.eventbus.ActionInteractionEvent#getCommand()}.
          */
         public boolean isExecutingOrLater() {
-            return this == EXECUTING || this == EXECUTED;
+            return isExecuting() || isExecuted();
+        }
+
+        public boolean isExecuting() {
+            return this == EXECUTING;
         }
 
         public boolean isExecuted() {

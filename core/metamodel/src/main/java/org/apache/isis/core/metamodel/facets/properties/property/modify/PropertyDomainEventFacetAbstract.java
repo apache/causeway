@@ -41,8 +41,6 @@ public abstract class PropertyDomainEventFacetAbstract
 
     private final DomainEventHelper domainEventHelper;
 
-    final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<>();
-
     private final PropertyOrCollectionAccessorFacet getterFacet;
 
     public PropertyDomainEventFacetAbstract(
@@ -62,12 +60,12 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
+                        AbstractDomainEvent.Phase.HIDE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -80,12 +78,12 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
+                        AbstractDomainEvent.Phase.DISABLE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        null, null);
         if (event != null && event.isDisabled()) {
             return event.getDisabledReason();
         }
@@ -98,21 +96,19 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final Object oldValue = getterFacet.getProperty(ic.getTarget());
         final Object proposedValue = proposedFrom(ic);
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
+                        AbstractDomainEvent.Phase.VALIDATE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
             return event.getInvalidityReason();
         }
 
-        // make available for next phases (executing/executed)
-        currentInteraction.set(event);
         return null;
     }
 
