@@ -47,7 +47,7 @@ public class EmailVerificationUrlServiceDefault implements EmailVerificationUrlS
     }
 
     /**
-     * Creates a url to the passed <em>pageClass</em> by encrypting the given
+     * Creates a url to the configured page for the given <em>pageType</em> by encrypting the given
      * <em>datum</em> as a first indexed parameter
      *
      * @param pageType The type of the page to link to
@@ -56,6 +56,20 @@ public class EmailVerificationUrlServiceDefault implements EmailVerificationUrlS
      */
     @Override
     public String createVerificationUrl(final PageType pageType, final String datum) {
+        final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
+        return createVerificationUrl(pageClass, datum);
+    }
+
+    /**
+     * Creates a url to the passed <em>pageClass</em> by encrypting the given
+     * <em>datum</em> as a first indexed parameter
+     *
+     * @param pageClass The class of the page to link to
+     * @param datum The data to encrypt in the url
+     * @return The full url to the page with the encrypted data
+     */
+    @Override
+    public String createVerificationUrl(final Class<? extends Page> pageClass, final String datum) {
         String uuid = UUID.randomUUID().toString();
         uuid = uuid.replace("-", "");
 
@@ -64,8 +78,6 @@ public class EmailVerificationUrlServiceDefault implements EmailVerificationUrlS
 
         final PageParameters parameters = new PageParameters();
         parameters.set(0, uuid);
-
-        final Class<? extends Page> pageClass = pageClassRegistry.getPageClass(pageType);
 
         final String fullUrl = fullUrlFor(pageClass, parameters);
         return fullUrl;
