@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
@@ -55,7 +56,7 @@ public class CollectionContentsAsAjaxTablePanelFactory extends ComponentFactoryA
 
     @Override
     public IModel<String> getTitleLabel() {
-        return Model.of("Table");
+        return new ResourceModel("CollectionContentsAsAjaxTablePanelFactory.Table", "Table");
     }
 
     @Override
