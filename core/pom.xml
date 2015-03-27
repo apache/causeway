@@ -1811,7 +1811,6 @@ ${license.additional-notes}
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-servlet_3.0_spec</artifactId>
                 <version>${geronimo-servlet_3.0_spec.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.geronimo.specs</groupId>
