@@ -117,7 +117,8 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
     private void injectServicesIfNecessary() {
         if(!injected) {
             for (final ExceptionRecognizer ers : exceptionRecognizers) {
-                container.injectServicesInto(ers);
+                if (container != null)
+                    container.injectServicesInto(ers);
             }
             injected = true;
         }
