@@ -49,7 +49,7 @@ public class HomePage extends PageAbstract {
         addChildComponents(themeDiv, null);
         buildGui();
 
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
     }
 
     private void buildGui() {

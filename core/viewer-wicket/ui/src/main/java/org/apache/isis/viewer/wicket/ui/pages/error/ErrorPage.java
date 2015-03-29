@@ -39,7 +39,7 @@ public class ErrorPage extends PageAbstract {
     public ErrorPage(ExceptionModel exceptionModel) {
         super(PageParametersUtils.newPageParameters(), null);
 
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
 
         themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
 

@@ -48,7 +48,7 @@ public class VoidReturnPage extends PageAbstract {
         
         addChildComponents(themeDiv, model);
 
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
     }
     
     private static String actionNameFrom(final VoidModel model) {

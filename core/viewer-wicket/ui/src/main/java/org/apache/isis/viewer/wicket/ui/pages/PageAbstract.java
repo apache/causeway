@@ -343,9 +343,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     /**
      * Convenience for subclasses
      */
-    protected void addBookmarkedPages() {
+    protected void addBookmarkedPages(final MarkupContainer container) {
         Component bookmarks = getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel());
-        themeDiv.add(bookmarks);
+        container.add(bookmarks);
         bookmarks.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
