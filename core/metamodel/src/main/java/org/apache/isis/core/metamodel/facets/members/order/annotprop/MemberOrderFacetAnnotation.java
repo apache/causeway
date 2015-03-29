@@ -19,13 +19,17 @@
 
 package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacetAbstract;
 
 public class MemberOrderFacetAnnotation extends MemberOrderFacetAbstract {
 
-    public MemberOrderFacetAnnotation(final String name, final String sequence, final FacetHolder holder) {
-        super(name, sequence, holder);
+    public MemberOrderFacetAnnotation(
+            final String name,
+            final String sequence,
+            final TranslationService translationService, final FacetHolder holder) {
+        super(name, sequence, translationService, holder);
     }
 
 }

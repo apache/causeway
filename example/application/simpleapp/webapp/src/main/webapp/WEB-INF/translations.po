@@ -67,6 +67,11 @@ msgid "Friendly Name"
 msgstr ""
 
 
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "General"
+msgstr "Common"
+
+
 #: domainapp.dom.app.homepage.HomePageService#homePage()
 msgid "Home Page"
 msgstr ""
@@ -191,6 +196,11 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObject#updateName()
 msgid "Update Name"
+msgstr ""
+
+
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "name"
 msgstr ""
 
 

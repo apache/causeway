@@ -34,7 +34,12 @@ msgstr "Creëren"
 
 #: org.apache.isis.applib.fixturescripts.FixtureScript#discoverable
 msgid "Discoverable"
-msgstr ""
+msgstr "Discoverable"
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#DOMAIN_OBJECTS
+msgid "Domain Objects"
+msgstr "Domain Objects"
 
 
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
@@ -107,7 +112,12 @@ msgstr ""
 
 #: domainapp.dom.app.homepage.HomePageViewModel#objects
 msgid "Objects"
-msgstr ""
+msgstr "Objects"
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#OTHER
+msgid "Other"
+msgstr "Other"
 
 
 #: domainapp.fixture.DomainAppFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
@@ -183,6 +193,10 @@ msgstr ""
 msgid "Update Name"
 msgstr "Updaten Naam"
 
+
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "name"
+msgstr ""
 
 
 

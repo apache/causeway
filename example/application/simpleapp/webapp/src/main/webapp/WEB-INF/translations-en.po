@@ -37,6 +37,11 @@ msgid "Discoverable"
 msgstr "Discoverable"
 
 
+#: org.apache.isis.applib.fixtures.FixtureType#DOMAIN_OBJECTS
+msgid "Domain Objects"
+msgstr "Domain Objects"
+
+
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations()
 msgid "Download Translations"
 msgstr "Download Translations"
@@ -60,6 +65,11 @@ msgstr "Fixture script"
 #: org.apache.isis.applib.fixturescripts.FixtureScript#friendlyName
 msgid "Friendly Name"
 msgstr "Friendly Name"
+
+
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "General"
+msgstr "General"
 
 
 #: domainapp.dom.app.homepage.HomePageService#homePage()
@@ -108,6 +118,11 @@ msgstr "Object: {name}"
 #: domainapp.dom.app.homepage.HomePageViewModel#objects
 msgid "Objects"
 msgstr "Objects"
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#OTHER
+msgid "Other"
+msgstr "Other"
 
 
 #: domainapp.fixture.DomainAppFixturesService#runFixtureScript(org.apache.isis.applib.fixturescripts.FixtureScript,java.lang.String)
@@ -183,6 +198,10 @@ msgstr "Type"
 msgid "Update Name"
 msgstr "Update Name"
 
+
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "name"
+msgstr ""
 
 
 
