@@ -38,7 +38,7 @@ public class JsonRepresentationTest_size {
     @Test
     public void size_forNonEmptyMap() throws IOException {
         jsonRepresentation = new JsonRepresentation(readJson("map.json"));
-        assertThat(jsonRepresentation.size(), is(16));
+        assertThat(jsonRepresentation.size(), is(17));
     }
 
     @Test
