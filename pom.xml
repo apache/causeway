@@ -62,6 +62,7 @@
             <id>released</id>
             <modules>
                 <module>core</module>
+
                 <module>example/application/simpleapp</module>
                 <module>example/archetype/simpleapp</module>
             </modules>
