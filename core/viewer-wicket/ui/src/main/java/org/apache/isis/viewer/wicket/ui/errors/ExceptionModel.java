@@ -121,11 +121,18 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
     private static List<StackTraceDetail> asStackTrace(Throwable ex) {
         List<StackTraceDetail> stackTrace = Lists.newArrayList();
         List<Throwable> causalChain = Throwables.getCausalChain(ex);
+        boolean firstTime = true;
         for(Throwable cause: causalChain) {
+            if(!firstTime) {
+                stackTrace.add(StackTraceDetail.spacer());
+                stackTrace.add(StackTraceDetail.causedBy());
+                stackTrace.add(StackTraceDetail.spacer());
+            } else {
+                firstTime = false;
+            }
             stackTrace.add(StackTraceDetail.exceptionClassName(cause));
             stackTrace.add(StackTraceDetail.exceptionMessage(cause));
             addStackTraceElements(cause, stackTrace);
-            cause = cause.getCause();
         }
         return stackTrace;
     }
