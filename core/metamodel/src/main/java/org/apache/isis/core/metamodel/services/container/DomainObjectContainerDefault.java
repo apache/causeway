@@ -43,6 +43,7 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
@@ -344,15 +345,43 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     //region > security
 
+    private final ThreadLocal<String> overrideUser = new ThreadLocal<>();
+    private final ThreadLocal<List<String>> overrideRoles = new ThreadLocal<>();
+
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void overrideUser(final String user) {
+        this.overrideUser.set(user);
+    }
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void overrideUserAndRoles(final String user, final List<String> roles) {
+        this.overrideUser.set(user);
+        this.overrideRoles.set(roles);
+    }
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void resetOverrides() {
+        this.overrideUser.set(null);
+        this.overrideRoles.set(null);
+    }
+
     @Programmatic
     @Override
     public UserMemento getUser() {
         final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
 
-        final String name = session.getUserName();
-        final List<RoleMemento> roleMementos = asRoleMementos(session.getRoles());
+        final String username = overrideUser.get() != null? overrideUser.get() : session.getUserName();
+        final List<String> roles = overrideRoles.get() != null ? overrideRoles.get() : session.getRoles();
+        final List<RoleMemento> roleMementos = asRoleMementos(roles);
 
-        final UserMemento user = new UserMemento(name, roleMementos);
+        final UserMemento user = new UserMemento(username, roleMementos);
         return user;
     }
 

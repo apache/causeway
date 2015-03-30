@@ -20,40 +20,51 @@
 package org.apache.isis.core.runtime.fixtures;
 
 import java.util.List;
-
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.authentication.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class SwitchUserServiceImpl implements SwitchUserService {
 
-    public SwitchUserServiceImpl() {
-    }
-
+    @Programmatic
     @Override
     public void switchUser(final String username, final List<String> roles) {
         switchUser(new LogonFixture(username, roles));
     }
 
+    @Programmatic
     @Override
     public void switchUser(final String username, final String... roles) {
         switchUser(new LogonFixture(username, roles));
     }
 
     private void switchUser(final LogonFixture logonFixture) {
+        reopenSession(new AuthenticationRequestLogonFixture(logonFixture));
+    }
+
+    private void reopenSession(final AuthenticationRequest authRequest) {
         getTransactionManager().endTransaction();
         IsisContext.closeSession();
-        final AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(logonFixture);
         final AuthenticationSession session = getAuthenticationManager().authenticate(authRequest);
         IsisContext.openSession(session);
         getTransactionManager().startTransaction();
     }
 
+
+    @Deprecated
+    @Programmatic
     public void injectInto(final Object fixture) {
         if (fixture instanceof SwitchUserServiceAware) {
             final SwitchUserServiceAware serviceAware = (SwitchUserServiceAware) fixture;
