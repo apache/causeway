@@ -49,6 +49,10 @@ public class ClassSubstitutor {
     //region > getClass(Class)
 
     public Class<?> getClass(final Class<?> cls) {
+    	
+    	if (cls == null) {
+	    return null;
+	}
 
         // ignore datanucleus proxies
         if(cls.getName().startsWith("org.datanucleus")) {

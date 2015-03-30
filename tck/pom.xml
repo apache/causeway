@@ -36,9 +36,10 @@
 
     <properties>
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
-        <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
+        <datanucleus-accessplatform-jdo-rdbms.version>4.0.4</datanucleus-accessplatform-jdo-rdbms.version>
+        <datanucleus-jodatime.version>4.0.4</datanucleus-jodatime.version>
+        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+        
     </properties>
 
     <repositories>

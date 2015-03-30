@@ -22,11 +22,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.collect.Sets;
+
+import org.datanucleus.PropertyNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -136,19 +140,19 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
             final Map<String, String> props) {
         
         // new feature in DN 3.2.3; enables dependency injection into entities
-        putIfNotPresent(props, "datanucleus.objectProvider.className", "org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis");
+        putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, "org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis");
         
         putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
 
-        putIfNotPresent(props, "datanucleus.autoCreateSchema", "true");
-        putIfNotPresent(props, "datanucleus.validateSchema", "true");
-        putIfNotPresent(props, "datanucleus.cache.level2.type", "none");
+        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, "true");
+        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, "true");
+        putIfNotPresent(props, PropertyNames.PROPERTY_CACHE_L2_TYPE, "none");
         
-        putIfNotPresent(props, "datanucleus.persistenceUnitLoadClasses", "true");
+        putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, "true");
 
-        String connectionFactoryName = props.get("datanucleus.ConnectionFactoryName");
+        String connectionFactoryName = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
-            String connectionFactory2Name = props.get("datanucleus.ConnectionFactory2Name");
+            String connectionFactory2Name = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY2_NAME);
             String transactionType = props.get("javax.jdo.option.TransactionType");
             if(transactionType == null) {
                 LOG.info("found non-JTA JNDI datasource (" + connectionFactoryName + ")");
