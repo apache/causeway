@@ -124,7 +124,7 @@
         <gson.version>2.3.1</gson.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
-        <hsqldb.version>2.3.2</hsqldb.version>
+        <hsqldb.version>2.3.1</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.10.Final</resteasy-jaxrs.version>
 

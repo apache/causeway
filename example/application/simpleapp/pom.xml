@@ -34,7 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.9.0-SNAPSHOT</isis.version>
+        <isis.version>1.9.0_dn4-SNAPSHOT</isis.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
         <datanucleus-accessplatform-jdo-rdbms.version>4.0.4</datanucleus-accessplatform-jdo-rdbms.version>
