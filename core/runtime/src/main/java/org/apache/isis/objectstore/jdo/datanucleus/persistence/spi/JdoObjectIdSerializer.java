@@ -32,7 +32,6 @@ import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
 import org.datanucleus.identity.DatastoreId;
-
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,13 +48,16 @@ public final class JdoObjectIdSerializer {
     public static class Exception extends RuntimeException {
         private static final long serialVersionUID = 1L;
 
-        public Exception(java.lang.Exception ex) {
+        public Exception(final java.lang.Exception ex) {
             super(ex);
         }
     }
 
     public static String toOidIdentifier(final Object jdoOid) {
 
+        //
+        // @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.APPLICATION)
+        //
         if(jdoOid instanceof javax.jdo.identity.ByteIdentity) {
             return "b" + SEPARATOR + jdoOid;
         }
@@ -79,106 +81,127 @@ public final class JdoObjectIdSerializer {
         }
 
         if(jdoOid instanceof DatastoreId) {
-            DatastoreId dnOid = (DatastoreId) jdoOid;
-            Object keyValue = dnOid.getKeyAsObject();
-            
-            // prettier handling of these common cases
-            if(keyValue instanceof String) {
-                return "S" + SEPARATOR + keyValue; 
-            }
-            if(keyValue instanceof Long) {
-                return "L" + SEPARATOR + keyValue; 
-            }
 
-            if(keyValue instanceof BigInteger) {
-                return "B" + SEPARATOR + keyValue; 
-            }
-            if(keyValue instanceof Integer) {
-                return "I" + SEPARATOR + keyValue; 
+            //
+            // prettier handling of common datatypes if possible
+            //
+
+            final DatastoreId dnOid = (DatastoreId) jdoOid;
+            final Object keyValue = dnOid.getKeyAsObject();
+
+            if(false) {
+
+                //
+                // 1.8.0 original handling, appending a prefix "L_" or whatever
+                //
+                // if required by user community, we could add a property in isis.properties to enable if requested.
+                //
+                if(keyValue instanceof String) {
+                    return "S" + SEPARATOR + keyValue;
+                }
+                if(keyValue instanceof Long) {
+                    return "L" + SEPARATOR + keyValue;
+                }
+
+                if(keyValue instanceof BigInteger) {
+                    return "B" + SEPARATOR + keyValue;
+                }
+                if(keyValue instanceof Integer) {
+                    return "I" + SEPARATOR + keyValue;
+                }
+
+            } else {
+                if( keyValue instanceof String ||
+                        keyValue instanceof Long ||
+                        keyValue instanceof BigDecimal || // 1.8.0 did not support BigDecimal
+                        keyValue instanceof BigInteger ||
+                        keyValue instanceof Integer) {
+
+                    // no separator
+                    return "" + keyValue;
+                }
             }
         }
 
-        
         // the JDO spec (5.4.3) requires that OIDs are serializable toString and 
         // recreatable through the constructor
         return jdoOid.getClass().getName().toString() + SEPARATOR + jdoOid.toString();
     }
 
-    private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "B");
+    private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
     
-    public static Object toJdoObjectId(RootOid oid) {
+    public static Object toJdoObjectId(final RootOid oid) {
 
-        String idStr = oid.getIdentifier();
+        final String idStr = oid.getIdentifier();
         final int separatorIdx = idStr.indexOf(SEPARATOR);
-        
-        final String distinguisher = idStr.substring(0, separatorIdx);
-        final String keyStr = idStr.substring(separatorIdx+1);
 
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
         final JdoPersistenceCapableFacet jdoPcFacet = spec.getFacet(JdoPersistenceCapableFacet.class);
 
-        if(isApplicationIdentity(jdoPcFacet)) {
+
+        if(separatorIdx != -1) {
+
+            // behaviour for OIDs as of 1.8.0 and previously
+
+            final String distinguisher = idStr.substring(0, separatorIdx);
+            final String keyStr = idStr.substring(separatorIdx + 1);
+
+            final boolean isApplicationIdentity = isApplicationIdentity(jdoPcFacet);
 
             if("s".equals(distinguisher)) {
-                return keyStr;
+                if (isApplicationIdentity) {
+                    return keyStr;
+                } else {
+                    return new StringIdentity(objectTypeClassFor(oid), keyStr);
+                }
+            } else if("i".equals(distinguisher)) {
+                if(isApplicationIdentity) {
+                    return Integer.parseInt(keyStr);
+                } else {
+                    return new IntIdentity(objectTypeClassFor(oid), keyStr);
+                }
+            } else if("l".equals(distinguisher)) {
+                if(isApplicationIdentity) {
+                    return Long.parseLong(keyStr);
+                } else {
+                    return new LongIdentity(objectTypeClassFor(oid), keyStr);
+                }
+            } else if("b".equals(distinguisher)) {
+                if(isApplicationIdentity) {
+                    return Byte.parseByte(keyStr);
+                } else {
+                    return new ByteIdentity(objectTypeClassFor(oid), keyStr);
+                }
+            } else if("u".equals(distinguisher)) {
+                if(isApplicationIdentity) {
+                    return UUID.fromString(keyStr);
+                } else {
+                    return new ObjectIdentity(objectTypeClassFor(oid), UUID.fromString(keyStr));
+                }
             }
-            if("i".equals(distinguisher)) {
-                return Integer.parseInt(keyStr);
+
+            if(dnPrefixes.contains(distinguisher)) {
+                return keyStr + "[OID]" + spec.getFullIdentifier();
             }
-            if("l".equals(distinguisher)) {
-                return Long.parseLong(keyStr);
-            }
-            if("b".equals(distinguisher)) {
-                return Byte.parseByte(keyStr);
-            }
-            if("u".equals(distinguisher)) {
-                return UUID.fromString(keyStr);
+
+            final String clsName = distinguisher;
+            try {
+                final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(clsName);
+                final Constructor<?> cons = cls.getConstructor(String.class);
+                final Object dnOid = cons.newInstance(keyStr);
+                return dnOid.toString();
+            } catch (ClassNotFoundException | IllegalArgumentException | InstantiationException | IllegalAccessException | SecurityException | InvocationTargetException | NoSuchMethodException e) {
+                throw new JdoObjectIdSerializer.Exception(e);
             }
 
         } else {
 
-            if("s".equals(distinguisher)) {
-                return new StringIdentity(objectTypeClassFor(oid), keyStr);
-            }
-            if("i".equals(distinguisher)) {
-                return new IntIdentity(objectTypeClassFor(oid), keyStr);
-            }
-            if("l".equals(distinguisher)) {
-                return new LongIdentity(objectTypeClassFor(oid), keyStr);
-            }
-            if("b".equals(distinguisher)) {
-                return new ByteIdentity(objectTypeClassFor(oid), keyStr);
-            }
-            if("u".equals(distinguisher)) {
-                return new ObjectIdentity(objectTypeClassFor(oid), UUID.fromString(keyStr));
-            }
-        }
-        
+            // there was no separator, so this identifier must have been for
+            // @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
+            // for one of the common types (prettier handling)
 
-        if(dnPrefixes.contains(distinguisher)) {
-			return keyStr + "[OID]" + spec.getFullIdentifier(); 
-        }
-        
-        final String clsName = distinguisher;
-        try {
-            final Class<?> cls = Thread.currentThread().getContextClassLoader().loadClass(clsName);
-            final Constructor<?> cons = cls.getConstructor(String.class);
-            final Object dnOid = cons.newInstance(keyStr);
-            return dnOid.toString();
-        } catch (ClassNotFoundException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (IllegalArgumentException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (InstantiationException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (IllegalAccessException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (InvocationTargetException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (SecurityException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
-        } catch (NoSuchMethodException e) {
-            throw new JdoObjectIdSerializer.Exception(e);
+            return idStr + "[OID]" + spec.getFullIdentifier();
+
         }
     }
 
@@ -186,14 +209,14 @@ public final class JdoObjectIdSerializer {
         return jdoPcFacet != null && jdoPcFacet.getIdentityType() == IdentityType.APPLICATION;
     }
 
-	private static Class<?> objectTypeClassFor(RootOid oid) {
-		final ObjectSpecId objectSpecId = oid.getObjectSpecId();
-		final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-		final Class<?> correspondingClass = spec.getCorrespondingClass();
-		return correspondingClass;
-	}
+    private static Class<?> objectTypeClassFor(final RootOid oid) {
+        final ObjectSpecId objectSpecId = oid.getObjectSpecId();
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final Class<?> correspondingClass = spec.getCorrespondingClass();
+        return correspondingClass;
+    }
 
-	private static SpecificationLoaderSpi getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
+    private static SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 }
