@@ -80,9 +80,11 @@ final class WebServerBootstrapper implements IsisBootstrapper {
 
         jettyServer.setHandler(context);
 
-        LOG.info("starting Jetty on port " + port + " to serve webapp");
+        LOG.info("Starting Jetty on port '{}' to serve the web application", port);
+        long start = System.currentTimeMillis();
         try {
             jettyServer.start();
+            LOG.info("Started the application in {}ms", System.currentTimeMillis() - start);
             if (startupMode.isForeground()) {
                 System.in.read();
                 System.out.println(">>> STOPPING EMBEDDED JETTY SERVER");
