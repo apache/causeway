@@ -21,6 +21,7 @@ package org.apache.isis.objectstore.jdo.datanucleus;
 
 import com.google.common.base.Joiner;
 
+import org.datanucleus.PropertyNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,9 +69,8 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         addDataNucleusProperty("javax.jdo.option.ConnectionPassword", "");
 
         // Don't do validations that consume setup time.
-        addDataNucleusProperty("datanucleus.schema.autoCreateAll", "true");
-        addDataNucleusProperty("datanucleus.schema.validateTables", "false");
-        addDataNucleusProperty("datanucleus.schema.validateConstraints", "false");
+        addDataNucleusProperty(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL, "true");
+        addDataNucleusProperty(PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, "false");
 
         // other properties as per WEB-INF/persistor_datanucleus.properties
         addDataNucleusProperty("datanucleus.persistenceByReachabilityAtCommit", "false");
