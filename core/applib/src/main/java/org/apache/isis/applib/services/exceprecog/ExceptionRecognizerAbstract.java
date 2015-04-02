@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Predicate;
@@ -29,6 +30,8 @@ import com.google.common.base.Throwables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
 /**
  * Abstract implementation of {@link ExceptionRecognizer} that looks 
@@ -130,6 +133,14 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
                 if(logRecognizedExceptions) {
                     LOG.info("Recognized exception, stacktrace : ", throwable);
                 }
+                if(ex instanceof TranslatableException) {
+                    final TranslatableException translatableException = (TranslatableException) ex;
+                    final TranslatableString translatableMessage = translatableException.getTranslatableMessage();
+                    final String translationContext = translatableException.getTranslationContext();
+                    if(translatableMessage != null && translationContext != null) {
+                        return translatableMessage.translate(translationService, translationContext);
+                    }
+                }
                 final Throwable rootCause = Throwables.getRootCause(throwable);
                 final String rootCauseMessage = rootCause.getMessage();
                 final String parsedMessage = messageParser.apply(rootCauseMessage);
@@ -144,5 +155,8 @@ public abstract class ExceptionRecognizerAbstract implements ExceptionRecognizer
     public Recognition recognize2(Throwable ex) {
         return Recognition.of(category, recognize(ex));
     }
+
+    @Inject
+    protected TranslationService translationService;
 
 }

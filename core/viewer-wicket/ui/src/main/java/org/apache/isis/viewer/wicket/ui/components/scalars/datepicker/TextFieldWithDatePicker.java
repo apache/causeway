@@ -51,12 +51,15 @@ public class TextFieldWithDatePicker<T> extends TextField<T> implements IConvert
     private final DateTimeConfig config;
 
     public TextFieldWithDatePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter) {
+        this(id, model, type, converter, new DateTimeConfig());
+    }
+
+    public TextFieldWithDatePicker(String id, IModel<T> model, Class<T> type, DateConverter<T> converter, DateTimeConfig config) {
         super(id, model, type);
 
         setOutputMarkupId(true);
 
         this.converter = converter;
-        this.config = new DateTimeConfig();
         String datePickerPattern = getPattern(converter, getLocale());
         // convert Java (SimpleDateFormat|DateTimeFormat) format to Moment.js format
         datePickerPattern = datePickerPattern.replace('d', 'D');
@@ -66,6 +69,7 @@ public class TextFieldWithDatePicker<T> extends TextField<T> implements IConvert
         if (datePickerPattern.contains("HH")) {
             config.sideBySide(true);
         }
+        this.config = config;
     }
 
     protected String getPattern(DateConverter<T> converter, Locale locale) {

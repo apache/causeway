@@ -47,10 +47,19 @@ public class StackTraceDetail implements Serializable {
         return new StackTraceDetail(StackTraceDetail.Type.STACKTRACE_ELEMENT, buf.toString());
     }
 
+    public static StackTraceDetail spacer() {
+        return new StackTraceDetail(Type.LITERAL, "");
+    }
+
+    public static StackTraceDetail causedBy() {
+        return new StackTraceDetail(Type.LITERAL, "Caused by:");
+    }
+
     enum Type {
         EXCEPTION_CLASS_NAME,
         EXCEPTION_MESSAGE,
-        STACKTRACE_ELEMENT
+        STACKTRACE_ELEMENT,
+        LITERAL
     }
     private final Type type;
     private final String line;

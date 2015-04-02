@@ -84,7 +84,7 @@ public class TranslationsResolverWicket implements TranslationsResolver {
         return getIsisWicketApplication().getServletContext();
     }
 
-    private static Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
+    private static final Pattern nonEmpty = Pattern.compile("^(#:|msgid|msgstr).+$");
     private static List<String> readLines(final URL url) throws IOException {
         if(url == null) {
             return null;

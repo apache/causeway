@@ -26,9 +26,12 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
@@ -42,21 +45,14 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public abstract class ActionDomainEventFacetAbstract
         extends SingleClassValueFacetAbstract implements ActionDomainEventFacet {
 
+    private final TranslationService translationService;
+    private final String translationContext;
+
     static Class<? extends Facet> type() {
         return ActionDomainEventFacet.class;
     }
 
     private final DomainEventHelper domainEventHelper;
-
-    /**
-     * Pass event from validate to executing phases.
-     *
-     * <p>
-     * A new event is created for the hide, disable and validate phases.  But when the validate completes (and if does
-     * not invalidate), then the event is passed through to the executing phase using this thread-local.
-     * </p>
-     */
-    final static ThreadLocal<ActionDomainEvent<?>> currentInteraction = new ThreadLocal<>();
 
     public ActionDomainEventFacetAbstract(
             final Class<? extends ActionDomainEvent<?>> eventType,
@@ -64,6 +60,11 @@ public abstract class ActionDomainEventFacetAbstract
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader) {
         super(type(), holder, eventType, specificationLoader);
+
+        this.translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+
         domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
@@ -74,14 +75,14 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.HIDE,
-                        getIdentified(), ic.getTarget(), argumentAdapters, null);
+                        AbstractDomainEvent.Phase.HIDE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        null,
+                        null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -94,16 +95,21 @@ public abstract class ActionDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ObjectAdapter[] argumentAdapters = argumentAdaptersFrom(ic);
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.DISABLE,
-                        getIdentified(), ic.getTarget(), argumentAdapters, null);
+                        AbstractDomainEvent.Phase.DISABLE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), argumentAdapters,
+                        null,
+                        null);
         if (event != null && event.isDisabled()) {
+            final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getDisabledReason();
+
         }
         return null;
     }
@@ -114,25 +120,27 @@ public abstract class ActionDomainEventFacetAbstract
     }
 
     @Override
-    public String invalidates(ValidityContext<? extends ValidityEvent> ic) {
+    public String invalidates(final ValidityContext<? extends ValidityEvent> ic) {
         if(!domainEventHelper.hasEventBusService()) {
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final ActionInvocationContext aic = (ActionInvocationContext) ic;
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
-                        eventType(), null, null, AbstractDomainEvent.Phase.VALIDATE,
-                        getIdentified(), ic.getTarget(), aic.getArgs(), null);
+                        AbstractDomainEvent.Phase.VALIDATE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(), aic.getArgs(),
+                        null,
+                        null);
         if (event != null && event.isInvalid()) {
+            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getInvalidityReason();
         }
 
-        // make available for next phases (executing/executed)
-        currentInteraction.set(event);
         return null;
     }
 

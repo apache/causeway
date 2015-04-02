@@ -20,10 +20,15 @@
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
 import java.util.List;
+import org.apache.wicket.Application;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.Strings;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -48,6 +53,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs.BreadcrumbModelProvider;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * Web page representing an entity.
@@ -64,9 +70,24 @@ public class EntityPage extends PageAbstract {
      * {@link BookmarkablePageLink bookmarkable} links.
      */
     public EntityPage(final PageParameters pageParameters) {
-        this(pageParameters, new EntityModel(pageParameters));
+        this(pageParameters, createEntityModel(pageParameters));
     }
-    
+
+    /**
+     * Creates an EntityModel from the given page parameters.
+     * Redirects to the application home page if there is no OID in the parameters.
+     *
+     * @param parameters The page parameters with the OID
+     * @return An EntityModel for the requested OID
+     */
+    private static EntityModel createEntityModel(final PageParameters parameters) {
+        String oid = EntityModel.oidStr(parameters);
+        if (Strings.isEmpty(oid)) {
+            throw new RestartResponseException(Application.get().getHomePage());
+        }
+        return new EntityModel(parameters);
+    }
+
     private EntityPage(final PageParameters pageParameters, final EntityModel entityModel) {
         this(pageParameters, entityModel, null);
     }
@@ -138,14 +159,24 @@ public class EntityPage extends PageAbstract {
             final String titleStr = objectAdapter.titleString(null);
             setTitle(titleStr);
         }
-        
-        addChildComponents(themeDiv, model);
+
+        WebMarkupContainer entityPageContainer = new WebMarkupContainer("entityPageContainer");
+        entityPageContainer.add(new CssClassAppender(new AbstractReadOnlyModel<String>() {
+            @Override
+            public String getObject() {
+                ObjectAdapter adapter = entityModel.getObject();
+                return adapter.getObject().getClass().getSimpleName();
+            }
+        }));
+        themeDiv.addOrReplace(entityPageContainer);
+
+        addChildComponents(entityPageContainer, model);
         
         // bookmarks and breadcrumbs
         bookmarkPage(model);
         addBreadcrumb(entityModel);
 
-        addBookmarkedPages();
+        addBookmarkedPages(entityPageContainer);
 
 
         // TODO mgrigorov: Zero Clipboard has been moved to EntityIconAndTitlePanel where the entity model is available.

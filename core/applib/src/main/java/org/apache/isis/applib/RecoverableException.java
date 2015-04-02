@@ -19,6 +19,10 @@
 
 package org.apache.isis.applib;
 
+import com.google.common.base.Strings;
+import org.apache.isis.applib.services.exceprecog.TranslatableException;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+
 /**
  * Indicates that an exceptional condition/problem has occurred within the application's domain logic.
  * 
@@ -43,20 +47,72 @@ package org.apache.isis.applib;
  * @see NonRecoverableException
  * @see FatalException
  */
-public class RecoverableException extends RuntimeException {
+public class RecoverableException extends RuntimeException implements TranslatableException {
     
     private static final long serialVersionUID = 1L;
 
+    private final TranslatableString translatableMessage;
+    private final String translationContext;
+
     public RecoverableException(final String msg) {
-        super(msg);
+        this(msg, null, null, null, null);
+    }
+
+    public RecoverableException(
+            final TranslatableString translatableMessage,
+            final Class<?> translationContextClass,
+            final String translationContextMethod) {
+        this(null, translatableMessage, translationContextClass, translationContextMethod, null);
     }
 
     public RecoverableException(final Throwable cause) {
-        super(cause);
+        this(null, null, null, null, cause);
     }
 
     public RecoverableException(final String msg, final Throwable cause) {
-        super(msg, cause);
+        this(msg, null, null, null, cause);
     }
 
+    public RecoverableException(
+            final TranslatableString translatableMessage,
+            final Class<?> translationContextClass,
+            final String translationContextMethod,
+            final Throwable cause) {
+        this(null, translatableMessage, translationContextClass, translationContextMethod, cause);
+    }
+
+    private RecoverableException(
+            final String message,
+            final TranslatableString translatableMessage,
+            final Class<?> translationContextClass,
+            final String translationContextMethod,
+            final Throwable cause) {
+        super(message, cause);
+        this.translatableMessage = translatableMessage;
+        this.translationContext =
+                translationContextClass != null
+                        ? (translationContextClass.getName() +
+                          (!Strings.isNullOrEmpty(translationContextMethod)
+                                ? "#" + translationContextMethod
+                                : "")
+                )
+                        : null;
+    }
+
+    @Override
+    public String getMessage() {
+        return getTranslatableMessage() != null
+                ? getTranslatableMessage().getPattern()
+                : super.getMessage();
+    }
+
+    @Override
+    public TranslatableString getTranslatableMessage() {
+        return translatableMessage;
+    }
+
+    @Override
+    public String getTranslationContext() {
+        return translationContext;
+    }
 }

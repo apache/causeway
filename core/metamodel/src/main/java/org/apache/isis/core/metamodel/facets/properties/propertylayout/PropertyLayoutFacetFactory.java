@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
+import java.lang.reflect.Method;
 import java.util.Properties;
 import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -46,13 +47,14 @@ public class PropertyLayoutFacetFactory extends FacetFactoryAbstract implements 
     public void process(final ProcessMethodContext processMethodContext) {
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
+        final Method method = processMethodContext.getMethod();
 
         Properties properties = processMethodContext.metadataProperties("propertyLayout");
         if(properties == null) {
             // alternate key
             properties = processMethodContext.metadataProperties("layout");
         }
-        final PropertyLayout propertyLayout = Annotations.getAnnotation(processMethodContext.getMethod(), PropertyLayout.class);
+        final PropertyLayout propertyLayout = Annotations.getAnnotation(method, PropertyLayout.class);
 
 
         // cssClass

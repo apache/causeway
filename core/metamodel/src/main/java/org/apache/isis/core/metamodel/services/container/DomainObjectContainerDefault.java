@@ -41,13 +41,26 @@ import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerForType;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.sudo.SudoService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.*;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -61,7 +74,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
-public class  DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
+public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware, ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware, LocalizationProviderAware, ExceptionRecognizer {
 
     //region > titleOf
 
@@ -332,15 +345,43 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
 
     //region > security
 
+    private final ThreadLocal<String> overrideUser = new ThreadLocal<>();
+    private final ThreadLocal<List<String>> overrideRoles = new ThreadLocal<>();
+
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void overrideUser(final String user) {
+        this.overrideUser.set(user);
+    }
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void overrideUserAndRoles(final String user, final List<String> roles) {
+        this.overrideUser.set(user);
+        this.overrideRoles.set(roles);
+    }
+    /**
+     * Not API; for use by the implementation of {@link SudoService}.
+     */
+    @Programmatic
+    public void resetOverrides() {
+        this.overrideUser.set(null);
+        this.overrideRoles.set(null);
+    }
+
     @Programmatic
     @Override
     public UserMemento getUser() {
         final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
 
-        final String name = session.getUserName();
-        final List<RoleMemento> roleMementos = asRoleMementos(session.getRoles());
+        final String username = overrideUser.get() != null? overrideUser.get() : session.getUserName();
+        final List<String> roles = overrideRoles.get() != null ? overrideRoles.get() : session.getRoles();
+        final List<RoleMemento> roleMementos = asRoleMementos(roles);
 
-        final UserMemento user = new UserMemento(name, roleMementos);
+        final UserMemento user = new UserMemento(username, roleMementos);
         return user;
     }
 
@@ -387,16 +428,35 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
         getDomainObjectServices().informUser(message);
     }
 
-    @Programmatic
     @Override
-    public void raiseError(final String message) {
-        getDomainObjectServices().raiseError(message);
+    public String informUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        return message.translate(translationService, context(contextClass, contextMethod));
     }
 
     @Programmatic
     @Override
     public void warnUser(final String message) {
         getDomainObjectServices().warnUser(message);
+    }
+
+    @Override
+    public String warnUser(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        return message.translate(translationService, context(contextClass, contextMethod));
+    }
+
+    @Programmatic
+    @Override
+    public void raiseError(final String message) {
+        getDomainObjectServices().raiseError(message);
+    }
+
+    @Override
+    public String raiseError(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        return message.translate(translationService, context(contextClass, contextMethod));
+    }
+
+    private static String context(final Class<?> contextClass, final String contextMethod) {
+        return contextClass.getName()+"#"+contextMethod;
     }
 
     //endregion
@@ -595,6 +655,7 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     @PostConstruct
     @Override
     public void init(Map<String, String> properties) {
+        injectServicesInto(recognizer);
         recognizer.init(properties);
     }
 
@@ -704,7 +765,11 @@ public class  DomainObjectContainerDefault implements DomainObjectContainer, Que
     //region > service dependencies
 
     @javax.inject.Inject
-    private WrapperFactory wrapperFactory;
+    WrapperFactory wrapperFactory;
+
+    @javax.inject.Inject
+    TranslationService translationService;
+
 
     //endregion
 

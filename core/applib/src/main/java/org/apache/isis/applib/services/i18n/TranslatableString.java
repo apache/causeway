@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.Programmatic;
 
 public final class TranslatableString {
 
@@ -177,6 +178,7 @@ public final class TranslatableString {
      * @param context
      * @return
      */
+    @Programmatic
     public String translate(final TranslationService translationService, final String context) {
         final String translatedText =
                 !isPluralForm()
@@ -191,8 +193,14 @@ public final class TranslatableString {
      * <p>
      *     Any placeholders will <i>not</i> have been replaced.
      * </p>
+     *
+     * <p>
+     *     NB: this method is exposed only so that implementations of
+     *     {@link org.apache.isis.applib.services.exceprecog.TranslatableException} can return a non-null
+     *     {@link Exception#getMessage() message} when only a translatable message has been provided.
+     * </p>
      */
-    String getPattern() {
+    public String getPattern() {
         return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
     }
 

@@ -16,31 +16,26 @@
  */
 package org.apache.isis.core.runtime.services.eventbus;
 
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.SubscriberExceptionContext;
-import com.google.common.eventbus.SubscriberExceptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.base.Strings;
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
+import org.apache.isis.applib.services.eventbus.EventBusImplementation;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.core.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.runtime.services.RequestScopedService;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForAxonSimple;
+import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementationForGuava;
 
 /**
- * @deprecated - but only because {@link org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo}
- * is annotated (with <code>@DomainService</code>) as the default implementation.  The functionality in this implementation
- * is still required.
+ * Holds common runtime logic for EventBusService implementations.
  */
-@Deprecated
-public class EventBusServiceDefault extends EventBusService {
-
-    private static final Logger LOG = LoggerFactory.getLogger(EventBusServiceDefault.class);
-
+public abstract class EventBusServiceDefault extends EventBusService {
+    
+    //region > register
     /**
      * {@inheritDoc}
      *
@@ -54,7 +49,6 @@ public class EventBusServiceDefault extends EventBusService {
      *     registrations are in effect ignored.
      * </p>
      */
-    @Programmatic
     @Override
     public void register(final Object domainService) {
         if(domainService instanceof RequestScopedService) {
@@ -64,68 +58,59 @@ public class EventBusServiceDefault extends EventBusService {
                 throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
             }
             // a singleton
-            if(eventBus != null) {
+            if(this.eventBusImplementation != null) {
                 // ... coming too late to the party.
                 throw new IllegalStateException("Event bus has already been created; too late to register any further (singleton) subscribers");
             }
         }
         super.register(domainService);
     }
+    
+    //endregion
 
-    // //////////////////////////////////////
+    //region > init, shutdown
+    @Programmatic
+    @PostConstruct
+    public void init(final Map<String, String> properties) {
+        final String implementation = properties.get("isis.services.eventbus.implementation");
+
+        if(Strings.isNullOrEmpty(implementation) || "guava".equalsIgnoreCase(implementation)) {
+            this.implementation = "guava";
+            return;
+        }
+        if("axon".equalsIgnoreCase(implementation)) {
+            this.implementation = "axon";
+        }
+        this.implementation = implementation;
+    }
+    //endregion
+
+    /**
+     * Either &lt;guava&gt; or &lt;axon&gt;, or else the fully qualified class name of an
+     * implementation of {@link org.apache.isis.applib.services.eventbus.EventBusImplementation}.
+     */
+    private String implementation;
 
     @Override
-    protected EventBus newEventBus() {
-        return new EventBus(newEventBusSubscriberExceptionHandler());
-    }
+    protected org.apache.isis.applib.services.eventbus.EventBusImplementation newEventBus() {
+        if("guava".equals(implementation)) {
+            return new EventBusImplementationForGuava();
+        }
+        if("axon".equals(implementation)) {
+            return new EventBusImplementationForAxonSimple();
+        }
 
-    protected SubscriberExceptionHandler newEventBusSubscriberExceptionHandler() {
-        return new SubscriberExceptionHandler(){
-            @Override
-            public void handleException(Throwable exception, SubscriberExceptionContext context) {
-                Object event = context.getEvent();
-                if(!(event instanceof AbstractDomainEvent)) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("Ignoring exception '%s' (%s), not a subclass of AbstractDomainEvent", exception.getMessage(), exception.getClass().getName());
-                    }
-                    return;
-                } 
-                final AbstractDomainEvent<?> interactionEvent = (AbstractDomainEvent<?>) event;
-                final AbstractDomainEvent.Phase phase = interactionEvent.getEventPhase();
-                switch (phase) {
-                case HIDE:
-                    LOG.warn("Exception thrown during HIDE phase, to be safe will veto (hide) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-                    interactionEvent.hide();
-                    break;
-                case DISABLE:
-                    LOG.warn("Exception thrown during DISABLE phase, to be safe will veto (disable) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-                    interactionEvent.disable(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
-                    break;
-                case VALIDATE:
-                    LOG.warn("Exception thrown during VALIDATE phase, to be safe will veto (invalidate) the interaction event, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-                    interactionEvent.invalidate(exception.getMessage()!=null?exception.getMessage(): exception.getClass().getName() + " thrown.");
-                    break;
-                case EXECUTING:
-                    LOG.warn("Exception thrown during EXECUTING phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-                    abortTransaction(exception);
-                    break;
-                case EXECUTED:
-                    LOG.warn("Exception thrown during EXECUTED phase, to be safe will abort the transaction, msg='{}', class='{}'", exception.getMessage(), exception.getClass().getName());
-                    abortTransaction(exception);
-                    break;
-                }
+        final Class<?> aClass = ClassUtil.forName(implementation);
+        if(EventBusImplementation.class.isAssignableFrom(aClass)) {
+            try {
+                return (EventBusImplementation) aClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new NonRecoverableException(e);
             }
-        };
+        }
+        throw new NonRecoverableException(
+                "Could not instantiate event bus implementation '" + implementation + "'");
     }
-
-    private void abortTransaction(Throwable exception) {
-        getTransactionManager().getTransaction().setAbortCause(new IsisApplicationException(exception));
-        return;
-    }
-
-    protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
-    }
+    //endregion
 
 }
-

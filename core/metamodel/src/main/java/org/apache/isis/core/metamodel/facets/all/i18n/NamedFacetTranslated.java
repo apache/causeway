@@ -30,8 +30,6 @@ public class NamedFacetTranslated extends FacetAbstract implements NamedFacet {
     String context;
     String originalText;
 
-    private String value;
-
     public NamedFacetTranslated(
             final String context, final String originalText,
             final TranslationService translationService,

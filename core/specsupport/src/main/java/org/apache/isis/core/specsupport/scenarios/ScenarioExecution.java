@@ -130,6 +130,10 @@ public abstract class ScenarioExecution {
      * <p>
      * Because integration tests cache services in the session, this method should typically be followed by
      * calls to {@link #closeSession() close} the current session and then to re-{@link #openSession() open} a new one.
+     *
+     * <p>
+     *     TODO: I'm not convinced this works reliably...
+     * </p>
      */
     public <T> void replaceService(T original, T replacement) {
         dsp.replaceService(original, replacement);

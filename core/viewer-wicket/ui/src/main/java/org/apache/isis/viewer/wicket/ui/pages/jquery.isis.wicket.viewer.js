@@ -26,7 +26,8 @@ $(function() {
 
     window.Isis = {
         Topic: {
-            OPEN_IN_NEW_TAB: 'openInNewTab'
+            OPEN_IN_NEW_TAB: 'openInNewTab',
+            FOCUS_FIRST_ACTION_PARAMETER: 'focusFirstActionParameter'
         },
         copyModalShown: false
     };
@@ -75,6 +76,12 @@ $(function() {
     Wicket.Event.subscribe(Isis.Topic.OPEN_IN_NEW_TAB, function(jqEvent, url) {
         var win=window.open(url, '_blank');
         if(win) { win.focus(); }
+    });
+
+    Wicket.Event.subscribe(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, function(jqEvent, modalWindowId) {
+        setTimeout(function() {
+            $('#'+modalWindowId).find('.inputFormTable.parameters').find('input,textarea,select').filter(':visible:first').focus();
+        }, 0);
     });
 
     /* for modal dialogs */

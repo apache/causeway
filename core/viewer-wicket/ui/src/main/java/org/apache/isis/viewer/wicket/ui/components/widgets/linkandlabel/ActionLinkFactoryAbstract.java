@@ -22,16 +22,12 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 import org.apache.wicket.Application;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -44,7 +40,6 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
-import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -84,44 +79,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     actionPrompt.setPanel(actionPanel, target);
                     actionPanel.setActionPrompt(actionPrompt);
                     actionPrompt.showPrompt(target);
-
-                    focusOnFirstParameter(target, actionPanel);
                 }
             }
 
-            private void focusOnFirstParameter(AjaxRequestTarget target, ActionPanel actionPanel) {
-
-                // first, force all parameters to build themselves...
-                actionPanel.visitChildren(new IVisitor<Component, Component>() {
-                    @Override
-                    public void component(Component object, IVisit<Component> visit) {
-                        if (object instanceof ScalarPanelAbstract) {
-                            ScalarPanelAbstract spa = (ScalarPanelAbstract) object;
-                            spa.forceBuildGui();
-                            visit.dontGoDeeper();
-                        }
-                    }
-                });
-
-                // second, go searching for the first <input> in the action panel.
-                final Component actionPanelFirstParam = actionPanel.visitChildren(new IVisitor<Component, Component>() {
-                    @Override
-                    public void component(Component object, IVisit<Component> visit) {
-                        if (object instanceof FormComponent &&
-                            !"scalarIfCompact".equals(object.getId()) &&
-                            object.getOutputMarkupId()) {
-                            // there are components for 'compact' and 'regular'; we want the 'regular' one
-                            // also double check that has outputMarkupId enabled (prereq for setting focus)
-                            visit.stop(object);
-                        }
-                    }
-                });
-
-                // third, if found then use Wicket API to focus on this component
-                if(actionPanelFirstParam != null) {
-                    target.focusComponent(actionPanelFirstParam);
-                }
-            }
 
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {

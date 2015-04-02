@@ -24,12 +24,15 @@ import java.util.Collection;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -37,11 +40,12 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
@@ -123,6 +127,8 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
 
             installFixturesIfRequired();
 
+            translateServicesAndEnumConstants();
+
         } catch (final IsisSystemException ex) {
             LOG.error("failed to initialise", ex);
             throw new RuntimeException(ex);
@@ -164,6 +170,47 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
         }
     }
 
+    /**
+     * The act of invoking titleOf(...) will cause translations to be requested.
+     */
+    private void translateServicesAndEnumConstants() {
+        IsisContext.openSession(new InitialisationSession());
+        try {
+            final List<Object> services = sessionFactory.getServices();
+            final DomainObjectContainer container = lookupService(DomainObjectContainer.class);
+            for (Object service : services) {
+                final String unused = container.titleOf(service);
+            }
+            for (final ObjectSpecification objSpec : allSpecifications()) {
+                final Class<?> correspondingClass = objSpec.getCorrespondingClass();
+                if(correspondingClass.isEnum()) {
+                    final Object[] enumConstants = correspondingClass.getEnumConstants();
+                    for (Object enumConstant : enumConstants) {
+                        final String unused = container.titleOf(enumConstant);
+                    }
+                }
+            }
+        } finally {
+            IsisContext.closeSession();
+        }
+
+    }
+
+    private <T> T lookupService(final Class<T> serviceClass) {
+        return getServicesInjector().lookupService(serviceClass);
+    }
+
+    private ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
+    }
+
+    private PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    Collection<ObjectSpecification> allSpecifications() {
+        return IsisContext.getSpecificationLoader().allSpecifications();
+    }
 
     @Override
     public void shutdown() {

@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.applib.services.i18n.TranslatableString;
 
 /**
  * Convenience super class for all classes that wish to interact with the
@@ -367,11 +368,23 @@ public abstract class AbstractContainedObject {
     }
 
     /**
+     * Display the specified message to the user, in a non-intrusive fashion.
+     */
+    protected void informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        getContainer().informUser(message, contextClass, contextMethod);
+    }
+
+    /**
      * Display the specified message as a warning to the user, in a more visible
      * fashion, but without requiring explicit acknowledgement.
      */
     protected void warnUser(final String message) {
         getContainer().warnUser(message);
+    }
+
+
+    protected void warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        getContainer().warnUser(message, contextClass, contextMethod);
     }
 
     /**
@@ -380,6 +393,10 @@ public abstract class AbstractContainedObject {
      */
     protected void raiseError(final String message) {
         getContainer().raiseError(message);
+    }
+
+    protected String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
+        return getContainer().raiseError(message, contextClass, contextMethod);
     }
 
     // //////////////////////////////////////

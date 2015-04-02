@@ -24,8 +24,11 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
+import org.apache.isis.applib.services.i18n.TranslatableString;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -41,9 +44,9 @@ public abstract class PropertyDomainEventFacetAbstract
 
     private final DomainEventHelper domainEventHelper;
 
-    final static ThreadLocal<PropertyDomainEvent<?,?>> currentInteraction = new ThreadLocal<>();
-
     private final PropertyOrCollectionAccessorFacet getterFacet;
+    private final TranslationService translationService;
+    private final String translationContext;
 
     public PropertyDomainEventFacetAbstract(
             final Class<? extends PropertyDomainEvent<?, ?>> eventType,
@@ -53,6 +56,11 @@ public abstract class PropertyDomainEventFacetAbstract
             final SpecificationLoader specificationLoader) {
         super(PropertyDomainEventFacet.class, holder, eventType, specificationLoader);
         this.getterFacet = getterFacet;
+
+        this.translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        this.translationContext = ((IdentifiedHolder)holder).getIdentifier().toClassAndNameIdentityString();
+
         domainEventHelper = new DomainEventHelper(servicesInjector);
     }
 
@@ -62,12 +70,12 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.HIDE, getIdentified(), ic.getTarget(), null, null);
+                        AbstractDomainEvent.Phase.HIDE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        null, null);
         if (event != null && event.isHidden()) {
             return "Hidden by subscriber";
         }
@@ -80,13 +88,17 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.DISABLE, getIdentified(), ic.getTarget(), null, null);
+                        AbstractDomainEvent.Phase.DISABLE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        null, null);
         if (event != null && event.isDisabled()) {
+            final TranslatableString reasonTranslatable = event.getDisabledReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getDisabledReason();
         }
         return null;
@@ -98,21 +110,23 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        // reset (belt-n-braces)
-        currentInteraction.set(null);
-
         final Object oldValue = getterFacet.getProperty(ic.getTarget());
         final Object proposedValue = proposedFrom(ic);
 
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
-                        eventType(), null, AbstractDomainEvent.Phase.VALIDATE, getIdentified(), ic.getTarget(), oldValue, proposedValue);
+                        AbstractDomainEvent.Phase.VALIDATE,
+                        eventType(), null,
+                        getIdentified(), ic.getTarget(),
+                        oldValue, proposedValue);
         if (event != null && event.isInvalid()) {
+            final TranslatableString reasonTranslatable = event.getInvalidityReasonTranslatable();
+            if(reasonTranslatable != null) {
+                return reasonTranslatable.translate(translationService, translationContext);
+            }
             return event.getInvalidityReason();
         }
 
-        // make available for next phases (executing/executed)
-        currentInteraction.set(event);
         return null;
     }
 

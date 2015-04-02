@@ -55,7 +55,7 @@ public class ValuePage extends PageAbstract {
 
         addChildComponents(themeDiv, valueModel);
 
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
         
     }
 

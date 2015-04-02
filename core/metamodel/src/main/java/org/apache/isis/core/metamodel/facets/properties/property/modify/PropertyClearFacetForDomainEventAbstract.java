@@ -72,36 +72,32 @@ public abstract class PropertyClearFacetForDomainEventAbstract
         }
 
 
-        try {
-            // pick up existing event (saved in thread local during the validation phase)
-            final PropertyDomainEvent<?, ?> existingEvent =
-                    PropertyDomainEventFacetAbstract.currentInteraction.get();
+        // ... post the executing event
+        final Object oldValue = getterFacet.getProperty(targetAdapter);
+        final PropertyDomainEvent<?, ?> event =
+                domainEventHelper.postEventForProperty(
+                        AbstractDomainEvent.Phase.EXECUTING,
+                        eventType(), null,
+                        getIdentified(), targetAdapter,
+                        oldValue, null);
 
-            // ... post the executing event
-            final Object oldValue = getterFacet.getProperty(targetAdapter);
-            domainEventHelper.postEventForProperty(
-                    value(), existingEvent, AbstractDomainEvent.Phase.EXECUTING,
-                    getIdentified(), targetAdapter, oldValue, null);
+        // ... perform the property clear
+        clearFacet.clearProperty(targetAdapter);
 
-            // ... perform the property clear
-            clearFacet.clearProperty(targetAdapter);
-
-            // reading the actual value from the target object, playing it safe...
-            final Object actualNewValue = getterFacet.getProperty(targetAdapter);
-            if(Objects.equal(oldValue, actualNewValue)) {
-                // do nothing.
-                return;
-            }
-
-            // ... and post the event (reusing existing event if available)
-            final PropertyDomainEvent<?, ?> event =
-                    PropertyDomainEventFacetAbstract.currentInteraction.get();
-            domainEventHelper.postEventForProperty(value(), verify(event), AbstractDomainEvent.Phase.EXECUTED, getIdentified(), targetAdapter, oldValue, actualNewValue);
-
-        } finally {
-            // clean up
-            PropertyDomainEventFacetAbstract.currentInteraction.set(null);
+        // reading the actual value from the target object, playing it safe...
+        final Object actualNewValue = getterFacet.getProperty(targetAdapter);
+        if(Objects.equal(oldValue, actualNewValue)) {
+            // do nothing.
+            return;
         }
+
+        // ... and post the event (reusing event from before)
+        domainEventHelper.postEventForProperty(
+                AbstractDomainEvent.Phase.EXECUTED,
+                eventType(), verify(event),
+                getIdentified(), targetAdapter,
+                oldValue, actualNewValue);
+
     }
 
     /**

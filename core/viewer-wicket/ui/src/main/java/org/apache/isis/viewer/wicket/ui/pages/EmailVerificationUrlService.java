@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import java.io.Serializable;
+import org.apache.wicket.Page;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 
 /**
@@ -30,7 +31,7 @@ import org.apache.isis.viewer.wicket.model.models.PageType;
 public interface EmailVerificationUrlService extends Serializable {
 
     /**
-     * Creates a url to the passed <em>pageClass</em> by encrypting the given
+     * Creates a url to the passed <em>pageType</em> by encrypting the given
      * <em>datum</em> as a first indexed parameter
      *
      * @param pageType The type of the page to link to
@@ -38,4 +39,14 @@ public interface EmailVerificationUrlService extends Serializable {
      * @return The full url to the page with the encrypted data
      */
     String createVerificationUrl(PageType pageType, String datum);
+
+    /**
+     * Creates a url to the passed <em>pageClass</em> by encrypting the given
+     * <em>datum</em> as a first indexed parameter
+     *
+     * @param pageClass The class of the page to link to
+     * @param datum The data to encrypt in the url
+     * @return The full url to the page with the encrypted data
+     */
+    String createVerificationUrl(final Class<? extends Page> pageClass, final String datum);
 }

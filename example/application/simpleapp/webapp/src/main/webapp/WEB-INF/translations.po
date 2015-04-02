@@ -10,6 +10,11 @@
 #     /WEB-INF/translations-fr.po
 #     /WEB-INF/translations.po
 #
+# If the app uses TranslatableString (eg for internationalized validation
+# messages), or if the app calls the TranslationService directly, then ensure
+# that all text to be translated has been captured by running a full
+# integration test suite that exercises all relevant behaviour
+#
 ##############################################################################
 
 #: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#downloadTranslations(java.lang.String)
@@ -24,6 +29,16 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObjects#create()
 msgid "Create"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#discoverable
+msgid "Discoverable"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#DOMAIN_OBJECTS
+msgid "Domain Objects"
 msgstr ""
 
 
@@ -47,6 +62,16 @@ msgid "Fixture script"
 msgstr ""
 
 
+#: org.apache.isis.applib.fixturescripts.FixtureScript#friendlyName
+msgid "Friendly Name"
+msgstr ""
+
+
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "General"
+msgstr "Common"
+
+
 #: domainapp.dom.app.homepage.HomePageService#homePage()
 msgid "Home Page"
 msgstr ""
@@ -57,13 +82,18 @@ msgid "List All"
 msgstr ""
 
 
-#: domainapp.fixture.scenarios.RecreateSimpleObjects#lookup()
+#: org.apache.isis.applib.fixturescripts.FixtureScript#localName
+msgid "Local Name"
+msgstr ""
+
+
 #: org.apache.isis.applib.fixturescripts.FixtureScript#lookup()
 #: org.apache.isis.applib.services.bookmark.BookmarkHolderActionContributions#lookup()
 msgid "Lookup"
 msgstr ""
 
 
+#: domainapp.dom.modules.simple.SimpleObject#name
 #: domainapp.dom.modules.simple.SimpleObjects#create(java.lang.String)
 #: domainapp.dom.modules.simple.SimpleObjects#findByName(java.lang.String)
 msgid "Name"
@@ -82,6 +112,16 @@ msgstr ""
 
 #: domainapp.dom.modules.simple.SimpleObject#title()
 msgid "Object: {name}"
+msgstr ""
+
+
+#: domainapp.dom.app.homepage.HomePageViewModel#objects
+msgid "Objects"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixtures.FixtureType#OTHER
+msgid "Other"
 msgstr ""
 
 
@@ -123,7 +163,6 @@ msgid "Run Fixture Script"
 msgstr ""
 
 
-#: domainapp.fixture.scenarios.RecreateSimpleObjects
 #: org.apache.isis.applib.fixturescripts.FixtureScript
 msgid "Script"
 msgstr ""
@@ -135,14 +174,33 @@ msgid "Script-specific parameters (if any).  The format depends on the script im
 msgstr ""
 
 
+#: domainapp.dom.modules.simple.SimpleObjects#title()
+msgid "Simple Objects"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToReadingTranslations()
+msgid "Switch To Reading Translations"
+msgstr ""
+
+
+#: org.apache.isis.core.runtime.services.i18n.po.TranslationServicePoMenu#switchToWritingTranslations()
+msgid "Switch To Writing Translations"
+msgstr ""
+
+
+#: org.apache.isis.applib.fixturescripts.FixtureScript#type
+msgid "Type"
+msgstr ""
+
+
 #: domainapp.dom.modules.simple.SimpleObject#updateName()
 msgid "Update Name"
 msgstr ""
 
 
-#: domainapp.fixture.scenarios.RecreateSimpleObjects#withDiscoverability()
-#: org.apache.isis.applib.fixturescripts.FixtureScript#withDiscoverability()
-msgid "With Discoverability"
+#: domainapp.dom.modules.simple.SimpleObject
+msgid "name"
 msgstr ""
 
 

@@ -33,7 +33,7 @@ public class AboutPage extends PageAbstract {
 
     public AboutPage(final PageParameters parameters) {
         super(parameters, null, ComponentType.ABOUT);
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
         addChildComponents(themeDiv, null);
     }
 

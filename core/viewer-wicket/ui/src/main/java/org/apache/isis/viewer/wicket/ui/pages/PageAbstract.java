@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
+import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
@@ -81,7 +81,7 @@ import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.components.actionprompt.ActionPromptModalWindow;
-import org.apache.isis.viewer.wicket.ui.components.widgets.navbar.BrandName;
+import org.apache.isis.viewer.wicket.ui.components.widgets.favicon.Favicon;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -110,7 +110,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     private static final String ID_ACTION_PROMPT_MODAL_WINDOW = "actionPromptModalWindow";
     
     private static final String ID_PAGE_TITLE = "pageTitle";
-    
+
+    private static final String ID_FAVICON = "favicon";
+
     public static final String ID_MENU_LINK = "menuLink";
 
     /**
@@ -168,6 +170,8 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
             getSession().bind();
             
             setTitle(title);
+
+            add(new Favicon(ID_FAVICON));
 
             themeDiv = new WebMarkupContainer(ID_THEME);
             add(themeDiv);
@@ -234,7 +238,6 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
         addOrReplace(new Label(ID_PAGE_TITLE, title != null? title: applicationName));
     }
 
-
     private Class<? extends Page> getSignInPage() {
         return pageClassRegistry.getPageClass(PageType.SIGN_IN);
     }
@@ -268,7 +271,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addBootLint(final IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+        response.render(BootlintHeaderItem.INSTANCE);
     }
 
     private boolean isModernBrowser() {
@@ -340,9 +343,9 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     /**
      * Convenience for subclasses
      */
-    protected void addBookmarkedPages() {
+    protected void addBookmarkedPages(final MarkupContainer container) {
         Component bookmarks = getComponentFactoryRegistry().createComponent(ComponentType.BOOKMARKED_PAGES, ID_BOOKMARKED_PAGES, getBookmarkedPagesModel());
-        themeDiv.add(bookmarks);
+        container.add(bookmarks);
         bookmarks.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {

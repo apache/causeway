@@ -51,14 +51,21 @@ public class FormGroup extends WebMarkupContainer {
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
 
-        FeedbackMessages feedbackMessages = formComponent.getFeedbackMessages();
+        Attributes.addClass(tag, "form-group");
 
-        if (feedbackMessages.hasMessage(FeedbackMessage.ERROR)) {
-            Attributes.addClass(tag, "has-error");
-        } else if (feedbackMessages.hasMessage(FeedbackMessage.WARNING)) {
-            Attributes.addClass(tag, "has-warning");
-        } else if (feedbackMessages.hasMessage(FeedbackMessage.SUCCESS)) {
-            Attributes.addClass(tag, "has-success");
+        applyFeedbackClasses(tag, formComponent);
+    }
+
+    protected void applyFeedbackClasses(ComponentTag tag, FormComponent<?> formComponent) {
+        FeedbackMessages feedbackMessages = formComponent.getFeedbackMessages();
+        for (FeedbackMessage feedbackMessage : feedbackMessages) {
+            if (feedbackMessage.getLevel() == FeedbackMessage.ERROR) {
+                Attributes.addClass(tag, "has-error");
+            } else if (feedbackMessage.getLevel() == FeedbackMessage.WARNING) {
+                Attributes.addClass(tag, "has-warning");
+            } else if (feedbackMessage.getLevel() == FeedbackMessage.SUCCESS) {
+                Attributes.addClass(tag, "has-success");
+            }
         }
     }
 }

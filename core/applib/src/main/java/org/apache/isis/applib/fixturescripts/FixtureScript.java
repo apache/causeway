@@ -188,10 +188,11 @@ public abstract class FixtureScript
     /**
      * Path of the parent of this script (if any), with trailing {@value #PATH_SEPARATOR}.
      */
-    @PropertyLayout(hidden = Where.EVERYWHERE)
+    @Programmatic
     public String getParentPath() {
         return parentPath;
     }
+    @Programmatic
     public void setParentPath(final String parentPath) {
         this.parentPath = parentPath;
     }
@@ -233,6 +234,8 @@ public abstract class FixtureScript
     public boolean isDiscoverable() {
         return discoverability == Discoverability.DISCOVERABLE;
     }
+
+    @Programmatic
     public FixtureScript withDiscoverability(final Discoverability discoverability) {
         this.discoverability = discoverability;
         return this;
@@ -515,10 +518,13 @@ public abstract class FixtureScript
         public <T extends FixtureScript> T executeChildT(final FixtureScript callingFixtureScript, final String localNameOverride, final T childFixtureScript) {
 
             childFixtureScript.setParentPath(callingFixtureScript.pathWith(""));
+            childFixtureScript.withTracing(callingFixtureScript.tracePrintStream); // cascade down
+
             if(localNameOverride != null) {
                 childFixtureScript.setLocalName(localNameOverride);
             }
             callingFixtureScript.getContainer().injectServicesInto(childFixtureScript);
+
             executeChildIfNotAlready(childFixtureScript);
 
             return childFixtureScript;
@@ -827,6 +833,10 @@ public abstract class FixtureScript
      */
     protected <T> T wrap(final T domainObject) {
         return wrapperFactory.wrap(domainObject);
+    }
+
+    protected <T> T wrap(final T domainObject, final WrapperFactory.ExecutionMode executionMode) {
+        return wrapperFactory.wrap(domainObject, executionMode);
     }
 
     /**

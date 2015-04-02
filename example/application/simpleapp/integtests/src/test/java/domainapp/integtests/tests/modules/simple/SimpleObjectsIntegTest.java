@@ -18,12 +18,6 @@
  */
 package domainapp.integtests.tests.modules.simple;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.dom.modules.simple.SimpleObjects;
-import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
-import domainapp.integtests.tests.SimpleAppIntegTest;
-
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,9 +28,14 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-
+import domainapp.dom.modules.simple.SimpleObject;
+import domainapp.dom.modules.simple.SimpleObjects;
+import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
+import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -49,6 +48,8 @@ public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
     FixtureScripts fixtureScripts;
     @Inject
     SimpleObjects simpleObjects;
+    @Inject
+    DomainObjectContainer container;
 
     public static class ListAll extends SimpleObjectsIntegTest {
 

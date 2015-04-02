@@ -21,25 +21,29 @@ package org.apache.isis.core.metamodel.facets.members.order.annotprop;
 
 import java.util.Properties;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacetAbstract;
 
 public class MemberOrderFacetProperties extends MemberOrderFacetAbstract {
 
-    public MemberOrderFacetProperties(Properties properties, FacetHolder holder) {
-        this(name(properties), sequence(properties), holder);
+    public MemberOrderFacetProperties(
+            final Properties properties,
+            final TranslationService translationService,
+            final FacetHolder holder) {
+        this(name(properties), sequence(properties), translationService, holder);
     }
 
-    private static String sequence(Properties properties) {
+    private static String sequence(final Properties properties) {
         return properties.getProperty("sequence");
     }
 
-    private static String name(Properties properties) {
+    private static String name(final Properties properties) {
         return properties.getProperty("name");
     }
 
-    private MemberOrderFacetProperties(final String name, final String sequence, final FacetHolder holder) {
-        super(name, sequence, holder);
+    private MemberOrderFacetProperties(final String name, final String sequence, final TranslationService translationService, final FacetHolder holder) {
+        super(name, sequence, translationService, holder);
     }
     
 }

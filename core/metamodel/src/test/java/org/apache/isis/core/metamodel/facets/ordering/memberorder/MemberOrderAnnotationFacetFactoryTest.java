@@ -22,23 +22,65 @@ package org.apache.isis.core.metamodel.facets.ordering.memberorder;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import org.hamcrest.Description;
+import org.jmock.Expectations;
+import org.jmock.api.Action;
+import org.jmock.api.Invocation;
+import org.junit.Rule;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetAnnotation;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetFactory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private MemberOrderFacetFactory facetFactory;
 
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+
+    TranslationService mockTranslationService;
+
+    ServicesInjector mockServicesInjector;
+
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+
+        context.checking(new Expectations() {{
+            allowing(mockTranslationService).translate(with(any(String.class)), with(any(String.class)));
+            will(new Action() {
+                @Override
+                public Object invoke(final Invocation invocation) throws Throwable {
+                    return invocation.getParameter(1);
+                }
+
+                @Override
+                public void describeTo(final Description description) {
+                    description.appendText("Returns parameter #1");
+                }
+            });
+        }});
+
+
         facetFactory = new MemberOrderFacetFactory();
+        facetFactory.setServicesInjector(mockServicesInjector);
+
     }
 
     @Override

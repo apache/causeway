@@ -252,6 +252,7 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
     
             final IsisInjectModule isisModule = newIsisModule(deploymentType, isisConfigurationBuilder);
             final Injector injector = Guice.createInjector(isisModule, newIsisWicketModule());
+            initWicketComponentInjection(injector);
             injector.injectMembers(this);
 
             if (requestCycleListenerForIsis instanceof WebRequestCycleForIsis) {
@@ -263,8 +264,6 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             this.getMarkupSettings().setStripWicketTags(determineStripWicketTags(configuration));
 
             getDebugSettings().setAjaxDebugModeEnabled(determineAjaxDebugModeEnabled(configuration));
-
-            initWicketComponentInjection(injector);
 
             // must be done after injected componentFactoryRegistry into the app itself
             buildCssBundle();

@@ -173,10 +173,10 @@
             <artifactId>javassist</artifactId>
         </dependency>
 
-	    <dependency>
+        <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
-		    <scope>provided</scope>
+            <artifactId>geronimo-servlet_3.0_spec</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Email Notification Service -->
@@ -210,6 +210,13 @@
             <version>1.1.1</version>
         </dependency>
         <!-- Email Notification Service -->
+        
+        <!-- Axon Event Bus Service -->
+        <dependency>
+            <groupId>org.axonframework</groupId>
+            <artifactId>axon-core</artifactId>
+            <version>2.4</version>
+        </dependency>
 
     </dependencies>
 </project>

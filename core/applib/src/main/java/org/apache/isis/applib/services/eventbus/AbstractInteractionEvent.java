@@ -87,14 +87,13 @@ public abstract class AbstractInteractionEvent<S> extends AbstractDomainEvent<S>
         }
     }
 
-    private Phase phase;
 
     /**
      * @deprecated - use {@link #getEventPhase()} instead.
      */
     @Deprecated
     public Phase getPhase() {
-        return phase;
+        return Phase.from(getEventPhase());
     }
 
     /**
@@ -102,7 +101,7 @@ public abstract class AbstractInteractionEvent<S> extends AbstractDomainEvent<S>
      */
     @Deprecated
     public void setPhase(Phase phase) {
-        this.phase = phase;
+        setEventPhase(Phase.from(phase));
     }
     //endregion
 

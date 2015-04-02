@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.resource.CssResourceReference;
 
 import org.apache.isis.applib.filter.Filter;
@@ -83,7 +84,7 @@ public class CollectionContentsAsSummaryFactory extends ComponentFactoryAbstract
 
     @Override
     public IModel<String> getTitleLabel() {
-        return Model.of("Summary");
+        return new ResourceModel("CollectionContentsAsSummaryFactory.Summary", "Summary");
     }
 
     @Override

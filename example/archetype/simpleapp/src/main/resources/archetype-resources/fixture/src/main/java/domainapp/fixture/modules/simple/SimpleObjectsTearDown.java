@@ -29,7 +29,7 @@ public class SimpleObjectsTearDown extends FixtureScript {
 
     @Override
     protected void execute(ExecutionContext executionContext) {
-        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"SimpleObject${symbol_escape}"");
+        isisJdoSupport.executeUpdate("delete from simple.${symbol_escape}"SimpleObject${symbol_escape}"");
     }
 
 

@@ -19,15 +19,12 @@
 
 package org.apache.isis.applib.fixtures.switchuser;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
-
 /**
  * Implement if require {@link SwitchUserService} to be injected into fixture.
- * 
- * <p>
- * Most fixtures will subclass from {@link AbstractFixture} which does indeed
- * implement this interface.
+ *
+ * @deprecated - use instead OverrideUserService
  */
+@Deprecated
 public interface SwitchUserServiceAware {
 
     void setService(SwitchUserService switchUserService);

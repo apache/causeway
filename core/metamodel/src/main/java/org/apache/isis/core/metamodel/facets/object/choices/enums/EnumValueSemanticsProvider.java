@@ -25,6 +25,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.util.Enums;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -115,8 +116,9 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
 
     @Override
     protected String titleString(final Object object, final Localization localization) {
+        final TranslationService translationService = getDependencyInjector().lookupService(TranslationService.class);
+
         if (titleMethod != null) {
-            final TranslationService translationService = getDependencyInjector().lookupService(TranslationService.class);
             // sadness: same as in TranslationFactory
             final String translationContext = titleMethod.getDeclaringClass().getName() + "#" + titleMethod.getName() + "()";
 
@@ -135,7 +137,11 @@ public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemantic
             }
         }
 
-        return object.toString();
+        // simply translate the enum constant's name
+        Enum<?> objectAsEnum = (Enum<?>) object;
+        final String translationContext = object.getClass().getName() + "#" + objectAsEnum.name();
+        final String friendlyNameOfEnum = Enums.getFriendlyNameOf(objectAsEnum.name());
+        return translationService.translate(translationContext, friendlyNameOfEnum);
     }
 
     @Override

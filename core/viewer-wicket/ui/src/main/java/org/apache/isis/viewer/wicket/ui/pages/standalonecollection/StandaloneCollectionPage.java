@@ -43,7 +43,7 @@ public class StandaloneCollectionPage extends PageAbstract {
         super(PageParametersUtils.newPageParameters(), actionNameFrom(model), ComponentType.STANDALONE_COLLECTION);
         addChildComponents(themeDiv, model);
 
-        addBookmarkedPages();
+        addBookmarkedPages(themeDiv);
     }
 
     private static String actionNameFrom(final EntityCollectionModel model) {

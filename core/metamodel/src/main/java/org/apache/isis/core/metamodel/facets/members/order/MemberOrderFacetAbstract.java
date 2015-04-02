@@ -20,13 +20,14 @@
 package org.apache.isis.core.metamodel.facets.members.order;
 
 import com.google.common.base.Strings;
-
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 
 public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstract implements MemberOrderFacet {
+
 
     public static Class<? extends Facet> type() {
         return MemberOrderFacet.class;
@@ -34,15 +35,37 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
 
     private final String name;
     private final String sequence;
+    private final TranslationService translationService;
 
-    public MemberOrderFacetAbstract(final String name, final String sequence, final FacetHolder holder) {
+    public MemberOrderFacetAbstract(
+            final String name,
+            final String sequence,
+            final TranslationService translationService,
+            final FacetHolder holder) {
         super(type(), holder);
-        this.name = valueElse(name, "");
+        this.translationService = translationService;
+        this.name = translatedValueElse(name, "");
         this.sequence = valueElse(sequence, "1");
     }
 
-    private static String valueElse(final String name, final String string) {
-        return !Strings.isNullOrEmpty(name) ? name : string;
+    private String translatedValueElse(final String name, final String defaultValue) {
+        final boolean nullOrEmpty = Strings.isNullOrEmpty(name);
+        if (nullOrEmpty) {
+            return defaultValue;
+        } else {
+            final IdentifiedHolder identifiedHolder = (IdentifiedHolder) getFacetHolder();
+            final String context = identifiedHolder.getIdentifier().getClassName();
+            return translationService.translate(context, name);
+        }
+    }
+
+    private static String valueElse(final String name, final String defaultValue) {
+        final boolean nullOrEmpty = Strings.isNullOrEmpty(name);
+        if (nullOrEmpty) {
+            return defaultValue;
+        } else {
+            return name;
+        }
     }
 
     @Override

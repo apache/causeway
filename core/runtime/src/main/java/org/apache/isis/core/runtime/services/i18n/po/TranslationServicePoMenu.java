@@ -112,6 +112,54 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
+    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {
+        public SwitchToReadingTranslationsDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    @Action(
+            domainEvent = SwitchToReadingTranslationsDomainEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-book"
+    )
+    @MemberOrder(sequence="500.500.3")
+    public void switchToReadingTranslations() {
+        translationService.toggleMode();
+    }
+    public boolean hideSwitchToReadingTranslations() {
+        return translationService.getMode().isRead();
+    }
+
+    // //////////////////////////////////////
+
+    public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {
+        public SwitchToWritingTranslationsDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+
+    @Action(
+            domainEvent = SwitchToWritingTranslationsDomainEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-pencil"
+    )
+    @MemberOrder(sequence="500.500.4")
+    public void switchToWritingTranslations() {
+        translationService.toggleMode();
+    }
+    public boolean hideSwitchToWritingTranslations() {
+        return translationService.getMode().isWrite();
+    }
+
+    // //////////////////////////////////////
+
     @Inject
     private TranslationServicePo translationService;
 

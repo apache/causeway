@@ -16,6 +16,8 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.ui.components.widgets.bootstrap.ModalDialog;
@@ -46,5 +48,13 @@ public class ActionPromptModalWindow extends ModalDialog<Void> {
     
     public ActionPromptModalWindow(String id) {
         super(id);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(OnDomReadyHeaderItem.forScript(
+                String.format("Wicket.Event.publish(Isis.Topic.FOCUS_FIRST_ACTION_PARAMETER, '%s')", getMarkupId())));
     }
 }

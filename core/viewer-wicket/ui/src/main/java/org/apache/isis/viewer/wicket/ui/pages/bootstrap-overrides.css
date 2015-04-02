@@ -528,6 +528,10 @@ div.label-left label.control-label {
     text-align: left;
 }
 
+.actionParametersForm .label-left label.control-label {
+    padding-left: 10px;
+}
+
 div.label-top label.control-label {
     padding-left: 10px;
     padding-bottom: 4px;

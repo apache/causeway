@@ -23,8 +23,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import com.google.common.collect.Lists;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.i18n.TranslationService;
 
 /**
  * Convenience implementation of {@link ExceptionRecognizer} that loops through a list of
@@ -41,14 +44,14 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
 
-    private final List<ExceptionRecognizer> services = Lists.newArrayList();
+    private final List<ExceptionRecognizer> exceptionRecognizers = Lists.newArrayList();
 
-    public ExceptionRecognizerComposite(ExceptionRecognizer... exceptionRecognizers) {
+    public ExceptionRecognizerComposite(final ExceptionRecognizer... exceptionRecognizers) {
         this(Arrays.asList(exceptionRecognizers));
     }
     
-    public ExceptionRecognizerComposite(List<ExceptionRecognizer> exceptionRecognizers) {
-        for (ExceptionRecognizer er : exceptionRecognizers) {
+    public ExceptionRecognizerComposite(final List<ExceptionRecognizer> exceptionRecognizers) {
+        for (final ExceptionRecognizer er : exceptionRecognizers) {
             add(er);
         }
     }
@@ -63,8 +66,8 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      * an example.
      */
     @Programmatic
-    public final void add(ExceptionRecognizer ers) {
-        services.add(ers);
+    public final void add(final ExceptionRecognizer ers) {
+        exceptionRecognizers.add(ers);
     }
     
     /**
@@ -72,15 +75,17 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      * {@link ExceptionRecognizer service} that recognizes the exception. 
      */
     @Programmatic
-    public final  String recognize(Throwable ex) {
-        for (ExceptionRecognizer ers : services) {
-            String message = ers.recognize(ex);
+    public final String recognize(final Throwable ex) {
+        injectServicesIfNecessary();
+        for (final ExceptionRecognizer ers : exceptionRecognizers) {
+            final String message = ers.recognize(ex);
             if(message != null) {
                 return message;
             }
         }
         return null;
     }
+
 
     /**
      * Returns the non-<tt>null</tt> recognition of the first {@link #add(ExceptionRecognizer) add}ed
@@ -94,8 +99,9 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      * </p>
      */
     @Programmatic
-    public final Recognition recognize2(Throwable ex) {
-        for (ExceptionRecognizer ers : services) {
+    public final Recognition recognize2(final Throwable ex) {
+        injectServicesIfNecessary();
+        for (final ExceptionRecognizer ers : exceptionRecognizers) {
             if(ers instanceof ExceptionRecognizer2) {
                 final ExceptionRecognizer2 recognizer2 = (ExceptionRecognizer2) ers;
                 final Recognition recognition = recognizer2.recognize2(ex);
@@ -108,13 +114,25 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
         return Recognition.of(Category.OTHER, recognize(ex));
     }
 
+    private void injectServicesIfNecessary() {
+        if(!injected) {
+            for (final ExceptionRecognizer ers : exceptionRecognizers) {
+                if (container != null)
+                    container.injectServicesInto(ers);
+            }
+            injected = true;
+        }
+    }
+
+    private boolean injected;
+
     // //////////////////////////////////////
 
     @PostConstruct
     @Override
     @Programmatic
-    public final void init(Map<String, String> properties) {
-        for (ExceptionRecognizer ers : services) {
+    public final void init(final Map<String, String> properties) {
+        for (final ExceptionRecognizer ers : exceptionRecognizers) {
             ers.init(properties);
         }
     }
@@ -123,9 +141,16 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
     @Override
     @Programmatic
     public final void shutdown() {
-        for (ExceptionRecognizer ers : services) {
+        for (final ExceptionRecognizer ers : exceptionRecognizers) {
             ers.shutdown();
         }
     }
+
+    // //////////////////////////////////////
+
+    @Inject
+    DomainObjectContainer container;
+    @Inject
+    TranslationService translationService;
 
 }

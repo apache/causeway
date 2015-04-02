@@ -23,6 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -52,7 +53,12 @@ public abstract class EntityComponentFactoryAbstract extends ComponentFactoryAbs
             return ApplicationAdvice.DOES_NOT_APPLY;
         }
         final EntityModel entityModel = (EntityModel) model;
-        final ObjectAdapter adapter = entityModel.getObject();
+        // hit a scenario on a redirect-and-post strategy where the component is rendered not on an
+        // EntityPage but instead using a custom home page.  The hacky override in entity page (in EntityPage#onBeforeRender)
+        // is therefore not called. resulting in a concurrency exception.
+        //
+        // Therefore, we do the same processing here instead.
+        final ObjectAdapter adapter = entityModel.load(AdapterManager.ConcurrencyChecking.NO_CHECK);
         if (adapter == null) {
             // is ok;
         }
