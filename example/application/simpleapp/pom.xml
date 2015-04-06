@@ -37,10 +37,16 @@
         <isis.version>1.9.0_dn4-SNAPSHOT</isis.version>
 
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>4.0.4</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-jodatime.version>4.0.4</datanucleus-jodatime.version>
+
+        <!--<jdo-api.version>3.1-rc1</jdo-api.version>-->
+        <datanucleus-core.version>4.0.6</datanucleus-core.version>
+        <datanucleus-api-jdo.version>4.0.5</datanucleus-api-jdo.version>
         <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
-        
+        <!--<datanucleus-jdo-query.version>4.0.4</datanucleus-jdo-query.version>-->
+        <!--<datanucleus-rdbms.version>4.0.11</datanucleus-rdbms.version>-->
+
+        <!--<datanucleus-jodatime.version>4.0.6</datanucleus-jodatime.version>-->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -357,7 +363,6 @@
                 <artifactId>simpleapp-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>
