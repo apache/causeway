@@ -154,7 +154,7 @@
                             <dependency>
                                 <groupId>org.apache.isis.example.application</groupId>
                                 <artifactId>simpleapp-dom</artifactId>
-                                <version>${isis.version}</version>
+                                <version>1.9.0_dn4-SNAPSHOT</version>
                             </dependency>
                             <!--
                             ... workaround to avoid conflict with plexus-default
