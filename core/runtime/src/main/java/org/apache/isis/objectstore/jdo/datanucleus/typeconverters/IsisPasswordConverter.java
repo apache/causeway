@@ -16,32 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
+package org.apache.isis.objectstore.jdo.datanucleus.typeconverters;
 
-import org.apache.isis.applib.value.DateTime;
-import org.datanucleus.store.rdbms.mapping.java.ObjectMapping;
+import org.datanucleus.store.types.converters.TypeConverter;
+import org.apache.isis.applib.value.Password;
 
-public class IsisDateTimeMapping extends ObjectMapping {
+public class IsisPasswordConverter implements TypeConverter<Password, String>{
 
-    private final IsisDateTimeConverter dateConverter = new IsisDateTimeConverter();
-    
-    public IsisDateTimeMapping() {
-        
-    }
-    
-    //TODO: Configure mapping
-    
+    private static final long serialVersionUID = 1L;
+
     @Override
-    public Class<?> getJavaType() {
-        return org.apache.isis.applib.value.DateTime.class;
+    public String toDatastoreType(final Password memberValue) {
+        return memberValue != null
+                ? memberValue.getPassword()
+                : null;
     }
 
-    protected Long objectToLong(Object object) {
-        return dateConverter.toDatastoreType((DateTime) object);
-    }
-
-    protected Object longToObject(Long datastoreValue) {
-        return dateConverter.toMemberType(datastoreValue);
+    @Override
+    public Password toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? new Password(datastoreValue)
+                : null;
     }
 
 }
