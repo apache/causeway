@@ -136,6 +136,10 @@
                 </dependency>
                 <dependency>
                     <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-jodatime</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.datanucleus</groupId>
                     <artifactId>datanucleus-api-jdo</artifactId>
                 </dependency>
             </dependencies>
