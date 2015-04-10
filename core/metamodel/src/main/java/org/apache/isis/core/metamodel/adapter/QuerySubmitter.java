@@ -38,6 +38,6 @@ public interface QuerySubmitter extends Injectable {
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    public <T> ObjectAdapter firstMatchingQuery(Query<T> query);
+    <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
 }

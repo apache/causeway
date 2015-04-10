@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system.session;
 
-import com.google.common.eventbus.EventBus;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -48,7 +47,7 @@ public interface IsisSession extends SessionScopedComponent {
      * {@link ApplicationScopedComponent}s to shutdown, closing any and all
      * running {@link IsisSession}s.
      */
-    public void closeAll();
+    void closeAll();
 
     // //////////////////////////////////////////////////////
     // Id
@@ -57,7 +56,7 @@ public interface IsisSession extends SessionScopedComponent {
     /**
      * A descriptive identifier for this {@link IsisSession}.
      */
-    public String getId();
+    String getId();
 
     // //////////////////////////////////////////////////////
     // Authentication Session
@@ -67,7 +66,7 @@ public interface IsisSession extends SessionScopedComponent {
      * Returns the {@link AuthenticationSession} representing this user for this
      * {@link IsisSession}.
      */
-    public AuthenticationSession getAuthenticationSession();
+    AuthenticationSession getAuthenticationSession();
 
     // //////////////////////////////////////////////////////
     // Persistence Session
@@ -81,7 +80,7 @@ public interface IsisSession extends SessionScopedComponent {
      * factory}'s
      * 
      */
-    public PersistenceSession getPersistenceSession();
+    PersistenceSession getPersistenceSession();
 
 
     
@@ -89,17 +88,17 @@ public interface IsisSession extends SessionScopedComponent {
     // Transaction (if in progress)
     // //////////////////////////////////////////////////////
 
-    public IsisTransaction getCurrentTransaction();
+    IsisTransaction getCurrentTransaction();
 
     // //////////////////////////////////////////////////////
     // Debugging
     // //////////////////////////////////////////////////////
 
-    public void debugAll(DebugBuilder debug);
+    void debugAll(DebugBuilder debug);
 
-    public void debug(DebugBuilder debug);
+    void debug(DebugBuilder debug);
 
-    public void debugState(DebugBuilder debug);
+    void debugState(DebugBuilder debug);
 
 
 }
