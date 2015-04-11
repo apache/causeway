@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.docs</groupId>
+        <artifactId>isis</artifactId>
+        <version>1.9.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.apache.isis.docs</groupId>
+    <artifactId>isis-documentation</artifactId>
+    <version>1.9.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Apache Isis Documentation</name>
+    <description>Documentation of Isis project.</description>
+    <url>http://isis.apache.org/documentation</url>
+
+    <properties>
+        <svn.scmPubUrl>https://svn.apache.org/repos/asf/isis/site/trunk/content/documentation/</svn.scmPubUrl>
+        <svn.scmPubUrlStaging>https://svn.apache.org/repos/asf/isis/site/trunk/content/staging/documentation/</svn.scmPubUrlStaging>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Configure ASCIIDOC plugin -->
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <attributes>
+                        <!-- Site Base Dir relative path -->
+                        <sitebasedir>..</sitebasedir>
+                    </attributes>
+                </configuration>
+            </plugin>
+
+            <!-- Publis documentation online -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-publish-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>scm-publish</id>
+                        <phase>site-deploy</phase>
+                        <!-- deploy documentation with maven-scm-publish-plugin -->
+                        <goals>
+                            <goal>publish-scm</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

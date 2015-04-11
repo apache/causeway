@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 
+    Heavily adapted from deltaspike's Asciidoctor website; many thanks!
+    -->
+    
+    <parent>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>14</version>
+    </parent>
+
+    <groupId>org.apache.isis.docs</groupId>
+    <artifactId>isis</artifactId>
+    <version>1.9.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>Apache Isis Docs</name>
+    <description>
+        Apache Isis Website and Documentation, written using Asciidoctor
+    </description>
+    <url>http://isis.apache.org</url>
+
+    <properties>
+        <asciidoctor.version>1.5.2</asciidoctor.version>
+        <version.isis.latest.stable>1.8.0</version.isis.latest.stable>
+        <version.isis.latest.snapshot>1.9.0-SNAPSHOT</version.isis.latest.snapshot>
+        <svn.scmPubCheckoutDirectory>${project.build.directory}/co-site</svn.scmPubCheckoutDirectory>
+    </properties>
+
+    <scm>
+        <connection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</connection>
+        <developerConnection>scm:git:https://git-wip-us.apache.org/repos/asf/isis.git</developerConnection>
+        <url>https://git-wip-us.apache.org/repos/asf/isis.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <modules>
+        <module>documentation</module>
+        <module>site</module>
+    </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- this is a hack to make mvn site not really run. -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <configuration>
+                        <skip>true</skip>
+                        <skipDeploy>true</skipDeploy>
+                    </configuration>
+                </plugin>
+
+
+                <!-- SCM Publish plugin to publish documentation and site -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-publish-plugin</artifactId>
+                    <version>1.1</version>
+                    <configuration>
+                        <content>${project.reporting.outputDirectory}</content>
+                        <pubScmUrl>scm:svn:${svn.scmPubUrlStaging}</pubScmUrl>
+                        <tryUpdate>true</tryUpdate>
+                        <skipDeletedFiles>true</skipDeletedFiles>
+                        <checkoutDirectory>${svn.scmPubCheckoutDirectory}</checkoutDirectory>
+                        <serverId>isis-site</serverId>
+                    </configuration>
+                </plugin>
+
+                <!-- Configure ASCIIDOC plugin -->
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${asciidoctor.version}</version>
+                    <configuration>
+                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+                        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+                        <sourceHighlighter>coderay</sourceHighlighter>
+                        <backend>html</backend>
+                        <templateDir>../template</templateDir>
+                        <eruby>erb</eruby>
+                        <preserveDirectories>true</preserveDirectories>
+                        <attributes>
+                            <toc>true</toc>
+                            <icons>font</icons>
+                            <latestStable>${version.isis.latest.stable}</latestStable>
+                            <latestSnapshot>${version.isis.latest.snapshot}</latestSnapshot>
+                        </attributes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <!-- we need to tweak the maven-release-plugin for GIT -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+
+                    <releaseProfiles>distribution</releaseProfiles>
+                    <preparationGoals>clean install</preparationGoals>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- Profile used to publish documentation and site to production URL -->
+            <id>production</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-scm-publish-plugin</artifactId>
+                            <version>1.1</version>
+                            <configuration>
+                                <pubScmUrl>scm:svn:${svn.scmPubUrl}</pubScmUrl>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
