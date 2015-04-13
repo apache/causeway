@@ -141,8 +141,10 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
     @Override
     public void debugData(final DebugBuilder debug) {
         int count = 1;
-        for (final Oid oid : this) {
-            final ObjectAdapter adapter = getAdapter(oid);
+        final Map<Oid, ObjectAdapter> copyForDebug = Maps.newHashMap(adapterByOidMap);
+        for (final Map.Entry<Oid, ObjectAdapter> entry : copyForDebug.entrySet()) {
+            Oid oid = entry.getKey();
+            final ObjectAdapter adapter = entry.getValue();
             debug.append(count++, 5);
             debug.append(" '");
             debug.append(oid.toString(), 15);

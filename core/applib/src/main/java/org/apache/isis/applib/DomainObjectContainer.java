@@ -492,7 +492,7 @@ public interface DomainObjectContainer {
      * @param range 2 longs, specifying 0-based start and count.
      */
     @Programmatic
-    public <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
+    <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
     
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -516,7 +516,7 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     @Deprecated
-    public <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
+    <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range);
 
     /**
      * Returns all the instances of the specified type (including subtypes) that
@@ -584,7 +584,7 @@ public interface DomainObjectContainer {
      * use {@link #firstMatch(Query)} for production code.
      */
     @Programmatic
-    public <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
     
     /**
      * Returns the first instance of the specified type (including subtypes)
@@ -598,7 +598,7 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     @Deprecated
-    public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
+    <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
 
     /**
      * Returns the first instance of the specified type (including subtypes)
@@ -644,7 +644,7 @@ public interface DomainObjectContainer {
      * use {@link #uniqueMatch(Query)} for production code.
      */
     @Programmatic
-    public <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
+    <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
      * Find the only instance of the specified type (including subtypes) that
@@ -710,7 +710,7 @@ public interface DomainObjectContainer {
     //endregion
 
 
-    public static class Functions {
+    class Functions {
         public static <T> Function<T, String> titleOfUsing(final DomainObjectContainer container) {
             return new Function<T, String>() {
                 @Override

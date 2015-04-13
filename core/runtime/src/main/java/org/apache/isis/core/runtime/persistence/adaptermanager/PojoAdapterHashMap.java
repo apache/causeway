@@ -169,8 +169,10 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
     @Override
     public void debugData(final DebugBuilder debug) {
         int count = 0;
-        for (final Object pojo : adapterByPojoMap.keySet()) {
-            final ObjectAdapter object = adapterByPojoMap.get(pojo);
+        final Map<Object, ObjectAdapter> copyForDebug = Maps.newHashMap(adapterByPojoMap);
+        for (final Map.Entry<Object, ObjectAdapter> entry : copyForDebug.entrySet()) {
+            Object pojo = entry.getKey();
+            final ObjectAdapter object = entry.getValue();
             debug.append(count++ + 1, 5);
             debug.append(" '");
             debug.append(pojo.toString(), 50);
