@@ -57,7 +57,6 @@
 
     <modules>
         <module>documentation</module>
-        <module>site</module>
     </modules>
 
     <build>

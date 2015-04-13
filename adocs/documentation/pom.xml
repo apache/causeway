@@ -36,8 +36,8 @@
     <url>http://isis.apache.org/documentation</url>
 
     <properties>
-        <svn.scmPubUrl>https://svn.apache.org/repos/asf/isis/site/trunk/content/documentation/</svn.scmPubUrl>
-        <svn.scmPubUrlStaging>https://svn.apache.org/repos/asf/isis/site/trunk/content/staging/documentation/</svn.scmPubUrlStaging>
+        <svn.scmPubUrl>https://svn.apache.org/repos/asf/isis/site/trunk/content/docs/</svn.scmPubUrl>
+        <svn.scmPubUrlStaging>https://svn.apache.org/repos/asf/isis/site/trunk/content/staging/docs/</svn.scmPubUrlStaging>
     </properties>
 
     <build>
