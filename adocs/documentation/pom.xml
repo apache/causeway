@@ -42,7 +42,6 @@
 
     <build>
         <plugins>
-            <!-- Configure ASCIIDOC plugin -->
             <plugin>
                 <groupId>org.asciidoctor</groupId>
                 <artifactId>asciidoctor-maven-plugin</artifactId>
@@ -57,13 +56,13 @@
                 </executions>
                 <configuration>
                     <attributes>
-                        <!-- Site Base Dir relative path -->
+                        <!--
                         <sitebasedir>..</sitebasedir>
+                        -->
                     </attributes>
                 </configuration>
             </plugin>
 
-            <!-- Publis documentation online -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
@@ -71,7 +70,6 @@
                     <execution>
                         <id>scm-publish</id>
                         <phase>site-deploy</phase>
-                        <!-- deploy documentation with maven-scm-publish-plugin -->
                         <goals>
                             <goal>publish-scm</goal>
                         </goals>

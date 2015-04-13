@@ -73,6 +73,30 @@
                     </configuration>
                 </plugin>
 
+                <!-- Configure ASCIIDOC plugin -->
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${asciidoctor.version}</version>
+                    <configuration>
+                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
+                        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
+                        <sourceHighlighter>coderay</sourceHighlighter>
+                        <backend>html5</backend>
+                        <templateDir>../template</templateDir>
+                        <imagesDir>.</imagesDir>
+                        <!--
+                        <relativeBaseDir>true</relativeBaseDir>
+                        -->
+                        <eruby>erb</eruby>
+                        <preserveDirectories>true</preserveDirectories>
+                        <attributes>
+                            <icons>font</icons>
+                            <latestStable>${version.isis.latest.stable}</latestStable>
+                            <latestSnapshot>${version.isis.latest.snapshot}</latestSnapshot>
+                        </attributes>
+                    </configuration>
+                </plugin>
 
                 <!-- SCM Publish plugin to publish documentation and site -->
                 <plugin>
@@ -89,27 +113,6 @@
                     </configuration>
                 </plugin>
 
-                <!-- Configure ASCIIDOC plugin -->
-                <plugin>
-                    <groupId>org.asciidoctor</groupId>
-                    <artifactId>asciidoctor-maven-plugin</artifactId>
-                    <version>${asciidoctor.version}</version>
-                    <configuration>
-                        <sourceDirectory>src/main/asciidoc</sourceDirectory>
-                        <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
-                        <sourceHighlighter>coderay</sourceHighlighter>
-                        <backend>html</backend>
-                        <templateDir>../template</templateDir>
-                        <eruby>erb</eruby>
-                        <preserveDirectories>true</preserveDirectories>
-                        <attributes>
-                            <toc>true</toc>
-                            <icons>font</icons>
-                            <latestStable>${version.isis.latest.stable}</latestStable>
-                            <latestSnapshot>${version.isis.latest.snapshot}</latestSnapshot>
-                        </attributes>
-                    </configuration>
-                </plugin>
             </plugins>
         </pluginManagement>
 
