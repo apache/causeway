@@ -25,9 +25,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 
 public class LinkAndLabel implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     public static List<LinkAndLabel> positioned(
@@ -46,7 +47,7 @@ public class LinkAndLabel implements Serializable {
     private final String actionIdentifier;
     private final String cssClass;
     private final String cssClassFa;
-    private final ActionLayout.CssClassFaPosition cssClassFaPosition;
+    private final CssClassFaPosition cssClassFaPosition;
     private final ActionLayout.Position position;
 
     public LinkAndLabel(
@@ -59,7 +60,7 @@ public class LinkAndLabel implements Serializable {
             final String identifier,
             final String cssClass,
             final String cssClassFa,
-            final ActionLayout.CssClassFaPosition cssClassFaPosition,
+            final CssClassFaPosition cssClassFaPosition,
             final ActionLayout.Position position) {
         this.link = link;
         this.label = label;
@@ -81,7 +82,7 @@ public class LinkAndLabel implements Serializable {
     public String getLabel() {
         return label;
     }
- 
+
     public String getDisabledReasonIfAny() {
         return disabledReasonIfAny;
     }
@@ -93,11 +94,11 @@ public class LinkAndLabel implements Serializable {
     public boolean isBlobOrClob() {
         return blobOrClob;
     }
- 
+
     public boolean isPrototype() {
         return prototype;
     }
-    
+
     public String getActionIdentifier() {
         return actionIdentifier;
     }
@@ -110,7 +111,7 @@ public class LinkAndLabel implements Serializable {
         return cssClassFa;
     }
 
-    public ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+    public CssClassFaPosition getCssClassFaPosition() {
         return cssClassFaPosition;
     }
 

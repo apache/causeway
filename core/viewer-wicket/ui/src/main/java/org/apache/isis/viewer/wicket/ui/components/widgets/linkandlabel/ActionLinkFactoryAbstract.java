@@ -1,34 +1,24 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
+/* Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License. */
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.request.IRequestHandler;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -43,6 +33,15 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.Application;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.request.IRequestHandler;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
 public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
@@ -52,7 +51,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final String linkId,
             final ObjectAdapter objectAdapter,
             final ObjectAction action) {
-        
+
         final ActionModel actionModel = ActionModel.create(objectAdapter, action);
 
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
@@ -63,12 +62,14 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
-                if(ajaxDeferredBehaviour != null) {
+                if (ajaxDeferredBehaviour != null) {
                     ajaxDeferredBehaviour.initiate(target);
-                } else {
+                }
+                else {
                     final ActionPromptProvider promptProvider = ActionPromptProvider.Util.getFrom(getPage());
                     final ActionPrompt actionPrompt = promptProvider.getActionPrompt();
-                    ActionPromptHeaderPanel titlePanel = new ActionPromptHeaderPanel(actionPrompt.getTitleId(), actionModel);
+                    ActionPromptHeaderPanel titlePanel = new ActionPromptHeaderPanel(actionPrompt.getTitleId(),
+                            actionModel);
                     final ActionPanel actionPanel =
                             (ActionPanel) getComponentFactoryRegistry().createComponent(
                                     ComponentType.ACTION_PROMPT, actionPrompt.getContentId(), actionModel);
@@ -81,7 +82,6 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     actionPrompt.showPrompt(target);
                 }
             }
-
 
             @Override
             protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -99,7 +99,7 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             }
         };
 
-        if(ajaxDeferredBehaviour != null) {
+        if (ajaxDeferredBehaviour != null) {
             link.add(ajaxDeferredBehaviour);
         }
 
@@ -108,15 +108,17 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         return link;
     }
 
-    private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action, final ActionModel actionModel) {
+    private static AjaxDeferredBehaviour determineDeferredBehaviour(final ObjectAction action,
+            final ActionModel actionModel) {
         // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
-        if(isNoArgReturnTypeRedirect(action)) {
+        if (isNoArgReturnTypeRedirect(action)) {
             /**
              * adapted from:
+             * 
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
             return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.NEW_WINDOW) {
-                
+
                 private static final long serialVersionUID = 1L;
 
                 @Override
@@ -126,17 +128,18 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     return ActionModel.redirectHandler(value);
                 }
             };
-        } 
-        if(isNoArgReturnTypeDownload(action)) {
+        }
+        if (isNoArgReturnTypeDownload(action)) {
 
             /**
              * adapted from:
+             * 
              * @see https://cwiki.apache.org/confluence/display/WICKET/AJAX+update+and+file+download+in+one+blow
              */
             return new AjaxDeferredBehaviour(AjaxDeferredBehaviour.OpenUrlStrategy.SAME_WINDOW) {
-                
+
                 private static final long serialVersionUID = 1L;
-   
+
                 @Override
                 protected IRequestHandler getRequestHandler() {
                     final ObjectAdapter resultAdapter = actionModel.executeHandlingApplicationExceptions();
@@ -144,20 +147,20 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
                     return ActionModel.downloadHandler(value);
                 }
             };
-        } 
+        }
         return null;
     }
 
     // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
     private static boolean isNoArgReturnTypeRedirect(final ObjectAction action) {
         return action.getParameterCount() == 0 &&
-               action.getReturnType() != null && 
-               action.getReturnType().getCorrespondingClass() == java.net.URL.class;
+                action.getReturnType() != null &&
+                action.getReturnType().getCorrespondingClass() == java.net.URL.class;
     }
 
     // TODO: should unify with ActionResultResponseType (as used in ActionPanel)
     private static boolean isNoArgReturnTypeDownload(final ObjectAction action) {
-        return action.getParameterCount() == 0 && action.getReturnType() != null && 
+        return action.getParameterCount() == 0 && action.getReturnType() != null &&
                 (action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Blob.class ||
                 action.getReturnType().getCorrespondingClass() == org.apache.isis.applib.value.Clob.class);
     }
@@ -176,20 +179,20 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
-        final ActionLayout.CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
+        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position);
+        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier,
+                cssClass, cssClassFa, cssClassFaPosition, position);
     }
-
 
     // ////////////////////////////////////////////////////////////
     // Dependencies
     // ////////////////////////////////////////////////////////////
-    
+
     protected ComponentFactoryRegistry getComponentFactoryRegistry() {
-        return ((ComponentFactoryRegistryAccessor)Application.get()).getComponentFactoryRegistry();
+        return ((ComponentFactoryRegistryAccessor) Application.get()).getComponentFactoryRegistry();
     }
-    
+
     protected PageClassRegistry getPageClassRegistry() {
         return ((PageClassRegistryAccessor) Application.get()).getPageClassRegistry();
     }
