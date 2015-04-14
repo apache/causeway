@@ -83,13 +83,15 @@
                         <sourceHighlighter>coderay</sourceHighlighter>
                         <backend>html5</backend>
                         <templateDir>../template</templateDir>
-                        <imagesDir>.</imagesDir>
-                        <!--
-                        <relativeBaseDir>true</relativeBaseDir>
-                        -->
                         <eruby>erb</eruby>
                         <preserveDirectories>true</preserveDirectories>
                         <attributes>
+                            <!--
+                            in essence unsets the imagesdir attribute (the mojo hardcodes it to "images").
+                            Has unfortunate side-effect of preventing docs from overriding with own value
+                            (but any other value seems to be incompatible with github's built-in rendering anyway)
+                            -->
+                            <imagesdir/>
                             <icons>font</icons>
                             <latestStable>${version.isis.latest.stable}</latestStable>
                             <latestSnapshot>${version.isis.latest.snapshot}</latestSnapshot>
