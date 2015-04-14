@@ -20,7 +20,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,22 +34,22 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
 
     private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
-    private final ActionLayout.CssClassFaPosition position;
+    private CssClassFaPosition position;
 
-    public CssClassFaFacetAbstract(final String value, final ActionLayout.CssClassFaPosition position,
+    public CssClassFaFacetAbstract(final String value, final CssClassFaPosition position,
             final FacetHolder holder) {
         super(type(), holder, sanitize(value));
         this.position = position;
     }
 
     @Override
-    public ActionLayout.CssClassFaPosition getPosition() {
+    public CssClassFaPosition getPosition() {
         return position;
     }
 
     /**
      * Adds the optional <em>fa</em> and <em>fa-fw</em> FontAwesome classes
-     * 
+     *
      * @param value The original CSS classes defined with {@literal @}
      *            {@link org.apache.isis.applib.annotation.CssClassFa CssClassFa}
      * @return The original CSS classes plus <em>fa</em> and <em>fa-fw</em> if not already provided
@@ -75,7 +75,8 @@ public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract impl
         return CssClassFaFacet.class;
     }
 
-    @Override
+    // @Override
+    // FIXME is this method needed?
     public String cssClassFa(ObjectAdapter objectAdapter) {
         // TODO Auto-generated method stub
         return null;

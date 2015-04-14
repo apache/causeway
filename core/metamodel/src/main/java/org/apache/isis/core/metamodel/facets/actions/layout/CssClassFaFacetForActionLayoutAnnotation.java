@@ -37,7 +37,7 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
     }
 
     private CssClassFaFacetForActionLayoutAnnotation(final String value, final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {
-        super(value, position, holder);
+        super(value, null, holder);
     }
 
 }

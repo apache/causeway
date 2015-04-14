@@ -72,10 +72,8 @@ import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore
 public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     CollectionAnnotationFacetFactory facetFactory;
