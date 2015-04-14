@@ -47,6 +47,14 @@ public @interface DomainObjectLayout {
     // //////////////////////////////////////
 
     /**
+     * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+     * icon. The icon could be rendered on the left or the right of the action button
+     */
+    CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
+
+    // //////////////////////////////////////
+
+    /**
      * Description of this class, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
@@ -63,10 +71,10 @@ public @interface DomainObjectLayout {
     /**
      * The page size for instances of this class when rendered within
      * a table.
-     * 
+     *
      * <p>
      * If annotated on a collection, then the page size refers to parented collections (eg <tt>Order#lineItems</tt>).
-     * 
+     *
      * <p>
      * If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository
      * query).

@@ -17,7 +17,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
-import org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
@@ -28,20 +28,17 @@ import com.google.common.base.Strings;
 
 public class CssClassFaFacetForDomainObjectLayoutFactory extends CssClassFaFacetAbstract {
 
-    public CssClassFaFacetForDomainObjectLayoutFactory(String value, CssClassFaPosition position, FacetHolder holder) {
-        super(value, position, holder);
-        // TODO Auto-generated constructor stub
-    }
-
     public static CssClassFaFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if (domainObjectLayout == null) {
             return null;
         }
         final String cssClassFa = Strings.emptyToNull(domainObjectLayout.cssClassFa());
-        return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, holder) : null;
+        final CssClassFaPosition position = domainObjectLayout.cssClassFaPosition();
+        return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 
-    private CssClassFaFacetForDomainObjectLayoutFactory(final String value, final FacetHolder holder) {
-        super(value, null, holder);
+    private CssClassFaFacetForDomainObjectLayoutFactory(final String value, final CssClassFaPosition position,
+            final FacetHolder holder) {
+        super(value, position, holder);
     }
 }

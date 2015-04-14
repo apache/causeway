@@ -17,12 +17,15 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -57,11 +60,11 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
         super.tearDown();
     }
 
-    // FIXME joerg.rade add test for cssClassFa
     @DomainObjectLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
-            cssClassFa = "star",
+            cssClassFa = "foo",
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -76,7 +79,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     @ViewModelLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
-            cssClassFa = "star",
+            cssClassFa = "foo",
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -261,7 +265,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
 
                 final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
-                Assert.assertTrue(facetImpl.value().contains("star"));
+                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
                 expectNoMethodsRemoved();
             }
@@ -294,7 +299,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 assertTrue(facet instanceof CssClassFaFacetForViewModelLayoutAnnotation);
 
                 final CssClassFaFacetForViewModelLayoutAnnotation facetImpl = (CssClassFaFacetForViewModelLayoutAnnotation) facet;
-                Assert.assertTrue(facetImpl.value().contains("star"));
+                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
 
                 expectNoMethodsRemoved();
             }

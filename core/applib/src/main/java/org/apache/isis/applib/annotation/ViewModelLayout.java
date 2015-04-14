@@ -25,13 +25,13 @@ import java.lang.annotation.Target;
 
 /**
  * Layout hints for view models.
- * 
+ *
  * <p>
  * This is intended for use with UI/application-layer view models that are specified as such through either the
  * {@link org.apache.isis.applib.annotation.ViewModel} annotation or by implementing the
  * {@link org.apache.isis.applib.ViewModel} interface.
  * </p>
- * 
+ *
  * <p>
  * Note that the attributes are the same as {@link org.apache.isis.applib.annotation.DomainObjectLayout}; it captures
  * the same information. This annotation is provided for symmetry; most view models will be annotated with just
@@ -59,6 +59,14 @@ public @interface ViewModelLayout {
     // //////////////////////////////////////
 
     /**
+     * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+     * icon. The icon could be rendered on the left or the right of the action button
+     */
+    CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
+
+    // //////////////////////////////////////
+
+    /**
      * Description of this class, eg to be rendered in a tooltip.
      */
     String describedAs() default "";
@@ -75,10 +83,10 @@ public @interface ViewModelLayout {
     /**
      * The page size for instances of this class when rendered within
      * a table.
-     * 
+     *
      * <p>
      * If annotated on a collection, then the page size refers to parented collections (eg <tt>Order#lineItems</tt>).
-     * 
+     *
      * <p>
      * If annotated on a type, then the page size refers to standalone collections (eg as returned from a repository
      * query).
