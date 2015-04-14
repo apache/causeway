@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
@@ -30,12 +30,12 @@ public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacet
 
     public static CssClassFaFacet create(final Properties properties, final FacetHolder holder) {
         final String cssClassFa = cssClassFa(properties);
-        ActionLayout.CssClassFaPosition position = cssClassFaPosition(properties);
+        CssClassFaPosition position = cssClassFaPosition(properties);
         return cssClassFa != null ? new CssClassFaFacetOnActionFromLayoutProperties(cssClassFa, position, holder) : null;
     }
 
     private CssClassFaFacetOnActionFromLayoutProperties(final String cssClass,
-            final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {
+            final CssClassFaPosition position, final FacetHolder holder) {
         super(cssClass, null, holder);
     }
 
@@ -46,13 +46,13 @@ public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacet
         return Strings.emptyToNull(properties.getProperty("cssClassFa"));
     }
 
-    private static ActionLayout.CssClassFaPosition cssClassFaPosition(final Properties properties) {
+    private static CssClassFaPosition cssClassFaPosition(final Properties properties) {
         if (properties == null) {
             return null;
         }
         String cssClassFaPosition = Strings.emptyToNull(properties.getProperty("cssClassFaPosition"));
         return cssClassFaPosition != null
-                ? ActionLayout.CssClassFaPosition.valueOf(cssClassFaPosition.toUpperCase())
-                : ActionLayout.CssClassFaPosition.LEFT;
+                ? CssClassFaPosition.valueOf(cssClassFaPosition.toUpperCase())
+                : CssClassFaPosition.LEFT;
     }
 }

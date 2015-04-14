@@ -28,7 +28,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
@@ -80,19 +80,19 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
 
     private List<LinkAndLabel> linkAndLabels;
-    
+
     protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
         super(id, new ListOfLinksModel(links));
 
         this.linkAndLabels = getModel().getObject();
-        
+
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
         addOrReplace(container);
-        
+
         container.setOutputMarkupId(true);
-        
+
         setOutputMarkupId(true);
-        
+
         final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, this.linkAndLabels) {
 
             private static final long serialVersionUID = 1L;
@@ -100,7 +100,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
             @Override
             protected void populateItem(ListItem<LinkAndLabel> item) {
                 final LinkAndLabel linkAndLabel = item.getModelObject();
-                
+
                 final AbstractLink link = linkAndLabel.getLink();
 
                 final String itemTitle = first(linkAndLabel.getDisabledReasonIfAny(), linkAndLabel.getDescriptionIfAny());
@@ -126,7 +126,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
                 final String cssClassFa = linkAndLabel.getCssClassFa();
                 if(!Strings.isNullOrEmpty(cssClassFa)) {
-                    final ActionLayout.CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
+                    final CssClassFaPosition position = linkAndLabel.getCssClassFaPosition();
                     viewTitleLabel.add(new CssClassFaBehavior(cssClassFa, position));
                 }
 

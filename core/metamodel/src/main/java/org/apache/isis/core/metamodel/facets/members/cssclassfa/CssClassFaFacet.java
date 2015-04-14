@@ -18,7 +18,6 @@
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
 import org.apache.isis.applib.annotation.CssClassFaPosition;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
@@ -37,14 +36,4 @@ public interface CssClassFaFacet extends SingleStringValueFacet {
      * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
      */
     CssClassFaPosition getPosition();
-
-    /**
-     * return custom CSS (if any) for provided {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter object}.
-     *
-     * @param objectAdapter - to evaluate. May be <tt>null</tt> in exceptional circumstances (specifically: the
-     *            {@link org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson#asJson(org.apache.isis.core.metamodel.spec.ObjectSpecification)}
-     *            which generates <tt>xxx.layout.json</tt> for a spec without recourse to any given object).
-     */
-    public String cssClassFa(final ObjectAdapter objectAdapter);
-
 }
