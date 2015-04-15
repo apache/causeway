@@ -27,10 +27,8 @@ License
 Apache Isis is licensed under ALv2.
 See the LICENSE file for the full license text.
 
-Publish procedure
+One time configuration
 -----------------
-
-To publish the documentation at [Isis Site](http://isis.apache.org/) you have do the following steps:
 
 Put the following information in your ~/.m2/settings.xml file
 
@@ -40,12 +38,23 @@ Put the following information in your ~/.m2/settings.xml file
       <password><YOUR_PASSWORD></password>
     </server>
 
-To publish to [staging area](http://isis.apache.org/staging/documentation), run:
 
-    mvn clean site-deploy 
+Publish procedure
+-----------------
 
-To publish to [production area](http://isis.apache.org/documentation), run:
+To publish the documentation at [Isis Site](http://isis.apache.org/) you have do the following steps:
 
-    mvn clean site-deploy -Pproduction
+To publish to [staging server](http://isis.staging.apache.org/docs), run:
 
-After log in to <https://cms.apache.org/isis/publish> and click on the `Submit` button.
+    mvn clean site-deploy
+
+Then log in to <https://cms.apache.org/isis/publish> and click on the `Submit` button.
+
+
+Preview procedure
+-----------------
+Note that it is also possible to push to a ["preview" area](http://isis.staging.apache.org/preview/docs) on the staging server;
+in general you can skip this unless you want to double-check your edits first:
+
+    mvn clean site-deploy -Ppreview
+

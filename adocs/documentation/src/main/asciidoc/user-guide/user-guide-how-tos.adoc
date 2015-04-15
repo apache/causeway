@@ -58,9 +58,10 @@ include::user-guide-how-tos-drop-downs-and-defaults.adoc[leveloffset=+1]
 include::user-guide-how-tos-triggering-events.adoc[leveloffset=+1]
 
 
-## Idioms and Patterns
 
-include::user-guide-how-tos-patterns.adoc[leveloffset=+1]
+## Tips n Tricks
+
+include::user-guide-how-tos-tips-n-tricks.adoc[leveloffset=+1]
 
 
 
@@ -69,9 +70,11 @@ include::user-guide-how-tos-patterns.adoc[leveloffset=+1]
 include::user-guide-how-tos-error-handling.adoc[leveloffset=+1]
 
 
+
 ## i18n
 
 include::user-guide-how-tos-i18n.adoc[leveloffset=+1]
+
 
 
 ## Multi-tenancy
@@ -79,14 +82,12 @@ include::user-guide-how-tos-i18n.adoc[leveloffset=+1]
 include::user-guide-how-tos-multi-tenancy.adoc[leveloffset=+1]
 
 
+
 ## Persistence Lifecycle
 
 include::user-guide-how-tos-persistence-lifecycle.adoc[leveloffset=+1]
 
 
-## Programming Model
-
-include::user-guide-how-tos-programming-model.adoc[leveloffset=+1]
 
 
 

@@ -28,6 +28,7 @@
         <groupId>org.apache</groupId>
         <artifactId>apache</artifactId>
         <version>14</version>
+        <relativePath/>
     </parent>
 
     <groupId>org.apache.isis.docs</groupId>
@@ -108,7 +109,7 @@
                     <version>1.1</version>
                     <configuration>
                         <content>${project.reporting.outputDirectory}</content>
-                        <pubScmUrl>scm:svn:${svn.scmPubUrlStaging}</pubScmUrl>
+                        <pubScmUrl>scm:svn:${svn.scmPubUrl}</pubScmUrl>
                         <tryUpdate>true</tryUpdate>
                         <skipDeletedFiles>true</skipDeletedFiles>
                         <checkoutDirectory>${svn.scmPubCheckoutDirectory}</checkoutDirectory>
@@ -140,8 +141,7 @@
 
     <profiles>
         <profile>
-            <!-- Profile used to publish documentation and site to production URL -->
-            <id>production</id>
+            <id>preview</id>
             <build>
                 <pluginManagement>
                     <plugins>
@@ -150,7 +150,7 @@
                             <artifactId>maven-scm-publish-plugin</artifactId>
                             <version>1.1</version>
                             <configuration>
-                                <pubScmUrl>scm:svn:${svn.scmPubUrl}</pubScmUrl>
+                                <pubScmUrl>scm:svn:${svn.scmPubUrlPreview}</pubScmUrl>
                             </configuration>
                         </plugin>
                     </plugins>

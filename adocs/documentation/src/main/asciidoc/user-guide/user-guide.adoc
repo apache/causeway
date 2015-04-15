@@ -11,7 +11,7 @@ include::user-guide-core-concepts.adoc[leveloffset=+1]
 
 ## How-tos
 
-include::user-guide-howtos.adoc[leveloffset=+1]
+include::user-guide-how-tos.adoc[leveloffset=+1]
 
 
 ## Reference
@@ -36,7 +36,7 @@ include::user-guide-restful-viewer.adoc[leveloffset=+1]
 
 ## Configuration and Deployment
 
-include::user-guide-config.adoc[leveloffset=+1]
+include::user-guide-config-and-deployment.adoc[leveloffset=+1]
 
 
 ## Isis Addons (Modules)
@@ -46,7 +46,7 @@ include::user-guide-isis-addons.adoc[leveloffset=+1]
 
 ## Integrating with other Systems
 
-include::user-guide-integrating.adoc[leveloffset=+1]
+include::user-guide-integrating-with-other-systems.adoc[leveloffset=+1]
 
 
 ## Extending
@@ -54,7 +54,7 @@ include::user-guide-integrating.adoc[leveloffset=+1]
 include::user-guide-extending.adoc[leveloffset=+1]
 
 
-## Trouble Shooting
+## Troubleshooting
 
-include::user-guide-trouble-shooting.adoc[leveloffset=+1]
+include::user-guide-troubleshooting.adoc[leveloffset=+1]
 
