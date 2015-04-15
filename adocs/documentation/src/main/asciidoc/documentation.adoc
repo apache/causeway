@@ -5,8 +5,6 @@
 :toc: right
 :numbered:
 
-Finding your way around:
-
 ifdef::env-github[]
 [TIP]
 ----
@@ -15,6 +13,8 @@ You are browsing this file on Github.
 For the links below, replace the `.html` with `.adoc` to find the original source (otherwise they will 404).
 ----
 endif::[]
+
+Finding your way around:
 
 * Introducing Isis
 ** link:introducing-apache-isis/isis-in-pictures/isis-in-pictures.html[Isis in Pictures]

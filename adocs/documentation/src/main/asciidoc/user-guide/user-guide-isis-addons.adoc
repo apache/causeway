@@ -1,14 +1,44 @@
-= User Guide: Reference: Value Types
+= User Guide: Isis Addons (not ASF)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 NOTE: TODO
 
+WARNING: Note that Isis addons, while maintained by Isis committers, are not part of the ASF.
 
-## JDK
+## Command Service (persistence)
 
-## JodaTime
+### API
+### Isis addons implementation  (not ASF)
 
-## Isis Applib
+## Background Command Service
 
+### API
+### Background Execution
+### Isis addons implementation (not ASF)
+
+## Auditing
+
+### Auditing API
+### Isis addons implementation (not ASF)
+
+
+## Publishing Service
+
+### API
+### Isis addons implementation (not ASF)
+### Event Serializer per RO Spec (out-of-date)
+
+## Other Isis Addons
+
+### Developer Utilities (not ASF)
+### Docx Mail merge (not ASF)
+### Excel download/upload (not ASF)
+### Fake Data (not ASF)
+### Poly (not ASF)
+### Security (not ASF)
+### Session Logger (not ASF)
+### Settings (not ASF)
+### String interpolator (not ASF)
+### Tags (not ASF)

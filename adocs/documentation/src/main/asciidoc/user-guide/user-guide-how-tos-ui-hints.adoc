@@ -17,12 +17,20 @@ NOTE: TODO
 
 ### Object CSS Styling
 
-
 ## Names and Descriptions
 
 NOTE: see also i18n (TODO: convert to link)
 
+### Name/descr. of an object
+
+### Name/descr. of a property
+
+### Name/descr. of a collection
+
+### Name/descr. of an action
+
 ### Action Parameters
+
 
 
 ## Layout
@@ -32,4 +40,16 @@ NOTE: see also i18n (TODO: convert to link)
 ### Dynamic layouts
 
 ### Application menu layout
+
+
+
+## Standardized font-awesome icons and CSS
+
+Use the following settings in isis.properties to apply CSS and font-awesome icons to object members (properties, collections and actions) based on their names.
+
+[source]
+----
+isis.reflector.facet.cssClassFa.patterns=\
+isis.reflector.facet.cssClass.patterns=\
+----
 

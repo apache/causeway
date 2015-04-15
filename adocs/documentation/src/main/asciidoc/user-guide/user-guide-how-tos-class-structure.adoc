@@ -5,6 +5,69 @@
 
 NOTE: TODO
 
+
+
+
+
+## Class Definition
+
+Classes are defined both to Isis and (if any entity) also to JDO/DataNucleus.
+
+
+
+
+We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then reason about all the classes in that package/namespace as a single unit.
+
+In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
+
+[NOTE]
+====
+As of 1.9.0-SNAPSHOT, all the IsisAddons modules (not ASF) define their own (database) schemas.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable( ...
+        schema = "isissecurity",
+        table = "ApplicationUser")
+public class ApplicationUser ... { ... }
+----
+
+and
+
+[source,java]
+----
+@javax.jdo.annotations.PersistenceCapable( ...
+        schema = "isisaudit",
+        table="AuditEntry")
+public class AuditEntry ... { ... }
+----
+
+This results in CREATE TABLE statements such as:
+
+[source,sql]
+----
+CREATE TABLE isissecurity."ApplicationUser" (
+    ...
+)
+----
+
+and
+
+[source,sql]
+----
+CREATE TABLE isisaudit."AuditEntry" (
+    ...
+)
+----
+
+If you don't want to use schemas, then note that you can override the `@PersistenceCapable` annotation by providing XML annotations (`mappings.jdo` files).
+====
+
+
+
+
 ## Property
 
 
@@ -34,6 +97,8 @@ The annotations for mapping value types tend to be different for properties vs a
 ====
 
 
+
+
 ## Collection
 
 
@@ -45,6 +110,8 @@ Or, actually, you can, because that is a valid mapping supported by JDO/DataNucl
 
 The workaround is to mark the collection as `@Programmatic`, as described in <<Ignoring Methods>>.  This ensures that the collection is ignored by Isis.
 ===
+
+
 
 ## Actions
 
@@ -69,6 +136,8 @@ The workaround is to mark the collection as `@Programmatic`, as described in <<I
 ### Mapping BigDecimals
 
 ### Mapping Blobs
+
+
 
 
 

@@ -21,6 +21,10 @@ include::user-guide-reference-domain-services.adoc[leveloffset=+1]
 
 include::user-guide-reference-domain-services.adoc[leveloffset=+1]
 
+## Applib Utility Classes
+
+include::user-guide-reference-domain-services.adoc[leveloffset=+1]
+
 ## Convenience Superclasses
 
 include::user-guide-reference-convenience-superclasses.adoc[leveloffset=+1]
