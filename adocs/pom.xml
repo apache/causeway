@@ -85,6 +85,7 @@
                         <templateDir>../template</templateDir>
                         <eruby>erb</eruby>
                         <preserveDirectories>true</preserveDirectories>
+                        <relativeBaseDir>true</relativeBaseDir>
                         <attributes>
                             <!--
                             in essence unsets the imagesdir attribute (the mojo hardcodes it to "images").
@@ -92,6 +93,7 @@
                             (but any other value seems to be incompatible with github's built-in rendering anyway)
                             -->
                             <imagesdir/>
+                            <toc>right</toc>
                             <icons>font</icons>
                             <latestStable>${version.isis.latest.stable}</latestStable>
                             <latestSnapshot>${version.isis.latest.snapshot}</latestSnapshot>

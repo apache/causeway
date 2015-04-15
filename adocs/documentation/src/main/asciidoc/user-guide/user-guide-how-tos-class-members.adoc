@@ -1,0 +1,104 @@
+= User Guide: How-tos: Class Members
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+NOTE: TODO
+
+## Property
+
+
+### Value vs Reference Types
+
+
+The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in <<Mapping Value Types>> provides a handy reference for the each.
+
+### Optional Properties
+
+
+### Mapping String (Length)
+
+### Mapping JODA Dates
+
+### Mapping BigDecimals
+
+### Mapping Blobs
+
+### Mapping Passwords
+
+
+[NOTE]
+.Lazy Loading
+====
+
+====
+
+
+## Collection
+
+
+[NOTE]
+====
+While Isis support collections of references, the framework (currently) does not support collections of values. That is, it isn't possible to define a collection of type `Set<String>`.
+
+Or, actually, you can, because that is a valid mapping supported by JDO/DataNucleus .  However, Isis has no default visualization.
+
+The workaround is to mark the collection as `@Programmatic`, as described in <<Ignoring Methods>>.  This ensures that the collection is ignored by Isis.
+===
+
+## Actions
+
+[NOTE]
+====
+While Isis support actions whose parameters' types are scalar (values such as `String`, `int`, or references such as `Customer`), the framework (currently) does not support parameter types that are collections or maps.
+
+The workaround is to mark the collection as `@Programmatic`, as described in <<Ignoring Methods>>.  This ensures that the collection is ignored by Isis.
+====
+
+
+### Optional Action Argument
+
+## String Length Of Action Parameter
+
+## BigDecimal Precision Of Action Parameter
+
+### Mapping String (Length)
+
+### Mapping JODA Dates
+
+### Mapping BigDecimals
+
+### Mapping Blobs
+
+
+
+## Mapping Value Types
+
+table of:
+.
+|value type
+|property
+|action parameter
+
+|string (length)
+|
+|
+
+|big decimal (precision)
+|
+|
+
+|Isis blob
+|
+|
+
+|optional
+|`@Column(allowsNull="true")`
+|`ParameterLayout(optionality=Optionality.OPTIONAL`) or `@Optional`
+
+
+## Ignoring Methods
+
+Sometimes you want to define a `public` method on a domain object that is not intended to be rendered in Isis' UI.
+
+To exclude such methods, use the `@Programmatic` annotation.

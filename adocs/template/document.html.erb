@@ -1,58 +1,44 @@
-<%#encoding:UTF-8%><!DOCTYPE html>
+<!doctype html>
+<html class="no-js" lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="deltaspike-generate-pages">
-<meta name="author" content="chm">
-<!-- No caching headers -->
-<meta http-equiv="cache-control" content="no-cache" />
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="expires" content="-1" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title><%= document.name %></title>
+    <title><%= document.name %></title>
 
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
+    <!--
+        Licensed to the Apache Software Foundation (ASF) under one
+        or more contributor license agreements.  See the NOTICE file
+        distributed with this work for additional information
+        regarding copyright ownership.  The ASF licenses this file
+        to you under the Apache License, Version 2.0 (the
+        "License"); you may not use this file except in compliance
+        with the License.  You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
+        Unless required by applicable law or agreed to in writing,
+        software distributed under the License is distributed on an
+        "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+        KIND, either express or implied.  See the License for the
+        specific language governing permissions and limitations
+        under the License.
+    -->
 
-<!-- Styles -->
-
-<link rel="shortcut icon" href="<%= (attr :sitebasedir) %>/images/favicon.ico">
-
-<!-- selected portions of the default asciidoctor-default CSS -->
-<link href="<%= (attr :_basedir) %>css/asciidoctor/font-icon-styles.css" rel="stylesheet">
-
-<script type="text/javascript" src="<%= (attr :_basedir) %>js/jquery/2.1.3/jquery.min.js"></script>
-<link href="<%= (attr :_basedir) %>css/bootstrap/3.3.4/bootstrap.min.css" rel="stylesheet">
-<script src="<%= (attr :_basedir) %>js/bootstrap/3.3.4/bootstrap.min.js"></script>
-<link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- No caching headers -->
+    <meta http-equiv="cache-control" content="no-cache" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
 
 
-<style type="text/css">
-<%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
+    <link rel="stylesheet" href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css"/>
+    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
 
-        body {
-          padding-top: 60px;
-          padding-bottom: 40px;
-        }
+    <link href="<%= (attr :_basedir) %>css/asciidoctor/stylesheets/foundation-potion.css" rel="stylesheet">
 
-       
+    <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style type="text/css">
         #forkongithub a{
             display: none;
             background:#090;
@@ -110,259 +96,290 @@
                 box-shadow:4px 4px 10px rgba(0,0,0,0.8);
             }
         }
+    </style>
 
-body {
-  position: relative;
-}
+    <style>
+        body {
+          position: relative;
+        }
 
-div#toc li {
-    list-style-type: none;
-}
+        body div#toc li,
+        body div#toc2 li {
+            list-style-type: none;
+        }
 
-div#toc li.active-region:before {
-    content: "\00BB \0020";
-    margin-left: -12px;
-}
+        div#doc-content {
+            margin-top: 30px;
+        }
 
-div#toc li a.active {
-    color: red;
-}
+        body div#toc li.active-region:before,
+        body div#toc2 li.active-region:before {
+            content: "\00BB \0020";
+            margin-left: -12px;
+        }
 
-div#toc li.active-region li.active-region {
-    border-left: none;
-}
+        body div#toc li a.active,
+        body div#toc2 li a.active {
+            color: red;
+        }
 
-div#toc ul {
-    -webkit-padding-start: 20px;
-}
+        body div#toc.toc,
+        body div#toc.toc2 {
+            position: fixed;
+            left: auto;
+            padding-top: 120px;
+            z-index: auto;
+            background-color: white;
+            border-left-color: #eee;
+            border-left-style: solid;
+            border-right: none;
+        }
+    </style>
 
-.imageblock .title {
-    padding-bottom: 30px;
-}
+</head>
+<body>
 
-div#toc {
-    position: fixed;
-    top: 20px;
-    height: 2000px;
-    padding-top: 120px;
-    padding-right: 10px;
-    border-left-color: #eee;
-    border-left-style: solid;
-}
-
-h4 {
-    font-size: 22px;
-}
-
-h5 {
-    font-size: 20px;
-    font-style: italic;
-}
-</style>
-
-    <!-- courtesy of http://codepo8.github.io/css-fork-on-github-ribbon/ -->
     <span id="forkongithub">
         <a href="https://github.com/apache/isis">Fork me on GitHub</a>
     </span>
-    
-    
-</head>
 
-<body>
+<div class="row">
 
-    <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container">
-        <a class="navbar-brand" href="<%= (attr :sitebasedir) %>/index.html">Apache Isis&trade;</a>
-        <ul class="nav navbar-nav">
-
-            <li class="active dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Demos<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="<%= (attr :sitebasedir) %>/intro/elevator-pitch/isis-in-pictures.html">Screenshots</a></li>
-                <li><a href="<%= (attr :sitebasedir) %>/intro/tutorials/screencasts.html">Screencasts&nbsp;<img src="<%= (attr :sitebasedir) %>/images/tv_show-25.png"></a></li>
-                <li><a href="<%= (attr :sitebasedir) %>/intro/powered-by/powered-by.html">Powered by</a></li>
-                <li><a href="http://isisdemo.mmyco.co.uk/" target="_blank">Online Demo</a></li>
-              </ul>
-            </li>
-
-            <li><a href="<%= (attr :sitebasedir) %>/documentation">Documentation</a></li>
-
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Downloads<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="<%= (attr :sitebasedir) %>/intro/getting-started/simpleapp-archetype.html">Isis (Maven archetype)</a></li>
-                <li><a href="<%= (attr :sitebasedir) %>/download.html">Isis (downloads)</a></li>
-                <li><a href="http://www.isisaddons.org" target="_blank">Isis Add-ons (not ASF)</a></li>
-              </ul>
-            </li>
-
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Help<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="<%= (attr :sitebasedir) %>/support.html">Mailing Lists</a></li>
-                <li><a href="http://isis.markmail.org/search/?q=" target="_blank">Mailing List Archives</a></li>
-                <li><a href="https://issues.apache.org/jira/browse/ISIS" target="_blank">JIRA</a></li>
-                <li><a href="http://github.com/apache/isis" target="_blank">Github mirror</a></li>
-                <li><a href="http://stackoverflow.com/questions/tagged/isis" target="_blank">Stack Overflow</a></li>
-                <li><a href="<%= (attr :sitebasedir) %>/contributors/contributing.html">How to contribute</a></li>
-              </ul>
-            </li>
-
-            <li class="dropdown navbar-right">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">@ASF<b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="http://www.apache.org/" target="_blank">Apache Homepage <i class="icon-share-alt"></i></a>
+    <div class="fixed contain-to-grid">
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1>
+                        <a href="<%= (attr :sitebasedir) %>/index.html">Apache Isis&trade;</a>
+                    </h1>
                 </li>
-                <li>
-                  <a href="http://www.apache.org/licenses/" target="_blank">Licenses <i class="icon-share-alt"></i></a>
-                </li>
-                <li>
-                  <a href="http://www.apache.org/security/" target="_blank">Security <i class="icon-share-alt"></i></a>
-                </li>
-                <li>
-                  <a href="http://www.apache.org/foundation/sponsorship.html" target="_blank">Sponsorship <i class="icon-share-alt"></i></a>
-                </li>
-                <li>
-                  <a href="http://www.apache.org/foundation/thanks.html">Thanks <i class="icon-share-alt"></i></a>
-                </li>
-                <li>
-                  <a href="{{base}}more-thanks.html">More thanks <i class="icon-share-alt"></i></a>
-                </li>
-              </ul>
-            </li>
-        </ul>
+                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+            </ul>
 
-        <FORM class="searchbox navbar-form navbar-right" id="searchbox_012614087480249044419:dn-q5gtwxya" action="http://www.google.com/cse">
-            <div class="form-group">
-                <input type="hidden" name="cx" value="012614087480249044419:dn-q5gtwxya">
-                <INPUT type="hidden" name="cof" value="FORID:0">
-                <INPUT class="form-control" name="q" type="text" placeholder="Search">
-            </div>
-        </FORM>
+            <section class="top-bar-section">
+                <ul class="right">
 
-      </div>
+                    <li class="has-form">
+                       <FORM class="searchbox navbar-form navbar-right" id="searchbox_012614087480249044419:dn-q5gtwxya" action="http://www.google.com/cse">
+                        <div class="row collapse">
+                            <input type="hidden" name="cx" value="012614087480249044419:dn-q5gtwxya">
+                            <INPUT type="hidden" name="cof" value="FORID:0">
+                            <INPUT class="form-control" name="q" type="text" placeholder="Search">
+                        </div>
+                    </FORM>
+                     </li>
 
-  </nav>
+                </ul>
 
-  
+                <!-- Left Nav Section -->
+                <ul class="left">
 
-  <div class="container">
+                    <li class="has-dropdown">
+                      <a href="#" >Demos</b></a>
+                      <ul class="dropdown">
+                        <li><a href="<%= (attr :sitebasedir) %>/intro/elevator-pitch/isis-in-pictures.html">Screenshots</a></li>
+                        <li><a href="<%= (attr :sitebasedir) %>/intro/tutorials/screencasts.html">Screencasts&nbsp;<img src="<%= (attr :sitebasedir) %>/images/tv_show-25.png"></a></li>
+                        <li><a href="<%= (attr :sitebasedir) %>/intro/powered-by/powered-by.html">Powered by</a></li>
+                        <li><a href="http://isisdemo.mmyco.co.uk/" target="_blank">Online Demo</a></li>
+                      </ul>
+                    </li>
 
-    <div class="row">
-      <div class="col-md-12">
-        <div class="page-title">
-          <h1><%= document.name %></h1>
-        </div>
-      </div>
+                    <li><a href="<%= (attr :sitebasedir) %>/documentation">Documentation</a></li>
+
+                    <li class="has-dropdown">
+                      <a href="#">Downloads</a>
+                      <ul class="dropdown">
+                        <li><a href="<%= (attr :sitebasedir) %>/intro/getting-started/simpleapp-archetype.html">Isis (Maven archetype)</a></li>
+                        <li><a href="<%= (attr :sitebasedir) %>/download.html">Isis (downloads)</a></li>
+                        <li><a href="http://www.isisaddons.org" target="_blank">Isis Add-ons (not ASF)</a></li>
+                      </ul>
+                    </li>
+
+                    <li class="has-dropdown">
+                      <a href="#">Help</a>
+                      <ul class="dropdown">
+                        <li><a href="<%= (attr :sitebasedir) %>/support.html">Mailing Lists</a></li>
+                        <li><a href="http://isis.markmail.org/search/?q=" target="_blank">Mailing List Archives</a></li>
+                        <li><a href="https://issues.apache.org/jira/browse/ISIS" target="_blank">JIRA</a></li>
+                        <li><a href="http://github.com/apache/isis" target="_blank">Github mirror</a></li>
+                        <li><a href="http://stackoverflow.com/questions/tagged/isis" target="_blank">Stack Overflow</a></li>
+                        <li><a href="<%= (attr :sitebasedir) %>/contributors/contributing.html">How to contribute</a></li>
+                      </ul>
+                    </li>
+
+                    <li class="has-dropdown">
+                      <a href="#" >@ASF</a>
+                      <ul class="dropdown">
+                        <li>
+                          <a href="http://www.apache.org/" target="_blank">Apache Homepage <i class="icon-share-alt"></i></a>
+                        </li>
+                        <li>
+                          <a href="http://www.apache.org/licenses/" target="_blank">Licenses <i class="icon-share-alt"></i></a>
+                        </li>
+                        <li>
+                          <a href="http://www.apache.org/security/" target="_blank">Security <i class="icon-share-alt"></i></a>
+                        </li>
+                        <li>
+                          <a href="http://www.apache.org/foundation/sponsorship.html" target="_blank">Sponsorship <i class="icon-share-alt"></i></a>
+                        </li>
+                        <li>
+                          <a href="http://www.apache.org/foundation/thanks.html">Thanks <i class="icon-share-alt"></i></a>
+                        </li>
+                        <li>
+                          <a href="{{base}}more-thanks.html">More thanks <i class="icon-share-alt"></i></a>
+                        </li>
+                      </ul>
+                    </li>
+
+                </ul>
+
+            </section>
+        </nav>
     </div>
-    <div class="row">
-      <div class="col-md-8">
+</div>
+
+<div class="row">
+    <div class="large-8 medium-8 columns">
+
         <div id="doc-content">
           <%= document.content %>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div id="toc" class="<%= attr 'toc-class', 'toc' %>">
-          <%= converter.convert_with_options @document, 'outline', :toclevels => 4  %>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
+
         <hr>
         <footer>
-          <p>
-          Copyright &copy; 2010~2015 The Apache Software Foundation, Licensed under the Apache License, Version 2.0.
+          <p class="small">
+          Copyright &copy; 2010~2015 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
           <br/>
-          Apache, the Apache feather logo, Apache Isis, and the Apache Isis project logo are trademarks of The Apache Software Foundation.
+          Apache, the Apache feather logo, Apache&nbsp;Isis, and the Apache&nbsp;Isis project logo are all trademarks of The&nbsp;Apache&nbsp;Software&nbsp;Foundation.
           </p>
         </footer>
-      </div>
+
     </div>
-  </div>
 
-  
-    <script type="text/javascript">
+    <div class="large-4 medium-4 columns">
+        <!-- the 'hide' class is removed by Javascript -->
+        <div id="toc" class="<%= attr 'toc-class', 'toc2' %> hide">
+          <%= converter.convert_with_options @document, 'outline', :toclevels => 4  %>
+        </div>
+    </div>
+</div>
 
-// Cache selectors
-var lastId,
-    topMenu = $("div#toc ul"),
-    topMenuHeight = 60,
-    // All list items
-    menuItems = topMenu.find("a"),
-    // Anchors corresponding to menu items
-    scrollItems = menuItems.map(function(){
-      var item = $($(this).attr("href"));
-      if (item.length) { return item; }
-    });
 
-// Bind click handler to menu items
-// so we can get a fancy scroll animation
-menuItems.click(function(e){
-  var href = $(this).attr("href"),
-      offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
-  $('html, body').stop().animate({ 
-      scrollTop: offsetTop
-  }, 300);
-  e.preventDefault();
-});
+    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
+    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
 
-// Bind to scroll
-$(  window ).scroll(function(){
 
-   // Get container scroll position
-   var fromTop = $(this).scrollTop()+topMenuHeight;
-  
-   //console.log("fromTop = " + fromTop);  
-   
-   // Get id of current scroll item
-   var cur = scrollItems.map(function(){
-     if ($(this).offset().top < fromTop)
-       return this;
-   });
+<script type="text/javascript">
+      $(document).foundation();
 
-   // Get the id of the current element
-   cur = cur[cur.length-1];
+      $(document).ready(function(){
+        // Cache selectors
+        var lastId,
+            topMenu = $("div#toc ul"),
+            topMenuHeight = 70,
 
-   //console.log("cur = " + cur);  
+            menuItems = topMenu.find("a"),
+            menuItemsHrefs = menuItems.map(function(){
+              var item = $($(this).attr("href"));
+              if (item.length) { return item; }
+            });
 
-   var id = cur && cur.length ? cur[0].id : "";
+        // Bind click handler to menu items to scroll animation
+        menuItems.click(function(e){
+          var href = $(this).attr("href"),
+              offsetTop = href === "#" ? 0 : $(href).offset().top-topMenuHeight+1;
+          $('html, body').stop().animate({
+              scrollTop: offsetTop
+          }, 300);
 
-   console.log("id = " + id + ", lastId = "  + lastId);  
-   
-   if (lastId !== id && id) {
-       lastId = id;
-       // Set/remove active class
-       menuItems
-         .removeClass("active");
+          e.preventDefault();
+        });
 
-       menuItems
-         .parents()
-         .removeClass("active-region");
-         
-       menuItems
-         .parents("ul").hide();
-       
-       menuItems
-         .filter("[href=#"+id+"]")
-         .addClass("active");
-         
-       menuItems
-         .filter("[href=#"+id+"]")
-         .parents("ul").show();
+        // Bind to scroll of window
+        $(  window ).scroll(function(){
 
-       menuItems
-         .filter("[href=#"+id+"]")
-         .parent().children("ul").show();
+           // Get container scroll position
+           var fromTop = $(this).scrollTop()+topMenuHeight;
 
-       menuItems
-         .filter("[href=#"+id+"]")
-         .parents("li").addClass("active-region");
+           var cur = menuItemsHrefs.map(function(){
+             if ($(this).offset().top < fromTop)
+               return this;
+           });
 
-     }                   
-});
+           // Get the id of the current element
+           cur = cur[cur.length-1];
 
-    </script>
-    </body>
+           var id = cur && cur.length ? cur[0].id : "";
+
+           //console.log("id = " + id + ", lastId = "  + lastId);
+
+           if (lastId !== id && id) {
+               scrollTo(id);
+           }
+        });
+
+        scrollTo = function(id) {
+              lastId = id;
+
+              menuItems
+                .removeClass("active");
+
+              menuItems
+                .parents()
+                .removeClass("active-region");
+
+              menuItems
+                .parents("ul").hide();
+
+              menuItems
+                .filter("[href=#"+id+"]")
+                .addClass("active");
+
+              menuItems
+                .filter("[href=#"+id+"]")
+                .parents("ul").show();
+
+              menuItems
+                .filter("[href=#"+id+"]")
+                .parent().children("ul").show();
+
+              menuItems
+                .filter("[href=#"+id+"]")
+                .parents("li").addClass("active-region");
+
+        }
+      menuItems
+        .removeClass("active");
+
+      menuItems
+        .parents()
+        .removeClass("active-region");
+
+        var syncMenuItem;
+        if(window.location.hash!=="") {
+            var menuItemFor = $.grep(menuItems, function(e) {
+                return e.hash === window.location.hash;
+            });
+            console.log(menuItemFor);
+            if(menuItemFor.length === 1) {
+                syncMenuItem = menuItemFor[0];
+            }
+        }
+
+        if(!syncMenuItem){
+            syncMenuItem = menuItems[0];
+        }
+
+        $("#toc").removeClass("hide");
+
+        $(syncMenuItem).click();
+
+      });
+
+
+</script>
+
+
+</body>
 </html>
