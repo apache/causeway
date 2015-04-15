@@ -7,9 +7,15 @@
 
 Finding your way around:
 
+ifdef::env-github[]
+WARNING: You are browsing this file on Github.
+
+For the links below, replace the `.html` with `.adoc` to find the original source.
+endif::[]
+
 * Introducing Isis
-** link:introducing-isis/isis-in-pictures/isis-in-pictures.html[Isis in Pictures]
-** link:introducing-isis/common-use-cases/common-use-cases.html[Common Use Cases]
+** link:introducing-apache-isis/isis-in-pictures/isis-in-pictures.html[Isis in Pictures]
+** link:introducing-apache-isis/common-use-cases/common-use-cases.html[Common Use Cases]
 * Getting Started
 ** link:getting-started/archetype/simpleapp-archetype.html[SimpleApp Archetype]
 ** Development Environments

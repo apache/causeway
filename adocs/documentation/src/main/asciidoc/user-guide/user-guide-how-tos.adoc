@@ -52,3 +52,10 @@ include::user-guide-how-tos-business-rules.adoc[leveloffset=+1]
 include::user-guide-how-tos-drop-downs-and-defaults.adoc[leveloffset=+1]
 
 
+
+## Triggering Events
+
+include::user-guide-how-tos-triggering-events.adoc[leveloffset=+1]
+
+
+
