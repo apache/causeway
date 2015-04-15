@@ -8,9 +8,12 @@
 Finding your way around:
 
 ifdef::env-github[]
-WARNING: You are browsing this file on Github.
+[TIP]
+----
+You are browsing this file on Github.
 
-For the links below, replace the `.html` with `.adoc` to find the original source.
+For the links below, replace the `.html` with `.adoc` to find the original source (otherwise they will 404).
+----
 endif::[]
 
 * Introducing Isis
