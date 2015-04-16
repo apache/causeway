@@ -30,72 +30,37 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="expires" content="-1" />
 
-
-    <link rel="stylesheet" href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css"/>
+    <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
     <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
-
-    <link href="<%= (attr :_basedir) %>css/asciidoctor/stylesheets/foundation-potion.css" rel="stylesheet">
-
+    <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
     <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.css" rel="stylesheet" />
+    <!--[if lt IE 9]>
+      <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.css" rel="stylesheet" />
+    <![endif]-->
+
     <style type="text/css">
-        #forkongithub a{
-            display: none;
-            background:#090;
-            color:#fff;
-            text-decoration:none;
-            font-family:arial, sans-serif;
-            text-align:center;
-            font-weight:bold;
-            padding:5px 40px;
-            font-size:1rem;
-            line-height:2rem;
-            position:relative;
-            transition:0.5s;
+        <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
+
+        pre.CodeRay code {
+            background-color: inherit;
+            border-style: none;
         }
-        #forkongithub a:hover{
-            background:#0D0;
-            color:#fff;
-        }
-        #forkongithub a::before,
-        #forkongithub a::after{
-            content:"";width:100%;
-            display:block;
-            position:fixed;
-            top:1px;
-            left:0;
-            height:1px;
-            background:#fff;
-            z-index: 9999;
-        }
-        #forkongithub a::after{
-            bottom:1px;
-            top:auto;
-        }
-        @media screen and (min-width:768px){
-            #forkongithub{
-                position:fixed;
-                display:block;
-                top:0;
-                right:0;
-                width:250px;
-                overflow:hidden;
-                height:250px;
-                z-index: 9999;
-            }
-            #forkongithub a{
-                display:inherit;
-                width:250px;
-                position:fixed;
-                font-size:small;
-                top:40px;
-                right:-60px;
-                transform:rotate(45deg);
-                -webkit-transform:rotate(45deg);
-                -ms-transform:rotate(45deg);
-                box-shadow:4px 4px 10px rgba(0,0,0,0.8);
-            }
-        }
+    <style>
+
+    <style>
+    .github-fork-ribbon-wrapper.right {
+        position: fixed;
+    }
+    .github-fork-ribbon {
+        background: #090;
+    }
+    .github-fork-ribbon a:hover {
+        background:#0D0;
+        color:#fff;
+        font-size: 1.1em;
+    }
     </style>
 
     <style>
@@ -127,21 +92,30 @@
         body div#toc.toc2 {
             position: fixed;
             left: auto;
-            padding-top: 120px;
+            padding-top: 80px;
             z-index: auto;
             background-color: white;
             border-left-color: #eee;
             border-left-style: solid;
             border-right: none;
+            min-height: 2000px;
+        }
+    </style>
+
+    <style>
+        footer {
+            margin-top: 1000px;
         }
     </style>
 
 </head>
 <body>
 
-    <span id="forkongithub">
-        <a href="https://github.com/apache/isis">Fork me on GitHub</a>
-    </span>
+<div class="github-fork-ribbon-wrapper right" style="position: fixed;">
+    <div class="github-fork-ribbon">
+        <a href="https://github.com/apache/isis/fork">Fork me on GitHub</a>
+    </div>
+</div>
 
 <div class="row">
 
@@ -246,8 +220,8 @@
           <%= document.content %>
         </div>
 
-        <hr>
         <footer>
+          <hr>
           <p class="small">
           Copyright &copy; 2010~2015 The Apache&nbsp;Software&nbsp;Foundation, licensed under the Apache&nbsp;License,&nbsp;v2.0.
           <br/>
@@ -259,15 +233,15 @@
 
     <div class="large-4 medium-4 columns">
         <!-- the 'hide' class is removed by Javascript -->
-        <div id="toc" class="<%= attr 'toc-class', 'toc2' %> hide">
-          <%= converter.convert_with_options @document, 'outline', :toclevels => 4  %>
+        <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
+          <%= converter.convert_with_options @document, 'outline', :toclevels => 6  %>
         </div>
     </div>
 </div>
 
 
-    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
-    <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
+<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/jquery.js"></script>
+<script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
 
 
 <script type="text/javascript">
@@ -312,11 +286,11 @@
 
            var id = cur && cur.length ? cur[0].id : "";
 
-           //console.log("id = " + id + ", lastId = "  + lastId);
-
            if (lastId !== id && id) {
                scrollTo(id);
            }
+
+           window.history.pushState({}, "", window.location.origin + window.location.pathname + "#" + id);
         });
 
         scrollTo = function(id) {
@@ -370,8 +344,6 @@
         if(!syncMenuItem){
             syncMenuItem = menuItems[0];
         }
-
-        $("#toc").removeClass("hide");
 
         $(syncMenuItem).click();
 

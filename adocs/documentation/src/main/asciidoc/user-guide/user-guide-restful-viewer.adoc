@@ -3,7 +3,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
+IMPORTANT: TODO
 
 ## Features
 

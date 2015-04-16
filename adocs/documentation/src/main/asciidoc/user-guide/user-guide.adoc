@@ -4,57 +4,25 @@
 :_imagesdir: images/
 :numbered:
 
-## Core Concepts
-
 include::user-guide-core-concepts.adoc[leveloffset=+1]
-
-
-## How-tos
 
 include::user-guide-how-tos.adoc[leveloffset=+1]
 
-
-## Reference
-
 include::user-guide-reference.adoc[leveloffset=+1]
-
-
-## Testing
 
 include::user-guide-testing.adoc[leveloffset=+1]
 
-
-## Wicket Viewer
-
 include::user-guide-wicket-viewer.adoc[leveloffset=+1]
-
-
-## Restful Objects Viewer
 
 include::user-guide-restful-viewer.adoc[leveloffset=+1]
 
-
-## Configuration and Deployment
-
 include::user-guide-config-and-deployment.adoc[leveloffset=+1]
-
-
-## Isis Addons (Modules)
 
 include::user-guide-isis-addons.adoc[leveloffset=+1]
 
-
-## Integrating with other Systems
-
 include::user-guide-integrating-with-other-systems.adoc[leveloffset=+1]
 
-
-## Extending
-
 include::user-guide-extending.adoc[leveloffset=+1]
-
-
-## Troubleshooting
 
 include::user-guide-troubleshooting.adoc[leveloffset=+1]
 

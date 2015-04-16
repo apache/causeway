@@ -1,9 +1,9 @@
-= User Guide: Core Concepts: Principles
+= Principles
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
+IMPORTANT: TODO
 
 ## Domain-Driven Design
 
@@ -13,6 +13,7 @@ NOTE: TODO
 
 ## Naked Objects Pattern
 
+[TIP]
 .Object Interface Mapping
 ====
 Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http:hibernate.org[Hibernate]) maps domain entities to a database, you can think of Naked Objects as an OIM - mapping domain objects to a user interface.
@@ -24,9 +25,11 @@ Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http:hi
 
 ## Hexagonal Architecture
 
-[NOTE]
+Originally described by Alistair Cockburn, the link:http://alistair.cockburn.us/Hexagonal+architecture[Hexagonal Architecture] ...
+
+[TIP]
 ====
-The hexagonal architecture is also known as the ports-and-adapters architecture.  another name used (less frequently) is the onion architecture.
+The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture:[Ports and Adapters] architecture or (less frequently) as the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture.
 ====
 
 
