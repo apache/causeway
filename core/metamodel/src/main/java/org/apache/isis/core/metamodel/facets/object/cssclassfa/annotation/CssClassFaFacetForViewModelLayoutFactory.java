@@ -18,7 +18,7 @@
 package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
 import org.apache.isis.applib.annotation.CssClassFaPosition;
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
@@ -28,15 +28,15 @@ import com.google.common.base.Strings;
 
 public class CssClassFaFacetForViewModelLayoutFactory extends CssClassFaFacetAbstract {
 
-    public static CssClassFaFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if (domainObjectLayout == null) {
+    public static CssClassFaFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if (viewModelLayout == null) {
             return null;
         }
-        final String cssClassFa = Strings.emptyToNull(domainObjectLayout.cssClassFa());
-        final CssClassFaPosition position = domainObjectLayout.cssClassFaPosition();
-        return (CssClassFaFacet) (cssClassFa != null ? new CssClassFaFacetForViewModelLayoutAnnotation(cssClassFa,
+        final String cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
+        final CssClassFaPosition position = viewModelLayout.cssClassFaPosition();
+        return cssClassFa != null ? new CssClassFaFacetForViewModelLayoutAnnotation(cssClassFa,
                 position,
-                holder) : null);
+                holder) : null;
     }
 
     private CssClassFaFacetForViewModelLayoutFactory(final String value, final CssClassFaPosition position,

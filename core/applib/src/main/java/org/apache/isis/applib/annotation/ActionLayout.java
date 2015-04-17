@@ -1,4 +1,5 @@
-/* Licensed to the Apache Software Foundation (ASF) under one
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -13,7 +14,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License. */
+ *  under the License.
+ */
 
 package org.apache.isis.applib.annotation;
 
@@ -35,8 +37,9 @@ public @interface ActionLayout {
      * Whether (and how) this action can be bookmarked in the UI.
      *
      * <p>
-     * For bookmarkable actions, either {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT} and
-     * {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated identically).
+     *     For bookmarkable actions, either {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_ROOT}
+     *     and {@link org.apache.isis.applib.annotation.BookmarkPolicy#AS_CHILD} can be used (they are treated
+     *     identically).
      * </p>
      */
     BookmarkPolicy bookmarking() default BookmarkPolicy.NEVER;
@@ -111,9 +114,9 @@ public @interface ActionLayout {
     // //////////////////////////////////////
 
     /**
-     * For actions of domain services that can be viewed and contributed (that is, whose {@link DomainService#nature()
-     * nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW} or
-     * {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
+     * For actions of domain services that can be viewed and contributed (that is, whose
+     * {@link DomainService#nature() nature} is either {@link org.apache.isis.applib.annotation.NatureOfService#VIEW}
+     * or {@link org.apache.isis.applib.annotation.NatureOfService#VIEW_CONTRIBUTIONS_ONLY}), specifies how the
      * contribution should be implemented, as an action, as an association, or as both.
      *
      * <p>

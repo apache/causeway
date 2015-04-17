@@ -1,4 +1,5 @@
-/* Licensed to the Apache Software Foundation (ASF) under one
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -13,7 +14,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License. */
+ *  under the License.
+ */
 
 package org.apache.isis.applib.annotation;
 
@@ -33,7 +35,7 @@ import java.lang.annotation.Target;
 public @interface CssClassFa {
 
     /**
-     * @deprecated - see {@link DomainObjectLayout#cssClassFa()}, @link ActionLayout#cssClassFa()}
+     * @deprecated - see {@link DomainObjectLayout#cssClassFa(),@link ViewModelLayout#cssClassFa(), @link ActionLayout#cssClassFa()}
      */
     @Deprecated
     String value();

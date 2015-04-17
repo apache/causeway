@@ -1,4 +1,5 @@
-/* Licensed to the Apache Software Foundation (ASF) under one
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -13,7 +14,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License. */
+ *  under the License.
+ */
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
@@ -68,11 +70,12 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
-            plural = "Customers Plural Form")
+            plural = "Customers Plural Form"
+    )
     class Customer {
     }
-
-    @DomainObjectLayout()
+    @DomainObjectLayout(
+    )
     class CustomerWithDefaults {
     }
 
@@ -84,11 +87,12 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
-            plural = "Customers Plural Form")
+            plural = "Customers Plural Form"
+    )
     class CustomerViewModel {
     }
-
-    @ViewModelLayout()
+    @ViewModelLayout(
+    )
     class CustomerViewModelWithDefaults {
     }
 

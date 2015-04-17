@@ -1,4 +1,5 @@
-/* Licensed to the Apache Software Foundation (ASF) under one
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements. See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership. The ASF licenses this file
@@ -13,7 +14,8 @@
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
- * under the License. */
+ *  under the License.
+ */
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
@@ -42,11 +44,10 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorFor
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 
-public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory,
-        MetaModelValidatorRefiner, IsisConfigurationAware {
+public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract implements ContributeeMemberFacetFactory, MetaModelValidatorRefiner, IsisConfigurationAware {
+    
+    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(CssClassFa.class);
 
-    private final MetaModelValidatorForDeprecatedAnnotation validator = new MetaModelValidatorForDeprecatedAnnotation(
-            CssClassFa.class);
 
     public CssClassFaFacetOnMemberFactory() {
         super(FeatureType.ACTIONS_ONLY);
@@ -55,10 +56,6 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         CssClassFaFacet cssClassFaFacet = createFromMetadataPropertiesIfPossible(processMethodContext);
-        if (cssClassFaFacet == null) {
-            // cssClassFaFacet = validator.flagIfPresent(createFromAnnotationIfPossible(processMethodContext),
-            // processMethodContext);
-        }
         if (cssClassFaFacet == null) {
             cssClassFaFacet = createFromConfiguredRegexIfPossible(processMethodContext);
         }
@@ -83,20 +80,13 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
         return properties != null ? new CssClassFaFacetOnMemberFromProperties(properties, holder) : null;
     }
 
-    // private CssClassFaFacet createFromAnnotationIfPossible(final ProcessMethodContext processMethodContext) {
-    // final CssClassFa annotation = Annotations.getAnnotation(processMethodContext.getMethod(), CssClassFa.class);
-    // return annotation != null ? new CssClassFaFacetOnMemberAnnotation(annotation.value(), annotation.position(),
-    // processMethodContext.getFacetHolder()) : null;
-    // }
-
     // region > faIconFromPattern
 
     /**
      * The pattern matches definitions like:
      * <ul>
      * <li>methodNameRegex:cssClassFa - will render the Font Awesome icon on the left of the title</li>
-     * <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the
-     * title</li>
+     *     <li>methodNameRegex:cssClassFa:(left|right) - will render the Font Awesome icon on the specified position of the title</li>
      * </ul>
      */
     private final static Pattern FA_ICON_REGEX_PATTERN = Pattern.compile("([^:]+):(.+)");
@@ -113,10 +103,8 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
                 String rest = value.substring(idxOfSeparator + 1);
                 position = CssClassFaPosition.valueOf(rest.toUpperCase());
             }
-            return new CssClassFaFacetOnMemberFromConfiguredRegex(value, position,
-                    processMethodContext.getFacetHolder());
-        }
-        else {
+            return new CssClassFaFacetOnMemberFromConfiguredRegex(value, position, processMethodContext.getFacetHolder());
+        } else {
             return null;
         }
     }
@@ -153,8 +141,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     private static Map<Pattern, String> buildFaIconByPattern(String cssClassFaPatterns) {
         final Map<Pattern, String> faIconByPattern = Maps.newLinkedHashMap();
         if (cssClassFaPatterns != null) {
-            final StringTokenizer regexToFaIcons = new StringTokenizer(cssClassFaPatterns,
-                    ConfigurationConstants.LIST_SEPARATOR);
+            final StringTokenizer regexToFaIcons = new StringTokenizer(cssClassFaPatterns, ConfigurationConstants.LIST_SEPARATOR);
             final Map<String, String> faIconByRegex = Maps.newLinkedHashMap();
             while (regexToFaIcons.hasMoreTokens()) {
                 String regexToFaIcon = regexToFaIcons.nextToken().trim();
@@ -180,8 +167,7 @@ public class CssClassFaFacetOnMemberFactory extends FacetFactoryAbstract impleme
     // //////////////////////////////////////
 
     @Override
-    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator,
-            final IsisConfiguration configuration) {
+    public void refineMetaModelValidator(final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
         metaModelValidator.add(validator);
     }
 
