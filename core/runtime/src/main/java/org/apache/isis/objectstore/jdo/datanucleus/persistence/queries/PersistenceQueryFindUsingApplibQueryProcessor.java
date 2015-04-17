@@ -116,7 +116,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         try {
             final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
             if (cardinality == QueryCardinality.MULTIPLE) {
-                return results;
+                return Lists.newArrayList(results);
             }
             return results.isEmpty() ? Collections.emptyList() : Lists.newArrayList(results.subList(0, 1));
         } finally {
