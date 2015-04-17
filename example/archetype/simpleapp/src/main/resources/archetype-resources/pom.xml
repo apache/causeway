@@ -40,6 +40,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <assertj-core.version>2.0.0</assertj-core.version>
     </properties>
 
     <repositories>
@@ -324,6 +325,12 @@
                 <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj-core.version}</version>
             </dependency>
 
 

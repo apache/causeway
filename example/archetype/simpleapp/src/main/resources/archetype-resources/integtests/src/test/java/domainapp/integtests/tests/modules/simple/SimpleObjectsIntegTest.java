@@ -40,7 +40,7 @@ import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
 
@@ -68,10 +68,10 @@ public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
             final List<SimpleObject> all = wrap(simpleObjects).listAll();
 
             // then
-            assertThat(all.size(), is(fs.getSimpleObjects().size()));
+            assertThat(all).hasSize(fs.getSimpleObjects().size());
 
             SimpleObject simpleObject = wrap(all.get(0));
-            assertThat(simpleObject.getName(), is(fs.getSimpleObjects().get(0).getName()));
+            assertThat(simpleObject.getName()).isEqualTo(fs.getSimpleObjects().get(0).getName());
         }
 
         @Test
@@ -86,7 +86,7 @@ public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
             final List<SimpleObject> all = wrap(simpleObjects).listAll();
 
             // then
-            assertThat(all.size(), is(0));
+            assertThat(all).hasSize(0);
         }
     }
 
@@ -105,7 +105,7 @@ public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
 
             // then
             final List<SimpleObject> all = wrap(simpleObjects).listAll();
-            assertThat(all.size(), is(1));
+            assertThat(all).hasSize(1);
         }
 
         @Test

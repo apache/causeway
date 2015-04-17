@@ -32,7 +32,7 @@ import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectsTest {
 
@@ -74,8 +74,8 @@ public class SimpleObjectsTest {
             final SimpleObject obj = simpleObjects.create("Foobar");
 
             // then
-            assertThat(obj, is(simpleObject));
-            assertThat(obj.getName(), is("Foobar"));
+            assertThat(obj).isEqualTo(simpleObject);
+            assertThat(obj.getName()).isEqualTo("Foobar");
         }
 
     }
@@ -99,7 +99,7 @@ public class SimpleObjectsTest {
             final List<SimpleObject> list = simpleObjects.listAll();
 
             // then
-            assertThat(list, is(all));
+            assertThat(list).isEqualTo(all);
         }
     }
 }
