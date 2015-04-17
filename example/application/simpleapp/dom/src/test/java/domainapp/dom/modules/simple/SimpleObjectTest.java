@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectTest {
 
@@ -38,13 +38,13 @@ public class SimpleObjectTest {
         public void happyCase() throws Exception {
             // given
             String name = "Foobar";
-            assertThat(simpleObject.getName(), is(nullValue()));
+            assertThat(simpleObject.getName()).isNull();
 
             // when
             simpleObject.setName(name);
 
             // then
-            assertThat(simpleObject.getName(), is(name));
+            assertThat(simpleObject.getName()).isEqualTo(name);
         }
     }
 

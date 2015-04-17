@@ -35,7 +35,7 @@ import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
@@ -61,7 +61,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
         simpleObjectPojo = fs.getSimpleObjects().get(0);
 
-        assertThat(simpleObjectPojo, is(not(nullValue())));
+        assertThat(simpleObjectPojo).isNotNull();
         simpleObjectWrapped = wrap(simpleObjectPojo);
     }
 
@@ -74,7 +74,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
             final String name = simpleObjectWrapped.getName();
             //
             // then
-            assertThat(name, is(fs.NAMES.get(0)));
+            assertThat(name).isEqualTo(fs.NAMES.get(0));
         }
 
         @Test
@@ -97,7 +97,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
             simpleObjectWrapped.updateName("new name");
 
             // then
-            assertThat(simpleObjectWrapped.getName(), is("new name"));
+            assertThat(simpleObjectWrapped.getName()).isEqualTo("new name");
         }
 
         @Test
@@ -128,7 +128,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
             final String title = container.titleOf(simpleObjectWrapped);
 
             // then
-            assertThat(title, is("Object: " + name));
+            assertThat(title).isEqualTo("Object: " + name);
         }
     }
 }
