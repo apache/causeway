@@ -397,7 +397,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public UserMemento getUser() {
         final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
 
-        final UserAndRoleOverrides userAndRoleOverrides = overrides.get().peek();
+        final UserAndRoleOverrides userAndRoleOverrides = currentOverridesIfAny();
 
         final String username = userAndRoleOverrides != null
                 ? userAndRoleOverrides.user
@@ -411,6 +411,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
         final UserMemento user = new UserMemento(username, roleMementos);
         return user;
+    }
+
+    private UserAndRoleOverrides currentOverridesIfAny() {
+        final Stack<UserAndRoleOverrides> userAndRoleOverrides = overrides.get();
+        return !userAndRoleOverrides.empty()
+                ? userAndRoleOverrides.peek()
+                : null;
     }
 
     private static List<RoleMemento> asRoleMementos(final List<String> roles) {
