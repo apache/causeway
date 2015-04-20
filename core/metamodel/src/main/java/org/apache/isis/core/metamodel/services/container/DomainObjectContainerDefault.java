@@ -22,9 +22,13 @@ package org.apache.isis.core.metamodel.services.container;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+
 import com.google.common.base.Predicate;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RecoverableException;
@@ -345,31 +349,47 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     //region > security
 
-    private final ThreadLocal<String> overrideUser = new ThreadLocal<>();
-    private final ThreadLocal<List<String>> overrideRoles = new ThreadLocal<>();
+    static class UserAndRoleOverrides {
+        final String user;
+        final List<String> roles;
+
+        UserAndRoleOverrides(final String user) {
+            this(user, null);
+        }
+
+        UserAndRoleOverrides(final String user, final List<String> roles) {
+            this.user = user;
+            this.roles = roles;
+        }
+    }
+
+    private final ThreadLocal<Stack<UserAndRoleOverrides>> overrides =
+            new ThreadLocal<Stack<UserAndRoleOverrides>>() {
+        @Override protected Stack<UserAndRoleOverrides> initialValue() {
+            return new Stack<>();
+        }
+    };
 
     /**
      * Not API; for use by the implementation of {@link SudoService}.
      */
     @Programmatic
     public void overrideUser(final String user) {
-        this.overrideUser.set(user);
+        overrideUserAndRoles(user, null);
     }
     /**
      * Not API; for use by the implementation of {@link SudoService}.
      */
     @Programmatic
     public void overrideUserAndRoles(final String user, final List<String> roles) {
-        this.overrideUser.set(user);
-        this.overrideRoles.set(roles);
+        this.overrides.get().push(new UserAndRoleOverrides(user, roles));
     }
     /**
      * Not API; for use by the implementation of {@link SudoService}.
      */
     @Programmatic
     public void resetOverrides() {
-        this.overrideUser.set(null);
-        this.overrideRoles.set(null);
+        this.overrides.get().pop();
     }
 
     @Programmatic
@@ -377,8 +397,16 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     public UserMemento getUser() {
         final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
 
-        final String username = overrideUser.get() != null? overrideUser.get() : session.getUserName();
-        final List<String> roles = overrideRoles.get() != null ? overrideRoles.get() : session.getRoles();
+        final UserAndRoleOverrides userAndRoleOverrides = overrides.get().peek();
+
+        final String username = userAndRoleOverrides != null
+                ? userAndRoleOverrides.user
+                : session.getUserName();
+        final List<String> roles = userAndRoleOverrides != null
+                ? userAndRoleOverrides.roles != null
+                    ? userAndRoleOverrides.roles
+                    : session.getRoles()
+                : session.getRoles();
         final List<RoleMemento> roleMementos = asRoleMementos(roles);
 
         final UserMemento user = new UserMemento(username, roleMementos);

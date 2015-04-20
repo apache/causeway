@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.services.overrideuser;
+package org.apache.isis.core.runtime.services.sudo;
 
 import java.util.List;
 import java.util.concurrent.Callable;
