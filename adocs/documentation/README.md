@@ -39,6 +39,22 @@ Put the following information in your ~/.m2/settings.xml file
     </server>
 
 
+Build and Review
+----------------
+
+To build the documentation locally, simply use:
+
+    mvn site
+
+The site will be generated at `target/site/index.html`.
+
+To review, recommend running a Python server:
+
+    cd target/site
+    python -m SimpleHTTPServer
+    
+Then open the browser on [localhost:8000](http://localhost:8000/).
+
 Publish procedure
 -----------------
 
