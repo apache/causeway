@@ -1,38 +1,29 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+/* Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License. */
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
+
+import static org.hamcrest.CoreMatchers.is;
 
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.Model;
-import org.apache.isis.applib.annotation.ActionLayout;
+
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -49,8 +40,17 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
 
-import static org.hamcrest.CoreMatchers.is;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 class CssMenuItem implements Serializable {
 
@@ -71,7 +71,7 @@ class CssMenuItem implements Serializable {
         }
 
         public <T extends Page> Builder link() {
-            final AbstractLink link = new SubmitLink(ID_MENU_LINK); 
+            final AbstractLink link = new SubmitLink(ID_MENU_LINK);
             return link(link);
         }
 
@@ -122,14 +122,13 @@ class CssMenuItem implements Serializable {
             return this;
         }
 
-        public Builder withCssClassFaPosition(final ActionLayout.CssClassFaPosition position) {
+        public Builder withCssClassFaPosition(final CssClassFaPosition position) {
             cssMenuItem.setCssClassFaPosition(position);
             return this;
         }
 
         /**
-         * Returns the built {@link CssMenuItem}, associating with
-         * {@link #parent(CssMenuItem) parent} (if specified).
+         * Returns the built {@link CssMenuItem}, associating with {@link #parent(CssMenuItem) parent} (if specified).
          */
         public CssMenuItem build() {
             if (cssMenuItem.parent != null) {
@@ -158,11 +157,9 @@ class CssMenuItem implements Serializable {
     private String actionIdentifier;
     private String cssClass;
     private String cssClassFa;
-    private ActionLayout.CssClassFaPosition cssClassFaPosition;
+    private CssClassFaPosition cssClassFaPosition;
 
     private String description;
-
-
 
     /**
      * Factory method returning {@link Builder builder}.
@@ -170,7 +167,6 @@ class CssMenuItem implements Serializable {
     public static Builder newMenuItem(final String name) {
         return new Builder(name);
     }
-
 
     public void setActionIdentifier(String actionIdentifier) {
         this.actionIdentifier = actionIdentifier;
@@ -190,6 +186,7 @@ class CssMenuItem implements Serializable {
 
     /**
      * Requires a separator before it
+     *
      * @return
      */
     public boolean isSeparator() {
@@ -260,14 +257,13 @@ class CssMenuItem implements Serializable {
         return cssClassFa;
     }
 
-    public void setCssClassFaPosition(final ActionLayout.CssClassFaPosition position) {
+    public void setCssClassFaPosition(final CssClassFaPosition position) {
         this.cssClassFaPosition = position;
     }
 
-    public ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+    public CssClassFaPosition getCssClassFaPosition() {
         return cssClassFaPosition;
     }
-
 
     /**
      * Only populated if not {@link #isEnabled() enabled}.
@@ -283,6 +279,7 @@ class CssMenuItem implements Serializable {
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -292,8 +289,8 @@ class CssMenuItem implements Serializable {
     // //////////////////////////////////////////////////////////////
 
     /**
-     * Creates a {@link Builder} for a submenu item invoking an action on the provided
-     * {@link ObjectAdapterMemento target adapter}.
+     * Creates a {@link Builder} for a submenu item invoking an action on the provided {@link ObjectAdapterMemento
+     * target adapter}.
      */
     public Builder newSubMenuItem(
             final ObjectAdapterMemento targetAdapterMemento,
@@ -312,8 +309,8 @@ class CssMenuItem implements Serializable {
         // build the link
         final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(
                 targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK
-        );
-        if(linkAndLabel==null) {
+                );
+        if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given guard above
             return null;
         }
@@ -322,9 +319,9 @@ class CssMenuItem implements Serializable {
 
         final Consent usability = objectAction.isUsable(session, adapter, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         final String reasonDisabledIfAny = usability.getReason();
-        
+
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);
-        final String descriptionIfAny = describedAsFacet != null? describedAsFacet.value(): null;
+        final String descriptionIfAny = describedAsFacet != null ? describedAsFacet.value() : null;
 
         Builder builder = newSubMenuItem(actionLabel)
                 .link(link)
@@ -340,7 +337,6 @@ class CssMenuItem implements Serializable {
 
         return builder;
     }
-
 
     // //////////////////////////////////////////////////////////////
     // Build wicket components from the menu item.
@@ -364,18 +360,17 @@ class CssMenuItem implements Serializable {
             markupContainer.add(link);
             link.add(label);
 
-            if(this.description != null) {
+            if (this.description != null) {
                 label.add(new AttributeModifier("title", Model.of(description)));
             }
-            if(this.blobOrClob) {
+            if (this.blobOrClob) {
                 link.add(new CssClassAppender("noVeil"));
             }
-            if(this.prototype) {
+            if (this.prototype) {
                 link.add(new CssClassAppender("prototype"));
             }
 
-
-            if(this.cssClass != null) {
+            if (this.cssClass != null) {
                 link.add(new CssClassAppender(this.cssClass));
             }
             link.add(new CssClassAppender(this.actionIdentifier));
@@ -385,7 +380,7 @@ class CssMenuItem implements Serializable {
                 label.add(new CssClassFaBehavior(cssClassFa, getCssClassFaPosition()));
             }
 
-            if(! this.isEnabled()) {
+            if (!this.isEnabled()) {
                 link.add(new AttributeModifier("title", Model.of(this.getDisabledReason())));
                 link.add(new CssClassAppender("disabled"));
 
@@ -395,7 +390,8 @@ class CssMenuItem implements Serializable {
             // .. and hide label
             Components.permanentlyHide(markupContainer, CssMenuItem.ID_MENU_LABEL);
             return link;
-        } else {
+        }
+        else {
             // hide link...
             Components.permanentlyHide(markupContainer, ID_MENU_LINK);
             // ... and show label, along with disabled reason
@@ -412,7 +408,8 @@ class CssMenuItem implements Serializable {
         final List<CssMenuItem> subMenuItems = getSubMenuItems();
         if (subMenuItems.isEmpty()) {
             Components.permanentlyHide(menuItemMarkup, CssMenuItem.ID_SUB_MENU_ITEMS);
-        } else {
+        }
+        else {
             menuItemMarkup.add(new CssSubMenuItemsPanel(CssMenuItem.ID_SUB_MENU_ITEMS, subMenuItems));
         }
     }
@@ -423,7 +420,8 @@ class CssMenuItem implements Serializable {
         }
         if (this.hasParent()) {
             linkComponent.add(new CssClassAppender("parent"));
-        } else {
+        }
+        else {
             linkComponent.add(new CssClassAppender("top-parent"));
         }
     }
@@ -435,6 +433,5 @@ class CssMenuItem implements Serializable {
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
     }
-
 
 }

@@ -18,24 +18,25 @@ package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
-public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
+public class CssClassFaFacetForViewModelLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
-        if (domainObjectLayout == null) {
+    public static CssClassFaFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+        if (viewModelLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
+        final String cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
+        final CssClassFaPosition position = CssClassFaPosition.from(viewModelLayout.cssClassFaPosition());
+        return cssClassFa != null ? new CssClassFaFacetForViewModelLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 
-    private CssClassFacetForDomainObjectLayoutAnnotation(
-            final String value,
+    public CssClassFaFacetForViewModelLayoutAnnotation(final String value, CssClassFaPosition position,
             final FacetHolder holder) {
-        super(value, holder);
+        super(value, position, holder);
     }
 }

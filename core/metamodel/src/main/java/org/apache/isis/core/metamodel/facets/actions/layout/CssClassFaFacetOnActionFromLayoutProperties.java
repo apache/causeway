@@ -20,21 +20,24 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import java.util.Properties;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetOnActionFromLayoutProperties extends CssClassFaFacetAbstract {
 
     public static CssClassFaFacet create(final Properties properties, final FacetHolder holder) {
         final String cssClassFa = cssClassFa(properties);
-        ActionLayout.CssClassFaPosition position = cssClassFaPosition(properties);
+        CssClassFaPosition position = CssClassFaPosition.from(cssClassFaPosition(properties));
         return cssClassFa != null? new CssClassFaFacetOnActionFromLayoutProperties(cssClassFa, position, holder): null;
     }
 
-    private CssClassFaFacetOnActionFromLayoutProperties(final String cssClass, final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {
+    private CssClassFaFacetOnActionFromLayoutProperties(final String cssClass, final CssClassFaPosition position, final FacetHolder holder) {
         super(cssClass, position, holder);
     }
 

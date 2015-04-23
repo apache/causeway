@@ -20,10 +20,12 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbstract {
 
@@ -32,11 +34,11 @@ public class CssClassFaFacetForActionLayoutAnnotation extends CssClassFaFacetAbs
             return null;
         }
         final String cssClassFa = Strings.emptyToNull(actionLayout.cssClassFa());
-        ActionLayout.CssClassFaPosition cssClassFaPosition = actionLayout.cssClassFaPosition();
+        CssClassFaPosition cssClassFaPosition = CssClassFaPosition.from(actionLayout.cssClassFaPosition());
         return cssClassFa != null ? new CssClassFaFacetForActionLayoutAnnotation(cssClassFa, cssClassFaPosition, holder) : null;
     }
 
-    private CssClassFaFacetForActionLayoutAnnotation(final String value, final ActionLayout.CssClassFaPosition position, final FacetHolder holder) {
+    private CssClassFaFacetForActionLayoutAnnotation(final String value, final CssClassFaPosition position, final FacetHolder holder) {
         super(value, position, holder);
     }
 

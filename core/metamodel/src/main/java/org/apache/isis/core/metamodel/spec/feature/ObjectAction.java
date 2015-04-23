@@ -1,33 +1,29 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
+/* Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License. */
 
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
-import com.google.common.base.Functions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
@@ -52,8 +48,12 @@ import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface ObjectAction extends ObjectMember {
+import com.google.common.base.Functions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
+public interface ObjectAction extends ObjectMember {
 
     // //////////////////////////////////////////////////////
     // semantics, realTarget, getOnType
@@ -69,7 +69,6 @@ public interface ObjectAction extends ObjectMember {
      * invoked upon.
      */
     ObjectSpecification getOnType();
-
 
     boolean promptForParameters(ObjectAdapter target);
 
@@ -89,7 +88,7 @@ public interface ObjectAction extends ObjectMember {
     ObjectSpecification getReturnType();
 
     /**
-     * Returns <tt>true</tt> if the represented action returns a non-void object, 
+     * Returns <tt>true</tt> if the represented action returns a non-void object,
      * else returns false.
      */
     boolean hasReturn();
@@ -118,24 +117,24 @@ public interface ObjectAction extends ObjectMember {
     // valid
     // //////////////////////////////////////////////////////////////////
 
-    /**
+/**
      * Creates an {@link ActionInvocationContext interaction context}
      * representing an attempt to invoke this action.
-     * 
+     *
      * <p>
      * Typically it is easier to just call
      * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[])
-     * 
+     *
      * @link #isProposedArgumentSetValidResultSet(ObjectAdapter,
      *       ObjectAdapter[])}; this is provided as API for symmetry with
      *       interactions (such as {@link AccessContext} accesses) have no
      *       corresponding vetoing methods.
      */
-    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
+    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session,
+            InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
 
     /**
-     * Whether the provided argument set is valid, represented as a
-     * {@link Consent}.
+     * Whether the provided argument set is valid, represented as a {@link Consent}.
      */
     Consent isProposedArgumentSetValid(ObjectAdapter object, ObjectAdapter[] proposedArguments);
 
@@ -150,23 +149,22 @@ public interface ObjectAction extends ObjectMember {
 
     /**
      * Returns set of parameter information.
-     * 
+     *
      * <p>
      * Implementations may build this array lazily or eagerly as required.
-     * 
+     *
      * @return
      */
     List<ObjectActionParameter> getParameters();
 
     /**
-     * Returns the {@link ObjectSpecification type} of each of the
-     * {@link #getParameters() parameters}.
+     * Returns the {@link ObjectSpecification type} of each of the {@link #getParameters() parameters}.
      */
     List<ObjectSpecification> getParameterTypes();
 
     /**
      * Returns set of parameter information matching the supplied filter.
-     * 
+     *
      * @return
      */
     List<ObjectActionParameter> getParameters(
@@ -197,7 +195,6 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectAdapter[][] getChoices(ObjectAdapter target);
 
-
     // //////////////////////////////////////////////////////
     // Utils
     // //////////////////////////////////////////////////////
@@ -222,7 +219,7 @@ public interface ObjectAction extends ObjectMember {
         public static boolean returnsBlobOrClob(final ObjectAction objectAction) {
             boolean blobOrClob = false;
             final ObjectSpecification returnType = objectAction.getReturnType();
-            if(returnType != null) {
+            if (returnType != null) {
                 Class<?> cls = returnType.getCorrespondingClass();
                 if (Blob.class.isAssignableFrom(cls) || Clob.class.isAssignableFrom(cls)) {
                     blobOrClob = true;
@@ -250,7 +247,7 @@ public interface ObjectAction extends ObjectMember {
 
         public static ActionLayout.Position actionLayoutPositionOf(ObjectAction action) {
             final ActionPositionFacet layoutFacet = action.getFacet(ActionPositionFacet.class);
-            return layoutFacet != null? layoutFacet.position(): ActionLayout.Position.BELOW;
+            return layoutFacet != null ? layoutFacet.position() : ActionLayout.Position.BELOW;
         }
 
         public static String cssClassFaFor(final ObjectAction action) {
@@ -258,9 +255,9 @@ public interface ObjectAction extends ObjectMember {
             return cssClassFaFacet != null ? cssClassFaFacet.value() : null;
         }
 
-        public static ActionLayout.CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
+        public static CssClassFaPosition cssClassFaPositionFor(final ObjectAction action) {
             CssClassFaFacet facet = action.getFacet(CssClassFaFacet.class);
-            return facet != null ? facet.getPosition() : ActionLayout.CssClassFaPosition.LEFT;
+            return facet != null ? facet.getPosition() : CssClassFaPosition.LEFT;
         }
 
         public static String cssClassFor(final ObjectAction action, final ObjectAdapter objectAdapter) {
@@ -270,17 +267,19 @@ public interface ObjectAction extends ObjectMember {
 
     }
 
-
     // //////////////////////////////////////////////////////
     // Predicates
     // //////////////////////////////////////////////////////
 
     public static final class Predicates {
 
-        private Predicates(){}
+        private Predicates() {
+        }
 
-        public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
+        public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session,
+                final ObjectAdapter target, final Where where) {
+            return org.apache.isis.applib.filter.Filters
+                    .asPredicate(Filters.dynamicallyVisible(session, target, where));
         }
 
         public static Predicate<ObjectAction> withId(final String actionId) {
@@ -308,21 +307,21 @@ public interface ObjectAction extends ObjectMember {
         }
     }
 
-
     // //////////////////////////////////////////////////////
     // Filters
     // //////////////////////////////////////////////////////
 
-    
     public static final class Filters {
-        
-        private Filters(){}
+
+        private Filters() {
+        }
 
         /**
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
+        public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session,
+                final ObjectAdapter target, final Where where) {
             return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(final ObjectAction objectAction) {
@@ -337,7 +336,7 @@ public interface ObjectAction extends ObjectMember {
          */
         @Deprecated
         public static Filter<ObjectAction> withId(final String actionId) {
-            return new Filter<ObjectAction>(){
+            return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(ObjectAction objectAction) {
                     return objectAction.getId().equals(actionId);
@@ -350,12 +349,14 @@ public interface ObjectAction extends ObjectMember {
          */
         @Deprecated
         public static Filter<ObjectAction> withNoValidationRules() {
-            return new Filter<ObjectAction>(){
+            return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(final ObjectAction objectAction) {
-                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters.isA(ValidatingInteractionAdvisor.class));
+                    final List<Facet> validatingFacets = objectAction.getFacets(FacetFilters
+                            .isA(ValidatingInteractionAdvisor.class));
                     return validatingFacets.isEmpty();
-                }};
+                }
+            };
         }
 
         /**
@@ -363,7 +364,7 @@ public interface ObjectAction extends ObjectMember {
          */
         @Deprecated
         public static Filter<ObjectAction> ofType(final ActionType type) {
-            return new Filter<ObjectAction>(){
+            return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(ObjectAction oa) {
                     return oa.getType() == type;
@@ -376,51 +377,53 @@ public interface ObjectAction extends ObjectMember {
          */
         @Deprecated
         public static Filter<ObjectAction> bulk() {
-            return new Filter<ObjectAction>(){
+            return new Filter<ObjectAction>() {
 
                 @Override
                 public boolean accept(ObjectAction oa) {
-                    if( !oa.containsDoOpFacet(BulkFacet.class)) {
+                    if (!oa.containsDoOpFacet(BulkFacet.class)) {
                         return false;
                     }
                     if (oa.getParameterCount() != 0) {
                         return false;
-                    } 
-                    
+                    }
+
                     // currently don't support returning Blobs or Clobs
                     // (because haven't figured out how to rerender the current page, but also to do a download)
                     ObjectSpecification returnSpec = oa.getReturnType();
-                    if(returnSpec != null) {
+                    if (returnSpec != null) {
                         Class<?> returnType = returnSpec.getCorrespondingClass();
-                        if(returnType == Blob.class || returnType == Clob.class) {
+                        if (returnType == Blob.class || returnType == Clob.class) {
                             return false;
                         }
                     }
                     return true;
-                }};
+                }
+            };
         }
 
         @Deprecated
         public static Filter<ObjectAction> notBulkOnly() {
-            return new Filter<ObjectAction>(){
+            return new Filter<ObjectAction>() {
 
                 @Override
                 public boolean accept(ObjectAction t) {
                     BulkFacet facet = t.getFacet(BulkFacet.class);
                     return facet == null || facet.value() != Bulk.AppliesTo.BULK_ONLY;
-                }};
+                }
+            };
         }
 
         public static Filter<ObjectAction> excludeWizardActions(final ObjectSpecification objectSpecification) {
             return org.apache.isis.applib.filter.Filters.not(wizardActions(objectSpecification));
-            //return wizardActions(objectSpecification);
+            // return wizardActions(objectSpecification);
         }
 
         private static Filter<ObjectAction> wizardActions(final ObjectSpecification objectSpecification) {
             return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(ObjectAction input) {
-                    if(objectSpecification == null) {
+                    if (objectSpecification == null) {
                         return false;
                     }
                     final WizardFacet wizardFacet = objectSpecification.getFacet(WizardFacet.class);
@@ -434,15 +437,15 @@ public interface ObjectAction extends ObjectMember {
             final String assocName = association.getName();
             final String assocId = association.getId();
             return new Filter<ObjectAction>() {
-        
+
                 @Override
                 public boolean accept(ObjectAction t) {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return false;
                     }
                     final String memberOrderName = memberOrderFacet.name().toLowerCase();
-                    if(Strings.isNullOrEmpty(memberOrderName)) {
+                    if (Strings.isNullOrEmpty(memberOrderName)) {
                         return false;
                     }
                     return memberOrderName.equalsIgnoreCase(assocName) || memberOrderName.equalsIgnoreCase(assocId);
@@ -453,19 +456,21 @@ public interface ObjectAction extends ObjectMember {
         public static Filter<ObjectAction> memberOrderNotAssociationOf(final ObjectSpecification adapterSpec) {
 
             final List<ObjectAssociation> associations = adapterSpec.getAssociations(Contributed.INCLUDED);
-            final List<String> associationNames = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
-            final List<String> associationIds = Lists.transform(associations, Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
+            final List<String> associationNames = Lists.transform(associations,
+                    Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toName()));
+            final List<String> associationIds = Lists.transform(associations,
+                    Functions.compose(StringFunctions.toLowerCase(), ObjectAssociation.Functions.toId()));
 
             return new Filter<ObjectAction>() {
 
                 @Override
                 public boolean accept(ObjectAction t) {
                     final MemberOrderFacet memberOrderFacet = t.getFacet(MemberOrderFacet.class);
-                    if(memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
+                    if (memberOrderFacet == null || Strings.isNullOrEmpty(memberOrderFacet.name())) {
                         return true;
                     }
                     String memberOrderName = memberOrderFacet.name().toLowerCase();
-                    if(Strings.isNullOrEmpty(memberOrderName)) {
+                    if (Strings.isNullOrEmpty(memberOrderName)) {
                         return false;
                     }
                     return !associationNames.contains(memberOrderName) && !associationIds.contains(memberOrderName);

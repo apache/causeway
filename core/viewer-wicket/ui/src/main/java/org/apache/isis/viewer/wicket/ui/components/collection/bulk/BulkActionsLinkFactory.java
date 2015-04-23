@@ -29,6 +29,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -54,10 +55,10 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 
 public final class BulkActionsLinkFactory implements ActionLinkFactory {
-    
+
     private static final long serialVersionUID = 1L;
     private final EntityCollectionModel model;
-    
+
     private final ObjectAdapterToggleboxColumn toggleboxColumn;
 
     public BulkActionsLinkFactory(
@@ -73,24 +74,24 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
             final ObjectAdapterMemento objectAdapterMemento,
             final ObjectAction objectAction,
             final String linkId) {
-        
+
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {
-            
+
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick() {
                 final ObjectAction objectAction = actionMemento.getAction();
-                final ConcurrencyChecking concurrencyChecking = 
+                final ConcurrencyChecking concurrencyChecking =
                         ConcurrencyChecking.concurrencyCheckingFor(objectAction.getSemantics());
 
                 try {
                     final List<ObjectAdapterMemento> toggleMementosList = model.getToggleMementosList();
 
-                    final Iterable<ObjectAdapter> toggledAdapters = 
+                    final Iterable<ObjectAdapter> toggledAdapters =
                             Iterables.transform(toggleMementosList, ObjectAdapterMemento.Functions.fromMemento(concurrencyChecking));
-                    
+
                     final List<Object> domainObjects = Lists.newArrayList(Iterables.transform(toggledAdapters, ObjectAdapter.Functions.getObject()));
 
 
@@ -117,7 +118,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     ObjectAdapter lastReturnedAdapter = null;
                     int i=0;
                     for(final ObjectAdapter adapter : toggledAdapters) {
-    
+
                         int numParameters = objectAction.getParameterCount();
                         if(numParameters != 0) {
                             return;
@@ -130,7 +131,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     }
 
 
-                    
+
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();
                     final ActionModel actionModelHint = model.getActionModelHint();
@@ -140,37 +141,37 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     } else {
                         model.setObject(persistentAdaptersWithin(model.getObject()));
                     }
-                    
+
                     if(lastReturnedAdapter != null) {
-                        final ActionResultResponse resultResponse = 
+                        final ActionResultResponse resultResponse =
                                 ActionResultResponseType.determineAndInterpretResult(actionModelHint, null, lastReturnedAdapter);
                         resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
                     }
 
                 } catch(final ConcurrencyException ex) {
-                    
+
                     recover();
                     // display a warning to the user so that they know that the action wasn't performed
                     getMessageBroker().addWarning(ex.getMessage());
                     return;
 
                 } catch(final RuntimeException ex) {
-                    
+
                     final RecoverableException appEx = ActionModel.getApplicationExceptionIfAny(ex);
                     if (appEx != null) {
 
                         recover();
-                        
+
                         getMessageBroker().setApplicationError(appEx.getMessage());
-                        
+
                         // there's no need to abort the transaction, it will have already been done
-                        // (in IsisTransactionManager#executeWithinTransaction(...)). 
+                        // (in IsisTransactionManager#executeWithinTransaction(...)).
                         return;
-                    } 
+                    }
                     throw ex;
                 }
             }
-            
+
             private void recover() {
                 // resync with the objectstore
                 final List<ObjectAdapterMemento> toggleMementosList = Lists.newArrayList(model.getToggleMementosList());
@@ -178,10 +179,10 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                     // just requesting the adapter will sync the OAM's version with the objectstore
                     oam.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                 }
-                
+
                 // discard any adapters that might have been deleted
                 model.setObject(persistentAdaptersWithin(model.getObject()));
-                
+
                 // attempt to preserve the toggled adapters
                 final List<ObjectAdapter> adapters = model.getObject();
                 model.clearToggleMementosList();
@@ -211,13 +212,13 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         final String description = ObjectAction.Utils.descriptionOf(objectAction);
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, null);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
-        final ActionLayout.CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
+        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
 
         return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position);
     }
-    
-    
+
+
     ///////////////////////////////////////////////////////
     // Dependencies (from context)
     ///////////////////////////////////////////////////////

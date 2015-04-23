@@ -14,28 +14,30 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
+
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
 import com.google.common.base.Strings;
 
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
-public class CssClassFacetForDomainObjectLayoutAnnotation extends CssClassFacetAbstract {
+public class CssClassFaFacetForDomainObjectLayoutAnnotation extends CssClassFaFacetAbstract {
 
-    public static CssClassFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
+    public static CssClassFaFacet create(final DomainObjectLayout domainObjectLayout, final FacetHolder holder) {
         if (domainObjectLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(domainObjectLayout.cssClass());
-        return cssClass != null ? new CssClassFacetForDomainObjectLayoutAnnotation(cssClass, holder) : null;
+        final String cssClassFa = Strings.emptyToNull(domainObjectLayout.cssClassFa());
+        final CssClassFaPosition position = CssClassFaPosition.from(domainObjectLayout.cssClassFaPosition());
+        return cssClassFa != null ? new CssClassFaFacetForDomainObjectLayoutAnnotation(cssClassFa, position, holder) : null;
     }
 
-    private CssClassFacetForDomainObjectLayoutAnnotation(
-            final String value,
+    public CssClassFaFacetForDomainObjectLayoutAnnotation(final String value, final CssClassFaPosition position,
             final FacetHolder holder) {
-        super(value, holder);
+        super(value, position, holder);
     }
 }

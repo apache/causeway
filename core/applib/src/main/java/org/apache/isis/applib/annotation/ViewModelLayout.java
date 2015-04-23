@@ -45,11 +45,34 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ViewModelLayout {
 
-
     /**
      * Indicates the css class that a domain class (type) should have.
      */
     String cssClass() default "";
+
+    // //////////////////////////////////////
+
+    /**
+     * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
+     * domain object.
+     */
+    String cssClassFa() default "";
+
+    // //////////////////////////////////////
+
+    /**
+     * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>
+     * icon. The icon could be rendered on the left or the right of the object's title.
+     *
+     * <p>
+     *     This attribute is currently ignored by Isis viewers.
+     * </p>
+     */
+    CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
+
+    enum CssClassFaPosition {
+        LEFT, RIGHT
+    }
 
 
     // //////////////////////////////////////

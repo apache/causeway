@@ -1,21 +1,19 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
- */
+/* Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
+ * under the License. */
 
 package org.apache.isis.progmodels.dflt;
 
@@ -77,7 +75,6 @@ import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.Cho
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
-import org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation.CssClassFaFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
@@ -215,7 +212,7 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 
     public ProgrammingModelFacetsJava5() {
-        
+
         // must be first, so any Facets created can be replaced by other
         // FacetFactorys later.
         addFactory(FallbackFacetFactory.class);
@@ -234,7 +231,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
-        
+
         // come what may, we have to ignore the PersistenceCapable supertype.
         addFactory(RemoveJdoEnhancementTypesFacetFactory.class);
         // so we may as well also just ignore any 'jdo' prefixed methods here also.
@@ -251,7 +248,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(EnumFacetUsingValueFacetUsingSemanticsProviderFactory.class);
         addFactory(ActionParameterChoicesFacetDerivedFromChoicesFacetFactory.class);
         addFactory(PropertyChoicesFacetDerivedFromChoicesFacetFactory.class);
-
 
         // properties
         addFactory(PropertyAccessorFacetViaAccessorFactory.class);
@@ -314,7 +310,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ActionOrderFacetAnnotationFactory.class);
         addFactory(FieldOrderFacetAnnotationFactory.class);
         addFactory(MemberGroupLayoutFacetFactory.class);
-        
+
         addFactory(ParentedFacetSinceAggregatedAnnotationFactory.class);
         addFactory(BookmarkPolicyFacetViaBookmarkableAnnotationFactory.class);
         addFactory(HomePageFacetAnnotationFactory.class);
@@ -328,7 +324,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(DescribedAsFacetOnTypeAnnotationFactory.class);
         addFactory(DescribedAsFacetOnMemberFactory.class);
         addFactory(DescribedAsFacetOnParameterAnnotationElseDerivedFromTypeFactory.class);
-        
+
         addFactory(BigDecimalFacetOnParameterFromJavaxValidationAnnotationFactory.class);
         addFactory(BigDecimalFacetOnPropertyFromJavaxValidationDigitsAnnotationFactory.class);
 
@@ -342,7 +338,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(NotContributedFacetDerivedFromDomainServiceFacetFactory.class);
         addFactory(NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory.class);
 
-
         addFactory(HiddenFacetOnTypeAnnotationFactory.class);
         // must come after the TitleAnnotationFacetFactory, because can act as an override
         addFactory(HiddenFacetOnMemberFromPropertiesFactory.class);
@@ -352,7 +347,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after CssClassFacetOnMemberFactory
         addFactory(CssClassFacetOnActionFromConfiguredRegexFactory.class);
 
-        addFactory(CssClassFaFacetOnTypeAnnotationFactory.class);
+        // addFactory(CssClassFaFacetOnTypeAnnotationFactory.class);
         addFactory(CssClassFaFacetOnMemberFactory.class);
 
         addFactory(HiddenObjectFacetViaMethodFactory.class);
@@ -372,11 +367,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(MultiLineFacetOnPropertyFactory.class);
         addFactory(MultiLineFacetOnParameterAnnotationFactory.class);
 
-
-
         // must come after RecreatableObjectFacetFactory
         addFactory(DomainObjectAnnotationFacetFactory.class);
-
 
         // must come after the property/collection accessor+mutator facet factories
         addFactory(ActionAnnotationFacetFactory.class);
@@ -384,7 +376,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PropertyAnnotationFacetFactory.class);
         // after the ActionAnnotationFacetFactory so that takes precedent for contributed associations
         addFactory(CollectionAnnotationFacetFactory.class);
-
 
         addFactory(ParameterAnnotationFacetFactory.class);
 
@@ -412,7 +403,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(PagedFacetOnTypeAnnotationFactory.class);
         addFactory(PagedFacetOnCollectionFactory.class);
         addFactory(PagedFacetOnActionFactory.class);
-
 
         // must come after any facets that install titles
         addFactory(MaskFacetOnTypeAnnotationFactory.class);
@@ -460,7 +450,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(UUIDValueFacetUsingSemanticsProviderFactory.class);
 
         addFactory(JavaAwtImageValueFacetUsingSemanticsProviderFactory.class);
-        
+
         // applib values
         addFactory(BlobValueFacetUsingSemanticsProviderFactory.class);
         addFactory(ClobValueFacetUsingSemanticsProviderFactory.class);
@@ -478,7 +468,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(JodaLocalDateValueFacetUsingSemanticsProviderFactory.class);
         addFactory(JodaLocalDateTimeValueFacetUsingSemanticsProviderFactory.class);
         addFactory(JodaDateTimeValueFacetUsingSemanticsProviderFactory.class);
-        
+
         // written to not trample over TypeOf if already installed
         addFactory(CollectionFacetFactory.class);
         // must come after CollectionFacetFactory
@@ -486,7 +476,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
 
         // so we can dogfood the applib "value" types
         addFactory(ValueFacetAnnotationOrConfigurationFactory.class);
-
 
         addFactory(DisabledFacetOnPropertyDerivedFromImmutableFactory.class);
         addFactory(DisabledFacetOnCollectionDerivedFromImmutableFactory.class);

@@ -31,15 +31,23 @@ import java.lang.annotation.*;
 public @interface CssClassFa {
 
     /**
-     * @deprecated - see {@link ActionLayout#cssClassFa()}
+     * @deprecated - see {@link DomainObjectLayout#cssClassFa(),@link ViewModelLayout#cssClassFa(), @link ActionLayout#cssClassFa()}
      */
     @Deprecated
     String value();
 
     /**
-     * @deprecated - see {@link org.apache.isis.applib.annotation.ActionLayout#cssClassFaPosition()}
+     * @deprecated - see {@link DomainObjectLayout#cssClassFaPosition()} and {@link ViewModelLayout#cssClassFaPosition()}.
      */
     @Deprecated
-    ActionLayout.CssClassFaPosition position() default ActionLayout.CssClassFaPosition.LEFT;
-}
+    CssClassFaPosition position() default CssClassFaPosition.LEFT;
 
+    /**
+     * @deprecated - see {@link org.apache.isis.applib.annotation.DomainObjectLayout.CssClassFaPosition} and {@link org.apache.isis.applib.annotation.ViewModelLayout.CssClassFaPosition}.
+     */
+    @Deprecated
+    public enum CssClassFaPosition {
+        LEFT, RIGHT
+    }
+
+}

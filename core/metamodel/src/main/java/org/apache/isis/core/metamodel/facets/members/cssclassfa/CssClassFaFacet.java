@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
@@ -34,5 +33,5 @@ public interface CssClassFaFacet extends SingleStringValueFacet {
     /**
      * @return The position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> icon.
      */
-    ActionLayout.CssClassFaPosition getPosition();
+    CssClassFaPosition getPosition();
 }
