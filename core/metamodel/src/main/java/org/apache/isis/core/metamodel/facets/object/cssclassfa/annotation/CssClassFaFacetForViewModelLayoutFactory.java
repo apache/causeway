@@ -14,29 +14,33 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
+
+package org.apache.isis.core.metamodel.facets.object.cssclassfa.annotation;
 
 import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.CssClassFaFacetForViewModelLayoutAnnotation;
 
 import com.google.common.base.Strings;
 
-public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbstract {
+public class CssClassFaFacetForViewModelLayoutFactory extends CssClassFaFacetAbstract {
 
-    public static CssClassFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
+    public static CssClassFaFacet create(final ViewModelLayout viewModelLayout, final FacetHolder holder) {
         if (viewModelLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(viewModelLayout.cssClass());
+        final String cssClassFa = Strings.emptyToNull(viewModelLayout.cssClassFa());
         final CssClassFaPosition position = viewModelLayout.cssClassFaPosition();
-        return cssClass != null ? new CssClassFacetForViewModelLayoutAnnotation(cssClass, position, holder) : null;
+        return cssClassFa != null ? new CssClassFaFacetForViewModelLayoutAnnotation(cssClassFa,
+                position,
+                holder) : null;
     }
 
-    private CssClassFacetForViewModelLayoutAnnotation(final String value, final CssClassFaPosition position,
+    private CssClassFaFacetForViewModelLayoutFactory(final String value, final CssClassFaPosition position,
             final FacetHolder holder) {
-        super(value, holder);
+        super(value, position, holder);
     }
 }

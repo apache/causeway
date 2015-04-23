@@ -1,30 +1,33 @@
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
+ * or more contributor license agreements. See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership. The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations
  *  under the License.
  */
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -34,14 +37,15 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -61,6 +65,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     @DomainObjectLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
+            cssClassFa = "foo",
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -76,6 +82,8 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
     @ViewModelLayout(
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
+            cssClassFa = "foo",
+            cssClassFaPosition = CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -229,6 +237,86 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
                 facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
 
                 final Facet facet = facetHolder.getFacet(CssClassFacet.class);
+                assertNull(facet);
+
+                expectNoMethodsRemoved();
+            }
+        }
+
+    }
+
+    public static class CssClassFa extends DomainObjectLayoutFactoryTest {
+
+        @Mock
+        ObjectAdapter mockAdapter;
+
+        public static class ForDomainObjectLayout extends CssClassFa {
+
+            @Before
+            public void setUp() throws Exception {
+                super.setUp();
+            }
+
+            @Test
+            public void whenSpecified() {
+
+                final Class<?> cls = Customer.class;
+
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+
+                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                assertNotNull(facet);
+                assertTrue(facet instanceof CssClassFaFacetForDomainObjectLayoutAnnotation);
+
+                final CssClassFaFacetForDomainObjectLayoutAnnotation facetImpl = (CssClassFaFacetForDomainObjectLayoutAnnotation) facet;
+                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
+
+                expectNoMethodsRemoved();
+            }
+
+            @Test
+            public void whenDefaults() {
+
+                final Class<?> cls = CustomerWithDefaults.class;
+
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+
+                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                assertNull(facet);
+
+                expectNoMethodsRemoved();
+            }
+        }
+
+        public static class ForViewModelLayout extends CssClassFa {
+
+            @Test
+            public void whenSpecified() {
+
+                final Class<?> cls = CustomerViewModel.class;
+
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+
+                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
+                assertNotNull(facet);
+                assertTrue(facet instanceof CssClassFaFacetForViewModelLayoutAnnotation);
+
+                final CssClassFaFacetForViewModelLayoutAnnotation facetImpl = (CssClassFaFacetForViewModelLayoutAnnotation) facet;
+                assertThat(facetImpl.value(), equalTo("fa fa-fw fa-foo"));
+                assertThat(facetImpl.getPosition(), is(CssClassFaPosition.RIGHT));
+
+                expectNoMethodsRemoved();
+            }
+
+            @Test
+            public void whenDefaults() {
+
+                final Class<?> cls = CustomerViewModelWithDefaults.class;
+
+                facetFactory.process(new FacetFactory.ProcessClassContext(cls, null, mockMethodRemover, facetHolder));
+
+                final Facet facet = facetHolder.getFacet(CssClassFaFacet.class);
                 assertNull(facet);
 
                 expectNoMethodsRemoved();
