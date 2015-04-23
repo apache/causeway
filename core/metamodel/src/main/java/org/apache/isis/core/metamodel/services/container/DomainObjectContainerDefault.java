@@ -542,7 +542,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Programmatic
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        flush(); // auto-flush any pending changes
+        if(autoFlush) {
+            flush(); // auto-flush any pending changes
+        }
+        return submitQuery(query);
+    }
+
+    <T> List<T> submitQuery(final Query<T> query) {
         final List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
@@ -686,12 +692,35 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
 
     //region > init, shutdown
 
+    /**
+     * Normally any queries are automatically preceded by flushing pending executions.
+     *
+     * <p>
+     * This key allows this behaviour to be disabled.
+     *
+     * <p>
+     *     Originally introduced as part of ISIS-1134 (fixing memory leaks in the objectstore)
+     *     where it was found that the autoflush behaviour was causing a (now unrepeatable)
+     *     data integrity error (see <a href="https://issues.apache.org/jira/browse/ISIS-1134?focusedCommentId=14500638&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-14500638">ISIS-1134 comment</a>, in the isis-module-security.
+     *     However, that this could be circumvented by removing the call to flush().
+     *     We don't want to break existing apps that might rely on this behaviour, on the
+     *     other hand we want to fix the memory leak.  Adding this configuration property
+     *     seems the most prudent way forward.
+     * </p>
+     */
+    private static final String KEY_DISABLE_AUTOFLUSH = "isis.services.container.disableAutoFlush";
+
+    private boolean autoFlush;
+
     @Programmatic
     @PostConstruct
     @Override
     public void init(Map<String, String> properties) {
         injectServicesInto(recognizer);
         recognizer.init(properties);
+
+        final boolean disableAutoFlush = Boolean.parseBoolean(properties.get(KEY_DISABLE_AUTOFLUSH));
+        this.autoFlush = !disableAutoFlush;
     }
 
     @Programmatic
