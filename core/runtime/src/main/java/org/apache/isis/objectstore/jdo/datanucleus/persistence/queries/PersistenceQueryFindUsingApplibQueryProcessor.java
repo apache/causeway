@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -82,8 +83,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         if (LOG.isDebugEnabled()) {
             LOG.debug(cls.getName() + " # " + queryName + " ( " + filter + " )");
         }
-        
-        return (List<?>) jdoQuery.execute();
+
+        try {
+            final List<?> results = (List<?>) jdoQuery.execute();
+            return Lists.newArrayList(results);
+        } finally {
+            jdoQuery.closeAll();
+        }
     }
 
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
@@ -108,11 +114,18 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
             LOG.debug(cls.getName() + " # " + queryName + " ( " + argumentsByParameterName + " )");
         }
         
-        final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
-        if (cardinality == QueryCardinality.MULTIPLE) {
-            return results;
+        try {
+            final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
+            final List<?> resultsToReturn =
+                    cardinality == QueryCardinality.MULTIPLE
+                            ? results
+                            : results.isEmpty()
+                                ? Collections.emptyList()
+                                : results.subList(0, 1);
+            return Lists.newArrayList(resultsToReturn);
+        } finally {
+            jdoQuery.closeAll();
         }
-        return results.isEmpty()?Collections.emptyList():results.subList(0, 1);
     }
 
     private static Map<String, Object> unwrap(final Map<String, ObjectAdapter> argumentAdaptersByParameterName) {

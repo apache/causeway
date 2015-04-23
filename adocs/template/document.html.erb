@@ -214,7 +214,7 @@
 </div>
 
 <div class="row">
-    <div class="large-8 medium-8 columns">
+    <div class="large-9 medium-9 columns">
 
         <div id="doc-content">
           <%= document.content %>
@@ -231,8 +231,7 @@
 
     </div>
 
-    <div class="large-4 medium-4 columns">
-        <!-- the 'hide' class is removed by Javascript -->
+    <div class="large-3 medium-3 columns">
         <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
           <%= converter.convert_with_options @document, 'outline', :toclevels => 6  %>
         </div>

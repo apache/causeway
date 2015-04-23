@@ -52,8 +52,12 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         if (LOG.isDebugEnabled()) {
             LOG.debug("allInstances(): class=" + specification.getFullIdentifier());
         }
-        
-        final List<?> pojos = (List<?>) jdoQuery.execute();
-        return loadAdapters(specification, pojos);
+
+        try {
+            final List<?> pojos = (List<?>) jdoQuery.execute();
+            return loadAdapters(specification, pojos);
+        } finally {
+            jdoQuery.closeAll();
+        }
     }
 }
