@@ -15,7 +15,7 @@ The todoapp also integrates with a number of other [Isis Addons](http://www.isis
 
 ### Sign-in
 
-Apache Isis integrates with [Apache Shiro](http://shiro.apacheorg)™.  The core framework supports file-based realms, while the Isis Addons [security module](http://github.com/isisaddons/isis-module-security) provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.  The example todoapp integrates with the security module.
+Apache Isis integrates with [Apache Shiro](http://shiro.apache.org)™.  The core framework supports file-based realms, while the Isis Addons [security module](http://github.com/isisaddons/isis-module-security) provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel.  The example todoapp integrates with the security module.
 
 ![](https://raw.github.com/apache/isis/master/images/010-login.png)
 
