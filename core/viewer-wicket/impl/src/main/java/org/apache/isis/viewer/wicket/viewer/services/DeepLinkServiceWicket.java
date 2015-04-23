@@ -37,6 +37,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 
 /**
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
@@ -66,11 +67,6 @@ public class DeepLinkServiceWicket implements DeepLinkService {
         } catch (final URISyntaxException ex) {
             throw new RuntimeException("Cannot create a deep link to domain object: " + domainObject, ex);
         }
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return RequestCycle.get() != null;
     }
 
     protected AdapterManagerDefault getAdapterManager() {

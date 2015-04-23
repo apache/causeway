@@ -38,9 +38,4 @@ public interface DeepLinkService {
     @Programmatic
     URI deepLinkFor(Object domainObject);
 
-    /**
-     * @return {@code true} if the service be used to create a link to domain objects
-     */
-    @Programmatic
-    boolean isEnabled();
 }
