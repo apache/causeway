@@ -19,9 +19,8 @@
 
 package org.apache.isis.core.runtime.system.context;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
-
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +42,7 @@ public class IsisContextThreadLocal extends IsisContext {
         return new IsisContextThreadLocal(sessionFactory);
     }
 
-    // TODO Review. Use IdentityHashMap to make it clear that Thread as a key is compared by identity
-    private final Map<Thread, IsisSession> sessionsByThread = Maps.newHashMap();
+    private final Map<Thread, IsisSession> sessionsByThread = new IdentityHashMap<>();
 
     
     // //////////////////////////////////////////////
@@ -71,9 +69,8 @@ public class IsisContextThreadLocal extends IsisContext {
 
     protected void shutdownAllThreads() {
         synchronized (sessionsByThread) {
-            int i = 0;
             for (final Map.Entry<Thread, IsisSession> entry : sessionsByThread.entrySet()) {
-                LOG.info("Shutting down thread: {}", i++); // TODO this 'i' is meaningless. Use entry.getKey().getName() instead ?
+                LOG.info("Shutting down thread: {}", entry.getKey().getName());
                 final IsisSession data = entry.getValue();
                 data.closeAll();
             }

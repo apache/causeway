@@ -85,7 +85,8 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         }
 
         try {
-            return Lists.newArrayList((List<?>) jdoQuery.execute());
+            final List<?> results = (List<?>) jdoQuery.execute();
+            return Lists.newArrayList(results);
         } finally {
             jdoQuery.closeAll();
         }
@@ -112,13 +113,16 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         if (LOG.isDebugEnabled()) {
             LOG.debug(cls.getName() + " # " + queryName + " ( " + argumentsByParameterName + " )");
         }
-
+        
         try {
             final List<?> results = (List<?>) jdoQuery.executeWithMap(argumentsByParameterName);
-            if (cardinality == QueryCardinality.MULTIPLE) {
-                return Lists.newArrayList(results);
-            }
-            return results.isEmpty() ? Collections.emptyList() : Lists.newArrayList(results.subList(0, 1));
+            final List<?> resultsToReturn =
+                    cardinality == QueryCardinality.MULTIPLE
+                            ? results
+                            : results.isEmpty()
+                                ? Collections.emptyList()
+                                : results.subList(0, 1);
+            return Lists.newArrayList(resultsToReturn);
         } finally {
             jdoQuery.closeAll();
         }
