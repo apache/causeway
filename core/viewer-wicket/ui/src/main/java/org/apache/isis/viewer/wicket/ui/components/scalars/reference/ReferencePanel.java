@@ -361,14 +361,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
         
         if(!curr.containedIn(choiceMementos)) {
-            if(!choiceMementos.isEmpty()) {
-                final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
-                select2Field.getModel().setObject(newAdapterMemento);
-                getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
-            } else {
-                select2Field.getModel().setObject(null);
-                getModel().setObject(null);
-            }
+        	select2Field.getModel().setObject(null);
+        	getModel().setObject(null);
         }
     }
 
