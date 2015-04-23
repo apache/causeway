@@ -20,15 +20,13 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.apache.isis.applib.annotation.CssClassFaPosition;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
+
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
 
 public class CssClassFaFacetAbstract extends SingleStringValueFacetAbstract implements CssClassFaFacet {
 

@@ -16,13 +16,12 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import org.apache.isis.applib.annotation.CssClassFaPosition;
+import com.google.common.base.Strings;
+
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
-
-import com.google.common.base.Strings;
 
 public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbstract {
 
@@ -31,11 +30,11 @@ public class CssClassFacetForViewModelLayoutAnnotation extends CssClassFacetAbst
             return null;
         }
         final String cssClass = Strings.emptyToNull(viewModelLayout.cssClass());
-        final CssClassFaPosition position = viewModelLayout.cssClassFaPosition();
-        return cssClass != null ? new CssClassFacetForViewModelLayoutAnnotation(cssClass, position, holder) : null;
+        return cssClass != null ? new CssClassFacetForViewModelLayoutAnnotation(cssClass, holder) : null;
     }
 
-    private CssClassFacetForViewModelLayoutAnnotation(final String value, final CssClassFaPosition position,
+    private CssClassFacetForViewModelLayoutAnnotation(
+            final String value,
             final FacetHolder holder) {
         super(value, holder);
     }

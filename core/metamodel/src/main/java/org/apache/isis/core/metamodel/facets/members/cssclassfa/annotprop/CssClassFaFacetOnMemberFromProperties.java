@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets.members.cssclassfa.annotprop;
 
 import java.util.Properties;
 
-import org.apache.isis.applib.annotation.CssClassFaPosition;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
 

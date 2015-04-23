@@ -25,7 +25,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CssClassFaPosition;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class LinkAndLabel implements Serializable {
 

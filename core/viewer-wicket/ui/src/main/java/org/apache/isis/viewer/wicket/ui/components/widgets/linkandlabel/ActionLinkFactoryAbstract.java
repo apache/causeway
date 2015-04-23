@@ -18,7 +18,7 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CssClassFaPosition;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;

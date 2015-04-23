@@ -17,27 +17,28 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
-
 import java.lang.reflect.Method;
 
+import org.jmock.Expectations;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetFallback;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
-import org.jmock.Expectations;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertThat;
 
 public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -151,7 +152,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
 
             class Customer {
                 @SuppressWarnings("unused")
-                @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = CssClassFaPosition.RIGHT)
+                @ActionLayout(cssClassFa = "font-awesome", cssClassFaPosition = ActionLayout.CssClassFaPosition.RIGHT)
                 public String foz() {
                     return null;
                 }

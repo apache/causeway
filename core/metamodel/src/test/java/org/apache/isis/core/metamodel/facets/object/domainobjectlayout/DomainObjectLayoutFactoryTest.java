@@ -19,15 +19,13 @@
 
 package org.apache.isis.core.metamodel.facets.object.domainobjectlayout;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import org.jmock.auto.Mock;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.annotation.CssClassFaPosition;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.ViewModelLayout;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -38,14 +36,17 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
-import org.jmock.auto.Mock;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
@@ -66,7 +67,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
             cssClassFa = "foo",
-            cssClassFaPosition = CssClassFaPosition.RIGHT,
+            cssClassFaPosition = DomainObjectLayout.CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
@@ -83,7 +84,7 @@ public class DomainObjectLayoutFactoryTest extends AbstractFacetFactoryJUnit4Tes
             bookmarking = BookmarkPolicy.AS_ROOT,
             cssClass = "foobar",
             cssClassFa = "foo",
-            cssClassFaPosition = CssClassFaPosition.RIGHT,
+            cssClassFaPosition = ViewModelLayout.CssClassFaPosition.RIGHT,
             describedAs = "This is a description",
             named = "Name override",
             paged = 20,
