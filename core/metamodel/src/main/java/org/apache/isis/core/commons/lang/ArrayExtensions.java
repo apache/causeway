@@ -27,6 +27,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 
 public final class ArrayExtensions {
@@ -71,7 +73,7 @@ public final class ArrayExtensions {
     }
 
     public static <T> T[] combine(final T[]... arrays) {
-        final List<T> combinedList = new ArrayList<T>();
+        final List<T> combinedList = Lists.newArrayList();
         for (final T[] array : arrays) {
             for (final T t : array) {
                 combinedList.add(t);

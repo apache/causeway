@@ -51,11 +51,11 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     private AdapterManager adapterManager;
     private ObjectPersistor objectPersistor;
 
-    private final ProxyContextHandler proxy;
+    private final ProxyContextHandler proxyContextHandler;
 
     public WrapperFactoryAbstract(final ProxyInstantiator proxyInstantiator) {
         
-        proxy = new ProxyContextHandler(proxyInstantiator);
+        proxyContextHandler = new ProxyContextHandler(proxyInstantiator);
         
         dispatchersByEventClass.put(ObjectTitleEvent.class, new InteractionEventDispatcherTypeSafe<ObjectTitleEvent>() {
             @Override
@@ -221,7 +221,7 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxy.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getObjectPersistor());
+        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getObjectPersistor());
     }
 
     @Override
