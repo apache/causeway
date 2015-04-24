@@ -143,16 +143,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-jodatime</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>

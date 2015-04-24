@@ -43,56 +43,6 @@
                 </excludes>
             </resource>
         </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-maven-plugin</artifactId>
-                <version>${datanucleus-maven-plugin.version}</version>
-                <configuration>
-                    <fork>false</fork>
-                    <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
-                    <verbose>true</verbose>
-                    <props>${basedir}/datanucleus.properties</props>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>enhance</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.datanucleus</groupId>
-                                        <artifactId>datanucleus-maven-plugin</artifactId>
-                                        <versionRange>[3.2.0-release,)</versionRange>
-                                        <goals>
-                                            <goal>enhance</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore></ignore>
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <dependencies>
@@ -123,6 +73,77 @@
     </dependencies>
 
     <profiles>
+        <profile>
+            <id>enhance</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+            </properties>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                            <groupId>org.eclipse.m2e</groupId>
+                            <artifactId>lifecycle-mapping</artifactId>
+                            <version>1.0.0</version>
+                            <configuration>
+                                <lifecycleMappingMetadata>
+                                    <pluginExecutions>
+                                        <pluginExecution>
+                                            <pluginExecutionFilter>
+                                                <groupId>org.datanucleus</groupId>
+                                                <artifactId>datanucleus-maven-plugin</artifactId>
+                                                <versionRange>[${datanucleus-maven-plugin.version},)</versionRange>
+                                                <goals>
+                                                    <goal>enhance</goal>
+                                                </goals>
+                                            </pluginExecutionFilter>
+                                            <action>
+                                                <ignore></ignore>
+                                            </action>
+                                        </pluginExecution>
+                                    </pluginExecutions>
+                                </lifecycleMappingMetadata>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.datanucleus</groupId>
+                        <artifactId>datanucleus-maven-plugin</artifactId>
+                        <version>${datanucleus-maven-plugin.version}</version>
+                        <configuration>
+                            <fork>false</fork>
+                            <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
+                            <verbose>true</verbose>
+                            <props>${basedir}/datanucleus.properties</props>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>process-classes</phase>
+                                <goals>
+                                    <goal>enhance</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.datanucleus</groupId>
+                    <artifactId>datanucleus-api-jdo</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
         <profile>
             <id>isis-validate</id>
             <activation>

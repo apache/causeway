@@ -21,11 +21,17 @@ package org.apache.isis.core.wrapper.handlers;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.datanucleus.enhancer.Persistable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
@@ -110,6 +116,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      */
     protected Method __isis_executionMode;
 
+    protected final Set<String> dnPersistableMethods = Sets.newHashSet();
+
     public DomainObjectInvocationHandler(
             final T delegate,
             final WrapperFactory wrapperFactory,
@@ -139,6 +147,18 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             __isis_executionMode = WrapperObject.class.getMethod("__isis_executionMode", new Class[]{});
             saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
             wrappedMethod = WrapperObject.class.getMethod("wrapped", new Class[] {});
+
+            dnPersistableMethods.addAll(
+                    Lists.newArrayList(
+                            Iterables.transform(
+                                    Arrays.asList(Persistable.class.getDeclaredMethods()),
+                                    new Function<Method, String>() {
+                                        @Override
+                                        public String apply(final Method input) {
+                                            return input.getName();
+                                        }
+                                    })));
+
         } catch (final NoSuchMethodException nsme) {
             throw new IllegalStateException(
                     "Could not locate reserved declared methods in the WrappingObject and WrappedObject interfaces",
@@ -153,7 +173,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        // workaround for JDO-enhanced..
         if(isJdoMethod(method)) {
             return delegate(method, args);
         }
@@ -296,14 +315,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private boolean isJdoMethod(final Method method) {
-        return methodStartsWith(method, "jdo");
+        return methodStartsWith(method, "jdo") || dnPersistableMethods.contains(method.getName());
     }
 
-    private boolean isInjectMethod(final Method method) {
+    private static boolean isInjectMethod(final Method method) {
         return methodStartsWith(method, "inject");
     }
 
-    private boolean methodStartsWith(final Method method, final String prefix) {
+    private static boolean methodStartsWith(final Method method, final String prefix) {
         return method.getName().startsWith(prefix);
     }
 

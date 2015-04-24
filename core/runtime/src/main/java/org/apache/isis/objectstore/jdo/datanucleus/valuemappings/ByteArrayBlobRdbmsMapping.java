@@ -23,9 +23,9 @@ import org.datanucleus.store.rdbms.mapping.datastore.BlobRDBMSMapping;
 import org.datanucleus.store.rdbms.mapping.java.JavaTypeMapping;
 import org.datanucleus.store.rdbms.table.Column;
 
-public class IsisBlobRDBMSMapping extends BlobRDBMSMapping {
+public class ByteArrayBlobRdbmsMapping extends BlobRDBMSMapping {
 
-    public IsisBlobRDBMSMapping(JavaTypeMapping mapping, RDBMSStoreManager storeMgr, Column col) {
+    public ByteArrayBlobRdbmsMapping(JavaTypeMapping mapping, RDBMSStoreManager storeMgr, Column col) {
         super(mapping, storeMgr, col);
     }
 

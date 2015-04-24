@@ -34,10 +34,6 @@
     <properties>
         <isis.version>1.9.0-SNAPSHOT</isis.version>
 
-        <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <assertj-core.version>2.0.0</assertj-core.version>
@@ -350,7 +346,6 @@
                 <artifactId>${rootArtifactId}-webapp</artifactId>
                 <version>${version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>

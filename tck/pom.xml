@@ -36,9 +36,15 @@
 
     <properties>
         <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
-        <datanucleus-jodatime.version>3.2.1</datanucleus-jodatime.version>
+        <jdo-api.version>3.1-rc1</jdo-api.version>
+        <datanucleus-core.version>4.0.6</datanucleus-core.version>
+        <datanucleus-api-jdo.version>4.0.5</datanucleus-api-jdo.version>
+        <datanucleus-jdo-query.version>4.0.4</datanucleus-jdo-query.version>
+        <datanucleus-rdbms.version>4.0.11</datanucleus-rdbms.version>
+
+        <datanucleus-jodatime.version>4.0.6</datanucleus-jodatime.version>
+        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+        
     </properties>
 
     <repositories>
@@ -151,10 +157,29 @@
 
             <!-- DataNucleus -->
             <dependency>
+                <groupId>javax.jdo</groupId>
+                <artifactId>jdo-api</artifactId>
+                <version>${jdo-api.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
-                <version>${datanucleus-accessplatform-jdo-rdbms.version}</version>
-                <type>pom</type>
+                <artifactId>datanucleus-core</artifactId>
+                <version>${datanucleus-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-api-jdo</artifactId>
+                <version>${datanucleus-api-jdo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-jdo-query</artifactId>
+                <version>${datanucleus-jdo-query.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-rdbms</artifactId>
+                <version>${datanucleus-rdbms.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.datanucleus</groupId>

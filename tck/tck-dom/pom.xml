@@ -16,17 +16,19 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-    	<groupId>org.apache.isis.tck</groupId>
-    	<artifactId>isis-tck</artifactId>
+    <parent>
+        <groupId>org.apache.isis.tck</groupId>
+        <artifactId>isis-tck</artifactId>
         <version>1.9.0-SNAPSHOT</version>
-	</parent>
+    </parent>
 
-	<artifactId>isis-tck-dom</artifactId>
-	<name>Isis TCK DOM</name>
+    <artifactId>isis-tck-dom</artifactId>
+    <name>Isis TCK DOM</name>
 
     <profiles>
         <profile>
@@ -57,7 +59,7 @@
                             </execution>
                         </executions>
                     </plugin>
-                    
+
                 </plugins>
                 <pluginManagement>
                     <plugins>
@@ -78,14 +80,14 @@
                                                     datanucleus-maven-plugin
                                                 </artifactId>
                                                 <versionRange>
-                                                    [3.2.0-release,)
+                                                    [4.0.0-release,)
                                                 </versionRange>
                                                 <goals>
                                                     <goal>enhance</goal>
                                                 </goals>
                                             </pluginExecutionFilter>
                                             <action>
-                                                <ignore />
+                                                <ignore/>
                                             </action>
                                         </pluginExecution>
                                     </pluginExecutions>
@@ -98,17 +100,32 @@
         </profile>
     </profiles>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-applib</artifactId>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+        </dependency>
 
         <!-- DataNucleus -->
         <dependency>
+            <groupId>javax.jdo</groupId>
+            <artifactId>jdo-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-accessplatform-jdo-rdbms</artifactId>
-            <type>pom</type>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-api-jdo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jdo-query</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-rdbms</artifactId>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
@@ -116,5 +133,5 @@
         </dependency>
 
     </dependencies>
-    
+
 </project>

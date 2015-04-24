@@ -31,7 +31,7 @@ import javax.jdo.identity.IntIdentity;
 import javax.jdo.identity.LongIdentity;
 import javax.jdo.identity.ObjectIdentity;
 import javax.jdo.identity.StringIdentity;
-import org.datanucleus.identity.OID;
+import org.datanucleus.identity.DatastoreId;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -80,17 +80,14 @@ public final class JdoObjectIdSerializer {
             }
         }
 
-        //
-        // @javax.jdo.annotations.PersistenceCapable(identityType = IdentityType.DATASTORE)
-        //
-        if(jdoOid instanceof OID) {
+        if(jdoOid instanceof DatastoreId) {
 
             //
             // prettier handling of common datatypes if possible
             //
 
-            final OID dnOid = (OID) jdoOid;
-            final Object keyValue = dnOid.getKeyValue();
+            final DatastoreId dnOid = (DatastoreId) jdoOid;
+            final Object keyValue = dnOid.getKeyAsObject();
 
             if(false) {
 
@@ -99,45 +96,39 @@ public final class JdoObjectIdSerializer {
                 //
                 // if required by user community, we could add a property in isis.properties to enable if requested.
                 //
-
                 if(keyValue instanceof String) {
                     return "S" + SEPARATOR + keyValue;
                 }
-
                 if(keyValue instanceof Long) {
                     return "L" + SEPARATOR + keyValue;
                 }
 
-                // 1.8.0 did not support BigDecimal
-
                 if(keyValue instanceof BigInteger) {
                     return "B" + SEPARATOR + keyValue;
                 }
-
                 if(keyValue instanceof Integer) {
                     return "I" + SEPARATOR + keyValue;
                 }
 
             } else {
-
                 if( keyValue instanceof String ||
-                    keyValue instanceof Long ||
-                    keyValue instanceof BigDecimal || // 1.8.0 did not support BigDecimal
-                    keyValue instanceof BigInteger ||
-                    keyValue instanceof Integer) {
+                        keyValue instanceof Long ||
+                        keyValue instanceof BigDecimal || // 1.8.0 did not support BigDecimal
+                        keyValue instanceof BigInteger ||
+                        keyValue instanceof Integer) {
 
                     // no separator
                     return "" + keyValue;
                 }
             }
         }
-        
+
         // the JDO spec (5.4.3) requires that OIDs are serializable toString and 
         // recreatable through the constructor
         return jdoOid.getClass().getName().toString() + SEPARATOR + jdoOid.toString();
     }
 
-    private static final List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
+    private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");
     
     public static Object toJdoObjectId(final RootOid oid) {
 
@@ -225,7 +216,7 @@ public final class JdoObjectIdSerializer {
         return correspondingClass;
     }
 
-	private static SpecificationLoaderSpi getSpecificationLoader() {
-		return IsisContext.getSpecificationLoader();
-	}
+    private static SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
 }

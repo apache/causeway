@@ -33,7 +33,6 @@
 
 
 	<properties>
-        <isis-viewer-wicket.version>1.9.0-SNAPSHOT</isis-viewer-wicket.version>
 		<siteBaseDir>..</siteBaseDir>
 		<relativeUrl>wicket-tck/</relativeUrl>
 		<!-- until someone comes up with a better solution -->
@@ -82,7 +81,6 @@
         <dependency>
             <groupId>org.apache.isis.viewer</groupId>
             <artifactId>isis-viewer-wicket-impl</artifactId>
-            <version>${isis-viewer-wicket.version}</version>
         </dependency>
 
         <!-- isis runtime -->

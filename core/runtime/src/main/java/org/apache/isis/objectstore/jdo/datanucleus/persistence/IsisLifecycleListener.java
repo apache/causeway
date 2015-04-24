@@ -29,17 +29,16 @@ import javax.jdo.listener.DirtyLifecycleListener;
 import javax.jdo.listener.InstanceLifecycleEvent;
 import javax.jdo.listener.LoadLifecycleListener;
 import javax.jdo.listener.StoreLifecycleListener;
-import javax.jdo.spi.PersistenceCapable;
 
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
+import org.datanucleus.enhancer.Persistable;
 
 public class IsisLifecycleListener implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener, DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener, SuspendableListener {
 
@@ -76,7 +75,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.POST, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.postLoadProcessingFor(pojo, CalledFrom.EVENT_LOAD);
             }});
     }
@@ -86,7 +85,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.PRE, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.preStoreProcessingFor(pojo, CalledFrom.EVENT_PRESTORE);
 
             }});
@@ -97,7 +96,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.POST, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.postStoreProcessingFor(pojo, CalledFrom.EVENT_POSTSTORE);
             }});
     }
@@ -107,7 +106,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.PRE, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.preDirtyProcessingFor(pojo, CalledFrom.EVENT_PREDIRTY);
             }});
     }
@@ -129,7 +128,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.PRE, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.preDeleteProcessingFor(pojo, CalledFrom.EVENT_PREDELETE);
             }
         });
@@ -140,7 +139,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         withLogging(Phase.POST, event, new RunnableAbstract(event){
             @Override
             protected void doRun() {
-                final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+                final Persistable pojo = Utils.persistenceCapableFor(event);
                 synchronizer.postDeleteProcessingFor(pojo, CalledFrom.EVENT_POSTDELETE);
             }
         });
@@ -221,7 +220,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
             super(event);
         }
         protected void doRun() {
-            final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+            final Persistable pojo = Utils.persistenceCapableFor(event);
             synchronizer.ensureRootObject(pojo);
             synchronizer.ensureFrameworksInAgreement(pojo);
         } 
@@ -268,7 +267,7 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
     }
 
     private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
-        final PersistenceCapable pojo = Utils.persistenceCapableFor(event);
+        final Persistable pojo = Utils.persistenceCapableFor(event);
         final AdapterManager adapterManager = getAdapterManager();
         final ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
         return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;

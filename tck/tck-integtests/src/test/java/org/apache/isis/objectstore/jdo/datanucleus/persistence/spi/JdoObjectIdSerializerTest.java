@@ -20,7 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.spi;
 
 import java.math.BigInteger;
 import java.util.Date;
-import org.datanucleus.identity.OIDImpl;
+import org.datanucleus.identity.ObjectId;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.annotation.ObjectType;
@@ -88,7 +88,7 @@ public class JdoObjectIdSerializerTest {
 
     @Test
     public void whenLong() throws Exception {
-        Object jdoOid = new OIDImpl(Customer.class.getName(), 123L);
+        Object jdoOid = new ObjectId(Customer.class, 123L);
         String id = JdoObjectIdSerializer.toOidIdentifier(jdoOid);
         assertThat(id, is("L_123"));
         
@@ -100,7 +100,7 @@ public class JdoObjectIdSerializerTest {
 
     @Test
     public void whenDataNucleusOidAndLong() throws Exception {
-        Object jdoOid = new OIDImpl(Customer.class.getName(), 123L);
+        Object jdoOid = new ObjectId(Customer.class, 123L);
         String id = JdoObjectIdSerializer.toOidIdentifier(jdoOid);
         assertThat(id, is("L_123"));
         
@@ -112,7 +112,7 @@ public class JdoObjectIdSerializerTest {
 
     @Test
     public void whenDataNucleusOidAndBigInteger() throws Exception {
-        Object jdoOid = new OIDImpl(Customer.class.getName(), new BigInteger("123"));
+        Object jdoOid = new ObjectId(Customer.class, new BigInteger("123"));
         String id = JdoObjectIdSerializer.toOidIdentifier(jdoOid);
         assertThat(id, is("B_123"));
         
@@ -124,7 +124,7 @@ public class JdoObjectIdSerializerTest {
 
     @Test
     public void whenDataNucleusOidAndString() throws Exception {
-        Object jdoOid = new OIDImpl(Customer.class.getName(), "456");
+        Object jdoOid = new ObjectId(Customer.class, "456");
         String id = JdoObjectIdSerializer.toOidIdentifier(jdoOid);
         assertThat(id, is("S_456"));
         
@@ -137,9 +137,9 @@ public class JdoObjectIdSerializerTest {
     @Test
     public void whenDataNucleusOidAndOtherKeyValue() throws Exception {
         Date key = new Date();
-		Object jdoOid = new OIDImpl(Customer.class.getName(), key);
+		Object jdoOid = new ObjectId(Customer.class, key);
         String id = JdoObjectIdSerializer.toOidIdentifier(jdoOid);
-        assertThat(id, IsisMatchers.startsWith(OIDImpl.class.getName() + "_" + key.toString()));
+        assertThat(id, IsisMatchers.startsWith(ObjectId.class.getName() + "_" + key.toString()));
         
         RootOidDefault oid = RootOidDefault.create(ObjectSpecId.of("CUS"), id);
         Object jdoOidRecreated = JdoObjectIdSerializer.toJdoObjectId(oid);
