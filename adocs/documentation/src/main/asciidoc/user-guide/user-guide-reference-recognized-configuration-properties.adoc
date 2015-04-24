@@ -20,5 +20,9 @@ IMPORTANT: TODO
 |`isis.services.` `container.disableAutoFlush`
 |`true`,`_false_`
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+|`isis.viewer.wicket.` `disableDependentChoiceAutoSelection`
+|`true`,`_false_`
+|For dependent choices (eg category/subcategory), whether the dependent choice should automatically select the first option, or instead should leave empty
 |===
 
