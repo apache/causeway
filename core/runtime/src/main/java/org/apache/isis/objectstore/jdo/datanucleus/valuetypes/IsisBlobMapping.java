@@ -57,9 +57,10 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
     {
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // name
         addColumns(ClassNameConstants.JAVA_LANG_STRING); // mime type
-        // this mapping type isn't supported out-of-the-box by DN, so instead we register IsisBlobRDBMSMapping
+        // this mapping type isn't supported out-of-the-box by DN, but the ByteArayBlobRdbmsMapping that we register supports it
         addColumns(ClassNameConstants.BYTE_ARRAY); // bytes
     }
+
 
     public Object getValueForDatastoreMapping(NucleusContext nucleusCtx, int index, Object value)
     {
@@ -118,5 +119,6 @@ public class IsisBlobMapping extends SingleFieldMultiMapping {
         }
         return new Blob(name, mimeTypeBase, bytes);
     }
+
 
 }

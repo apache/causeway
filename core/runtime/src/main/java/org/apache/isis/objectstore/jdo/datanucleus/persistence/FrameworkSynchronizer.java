@@ -20,9 +20,10 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 
 import java.text.MessageFormat;
 import java.util.concurrent.Callable;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.spi.PersistenceCapable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -43,6 +44,7 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.datanucleus.enhancer.Persistable;
 
 public class FrameworkSynchronizer {
 
@@ -68,12 +70,12 @@ public class FrameworkSynchronizer {
     }
 
 
-    public void postLoadProcessingFor(final PersistenceCapable pojo, CalledFrom calledFrom) {
+    public void postLoadProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
 
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                final PersistenceCapable pc = pojo;
+                final Persistable pc = pojo;
                 
                 // need to do eagerly, because (if a viewModel then) a
                 // viewModel's #viewModelMemento might need to use services 
@@ -131,7 +133,7 @@ public class FrameworkSynchronizer {
                     PersistorUtil.toEndState(adapter);
                 }
                 adapter.setVersion(datastoreVersion);
-                if(pojo.jdoIsDeleted()) {
+                if(pojo.dnIsDeleted()) {
                     adapter.changeState(ResolveState.DESTROYED);
                 }
 
@@ -149,7 +151,7 @@ public class FrameworkSynchronizer {
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void preStoreProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+    public void preStoreProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -183,14 +185,14 @@ public class FrameworkSynchronizer {
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void postStoreProcessingFor(final PersistenceCapable pojo, CalledFrom calledFrom) {
+    public void postStoreProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
                 ensureRootObject(pojo);
 
                 // assert is persistent
-                if(!pojo.jdoIsPersistent()) {
+                if(!pojo.dnIsPersistent()) {
                     throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
                 }
 
@@ -225,7 +227,7 @@ public class FrameworkSynchronizer {
         }, calledFrom);
     }
 
-    public void preDirtyProcessingFor(final PersistenceCapable pojo, CalledFrom calledFrom) {
+    public void preDirtyProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -265,7 +267,7 @@ public class FrameworkSynchronizer {
     }
 
 
-    public ObjectAdapter lazilyLoaded(final PersistenceCapable pojo, CalledFrom calledFrom) {
+    public ObjectAdapter lazilyLoaded(final Persistable pojo, CalledFrom calledFrom) {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
@@ -280,7 +282,7 @@ public class FrameworkSynchronizer {
     }
 
     
-    public void preDeleteProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+    public void preDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -296,7 +298,7 @@ public class FrameworkSynchronizer {
         
     }
 
-    public void postDeleteProcessingFor(final PersistenceCapable pojo, final CalledFrom calledFrom) {
+    public void postDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -327,7 +329,7 @@ public class FrameworkSynchronizer {
     // Helpers
     // /////////////////////////////////////////////////////////
     
-    private <T> T withLogging(PersistenceCapable pojo, Callable<T> runnable, CalledFrom calledFrom) {
+    private <T> T withLogging(Persistable pojo, Callable<T> runnable, CalledFrom calledFrom) {
         if (LOG.isDebugEnabled()) {
             LOG.debug(logString(calledFrom, LoggingLocation.ENTRY, pojo));
         }
@@ -342,7 +344,7 @@ public class FrameworkSynchronizer {
         }
     }
     
-    private void withLogging(PersistenceCapable pojo, final Runnable runnable, CalledFrom calledFrom) {
+    private void withLogging(Persistable pojo, final Runnable runnable, CalledFrom calledFrom) {
         withLogging(pojo, new Callable<Void>() {
 
             @Override
@@ -354,7 +356,7 @@ public class FrameworkSynchronizer {
         }, calledFrom);
     }
     
-    private String logString(CalledFrom calledFrom, LoggingLocation location, PersistenceCapable pojo) {
+    private String logString(CalledFrom calledFrom, LoggingLocation location, Persistable pojo) {
         final AdapterManager adapterManager = getAdapterManager();
         final ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
         // initial spaces just to look better in log when wrapped by IsisLifecycleListener...
@@ -366,11 +368,11 @@ public class FrameworkSynchronizer {
     // More Helpers...
     // /////////////////////////////////////////////////////////
 
-    void ensureFrameworksInAgreement(final PersistenceCapable pojo) {
+    void ensureFrameworksInAgreement(final Persistable pojo) {
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
         final Oid oid = adapter.getOid();
 
-        if(!pojo.jdoIsPersistent()) {
+        if(!pojo.dnIsPersistent()) {
             // make sure the adapter is transient
             if (!adapter.getResolveState().isTransient()) {
                 throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be transient but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
@@ -381,7 +383,7 @@ public class FrameworkSynchronizer {
                 throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be transient; pojo: {1}", oid, pojo));
             }
 
-        } else if(pojo.jdoIsDeleted()) {
+        } else if(pojo.dnIsDeleted()) {
             
             // make sure the adapter is destroyed
             if (!adapter.getResolveState().isDestroyed()) {
@@ -406,19 +408,19 @@ public class FrameworkSynchronizer {
 
     // make sure the entity is known to Isis and is a root
     // TODO: will probably need to handle aggregated entities at some point...
-    void ensureRootObject(final PersistenceCapable pojo) {
+    void ensureRootObject(final Persistable pojo) {
         final Oid oid = getAdapterManager().adapterFor(pojo).getOid();
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
     }
 
-    private Version getVersionIfAny(final PersistenceCapable pojo) {
+    private Version getVersionIfAny(final Persistable pojo) {
         return Utils.getVersionIfAny(pojo, getAuthenticationSession());
     }
 
     @SuppressWarnings("unused")
-    private void ensureObjectNotLoaded(final PersistenceCapable pojo) {
+    private void ensureObjectNotLoaded(final Persistable pojo) {
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
         if(adapter != null) {
             final Oid oid = adapter.getOid();

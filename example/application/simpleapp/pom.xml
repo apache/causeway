@@ -23,7 +23,7 @@
 
     <groupId>org.apache.isis.example.application</groupId>
     <artifactId>simpleapp</artifactId>
-    <version>1.9.0-SNAPSHOT</version>
+    <version>1.9.0_dn4-SNAPSHOT</version>
 
     <name>Simple App</name>
 
@@ -34,11 +34,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.9.0-SNAPSHOT</isis.version>
-
-        <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+        <isis.version>1.9.0_dn4-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -363,7 +359,6 @@
                 <artifactId>simpleapp-webapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>

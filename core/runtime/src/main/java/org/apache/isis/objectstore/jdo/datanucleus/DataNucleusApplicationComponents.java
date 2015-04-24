@@ -18,15 +18,23 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
+
 import org.datanucleus.NucleusContext;
+import org.datanucleus.NucleusContextHelper;
+import org.datanucleus.PersistenceNucleusContext;
+import org.datanucleus.PropertyNames;
+import org.datanucleus.StoreNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
@@ -104,27 +112,35 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private void initialize() {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
         
-        datanucleusProps.put("datanucleus.autoStartClassNames", persistableClassNames);
+        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
         persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
 
-        final boolean createSchema = Boolean.parseBoolean(datanucleusProps.get("datanucleus.autoCreateSchema"));
+        final boolean createSchema = (Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ) ||
+                Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL) ));
         if(createSchema) {
             createSchema();
         }
 
         namedQueryByName = catalogNamedQueries(persistableClassNameSet);
+
     }
     
+
     private void createSchema() {
+    	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
+    	
         final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
         final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        final StoreManager storeManager = nucleusContext.getStoreManager();
-        final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
-
-        registerMetadataListener(metaDataManager);
-        if (storeManager instanceof SchemaAwareStoreManager) {
-            final SchemaAwareStoreManager schemaAwareStoreManager = (SchemaAwareStoreManager) storeManager;
-            schemaAwareStoreManager.createSchema(persistableClassNameSet, asProperties(datanucleusProps));
+        
+        if (nucleusContext instanceof StoreNucleusContext) {
+        	
+            final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
+            final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
+            
+            registerMetadataListener(metaDataManager);
+            if (storeManager instanceof SchemaAwareStoreManager) {
+                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
+            }
         }
     }
 
@@ -154,7 +170,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return properties;
     }
 
-    private static Map<String, JdoNamedQuery> catalogNamedQueries(final Set<String> persistableClassNames) {
+    private static Map<String, JdoNamedQuery> catalogNamedQueries(Set<String> persistableClassNames) {
         final Map<String, JdoNamedQuery> namedQueryByName = Maps.newHashMap();
         for (final String persistableClassName: persistableClassNames) {
             final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(persistableClassName);
@@ -168,7 +184,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         }
         return namedQueryByName;
     }
-
+    
     public PersistenceManagerFactory getPersistenceManagerFactory() {
         return persistenceManagerFactory;
     }
@@ -200,13 +216,13 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     ///////////////////////////////////////////////////////////////////////////
     
     public PersistenceManager createPersistenceManager() {
-        final PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
+        PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
         
         persistenceManager.addInstanceLifecycleListener(lifecycleListener, (Class[])null);
         return persistenceManager;
     }
 
-    public JdoNamedQuery getNamedQuery(final String queryName) {
+    public JdoNamedQuery getNamedQuery(String queryName) {
         return namedQueryByName.get(queryName);
     }
 

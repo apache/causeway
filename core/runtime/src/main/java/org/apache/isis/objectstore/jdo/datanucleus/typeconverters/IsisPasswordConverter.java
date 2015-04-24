@@ -16,35 +16,27 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.valuetypes;
+package org.apache.isis.objectstore.jdo.datanucleus.typeconverters;
 
 import org.datanucleus.store.types.converters.TypeConverter;
+import org.apache.isis.applib.value.Password;
 
-import org.apache.isis.applib.value.Date;
-
-public class IsisDateConverter implements TypeConverter<Date, Long>{
+public class IsisPasswordConverter implements TypeConverter<Password, String>{
 
     private static final long serialVersionUID = 1L;
 
-    public IsisDateConverter() {
-    }
-    
     @Override
-    public Long toDatastoreType(Date memberValue) {
-        if(memberValue == null) {
-            return null;
-        }
-
-        Date d = (Date)memberValue;
-        return d.getMillisSinceEpoch();
+    public String toDatastoreType(final Password memberValue) {
+        return memberValue != null
+                ? memberValue.getPassword()
+                : null;
     }
 
     @Override
-    public Date toMemberType(Long datastoreValue) {
-        if(datastoreValue == null) {
-            return null;
-        }
-        return new Date(datastoreValue);
+    public Password toMemberType(final String datastoreValue) {
+        return datastoreValue != null
+                ? new Password(datastoreValue)
+                : null;
     }
 
 }

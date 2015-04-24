@@ -32,11 +32,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.9.0-SNAPSHOT</isis.version>
-
-        <!-- must be consistent with the versions defined by the JDO Objectstore -->
-        <datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
-        <datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+        <isis.version>1.9.0_dn4-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -350,7 +346,6 @@
                 <artifactId>${rootArtifactId}-webapp</artifactId>
                 <version>${version}</version>
             </dependency>
-
 
         </dependencies>
     </dependencyManagement>
