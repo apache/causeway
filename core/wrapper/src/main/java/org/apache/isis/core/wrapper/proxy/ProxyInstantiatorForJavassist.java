@@ -44,7 +44,7 @@ public class ProxyInstantiatorForJavassist implements ProxyInstantiator {
     private final Map<Class, ProxyFactory> proxyFactoryByClass;
 
     public ProxyInstantiatorForJavassist() {
-        this(new MapMaker().concurrencyLevel(10).<Class, ProxyFactory>makeMap());
+        this(new MapMaker().weakKeys().concurrencyLevel(10).<Class, ProxyFactory>makeMap());
     }
 
     public ProxyInstantiatorForJavassist(Map<Class, ProxyFactory> proxyFactoryByClass) {
