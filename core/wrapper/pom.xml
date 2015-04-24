@@ -113,20 +113,6 @@
             <artifactId>javassist</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-            <!-- explicitly include for use of WrapperFactoryCglib -->
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib-nodep</artifactId>
-            <!-- explicitly include for use of WrapperFactoryCglib -->
-            <optional>true</optional>
-        </dependency>
-
 	</dependencies>
 
 </project>
