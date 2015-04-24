@@ -19,12 +19,15 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.reference;
 
-import javax.inject.Inject;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
 import com.vaynberg.wicket.select2.Settings;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -36,11 +39,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -68,6 +74,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     private static final String ID_AUTO_COMPLETE = "autoComplete";
     private static final String ID_ENTITY_ICON_TITLE = "entityIconAndTitle";
+
+    /**
+     * Determines the behaviour of dependent choices for the dependent; either to autoselect the first available choice, or to select none.
+     */
+    private static final String KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION = "isis.viewer.wicket.disableDependentChoiceAutoSelection";
 
     private EntityLinkSelect2Panel entityLink;
     Select2Choice<ObjectAdapterMemento> select2Field;
@@ -361,7 +372,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
         }
         
         if(!curr.containedIn(choiceMementos)) {
-            if(!choiceMementos.isEmpty()) {
+            if(!choiceMementos.isEmpty() && autoSelect()) {
                 final ObjectAdapterMemento newAdapterMemento = choiceMementos.get(0);
                 select2Field.getModel().setObject(newAdapterMemento);
                 getModel().setObject(newAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
@@ -370,6 +381,12 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 getModel().setObject(null);
             }
         }
+    }
+
+    private boolean autoSelect() {
+        final boolean disableAutoSelect = getConfiguration().getBoolean(KEY_DISABLE_DEPENDENT_CHOICE_AUTO_SELECTION, false);
+        final boolean autoSelect = !disableAutoSelect;
+        return autoSelect;
     }
 
     // called by setProviderAndCurrAndPending
@@ -503,5 +520,10 @@ public class ReferencePanel extends ScalarPanelAbstract {
 
     @Inject
     private WicketViewerSettings wicketViewerSettings;
+
+    IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+
 
 }
