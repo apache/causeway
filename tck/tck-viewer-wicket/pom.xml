@@ -23,11 +23,11 @@
     <parent>
         <groupId>org.apache.isis.tck</groupId>
         <artifactId>isis-tck</artifactId>
-        <version>1.9.0_dn4-SNAPSHOT</version>
+        <version>1.9.0-SNAPSHOT</version>
     </parent>
 
 	<artifactId>isis-tck-viewer-wicket</artifactId>
-    <version>1.9.0_dn4-SNAPSHOT</version>
+    <version>1.9.0-SNAPSHOT</version>
 
 	<name>Isis TCK Wicket Viewer tests</name>
 

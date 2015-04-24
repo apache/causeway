@@ -13,3 +13,19 @@ For example:
 * `--services`
 
 etc...
+
+
+
+## Recommended JVM Flags
+
+
+for the `WrapperFactory` (uses link:http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/[Javassist])
+
+using:
+
+[source]
+----
+-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
+----
+
+You can hint the JVM to unload dynamically created classes which ClassLoaders are still around.
