@@ -18,13 +18,23 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import java.util.Locale;
+import java.util.TimeZone;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.IConverterLocator;
+import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
+
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConverterForApplibDate;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.DateConverterForApplibDateTime;
@@ -68,6 +78,8 @@ public class IsisConverterLocator {
         final RenderedAdjustedFacet renderedAdjustedFacet = objectSpecification.getFacet(RenderedAdjustedFacet.class);
         final int adjustBy = renderedAdjustedFacet != null ? renderedAdjustedFacet.value() : 0;
 
+        final ParseableFacet parseableFacet = objectSpecification.getFacet(ParseableFacet.class);
+
         IConverter converter = null;
         if (java.util.Date.class == correspondingClass) {
             converter = new DateConverterForJavaUtilDate(wicketViewerSettings, adjustBy);
@@ -94,11 +106,47 @@ public class IsisConverterLocator {
                 scale = facet.getScale();
             }
             converter = new BigDecimalConverterWithScale(scale).forViewMode();
+        } else if(parseableFacet != null){
+            // try to parse (as a value object) using the Isis API.
+            converter = new IConverter() {
+                @Override public Object convertToObject(final String value, final Locale locale) throws ConversionException {
+                    if(value == null) {
+                        return null;
+                    }
+                    final ObjectAdapter parsedObjectAdapter = parseableFacet.parseTextEntry(objectAdapter, value, new Localization() {
+                        @Override public Locale getLocale() {
+                            return locale;
+                        }
+
+                        @Override public TimeZone getTimeZone() {
+                            // TODO: need a TimeZoneProvider service, cf LocaleProvider.
+                            return TimeZone.getDefault();
+                        }
+                    });
+                    return parsedObjectAdapter != null? parsedObjectAdapter.getObject(): null;
+                }
+
+                @Override public String convertToString(final Object value, final Locale locale) {
+                    if(value == null) {
+                        return null;
+                    }
+                    final ObjectAdapter obj = getAdapterManager().adapterFor(value);
+                    // TODO: the Isis API doesn't deal with locale (or timezone) so isn't symmetrical :-(
+                    return parseableFacet.parseableTitle(obj);
+                }
+            };
         } else if (Application.exists()) {
             final IConverterLocator converterLocator = Application.get().getConverterLocator();
             converter = converterLocator.getConverter(correspondingClass);
         }
-
         return converter;
+    }
+
+    static AdapterManagerDefault getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    static PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 }
