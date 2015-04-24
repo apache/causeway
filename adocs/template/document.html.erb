@@ -108,6 +108,19 @@
         }
     </style>
 
+    <style>
+        /* overriding colony.css stylesheet */
+        .literalblock pre, .literalblock pre[class], .listingblock pre, .listingblock pre[class] {
+           /*padding: 1.25em 1.5625em 1.125em 1.5625em;*/
+           padding: 0.3em 0.6em 0.25em 0.6em;
+        }
+        @media only screen and (min-width: 1280px)
+        #toc.toc2 {
+          /*width: 20em;*/
+          width: 25em;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -214,7 +227,7 @@
 </div>
 
 <div class="row">
-    <div class="large-9 medium-9 columns">
+    <div class="large-12 medium-12 columns">
 
         <div id="doc-content">
           <%= document.content %>
@@ -231,11 +244,16 @@
 
     </div>
 
-    <div class="large-3 medium-3 columns">
+    <!--
+    as a column to the right
+    (previous was using foundation in a 9:3 ratio with the content, above... decided was too crammed.
+    -->
+    <div class="xlarge-3 xmedium-3 xcolumns">
         <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
           <%= converter.convert_with_options @document, 'outline', :toclevels => 6  %>
         </div>
     </div>
+
 </div>
 
 
