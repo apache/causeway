@@ -160,17 +160,17 @@ Let's load in some actual code!  We do this by importing the Maven modules.
 First up, open up the Maven tool window (`View > Tool Windows > Maven Projects`).  You can then use the 'plus' button to add Maven modules.  In the screenshot you can see we've loaded in Isis core; the modules are listed in the _Maven Projects_ window and corresponding (IntelliJ) modules are shown in the _Projects_ window:
 
 .IntelliJ Maven Module Management - Importing Maven modules
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/010-maven-modules-view.png[width="730px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/010-maven-modules-view.png[width="730px"]
 
 We can then import another module (from some other directory).  For example, here we are importing the Isis Addons' todoapp example:
 
 .IntelliJ Maven Module Management - Importing another Module
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/020-adding-another-module.png[width="400px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/020-adding-another-module.png[width="400px"]
 
 You should then see the new Maven module loaded in the _Projects_ window and also the _Maven Projects_ window:
 
 .IntelliJ Maven Module Management -
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/030-other-module-added.png[width="730px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/030-other-module-added.png[width="730px"]
 
 If any dependencies are already loaded in the project, then IntelliJ will automatically update the CLASSPATH to resolve to locally held modules (rather from `.m2/repository` folder).  So, for example (assuming that the `<version>` is correct, of course), the Isis todoapp will have local dependencies on the Isis core.
 
@@ -179,17 +179,17 @@ You can press F4 (or use `File > Project Structure`) to see the resolved classpa
 If you want to focus on one set of code (eg the Isis todoapp but not Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove from the the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
 
 .IntelliJ Maven Module Management - Ignoring Modules
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/040-ignoring-modules.png[width="730px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/040-ignoring-modules.png[width="730px"]
 
 Confirm that it's ok to ignore these modules:
 
 .IntelliJ Maven Module Management - Ignoring Modules (ctd)
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/050-ignoring-modules-2.png[width="300px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png[width="300px"]
 
 All being well you should see that the _Projects_ window now only contains the code you are working on.  Its classpath dependencies will be adjusted (eg to resolve to Isis core from `.m2/repository`):
 
 .IntelliJ Maven Module Management - Updated Projects Window
-image::{_imagesdir}appendices/dev-env/intellij100-maven-module-mgmt/060-ignored-modules.png[width="730px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/060-ignored-modules.png[width="730px"]
 
 
 
@@ -204,7 +204,7 @@ Once you've imported your Isis application, we should run it.  We do this by cre
 Set up the details as follows:
 
 .IntelliJ Running the App - Run Configuration
-image::{_imagesdir}appendices/dev-env/intellij110-running-the-app/010-run-configuration.png[width="600px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/010-run-configuration.png[width="600px"]
 
 We specify the `Main class` to be `org.apache.isis.WebServer`; this is a wrapper around Jetty.  It's possible to pass program arguments to this (eg to automatically install fixtures), but for now leave this blank.
 
@@ -213,7 +213,7 @@ Also note that `Use classpath of module` is the webapp module for your app, and 
 Next, and most importantly, configure the DataNucleus enhancer to run for your `dom` goal.  This can be done by defining a Maven goal to run before the app:
 
 .IntelliJ Running the App - Datanucleus Enhancer Goal
-image::{_imagesdir}appendices/dev-env/intellij110-running-the-app/020-datanucleus-enhancer-goal.png[width="400px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/020-datanucleus-enhancer-goal.png[width="400px"]
 
 The `-o` flag in the goal means run off-line; this will run faster.
 
@@ -227,12 +227,12 @@ You should now be able to run the app using `Run > Run Configuration`.  The same
 The easiest way to run the unit tests is just to right click on the `dom` module in the _Project Window_, and choose run unit tests.  Hopefully your tests will pass (!).
 
 .IntelliJ Running the App - Unit Tests Run Configuration
-image::{_imagesdir}appendices/dev-env/intellij110-running-the-app/030-running-unit-tests.png[width="600px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/030-running-unit-tests.png[width="600px"]
 
 As a side-effect, this will create a run configuration, very similar to the one we manually created for the main app:
 
 .IntelliJ Running the App - Unit Tests Run Configuration
-image::{_imagesdir}appendices/dev-env/intellij110-running-the-app/040-running-unit-tests-run-configuration.png[width="600px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/040-running-unit-tests-run-configuration.png[width="600px"]
 
 Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
 
@@ -243,7 +243,7 @@ Integration tests can be run in the same way as unit tests, however the `dom` mo
 One approach is to initially run the tests use the right click on the `integtests` module; the tests will fail because the code won't have been enhanced, but we can then go and update the run configuration to run the datanucleus enhancer goal (same as when running the application):
 
 .IntelliJ Running the App - Integration Tests Run Configuration
-image::{_imagesdir}appendices/dev-env/intellij110-running-the-app/050-running-integration-tests-run-configuration.png[width="600px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/050-running-integration-tests-run-configuration.png[width="600px"]
 
 
 
