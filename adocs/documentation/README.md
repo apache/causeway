@@ -42,31 +42,47 @@ Put the following information in your ~/.m2/settings.xml file
 Naming Conventions
 ------------------
 
+For documents with inclusions, use '_' to separate out the logical hierarchy:
+
 <pre>
 xxx-xxx/xxx-xxx.adoc
         _xxx-xxx_ppp-ppp.adoc
         _xxx-xxx_qqq-qqq.adoc
         _xxx-xxx_qqq-qqq_mmm-mmm.adoc
         _xxx-xxx_qqq-qqq_nnn-nnn.adoc
+</pre>
 
-xxx-xxx/images/ppp-ppp
-               ppp-ppp
+Any referenced images should be in subdirectories of the `images` directory: 
+<pre>
+xxx-xxx/images/.
+              /ppp-ppp/.
+              /qqq-qqq/.
+                      /mmm-mmm
+                      /nnn-nnn
 
-xxx-xxx/resources/
-                  ppp-ppp/
-                  qqq-qqq/
-                  qqq-qqq/mmm-mmm/
-                  qqq-qqq/nnn-nnn/
+</pre>
+
+And similarly any resources should be in the `resources` subdirectory:
+<pre>
+xxx-xxx/resources/.
+                  ppp-ppp/.
+                  qqq-qqq/.
+                         /mmm-mmm/
+                         /nnn-nnn/
 </pre>
 
 Build and Review (using Maven)
 -----------------------
 
-To build the documentation locally prior to release, simply use:
+To build the documentation locally prior to release, use:
 
     mvn site
 
 The site will be generated at `target/site/index.html`.
+
+
+Review
+------
 
 Then open the browser on [localhost:8000](http://localhost:8000/).
 

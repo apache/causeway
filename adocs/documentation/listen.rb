@@ -5,6 +5,9 @@ require 'pathname'
 require 'fileutils'
 require 'bundler/setup'
 
+require 'webrick'
+include WEBrick
+
 Bundler.require(:default)
 
 # uses: https://github.com/guard/listen
@@ -86,4 +89,8 @@ listener = Listen.to('src/main/asciidoc/user-guide') do |modified, added, remove
 end
 listener.start
 listener.only(/.*\.adoc$/)
-sleep
+
+s = HTTPServer.new(:Port => 4000,  :DocumentRoot => 'target/site')
+trap("INT"){ s.shutdown }
+s.start
+
