@@ -11,17 +11,17 @@ in order for the action to proceed.
 
 For example:
 
-image::{_imagesdir}/user-guide-how-tos-tips-n-tricks-are-you-sure.png[]
+image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure.png[]
 
 If the user checks the box:
 
-image::{_imagesdir}/user-guide-how-tos-tips-n-tricks-are-you-sure-happy-case.png[]
+image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure-happy-case.png[]
 
 then the action will complete.
 
 However, if the user fails to check the box, then a validation message is shown:
 
-image::{_imagesdir}/user-guide-how-tos-tips-n-tricks-are-you-sure-sad-case.png[]
+image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure-sad-case.png[]
 
 == Code example
 

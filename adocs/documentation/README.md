@@ -39,20 +39,47 @@ Put the following information in your ~/.m2/settings.xml file
     </server>
 
 
-Build and Review
-----------------
+Instant Preview (optional)
+---------------
 
-To build the documentation locally, simply use:
+To build 
 
-    mvn site
+download ruby 2.0.0
 
-The site will be generated at `target/site/index.html`.
+* [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
+
+> the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
+
+download and install devkit for the Ruby 2.0 installation:
+
+* [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
+* https://github.com/oneclick/rubyinstaller/wiki/Development-Kit
+
+install:
+
+    gem install bundler
+    bundle install
+
+run:
+
+    ruby listen.rb
 
 To review, recommend running a Python server:
 
     cd target/site
     python -m SimpleHTTPServer
     
+
+
+Build and Review (using Maven)
+-----------------------
+
+To build the documentation locally prior to release, simply use:
+
+    mvn site
+
+The site will be generated at `target/site/index.html`.
+
 Then open the browser on [localhost:8000](http://localhost:8000/).
 
 Publish procedure

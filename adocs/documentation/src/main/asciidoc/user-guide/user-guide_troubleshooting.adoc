@@ -7,7 +7,7 @@ IMPORTANT: TODO
 
 ## JDO/DataNucleus Logging
 
-include::user-guide-troubleshooting-datanucleus-logging.adoc[leveloffset=+1]
+include::user-guide_troubleshooting-datanucleus-logging.adoc[leveloffset=+1]
 
 
 

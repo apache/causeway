@@ -1,0 +1,13 @@
+source 'https://rubygems.org'
+
+# only compatible with ruby 2.0 
+# http://stackoverflow.com/questions/29123339/error-installed-wdm-gem-on-windows-system
+gem 'wdm', '>= 0.1.0' if Gem.win_platform?
+
+
+#https://github.com/guard/listen
+gem 'listen', '~> 2.7' # this prevents upgrading to 3.x
+gem 'asciidoctor'
+
+gem 'tilt'
+gem 'thread_safe'

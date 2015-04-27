@@ -1,0 +1,40 @@
+= Background Execution
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+
+## JDO Implementation
+
+The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of link:../../../../reference/non-ui/background-command-execution.html[BackgroundCommandExecution]. The intended use is for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz.org[Quartz]) to poll for `Command`s to be executed, and then execute them.
+
+As you might imagine, this implementation queries for `Command`s persisted by the JDO implementations of link:../services/command-service-jdo.html[CommandService] and link:../services/background-command-service-jdo.html[BackgroundCommandService], using the `BackgroundCommandServiceJdoRepository`.
+
+The diagram below shows the inheritance hierarchy for this class:
+
+.Inheritance Hierarchy for `BackgroundCommandExecution`
+image::http://yuml.me/363b335f[width="600px"]
+
+
+[NOTE]
+----
+In 1.6.0 this implementation was released as part of `org.apache.isis.core:isis-module-command-jdo:1.6.0` and was also released as an http://github.com/isisaddons/isis-module-command[Isis addon] module.
+
+In 1.7.0+ only the http://github.com/isisaddons/isis-module-command[Isis addon] (non-ASF) implementation is released.
+----
+
+
+## Footnote
+
+NOTE: The diagrams on this page were created using http://yuml.me[yuml.me].
+
+[source]
+.DSL (http://yuml.me/edit/363b335f[yuml.me/363b335f]):
+----
+[AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
+[BackgroundCommandExecution]^-[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]
+[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]->injected[BackgroundCommandServiceJdoRepository|findBackgroundCommandsNotYetStarted()]
+----
