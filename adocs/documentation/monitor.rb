@@ -38,15 +38,7 @@ def process(file,srcBasePath,targetBasePath,templateDir,i)
 
     srcDir = File.dirname file
     srcBase = File.basename file
-
-    srcSplit = srcBase.split('_')
-    if srcSplit[0].length==0 then
-        # handle include files of form
-        # _xxx-xxx_yyy-yyy_zzz  => xxx-xxx.adoc
-        regenerate = srcSplit[1] + ".adoc"
-    else
-        regenerate = srcBase
-    end
+    ext = File.extname file
 
     srcPath = Pathname.new srcDir
     srcRel = srcPath.relative_path_from srcBasePath
@@ -57,19 +49,50 @@ def process(file,srcBasePath,targetBasePath,templateDir,i)
     Dir.chdir srcDir
     FileUtils.mkdir_p targetRelDir
 
-    cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+    if ext == ".adoc" then
 
-    puts ""
-    puts "#{i}: #{cmd}"
+        srcSplit = srcBase.split('_')
+        if srcSplit[0].length==0 then
+            # handle include files of form
+            # _xxx-xxx_yyy-yyy_zzz  => xxx-xxx.adoc
+            regenerate = srcSplit[1] + ".adoc"
+        else
+            regenerate = srcBase
+        end
 
-    system cmd
+        cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+
+        puts ""
+        puts "#{i}: #{cmd}"
+
+        system cmd
+
+    else
+
+        cmd = "cp #{srcBase} #{targetRelDir}"
+
+        puts ""
+        puts "#{i}: #{cmd}"
+
+        system cmd
+
+    end
 
     Dir.chdir workingDir
 
     return i+1
+
 end
 
-listener = Listen.to('src/main/asciidoc/user-guide') do |modified, added, removed|
+# process all files
+files = Dir.glob("src/main/asciidoc/**/*")
+files.each { |file|
+    i = process file, srcBasePath, targetBasePath, templateDir, i
+}
+
+# then continue monitoring all directories
+directories = Dir.glob("src/main/asciidoc/**/*/")
+listener = Listen.to(directories) do |modified, added, removed|
     unless modified.length==0
         modified.each { |file|
             i = process file, srcBasePath, targetBasePath, templateDir, i
@@ -88,7 +111,7 @@ listener = Listen.to('src/main/asciidoc/user-guide') do |modified, added, remove
     end
 end
 listener.start
-listener.only(/.*\.adoc$/)
+#listener.only(/.*\.adoc$/)
 
 s = HTTPServer.new(:Port => 4000,  :DocumentRoot => 'target/site')
 trap("INT"){ s.shutdown }
