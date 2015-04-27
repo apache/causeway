@@ -9,6 +9,9 @@ IMPORTANT: TODO
 
 ### Ubiquitous Language
 
+IMPORTANT: TODO
+
+yada yada
 
 
 ## Naked Objects Pattern

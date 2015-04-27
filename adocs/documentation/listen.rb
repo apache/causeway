@@ -7,73 +7,81 @@ require 'bundler/setup'
 
 Bundler.require(:default)
 
+# https://github.com/guard/listen
 
-#https://github.com/guard/listen
 
+# to suppress
 $CELLULOID_DEBUG=false
 $CELLULOID_TEST=false
 
-#
-#guard 'shell' do
-#  watch(/^.*\.adoc$/) {|m|
-#    #Asciidoctor.convert_file(m[0], :in_place => true)
-#    puts "Hello, Ruby!";
-#  }
-#end
 
-scriptDir = File.absolute_path File.dirname(__FILE__)
+#scriptDir = File.absolute_path File.dirname(__FILE__)
 templateDir = File.absolute_path '../template'
-targetDir = File.absolute_path 'target/site'
+srcBaseDir = File.absolute_path 'src/main/asciidoc'
+targetBaseDir = File.absolute_path 'target/site'
 workingDir = Dir.pwd
 
-templateDirPath = Pathname.new templateDir
-targetDirPath = Pathname.new targetDir
-workingDirPath = Pathname.new workingDir
+#templatePath = Pathname.new templateDir
+srcBasePath = Pathname.new srcBaseDir
+targetBasePath = Pathname.new targetBaseDir
+workingPath = Pathname.new workingDir
 
-listener = Listen.to('src/foo', 'src/bar') do |modified, added, removed|
+#puts "workingDir: #{workingDir}"
+#puts "workingPath: #{workingPath}"
+
+#puts "srcBaseDir: #{srcBaseDir}"
+#puts "srcBasePath: #{srcBasePath}"
+
+#puts "targetBaseDir: #{targetBaseDir}"
+#puts "targetBasePath: #{targetBasePath}"
+
+puts ""
+puts ""
+puts ""
+puts "now monitoring..."
+puts ""
+
+def process(file)
+    puts "regenerating #{file}..."
+end
+
+i=0
+listener = Listen.to('src/main/asciidoc/user-guide') do |modified, added, removed|
   unless modified.length==0
     modified.each { |file|
 
-      dir = File.dirname file 
-      base = File.basename file
+      srcDir = File.dirname file
+      srcBase = File.basename file
 
-      #puts "modified #{file}"
-      #puts "dir: #{dir}"
-      #puts "base: #{base}"
+      srcSplit = srcBase.split('_')
+      if srcSplit[0].length==0 then
+          regenerate = srcSplit[1] + ".adoc"
+      else
+          regenerate = srcBase
+      end
 
-      dirPath = Pathname.new dir
+      srcPath = Pathname.new srcDir
+      srcRel = srcPath.relative_path_from srcBasePath
+      targetRelPath = targetBasePath + srcRel
+      targetRelDir = File.absolute_path targetRelPath.to_s
 
-      srcRel = dirPath.relative_path_from workingDirPath
-      #templateRel = dirPath.relative_path_from templateDirPath
+      #puts "regenerate: #{regenerate}"
+      #puts "targetRelPath: #{targetRelPath}"
+      #puts "targetRelDir: #{targetRelDir}"
 
-      targetRelPath = targetDirPath + srcRel
-      destinationDir = File.absolute_path targetRelPath.to_s
+      process regenerate
+      Dir.chdir srcDir
+      FileUtils.mkdir_p targetRelDir
 
-      Dir.chdir(dir)
+      #cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+      cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font"
 
-      #puts "dir: #{dir}"
-      #puts "file: #{file}"
-      #puts "templateDir: #{templateDir}"
-      #puts "destinationDir: #{destinationDir}"
-
-      FileUtils.mkdir_p destinationDir
-
-      #attributes = {:imagesdir => '', :toc => 'right', :icons => 'font', :source-highlighter => 'coderay'}
-
-      #Asciidoctor.convert_file(file, :in_place => true, :backend => 'html', :eruby => 'erb', :template_dir => templateDir, :destination_dir => targetRelDir, :attributes => attributes)
-
-      #Asciidoctor.convert_file(file, :in_place => true, :backend => 'html', :eruby => 'erb', :template_dir => templateDir, :destination_dir => targetRelDir)
-
-      cmd = "asciidoctor #{file} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{destinationDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
-
+      i=i+1
       puts ""
-      puts cmd
-
-#Asciidoctor.convert_file file, :in_place => true, :backend => 'html', :eruby => 'erb', :template_dir => templateDir, :destination_dir => targetRelDir 
-
+      puts "#{i}: #{cmd}"
       system cmd
 
-      Dir.chdir(workingDir)
+      Dir.chdir workingDir
     }
   end
   unless added.length==0

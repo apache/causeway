@@ -5,13 +5,13 @@
 
 IMPORTANT: TODO
 
-include::user-guide_core-concepts-principles.adoc[leveloffset=+1]
+include::_user-guide_core-concepts_principles.adoc[leveloffset=+1]
 
-include::user-guide_core-concepts-apache-isis-vs.adoc[leveloffset=+1]
+include::_user-guide_core-concepts_apache-isis-vs.adoc[leveloffset=+1]
 
-include::user-guide_core-concepts-building-blocks.adoc[leveloffset=+1]
+include::_user-guide_core-concepts_building-blocks.adoc[leveloffset=+1]
 
-include::user-guide_core-concepts-framework-provided-services.adoc[leveloffset=+2]
+include::_user-guide_core-concepts_framework-provided-services.adoc[leveloffset=+2]
 
 
 ## Honouring the Single Responsibility Principle

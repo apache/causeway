@@ -20,11 +20,11 @@ image::http://yuml.me/363b335f[width="600px"]
 
 
 [NOTE]
-----
+====
 In 1.6.0 this implementation was released as part of `org.apache.isis.core:isis-module-command-jdo:1.6.0` and was also released as an http://github.com/isisaddons/isis-module-command[Isis addon] module.
 
 In 1.7.0+ only the http://github.com/isisaddons/isis-module-command[Isis addon] (non-ASF) implementation is released.
-----
+====
 
 
 ## Footnote

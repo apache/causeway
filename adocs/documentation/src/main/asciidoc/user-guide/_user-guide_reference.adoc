@@ -1,32 +1,25 @@
-= Tips n Tricks
+= Reference
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 IMPORTANT: TODO
 
-## Are You Sure? idiom
+include::_user-guide_reference_recognized-methods.adoc[leveloffset=+1]
 
-include::user-guide_how-tos_tips-n-tricks_are-you-sure.adoc[leveloffset=+1]
+include::_user-guide_reference_recognized-annotations.adoc[leveloffset=+1]
 
+include::_user-guide_reference_recognized-configuration-properties.adoc[leveloffset=+1]
 
+include::_user-guide_reference_domain-services.adoc[leveloffset=+1]
 
-## To review...
+include::_user-guide_reference_value-types.adoc[leveloffset=+1]
 
-Most of these will move elsewhere, I think:
+include::_user-guide_reference_applib-utility-classes.adoc[leveloffset=+1]
 
-* Singleton & request-scoped services
-* Decoupling dependencies using contributions
-* How to suppress contributions
-* Bulk actions, acting upon lists
-* Bidirectional relationships
-* View models
+include::_user-guide_reference_convenience-superclasses.adoc[leveloffset=+1]
 
+include::_user-guide_reference_cmd-line-args.adoc[leveloffset=+1]
 
+include::_user-guide_reference_web-xml.adoc[leveloffset=+1]
 
-## Overriding JDO Annotations
-
-include::user-guide_how-tos_tips-n-tricks_overriding-jdo-annotations.adoc[leveloffset=+1]
-
-
-## Render abstract properties in tables

@@ -5,5 +5,5 @@
 
 IMPORTANT: TODO
 
-include::user-guide_getting-started-simpleapp-archetype.adoc[leveloffset=+1]
+include::_user-guide_getting-started_simpleapp-archetype.adoc[leveloffset=+1]
 

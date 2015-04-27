@@ -39,8 +39,42 @@ Put the following information in your ~/.m2/settings.xml file
     </server>
 
 
+Naming Conventions
+------------------
+
+<pre>
+xxx-xxx/xxx-xxx.adoc
+        _xxx-xxx_ppp-ppp.adoc
+        _xxx-xxx_qqq-qqq.adoc
+        _xxx-xxx_qqq-qqq_mmm-mmm.adoc
+        _xxx-xxx_qqq-qqq_nnn-nnn.adoc
+
+xxx-xxx/images/ppp-ppp
+               ppp-ppp
+
+xxx-xxx/resources/
+                  ppp-ppp/
+                  qqq-qqq/
+                  qqq-qqq/mmm-mmm/
+                  qqq-qqq/nnn-nnn/
+</pre>
+
+Build and Review (using Maven)
+-----------------------
+
+To build the documentation locally prior to release, simply use:
+
+    mvn site
+
+The site will be generated at `target/site/index.html`.
+
+Then open the browser on [localhost:8000](http://localhost:8000/).
+
+
 Instant Preview (optional)
 ---------------
+
+
 
 To build 
 
@@ -53,7 +87,7 @@ download ruby 2.0.0
 download and install devkit for the Ruby 2.0 installation:
 
 * [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
-* https://github.com/oneclick/rubyinstaller/wiki/Development-Kit
+* [https://github.com/oneclick/rubyinstaller/wiki/Development-Kit](Ruby DevKit installation)
 
 install:
 
@@ -70,17 +104,8 @@ To review, recommend running a Python server:
     python -m SimpleHTTPServer
     
 
-
-Build and Review (using Maven)
------------------------
-
-To build the documentation locally prior to release, simply use:
-
-    mvn site
-
-The site will be generated at `target/site/index.html`.
-
-Then open the browser on [localhost:8000](http://localhost:8000/).
+Uses:
+* 
 
 Publish procedure
 -----------------
