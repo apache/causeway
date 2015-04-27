@@ -4,6 +4,7 @@ GEM
     asciidoctor (1.5.2)
     celluloid (0.16.0)
       timers (~> 4.0.0)
+    coderay (1.1.0)
     ffi (1.9.8-x64-mingw32)
     hitimes (1.2.2)
     listen (2.10.0)
@@ -24,6 +25,7 @@ PLATFORMS
 
 DEPENDENCIES
   asciidoctor
+  coderay
   listen (~> 2.7)
   thread_safe
   tilt

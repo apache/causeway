@@ -11,3 +11,4 @@ gem 'asciidoctor'
 
 gem 'tilt'
 gem 'thread_safe'
+gem 'coderay'
