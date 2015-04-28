@@ -68,6 +68,11 @@
           position: relative;
         }
 
+        *:not(pre) > code {
+            background-color: inherit;
+            border: none;
+        }
+
         body div#toc li,
         body div#toc2 li {
             list-style-type: none;
@@ -132,6 +137,12 @@
 
         .admonitionblock.tip > table td.content {
             color: #10B061;
+        }
+        .admonitionblock.note > table td.content {
+            color: #B509AB;
+        }
+        .admonitionblock.important > table td.content {
+            color: #D5810A;
         }
 
         .imageblock img {

@@ -10,5 +10,4 @@ IMPORTANT: TODO
 
 == Isis Addons Implementation
 
-
-For 1.7.0+, see the [Isis addon](http://github.com/isisaddons/isis-module-audit) module.
+For 1.7.0+, see the http://github.com/isisaddons/isis-module-audit}[Isis addons' Audit module] (non-ASF).
