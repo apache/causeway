@@ -44,32 +44,28 @@ Naming Conventions
 
 For documents with inclusions, use '_' to separate out the logical hierarchy:
 
-<pre>
-xxx-xxx/xxx-xxx.adoc
-        _xxx-xxx_ppp-ppp.adoc
-        _xxx-xxx_qqq-qqq.adoc
-        _xxx-xxx_qqq-qqq_mmm-mmm.adoc
-        _xxx-xxx_qqq-qqq_nnn-nnn.adoc
-</pre>
+    xxx-xxx/xxx-xxx.adoc
+            _xxx-xxx_ppp-ppp.adoc
+            _xxx-xxx_qqq-qqq.adoc
+            _xxx-xxx_qqq-qqq_mmm-mmm.adoc
+            _xxx-xxx_qqq-qqq_nnn-nnn.adoc
 
 Any referenced images should be in subdirectories of the `images` directory: 
-<pre>
-xxx-xxx/images/.
-              /ppp-ppp/.
-              /qqq-qqq/.
-                      /mmm-mmm
-                      /nnn-nnn
 
-</pre>
+    xxx-xxx/images/.
+                  /ppp-ppp/.
+                  /qqq-qqq/.
+                          /mmm-mmm
+                          /nnn-nnn
 
 And similarly any resources should be in the `resources` subdirectory:
-<pre>
-xxx-xxx/resources/.
-                  ppp-ppp/.
-                  qqq-qqq/.
-                         /mmm-mmm/
-                         /nnn-nnn/
-</pre>
+
+    xxx-xxx/resources/.
+                      ppp-ppp/.
+                      qqq-qqq/.
+                             /mmm-mmm/
+                             /nnn-nnn/
+
 
 Build and Review (using Maven)
 -----------------------
@@ -80,55 +76,57 @@ To build the documentation locally prior to release, use:
 
 The site will be generated at `target/site/index.html`.
 
-
-Review
-------
-
-Then open the browser on [localhost:8000](http://localhost:8000/).
+You could then use a web server such as Python's SimpleHTTPServer to preview (so that all Javascript works correctly).  However, instead we recommend using instant preview, described nex.
 
 
-Instant Preview (optional)
+Instant Rebuild (using Ruby)
 ---------------
 
+The ruby script, `monitor.rb` emulates the `mvn site` command, regenerating any changed Asciidoctor files to the relevant `target/site` directory.  If any included files are changed then it rebuilds the parent (per the above naming convention).   
 
+To setup:
 
-To build 
+* download and install ruby 2.0.0, from [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
+* download devkit for the Ruby 2.0 installation, also from [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads).  Then follow the [https://github.com/oneclick/rubyinstaller/wiki/Development-Kit](installation instructions) on their wiki
 
-download ruby 2.0.0
-
-* [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
-
-> the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
-
-download and install devkit for the Ruby 2.0 installation:
-
-* [http://rubyinstaller.org/downloads/](rubyinstaller.org/downloads)
-* [https://github.com/oneclick/rubyinstaller/wiki/Development-Kit](Ruby DevKit installation)
+> Note the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
 
 install:
 
     gem install bundler
     bundle install
 
-run:
+to run, typically just use:
 
-    ruby listen.rb
+    ruby monitor.rb
 
-To review, recommend running a Python server:
+This will start monitoring all files under `src/main/asciidoc`, and start up a web server on port 4000 so you can review results.
 
-    cd target/site
-    python -m SimpleHTTPServer
+There are several other options, use `-h` flag for usage:
+
+    ruby monitor.rb -h
+
+which should print:
+
+    usage: monitor.rb [options]
+        -a, --all        process all files
+        -x, --nomonitor  do not monitor, just process all files then exit
+        -p, --port       port (default: 4000)
+        -b, --browser    launch browser
+        -h, --help       help
+
+So, for example
+
+    ruby monitor.rb -a -b -p 9090
     
+will process all files before starting monitoring, start the web browser on port 9000, and will also automatically open up your default web browser at that port.
 
-Uses:
-* 
+
 
 Publish procedure
 -----------------
 
-To publish the documentation at [Isis Site](http://isis.apache.org/) you have do the following steps:
-
-To publish to [staging server](http://isis.staging.apache.org/docs), run:
+To publish the documentation to the [ASF staging server](http://isis.staging.apache.org/docs), run:
 
     mvn clean site-deploy
 

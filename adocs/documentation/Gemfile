@@ -13,3 +13,6 @@ gem 'tilt'
 gem 'thread_safe'
 gem 'coderay'
 gem 'webrick'
+
+gem 'launchy', '~> 2.4.3'
+gem 'slop', '~> 4.1.0'

@@ -1,28 +1,40 @@
-#!/c/bin/Ruby200-x64/bin/ruby -w
-
 require 'rubygems'
 require 'pathname'
 require 'fileutils'
 require 'bundler/setup'
-
-#require 'launchy'
-
+require "slop"
+require 'launchy'
 require 'webrick'
-
-#include Launchy
-include WEBrick
-
 
 Bundler.require(:default)
 
+include WEBrick
 
-
-#prime = false
-
-
-# to suppress some debugs
+# to (try to) suppress some debugs
 $CELLULOID_DEBUG=false
 $CELLULOID_TEST=false
+
+
+
+#
+# parse cmd line args
+#
+opts = Slop.parse do |o|
+  o.bool '-a', '--all', 'process all files'
+  o.bool '-x', '--nomonitor', 'do not monitor, just process all files then exit'
+  o.int '-p', '--port', 'port (default: 4000)', default: 4000
+  o.bool '-b', '--browser', 'launch browser'
+  o.bool '-h', '--help', 'help'
+end
+
+if opts.help? then
+    puts opts
+    exit
+end
+
+processAll = opts.all? || opts.nomonitor?
+port = opts[:port]
+
 
 #scriptDir = File.absolute_path File.dirname(__FILE__)
 templateDir = File.absolute_path '../template'
@@ -70,10 +82,10 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 
             cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
-            #unless priming then
+            unless priming then
                 puts ""
                 puts "#{i}: #{cmd}"
-            #end
+            end
 
             system cmd
         end
@@ -84,10 +96,10 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 
             cmd = "cp #{srcBase} #{targetRelDir}"
 
-            #unless priming then
+            unless priming then
                 puts ""
                 puts "#{i}: #{cmd}"
-            #end
+            end
 
             system cmd
 
@@ -102,29 +114,35 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 end
 
 
-puts ""
-puts ""
-puts ""
-puts "priming (processing all files)..."
-puts ""
-
-
 #
-# priming: process all files
+# process all files
 #
-files = Dir.glob("src/main/asciidoc/**/*")
-#if prime then
+if processAll then
+
+    files = Dir.glob("src/main/asciidoc/**/*")
+
+    puts ""
+    puts ""
+    puts ""
+    puts "processing all files..."
+    puts ""
+
     files.each { |file|
         absFile = File.absolute_path file
         i = process absFile, srcBasePath, targetBasePath, templateDir, i, true
     }
-#end
+end
 
 
+
+if opts.nomonitor? then
+    exit
+end
+
 puts ""
 puts ""
 puts ""
-puts "now monitoring..."
+puts "monitoring..."
 puts ""
 
 
@@ -132,7 +150,7 @@ puts ""
 # then continue monitoring all directories
 #
 directories = Dir.glob("src/main/asciidoc/**/*/")
-listener = Listen.to(directories) do |modified, added, removed|
+fileListener = Listen.to(directories) do |modified, added, removed|
     unless modified.length==0
         modified.each { |file|
             i = process file, srcBasePath, targetBasePath, templateDir, i, false
@@ -149,18 +167,33 @@ listener = Listen.to(directories) do |modified, added, removed|
         }
     end
 end
-listener.start
+fileListener.start
 
-s = HTTPServer.new(:Port => 4000,  :DocumentRoot => 'target/site')
+httpServer = HTTPServer.new(:Port => port,  :DocumentRoot => 'target/site')
 trap("INT"){
-    s.shutdown
-    listener.stop
+    httpServer.shutdown
+    fileListener.stop
 }
-s.start
 
 
-#puts ""
-#puts "opening web browser @ http://localhost:4000/"
-#puts
-#Launchy.open("http://localhost:4000")
+
+if opts.browser? then
+
+    puts ""
+    puts "opening web browser @ http://localhost:#{port}/"
+    puts
+
+    Launchy.open("http://localhost:#{port}")
+else
+    puts ""
+    puts "open web browser @ http://localhost:#{port}/"
+    puts
+
+end
+
+
+
+httpServer.start
+
+
 
