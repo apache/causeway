@@ -40,9 +40,13 @@ include::_user-guide_reference_domain-services_isis-jdo-support.adoc[leveloffset
 
 include::_user-guide_reference_domain-services_memento-service.adoc[leveloffset=+1]
 
+include::_user-guide_reference_domain-services_publishing-service.adoc[leveloffset=+1]
+
 include::_user-guide_reference_domain-services_query-results-cache.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_scratch-pad.adoc[leveloffset=+1]
+
+include::_user-guide_reference_domain-services_settings-service.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_user-profile-service.adoc[leveloffset=+1]
 

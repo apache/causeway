@@ -5,9 +5,11 @@
 
 IMPORTANT: TODO
 
-
-
 ## Implementation
+
+IMPORTANT: TODO
+
+## Registration
 
 The `EventBusServiceJdo` class provides the default implementation and (as of 1.6.0+) is automatically registered using `@DomainService`.  No further configuration is necessary.
 

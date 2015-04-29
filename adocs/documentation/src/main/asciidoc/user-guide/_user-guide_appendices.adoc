@@ -6,3 +6,7 @@
 IMPORTANT: TODO
 
 include::_user-guide_appendices_dev-env.adoc[leveloffset=+1]
+
+include::_user-guide_appendices_release-notes.adoc[leveloffset=+1]
+
+include::_user-guide_appendices_migration-notes.adoc[leveloffset=+1]

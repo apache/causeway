@@ -8,4 +8,4 @@ IMPORTANT: TODO
 
 == Isis Addons Implementation
 
-For 1.7.0+, see the http://github.com/isisaddons/isis-module-command}[Isis addons' Command module] (non-ASF).
+For 1.7.0+, see the http://github.com/isisaddons/isis-module-command[Isis addons' Command module] (non-ASF).

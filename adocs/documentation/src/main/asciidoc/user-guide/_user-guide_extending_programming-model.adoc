@@ -13,4 +13,3 @@ IMPORTANT: TODO
 
 ## Layout metadata reader
 
-## Listener to create DB schema objects

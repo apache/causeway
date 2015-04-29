@@ -23,6 +23,8 @@ include::_user-guide_how-tos_drop-downs-and-defaults.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_triggering-events.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_using-modules.adoc[leveloffset=+1]
+
 include::_user-guide_how-tos_tips-n-tricks.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_error-handling.adoc[leveloffset=+1]

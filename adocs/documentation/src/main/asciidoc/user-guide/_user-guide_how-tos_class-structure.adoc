@@ -20,49 +20,9 @@ We use Java packages as a way to group related domain objects together; the pack
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
 
-[NOTE]
+[TIP]
 ====
-As of 1.9.0-SNAPSHOT, all the IsisAddons modules (not ASF) define their own (database) schemas.
-
-For example:
-
-[source,java]
-----
-@javax.jdo.annotations.PersistenceCapable( ...
-        schema = "isissecurity",
-        table = "ApplicationUser")
-public class ApplicationUser ... { ... }
-----
-
-and
-
-[source,java]
-----
-@javax.jdo.annotations.PersistenceCapable( ...
-        schema = "isisaudit",
-        table="AuditEntry")
-public class AuditEntry ... { ... }
-----
-
-This results in CREATE TABLE statements such as:
-
-[source,sql]
-----
-CREATE TABLE isissecurity."ApplicationUser" (
-    ...
-)
-----
-
-and
-
-[source,sql]
-----
-CREATE TABLE isisaudit."AuditEntry" (
-    ...
-)
-----
-
-If you don't want to use schemas, then note that you can override the `@PersistenceCapable` annotation by providing XML annotations (`mappings.jdo` files).
+For more on this topic, see <<Using Modules>>.
 ====
 
 
