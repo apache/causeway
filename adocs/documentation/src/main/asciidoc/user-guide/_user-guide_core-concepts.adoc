@@ -3,18 +3,14 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+This introductory chapter should give you a good about what Apache Isis actually *is*: the fundamental ideas and principles that it builds upon, how it compares with other frameworks, what the fundamental building blocks are for actually writing an Isis application, and what services and features the framework provides for you to leverage in your own apps.
+
+include::_user-guide_core-concepts_philosophy.adoc[leveloffset=+1]
 
 include::_user-guide_core-concepts_principles.adoc[leveloffset=+1]
 
-include::_user-guide_core-concepts_apache-isis-vs.adoc[leveloffset=+1]
-
 include::_user-guide_core-concepts_building-blocks.adoc[leveloffset=+1]
 
-include::_user-guide_core-concepts_framework-provided-services.adoc[leveloffset=+2]
+include::_user-guide_core-concepts_framework-provided-services.adoc[leveloffset=+1]
 
-
-## Honouring the Single Responsibility Principle
-
-### Behaviourally Complete vs Contributions
 

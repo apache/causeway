@@ -232,3 +232,6 @@ public String getId()
 ----
 
 This method returns a logical identifier for a service, independent of its implementation. Currently it used only by perspectives, providing a label by which to record the services that are available for a current user's profile. <!--See ? for more about profiles and perspectives.-->
+
+
+

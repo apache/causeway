@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE chapter SYSTEM "local/xml/markup.dtd">
+= Getting Started
+
+
+
+To stop himself from procrastinating in his work, the Greek orator Demosthenes
+would shave off half his beard. Too embarrassed to go outside and with
+nothing else to do, his work got done.
+
+We could learn a lesson or two from old Demosthenes. After all, we
+forever seem to be taking an old concept and inventing a new technology
+around it (always remembering to invent a new acronym, of course)---anything,
+it would seem, instead of getting down to the real work of solving business
+problems.
+
+Domain-driven design (hereafter  _DDD_) puts the emphasis
+elsewhere, "tackling complexity in the heart of software." And Naked
+Objects---an open source Java framework---helps you build your business
+applications with ease. No beard shaving necessary, indeed.
+
+In this chapter, we're going to briefly describe the key ideas underlying
+_DDD_, identify some of the challenges of applying these
+ideas, and see for ourselves how Naked Objects makes our task that much
+easier.
+
+== Understanding Domain-Driven Design
+
+
+
+There's no doubt that we developers love the challenge of understanding
+and deploying complex technologies. But understanding the nuances and
+subtleties of the business domain itself is just as great a challenge,
+perhaps more so. If we devoted our efforts to understanding and addressing
+those subtleties, we could build better, cleaner, and more maintainable
+software that did a better job for our stakeholders. And there's no doubt
+that our stakeholders would thank us for it.
+
+A couple of years back Eric Evans wrote his book  'Domain-Driven Design', which is well on its way to
+becoming a seminal work. In fact, most if not all of the ideas in Evans'
+book have been expressed before, but what he did was pull those ideas
+together to show how predominantly object-oriented techniques can be used
+to develop rich, deep, insightful, and ultimately useful business
+applications.
+
+So, let's start off by reviewing the essential ideas of
+_DDD_.
+
+
+== The Essentials of DDD
+
+
+
+There are two central ideas at the heart of domain-driven design. The
+*_ubiquitous language_* is about getting the whole team
+(both domain experts and developers) to communicate more transparently
+using a domain model. Meanwhile, *_model-driven design_*
+is about capturing that model in a very straightforward manner in code.
+Let's look at each in turn.
+
+=== Creating a Ubiquitous Language
+
+
+
+It's no secret that the IT industry is plagued by project
+failures. Too
+often systems take longer than intended to implement, and when finally
+implemented, they don't address the real requirements anyway.
+
+Over the years we in IT have tried various approaches to address this
+failing. Using waterfall methodologies, we've asked for requirements to
+be fully and precisely written down before starting on anything
+else. Or, using
+agile methodologies, we've realized that requirements are likely to
+change anyway and have sought to deliver systems incrementally using
+feedback loops to refine the implementation.
+
+But let's not get distracted talking about methodologies. At the end
+of the day what really matters is communication between the domain
+experts (that is, the business) who need the system and the techies
+actually implementing it. If the two don't have and cannot evolve a
+shared understanding of what is required, then the chance of delivering
+a useful system will be next to nothing.
+
+Bridging this gap is traditionally what business analysts are for;
+they act as interpreters between the domain experts and the developers.
+However, this still means there are two (or more) languages in use,
+making it difficult to verify that the system being built is correct. If
+the analyst mistranslates a requirement, then neither the domain expert
+nor the application developer will discover this until (at best) the
+application is first demonstrated or (much worse) an end user sounds
+the alarm once the application has been deployed into production.
+
+Rather than trying to translate between a business language and a
+technical language, with  _DDD_ we aim to have the
+business and developers using the same terms for the same concepts in order to
+create a single *_domain model_*. This domain model
+identifies the relevant concepts of the domain, how they relate, and
+ultimately where the responsibilities are. This single domain model
+provides the vocabulary for the  *ubiquitous language* for our
+system.
+
+[TIP]
+=====
+
+In Extreme Programming, there is a similar idea called
+a  *system of names*. But  *ubiquitous language* is much more
+evocative.
+
+====
+
+
+
+==
+
+.Ubiquitous Language
+****
+
+Build a common language between the domain experts and developers
+by using the concepts of the domain model as the primary means of
+communication. Use the terms in speech, in diagrams, in writing, and when
+presenting.
+
+If an idea cannot be expressed using this set of concepts, then go
+back and extend the model. Look for and remove ambiguities and
+inconsistencies.
+
+****
+
+
+
+Creating a  *ubiquitous
+language* calls upon everyone involved in the system's development
+to express what they are doing through the vocabulary provided by the
+model. If this can't be done, then our model is incomplete. Finding the
+missing words deepens our understanding of the domain being modeled.
+
+This might sound like nothing more than me insisting that the
+developers shouldn't use jargon when talking to the business. Well,
+that's true enough, but it's not a one-way street. A  *ubiquitous
+language* demands that the developers work hard to understand the
+problem domain, but it also demands that the business works hard in
+being  *precise* in its naming and descriptions of those
+concepts. After all, ultimately the developers will have to express
+those concepts in a computer programming language.
+
+Also, although here I'm talking about the "domain experts" as being a
+homogeneous group of people, often they may come from different branches
+of the business. Even if we weren't building a computer system, there's a
+lot of value in helping the domain experts standardize their own
+terminology. Is the marketing department's "prospect" the same as sales'
+"customer," and is that the same as an after-sales "contract"?
+
+The need for precision within the  *ubiquitous language*
+also helps us scope the system. Most business processes evolve piecemeal
+and are often quite ill-defined. If the domain experts have a very good
+idea of what the business process should be, then that's a good
+candidate for automation, that is, including it in the scope of the
+system. But if the domain experts find it hard to agree, then it's
+probably best to leave it out. After all, human beings are rather more
+capable of dealing with fuzzy situations than computers.
+
+So, if the development team (business and developers together)
+continually searches to build their  *ubiquitous language*,
+then the domain model naturally becomes richer as the nuances of the
+domain are uncovered. At the same time, the knowledge of the business
+domain experts also deepens as edge conditions and contradictions that
+have previously been overlooked are explored.
+
+We use the  *ubiquitous language* to build up a domain
+model. But what do we do  *with* that model? The answer to
+that is the second of our central ideas.
+
+
+=== Model-Driven Design
+
+
+
+Of the various methodologies that the IT industry has tried, many
+advocate the production of separate analysis models and implementation
+models. A recent example is that of the  _OMG_'s Model-Driven Architecture ( _MDA_) initiative, with its
+platform-independent model (the  _PIM_) and a
+platform-specific model (the  _PSM_).
+
+Bah and humbug! If we use our  *ubiquitous language* just
+to build up a high-level analysis model, then we will re-create the
+communication divide. The domain experts and business analysts will look
+only to the analysis model, and the developers will look only to the
+implementation model. Unless the mapping between the two is completely
+mechanical, inevitably the two will diverge.
+
+What do we mean by  *model* anyway? For some, the term will bring to
+mind  _UML_ class or sequence diagrams and the like. But
+this isn't a model; it's a visual  *representation* of some
+aspect of a model. No, a domain model is a group of related concepts,
+identifying them, naming them, and defining how they relate. What is in
+the model depends on what our objective is. We're not looking to simply
+model everything that's out there in the real world. Instead, we want to
+take a relevant abstraction or simplification of it and then make it do
+something useful for us. Oft quoted and still true is that a model is neither
+right nor wrong, just more or less useful.
+
+For our  *ubiquitous language* to have value, the domain
+model that encodes it must have a straightforward, literal
+representation to the design of the software, specifically to the implementation. Our
+software's design should be driven by this model; we should have a
+*model-driven design*.
+
+==
+
+.Model-Driven Design
+****
+
+There must be a straightforward and very literal way to represent
+the domain model in terms of software. The model should balance these
+two requirements: form the  *ubiquitous language* of the
+development team and be representable in code.
+
+Changing the code means changing the model; refining the model
+requires a change to the code.
+
+****
+
+
+
+Here also the word  *design* might mislead; some might again be
+thinking of design documents and design diagrams. But by  *design* we mean
+a way of organizing the domain concepts, which in turn leads to the way
+in which we organize their representation in code.
+
+Luckily, using *_object-oriented_*
+( _OO_) languages such as Java, this is relatively easy
+to do;  _OO_ is based on a modeling paradigm anyway. We
+can express domain concepts using classes and interfaces, and we can
+express the relationships between those concepts using associations.
+
+
+So far so good. Or maybe, so far so much motherhood and apple pie.
+Understanding the  _DDD_ concepts isn't the same as being
+able to apply them, and some of the  _DDD_ ideas can be
+difficult to put into practice. What this book is about is how Naked
+Objects eases that path by applying these central ideas of
+_DDD_ in a very concrete way. So, now would be a good time
+to see how.
+
+
+== Introducing Naked Objects
+
+
+
+*_Naked Objects_* is both an architectural pattern and a software
+framework. The pattern was originally conceived and articulated by Richard
+Pawson as a means of engaging business stakeholders and experts in
+developing more expressive domain-driven applications. Richard discusses this in more
+detail in the foreword.
+
+The framework, then, is an implementation of the pattern to help you
+rapidly prototype, develop, and deploy domain-driven applications:
+
+
+*  *Rapid prototyping* comes from the fact that you can
+develop an application without spending any time writing user
+interface code or persistence code. This creates a very tight feedback
+loop with your domain experts.
+
+
+* The  *development support* comes from the close
+integration with developer tools such as *_Eclipse_* (for coding),
+*_FitNesse_* (for testing), *_Maven_* (for building and packaging), and *_Hudson_*
+(for continuous integration).
+
+
+* The  *deployment support* comes from Naked Objects'
+pluggable architecture allowing different viewers, persistence
+mechanisms, and security. In fact, the domain
+model has no runtime dependencies on the framework, so you can deploy
+your application on any Java-based enterprise architecture with any
+_UI_ you want.
+
+
+
+For more on the original philosophy that drove Naked Objects'
+development, see Richard Pawson and Robert Matthews' book,  'Naked Objects', and Richard's later PhD thesis.
+
+[TIP]
+=====
+
+link:http://www.nakedobjects.org/downloads/Pawson%20thesis.pdf[]
+
+====
+
+
+
+==
+
+.How Does Naked Objects Compare to Other Frameworks?
+****
+
+Many other frameworks promise rapid application
+development and provide automatically generated user interfaces, so how
+do they compare to Naked Objects?
+
+Some of most significant are *_Rails_* (for the Ruby programming
+language), *_Grails_* (Groovy), and *_Spring Roo_* (Java with AspectJ).
+
+[TIP]
+=====
+
+The frameworks mentioned here are hosted at
+link:http://rubyonrails.org/[], link:http://www.grails.org[],
+and link:http://www.springsource.org/roo[].
+
+====
+
+These frameworks all use the classic  *model-view-controller* ( _MVC_)
+pattern for web applications, with scaffolding, code-generation,
+and/or metaprogramming tools for the controllers and views, as well as
+convention over configuration to define how these components
+interact.  The views provided out of the box by these frameworks tend to be
+simple  _CRUD_-style interfaces. More sophisticated
+behavior is accomplished by customizing the generated controllers.
+
+For many developers, the most obvious difference of Naked Objects is
+its deliberate lack of an explicit controller layer;
+non- _CRUD_ behavior is automatically made available in
+its generic object-oriented  _UI_s. More sophisticated
+UIs can be built either by skinning Naked Objects (see <<chp.IWWF>>) or by using a newer viewer that supports
+easy customization (see <<chp.DTFR>>).
+
+Like all of these frameworks, Naked Objects can expose domain
+objects as a  _RESTful_ web service. However, it has some other tricks you
+may not find in a typical  _MVC_ framework:
+it supports client-server (rich-client) deployments as well as on the Web;
+it supports non- _RDBMS_ as well as
+_RDBMS_ object stores, with an in-memory object store
+for rapid prototyping; it supports domain-driven concepts such as
+values, repositories, and domain services; it supports agile scenario
+testing using FitNesse; and it puts the domain
+metamodel at the center, allowing the programming model to be
+redefined.
+****
+
+I could talk at length in a highly theoretical fashion about Naked
+Objects and how it relates to  _DDD_ for the next thirty
+pages, but what we're going to do instead is see Naked Objects in
+action.
+
+
+== Naked Objects in About Five Minutes
+
+
+
+Throughout the book we're going to be using Naked Objects 4.0 for Java,
+an open source framework licensed under Apache License v2.
+
+[TIP]
+=====
+
+link:http://www.apache.org/licenses/LICENSE-2.0.html[]
+
+====
+
+All the other products we're going to use in this book are
+also open source with similar nonrestrictive licenses. Without further
+ado, let's get our development environment set up.
+
+[TIP]
+=====
+
+If you have any problems setting up or running the application,
+don't forget the book's forum as a place to get help.
+
+====
+
+
+
+
+=== Set Up the Development Environment
+
+
+
+Naked Objects is a Java framework, so we need Java 5 or higher
+installed along with an  _IDE_. In this book I'm going
+to be using Eclipse 3.5: it's extremely capable and freely available.
+However, there's nothing stopping you from using some other  _IDE_.
+
+In addition, we need to set up Maven, one of the most commonly used
+tools for building Java software.
+
+[TIP]
+=====
+
+Maven is hosted at link:http://maven.apache.org[].
+
+====
+
+Naked Objects provides a Maven archetype (a project
+template) to help get us started, and the case study we'll develop
+through the book builds on this archetype and so is also a Maven-based
+project. We won't be using particularly advanced features of Maven, but
+if you are interested in learning more, then take a look at  'Maven, The Definitive Guide'.
+
+We also need Maven support in our  _IDE_ (or at least
+the ability to import Maven projects). In the case of Eclipse, this
+means installing a plug-in; if you're using an  _IDE_
+other than Eclipse, then make sure it has equivalent Maven support. Both
+NetBeans 6.7 onward and IntelliJ IDEA 7.0 onward have out-of-the-box
+support, so there's plenty of choice.
+
+And finally, we also need to download the Naked Objects distribution
+itself. We don't need this for the Naked Objects
+_JAR_s---we'll get those courtesy of Maven---but the
+distribution does include a number of resources (such as icons) that we
+will need, along with an example application that we're going to try
+in the next section.
+
+So, do the following:
+
+
+* Install Java 5 or 6 from link:http://java.sun.com[]. Either
+the  _JRE_ or the  _JDK_ is fine. I used
+_JDK_ 1.5_014 for this book. Set the
+`JAVA_HOME` environment variable, and
+update the `PATH` to include
+`$JAVA_HOME/``bin`.
+
+
+* Download and install Maven 2.0.9 or higher, from
+link:http://maven.apache.org/download.html[]. The Maven website
+has instructions on installing Maven, but it basically amounts to
+extracting the  _ZIP_, setting up the
+`M2_HOME` environment variable, and
+updating your `PATH` to pick up the
+`mvn.bat` or `mvn.sh` batch
+file.
+
+
+* Download and unzip Eclipse 3.5 or higher,
+link:http://www.eclipse.org/downloads[]. You can use either the
+standard distribution or the full-blown Java EE enterprise distribution.
+
+
+* Install the  *m2eclipse* plug-ins into Eclipse, v0.9.7 or higher,
+link:http://m2eclipse.sonatype.org/update[]. This is an update
+site from which Eclipse can download and install the software. If
+you aren't an Eclipse regular, the incantation is: select the Help &gt; Install
+New Software menu and then press the Add&#8230; button to add
+this site.
+
+
+* Download Naked Objects 4.0 from
+link:https://sourceforge.net/projects/nakedobjects/[]; the file
+you need is `nakedobjects-4.0.0-for-maven.zip`
+(or whichever is the latest release). Unzip this wherever you want;
+I'll refer to this location as `$NO_HOME` (though
+there's no need to set an environment variable).
+
+
+
+
+Included in the Naked Objects download are a number of Eclipse
+templates that we can use to quickly write short code fragments using
+Content Assist (that is,
+kbd:[Ctrl]+kbd:[Spacebar]). We won't need
+these until the next chapter, but now is a good time to set them up.  So,
+start up Eclipse in a new workspace, select Window &gt;
+Preferences &gt; Java &gt; Editor &gt; Templates, and then select Import.
+Navigate to the
+`$NO_HOME/resources/ide/``eclipse/templates` directory,
+and select the `nakedobjects-templates.xml` file.
+Finally, hit OK.
+
+Note, by the way, that these templates are effectively stored in the
+workspace; if you use File &gt; Switch Workspace, then you'll need to
+reimport the templates. For easy reference, all the templates are
+listed in <<apx.ET>>. When we get to using them, I'll also
+indicate some of the main ones to use in the text.
+
+OK, let's test our setup by importing and running a very simple
+claims-processing application written using Naked Objects.
+
+
+=== Import and Explore a Naked Objects Application
+
+
+
+With Eclipse still running, first make sure you are in the Java
+perspective (use Window &gt; Open Perspective &gt; Other &gt; Java).
+Then, use File &gt; Import &gt; General &gt; Maven Projects, and browse
+to `$NO_HOME/examples/``claims`. Hit Enter, and a set of
+Maven projects should be listed.
+
+==
+
+.The imported `dom` project
+
+image::images/eps/TheImportedDomProject.eps[]
+
+
+
+Now hit Finish, and you should be left with a parent project (no
+suffix) and five further child projects with various suffices. This is the
+standard way that we tend to organize Naked Objects applications:
+
+
+* The `dom` (domain object model) is where most of
+the action is, containing the domain classes that make up the
+application.
+
+
+* The `fixture` project contains fixtures that
+provide a working set of objects for demonstration purposes; we
+cover this in <<chp.RP>>.
+
+
+* The `service` project provides supporting
+services to the domain objects; we cover this mostly in <<chp.IIS>> and in <<chp.IWTD>>.
+
+
+* The `commandline` project is where we run the
+application from during development (throughout the book).
+
+
+* The `webapp` project allows us to deploy the
+application to a web container; we use this at the end of the book,
+in <<chp.DTFR>>.
+
+
+
+Open the `dom` project, as shown in <<sec.TheImportedDomProject>>. There should be three concrete
+classes: `Employee`, `Claim`,
+and `ClaimItem`. `Employee`s
+make `Claim`s, and `Claim`s
+are made up of `ClaimItem`s. In addition, there are
+some interfaces implemented by these domain classes
+(`Approver` and `Claimant`),
+as well as some repository interfaces
+(`EmployeeRepository` and
+`ClaimRepository`). These are used to look up
+`Employee`s and, um,
+`Claim`s; the implementations are in the
+`services` project.
+
+Poke around inside these domain classes. We are of course
+going to be covering how to write such classes in detail (starting in
+<<chp.ITDC>>), but for now it should at easy enough to see
+that an `Employee` has a
+`Name` and an
+`Approver` property:
+
+[source,java]
+----
+include::code/chapter01/Employee.java
+----
+
+==
+
+.The claims app in the DnD viewer
+
+image::images/eps/TheSampleAppInTheDndViewer.eps[]
+
+
+Now here's the thing: the domain model we've been looking at is the
+entire application. Fundamentally, writing a Naked Objects application
+means writing a domain model, and that's it.
+
+
+It's time to run the application, methinks.
+
+
+=== Run the Application
+
+
+
+Naked Objects is so called because it automatically displays the
+domain objects in an *_object-oriented user interface_*
+( _OOUI_). These  _OOUI_s are also
+generic because they can display  *any* domain object in a
+standardized fashion.
+
+Out of the box, Naked Objects ships with two main
+_OOUI_ viewers. The *_drag-n-drop_*
+( _DnD_) viewer is a rich client intended for
+client-side deployment, while the  _HTML_ viewer is
+designed to host your application on the Web. Let's look at the
+_DnD_ viewer first.
+
+==
+
+.The claims app in the HTML viewer
+
+image::images/eps/TheSampleAppInTheHtmlViewer.eps[]
+
+
+In Eclipse, use Run &gt; Run Configurations to bring up the generated
+launch configurations. Listed as a Java Application launch configuration
+should be `claims_exploration_dnd.launch` (defined
+in the `commandline` project). Select this, and then
+click Run. If using another  _IDE_, all we are doing is
+running `org.nakedobjects.runtime.NakedObjects`
+with a command-line option of `--type exploration --viewer
+dnd`.
+
+All being well, the  _DnD_ viewer should launch,
+showing the two repositories as icons. By right-clicking these icons,
+we can invoke actions on the repositories to retrieve objects. Once we
+have an object, we can use it to navigate to other referenced objects
+(click/double-click  icons), right-click to invoke actions, and
+generally have a good old browse around. We can see the
+_DnD_ viewer in action in <<sec.TheSampleAppInTheDndViewer>>.
+
+
+OK, let's now run the same application using the
+_HTML_ viewer. Again, using Run &gt; Run Configurations,
+this time select `claims_exploration_html.``launch`,
+and click Run. Again, if using another IDE, this is running the same
+class with flags of `--type exploration` and `--viewer
+html`.
+
+What Naked Objects will do is run the application on an embedded
+Jetty web server, listening on port 8080. If for some reason you need to
+use another port number, just edit the
+`nakedobjects.embedded-web-server.port`
+property in the
+`config/embedded-web-server.properties` file in the
+`commandline` project.
+
+Eclipse's console view should indicate that the server is up and
+running. Now start your favorite web browser, and go to
+link:http://localhost:8080/logon.app[]. You should be logged in
+automatically and then see links representing the two repositories;
+these are the  _HTML_ equivalents of the icons in the
+_DnD_ desktop view. Click one of these, and then use
+the action links to navigate the application as before. We can see the
+_HTML_ viewer in action in <<sec.TheSampleAppInTheHtmlViewer>>.
+
+Try running the two viewers side-by-side. Although they look
+different, they both provide the same functionality, and that
+functionality is defined entirely by the domain classes.
+
+We're going to be using both of these viewers extensively throughout
+the book; they are, after all, the default viewers provided by Naked
+Objects. I should point out, though, that these aren't the only viewers
+available. In <<chp.DTFR>>, we'll see a number of other
+viewers either developed or in active development. It's also possible to
+use a custom interface; see <<chp.IWWF>>.
+
+
+Before our quick Naked Objects demo, I was asserting that putting
+_DDD_ ideas into practice isn't necessarily that easy
+but that Naked Objects eases the path. Now that you've seen Naked Objects "in
+the flesh" (so to speak!), let's see how.
+
+
+== How Naked Objects Helps with DDD
+
+
+
+The case for  _DDD_ might be compelling, but that
+doesn't necessarily make it easy to do. Let's take a look at some of the
+challenges that  _DDD_ throws up and see how Naked Objects
+helps address them.
+
+=== DDD Takes a Conscious Effort
+
+
+
+Here's what Evans says about  *ubiquitous language*: "With
+a conscious effort by the [development] team the domain model can
+provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation."
+
+The word I want to pick up on here is  *conscious*. It takes a
+*conscious* effort by the entire team to develop the
+*ubiquitous language*. Everyone in the team must challenge the use of new
+or unfamiliar terms, must clarify concepts when used in a new context, and
+in general must be on the lookout for sloppy thinking. This takes
+willingness on the part of all involved, not to mention some practice.
+
+With Naked Objects, though, the  *ubiquitous language*
+evolves with scarcely any effort at all. For the business experts, the
+Naked Objects viewers show the domain concepts they identify and the
+relationships between those concepts in a straightforward fashion.
+Meanwhile, the developers can devote themselves to encoding those domain
+concepts directly as domain classes. There's no technology to get
+distracted by; there is literally nothing else for the developers to
+work on.
+
+
+=== DDD Must Be Grounded
+
+
+
+Employing a  *model-driven design* isn't necessarily
+straightforward, and the development processes used by some
+organizations positively hinder it. It's not sufficient for the business
+analysts or architects to come up with some idealized representation of
+the business domain and then chuck it over the wall for the programmers
+to do their best with.
+
+Instead, the concepts in the model must have a very literal
+representation in code. If we fail to do this, then we open up the
+communication divide, and our  *ubiquitous language* is lost.
+There is literally no point having a domain model that cannot be
+represented in code. We cannot invent our  *ubiquitous
+language* in a vacuum, and the developers must ensure that the
+model remains grounded in the doable.
+
+In Naked Objects, we have a very pure one-to-one correspondence between the
+domain concepts and its implementation. Domain concepts are represented
+as classes and interfaces, easily demonstrated back to the business. If
+the model is clumsy, then the application will be clumsy too, and so the
+team can work together to find a better implementable model.
+
+
+=== Abstract Models Are Difficult to Represent
+
+
+
+If we are using code as the primary means of expressing the model,
+then we need to find a way to make this model understandable to the
+business.
+
+We could generate  _UML_ diagrams and the like from
+code. That will work for some members of the business community, but not
+for everyone. Or we could generate a  _PDF_
+document from Javadoc comments, but comments aren't code and so the
+document may be inaccurate.  Anyway, even if we do create such a
+document, not everyone will read it.
+
+A better way to represent the model is to show it in action as a
+working prototype. As we've seen, Naked Objects enables this with ease.
+Such prototypes bring the domain model to life, engaging the
+audience in a way that a piece of paper never can.
+
+Moreover, with Naked Objects prototypes, the domain model will come
+shining through. If there are mistakes or misunderstandings in the
+domain model, they will be obvious to all.
+
+
+=== Layered Architectures Are Expensive and Easily
+Compromised
+
+
+
+==
+
+.Layered Architecture
+****
+
+We partition a complex program into layers, with each layer
+cohesive and depending only on the layers below.
+
+In particular, we have a layer dedicated to the domain model. The
+code in this layer is unencumbered with the (mostly technical)
+responsibilities of the other layers and so can evolve to tackle
+complex domains as well as simple ones.
+
+****
+
+
+
+_DDD_ rightly requires that the domain model lives
+in its own layer within the architecture. The other layers of the application (usually presentation, application, and persistence)
+have their own responsibilities, and are completely separate.
+
+
+
+
+However, there are two immediate issues. The first is rather obvious:
+custom coding each of those other layers is an expensive proposition.
+Picking up on the previous point, this in itself can put the kibosh on
+using prototyping to represent the model, even if we wanted to do so.
+
+The second issue is more subtle. It takes real skill to ensure the
+correct separation of concerns between these layers, if indeed you can
+get an agreement as to what those concerns actually are. Even with the
+best intentions, it's all too easy for custom-written layers to blur the
+boundaries and put (for example) validation in the user interface layer
+when it should belong to the domain layer. At the other extreme, it's
+quite possible for custom layers to distort or completely subvert the
+underlying domain model.
+
+
+
+Because of Naked Objects' generic  _OOUI_s, there's
+no need to write the other layers of the architecture. And as we've
+seen, this makes prototyping cheap. But more than that, there will be no
+leakage of concerns outside the domain model. All the validation logic
+*must* be in the domain model because there is
+nowhere else to put it.
+
+Moreover, although Naked Objects does provide a
+complete runtime framework, there is no direct coupling of your domain
+model to the framework. That means it is very possible to take
+your domain model prototyped in Naked Objects and then deploy it on
+some other  _J(2)EE_ architecture, with a custom
+_UI_ if you want. Naked Objects guarantees that your
+domain model is complete.
+
+
+=== Naked Objects Extends the Reach of DDD
+
+
+
+Domain-driven design is often positioned as  being applicable only to
+complex domains; indeed, the subtitle of Evans book is  *Tackling
+Complexity in the Heart of Software*. The corollary is that DDD is
+overkill for simpler domains. The trouble is that we immediately have to
+make a choice: is the domain complex enough to warrant a domain-driven
+approach?
+
+This goes back to the previous point, building and maintaining a
+*layered architecture*. It doesn't seem cost effective to go to all the
+effort of a DDD approach if the underlying domain is simple.
+
+However, with Naked Objects, we don't write these other layers, so
+we don't have to make a call on how complex our domain is. We can
+start working solely on our domain, even if we suspect it will be
+simple. If it is indeed a simple domain, then there's no hardship, but if unexpected subtleties arise, then we're in a good position to
+handle them.
+
+
+If you're just starting out writing domain-driven applications, then
+Naked Objects should significantly ease your journey into applying
+_DDD_. On the other hand, if you've used
+_DDD_ for a while, then you should find Naked Objects a
+very useful new tool in your arsenal.
+
+In this chapter we've discussed DDD in the context of a layered
+architecture.  We're going to finish off this chapter with a refinement
+of that idea, which moreover will act as a road map to the
+rest of the book.
+
+
+== The Big Picture
+
+
+
+A few years ago Alistair Cockburn reworked the traditional layered
+architecture diagram and came up with the
+*_hexagonal architecture_*, as shown in <<sec.HexagonalArchitecture>>.
+
+[TIP]
+=====
+
+link:http://alistair.cockburn.us/Hexagonal+architecture[].
+Another similar (same?) pattern is the onion architecture; see
+link:http://jeffreypalermo.com/blog/the-onion-architecture-part-3/[].
+
+====
+
+
+
+==
+
+.The  *hexagonal architecture* emphasizes multiple implementations of
+the different layers.
+
+image::images/eps/HexagonalArchitecture.eps[]
+
+
+What Cockburn is emphasizing is that there's usually more than one way
+*into* an application (what he called the *_user-side'
+ports_*) and more than one way  *out of* an
+application too (the *_data-side ports_*). This is very similar to the
+concept of primary and secondary actors in use cases: a primary actor
+(often a human user but not always) is active and initiates an
+interaction, while a secondary actor (almost always an external system) is
+passive and waits to be interacted with.
+
+Associated with each port can be an *_adapter_* (in
+fact, Cockburn's alternative name for this architecture is *_ports and
+adapters_*). An adapter is a device (piece of software) that talks in the
+protocol (or  _API_) of the port. Each port could have
+several adapters.
+
+Naked Objects maps very nicely onto the  *hexagonal architecture*. As
+shown in <<sec.HexagonalArchitectureForNakedObjects>>, most
+of the user-side adapters (that is, viewers) run in the same memory space
+as the domain layer and so (using Cockburn's terminology) access the
+domain layer through an in-memory port. However, rich client/desktop-based
+viewers such as the  _DnD_ viewer can also access the
+domain layer using a remoting protocol port. Naked Objects also supports
+_RESTful_ web services, which I've drawn as
+an adapter, but one could also think of it as an implementation of a third
+port providing access to other non-Java on the user side. An inbound adapter from
+an *_enterprise service bus_* ( _ESB_)
+could also consume events from any other system in the enterprise.
+
+==
+
+.The  *hexagonal architecture* for Naked Objects
+
+image::images/eps/HexagonalArchitectureForNakedObjects.eps[]
+
+
+For the data side, we are mostly concerned with persisting domain
+objects to some sort of object store; this is the persistence port. We
+might also invoke services; the implementation of these services is
+specific to the application. These could, for example, call out to an
+external web service. Alternatively, the service could be a generic
+mechanism to publish events asynchronously onto an ESB, removing any
+runtime dependency between our application and the external system.
+
+Doing double duty, <<sec.HexagonalArchitectureForNakedObjects>> is a road map for the book; as you might have guessed, the
+overlaid numbers correspond to the chapters where that component is
+discussed. As you would expect, much of the book (most of the chapters in
+Parts I and II) is focused on the domain model. The chapters in
+Part III focus more on the adapters (viewers and object stores) that
+interact with the domain model.
+
+
+== Coming Up Next
+
+
+
+In this chapter, we talked about the two central ideas of
+domain-driven design, that of the  *ubiquitous language* and of
+a  *model-driven design*. We also got our development
+environment up and running and used it to run our first Naked Objects
+application. We then looked at how Naked Objects addresses several issues
+that you might otherwise struggle with when applying
+_DDD_ and recast the traditional  *layered architecture*
+instead as the  *hexagonal architecture*.
+
+This is very much a learning-by-doing book. Throughout, we're going to
+be developing our own domain application as a single case study, so in
+the next chapter we're going to start at the beginning, identifying the
+main concepts of its domain. See you there.
+
+
+== Exercises
+
+
+
+In each chapter of the book there is an "Exercises" section like this,
+where I'll be asking you to implement the techniques covered in the
+chapter text.
+
+In addition to the case study in the main text, you might want to
+develop your own application alongside, something that's close to your
+heart. So, get your thinking hat on and decide what you'd like to implement
+as your first Naked Objects (and perhaps domain-driven design)
+application. In the next chapter's exercises, you'll be in a position to
+start implementing it.
+

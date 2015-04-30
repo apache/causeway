@@ -60,7 +60,7 @@ If working from the Maven command line, JDO enhancement is done using the `maven
 
 The <<SimpleApp Archetype>> sets up the plugin correctly in the `dom` (domain object model) module.  (It's actually a little bit more complext to cater for users of the Eclipse IDE using Eclipse's m2e plugin).
 
-=== `META-INF/persistence.xml`
+== `META-INF/persistence.xml`
 
 It's also a good idea to ensure that the `dom` module has a JDO `META-INF/persistence.xml` file:
 
