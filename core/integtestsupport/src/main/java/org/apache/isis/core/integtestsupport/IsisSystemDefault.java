@@ -139,7 +139,13 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Optional hook method.
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
-        return new ProgrammingModelFacetsJava5();
+        final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5();
+
+        // TODO: this is duplicating logic in JavaReflectorInstallerNoDecorators; need to unify.
+
+        ProgrammingModel.Util.includeFacetFactories(getConfiguration(), programmingModel);
+        ProgrammingModel.Util.excludeFacetFactories(getConfiguration(), programmingModel);
+        return programmingModel;
     }
 
     /**

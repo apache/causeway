@@ -57,7 +57,7 @@ public final class ReflectorConstants {
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
-    public static final String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
+    public static final String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ProgrammingModel.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST;
 
     /**
      * Key used to lookup comma-separated list of {@link FacetFactory}s to
@@ -67,7 +67,7 @@ public final class ReflectorConstants {
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      */
-    public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
+    public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ProgrammingModel.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST;
 
     /**
      * Key used to lookup comma-separated list of {@link FacetDecorator}s.

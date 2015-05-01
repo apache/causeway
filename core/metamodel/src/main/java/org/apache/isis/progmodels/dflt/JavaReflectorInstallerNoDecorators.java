@@ -93,7 +93,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * {@link IsisConfiguration} using
      * {@link ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME}. If not
      * specified, then defaults to
-     * {@value ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT}.
+     * {@link ReflectorConstants#PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT}.
      * 
      * <p>
      * The list of facets can be adjusted using
@@ -104,8 +104,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      */
     protected ProgrammingModel createProgrammingModel(final IsisConfiguration configuration) {
         final ProgrammingModel programmingModel = lookupAndCreateProgrammingModelFacets(configuration);
-        includeFacetFactories(configuration, programmingModel);
-        excludeFacetFactories(configuration, programmingModel);
+        includeAndExcludeFacetFactories(configuration, programmingModel);
         return programmingModel;
     }
 
@@ -115,19 +114,18 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
         return programmingModel;
     }
 
+    private void includeAndExcludeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
+        includeFacetFactories(configuration, programmingModel);
+        excludeFacetFactories(configuration, programmingModel);
+    }
+
     /**
      * Factored out of {@link #createProgrammingModel(IsisConfiguration)}
      * so that subclasses that choose to override can still support
      * customization of their {@link ProgrammingModel} in a similar way.
      */
     protected void includeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-        final String[] facetFactoriesIncludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
-        if (facetFactoriesIncludeClassNames != null) {
-            for (final String facetFactoryClassName : facetFactoriesIncludeClassNames) {
-                final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
-                programmingModel.addFactory(facetFactory);
-            }
-        }
+        ProgrammingModel.Util.includeFacetFactories(configuration, programmingModel);
     }
 
     /**
@@ -136,11 +134,7 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
      * customization of their {@link ProgrammingModel} in a similar way.
      */
     protected void excludeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {
-        final String[] facetFactoriesExcludeClassNames = configuration.getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
-        for (final String facetFactoryClassName : facetFactoriesExcludeClassNames) {
-            final Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
-            programmingModel.removeFactory(facetFactory);
-        }
+        ProgrammingModel.Util.excludeFacetFactories(configuration, programmingModel);
     }
 
     /**
