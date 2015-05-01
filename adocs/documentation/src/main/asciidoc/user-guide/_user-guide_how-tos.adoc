@@ -7,23 +7,29 @@ IMPORTANT: TODO
 
 include::_user-guide_how-tos_class-structure.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_ui-hints.adoc[leveloffset=+1]
+
+include::_user-guide_how-tos_domain-services.adoc[leveloffset=+1]
+
+include::_user-guide_how-tos_crud.adoc[leveloffset=+1]
+
 include::_user-guide_how-tos_entity-relationships.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_contributed-members.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_derived-members.adoc[leveloffset=+1]
-
-include::_user-guide_how-tos_crud.adoc[leveloffset=+1]
-
-include::_user-guide_how-tos_ui-hints.adoc[leveloffset=+1]
-
 include::_user-guide_how-tos_business-rules.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_derived-members.adoc[leveloffset=+1]
+
 include::_user-guide_how-tos_drop-downs-and-defaults.adoc[leveloffset=+1]
+
+include::_user-guide_how-tos_bulk-actions.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_triggering-events.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_using-modules.adoc[leveloffset=+1]
+
+include::_user-guide_how-tos_view-models.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_tips-n-tricks.adoc[leveloffset=+1]
 

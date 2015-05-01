@@ -5,4 +5,8 @@
 
 IMPORTANT: TODO
 
+include::_user-guide_appendices_dev-env_cmd-line.adoc[leveloffset=+1]
+
 include::_user-guide_appendices_dev-env_intellij.adoc[leveloffset=+1]
+
+include::_user-guide_appendices_dev-env_eclipse.adoc[leveloffset=+1]

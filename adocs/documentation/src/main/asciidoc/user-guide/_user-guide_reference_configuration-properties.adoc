@@ -50,6 +50,10 @@ TIP: the default value (if there is one) is shown in _italics_.
 | `true`,`_false_`
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
+|`isis.viewer.wicket.` `disableDependentChoiceAutoSelection`
+| `true`,`_false_`
+| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+
 |`isis.persistor.datanucleus.impl.*`
 |
 | Passed through directly to Datanucleus (with prefix stripped)

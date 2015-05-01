@@ -19,12 +19,7 @@ Finding your way around:
 * Introducing Isis
 ** link:introducing-apache-isis/isis-in-pictures/isis-in-pictures.html[Isis in Pictures]
 ** link:introducing-apache-isis/common-use-cases/common-use-cases.html[Common Use Cases]
-* Getting Started
-** link:getting-started/archetype/simpleapp-archetype.html[SimpleApp Archetype]
-** Development Environments
-*** link:getting-started/development-environment/intellij-idea/intellij-idea.html[Intellij IDEA]
-*** link:getting-started/development-environment/eclipse/eclipse.html[Eclipse]
-*** link:getting-started/development-environment/cmd-line/cmd-line.html[(Maven) Command Line]
-* link:user-guide/user-guide.html[User Guide]
-* link:release-notes/release-notes.html[Release Notes]
+
+* User Guide
+** link:user-guide/user-guide.html[User Guide]
 
