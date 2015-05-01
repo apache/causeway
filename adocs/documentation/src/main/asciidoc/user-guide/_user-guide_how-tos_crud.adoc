@@ -11,6 +11,10 @@ IMPORTANT: TODO
 
 ## Finding Objects
 
+### Using DataNucleus type-safe queries
+
+as per http://github.com/isisaddons/isis-app-todoapp}[Isis addons' todoapp] (non-ASF)
+
 ## Deleting Objects
 
 

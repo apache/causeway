@@ -8,7 +8,7 @@ IMPORTANT: TODO
 
 == Question:
 
-Is there a simple way to make a run configuratoin in IntelliJ for running the datanucleus enhancer before running integration test?
+Is there a simple way to make a run configuration in IntelliJ for running the datanucleus enhancer before running integration test?
 
 == Answer:
 

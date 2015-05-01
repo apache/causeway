@@ -12,6 +12,8 @@ include::_user-guide_how-tos_tips-n-tricks_overriding-jdo-annotations.adoc[level
 
 include::_user-guide_how-tos_tips-n-tricks_render-all-properties-in-tables.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_tips-n-tricks_per-user-themes.adoc[leveloffset=+1]
+
 include::_user-guide_how-tos_tips-n-tricks_suppress-actions-from-the-ui.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos_tips-n-tricks_enhance-only.adoc[leveloffset=+1]
