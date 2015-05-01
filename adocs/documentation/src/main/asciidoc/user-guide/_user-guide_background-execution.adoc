@@ -76,9 +76,7 @@ image::{_imagesdir}background-execution/BackgroundCommandExecution.png[width="40
 
 
 
-## BackgroundCommandExecutionFromBackgroundCommandServiceJdo
-
-NOTE: this class is part of http://isisaddons.org/isis-module-command[Isis addons Command Module] (not ASF)
+=== Isis Addons Command Module
 
 The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of <<BackgroundCommandExecution>>, the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
