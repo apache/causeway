@@ -76,7 +76,7 @@ To build the documentation locally prior to release, use:
 
 The site will be generated at `target/site/index.html`.
 
-You could then use a web server such as Python's SimpleHTTPServer to preview (so that all Javascript works correctly).  However, instead we recommend using instant preview, described nex.
+You could then use a web server such as Python's SimpleHTTPServer to preview (so that all Javascript works correctly).  However, instead we recommend using instant preview, described next.
 
 
 Instant Rebuild (using Ruby)

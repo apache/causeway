@@ -7,190 +7,76 @@ This section describes some of the core ideas and architectural patterns upon wh
 
 == Domain-Driven Design
 
-There's no doubt that we developers love the challenge of understanding
-and deploying complex technologies. But understanding the nuances and
-subtleties of the business domain itself is just as great a challenge,
-perhaps more so. If we devoted our efforts to understanding and addressing
-those subtleties, we could build better, cleaner, and more maintainable
-software that did a better job for our stakeholders. And there's no doubt
-that our stakeholders would thank us for it.
+There's no doubt that we developers love the challenge of understanding and deploying complex technologies. But understanding the nuances and subtleties of the business domain itself is just as great a challenge, perhaps more so. If we devoted our efforts to understanding and addressing those subtleties, we could build better, cleaner, and more maintainable software that did a better job for our stakeholders. And there's no doubt that our stakeholders would thank us for it.
 
-A couple of years back Eric Evans wrote his book link:http://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215[Domain-Driven Design], which is well on its way to
-becoming a seminal work. In fact, most if not all of the ideas in Evans'
-book have been expressed before, but what he did was pull those ideas
-together to show how predominantly object-oriented techniques can be used
-to develop rich, deep, insightful, and ultimately useful business
-applications.
+A couple of years back Eric Evans wrote his book link:http://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215[Domain-Driven Design], which is well on its way to becoming a seminal work. In fact, most if not all of the ideas in Evans' book have been expressed before, but what he did was pull those ideas together to show how predominantly object-oriented techniques can be used to develop rich, deep, insightful, and ultimately useful business applications.
 
 There are two central ideas at the heart of domain-driven design.
 
-* the *_ubiquitous language_* is about getting the whole team (both domain experts
-  and developers) to communicate more transparently using a domain model.
+* the *_ubiquitous language_* is about getting the whole team (both domain experts and developers) to communicate more transparently using a domain model.
 
-* Meanwhile, *_model-driven design_* is about capturing that model in a
-  very straightforward manner in code.
+* Meanwhile, *_model-driven design_* is about capturing that model in a very straightforward manner in code.
 
 Let's look at each in turn.
 
 === Ubiquitous Language
 
-It's no secret that the IT industry is plagued by project failures. Too
-often systems take longer than intended to implement, and when finally
-implemented, they don't address the real requirements anyway.
+It's no secret that the IT industry is plagued by project failures. Too often systems take longer than intended to implement, and when finally implemented, they don't address the real requirements anyway.
 
-Over the years we in IT have tried various approaches to address this
-failing. Using waterfall methodologies, we've asked for requirements to
-be fully and precisely written down before starting on anything
-else. Or, using
-agile methodologies, we've realized that requirements are likely to
-change anyway and have sought to deliver systems incrementally using
-feedback loops to refine the implementation.
+Over the years we in IT have tried various approaches to address this failing. Using waterfall methodologies, we've asked for requirements to be fully and precisely written down before starting on anything else. Or, using agile methodologies, we've realized that requirements are likely to change anyway and have sought to deliver systems incrementally using feedback loops to refine the implementation.
 
-But let's not get distracted talking about methodologies. At the end
-of the day what really matters is communication between the domain
-experts (that is, the business) who need the system and the techies
-actually implementing it. If the two don't have and cannot evolve a
-shared understanding of what is required, then the chance of delivering
-a useful system will be next to nothing.
+But let's not get distracted talking about methodologies. At the end of the day what really matters is communication between the domain experts (that is, the business) who need the system and the techies actually implementing it. If the two don't have and cannot evolve a shared understanding of what is required, then the chance of delivering a useful system will be next to nothing.
 
-Bridging this gap is traditionally what business analysts are for;
-they act as interpreters between the domain experts and the developers.
-However, this still means there are two (or more) languages in use,
-making it difficult to verify that the system being built is correct. If
-the analyst mistranslates a requirement, then neither the domain expert
-nor the application developer will discover this until (at best) the
-application is first demonstrated or (much worse) an end user sounds
-the alarm once the application has been deployed into production.
+Bridging this gap is traditionally what business analysts are for; they act as interpreters between the domain experts and the developers. However, this still means there are two (or more) languages in use, making it difficult to verify that the system being built is correct. If the analyst mistranslates a requirement, then neither the domain expert nor the application developer will discover this until (at best) the application is first demonstrated or (much worse) an end user sounds the alarm once the application has been deployed into production.
 
-Rather than trying to translate between a business language and a
-technical language, with  _DDD_ we aim to have the
-business and developers using the same terms for the same concepts in order to
-create a single *_domain model_*. This domain model
-identifies the relevant concepts of the domain, how they relate, and
-ultimately where the responsibilities are. This single domain model
-provides the vocabulary for the  ubiquitous language for our
-system.
+Rather than trying to translate between a business language and a technical language, with  _DDD_ we aim to have the business and developers using the same terms for the same concepts in order to create a single *_domain model_*. This domain model identifies the relevant concepts of the domain, how they relate, and ultimately where the responsibilities are. This single domain model provides the vocabulary for the  ubiquitous language for our system.
+
 
 .Ubiquitous Language
 ****
-Build a common language between the domain experts and developers
-by using the concepts of the domain model as the primary means of
-communication. Use the terms in speech, in diagrams, in writing, and when
-presenting.
+Build a common language between the domain experts and developers by using the concepts of the domain model as the primary means of communication. Use the terms in speech, in diagrams, in writing, and when presenting.
 
-If an idea cannot be expressed using this set of concepts, then go
-back and extend the model. Look for and remove ambiguities and
-inconsistencies.
+If an idea cannot be expressed using this set of concepts, then go back and extend the model. Look for and remove ambiguities and inconsistencies.
 ****
 
 
+Creating a  ubiquitous language calls upon everyone involved in the system's development to express what they are doing through the vocabulary provided by the model. If this can't be done, then our model is incomplete. Finding the missing words deepens our understanding of the domain being modeled.
 
-Creating a  ubiquitous language calls upon everyone involved in the system's development
-to express what they are doing through the vocabulary provided by the
-model. If this can't be done, then our model is incomplete. Finding the
-missing words deepens our understanding of the domain being modeled.
+This might sound like nothing more than me insisting that the developers shouldn't use jargon when talking to the business. Well, that's true enough, but it's not a one-way street. A  *ubiquitous language* demands that the developers work hard to understand the problem domain, but it also demands that the business works hard in being  *precise* in its naming and descriptions of those concepts. After all, ultimately the developers will have to express those concepts in a computer programming language.
 
-This might sound like nothing more than me insisting that the
-developers shouldn't use jargon when talking to the business. Well,
-that's true enough, but it's not a one-way street. A  *ubiquitous
-language* demands that the developers work hard to understand the
-problem domain, but it also demands that the business works hard in
-being  *precise* in its naming and descriptions of those
-concepts. After all, ultimately the developers will have to express
-those concepts in a computer programming language.
+Also, although here I'm talking about the "domain experts" as being a homogeneous group of people, often they may come from different branches of the business. Even if we weren't building a computer system, there's a lot of value in helping the domain experts standardize their own terminology. Is the marketing department's "prospect" the same as sales' "customer," and is that the same as an after-sales "contract"?
 
-Also, although here I'm talking about the "domain experts" as being a
-homogeneous group of people, often they may come from different branches
-of the business. Even if we weren't building a computer system, there's a
-lot of value in helping the domain experts standardize their own
-terminology. Is the marketing department's "prospect" the same as sales'
-"customer," and is that the same as an after-sales "contract"?
+The need for precision within the  ubiquitous language also helps us scope the system. Most business processes evolve piecemeal and are often quite ill-defined. If the domain experts have a very good idea of what the business process should be, then that's a good candidate for automation, that is, including it in the scope of the system. But if the domain experts find it hard to agree, then it's probably best to leave it out. After all, human beings are rather more capable of dealing with fuzzy situations than computers.
 
-The need for precision within the  ubiquitous language
-also helps us scope the system. Most business processes evolve piecemeal
-and are often quite ill-defined. If the domain experts have a very good
-idea of what the business process should be, then that's a good
-candidate for automation, that is, including it in the scope of the
-system. But if the domain experts find it hard to agree, then it's
-probably best to leave it out. After all, human beings are rather more
-capable of dealing with fuzzy situations than computers.
+So, if the development team (business and developers together) continually searches to build their  ubiquitous language, then the domain model naturally becomes richer as the nuances of the domain are uncovered. At the same time, the knowledge of the business domain experts also deepens as edge conditions and contradictions that have previously been overlooked are explored.
 
-So, if the development team (business and developers together)
-continually searches to build their  ubiquitous language,
-then the domain model naturally becomes richer as the nuances of the
-domain are uncovered. At the same time, the knowledge of the business
-domain experts also deepens as edge conditions and contradictions that
-have previously been overlooked are explored.
-
-We use the  ubiquitous language to build up a domain
-model. But what do we do  *with* that model? The answer to
-that is the second of our central ideas.
+We use the  ubiquitous language to build up a domain model. But what do we do  *with* that model? The answer to that is the second of our central ideas.
 
 
 === Model-Driven Design
 
-Of the various methodologies that the IT industry has tried, many
-advocate the production of separate analysis models and implementation
-models. One example (from the mid 2000s) was that of the  _OMG_'s Model-Driven Architecture ( _MDA_) initiative, with its
-platform-independent model (the  _PIM_) and a
-platform-specific model (the  _PSM_).
+Of the various methodologies that the IT industry has tried, many advocate the production of separate analysis models and implementation models. One example (from the mid 2000s) was that of the  _OMG_'s Model-Driven Architecture ( _MDA_) initiative, with its platform-independent model (the  _PIM_) and a platform-specific model (the  _PSM_).
 
-Bah and humbug! If we use our  ubiquitous language just
-to build up a high-level analysis model, then we will re-create the
-communication divide. The domain experts and business analysts will look
-only to the analysis model, and the developers will look only to the
-implementation model. Unless the mapping between the two is completely
-mechanical, inevitably the two will diverge.
+Bah and humbug! If we use our  ubiquitous language just to build up a high-level analysis model, then we will re-create the communication divide. The domain experts and business analysts will look only to the analysis model, and the developers will look only to the implementation model. Unless the mapping between the two is completely mechanical, inevitably the two will diverge.
 
-What do we mean by  *model* anyway? For some, the term will bring to
-mind  _UML_ class or sequence diagrams and the like. But
-this isn't a model; it's a visual  *representation* of some
-aspect of a model. No, a domain model is a group of related concepts,
-identifying them, naming them, and defining how they relate. What is in
-the model depends on what our objective is. We're not looking to simply
-model everything that's out there in the real world. Instead, we want to
-take a relevant abstraction or simplification of it and then make it do
-something useful for us. Oft quoted and still true is that a model is neither
-right nor wrong, just more or less useful.
+What do we mean by  *model* anyway? For some, the term will bring to mind  _UML_ class or sequence diagrams and the like. But this isn't a model; it's a visual  *representation* of some aspect of a model. No, a domain model is a group of related concepts, identifying them, naming them, and defining how they relate. What is in the model depends on what our objective is. We're not looking to simply model everything that's out there in the real world. Instead, we want to take a relevant abstraction or simplification of it and then make it do something useful for us.  A model is neither right nor wrong, just more or less useful.
 
-For our  ubiquitous language to have value, the domain
-model that encodes it must have a straightforward, literal
-representation to the design of the software, specifically to the implementation. Our
-software's design should be driven by this model; we should have a
-model-driven design.
+For our  ubiquitous language to have value, the domain model that encodes it must have a straightforward, literal representation to the design of the software, specifically to the implementation. Our software's design should be driven by this model; we should have a model-driven design.
 
 
 .Model-Driven Design
 ****
-There must be a straightforward and very literal way to represent
-the domain model in terms of software. The model should balance these
-two requirements: form the  ubiquitous language of the
-development team and be representable in code.
+There must be a straightforward and very literal way to represent the domain model in terms of software. The model should balance these two requirements: form the  ubiquitous language of the development team and be representable in code.
 
-Changing the code means changing the model; refining the model
-requires a change to the code.
+Changing the code means changing the model; refining the model requires a change to the code.
 ****
 
 
-Here also the word  *design* might mislead; some might again be
-thinking of design documents and design diagrams. But by  *design* we mean
-a way of organizing the domain concepts, which in turn leads to the way
-in which we organize their representation in code.
+Here also the word  *design* might mislead; some might again be thinking of design documents and design diagrams. But by  *design* we mean a way of organizing the domain concepts, which in turn leads to the way in which we organize their representation in code.
 
-Luckily, using *_object-oriented_*
-( _OO_) languages such as Java, this is relatively easy
-to do;  _OO_ is based on a modeling paradigm anyway. We
-can express domain concepts using classes and interfaces, and we can
-express the relationships between those concepts using associations.
+Luckily, using *_object-oriented_* ( _OO_) languages such as Java, this is relatively easy to do;  _OO_ is based on a modeling paradigm anyway. We can express domain concepts using classes and interfaces, and we can express the relationships between those concepts using associations.
 
-
-So far so good. Or maybe, so far so much motherhood and apple pie.
-Understanding the  _DDD_ concepts isn't the same as being
-able to apply them, and some of the  _DDD_ ideas can be
-difficult to put into practice. What this book is about is how Naked
-Objects eases that path by applying these central ideas of
-_DDD_ in a very concrete way. So, now would be a good time
-to see how.
+So far so good. Or maybe, so far so much motherhood and apple pie. Understanding the  _DDD_ concepts isn't the same as being able to apply them, and some of the  _DDD_ ideas can be difficult to put into practice. Time to discuss the naked objects pattern and how it eases that path by applying these central ideas of _DDD_ in a very concrete way.
 
 
 
@@ -199,51 +85,28 @@ to see how.
 
 Apache Isis implements the naked objects pattern, originally formulated by Richard Pawson.  So who better than Richard to explain the origination of the idea?
 
-pass:[<div class="extended-quote-first"><p>]The Naked Objects pattern arose, at least in part, from my own
-frustration at the lack of success of the domain-driven approach. Good examples were hard to find--as they are still.
+pass:[<div class="extended-quote-first"><p>]The Naked Objects pattern arose, at least in part, from my own frustration at the lack of success of the domain-driven approach. Good examples were hard to find--as they are still.
 pass:[</p></div>]
 
-pass:[<div class="extended-quote"><p>]A common complaint from _DDD_ practitioners was that it
-was hard to gain enough commitment from business stakeholders, or even to engage them at all. My own experience
-suggested that it was nearly impossible to engage business managers with _UML_ diagrams.  It was much easier to
-engage them in rapid prototyping -- where they could see and interact with the results -- but most forms of rapid
-prototyping concentrate on the presentation layer, often at the expense of the underlying model and certainly
-at the expense of abstract thinking.
+pass:[<div class="extended-quote"><p>]A common complaint from _DDD_ practitioners was that it was hard to gain enough commitment from business stakeholders, or even to engage them at all. My own experience suggested that it was nearly impossible to engage business managers with _UML_ diagrams.  It was much easier to engage them in rapid prototyping -- where they could see and interact with the results -- but most forms of rapid prototyping concentrate on the presentation layer, often at the expense of the underlying model and certainly at the expense of abstract thinking.
 pass:[</p></div>]
 
-pass:[<div class="extended-quote"><p>]Even if you could engage the business sponsors sufficiently to design a
-domain model, by the time you'd finished developing the system on top of the domain model, most of its benefits
-had disappeared. It's all very well creating an agile domain object model, but if any change to that model
-also dictates the modification of one or more layers underneath it (dealing with persistence) and multiple layers
-on top (dealing with presentation), then that agility is practically worthless.
+pass:[<div class="extended-quote"><p>]Even if you could engage the business sponsors sufficiently to design a domain model, by the time you'd finished developing the system on top of the domain model, most of its benefits had disappeared. It's all very well creating an agile domain object model, but if any change to that model also dictates the modification of one or more layers underneath it (dealing with persistence) and multiple layers on top (dealing with presentation), then that agility is practically worthless.
 pass:[</p></div>]
 
-pass:[<div class="extended-quote"><p>]The other concern that gave rise to the birth of Naked Objects was how to
-make user interfaces of mainstream business systems more "expressive" -- how to make them feel more like using
-a drawing program or _CAD_ system. Most business systems are not at all expressive; they treat the user merely
-as a dumb *process-follower*, rather than as an empowered *problem-solver*.  Even the so-called usability experts
-had little to say on the subject: try finding the word "empowerment" or any synonym thereof in the index of any
-book on usability. Research had demonstrated that the best way to achieve expressiveness was to create an object-oriented
-user interface (_OOUI_). In practice, though, __OOUI__s were notoriously hard to develop.
+pass:[<div class="extended-quote"><p>]The other concern that gave rise to the birth of Naked Objects was how to make user interfaces of mainstream business systems more "expressive" -- how to make them feel more like using a drawing program or _CAD_ system. Most business systems are not at all expressive; they treat the user merely as a dumb *process-follower*, rather than as an empowered *problem-solver*.  Even the so-called usability experts had little to say on the subject: try finding the word "empowerment" or any synonym thereof in the index of any book on usability. Research had demonstrated that the best way to achieve expressiveness was to create an object-oriented user interface (_OOUI_). In practice, though, __OOUI__s were notoriously hard to develop.
 pass:[</p></div>]
 
-pass:[<div class="extended-quote"><p>]Sometime in the late 1990s, it dawned on me that if the domain model
-really did represent the "ubiquitous language" of the business and those domain objects were behaviorally rich
-(that is, business logic is encapsulated as methods on the domain objects rather than in procedural scripts on top
-of them), then the _UI_ could be nothing more than a reflection of the user interface. This would solve
-both of my concerns. It would make it easier to do domain-driven design, because one could instantly translate
-evolving domain modeling ideas into a working prototype. And it would deliver an expressive, object-oriented
-user interface for free. Thus was born the idea of Naked Objects.
+pass:[<div class="extended-quote"><p>]Sometime in the late 1990s, it dawned on me that if the domain model really did represent the "ubiquitous language" of the business and those domain objects were behaviorally rich (that is, business logic is encapsulated as methods on the domain objects rather than in procedural scripts on top of them), then the _UI_ could be nothing more than a reflection of the user interface. This would solve both of my concerns. It would make it easier to do domain-driven design, because one could instantly translate evolving domain modeling ideas into a working prototype. And it would deliver an expressive, object-oriented user interface for free. Thus was born the idea of Naked Objects.
 pass:[</p></div>]
 
 pass:[<div class="extended-quote-attribution"><p>]-- Richard Pawson
-pass:[</p></div>]
-pass:[<div class="clear"><p>]
 pass:[</p></div>]
 
 You can learn much more about the pattern in the book, link:http://www.amazon.com/exec/obidos/ISBN=0470844205/[Naked Objects], also freely available to link:http://www.nakedobjects.org/book/[read online].  Richard co-wrote the book with one of Isis' committers, Robert Matthews, who was in turn the author of the Naked Objects Framework for Java (the original codebase of of Apache Isis).
 
 You might also want to read Richard's link:core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD on the subject].
+
 
 [TIP]
 ====
@@ -269,15 +132,39 @@ We compare Apache Isis' with MetaWidget <<_vs_metawidget,here>>.
 
 
 
+
+
 == Hexagonal Architecture
 
-Originally described by Alistair Cockburn, the link:http://alistair.cockburn.us/Hexagonal+architecture[Hexagonal Architecture] ...
+One of the patterns that Evans discusses in his book is that of a *layered architecture*.  In it he describes why the domain model lives in its own layer within the architecture. The other layers of the application (usually presentation, application, and persistence) have their own responsibilities, and are completely separate.  Each layer is cohesive and depending only on the layers below.  In particular, we have a layer dedicated to the domain model. The code in this layer is unencumbered with the (mostly technical) responsibilities of the other layers and so can evolve to tackle complex domains as well as simple ones.
 
+This is a well-established pattern, almost a de-facto; there's very little debate that these responsibilities should be kept separate from each other.  With Apache Isis the responsibility for presentation is a framework concern, the responsibility for the domain logic is implemented by the (your) application code.
+
+A few years ago Alistair Cockburn reworked the traditional layered architecture diagram and came up with the *_hexagonal architecture_*:.
 
 [TIP]
 ====
 The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture:[Ports and Adapters] architecture or (less frequently) as the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture.
 ====
+
+.The hexagonal architecture emphasizes multiple implementations of the different layers.
+image::{_imagesdir}core-concepts/philosophy/hexagonal-architecture.png[width="700px"]
+
+What Cockburn is emphasizing is that there's usually more than one way *into* an application (what he called the *_user-side' ports_*) and more than one way  *out of* an application too (the *_data-side ports_*). This is very similar to the concept of primary and secondary actors in use cases: a primary actor (often a human user but not always) is active and initiates an interaction, while a secondary actor (almost always an external system) is passive and waits to be interacted with.
+
+Associated with each port can be an *_adapter_* (in fact, Cockburn's alternative name for this architecture is *_ports and adapters_*). An adapter is a device (piece of software) that talks in the protocol (or  _API_) of the port. Each port could have several adapters.
+
+Apache Isis maps very nicely onto the  *hexagonal architecture*.  Isis' viewers act as user-side adapters and use the Isis metamodel API as a port into the domain objects.   For the data side, we are mostly concerned with persisting domain objects to some sort of object store.  Here Apache Isis delegates most of the heavy lifting to ORM implementing the JDO API.  Most of the time this will be DataNucleus configured to persist to an RDBMS, but DataNucleus can also support other object stores, for example Neo4J.  Alternatively Isis can be configured to persist using some other JDO implementation, for example Google App Engine.
+
+It's worth extending the hexagonal architecture to show where http://isisaddons.org[Isis Addons] (non-ASF) fit in:
+
+.The hexagonal architecture with Isis addons
+image::{_imagesdir}core-concepts/philosophy/hexagonal-architecture-addons.png[width="700px"]
+
+Here, we can see that the addons provide services both to the Isis framework (for example security, command and auditing) and also to the domain objects (eg tags, excel, settings).  Of course, you can also write your own domain services as well, for example to interface with some external CMS system, say.
+
+
+
 
 
 == Aspect Oriented
@@ -298,5 +185,73 @@ IMPORTANT: TODO ... Trygve Reenskaug
 
 
 
+== How Apache Isis eases DDD
 
+The case for  _DDD_ might be compelling, but that doesn't necessarily make it easy to do. Let's take a look at some of the
+challenges that  _DDD_ throws up and see how Apache Isis (and its implementation of the naked objects pattern) helps address them.
+
+=== DDD Takes a Conscious Effort
+
+Here's what Eric Evans says about ubiquitous language:
+
+pass:[<div class="extended-quote-first"><p>]With a conscious effort by the [development] team the domain model can provide the backbone for [the] common [ubiquitous] language...connecting team communication to the software implementation."
+pass:[</p></div>]
+
+pass:[<div class="extended-quote-attribution"><p>]-- Eric Evans
+pass:[</p></div>]
+
+The word to pick up on here is *conscious*.  It takes a conscious effort by the entire team to develop the ubiquitous language. Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking. This takes willingness on the part of all involved, not to mention some practice.
+
+With Apache Isis, though, the  ubiquitous language evolves with scarcely any effort at all. For the business experts, the Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion. Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes. There's no technology to get distracted by; there is literally nothing else for the developers to work on.
+
+
+=== DDD Must Be Grounded
+
+Employing a  model-driven design isn't necessarily straightforward, and the development processes used by some organizations positively hinder it. It's not sufficient for the business analysts or architects to come up with some idealized representation of the business domain and then chuck it over the wall for the programmers to do their best with.
+
+Instead, the concepts in the model must have a very literal representation in code. If we fail to do this, then we open up the communication divide, and our  ubiquitous language is lost. There is literally no point having a domain model that cannot be represented in code. We cannot invent our ubiquitous language in a vacuum, and the developers must ensure that the model remains grounded in the doable.
+
+In Apache Isis, we have a very pure one-to-one correspondence between the domain concepts and its implementation. Domain concepts are represented as classes and interfaces, easily demonstrated back to the business. If the model is clumsy, then the application will be clumsy too, and so the team can work together to find a better implementable model.
+
+
+=== Abstract Models Are Difficult to Represent
+
+If we are using code as the primary means of expressing the model, then we need to find a way to make this model understandable to the business.
+
+We could generate  _UML_ diagrams and the like from code. That will work for some members of the business community, but not for everyone. Or we could generate a  _PDF_ document from Javadoc comments, but comments aren't code and so the document may be inaccurate.  Anyway, even if we do create such a document, not everyone will read it.
+
+A better way to represent the model is to show it in action as a working prototype. As we show in the <<_getting_started, Getting Started>> section, Apache Isis enables this with ease. Such prototypes bring the domain model to life, engaging the audience in a way that a piece of paper never can.
+
+Moreover, with Apache Isis prototypes, the domain model will come shining through. If there are mistakes or misunderstandings in the domain model (inevitable when building any complex system), they will be obvious to all.
+
+
+=== Layered Architectures Are Expensive and Easily Compromised
+
+_DDD_ rightly requires that the domain model lives in its own layer within the architecture. The other layers of the application (usually presentation, application, and persistence) have their own responsibilities, and are completely separate.
+
+.Layered Architecture
+****
+We partition a complex program into layers, with each layer cohesive and depending only on the layers below.
+
+In particular, we have a layer dedicated to the domain model. The code in this layer is unencumbered with the (mostly technical) responsibilities of the other layers and so can evolve to tackle complex domains as well as simple ones.
+****
+
+However, there are two immediate issues. The first is rather obvious: custom coding each of those other layers is an expensive proposition. Picking up on the previous point, this in itself can put the kibosh on using prototyping to represent the model, even if we wanted to do so.
+
+The second issue is more subtle. It takes real skill to ensure the correct separation of concerns between these layers, if indeed you can get an agreement as to what those concerns actually are. Even with the best intentions, it's all too easy for custom-written layers to blur the boundaries and put (for example) validation in the user interface layer when it should belong to the domain layer. At the other extreme, it's quite possible for custom layers to distort or completely subvert the underlying domain model.
+
+Because of Apache Isis' generic  _OOUI_s, there's no need to write the other layers of the architecture.  Of course, this reduces the development cost. But more than that, there will be no leakage of concerns outside the domain model. All the validation logic *must* be in the domain model because there is nowhere else to put it.
+
+Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework. That means it is very possible to take your domain model prototyped in Naked Objects and then deploy it on some other  _J(2)EE_ architecture, with a custom _UI_ if you want.  Isis guarantees that your domain model is complete.
+
+
+=== Apache Isis extends the reach of DDD
+
+Domain-driven design is often positioned as  being applicable only to complex domains; indeed, the subtitle of Evans book is  *Tackling Complexity in the Heart of Software*. The corollary is that DDD is overkill for simpler domains. The trouble is that we immediately have to make a choice: is the domain complex enough to warrant a domain-driven approach?
+
+This goes back to the previous point, building and maintaining a *layered architecture*. It doesn't seem cost effective to go to all the effort of a DDD approach if the underlying domain is simple.
+
+However, with Apache Isis, we don't write these other layers, so we don't have to make a call on how complex our domain is. We can start working solely on our domain, even if we suspect it will be simple. If it is indeed a simple domain, then there's no hardship, but if unexpected subtleties arise, then we're in a good position to handle them.
+
+If you're just starting out writing domain-driven applications, then Apache Isis should significantly ease your journey into applying _DDD_. On the other hand, if you've used _DDD_ for a while, then you should find Isis a very useful new tool in your arsenal.
 
