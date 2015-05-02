@@ -7,8 +7,6 @@ IMPORTANT: WIP...
 
 The table below lists the configuration properties recognized by Apache Isis.
 
-TIP: the default value (if there is one) is shown in _italics_.
-
 .Configuration Properties
 [cols="2,1,3", options="header"]
 |===

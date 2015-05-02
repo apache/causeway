@@ -40,6 +40,12 @@ Using:
 
 
 
+== Full-stack but extensible
+
+IMPORTANT: TODO
+
+
+
 
 == Testable Applications
 
@@ -47,3 +53,4 @@ While Apache Isis can be used (very effectively) for simple CRUD-style applicati
 
 
 
+include::_user-guide_core-concepts_principles_apache-isis-vs.adoc[leveloffset=+1]

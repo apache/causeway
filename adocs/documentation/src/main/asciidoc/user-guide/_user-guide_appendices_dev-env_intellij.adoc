@@ -6,9 +6,9 @@
 
 
 
-## Setting up and Configurating IntelliJ
+== Installing and Setting up
 
-### Download and Install
+=== Download and Install
 
 WARNING: This doc used IntelliJ Community Edition 14.1.1, with screenshots taken for Windows.  If you're a MacOS user, I'm sure you can adapt :-)
 
@@ -52,7 +52,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/010-installing/070-set-ui-th
 
 
 
-### New Project
+=== New Project
 
 In IntelliJ a project can contain multiple modules; these need not be physically located together.  (If you are previously an Eclipse user, you can think of it as similar to an Eclipse workspace).
 
@@ -86,7 +86,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/060-c
 
 
 
-### Import Settings
+=== Import Settings
 
 Next we need to configure IntelliJ with ASF/Apache Isis' standard templates and coding conventions.  These are bundled as the `settings.jar` JAR file link:resources/appendices/dev-env/intellij/isis-settings.jar[download from the Isis website]).
 
@@ -107,7 +107,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/030-import-settings/030-rest
 
 
 
-### Other Settings
+=== Other Settings
 
 There are also some other miscellaneous settings that we recommend that you adjust (though these are not critical).
 
@@ -133,7 +133,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/040-auto-
 
 
 
-### Plugins
+=== Plugins
 
 You might also want to set up some additional plugins, using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
 
@@ -153,7 +153,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-pl
 
 
 
-## Importing and Managing Maven Modules
+== Importing and Managing Maven Modules
 
 Let's load in some actual code!  We do this by importing the Maven modules.
 
@@ -193,11 +193,11 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/060-ig
 
 
 
-## Running
+== Running
 
 Let's see how to run both the app and the tests.
 
-### Running the App
+=== Running the App
 
 Once you've imported your Isis application, we should run it.  We do this by creating a Run configuration, using `Run > Edit Configurations`.
 
@@ -222,7 +222,7 @@ WARNING: if you forget to set up the enhancer goal, or don't run it on the corre
 You should now be able to run the app using `Run > Run Configuration`.  The same configuration can also be used to debug the app if you so need.
 
 
-### Running the Unit Tests
+=== Running the Unit Tests
 
 The easiest way to run the unit tests is just to right click on the `dom` module in the _Project Window_, and choose run unit tests.  Hopefully your tests will pass (!).
 
@@ -236,7 +236,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/040-runn
 
 Thereafter, you should run units by selecting this configuration (if you use the right click approach you'll end up with lots of run configurations, all similar).
 
-### Running the Integration Tests
+=== Running the Integration Tests
 
 Integration tests can be run in the same way as unit tests, however the `dom` module must also have been enhanced.
 
@@ -247,9 +247,10 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/050-runn
 
 
 
-## Hints and Tips
 
-### Keyboard Shortcuts Cheat Sheets
+== Hints and Tips
+
+=== Keyboard Shortcuts Cheat Sheets
 
 You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
 * for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf[Windows]
@@ -274,7 +275,7 @@ The Tool Windows are the views around the editor (to left, bottom and right).  I
 
 Using these shortcuts you can easily toggle between the tool windows and the editor, without using the mouse.  Peachy!
 
-### Navigating Around
+=== Navigating Around
 
 For all of the following, you don't need to type every letter, typing "ab" will actually search for ".*a.*b.*".
 
@@ -295,7 +296,7 @@ Viewing the structure (ie outline) of a class
 ** hit `ctrl-F12` again to also see inherited members
 
 
-### Editing
+=== Editing
 
 * Extend selection using `ctrl-W`
 ** and contract it down again using `ctrl-shift-W`
@@ -318,7 +319,7 @@ In certain circumstances (eg in methods0) you can also type `ctrl-shift-space` t
 Last, when invoking a method, use `ctrl-P` to see the parameter types.
 
 
-### Refactoring
+=== Refactoring
 
 Loads of good stuff on the `Refactor` menu; most used are:
 
@@ -332,7 +333,7 @@ Loads of good stuff on the `Refactor` menu; most used are:
 If you can't remember all those shortcuts, just use `ctrl-shift-alt-T` (might want to rebind that to something else!) and get a context-sensitive list of refactorings available for the currently selected object
 
 
-### Troubleshooting
+=== Troubleshooting
 
 When a Maven module is imported, IntelliJ generates its own project files (suffix `.ipr`), and the application is actually built from that.
 
@@ -348,15 +349,15 @@ To fix the issue, try:
 One thing worth knowing; IntelliJ actively scans the filesystem all the time.  It's therefore (almost always) fine to build the app from the Maven command line; IntelliJ will detect the changes and keep in sync.  If you want to force that, use `File > Synchronize`, `ctrl-alt-Y`.
 
 
-## Advanced
+== Advanced
 
 In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
 
 
-### Setting up Dynamic Reloading
+=== Setting up Dynamic Reloading
 
 IMPORTANT: TODO
 
-### Setting up JRebel
+=== Setting up JRebel
 
 IMPORTANT: TODO

@@ -5,6 +5,12 @@
 
 This introductory chapter should give you a good about what Apache Isis actually *is*: the fundamental ideas and principles that it builds upon, how it compares with other frameworks, what the fundamental building blocks are for actually writing an Isis application, and what services and features the framework provides for you to leverage in your own apps.
 
+[TIP]
+====
+Parts of this chapter have been adapted from Dan Haywood's 2009 book, 'Domain Driven Design using Naked Objects'.  We've also added some new insights and made sure the material we've used is relevant to Apache Isis.
+====
+
+
 include::_user-guide_core-concepts_philosophy.adoc[leveloffset=+1]
 
 include::_user-guide_core-concepts_principles.adoc[leveloffset=+1]
