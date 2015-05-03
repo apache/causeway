@@ -3,136 +3,37 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+Apache Isis works by building a metamodel of the domain objects: entities, view models and services.  The class members of both entities and view models represent both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.  The class members of domain services is simpler: just behaviour, ie actions.
 
+In the automatically generated UI a property is rendered as a field.  This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.  A collection is generally rendered as a table.
 
+In order for Isis to build its metamodel the domain objects must follow some conventions: what we call the _Apache Isis Programming Model_.  This is just an extension of the pojo / JavaBean standard of yesteryear: properties and collections are getters/setters, while actions are simply any remaining `public` methods.
 
+Additional metamodel semantics are inferred both imperatively from _supporting methods_ and declaratively from annotations.
 
-
-## Class Definition
-
-Classes are defined both to Isis and (if any entity) also to JDO/DataNucleus.
-
-
-
-
-We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then reason about all the classes in that package/namespace as a single unit.
-
-In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to their own (database) schemas.
+In this section we discuss the mechanics of writing domain objects that comply with Isis programming model.
 
 [TIP]
 ====
-For more on this topic, see <<Using Modules>>.
+In fact, Isis programming model is extensible; you can teach Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.   The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
+
+You can learn more about extending Isis programming model <<_extending_the_programming_model, here>>.
 ====
 
 
+include::_user-guide_how-tos_class-structure_class-definition.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_class-structure_properties.adoc[leveloffset=+1]
 
-## Property
+include::_user-guide_how-tos_class-structure_collections.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_class-structure_actions.adoc[leveloffset=+1]
 
-### Value vs Reference Types
+include::_user-guide_how-tos_class-structure_action-parameters.adoc[leveloffset=+1]
 
+include::_user-guide_how-tos_class-structure_properties-vs-parameters.adoc[leveloffset=+1]
 
-The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in <<Mapping Value Types>> provides a handy reference for the each.
-
-### Optional Properties
-
-
-### Mapping String (Length)
-
-### Mapping JODA Dates
-
-### Mapping BigDecimals
-
-### Mapping Blobs
-
-### Mapping Passwords
-
-
-[NOTE]
-.Lazy Loading
-====
-
-====
+include::_user-guide_how-tos_class-structure_ignoring-methods.adoc[leveloffset=+1]
 
 
 
-
-## Collection
-
-
-[NOTE]
-====
-While Isis support collections of references, the framework (currently) does not support collections of values. That is, it isn't possible to define a collection of type `Set<String>`.
-
-Or, actually, you can, because that is a valid mapping supported by JDO/DataNucleus .  However, Isis has no default visualization.
-
-The workaround is to mark the collection as `@Programmatic`, as described in <<Ignoring Methods>>.  This ensures that the collection is ignored by Isis.
-====
-
-
-
-## Actions
-
-[NOTE]
-====
-While Isis support actions whose parameters' types are scalar (values such as `String`, `int`, or references such as `Customer`), the framework (currently) does not support parameter types that are collections or maps.
-
-The workaround is to mark the collection as `@Programmatic`, as described in <<Ignoring Methods>>.  This ensures that the collection is ignored by Isis.
-====
-
-
-## Action Parameters
-
-
-### String Length Of Action Parameter
-
-### BigDecimal Precision Of Action Parameter
-
-### Optional Action Argument
-
-
-
-
-## Properties vs Parameters
-
-In many cases the value types of properties and of action parameters align. For example, a `Customer` entity might have a `surname` property, and there might also be corresponding `changeSurname`.  Ideally we want the surname property and surname action parameter to use the same value type.
-
-Having first-class support for this is a goal of Isis, and it is already possible (by writing some plumbing and glue code using Isis and DataNucleus APIs) to get some way towards this ideal.  However, in the vast majority of cases it is much easier and more practical to simply use standard value types such as `java.lang.String`.
-
-However, the JDO/DataNucleus annotations for specifying semantics such as optionality or maximum length are restricted to only apply to fields and to methods; they cannot be applied to action parameters.  It is therefore necessary to use Isis' equivalent annotations for action parameters.
-
-The table below summarises the equivalence of some of the most common cases.
-
-
-.Comparing annotations of Properties vs Action Parameters
-[cols="2,3,3", options="header"]
-|===
-|value type/semantic
-|property
-|action parameter
-
-|string (length)
-|
-|
-
-|big decimal (precision)
-|
-|
-
-|Isis blob
-|
-|
-
-|optional
-|`@Column(allowsNull="true")`
-|`ParameterLayout(optionality=Optionality.OPTIONAL`) or `@Optional`
-|===
-
-
-## Ignoring Methods
-
-Sometimes you want to define a `public` method on a domain object that is not intended to be rendered in Isis' UI.
-
-To exclude such methods, use the `@Programmatic` annotation.
