@@ -5,68 +5,13 @@
 
 IMPORTANT: WIP...
 
-The table below lists the configuration properties recognized by Apache Isis.
+This section lists the configuration properties recognized by Apache Isis.
 
-.Configuration Properties
-[cols="2,1,3", options="header"]
-|===
-|Property
-|Value +
-(_default value_)
-|Description
+include::_user-guide_reference_configuration-properties_core.adoc[leveloffset=+1]
 
-|`isis.services`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated as domain services.  Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to `@DomainServiceLayout#menuOrder()`).
+include::_user-guide_reference_configuration-properties_wicket-viewer.adoc[leveloffset=+1]
 
-|`isis.services.` `container.disableAutoFlush`
-|`true`,`_false_`
-|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+include::_user-guide_reference_configuration-properties_restfulobjects-viewer.adoc[leveloffset=+1]
 
-|`isis.viewer.wicket.` `disableDependentChoiceAutoSelection`
-|`true`,`_false_`
-|For dependent choices (eg category/subcategory), whether the dependent choice should automatically select the first option, or instead should leave empty
-
-|`isis.viewer.wicket.` `suppressRememberMe`
-|`true`,`_false_`
-|
-
-|`isis.viewer.wicket.` `disableModalDialogs`
-|`true`,`_false_`
-|
-
-|`isis.viewer.wicket.` `stripWicketTags`
-|`true`,`false`
-| Whether to force Wicket tags to be stripped.  The default is for them to be stripped in production (Isis' SERVER mode == Wicket DEPLOYMENT mode), but not stripped otherwise (Isis' DEPLOYMENT mode == Wicket DEVELOPMENT mode)
-
-|`isis.viewer.wicket.` `bookmarkedPages`
-| +ve int (`_15_`)
-| number of pages to bookmark
-
-
-|`isis.viewer.wicket.` `regularCase`
-| `true`,`_false_`
-| Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
-
-|`isis.viewer.wicket.` `disableDependentChoiceAutoSelection`
-| `true`,`_false_`
-| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
-
-|`isis.persistor.datanucleus.impl.*`
-|
-| Passed through directly to Datanucleus (with prefix stripped)
-
-|`isis.persistor.datanucleus.` `RegisterEntities.packagePrefix`
-| fully qualified package names (CSV)
-| of class names; specifies the entities early rather than allow DataNucleus to find the entities lazily.  Strongly recommended (subtle issues can sometimes arise if lazy discovery is used).
-
-|`isis.persistor.datanucleus.` `PublishingService.serializedForm`
-| zipped
-|
-
-|`isis.persistor.disableConcurrencyChecking`
-|`true`,`_false_`
-| Disables concurrency checking globally.  Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.
-
-|===
+include::_user-guide_reference_configuration-properties_datanucleus-objectstore.adoc[leveloffset=+1]
 
