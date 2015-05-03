@@ -25,10 +25,142 @@ The annotations for mapping value types tend to be different for properties vs a
 
 == Mapping BigDecimals
 
-== Mapping Blobs
+Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
 
-== Mapping Passwords
+For example, suppose we have:
+
+[source,java]
+----
+private BigDecimal impact;
+public BigDecimal getImpact() {
+    return impact;
+}
+public void setImpact(final BigDecimal impact) {
+    this.impact = impact;
+}
+----
+
+JDO/DataNucleus creates, at least with HSQL, the table with the field type as NUMERIC(19). No decimal digits are admitted. (Further details http://hsqldb.org/doc/2.0/guide/sqlgeneral-chapt.html#sgc_numeric_types[here]).
+
+What this implies is that, when a record is inserted, a log entry similar to this one appears:
+
+[source,java]
+----
+INSERT INTO ENTITY(..., IMPACT, ....) VALUES (...., 0.5, ....)
+----
+
+But when that same record is retrieved, the log will show that a value of "0" is returned, instead of 0.5.
+
+The solution is to explicitly add the scale to the field like this:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(scale=2)
+private BigDecimal impact;
+public BigDecimal getImpact() {
+    return impact;
+}
+public void setImpact(final BigDecimal impact) {
+    this.impact = impact;
+}
+----
+
+In addition, you should also set the scale of the `BigDecimal`, using `setScale(scale, roundingMode)`.
+
+More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_Java_BigDecimal:_A_Tutorial[here] and http://www.tutorialspoint.com/java/math/bigdecimal_setscale_rm_roundingmode.htm[here].
+
+== Mapping Blobs and Clobs
+
+Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
+
+As for link:mapping-joda-dates.html[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation. However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
+
+=== Mapping Blobs
+
+For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-app-todoapp/blob/61b8114a8e01dbb3c380b31cf09eaed456407570/dom/src/main/java/todoapp/dom/module/todoitem/ToDoItem.java#L475[todoapp example app] (non-ASF) the `attachment` property is as follows:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "BLOB")
+})
+private Blob attachment;
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+public Blob getAttachment() {
+    return attachment;
+}
+public void setAttachment(final Blob attachment) {
+    this.attachment = attachment;
+}
+----
+
+The three `@javax.jdo.annotations.Column` annotations are required because the mapping classes that Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns. (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
+
+If the `Blob` is mandatory, then use:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "BLOB",
+                                  allowsNull="false")
+})
+private Blob attachment;
+@Property(
+    optionality = Optionality.MANDATORY
+)
+public Blob getAttachment() {
+return attachment;
+}
+public void setAttachment(final Blob attachment) {
+this.attachment = attachment;
+}
+----
+
+=== Mapping Clobs
+
+Mapping `Clob`s works in a very similar way, but the `@Column#sqlType` attribute will be `CLOB`:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "CLOB")
+})
+private Clob doc;
+@Property(
+    optionality = Optionality.OPTIONAL
+)
+public Clob getDoc() {
+    return doc;
+}
+public void setDoc(final Clob doc) {
+    this.doc = doc;
+}
+----
 
 
+=== Mapping to VARBINARY or VARCHAR
+
+Instead of mapping to a `Blob` or `Clob` datatype, you might also specify map to a `VARBINARY` or `VARCHAR`. In this case you will need to specify a length. For example:
 
 
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_bytes", sqlType = "VARBINARY", length=2048)
+----
+
+or
+
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "VARCHAR", length=2048)
+----
+
+Support and maximum allowed length will vary by database vendor.
