@@ -10,6 +10,8 @@ include::_user-guide_getting-started.adoc[leveloffset=+1]
 
 include::_user-guide_how-tos.adoc[leveloffset=+1]
 
+include::_user-guide_more-advanced.adoc[leveloffset=+1]
+
 include::_user-guide_reference.adoc[leveloffset=+1]
 
 include::_user-guide_decoupling.adoc[leveloffset=+1]

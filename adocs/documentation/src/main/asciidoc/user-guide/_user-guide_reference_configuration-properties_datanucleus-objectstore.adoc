@@ -7,6 +7,9 @@ IMPORTANT: WIP...
 
 These configuration properties are typically stored in `WEB-INF/persistor_datanucleus.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
 
+== Configuration Properties for Apache Isis itself
+
+
 .JDO/DataNucleus Objectstore Configuration Properties
 [cols="2a,1,3a", options="header"]
 |===
@@ -14,17 +17,6 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 |Value +
 (_default value_)
 |Description
-
-|`isis.persistor.datanucleus.` +
-`impl.*`
-|
-| Passed through directly to Datanucleus (with `isis.persistor.datanucleus.impl` prefix stripped)
-
-|`isis.persistor.datanucleus.impl` +
-`.datanucleus.persistenceByReachabilityAtCommit
-|false
-|We recommend this setting is disabled.  +
-Further <<_disabling_persistence_by_reachability, discussion below>>.
 
 |`isis.persistor.datanucleus.` +
 `RegisterEntities.packagePrefix`
@@ -36,6 +28,28 @@ Further <<_registering_entity_types, discussion below>>.
 `PublishingService.serializedForm`
 | zipped
 |
+
+|===
+
+== Configuration Properties passed through directly to DataNucleus.
+
+.JDO/DataNucleus Objectstore Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(_default value_)
+|Description
+
+|`isis.persistor.datanucleus.impl.*`
+|
+| Passed through directly to Datanucleus (with `isis.persistor.datanucleus.impl` prefix stripped)
+
+|`isis.persistor.datanucleus.impl.` +
+`datanucleus.persistenceByReachabilityAtCommit`
+|`false`
+|We recommend this setting is disabled.  +
+Further <<_disabling_persistence_by_reachability, discussion below>>.
 
 |===
 
