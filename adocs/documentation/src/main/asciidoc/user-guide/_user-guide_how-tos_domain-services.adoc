@@ -12,3 +12,12 @@ IMPORTANT: TODO
 IMPORTANT: TODO
 
 
+It's worth extending the <<_hexagonal_architecture, Hexagonal Architecture> to show where domain services -- and in particular the domain services provided by http://isisaddons.org[Isis Addons] (non-ASF) -- fit in:
+
+.The hexagonal architecture with Isis addons
+image::{_imagesdir}how-tos/domain-services/hexagonal-architecture-addons.png[width="700px"]
+
+Here, we can see that the addons provide services both to the Isis framework (for example security, command and auditing) and also - by way of dependency injection - to the domain objects (eg tags, excel, settings). Of course, you can also write your own domain services as well, for example to interface with some external CMS system, say.
+
+The Apache Isis framework also provides a number of in-built domain services.
+
