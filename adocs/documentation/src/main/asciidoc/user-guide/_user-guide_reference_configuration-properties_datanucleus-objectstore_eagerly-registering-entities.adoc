@@ -23,3 +23,21 @@ In the `persistor_datanucleus.properties`, specify the package prefix(es) of you
 
 The value of this property can be a comma-separated list (if there is more than one package or Maven module that holds persistable entities).
 
+
+== Integration Testing
+
+The `IsisConfigurationForJdoIntegTests`, recommended for use in <<_integration_testing, Integration Testing>> provides the `#addRegisterEntitiesPackagePrefix()` method to set up this configuration property:
+
+[source,java]
+.Integration test bootstrapping
+----
+private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
+    ...
+    private static IsisConfiguration testConfiguration() {
+        final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
+        testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom.modules"); // <1>
+        return testConfiguration;
+    }
+}
+----
+<1> specify the package prefix(es) for integration testing.

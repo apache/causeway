@@ -27,6 +27,15 @@ IMPORTANT: WIP...
 |`true`,`_false_`
 | Disables concurrency checking globally.  Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
 
-|===
+|`isis.reflector.facet.` +
+`cssClassFa.patterns`
+|regex:fa-icon,regex2:fa-icon2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex.
 
+|`isis.reflector.facet.` +
+`cssClass.patterns`
+|regex:css1,regex2:css2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex.
+
+|===
 
