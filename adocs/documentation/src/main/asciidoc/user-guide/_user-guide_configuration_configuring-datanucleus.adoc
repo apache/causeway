@@ -3,27 +3,18 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+Apache Isis programmatically configures DataNucleus; any Isis properties with the prefix `isis.persistor.datanucleus.impl` are passed through directly to the JDO/DataNucleus objectstore (with the prefix stripped off, of course).
 
-== persistence.xml file
+DataNucleus will for itself also and read the `META-INF/persistence.xml`; at a minimum this defines the name of the "persistence unit".  n theory it could also hold mappings, though in Isis we tend to use annotations instead.
 
-
-== Eagerly Registering Entity Types
-
-
-== Disabling persistence-by-reachability
-
-
-== Transaction Management
-
-
-== Using Neo4J (instead of an RDBMS)
+Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see <<_overriding_jdo_annotations, Overriding JDO Annotatons>> for further discussion.
 
 
 
-== JDO/DataNucleus configuration
+include::_user-guide_configuration_configuring-datanucleus_persistence-xml.adoc[leveloffset=+1]
 
-Any Isis properties with the prefix `isis.persistor.datanucleus.impl` are passed through directly to the JDO/DataNucleus objectstore (with the prefix stripped off, of course).
+include::_user-guide_configuration_configuring-datanucleus_disabling-persistence-by-reachability.adoc[leveloffset=+1]
 
-DataNucleus will itself search for additional XML mapping files, eg `mappings.jdo`.  These an be used to override any annotations of annotated entities.
+include::_user-guide_configuration_configuring-datanucleus_eagerly-registering-entities.adoc[leveloffset=+1]
 
+include::_user-guide_configuration_configuring-datanucleus_using-jndi-data-source.adoc[leveloffset=+1]

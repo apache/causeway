@@ -88,6 +88,8 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
             end
 
             system cmd
+
+
         end
 
     else

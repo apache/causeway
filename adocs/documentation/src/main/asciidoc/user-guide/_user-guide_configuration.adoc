@@ -3,20 +3,25 @@
 :_basedir: ../
 :_imagesdir: images/
 
-This chapter describes how to configure an Apache Isis application.
+
+Isis' own configuration properties are simple key-value pairs, typically held in the `WEBINF/isis.properties` file and other related files.  This chapter describes how to configure an Apache Isis application.
 
 [TIP]
 ====
-Details on adjusting these configuration properties between development and production can be found in the <<_deployment,Deployment>> chapter.
+The configuration values are "baked" into the WAR file.  Details on how to override these configuration properties externally for different environments can be found in the <<_deployment,Deployment>> chapter.
 ====
 
-include::_user-guide_configuration_properties-and-files.adoc[leveloffset=+1]
+include::_user-guide_configuration_files.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring_shiro.adoc[leveloffset=+1]
+include::_user-guide_configuration_properties.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring_datanucleus.adoc[leveloffset=+1]
+include::_user-guide_configuration_web-xml.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring-the-webapp.adoc[leveloffset=+1]
+include::_user-guide_configuration_configuring-shiro.adoc[leveloffset=+1]
+
+include::_user-guide_configuration_configuring-datanucleus.adoc[leveloffset=+1]
+
+include::_user-guide_configuration_integration-tests.adoc[leveloffset=+1]
 
 
 

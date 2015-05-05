@@ -8,8 +8,6 @@ IMPORTANT: TODO
 
 include::_user-guide_more-advanced_tips-n-tricks_are-you-sure.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_overriding-jdo-annotations.adoc[leveloffset=+1]
-
 include::_user-guide_more-advanced_tips-n-tricks_simulating-collections-of-values.adoc[leveloffset=+1]
 
 include::_user-guide_more-advanced_tips-n-tricks_render-all-properties-in-tables.adoc[leveloffset=+1]

@@ -31,6 +31,8 @@ Further <<_registering_entity_types, discussion below>>.
 
 |===
 
+
+
 == Configuration Properties passed through directly to DataNucleus.
 
 .JDO/DataNucleus Objectstore Configuration Properties
@@ -53,6 +55,3 @@ Further <<_disabling_persistence_by_reachability, discussion below>>.
 
 |===
 
-include::_user-guide_reference_configuration-properties_datanucleus-objectstore_disabling-persistence-by-reachability.adoc[leveloffset=+1]
-
-include::_user-guide_reference_configuration-properties_datanucleus-objectstore_eagerly-registering-entities.adoc[leveloffset=+1]

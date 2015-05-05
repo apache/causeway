@@ -1,16 +1,10 @@
-= Using Modules
+= Database Schemas
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: 1.9.0-SNAPSHOT onwards.
-
-We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then
-reason about all the classes in that package/namespace as a single unit. Good examples are the various
-http://github.com/isisaddons[Isis Addons] (not ASF): security, commands, auditing and so on.
-
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to
-their own (database) schemas. As of 1.9.0-SNAPSHOT, all the IsisAddons modules do this, for example:
+their own (database) schemas. As of 1.9.0-SNAPSHOT, all the http://isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
 
 [source,java]
 ----
@@ -50,7 +44,11 @@ CREATE TABLE isisaudit."AuditEntry" (
 ----
 
 
-If for some reason you don't want to use schemas (though we strongly recommend that you do), then then note that you can override the `@PersistenceCapable` annotation by providing XML metadata (the `mappings.jdo` file).  See <<Overriding Annotations>> for a write-up of how to do this.
+[TIP]
+====
+If for some reason you don't want to use schemas (though we strongly recommend that you do), then note that you can override the `@PersistenceCapable` annotation by providing XML metadata (the `mappings.jdo` file).  See <<_overriding_jdo_annotations, Overriding Annotations>> for a write-up of how to do this.
+====
+
 
 
 
@@ -61,7 +59,7 @@ on the initialization of each class into the JDO metamodel.
 
 [TIP]
 ====
-Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Isis up to v1.8.0) there was no support for schemas.  As of Isis 1.9.0-SNAPSHOT and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so we've decided to leave it in.
+Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Isis up to v1.8.0) there was no support for schemas.  As of Isis 1.9.0-SNAPSHOT and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
 ====
 
 Therefore Apache Isis attaches a listener, `CreateSchemaObjectFromClassMetadata`, that checks for the schema's existence, and creates the schema if required.
@@ -147,8 +145,8 @@ public interface DataNucleusPropertiesAware {
 This latter interface provides access to the properties passed through to JDO/DataNucleus.
 
 
-
-
-== Please contribute back
-
+[IMPORTANT]
+====
 If you do extend Isis' `CreateSchemaObjectFromClassMetadata` class for some other database, please https://issues.apache.org/jira/browse/ISIS[contribute back] your improvements.
+====
+

@@ -9,8 +9,6 @@ include::_user-guide_reference_recognized-methods.adoc[leveloffset=+1]
 
 include::_user-guide_reference_annotations.adoc[leveloffset=+1]
 
-include::_user-guide_reference_configuration-properties.adoc[leveloffset=+1]
-
 include::_user-guide_reference_domain-services.adoc[leveloffset=+1]
 
 include::_user-guide_reference_value-types.adoc[leveloffset=+1]
