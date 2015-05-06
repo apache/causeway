@@ -214,28 +214,28 @@ The configuration required in the `WEB-INF/shiro.ini` file is:
 ----
 contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
 contextFactory.url = ldap://localhost:10389
-contextFactory.authenticationMechanism = CRAM-MD5
-contextFactory.systemAuthenticationMechanism = simple
-contextFactory.systemUsername = uid=admin,ou=system
+contextFactory.systemUsername = uid=admin,ou=system        # <1>
 contextFactory.systemPassword = secret
+contextFactory.authenticationMechanism = CRAM-MD5          # <2>
+contextFactory.systemAuthenticationMechanism = simple
 
 ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm
 ldapRealm.contextFactory = $contextFactory
 
-ldapRealm.searchBase = ou=groups,o=mojo
-ldapRealm.groupObjectClass = groupOfUniqueNames
-ldapRealm.uniqueMemberAttribute = uniqueMember
+ldapRealm.searchBase = ou=groups,o=mojo                    # <3>
+ldapRealm.groupObjectClass = groupOfUniqueNames            # <4>
+ldapRealm.uniqueMemberAttribute = uniqueMember             # <5>
 ldapRealm.uniqueMemberAttributeValueTemplate = uid={0}
 
 # optional mapping from physical groups to logical application roles
-ldapRealm.rolesByGroup = \
+ldapRealm.rolesByGroup = \                                 # <6>
     LDN_USERS: user_role,\
     NYK_USERS: user_role,\
     HKG_USERS: user_role,\
     GLOBAL_ADMIN: admin_role,\
     DEMOS: self-install_role
 
-ldapRealm.permissionsByRole=\
+ldapRealm.permissionsByRole=\                              # <7>
    user_role = *:ToDoItemsJdo:*:*,\
                *:ToDoItem:*:*; \
    self-install_role = *:ToDoItemsFixturesService:install:* ; \
@@ -243,20 +243,18 @@ ldapRealm.permissionsByRole=\
 
 securityManager.realms = $ldapRealm
 ----
+<1> user accounts are searched using a dedicated service account
+<2> SASL (CRAM-MD5) authentication is used for this authentication
+<3> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
+<4> each group has an LDAP objectClass of `groupOfUniqueNames`
+<5> each group has a vector attribute of `uniqueMember`
+<6> groups looked up from LDAP can optionally be mapped to logical roles; otherwise groups are used as role names directly
+<7> roles are mapped in turn to permissions
 
-where:
-
-* user accounts are searched under `ou=system`
+The value of `uniqueMember` is in the form `uid=xxx`, with `xxx` being the uid of the user
+* users searched under `ou=system`
 * users have, at minimum, a `uid` attribute and a password
-* SASL (CRAM-MD5) authentication is used for this authentication
 * the users credentials are used to verify their user/password
-* groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
-* each group has an LDAP objectClass of `groupOfUniqueNames`
-* each group has a vector attribute of `uniqueMember`
-* each value of `uniqueMember` is in the form `uid=xxx`, with `xxx` being the uid of the user
-* the group membership is looked up using the specified system user
-* groups looked up from LDAP can be mapped to logical roles
-* if no group-to-role mapping is provided, then the group names are used as role names with no translation
 
 The above configuration has been tested against http://directory.apache.org/apacheds/[ApacheDS], v1.5.7. This can be administered using http://directory.apache.org/studio/[Apache Directory Studio], v1.5.3.
 
@@ -330,27 +328,18 @@ realm.roleToPermissionsMappings = ...
 
 This forces you to put everything on one line for each of the above.
 
-This is, unfortunately, a Shiro "feature". The only solution to this is to use '&#39; to separate the mappings onto separate lines in the file so that it is at least maintainable.
+This is, unfortunately, a Shiro "feature". The only solution to this is to use "\" to separate the mappings onto separate lines in the file so that it is at least maintainable.
 
 Use this technique for both group to roles mapping and role to permission mapping. If you use the '&#39; after the "," that separates the key:value pairs it is more readable.
 
 If you repeat the entries above then it's "last one wins".
 
-____
+[WARNING]
+====
+Configuring a [roles] section instead doesn't work because that triggers Shiro to use the simple "INI" realm and not your defined realm.
 
-*Note* you can't use a [roles] section because that triggers Shiro to use the simple "INI" realm and not your defined realm (in most cases you are going to use an LDAP realm in an enterprise environment and the "simple" realm in Shiro isn't much use beyond prototyping work).
-
-____
-
-
-
-
-
-
-
-
-
-
+In an enterprise environment you are most likely going to use either an LDAP realm or the realm that comes with the http://github.com/isisaddons/isis-module-security}[Isis addons' security] module (non-ASF); so the "simple" realm in Shiro isn't much use beyond prototyping work).
+====
 
 
 

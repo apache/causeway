@@ -3,23 +3,11 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+This chapter explains the main APIs for extending Apache Isis: the programming model conventions, the Wicket viewer, and the Restful Objects viewer.
 
 include::_user-guide_extending_programming-model.adoc[leveloffset=+1]
 
+include::_user-guide_extending_wicket-viewer.adoc[leveloffset=+1]
 
+include::_user-guide_extending_restfulobjects-viewer.adoc[leveloffset=+1]
 
-## Extending the Wicket viewer
-
-### Writing a custom theme
-
-### Replacing page elements
-
-### Custom pages
-
-
-
-
-## Extending the Restful viewer
-
-### Custom Representations

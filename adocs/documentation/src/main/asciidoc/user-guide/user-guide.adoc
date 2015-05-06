@@ -26,7 +26,7 @@ include::_user-guide_configuration.adoc[leveloffset=+1]
 
 include::_user-guide_deployment.adoc[leveloffset=+1]
 
-include::_user-guide_isis-addons.adoc[leveloffset=+1]
+include::_user-guide_isis-addons-modules.adoc[leveloffset=+1]
 
 include::_user-guide_integrating-with-other-systems.adoc[leveloffset=+1]
 
