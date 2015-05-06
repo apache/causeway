@@ -1,4 +1,4 @@
-= Wicket Viewer
+= Configuration Properties
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -47,6 +47,44 @@ The default is for them to be stripped in production (Isis' SERVER mode == Wicke
 | `true`,`_false_`
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
 
+|`isis.viewer.wicket.` `disableModalDialogs`
+| `true`,`_false_`
+| By default the Isis Wicket viewer uses a modal dialog for action parameters.  Before this feature was implemented (prior to 1.4.0), Isis rendered action parameters on its own page.  This property re-enables the old behaviour.
+
+Note that action pages are still used for bookmarked actions.
+
 |===
 
+
+=== Suppressing 'sign up'
+
+IMPORTANT: TODO
+
+=== Suppressing 'remember me'
+
+IMPORTANT: TODO
+
+=== Suppressing 'password reset'
+
+IMPORTANT: TODO
+
+=== Number of bookmarked pages
+
+IMPORTANT: TODO
+
+=== Stripped Wicket tags
+
+IMPORTANT: TODO
+
+=== Disabling modal dialogs
+
+IMPORTANT: TODO
+
+=== Showing a theme chooser
+
+IMPORTANT: TODO
+
+=== Suppressing header and footer (embedded view)
+
+IMPORTANT: TODO
 
