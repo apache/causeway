@@ -7,122 +7,24 @@
 IMPORTANT: TODO
 
 
-== Bootstrapping
+== Test Class
 
-[source,java]
-.Integration test bootstrapping
-----
-private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
+IMPORTANT: TODO
 
-    public SimpleAppSystemBuilder() {
-        withLoggingAt(org.apache.log4j.Level.INFO);
-        with(testConfiguration());
-        with(new DataNucleusPersistenceMechanismInstaller());
 
-        // services annotated with @DomainService
-        withServicesIn( "domainapp" );
-    }
-
-    private static IsisConfiguration testConfiguration() {
-        final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests(); // <1>
-
-        testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom.modules");
-        return testConfiguration;
-    }
-}
-----
-<1> uses `IsisConfigurationForJdoIntegTests` for in-memory HSQLDB and other standard settings, see <<_isisconfigurationforjdointegtests, below>>.
-
-The <<_simpleapp_archetype, SimpleApp archetype>> is already set up to do this.
+include::_user-guide_testing_integ-test-support_bootstrapping.adoc[leveloffset=+1]
 
 
 
-== IsisConfigurationForJdoIntegTests
-
-IMPORTANT: WIP...
-
-When running integration tests with the JDO/DataNucleus Objectstore, there are certain standard configuration properties that are usually set. For example, integration tests are usually run against an in-memory HSQLDB database.
-
-To remove a little bit of boilerplate, the `IsisConfigurationForJdoIntegTests` class (in the `org.apache.isis.objectstore.jdo.datanucleus` package) can be used to bootstrap the application.
-
-
-.Default Configuration Properties for Integration Tests
-[cols="2a,1,3a", options="header"]
-|===
-|Property
-|Value
-|Description
-
-|`isis.persistor.datanucleus.impl.` +
-`javax.jdo.option.ConnectionURL`
-|jdbc:hsqldb:mem:test
-|JDBC URL
-
-|`isis.persistor.datanucleus.impl.` +
-`javax.jdo.option.ConnectionDriverName`
-|org.hsqldb.jdbcDriver
-|JDBC Driver
-
-|`isis.persistor.datanucleus.impl.` +
-`javax.jdo.option.ConnectionUserName`
-|sa
-|Username
-
-|`isis.persistor.datanucleus.impl.` +
-`javax.jdo.option.ConnectionPassword`
-|<empty string>
-|Password
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.schema.autoCreateAll`
-|true
-|Recreate DB for each test run (an in-memory database)
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.schema.validateAll`
-|false
-|Disable validations (minimize bootstrap time)
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.persistenceByReachabilityAtCommit`
-|false
-|As per WEB-INF/persistor_datanucleus.properties
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.identifier.case`
-|MixedCase
-|As per WEB-INF/persistor_datanucleus.properties
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.cache.level2.type`
-|none
-|As per WEB-INF/persistor_datanucleus.properties
-
-|`isis.persistor.datanucleus.impl.` +
-`datanucleus.cache.level2.mode`
-|ENABLE_SELECTIVE
-|As per WEB-INF/persistor_datanucleus.properties
-
-|`isis.persistor.datanucleus.` +
-`install-fixtures`
-|true
-|Automatically install any fixtures that might have been registered
-
-|`isis.persistor.` +
-`enforceSafeSemantics`
-|false
-|
-
-|`isis.deploymentType`
-|server_prototype
-|
-|===
 
 
 
 == WrapperFactory
 
 IMPORTANT: TODO
+
+
+
 
 
 

@@ -18,15 +18,13 @@ The configuration values are "baked" into the WAR file.  Details on how to overr
 
 include::_user-guide_runtime-configuration_files.adoc[leveloffset=+1]
 
-include::_user-guide_runtime-configuration_properties.adoc[leveloffset=+1]
+include::_user-guide_runtime-configuration_configuring-core.adoc[leveloffset=+1]
 
 include::_user-guide_runtime-configuration_web-xml.adoc[leveloffset=+1]
 
 include::_user-guide_runtime-configuration_configuring-shiro.adoc[leveloffset=+1]
 
 include::_user-guide_runtime-configuration_configuring-datanucleus.adoc[leveloffset=+1]
-
-include::_user-guide_runtime-configuration_integration-tests.adoc[leveloffset=+1]
 
 
 

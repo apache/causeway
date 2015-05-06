@@ -56,35 +56,35 @@ Note that action pages are still used for bookmarked actions.
 |===
 
 
-=== Suppressing 'sign up'
+== Suppressing 'sign up'
 
 IMPORTANT: TODO
 
-=== Suppressing 'remember me'
+== Suppressing 'remember me'
 
 IMPORTANT: TODO
 
-=== Suppressing 'password reset'
+== Suppressing 'password reset'
 
 IMPORTANT: TODO
 
-=== Number of bookmarked pages
+== Number of bookmarked pages
 
 IMPORTANT: TODO
 
-=== Stripped Wicket tags
+== Stripped Wicket tags
 
 IMPORTANT: TODO
 
-=== Disabling modal dialogs
+== Disabling modal dialogs
 
 IMPORTANT: TODO
 
-=== Showing a theme chooser
+== Showing a theme chooser
 
 IMPORTANT: TODO
 
-=== Suppressing header and footer (embedded view)
+== Suppressing header and footer (embedded view)
 
 IMPORTANT: TODO
 

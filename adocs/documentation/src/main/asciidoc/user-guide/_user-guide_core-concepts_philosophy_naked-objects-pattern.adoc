@@ -37,7 +37,7 @@ Reenskaug then goes on to say that "this simple and powerful idea failed because
 In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.  Rather, the object inspects the object and uses that to decide how to render the object.  This is also extensible.  In the http://isisaddons.org[Isis Addons] (non-ASF) the http://github.com/isisaddons/isis-wicket-gmap3}[Isis addons' gmap3 modue] renders any object with latitude/longitude on a map, while http://github.com/isisaddons/isis-wicket-fullcalendar2}[Isis addons' fullcalendar2 wicket extension] renders any object with date(s) on a calendar.
 ====
 
-=== Object Interface Mapping
+== Object Interface Mapping
 
 Another -- more technical -- way to think about the naked objects pattern is as an _object interface mapper_, or `OIM`.  We sometimes use this idea to explain naked objects to a bunch of developers.
 

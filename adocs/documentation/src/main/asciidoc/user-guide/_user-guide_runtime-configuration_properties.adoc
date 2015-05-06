@@ -3,10 +3,3 @@
 :_basedir: ../
 :_imagesdir: images/
 
-This section lists the core/runtime configuration properties recognized by Apache Isis.
-
-Configuration properties for the viewers can be found in the <<Wicket Viewer>> chapter and the <<Restful Objects Viewer>> chapter.
-
-include::_user-guide_configuration_properties_core.adoc[leveloffset=+1]
-
-include::_user-guide_configuration_properties_datanucleus-objectstore.adoc[leveloffset=+1]

@@ -9,7 +9,7 @@ include::_user-guide_testing_unit-test-support.adoc[leveloffset=+1]
 
 include::_user-guide_testing_integ-test-support.adoc[leveloffset=+1]
 
-include::_user-guide_testing_bdd-integ-test-support.adoc[leveloffset=+1]
+include::_user-guide_testing_bdd-spec-support.adoc[leveloffset=+1]
 
 include::_user-guide_testing_fixture-scripts.adoc[leveloffset=+1]
 

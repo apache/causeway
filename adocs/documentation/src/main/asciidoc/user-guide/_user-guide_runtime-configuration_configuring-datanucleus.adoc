@@ -10,11 +10,12 @@ DataNucleus will for itself also and read the `META-INF/persistence.xml`; at a m
 Furthermore, DataNucleus will search for various other XML mapping files, eg `mappings.jdo`.  A full list can be found http://www.datanucleus.org/products/datanucleus/jdo/metadata.html[here].  The metadata in these XML can be used to override the annotations of annotated entities; see <<_overriding_jdo_annotations, Overriding JDO Annotatons>> for further discussion.
 
 
+include::_user-guide_runtime-configuration_configuring-datanucleus_properties.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring-datanucleus_persistence-xml.adoc[leveloffset=+1]
+include::_user-guide_runtime-configuration_configuring-datanucleus_persistence-xml.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring-datanucleus_disabling-persistence-by-reachability.adoc[leveloffset=+1]
+include::_user-guide_runtime-configuration_configuring-datanucleus_eagerly-registering-entities.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring-datanucleus_eagerly-registering-entities.adoc[leveloffset=+1]
+include::_user-guide_runtime-configuration_configuring-datanucleus_disabling-persistence-by-reachability.adoc[leveloffset=+1]
 
-include::_user-guide_configuration_configuring-datanucleus_using-jndi-data-source.adoc[leveloffset=+1]
+include::_user-guide_runtime-configuration_configuring-datanucleus_using-jndi-data-source.adoc[leveloffset=+1]

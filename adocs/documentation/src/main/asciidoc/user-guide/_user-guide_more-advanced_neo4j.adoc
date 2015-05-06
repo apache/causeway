@@ -14,7 +14,7 @@ In addition, the http://github.com/isisaddons/isis-app-neoapp}[Isis addons' neoa
 
 The steps below describe the configuration steps required to update an existing app.
 
-==== ConnectionURL
+== ConnectionURL
 
 In `persistor.properties`, update the JDO `ConnectionURL` property, eg:
 
@@ -25,7 +25,7 @@ isis.persistor.datanucleus.impl.javax.jdo.option.ConnectionURL=neo4j:neo4j_DB
 
 The other connection properties (`ConnectionDriverName`, `ConnectionUserName` and `ConnectionPassword`) should be commented out.
 
-==== Update pom.xml
+== Update pom.xml
 
 Add the following dependency to the `webapp` project's `pom.xml`:
 
@@ -45,7 +45,7 @@ Add the following dependency to the `webapp` project's `pom.xml`:
 
 In the <<_simpleapp_archetype, SimpleApp archetype>> this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
 
-==== Try it out!
+== Try it out!
 
 If you want to quickly try out neo4j for yourself:
 
