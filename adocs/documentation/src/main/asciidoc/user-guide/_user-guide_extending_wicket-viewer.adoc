@@ -12,22 +12,12 @@ The Wicket viewer allows you to customize the GUI in several (progressively more
 * by <<_replacing_page_elements, replacing elements of the page>> using the `ComponentFactory` interface
 * by implementing <<_custom_pages, replacement page implementations>> for the standard page types
 
-This chapter describes each of these mechanisms.
-
-
-== Tweak the UI with CSS
-
-IMPORTANT: TODO
+The first two of these options are discussed in the <<Wicket Viewer>> chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
 
 
 
-== Tweak the UI with Javascript
 
-IMPORTANT: TODO
-
-
-
-== Writing a custom theme
+== Custom Bootstrap theme
 
 IMPORTANT: TODO
 

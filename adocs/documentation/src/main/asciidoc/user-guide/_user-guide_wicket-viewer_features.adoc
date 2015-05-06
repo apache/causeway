@@ -8,7 +8,101 @@ This section discusses features of the wicket viewer from the perspective of an 
 
 == File upload/download
 
-IMPORTANT: TODO
+The Isis application library provides the <<_blob, Blob>> value type (binary large objects) and also the <<_clob, Clob>>
+value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
+
+A class can define a property using either of these types, for example:
+
+=== Screenshots
+
+The following screenshots are taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF):
+
+[NOTE]
+====
+TODO: these screenshots need to be updated for the new look-n-feel introduced in 1.8.0
+====
+
+==== View mode, empty
+
+`Blob` field rendered as attachment (with no data):
+
+image::{_imagesdir}wicket-viewer/file-upload-download/010-attachment-field-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/010-attachment-field.png"]
+
+==== Edit mode
+
+Hit edit; 'choose file' button appears:
+
+image::{_imagesdir}wicket-viewer/file-upload-download/020-edit-choose-file-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/020-edit-choose-file.png"]
+
+==== Choose file
+
+Choose file using the regular browser window:
+
+image::{_imagesdir}wicket-viewer/file-upload-download/030-choose-file-using-browser-520.png[width="520px",link="{_imagesdir}wicket-viewer/file-upload-download/030-choose-file-using-browser.png"]
+
+
+Chosen file is indicated:
+
+image::{_imagesdir}wicket-viewer/file-upload-download/040-edit-chosen-file-indicated-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/040-edit-chosen-file-indicated.png"]
+
+==== Image rendered
+
+Back in view mode (ie once hit OK) if the `Blob` is an image, then it is shown:
+
+image::{_imagesdir}wicket-viewer/file-upload-download/050-ok-if-image-then-rendered-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/050-ok-if-image-then-rendered.png"]
+
+==== Download
+
+`Blob` can be downloaded:
+
+image::{_imagesdir}wicket-viewer/file-upload-download/060-download-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/060-download.png"]
+
+==== Clear
+
+Back in edit mode, can choose a different file or clear (assuming property is not mandatory):
+
+image::{_imagesdir}wicket-viewer/file-upload-download/070-edit-clear-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/070-edit-clear.png"]
+
+=== Domain Code
+
+To define a `Blob`, use:
+
+[source,java]
+----
+private Blob attachment;
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false")
+    @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+            @javax.jdo.annotations.Column(name = "attachment_name"),
+            @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+            @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType = "BLOB", sqlType = "BLOB")
+    })
+@Property(
+        domainEvent = AttachmentDomainEvent.class,
+        optionality = Optionality.OPTIONAL
+)
+public Blob getAttachment() { return attachment; }
+public void setAttachment(final Blob attachment) { this.attachment = attachment; }
+----
+
+To define a `Clob`, use:
+
+[source,java]
+----
+private Clob doc;
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+        @javax.jdo.annotations.Column(name = "doc_name"),
+        @javax.jdo.annotations.Column(name = "doc_mimetype"),
+        @javax.jdo.annotations.Column(name = "doc_chars", jdbcType = "CLOB", sqlType = "CLOB")
+})
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+public Clob getDoc() { return doc; }
+public void setDoc(final Clob doc) { this.doc = doc; }
+----
+
+The `Blob` and `Clob` types can also be used as parameters to actions.
+
 
 
 
@@ -24,7 +118,7 @@ Bookmarking is automatic; whenever a bookmarkable object/action is visited, then
 
 The following screenshot, taken from https://github.com/isisaddons/isis-app-todoapp[Isisaddons example todoapp] (not ASF) shows how the bookmarks are listed in a sliding panel.
 
-image::{_imagesdir}wicket-viewer/bookmarked-pages/panel.png[width="800px"]
+image::{_imagesdir}wicket-viewer/bookmarked-pages/panel.png[width="800px",link="{_imagesdir}wicket-viewer/bookmarked-pages/panel.png"]
 
 [NOTE]
 ====
@@ -35,7 +129,7 @@ Note how the list contains both domain objects and an action ("not yet complete"
 
 Bookmarks can also form a hierarchy.  The following screenshot, also taken from the https://github.com/estatio/estatio[Estatio] application, shows a variety of different bookmarked objects with a nested structure:
 
-image::{_imagesdir}wicket-viewer/bookmarked-pages/panel-estatio.png[width="800px"]
+image::{_imagesdir}wicket-viewer/bookmarked-pages/panel-estatio.png[width="800px",link="{_imagesdir}wicket-viewer/bookmarked-pages/panel-estatio.png"]
 
 [NOTE]
 ====
@@ -109,14 +203,108 @@ isis.viewer.wicket.bookmarkedPages.maxSize=20
 
 == Recent pages (drop down)
 
-IMPORTANT: TODO
+The Wicket viewer provides a recent pages drop-down that acts as a breadcrumb trail. Using it, the user can quickly open a recently accessed domain object.
+
+=== Screenshots
+
+The following screenshot, taken from the https://github.com/estatio/estatio[Estatio] application, shows the recent pages drop-down after a number of pages have been accessed.
+
+image::{_imagesdir}wicket-viewer/recent-pages/recent-pages.png[width="800px",link="{_imagesdir}wicket-viewer/recent-pages/recent-pages.png"]
+
+
+[NOTE]
+====
+TODO: this screenshot need to be updated for the new look-n-feel introduced in 1.8.0
+====
+
+=== Domain Code
+
+The recent pages drop-down is automatically populated; no changes need to be made to the domain classes.
+
+=== User Experience
+
+Selecting the domain object from the list causes the viewer to automatically navigate to the page for the selected object.
+
+=== Related functionality
+
+The <<_bookmarked_pages, bookmarked pages>> (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
+
+=== Configuration
+
+The number of objects is hard-coded as 10; it cannot currently be configured.
+
 
 
 
 
 == Hints and copy URL
 
-IMPORTANT: TODO
+While the user can often copy the URL of a domain object directly from the browser's address bar, the Wicket viewer also allows the URL of domain objects to be easily copied from a dialog.
+
+More interestingly, this URL can also contain hints capturing any sorting or page numbering, or hiding/viewing of collections.  End-users can therefore share these URLs as a form of deep linking into a particular view on a domain object.
+
+The copy URL and hinting is automatic.
+
+=== Screenshots
+
+The following screenshots are taken from the [Estatio](https://github.com/estatio/estatio) application.
+
+[NOTE]
+====
+TODO: these screenshots need to be updated for the new look-n-feel introduced in 1.8.0
+====
+
+==== Copy URL
+
+This screenshot shows the copy URL button (top right):
+
+image::{_imagesdir}wicket-viewer/copy-link/010-copy-link-button.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/010-copy-link-button.png"]
+
+Clicking on this button brings up a dialog with the URL preselected:
+
+image::{_imagesdir}wicket-viewer/copy-link/020-copy-link-dialog.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/020-copy-link-dialog.png"]
+
+
+The URL in this case is something like:
+
+    http://localhost:8080/wicket/entity/org.estatio.dom.lease.Lease:0
+
+The user can copy the link (eg `ctrl+C`) into the clipboard, then hit `OK` or `Esc` to dismiss the dialog.
+
+==== Hints
+
+Using the viewer the user can hide/show collection tables, can sort the tables by header columns:
+
+image::{_imagesdir}wicket-viewer/copy-link/030-hints.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/030-hints.png"]
+
+
+Also, if the collection spans multiple pages, then the individual page can be selected.
+
+Once the view has been customised, the URL shown in the copy URL dialog is in an extended form:
+
+image::{_imagesdir}wicket-viewer/copy-link/040-copy-link-with-hints.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/040-copy-link-with-hints.png"]
+
+The URL in this case is something like:
+
+    http://localhost:8080/wicket/entity/org.estatio.dom.lease.Lease:0?hint-1:collectionContents-view=3&hint-1:collectionContents:collectionContents-3:table-DESCENDING=value&hint-1:collectionContents:collectionContents-3:table-pageNumber=0&hint-2:collectionContents-view=0&hint-2:collectionContents:collectionContents-2:table-pageNumber=0&hint-3:collectionContents-view=2&hint-3:collectionContents:collectionContents-2:table-pageNumber=0&hint-4:collectionContents-view=3&hint-4:collectionContents:collectionContents-3:table-ASCENDING=exerciseDate&hint-4:collectionContents:collectionContents-3:table-pageNumber=0&hint-5:collectionContents-view=0&hint-5:collectionContents:collectionContents-3:table-pageNumber=0
+
+==== Copy URL from title
+
+When the user invokes an action on the object, the URL (necessarily) changes to indicate that the action was invoked.  This URL is specific to the user's session and cannot be shared with others.
+
+A quick way for the user to grab a shareable URL is simply by clicking on the object's title:
+
+image::{_imagesdir}wicket-viewer/copy-link/050-title-url.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/050-title-url.png"]
+
+
+=== User Experience
+
+The copy URL dialog is typically obtained by clicking on the icon.
+
+Alternatively, `alt+]` will also open the dialog.  It can be closed with either `OK` or the `Esc` key.
+
+
+
 
 
 

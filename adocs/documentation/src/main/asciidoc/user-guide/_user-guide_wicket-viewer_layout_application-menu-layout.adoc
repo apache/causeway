@@ -17,12 +17,12 @@ application built using Apache Isis.
 
 Menus for domain services can be placed either on a primary, secondary or tertiary menu bar.
 
-image::{_imagesdir}wicket-viewer/application-menu/layout-menus.png[width="800px"]
+image::{_imagesdir}wicket-viewer/application-menu/layout-menus.png[width="800px",link="{_imagesdir}wicket-viewer/application-menu/layout-menus.png"]
 
 Within a single top-level menu (eg "Fixed Assets") there can be actions from multiple services. The Wicket viewer
 automatically adds a divider between each:
 
-image::{_imagesdir}wicket-viewer/application-menu/dividers.png[width="400px"]
+image::{_imagesdir}wicket-viewer/application-menu/dividers.png[width="400px",link="{_imagesdir}wicket-viewer/application-menu/dividers.png"]
 
 In the example above the top-level menu combines the actions from the `Properties`, `Units` and `FixedAssetRegistrations`
 services. The `Properties` service is annotated:
@@ -120,7 +120,7 @@ is not recommended).
 The tertiary menu bar consists of a single unnamed menu, rendered underneath the user's login, top right. This is
 intended primarily for actions pertaining to the user themselves, eg their account, profile or settings:
 
-image::{_imagesdir}wicket-viewer/application-menu/tertiary.png[width="300px"]
+image::{_imagesdir}wicket-viewer/application-menu/tertiary.png[width="300px",link="{_imagesdir}wicket-viewer/application-menu/tertiary.png"]
 
 Domain services' actions can be associated with the tertiary menu using the same `@DomainServiceLayout` annotation. For
 example, the `updateEpochDate(...)` and `listAllSettings(...)` actions come from the following service:

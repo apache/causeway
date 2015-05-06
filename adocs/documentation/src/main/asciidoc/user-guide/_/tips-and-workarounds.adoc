@@ -1,0 +1,47 @@
+Title: Rendering of abstract properties in tables
+
+____
+
+For more info, see https://issues.apache.org/jira/browse/ISIS-582[ISIS-582].
+
+____
+
+Suppose you have a hierarchy of classes where a property is derived and abstract in the superclass, concrete implementations in the subclasses. For example:
+
+[source]
+----
+public abstract class LeaseTerm {
+    ...
+    public abstract BigDecimal getEffectiveValue(); 
+    ...
+}
+
+public class LeaseTermForIndexableTerm extends LeaseTerm {
+    ...
+    public BigDecimal getEffectveValue() { ... }
+    ...
+}
+----
+
+Currently the Wicket viewer will not render the property in tables (though the property is correctly rendered in views):
+
+The work-around is simple enough; make the method concrete in the superclass and return a dummy implementation, eg:
+
+[source]
+----
+public abstract class LeaseTerm {
+    ...
+    public BigDecimal getEffectiveValue() {
+        // workaround for ISIS-582
+        return null;
+    }
+    ...
+}
+----
+
+Alternatively the implementation could throw a `RuntimeException`, eg 
+
+[source]
+----
+throw new RuntimeException("never called; workaround for ISIS-582");
+----

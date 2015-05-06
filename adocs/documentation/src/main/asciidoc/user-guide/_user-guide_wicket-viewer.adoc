@@ -12,9 +12,12 @@ include::_user-guide_wicket-viewer_features.adoc[leveloffset=+1]
 
 include::_user-guide_wicket-viewer_configuration_properties.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_application-menu-layout.adoc[leveloffset=+1]
+include::_user-guide_wicket-viewer_request-parameters.adoc[leveloffset=+1]
+
+include::_user-guide_wicket-viewer_layout.adoc[leveloffset=+1]
 
 include::_user-guide_wicket-viewer_customisation.adoc[leveloffset=+1]
+
 
 
 == Extending the viewer

@@ -1,0 +1,31 @@
+= Layout
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Isis aims to infer as much information from the domain classes as possible.  Nevertheless, some metadata relating solely to the UI is inevitably required.
+
+This section describes how this is done both for domain objects -- statically or dynamically -- and for the application menu bar (containing domain service' actions).
+
+include::_user-guide_wicket-viewer_layout_static-object-layout.adoc[leveloffset=+1]
+
+include::_user-guide_wicket-viewer_layout_dynamic-object-layout.adoc[leveloffset=+1]
+
+include::_user-guide_wicket-viewer_layout_application-menu-layout.adoc[leveloffset=+1]
+
+
+
+== Static vs Dynamic Layouts
+
+Using <<_dynamic_object_layout, dynamic object layout>>s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+
+Another benefit of dynamic layout is that UI hints can be provided for <<_contributed_members, contributed associations and actions>> that are synthesised at runtime.
+
+The main downsides of using dynamic layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid JSON document will result in no metadata for the entire class. Also, dynamic layouts have no notion of inheritance, whereas the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
+
+=== Best of both worlds?
+
+Using the (third-party) http://github.com/isisaddons/isis-jrebel-plugin}[Isis addons' jrebel] plugin (non-ASF) comes close to getting the best of both words: metadata is specified in a type-safe way using annotations, but can be reloaded automatically.
+
+The downsides are licensing cost, and also the fact that metadata for contributed actions in the contributee class cannot be specified.

@@ -3,7 +3,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: WIP...
 
 These configuration properties are typically stored in `WEB-INF/viewer_wicket.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
 
@@ -17,74 +16,202 @@ These configuration properties are typically stored in `WEB-INF/viewer_wicket.pr
 |Description
 
 |`isis.viewer.wicket.` +
-`suppressRememberMe`
-|`true`,`_false_`
-|
-
-|`isis.viewer.wicket.` +
-`disableModalDialogs`
-|`true`,`_false_`
-|
-
-|`isis.viewer.wicket.` +
-`stripWicketTags`
-|`true`,`false`
-| Whether to force Wicket tags to be stripped.  +
-The default is for them to be stripped in production (Isis' SERVER mode == Wicket DEPLOYMENT mode), but not stripped otherwise (Isis' PROTOTYPE mode == Wicket DEVELOPMENT mode)
-
-|`isis.viewer.wicket.` +
 `bookmarkedPages`
 | +ve int (`_15_`)
 | number of pages to bookmark
 
+|`isis.viewer.wicket.` +
+`disableDependentChoiceAutoSelection`
+| `true`,`_false_`
+| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+
+|`isis.viewer.wicket.` +
+`disableModalDialogs`
+| `true`,`_false_`
+| By default the Isis Wicket viewer uses a modal dialog for action parameters.  Before this feature was implemented (prior to 1.4.0), Isis rendered action parameters on its own page.  This property re-enables the old behaviour.
+
+Note that action pages are still used for bookmarked actions.
 
 |`isis.viewer.wicket.` +
 `regularCase`
 | `true`,`_false_`
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
-|`isis.viewer.wicket.` `disableDependentChoiceAutoSelection`
-| `true`,`_false_`
-| For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
+|`isis.viewer.wicket.` +
+`stripWicketTags`
+|`_true_`,`false`
+| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion <<_stripped_wicket_tags, below>>.
 
-|`isis.viewer.wicket.` `disableModalDialogs`
-| `true`,`_false_`
-| By default the Isis Wicket viewer uses a modal dialog for action parameters.  Before this feature was implemented (prior to 1.4.0), Isis rendered action parameters on its own page.  This property re-enables the old behaviour.
+|`isis.viewer.wicket.` +
+`suppressPasswordReset`
+|`true`,`_false_`
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion <<_suppressing_password_reset, below>>.
 
-Note that action pages are still used for bookmarked actions.
+|`isis.viewer.wicket.` +
+`suppressRememberMe`
+|`true`,`_false_`
+|Whether to suppress "remember me" checkbox on the login page.
+
+|`isis.viewer.wicket.` +
+`suppressSignUp`
+|`true`,`_false_`
+|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion <<_suppressing_sign_up, below>>.
+
+|`isis.viewer.wicket.` `themes.enabled`
+| comma separated list ...
+| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion <<_showing_a_theme_chooser, below>>.
+
+|`isis.viewer.wicket.` `themes.showChooser`
+| `true`,`_false_`
+| Whether to show chooser for Bootstrap themes.  See discussion <<_showing_a_theme_chooser, below>>
 
 |===
 
 
-== Suppressing 'sign up'
-
-IMPORTANT: TODO
 
 == Suppressing 'remember me'
 
-IMPORTANT: TODO
+The 'remember me' checkbox on the login page can be suppressed, if required, by setting a configuration flag.
+
+=== Screenshots
+
+With 'remember me' not suppressed (the default):
+
+image::{_imagesdir}wicket-viewer/remember-me/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/remember-me/login-page-default.png"]
+
+and with the checkbox suppressed:
+
+image::{_imagesdir}wicket-viewer/remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}wicket-viewer/remember-me/login-page-suppress-remember-me.png"]
+
+=== Configuration
+
+To suppress the 'remember me' checkbox, add the following configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.suppressRememberMe=true
+----
+
+
+
+== Suppressing 'sign up'
+
+If <<_user_registration, user registration>> has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
+
+The 'sign up' link can be suppressed, if required, by setting a configuration flag.
+
+=== Screenshots
+
+With 'sign up' not suppressed (the default):
+
+image::{_imagesdir}wicket-viewer/sign-up/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/sign-up/login-page-default.png"]
+
+and with the link suppressed:
+
+image::{_imagesdir}wicket-viewer/sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}wicket-viewer/sign-up/login-page-suppress-sign-up.png"]
+
+
+=== Configuration
+
+To suppress the 'sign up' link, add the following configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.suppressSignUp=true
+----
+
+=== See also
+
+The <<_suppressing_password_reset, password reset link>> can be suppressed in a similar manner.
+
+
 
 == Suppressing 'password reset'
 
-IMPORTANT: TODO
+If <<_user_registration, user registration>> has been configured, then the Wicket viewer allows the user to sign-up a new account and to reset their password from the login page.
 
-== Number of bookmarked pages
+The 'password reset' link can be suppressed, if required, by setting a configuration flag.
 
-IMPORTANT: TODO
+=== Screenshots
+
+With 'password reset' not suppressed (the default):
+
+image::{_imagesdir}wicket-viewer/password-reset/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/password-reset/login-page-default.png"]
+
+and with the link suppressed:
+
+image::{_imagesdir}wicket-viewer/password-reset/login-page-suppress-password-reset.png[width="300px",link="{_imagesdir}wicket-viewer/password-reset/login-page-suppress-password-reset.png"]
+
+=== Configuration
+
+To suppress the 'password reset' link, add the following configuration flag:
+
+[source,ini]
+----
+isis.viewer.wicket.suppressPasswordReset=true
+----
+
+Typically this should be added to the `viewer_wicket.properties` file (in `WEB-INF`), though you can add to `isis.properties` if you wish.
+
+=== See also
+
+The <<_suppressing_sign-up, sign up link>> can be suppressed in a similar manner.
+
+
+
 
 == Stripped Wicket tags
 
-IMPORTANT: TODO
+By default the Isis Wicket viewer will always strip wicket tags. However, when running in prototype mode, this behaviour can be overridden using a configuration property:
 
-== Disabling modal dialogs
+[source,ini]
+----
+isis.viewer.wicket.stripWicketTags=false
+----
 
-IMPORTANT: TODO
+[NOTE]
+====
+In 1.7.0 and earlier, the behaviour is different; the Isis Wicket viewer will preserve wicket tags when running in Isis' prototype/development mode, but will still strip wicket tags in Isis' server/deployment mode.
+
+We changed the behaviour in 1.8.0 because we found that Internet Explorer can be sensitive to the presence of Wicket tags.
+====
+
+
 
 == Showing a theme chooser
 
-IMPORTANT: TODO
+The Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
 
-== Suppressing header and footer (embedded view)
+Unless a <<_specifying_a_default_theme, default theme has been specified>>, the viewer uses the default bootstrap theme. However,
+the viewer can also be configured to allow the end-user to switch theme to another theme, in particular one of those provided by http://bootswatch.com[bootswatch.com].
 
-IMPORTANT: TODO
+This is done using the following configuration property (in `WEB-INF/viewer_wicket.properties`):
+
+[source,ini]
+----
+isis.viewer.wicket.themes.showChooser=true
+----
+
+.Example 1
+image::{_imagesdir}wicket-viewer/theme-chooser/example-1.png[width="720px",link="{_imagesdir}wicket-viewer/theme-chooser/example-1.png"]
+
+
+.Example 2:
+image::{_imagesdir}wicket-viewer/theme-chooser/example-2.png[width="720px",link="{_imagesdir}wicket-viewer/theme-chooser/example-2.png"]
+
+It is also possible to restrict the themes shown to some subset of those in bootswatch. This is done using a further
+property:
+
+[source,ini]
+----
+isis.viewer.wicket.themes.enabled=bootstrap-theme,Cosmo,Flatly,Darkly,Sandstone,United
+----
+
+where the value is the list of themes (from http://bootswatch.com[bootswatch.com]) to be made available.
+
+[TIP]
+====
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the <<_custom_bootstrap_theme, Extending>> chapter for further details.
+====
+
 
