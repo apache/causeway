@@ -22,15 +22,19 @@ package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -126,9 +130,23 @@ public final class ServiceActionUtil {
      */
     private static void collateServiceActions(final ObjectAdapter serviceAdapter, ActionType actionType, List<LogicalServiceAction> serviceActions) {
         final ObjectSpecification serviceSpec = serviceAdapter.getSpecification();
+
+        // skip if annotated to not be included in repository menu using @DomainService
+        final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
+        if (domainServiceFacet != null) {
+            final NatureOfService natureOfService = domainServiceFacet.getNatureOfService();
+            if (natureOfService == NatureOfService.VIEW_REST_ONLY ||
+                    natureOfService == NatureOfService.VIEW_CONTRIBUTIONS_ONLY ||
+                    natureOfService == NatureOfService.DOMAIN) {
+                return;
+            }
+        }
+
         for (final ObjectAction objectAction : serviceSpec.getObjectActions(
                 actionType, Contributed.INCLUDED, Filters.<ObjectAction>any())) {
-            // skip if annotated to not be included in repository menu
+
+
+            // skip if annotated to not be included in repository menu using legacy mechanism
             if (objectAction.getFacet(NotInServiceMenuFacet.class) != null) {
                 continue;
             }
