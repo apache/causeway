@@ -4,7 +4,23 @@
 :_imagesdir: images/
 
 
-These configuration properties are typically stored in `WEB-INF/viewer_wicket.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
+Wicket configuration properties alter the way in which Isis' Wicket viewer renders domain objects.  They are typically stored in `WEB-INF/viewer_wicket.properties`.
+
+[NOTE]
+====
+To tell Isis that the Wicket viewer is in use (and should therefore search for the `viewer_wicket.properties` file), add the following to `WEB-INF/web.xml`:
+
+[source, xml]
+----
+<context-param>
+    <param-name>isis.viewers</param-name>
+    <param-value>wicket</param-value>
+</context-param>
+----
+
+====
+
+If you prefer you can place all configuration properties into `WEB-INF/isis.properties` (the configuration properties from all config files are merged together).
 
 
 .Wicket Viewer Configuration Properties
@@ -22,50 +38,93 @@ These configuration properties are typically stored in `WEB-INF/viewer_wicket.pr
 
 |`isis.viewer.wicket.` +
 `disableDependentChoiceAutoSelection`
-| `true`,`_false_`
+| `true`,`false` (`_false_`)
 | For dependent choices, whether to automatically select the first dependent (eg subcategory) when the parameter on which it depends (category) changes.
 
 |`isis.viewer.wicket.` +
 `disableModalDialogs`
-| `true`,`_false_`
+| `true`,`false` (`_false_`)
 | By default the Isis Wicket viewer uses a modal dialog for action parameters.  Before this feature was implemented (prior to 1.4.0), Isis rendered action parameters on its own page.  This property re-enables the old behaviour.
 
 Note that action pages are still used for bookmarked actions.
 
 |`isis.viewer.wicket.` +
+`maxTitleLengthInParentedTables`
+| +ve integer, (`_12_`)
+| See discussion <<_abbreviating_suppressing_titles_in_tables, below>>.
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInStandaloneTables`
+| +ve integer, (`_12_`)
+| See discussion <<_abbreviating_suppressing_titles_in_tables, below>>.
+
+|`isis.viewer.wicket.` +
+`maxTitleLengthInTables`
+| +ve integer, (`_12_`)
+| See discussion <<_abbreviating_suppressing_titles_in_tables, below>>.
+
+|`isis.viewer.wicket.` +
 `regularCase`
-| `true`,`_false_`
+| `true`,`false` (`_false_`)
 | Ignored for 1.8.0+; in earlier versions forced regular case rather than title case in the UI
 
 |`isis.viewer.wicket.` +
 `stripWicketTags`
-|`_true_`,`false`
+| `true`,`false` (`_true_`)
 | Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion <<_stripped_wicket_tags, below>>.
 
 |`isis.viewer.wicket.` +
 `suppressPasswordReset`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 |If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion <<_suppressing_password_reset, below>>.
 
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 |Whether to suppress "remember me" checkbox on the login page.
 
 |`isis.viewer.wicket.` +
 `suppressSignUp`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 |If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion <<_suppressing_sign_up, below>>.
 
-|`isis.viewer.wicket.` `themes.enabled`
+|`isis.viewer.wicket.` +
+`themes.enabled`
 | comma separated list ...
 | ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion <<_showing_a_theme_chooser, below>>.
 
-|`isis.viewer.wicket.` `themes.showChooser`
-| `true`,`_false_`
+|`isis.viewer.wicket.` +
+`themes.showChooser`
+| `true`,`false` (`_false_`)
 | Whether to show chooser for Bootstrap themes.  See discussion <<_showing_a_theme_chooser, below>>
 
 |===
+
+
+
+== Abbreviating/suppressing titles in tables
+
+Objects whose title is overly long can be cumbersome in titles.  The Wicket viewer has a <<_titles_in_tables, mechanism to automatically shorten>> the titles of objects specified using `@Title`.  As an alternative/in addition, the viewer can also be configured to simply truncate titles longer than a certain length.
+
+The properties themselves are:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInStandaloneTables=20
+isis.viewer.wicket.maxTitleLengthInParentedTables=8
+----
+
+If you wish to use the same value in both cases, you can also specify just:
+
+[source,ini]
+----
+isis.viewer.wicket.maxTitleLengthInTables=15
+----
+
+This is used as a fallback if the more specific properties are not provided.
+
+If no properties are provided, then the Wicket viewer defaults to abbreviating titles to a length of `12`.
+
 
 
 
@@ -77,11 +136,11 @@ The 'remember me' checkbox on the login page can be suppressed, if required, by 
 
 With 'remember me' not suppressed (the default):
 
-image::{_imagesdir}wicket-viewer/remember-me/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/remember-me/login-page-default.png"]
+image::{_imagesdir}wicket-viewer/suppress-remember-me/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-remember-me/login-page-default.png"]
 
 and with the checkbox suppressed:
 
-image::{_imagesdir}wicket-viewer/remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}wicket-viewer/remember-me/login-page-suppress-remember-me.png"]
+image::{_imagesdir}wicket-viewer/suppress-remember-me/login-page-suppress-remember-me.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-remember-me/login-page-suppress-remember-me.png"]
 
 === Configuration
 
@@ -104,11 +163,11 @@ The 'sign up' link can be suppressed, if required, by setting a configuration fl
 
 With 'sign up' not suppressed (the default):
 
-image::{_imagesdir}wicket-viewer/sign-up/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/sign-up/login-page-default.png"]
+image::{_imagesdir}wicket-viewer/suppress-sign-up/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-sign-up/login-page-default.png"]
 
 and with the link suppressed:
 
-image::{_imagesdir}wicket-viewer/sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}wicket-viewer/sign-up/login-page-suppress-sign-up.png"]
+image::{_imagesdir}wicket-viewer/suppress-sign-up/login-page-suppress-sign-up.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-sign-up/login-page-suppress-sign-up.png"]
 
 
 === Configuration
@@ -136,11 +195,11 @@ The 'password reset' link can be suppressed, if required, by setting a configura
 
 With 'password reset' not suppressed (the default):
 
-image::{_imagesdir}wicket-viewer/password-reset/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/password-reset/login-page-default.png"]
+image::{_imagesdir}wicket-viewer/suppress-password-reset/login-page-default.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-password-reset/login-page-default.png"]
 
 and with the link suppressed:
 
-image::{_imagesdir}wicket-viewer/password-reset/login-page-suppress-password-reset.png[width="300px",link="{_imagesdir}wicket-viewer/password-reset/login-page-suppress-password-reset.png"]
+image::{_imagesdir}wicket-viewer/suppress-password-reset/login-page-suppress-password-reset.png[width="300px",link="{_imagesdir}wicket-viewer/suppress-password-reset/login-page-suppress-password-reset.png"]
 
 === Configuration
 

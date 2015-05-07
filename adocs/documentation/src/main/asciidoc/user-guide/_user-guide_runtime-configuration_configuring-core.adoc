@@ -25,12 +25,12 @@ IMPORTANT: WIP...
 
 |`isis.services.` +
 `container.disableAutoFlush`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 |`isis.persistor.` +
 `disableConcurrencyChecking`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 | Disables concurrency checking globally.  Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
 
 |`isis.reflector.facet.` +

@@ -27,37 +27,37 @@ Also, be aware enabling these settings makes the representations with respect to
 
 |`isis.viewer.restfulobjects.` +
 `honorUiHints`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 | See <<_honor_ui_hints, discussion>>, below.
 
 |`isis.viewer.restfulobjects.` +
 `suppressDescribedByLinks`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 .6+| See <<_suppressing_elements_of_the_representation, discussion>>, below.
 
 |`isis.viewer.restfulobjects.` +
 `suppressUpdateLink`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 
 |`isis.viewer.restfulobjects.` +
 `suppressMemberId`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 
 |`isis.viewer.restfulobjects.` +
 `suppressMemberLinks`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 
 |`isis.viewer.restfulobjects.` +
 `suppressMemberExtensions`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 
 |`isis.viewer.restfulobjects.` +
 `suppressMemberDisabledReason`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 
 |`isis.viewer.restfulobjects.` +
 `objectPropertyValuesOnly`
-|`true`,`_false_`
+| `true`,`false` (`_false_`)
 | See <<_simplified_object_representation, discussion>>, below.
 
 |===
