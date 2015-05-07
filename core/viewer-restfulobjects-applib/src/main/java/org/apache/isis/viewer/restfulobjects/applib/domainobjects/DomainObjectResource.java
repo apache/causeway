@@ -32,8 +32,9 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
+
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/objects")
 public interface DomainObjectResource {
@@ -156,21 +157,30 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     @ClientResponseType(entityType = String.class)
     public Response invokeActionQueryOnly(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, @QueryParam("x-isis-querystring") final String xIsisQueryString);
 
     @PUT
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     @ClientResponseType(entityType = String.class)
     public Response invokeActionIdempotent(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 
     @POST
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     @ClientResponseType(entityType = String.class)
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream arguments);
 

@@ -17,7 +17,11 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.List;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Providers;
+
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
@@ -88,6 +92,16 @@ public class DomainResourceHelper {
         @Override
         public List<List<String>> getFollowLinks() {
             return rendererContext.getFollowLinks();
+        }
+
+        @Override
+        public List<MediaType> getAcceptableMediaTypes() {
+            return rendererContext.getAcceptableMediaTypes();
+        }
+
+        @Override
+        public Providers getProviders() {
+            return rendererContext.getProviders();
         }
 
         @Override

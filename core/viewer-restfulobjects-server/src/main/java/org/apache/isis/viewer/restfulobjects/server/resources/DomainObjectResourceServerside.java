@@ -384,7 +384,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeActionQueryOnly(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -406,7 +409,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @PUT
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeActionIdempotent(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -427,7 +433,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @POST
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 

@@ -25,6 +25,8 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Providers;
+
 import com.google.common.collect.Sets;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
@@ -49,11 +51,12 @@ public class ResourceContext implements RendererContext {
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
     private final Request request;
+    private final Providers providers;
     private final HttpServletRequest httpServletRequest;
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
-    private final Localization localization;
 
+    private final Localization localization;
     private final IsisConfiguration configuration;
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
@@ -69,23 +72,25 @@ public class ResourceContext implements RendererContext {
     //region > constructor and init
 
     public ResourceContext(
-            final RepresentationType representationType, 
-            final HttpHeaders httpHeaders, 
-            final UriInfo uriInfo, 
-            final Request request, 
-            final Where where, 
+            final RepresentationType representationType,
+            final HttpHeaders httpHeaders,
+            final Providers providers,
+            final UriInfo uriInfo,
+            final Request request,
+            final Where where,
             final String urlUnencodedQueryStringIfAny,
-            final HttpServletRequest httpServletRequest, 
+            final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
-            final SecurityContext securityContext, 
+            final SecurityContext securityContext,
             final Localization localization,
             final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession, 
-            final AdapterManager objectAdapterLookup, 
-            final SpecificationLoader specificationLookup, 
+            final PersistenceSession persistenceSession,
+            final AdapterManager objectAdapterLookup,
+            final SpecificationLoader specificationLookup,
             final IsisConfiguration configuration) {
 
         this.httpHeaders = httpHeaders;
+        this.providers = providers;
         this.uriInfo = uriInfo;
         this.request = request;
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
@@ -219,6 +224,16 @@ public class ResourceContext implements RendererContext {
         return httpServletRequest;
     }
 
+    @Override
+    public Providers getProviders() {
+        return providers;
+    }
+
+    @Override
+    public List<MediaType> getAcceptableMediaTypes() {
+        return httpHeaders.getAcceptableMediaTypes();
+    }
+
     public HttpServletResponse getServletResponse() {
         return httpServletResponse;
     }
@@ -227,22 +242,27 @@ public class ResourceContext implements RendererContext {
         return securityContext;
     }
 
+    @Override
     public List<List<String>> getFollowLinks() {
         return followLinks;
     }
 
+    @Override
     public Localization getLocalization() {
         return localization;
     }
 
+    @Override
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
 
+    @Override
     public AdapterManager getAdapterManager() {
         return adapterManager;
     }
 
+    @Override
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
@@ -260,7 +280,7 @@ public class ResourceContext implements RendererContext {
         return configuration;
     }
 
-
+    @Override
     public Where getWhere() {
         return where;
     }

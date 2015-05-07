@@ -18,18 +18,35 @@ package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectActionReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -48,6 +65,7 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final Context resourceContext,
             final ObjectAdapter objectAdapter) {
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
+
         renderer.with(objectAdapter).includesSelf();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
@@ -130,6 +148,38 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
+        final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
+
+        MediaType xmlMediaType = matchingActionResultXmlWithXRoDomainType(acceptableMediaTypes);
+        if(xmlMediaType != null) {
+
+            final String xRoDomainType = xmlMediaType.getParameters().get("x-ro-domain-type");
+
+            final Class<?> domainType;
+            try {
+                domainType = InstanceUtil.loadClass(xRoDomainType);
+            }catch (final Exception ex) {
+                throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
+            }
+
+            final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+            if(returnedAdapter == null) {
+                throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
+            }
+            final Object domainObject = returnedAdapter.getObject();
+
+            if(!domainType.isAssignableFrom(domainObject.getClass())) {
+                throw RestfulObjectsApplicationException.createWithMessage(
+                        RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE,
+                        "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')",
+                        xRoDomainType, domainObject.getClass().getName());
+            }
+
+            return buildResponse(Response.ok(domainObject, xmlMediaType));
+        }
+
+        // fall through
+
         final ActionResultReprRenderer renderer = new ActionResultReprRenderer(rendererContext, selfLink);
         renderer.with(objectAndActionInvocation)
                 .using(rendererContext.getAdapterLinkTo());
@@ -138,6 +188,15 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
         Responses.addLastModifiedAndETagIfAvailable(respBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
         return buildResponse(respBuilder);
     }
+
+    /**
+     * search for an accept header in form:
+     * "application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto"
+     */
+    private static MediaType matchingActionResultXmlWithXRoDomainType(final List<MediaType> mediaTypes) {
+        return RepresentationType.ACTION_RESULT.matchingXmlWithXRoDomainType(mediaTypes);
+    }
+
 
     /**
      * Overridable to allow further customization.

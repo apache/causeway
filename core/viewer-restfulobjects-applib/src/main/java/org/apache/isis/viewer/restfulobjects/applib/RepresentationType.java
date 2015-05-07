@@ -20,9 +20,12 @@ package org.apache.isis.viewer.restfulobjects.applib;
 
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.MediaType;
+
+import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.util.Enums;
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
@@ -44,49 +47,59 @@ import org.apache.isis.viewer.restfulobjects.applib.user.UserRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
 import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentation;
 
-import com.google.common.collect.Maps;
-
 public enum RepresentationType {
 
-    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, HomePageRepresentation.class), 
-    USER(RestfulMediaType.APPLICATION_JSON_USER, UserRepresentation.class), 
-    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, VersionRepresentation.class), 
-    LIST(RestfulMediaType.APPLICATION_JSON_LIST, ListRepresentation.class), 
-    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_OBJECT, DomainObjectRepresentation.class), 
-    OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, ObjectPropertyRepresentation.class), 
-    OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, ObjectCollectionRepresentation.class), 
-    OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, ObjectActionRepresentation.class), 
-    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, ActionResultRepresentation.class), 
-    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, TypeListRepresentation.class), 
-    DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, DomainTypeRepresentation.class), 
-    PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, PropertyDescriptionRepresentation.class), 
-    COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, CollectionDescriptionRepresentation.class), 
-    ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, ActionDescriptionRepresentation.class), 
-    ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, ActionParameterDescriptionRepresentation.class), 
-    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, TypeActionResultRepresentation.class), 
-    ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, ErrorRepresentation.class), 
-    GENERIC(MediaType.APPLICATION_JSON, JsonRepresentation.class);
+    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, null, HomePageRepresentation.class),
+    USER(RestfulMediaType.APPLICATION_JSON_USER, null, UserRepresentation.class),
+    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, null, VersionRepresentation.class),
+    LIST(RestfulMediaType.APPLICATION_JSON_LIST, null, ListRepresentation.class),
+    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_OBJECT, null, DomainObjectRepresentation.class),
+    OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, null, ObjectPropertyRepresentation.class),
+    OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, null, ObjectCollectionRepresentation.class),
+    OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, null, ObjectActionRepresentation.class),
+    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, ActionResultRepresentation.class),
+    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, null, TypeListRepresentation.class),
+    DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, null, DomainTypeRepresentation.class),
+    PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, null, PropertyDescriptionRepresentation.class),
+    COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, null, CollectionDescriptionRepresentation.class),
+    ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, null, ActionDescriptionRepresentation.class),
+    ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, null, ActionParameterDescriptionRepresentation.class),
+    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, null, TypeActionResultRepresentation.class),
+    ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, RestfulMediaType.APPLICATION_XML_ERROR, ErrorRepresentation.class),
+    GENERIC(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, JsonRepresentation.class);
 
     private final String name;
-    private final MediaType mediaType;
+    private final MediaType jsonMediaType;
+    private MediaType xmlMediaType;
     private final Class<? extends JsonRepresentation> representationClass;
 
-    private RepresentationType(final String mediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
-        this(MediaType.valueOf(mediaTypeStr), representationClass);
+    private RepresentationType(final String jsonMediaTypeStr, final String xmlMediaTypeStr, final Class<? extends JsonRepresentation> representationClass) {
+        this(MediaType.valueOf(jsonMediaTypeStr), xmlMediaTypeStr != null? MediaType.valueOf(xmlMediaTypeStr): null, representationClass);
     }
 
-    private RepresentationType(final MediaType mediaType, final Class<? extends JsonRepresentation> representationClass) {
+    private RepresentationType(final MediaType jsonMediaType, final MediaType xmlMediaType, final Class<? extends JsonRepresentation> representationClass) {
+        this.xmlMediaType = xmlMediaType;
         this.representationClass = representationClass;
         this.name = Enums.enumToCamelCase(this);
-        this.mediaType = mediaType;
+        this.jsonMediaType = jsonMediaType;
     }
 
     public String getName() {
         return name;
     }
 
+    /**
+     * @deprecated - use {@link #getJsonMediaType()} instead.
+     */
+    @Deprecated
     public final MediaType getMediaType() {
-        return mediaType;
+        return getJsonMediaType();
+    }
+    public final MediaType getJsonMediaType() {
+        return jsonMediaType;
+    }
+    public MediaType getXmlMediaType() {
+        return xmlMediaType;
     }
 
     /**
@@ -100,15 +113,30 @@ public enum RepresentationType {
     /**
      * Clones the (immutable) {@link #getMediaType() media type}, adding all provided
      * parameters.
+     *
+     * @deprecated - use {@link #getMediaType(Map)} instead.
      */
+    @Deprecated
     public MediaType getMediaType(Map<String, String> mediaTypeParams) {
-        Map<String, String> parameters = Maps.newHashMap(mediaType.getParameters());
+        return getJsonMediaType(mediaTypeParams);
+    }
+    public MediaType getJsonMediaType(Map<String, String> mediaTypeParams) {
+        Map<String, String> parameters = Maps.newHashMap(jsonMediaType.getParameters());
         parameters.putAll(mediaTypeParams);
-        return new MediaType(mediaType.getType(), mediaType.getSubtype(), parameters);
+        return new MediaType(jsonMediaType.getType(), jsonMediaType.getSubtype(), parameters);
+    }
+    public MediaType getXmlMediaType(Map<String, String> mediaTypeParams) {
+        if(xmlMediaType == null) {
+            return null;
+        }
+        Map<String, String> parameters = Maps.newHashMap(xmlMediaType.getParameters());
+        parameters.putAll(mediaTypeParams);
+        return new MediaType(xmlMediaType.getType(), xmlMediaType.getSubtype(), parameters);
     }
 
     public String getMediaTypeProfile() {
-        return getMediaType().getParameters().get("profile");
+        // same for both JSON and XML
+        return getJsonMediaType().getParameters().get("profile");
     }
 
     public Class<? extends JsonRepresentation> getRepresentationClass() {
@@ -124,24 +152,66 @@ public enum RepresentationType {
         return RepresentationType.GENERIC;
     }
 
+    @Deprecated
     public static RepresentationType lookup(final MediaType mediaType) {
         if(mediaType != null) {
             for (final RepresentationType representationType : values()) {
-                final MediaType candidate = representationType.getMediaType();
-                if(!candidate.getType().equals(mediaType.getType())) {
-                    continue;
-                }
-                if(!candidate.getSubtype().equals(mediaType.getSubtype())) {
-                    continue;
-                }
-                String candidateProfile = candidate.getParameters().get("profile");
-                String mediaTypeProfile = mediaType.getParameters().get("profile");
-                if(candidateProfile == null || candidateProfile.equals(mediaTypeProfile)) {
+                if(representationType.matches(mediaType)) {
                     return representationType;
                 }
             }
         }
         return RepresentationType.GENERIC;
+    }
+
+    public boolean matches(final MediaType mediaType) {
+        return matchesXml(mediaType) || matchesJson(mediaType);
+    }
+
+    public boolean matchesXml(final MediaType mediaType) {
+        final MediaType xmlCandidate = this.getXmlMediaType();
+        if (xmlCandidate == null) {
+            return false;
+        }
+        if(!xmlCandidate.getType().equals(mediaType.getType())) {
+            return false;
+        }
+        if(!xmlCandidate.getSubtype().equals(mediaType.getSubtype())) {
+            return false;
+        }
+        String xmlCandidateProfile = xmlCandidate.getParameters().get("profile");
+        String xmlMediaTypeProfile = mediaType.getParameters().get("profile");
+        return xmlCandidateProfile == null || xmlCandidateProfile.equals(xmlMediaTypeProfile);
+    }
+
+    public boolean matchesJson(final MediaType mediaType) {
+        final MediaType jsonCandidate = this.getJsonMediaType();
+        if(!jsonCandidate.getType().equals(mediaType.getType())) {
+            return false;
+        }
+        if(!jsonCandidate.getSubtype().equals(mediaType.getSubtype())) {
+            return false;
+        }
+        String jsonCandidateProfile = jsonCandidate.getParameters().get("profile");
+        String jsonMediaTypeProfile = mediaType.getParameters().get("profile");
+        return jsonCandidateProfile == null || jsonCandidateProfile.equals(jsonMediaTypeProfile);
+
+    }
+
+    /**
+     * whether this representation type matches any (accept header) media types with an "x-ro-domain-type" parameter.
+     */
+    public MediaType matchingXmlWithXRoDomainType(final List<MediaType> mediaTypes) {
+        for (MediaType mediaType : mediaTypes) {
+            if(this.matchesXml(mediaType)) {
+                final String xRoDomainType = mediaType.getParameters().get("x-ro-domain-type");
+                if(xRoDomainType == null) {
+                    return null;
+                }
+                return mediaType;
+            }
+        }
+        return null;
     }
 
     public static Parser<RepresentationType> parser() {

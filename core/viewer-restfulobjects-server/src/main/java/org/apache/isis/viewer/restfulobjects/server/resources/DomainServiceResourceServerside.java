@@ -171,7 +171,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @GET
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeActionQueryOnly(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -194,9 +197,11 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    // to save the client having to specify a Content-Type: application/json
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeActionIdempotent(
             final @PathParam("serviceId") String serviceId,
             final @PathParam("actionId") String actionId,
@@ -215,9 +220,11 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @POST
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.WILDCARD })
-    // to save the client having to specify a Content-Type: application/json
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD }) // to save the client having to specify a Content-Type: application/json
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response invokeAction(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId, final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 

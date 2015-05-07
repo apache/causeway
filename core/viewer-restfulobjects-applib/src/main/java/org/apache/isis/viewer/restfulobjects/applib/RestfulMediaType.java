@@ -35,28 +35,47 @@ public final class RestfulMediaType {
     
     static final String PROFILE_PARAM_PREFIX = "urn:org.restfulobjects:repr-types/";
 
-    private static final String BASE = "application/json" + ";profile=" + PROFILE_PARAM_PREFIX;
+    private static final String JSON_BASE = "application/json" + ";profile=" + PROFILE_PARAM_PREFIX;
 
-    public final static String APPLICATION_JSON_HOME_PAGE = BASE + "homepage";
-    public final static String APPLICATION_JSON_USER = BASE + "user";
-    public final static String APPLICATION_JSON_VERSION = BASE + "version";
-    public final static String APPLICATION_JSON_LIST = BASE + "list";
-    public final static String APPLICATION_JSON_OBJECT = BASE + "object";
-    public final static String APPLICATION_JSON_OBJECT_PROPERTY = BASE + "object-property";
-    public final static String APPLICATION_JSON_OBJECT_COLLECTION = BASE + "object-collection";
-    public final static String APPLICATION_JSON_OBJECT_ACTION = BASE + "object-action";
-    public final static String APPLICATION_JSON_ACTION_RESULT = BASE + "action-result";
-    public final static String APPLICATION_JSON_TYPE_LIST = BASE + "type-list";
-    public final static String APPLICATION_JSON_DOMAIN_TYPE = BASE + "domain-type";
-    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = BASE + "property-description";
-    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = BASE + "collection-description";
-    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = BASE + "action-description";
-    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = BASE + "action-param-description";
-    public final static String APPLICATION_JSON_ERROR = BASE + "error";
-    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = BASE + "type-action-result";
+    public final static String APPLICATION_JSON_HOME_PAGE = JSON_BASE + "homepage";
+    public final static String APPLICATION_JSON_USER = JSON_BASE + "user";
+    public final static String APPLICATION_JSON_VERSION = JSON_BASE + "version";
+    public final static String APPLICATION_JSON_LIST = JSON_BASE + "list";
+    public final static String APPLICATION_JSON_OBJECT = JSON_BASE + "object";
+    public final static String APPLICATION_JSON_OBJECT_PROPERTY = JSON_BASE + "object-property";
+    public final static String APPLICATION_JSON_OBJECT_COLLECTION = JSON_BASE + "object-collection";
+    public final static String APPLICATION_JSON_OBJECT_ACTION = JSON_BASE + "object-action";
+    public final static String APPLICATION_JSON_ACTION_RESULT = JSON_BASE + "action-result";
+    public final static String APPLICATION_JSON_TYPE_LIST = JSON_BASE + "type-list";
+    public final static String APPLICATION_JSON_DOMAIN_TYPE = JSON_BASE + "domain-type";
+    public final static String APPLICATION_JSON_PROPERTY_DESCRIPTION = JSON_BASE + "property-description";
+    public final static String APPLICATION_JSON_COLLECTION_DESCRIPTION = JSON_BASE + "collection-description";
+    public final static String APPLICATION_JSON_ACTION_DESCRIPTION = JSON_BASE + "action-description";
+    public final static String APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION = JSON_BASE + "action-param-description";
+    public final static String APPLICATION_JSON_ERROR = JSON_BASE + "error";
+    public final static String APPLICATION_JSON_TYPE_ACTION_RESULT = JSON_BASE + "type-action-result";
 
-    // REVIEW: these do not appear in RO spec 1.0.0 
-    // public final static String APPLICATION_JSON_SCALAR_VALUE = BASE + "scalarvalue";
-    // public final static String APPLICATION_JSON_TRANSIENT_DOMAIN_OBJECT = BASE + "transient";
+    private static final String XML_BASE = "application/xml" + ";profile=" + PROFILE_PARAM_PREFIX;
+
+
+    // currently only support a subset of representations in XML format
+
+//    public final static String APPLICATION_XML_HOME_PAGE = XML_BASE + "homepage";
+//    public final static String APPLICATION_XML_USER = XML_BASE + "user";
+//    public final static String APPLICATION_XML_VERSION = XML_BASE + "version";
+//    public final static String APPLICATION_XML_LIST = XML_BASE + "list";
+//    public final static String APPLICATION_XML_OBJECT = XML_BASE + "object";
+//    public final static String APPLICATION_XML_OBJECT_PROPERTY = XML_BASE + "object-property";
+//    public final static String APPLICATION_XML_OBJECT_COLLECTION = XML_BASE + "object-collection";
+//    public final static String APPLICATION_XML_OBJECT_ACTION = XML_BASE + "object-action";
+    public final static String APPLICATION_XML_ACTION_RESULT = XML_BASE + "action-result";
+//    public final static String APPLICATION_XML_TYPE_LIST = XML_BASE + "type-list";
+//    public final static String APPLICATION_XML_DOMAIN_TYPE = XML_BASE + "domain-type";
+//    public final static String APPLICATION_XML_PROPERTY_DESCRIPTION = XML_BASE + "property-description";
+//    public final static String APPLICATION_XML_COLLECTION_DESCRIPTION = XML_BASE + "collection-description";
+//    public final static String APPLICATION_XML_ACTION_DESCRIPTION = XML_BASE + "action-description";
+//    public final static String APPLICATION_XML_ACTION_PARAMETER_DESCRIPTION = XML_BASE + "action-param-description";
+    public final static String APPLICATION_XML_ERROR = XML_BASE + "error";
+//    public final static String APPLICATION_XML_TYPE_ACTION_RESULT = XML_BASE + "type-action-result";
 
 }

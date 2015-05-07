@@ -128,7 +128,7 @@
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
         <hsqldb.version>2.3.1</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>3.0.10.Final</resteasy-jaxrs.version>
+        <resteasy-jaxrs.version>3.0.11.Final</resteasy-jaxrs.version>
 
         <jetty.version>8.1.16.v20140903</jetty.version>
 
@@ -1456,6 +1456,11 @@ ${license.additional-notes}
                         <artifactId>activation</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxb-provider</artifactId>
+                <version>${resteasy-jaxrs.version}</version>
             </dependency>
 
 

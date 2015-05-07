@@ -23,6 +23,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.*;
+import javax.ws.rs.ext.Providers;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -63,6 +65,9 @@ public abstract class ResourceAbstract {
     @Context
     SecurityContext securityContext;
 
+    @Context
+    Providers providers;
+
     private ResourceContext resourceContext;
 
     protected void init(final Where where) {
@@ -99,7 +104,7 @@ public abstract class ResourceAbstract {
         }
 
         this.resourceContext = new ResourceContext(
-                representationType, httpHeaders, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
+                representationType, httpHeaders, providers, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
     }
 
