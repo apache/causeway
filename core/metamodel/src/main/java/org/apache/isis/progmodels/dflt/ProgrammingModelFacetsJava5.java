@@ -89,6 +89,7 @@ import org.apache.isis.core.metamodel.facets.object.fieldorder.annotation.FieldO
 import org.apache.isis.core.metamodel.facets.object.hidden.annotation.HiddenFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
@@ -232,6 +233,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveInjectMethodsFacetFactory.class);
         addFactory(RemoveStaticGettersAndSettersFacetFactory.class);
         addFactory(RemoveGetClassMethodFacetFactory.class);
+        addFactory(RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory.class);
         addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
 
         // come what may, we have to ignore the PersistenceCapable supertype.
