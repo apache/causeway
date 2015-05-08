@@ -20,9 +20,6 @@ package org.apache.isis.viewer.restfulobjects.rendering;
 
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.ext.Providers;
-
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
@@ -48,10 +45,6 @@ public interface RendererContext {
     public Where getWhere();
 
     public List<List<String>> getFollowLinks();
-
-    public List<MediaType> getAcceptableMediaTypes();
-
-    public Providers getProviders();
 
     public Localization getLocalization();
 

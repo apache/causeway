@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
@@ -36,20 +35,27 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context2 {
 
-        private final RendererContext rendererContext;
+        private final RendererContext2 rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
 
-        RepresentationServiceContextAdapter(final RendererContext rendererContext, final ObjectAdapterLinkTo adapterLinkTo) {
+        RepresentationServiceContextAdapter(final RendererContext2 rendererContext, final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
         }
@@ -97,11 +103,6 @@ public class DomainResourceHelper {
         @Override
         public List<MediaType> getAcceptableMediaTypes() {
             return rendererContext.getAcceptableMediaTypes();
-        }
-
-        @Override
-        public Providers getProviders() {
-            return rendererContext.getProviders();
         }
 
         @Override

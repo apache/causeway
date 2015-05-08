@@ -148,35 +148,40 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
-        final List<MediaType> acceptableMediaTypes = rendererContext.getAcceptableMediaTypes();
+        if(rendererContext instanceof Context2) {
+            final Context2 renderContext2 = (Context2) rendererContext;
 
-        MediaType xmlMediaType = matchingActionResultXmlWithXRoDomainType(acceptableMediaTypes);
-        if(xmlMediaType != null) {
+            final List<MediaType> acceptableMediaTypes = renderContext2.getAcceptableMediaTypes();
 
-            final String xRoDomainType = xmlMediaType.getParameters().get("x-ro-domain-type");
+            MediaType xmlMediaType = matchingActionResultXmlWithXRoDomainType(acceptableMediaTypes);
+            if(xmlMediaType != null) {
 
-            final Class<?> domainType;
-            try {
-                domainType = InstanceUtil.loadClass(xRoDomainType);
-            }catch (final Exception ex) {
-                throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
+                final String xRoDomainType = xmlMediaType.getParameters().get("x-ro-domain-type");
+
+                final Class<?> domainType;
+                try {
+                    domainType = InstanceUtil.loadClass(xRoDomainType);
+                }catch (final Exception ex) {
+                    throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
+                }
+
+                final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
+                if(returnedAdapter == null) {
+                    throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
+                }
+                final Object domainObject = returnedAdapter.getObject();
+
+                if(!domainType.isAssignableFrom(domainObject.getClass())) {
+                    throw RestfulObjectsApplicationException.createWithMessage(
+                            RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE,
+                            "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')",
+                            xRoDomainType, domainObject.getClass().getName());
+                }
+
+                return buildResponse(Response.ok(domainObject, xmlMediaType));
             }
-
-            final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-            if(returnedAdapter == null) {
-                throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
-            }
-            final Object domainObject = returnedAdapter.getObject();
-
-            if(!domainType.isAssignableFrom(domainObject.getClass())) {
-                throw RestfulObjectsApplicationException.createWithMessage(
-                        RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE,
-                        "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')",
-                        xRoDomainType, domainObject.getClass().getName());
-            }
-
-            return buildResponse(Response.ok(domainObject, xmlMediaType));
         }
+
 
         // fall through
 

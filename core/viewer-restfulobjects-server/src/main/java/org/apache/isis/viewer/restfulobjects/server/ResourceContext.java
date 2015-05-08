@@ -22,12 +22,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -42,11 +49,11 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext {
+public class ResourceContext implements RendererContext2 {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -181,10 +188,11 @@ public class ResourceContext implements RendererContext {
             for(String paramName: params.keySet()) {
                 String paramValue = params.get(paramName)[0];
                 try {
+                    // this is rather hacky
                     int paramValueAsInt = Integer.parseInt(paramValue);
                     map.mapPut(paramName+".value", paramValueAsInt);
                 } catch(Exception ex) {
-                    map.mapPut(paramName+".value", paramValue);
+                    map.mapPut(paramName+".value", stripQuotes(paramValue));
                 }
             }
             return map;
@@ -192,6 +200,16 @@ public class ResourceContext implements RendererContext {
             final String queryString = getUrlUnencodedQueryString();
             return Util.readQueryStringAsMap(queryString);
         }
+    }
+
+    static String stripQuotes(final String str) {
+        if(Strings.isNullOrEmpty(str)) {
+            return str;
+        }
+        if(str.startsWith("\"") && str.endsWith("\"")) {
+            return str.substring(1, str.lastIndexOf("\""));
+        }
+        return str;
     }
 
     private static boolean simpleQueryArgs(Map<String, String[]> params) {
@@ -222,11 +240,6 @@ public class ResourceContext implements RendererContext {
 
     public HttpServletRequest getHttpServletRequest() {
         return httpServletRequest;
-    }
-
-    @Override
-    public Providers getProviders() {
-        return providers;
     }
 
     @Override

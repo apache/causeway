@@ -17,10 +17,18 @@
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
 import javax.ws.rs.core.Response;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 
 /**
  * Configure the Restful Objects viewer to emit custom representations (rather than the
@@ -61,6 +69,9 @@ public interface RepresentationService {
             ActionResultReprRenderer.SelfLink selfLink);
 
     public static interface Context extends RendererContext {
+        ObjectAdapterLinkTo getAdapterLinkTo();
+    }
+    public static interface Context2 extends Context, RendererContext2 {
         ObjectAdapterLinkTo getAdapterLinkTo();
     }
 }
