@@ -139,11 +139,20 @@
             <artifactId>geronimo-jcdi_1.0_spec</artifactId>
         </dependency>
 
-
-        <!-- DataNucleus (jdo-api, and for enhancer) -->
+        <!-- DataNucleus' standard JDO support -->
         <dependency>
             <groupId>javax.jdo</groupId>
             <artifactId>jdo-api</artifactId>
+        </dependency>
+
+        <!-- DataNucleus' (proprietary) type-safe query support-->
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-api-jdo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jdo-query</artifactId>
         </dependency>
 
         <dependency>

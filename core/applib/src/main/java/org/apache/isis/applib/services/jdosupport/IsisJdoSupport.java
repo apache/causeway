@@ -22,8 +22,14 @@ package org.apache.isis.applib.services.jdosupport;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+
 import javax.jdo.PersistenceManager;
+
+import org.datanucleus.query.typesafe.BooleanExpression;
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.annotation.Programmatic;
+
 
 /**
  * Service that provide a number of workarounds when using JDO/DataNucleus. 
@@ -78,4 +84,34 @@ public interface IsisJdoSupport {
     @Programmatic
     void deleteAll(Class<?>... pcClasses);
 
+    /**
+     * To perform the most common use-case of executing a (type-safe) query against the specified class,
+     * filtering using the provided {@link BooleanExpression}, then automatically cloning the returned list
+     * and closing the query.
+     *
+     * <p>
+     *     Typical usage:
+     *     <pre>
+     *          final QToDoItem q = QToDoItem.candidate();
+     *          return executeQuery(ToDoItem.class,
+     *                              q.atPath.eq(atPath).and(
+     *                              q.description.indexOf(description).gt(0))
+     *                              );
+     *     </pre>
+     * </p>
+     */
+    @Programmatic
+    <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression booleanExpression);
+
+    /**
+     * To support the execution of type-safe queries using DataNucleus' lower-level APIs
+     * (eg for group by and so on).
+     *
+     * <p>
+     *     Responsibility for cloning any result sets and closing the query is the responsibility
+     *     of the caller.
+     * </p>
+     */
+    @Programmatic
+    <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls);
 }

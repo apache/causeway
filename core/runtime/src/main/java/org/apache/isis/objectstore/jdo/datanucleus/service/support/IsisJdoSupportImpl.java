@@ -27,11 +27,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import javax.jdo.Extent;
 import javax.jdo.PersistenceManager;
 import javax.jdo.datastore.JDOConnection;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
+import org.datanucleus.api.jdo.JDOPersistenceManager;
+import org.datanucleus.query.typesafe.BooleanExpression;
+import org.datanucleus.query.typesafe.TypesafeQuery;
+
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
@@ -45,6 +52,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+
 
 /**
  * This service provdes a number of utility methods to supplement/support the capabilities of the JDO Objectstore.
@@ -164,7 +172,29 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     }
 
     // //////////////////////////////////////
-    
+
+    @Programmatic
+    @Override
+    public <T> List<T> executeQuery(final Class<T> cls, final BooleanExpression expression) {
+        final TypesafeQuery<T> query = newTypesafeQuery(cls).filter(expression);
+        return executeListAndClose(query);
+    }
+
+    @Programmatic
+    @Override
+    public <T> TypesafeQuery<T> newTypesafeQuery(Class<T> cls) {
+        return ((JDOPersistenceManager)getJdoPersistenceManager()).newTypesafeQuery(cls);
+    }
+
+    private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
+        final List<T> elements = query.executeList();
+        final List<T> list = Lists.newArrayList(elements);
+        query.closeAll();
+        return list;
+    }
+
+    // //////////////////////////////////////
+
     
     protected DataNucleusObjectStore getObjectStore() {
         return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
