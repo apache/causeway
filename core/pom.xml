@@ -1462,8 +1462,11 @@ ${license.additional-notes}
                 <artifactId>resteasy-jaxb-provider</artifactId>
                 <version>${resteasy-jaxrs.version}</version>
             </dependency>
-
-
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jackson-provider</artifactId>
+                <version>${resteasy-jaxrs.version}</version>
+            </dependency>
 
             <!-- Wicket -->
             <dependency>

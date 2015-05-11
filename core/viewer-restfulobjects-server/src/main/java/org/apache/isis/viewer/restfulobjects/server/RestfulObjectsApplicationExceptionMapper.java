@@ -30,7 +30,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.apache.isis.core.commons.exceptions.ExceptionUtils;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
@@ -42,10 +41,6 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
 
     @Context
     HttpHeaders httpHeaders;
-
-    private static MediaType matchingActionResultXmlWithXRoDomainType(final List<MediaType> mediaTypes) {
-        return RepresentationType.ACTION_RESULT.matchingXmlWithXRoDomainType(mediaTypes);
-    }
 
     @Override
     public Response toResponse(final RestfulObjectsApplicationException ex) {

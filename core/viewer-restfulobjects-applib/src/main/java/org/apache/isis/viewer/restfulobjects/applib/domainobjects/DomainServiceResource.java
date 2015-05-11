@@ -63,7 +63,10 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     @ClientResponseType(entityType = String.class)
     public Response service(@PathParam("serviceId") final String serviceId);
 
@@ -86,7 +89,10 @@ public interface DomainServiceResource {
 
     @GET
     @Path("/{serviceId}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     @ClientResponseType(entityType = String.class)
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId);
 
@@ -124,7 +130,7 @@ public interface DomainServiceResource {
 
     @PUT
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
@@ -134,7 +140,7 @@ public interface DomainServiceResource {
 
     @POST
     @Path("/{serviceId}/actions/{actionId}/invoke")
-    @Consumes({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR

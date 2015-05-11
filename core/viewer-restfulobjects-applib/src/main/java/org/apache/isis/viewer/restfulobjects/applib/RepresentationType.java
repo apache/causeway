@@ -49,24 +49,78 @@ import org.apache.isis.viewer.restfulobjects.applib.version.VersionRepresentatio
 
 public enum RepresentationType {
 
-    HOME_PAGE(RestfulMediaType.APPLICATION_JSON_HOME_PAGE, null, HomePageRepresentation.class),
-    USER(RestfulMediaType.APPLICATION_JSON_USER, null, UserRepresentation.class),
-    VERSION(RestfulMediaType.APPLICATION_JSON_VERSION, null, VersionRepresentation.class),
-    LIST(RestfulMediaType.APPLICATION_JSON_LIST, null, ListRepresentation.class),
-    DOMAIN_OBJECT(RestfulMediaType.APPLICATION_JSON_OBJECT, null, DomainObjectRepresentation.class),
-    OBJECT_PROPERTY(RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, null, ObjectPropertyRepresentation.class),
-    OBJECT_COLLECTION(RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, null, ObjectCollectionRepresentation.class),
-    OBJECT_ACTION(RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, null, ObjectActionRepresentation.class),
-    ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, ActionResultRepresentation.class),
-    TYPE_LIST(RestfulMediaType.APPLICATION_JSON_TYPE_LIST, null, TypeListRepresentation.class),
-    DOMAIN_TYPE(RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE, null, DomainTypeRepresentation.class),
-    PROPERTY_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION, null, PropertyDescriptionRepresentation.class),
-    COLLECTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION, null, CollectionDescriptionRepresentation.class),
-    ACTION_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION, null, ActionDescriptionRepresentation.class),
-    ACTION_PARAMETER_DESCRIPTION(RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION, null, ActionParameterDescriptionRepresentation.class),
-    TYPE_ACTION_RESULT(RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT, null, TypeActionResultRepresentation.class),
-    ERROR(RestfulMediaType.APPLICATION_JSON_ERROR, RestfulMediaType.APPLICATION_XML_ERROR, ErrorRepresentation.class),
-    GENERIC(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, JsonRepresentation.class);
+    HOME_PAGE(
+            RestfulMediaType.APPLICATION_JSON_HOME_PAGE,
+            null,
+            HomePageRepresentation.class),
+    USER(
+            RestfulMediaType.APPLICATION_JSON_USER,
+            null,
+            UserRepresentation.class),
+    VERSION(
+            RestfulMediaType.APPLICATION_JSON_VERSION,
+            null,
+            VersionRepresentation.class),
+    LIST(
+            RestfulMediaType.APPLICATION_JSON_LIST,
+            null,
+            ListRepresentation.class),
+    DOMAIN_OBJECT(
+            RestfulMediaType.APPLICATION_JSON_OBJECT,
+            RestfulMediaType.APPLICATION_XML_OBJECT,
+            DomainObjectRepresentation.class),
+    OBJECT_PROPERTY(
+            RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY,
+            RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY,
+            ObjectPropertyRepresentation.class),
+    OBJECT_COLLECTION(
+            RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION,
+            RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION,
+            ObjectCollectionRepresentation.class),
+    OBJECT_ACTION(
+            RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION,
+            RestfulMediaType.APPLICATION_XML_OBJECT_ACTION,
+            ObjectActionRepresentation.class),
+    ACTION_RESULT(
+            RestfulMediaType.APPLICATION_JSON_ACTION_RESULT,
+            RestfulMediaType.APPLICATION_XML_ACTION_RESULT,
+            ActionResultRepresentation.class),
+    TYPE_LIST(
+            RestfulMediaType.APPLICATION_JSON_TYPE_LIST,
+            null,
+            TypeListRepresentation.class),
+    DOMAIN_TYPE(
+            RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE,
+            null,
+            DomainTypeRepresentation.class),
+    PROPERTY_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION,
+            null,
+            PropertyDescriptionRepresentation.class),
+    COLLECTION_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION,
+            null,
+            CollectionDescriptionRepresentation.class),
+    ACTION_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION,
+            null,
+            ActionDescriptionRepresentation.class),
+    ACTION_PARAMETER_DESCRIPTION(
+            RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION,
+            null,
+            ActionParameterDescriptionRepresentation.class),
+    TYPE_ACTION_RESULT(
+            RestfulMediaType.APPLICATION_JSON_TYPE_ACTION_RESULT,
+            null,
+            TypeActionResultRepresentation.class),
+    ERROR(
+            RestfulMediaType.APPLICATION_JSON_ERROR,
+            RestfulMediaType.APPLICATION_XML_ERROR,
+            ErrorRepresentation.class),
+    GENERIC(
+            MediaType.APPLICATION_JSON,
+            MediaType.APPLICATION_XML,
+            JsonRepresentation.class);
 
     private final String name;
     private final MediaType jsonMediaType;
@@ -165,47 +219,45 @@ public enum RepresentationType {
     }
 
     public boolean matches(final MediaType mediaType) {
-        return matchesXml(mediaType) || matchesJson(mediaType);
+        return matchesXmlProfile(mediaType) || matchesJsonProfile(mediaType);
     }
 
-    public boolean matchesXml(final MediaType mediaType) {
+    public boolean matchesXmlProfile(final MediaType mediaType) {
         final MediaType xmlCandidate = this.getXmlMediaType();
         if (xmlCandidate == null) {
             return false;
         }
-        if(!xmlCandidate.getType().equals(mediaType.getType())) {
-            return false;
-        }
-        if(!xmlCandidate.getSubtype().equals(mediaType.getSubtype())) {
-            return false;
-        }
-        String xmlCandidateProfile = xmlCandidate.getParameters().get("profile");
-        String xmlMediaTypeProfile = mediaType.getParameters().get("profile");
-        return xmlCandidateProfile == null || xmlCandidateProfile.equals(xmlMediaTypeProfile);
+        return matchesProfile(mediaType, xmlCandidate);
     }
 
-    public boolean matchesJson(final MediaType mediaType) {
+    public boolean matchesJsonProfile(final MediaType mediaType) {
         final MediaType jsonCandidate = this.getJsonMediaType();
-        if(!jsonCandidate.getType().equals(mediaType.getType())) {
-            return false;
-        }
-        if(!jsonCandidate.getSubtype().equals(mediaType.getSubtype())) {
-            return false;
-        }
-        String jsonCandidateProfile = jsonCandidate.getParameters().get("profile");
-        String jsonMediaTypeProfile = mediaType.getParameters().get("profile");
-        return jsonCandidateProfile == null || jsonCandidateProfile.equals(jsonMediaTypeProfile);
+        return matchesProfile(mediaType, jsonCandidate);
 
+    }
+
+    private boolean matchesProfile(final MediaType mediaType, final MediaType candidate) {
+        if(!candidate.getType().equals(mediaType.getType())) {
+            return false;
+        }
+        if(!candidate.getSubtype().equals(mediaType.getSubtype())) {
+            return false;
+        }
+        String candidateProfile = candidate.getParameters().get("profile");
+        String mediaTypeProfile = mediaType.getParameters().get("profile");
+        return candidateProfile == null || candidateProfile.equals(mediaTypeProfile);
     }
 
     /**
-     * whether this representation type matches any (accept header) media types with an "x-ro-domain-type" parameter.
+     * whether any of the {@link RepresentationType}s matches any (accept header) XML {@link MediaType}
+     * with specified parameter.
      */
-    public MediaType matchingXmlWithXRoDomainType(final List<MediaType> mediaTypes) {
+    public MediaType matchesXmlProfileWithParameter(
+        final List<MediaType> mediaTypes, final String parameterKey) {
         for (MediaType mediaType : mediaTypes) {
-            if(this.matchesXml(mediaType)) {
-                final String xRoDomainType = mediaType.getParameters().get("x-ro-domain-type");
-                if(xRoDomainType == null) {
+            if(this.matchesXmlProfile(mediaType)) {
+                final String paramValue = mediaType.getParameters().get(parameterKey);
+                if(paramValue == null) {
                     return null;
                 }
                 return mediaType;
@@ -213,6 +265,25 @@ public enum RepresentationType {
         }
         return null;
     }
+
+    /**
+     * whether any of the {@link RepresentationType}s matches any (accept header) JSON {@link MediaType}
+     * with specified parameter.
+     */
+    public MediaType matchesJsonProfileWithParameter(
+            final List<MediaType> mediaTypes, final String parameterKey) {
+        for (MediaType mediaType : mediaTypes) {
+            if(this.matchesJsonProfile(mediaType)) {
+                final String paramValue = mediaType.getParameters().get(parameterKey);
+                if(paramValue == null) {
+                    return null;
+                }
+                return mediaType;
+            }
+        }
+        return null;
+    }
+
 
     public static Parser<RepresentationType> parser() {
         return new Parser<RepresentationType>() {

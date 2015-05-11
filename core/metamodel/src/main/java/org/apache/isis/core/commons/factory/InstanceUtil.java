@@ -49,12 +49,12 @@ public final class InstanceUtil {
             try {
                 defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
                 if (defaultType == null) {
-                    throw new InstanceCreationClassException("Failed to load default type '" + defaultTypeName + "'");
+                    throw new InstanceCreationClassException(String.format("Failed to load default type '%s'", defaultTypeName));
                 }
             } catch (final ClassNotFoundException e) {
-                throw new UnavailableClassException("The default type '" + defaultTypeName + "' cannot be found");
+                throw new UnavailableClassException(String.format("The default type '%s' cannot be found", defaultTypeName));
             } catch (final NoClassDefFoundError e) {
-                throw new InstanceCreationClassException("Default type '" + defaultTypeName + "' found, but is missing a dependent class: " + e.getMessage(), e);
+                throw new InstanceCreationClassException(String.format("Default type '%s' found, but is missing a dependent class: %s", defaultTypeName, e.getMessage()), e);
             }
         }
         return createInstance(className, defaultType, requiredType);
@@ -67,12 +67,12 @@ public final class InstanceUtil {
             try {
                 defaultType = ObjectExtensions.asT(Thread.currentThread().getContextClassLoader().loadClass(defaultTypeName));
                 if (defaultType == null) {
-                    throw new InstanceCreationClassException("Failed to load default type '" + defaultTypeName + "'");
+                    throw new InstanceCreationClassException(String.format("Failed to load default type '%s'", defaultTypeName));
                 }
             } catch (final ClassNotFoundException e) {
-                throw new UnavailableClassException("The default type '" + defaultTypeName + "' cannot be found");
+                throw new UnavailableClassException(String.format("The default type '%s' cannot be found", defaultTypeName));
             } catch (final NoClassDefFoundError e) {
-                throw new InstanceCreationClassException("Default type '" + defaultTypeName + "' found, but is missing a dependent class: " + e.getMessage(), e);
+                throw new InstanceCreationClassException(String.format("Default type '%s' found, but is missing a dependent class: %s", defaultTypeName, e.getMessage()), e);
             }
         }
         return createInstance(cls, defaultType, requiredType);
@@ -84,16 +84,16 @@ public final class InstanceUtil {
         try {
             cls = Thread.currentThread().getContextClassLoader().loadClass(className);
             if (cls == null) {
-                throw new InstanceCreationClassException("Failed to load class '" + className + "'");
+                throw new InstanceCreationClassException(String.format("Failed to load class '%s'", className));
             }
             return createInstance(cls, defaultType, requiredType);
         } catch (final ClassNotFoundException e) {
             if (className.indexOf('.') == -1) {
-                throw new UnavailableClassException("The component '" + className + "' cannot be found");
+                throw new UnavailableClassException(String.format("The component '%s' cannot be found", className));
             }
-            throw new UnavailableClassException("The class '" + className + "' cannot be found");
+            throw new UnavailableClassException(String.format("The class '%s' cannot be found", className));
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class '" + className + "' found , but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException(String.format("Class '%s' found , but is missing a dependent class: %s", className, e.getMessage()), e);
         }
     }
 
@@ -104,14 +104,14 @@ public final class InstanceUtil {
                 final Class<T> tClass = ObjectExtensions.asT(cls);
                 return tClass.newInstance();
             } else {
-                throw new InstanceCreationClassException("Class '" + cls.getName() + "' is not of type '" + requiredType + "'");
+                throw new InstanceCreationClassException(String.format("Class '%s' is not of type '%s'", cls.getName(), requiredType));
             }
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Class '" + cls + "'found , but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException(String.format("Class '%s'found , but is missing a dependent class: %s", cls, e.getMessage()), e);
         } catch (final InstantiationException e) {
-            throw new InstanceCreationException("Could not instantiate an object of class '" + cls.getName() + "'; " + e.getMessage());
+            throw new InstanceCreationException(String.format("Could not instantiate an object of class '%s'; %s", cls.getName(), e.getMessage()));
         } catch (final IllegalAccessException e) {
-            throw new InstanceCreationException("Could not access the class '" + cls.getName() + "'; " + e.getMessage());
+            throw new InstanceCreationException(String.format("Could not access the class '%s'; %s", cls.getName(), e.getMessage()));
         }
     }
 
@@ -120,9 +120,9 @@ public final class InstanceUtil {
         try {
             return Thread.currentThread().getContextClassLoader().loadClass(className);
         } catch (final ClassNotFoundException e) {
-            throw new UnavailableClassException("The default type '" + className + "' cannot be found");
+            throw new UnavailableClassException(String.format("The type '%s' cannot be found", className));
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Default type '" + className + "' found, but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException(String.format("Type '%s' found, but is missing a dependent class: %s", className, e.getMessage()), e);
         }
     }
 
@@ -135,7 +135,7 @@ public final class InstanceUtil {
             }
             return ObjectExtensions.asT(loadedClass);
         } catch (final NoClassDefFoundError e) {
-            throw new InstanceCreationClassException("Default type '" + className + "' found, but is missing a dependent class: " + e.getMessage(), e);
+            throw new InstanceCreationClassException(String.format("Default type '%s' found, but is missing a dependent class: %s", className, e.getMessage()), e);
         }
     }
 

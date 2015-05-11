@@ -17,10 +17,19 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
-import javax.ws.rs.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.jboss.resteasy.annotations.ClientResponseType;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -50,8 +59,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @POST
     @Path("/{domainType}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
-    @ClientResponseType(entityType = String.class)
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response persist(@PathParam("domainType") String domainType, final InputStream object) {
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
@@ -96,14 +107,16 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
 
-        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
-        return helper.objectRepresentation();
+        return getDomainResourceHelper(objectAdapter).objectRepresentation();
     }
 
     private DomainResourceHelper getDomainResourceHelper(ObjectAdapter objectAdapter) {
@@ -114,7 +127,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @PUT
     @Path("/{domainType}/{instanceId}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
@@ -137,8 +153,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason());
         }
 
-        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
-        return helper.objectRepresentation();
+        return getDomainResourceHelper(objectAdapter).objectRepresentation();
     }
 
     @Override
@@ -158,7 +173,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);
 
@@ -175,7 +193,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @PUT
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response modifyProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId, final InputStream body) {
         init(Where.OBJECT_FORMS);
 
@@ -206,7 +227,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @DELETE
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response clearProperty(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(Where.OBJECT_FORMS);
 
@@ -242,7 +267,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES);
 
@@ -256,7 +284,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @PUT
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response addToSet(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES);
 
@@ -289,7 +320,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @POST
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
     @Consumes({ MediaType.WILDCARD })
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response addToList(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId, final InputStream body) {
         init(Where.PARENTED_TABLES);
 
@@ -321,7 +355,11 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @DELETE
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Consumes({ MediaType.WILDCARD })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response removeFromCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(Where.PARENTED_TABLES);
 
@@ -352,7 +390,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
     @Override
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS);
 

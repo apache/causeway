@@ -64,10 +64,10 @@ public final class RestfulMediaType {
 //    public final static String APPLICATION_XML_USER = XML_BASE + "user";
 //    public final static String APPLICATION_XML_VERSION = XML_BASE + "version";
 //    public final static String APPLICATION_XML_LIST = XML_BASE + "list";
-//    public final static String APPLICATION_XML_OBJECT = XML_BASE + "object";
-//    public final static String APPLICATION_XML_OBJECT_PROPERTY = XML_BASE + "object-property";
-//    public final static String APPLICATION_XML_OBJECT_COLLECTION = XML_BASE + "object-collection";
-//    public final static String APPLICATION_XML_OBJECT_ACTION = XML_BASE + "object-action";
+    public final static String APPLICATION_XML_OBJECT = XML_BASE + "object";
+    public final static String APPLICATION_XML_OBJECT_PROPERTY = XML_BASE + "object-property";
+    public final static String APPLICATION_XML_OBJECT_COLLECTION = XML_BASE + "object-collection";
+    public final static String APPLICATION_XML_OBJECT_ACTION = XML_BASE + "object-action";
     public final static String APPLICATION_XML_ACTION_RESULT = XML_BASE + "action-result";
 //    public final static String APPLICATION_XML_TYPE_LIST = XML_BASE + "type-list";
 //    public final static String APPLICATION_XML_DOMAIN_TYPE = XML_BASE + "domain-type";

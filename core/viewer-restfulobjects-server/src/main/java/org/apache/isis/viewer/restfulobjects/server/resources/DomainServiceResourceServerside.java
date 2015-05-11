@@ -102,7 +102,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @GET
     @Path("/{serviceId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response service(@PathParam("serviceId") final String serviceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
@@ -139,7 +142,10 @@ public class DomainServiceResourceServerside extends ResourceAbstract implements
     @Override
     @GET
     @Path("/{serviceId}/actions/{actionId}")
-    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR })
+    @Produces({
+            MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
+            MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
+    })
     public Response actionPrompt(@PathParam("serviceId") final String serviceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS);
 

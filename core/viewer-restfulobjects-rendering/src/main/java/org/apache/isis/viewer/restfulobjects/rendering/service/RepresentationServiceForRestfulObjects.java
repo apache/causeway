@@ -20,22 +20,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
@@ -47,6 +42,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCo
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -62,18 +58,38 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
     @Override
     @Programmatic
     public Response objectRepresentation(
-            final Context resourceContext,
+            final Context rendererContext,
             final ObjectAdapter objectAdapter) {
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(resourceContext, null, JsonRepresentation.newMap());
 
-        renderer.with(objectAdapter).includesSelf();
+        ResponseBuilder responseBuilder = null;
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        if(rendererContext instanceof Context2) {
+            final Context2 renderContext2 = (Context2) rendererContext;
 
-        final Version version = objectAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+            final List<ContentNegotiationService> contentNegotiationServices =
+                    lookupService(renderContext2, ContentNegotiationService.class);
+            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAdapter);
+                if(responseBuilder != null) {
+                    break;
+                }
+            }
         }
+
+        if (responseBuilder == null) {
+            // fall through
+            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, JsonRepresentation.newMap());
+
+            renderer.with(objectAdapter).includesSelf();
+
+            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+
+            final Version version = objectAdapter.getVersion();
+            if (version != null && version.getTime() != null) {
+                responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+            }
+        }
+
         return buildResponse(responseBuilder);
     }
 
@@ -89,12 +105,32 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndProperty objectAndProperty,
             final MemberReprMode memberReprMode) {
 
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
-        renderer.with(objectAndProperty)
-                .usingLinkTo(rendererContext.getAdapterLinkTo())
-                .withMemberMode(memberReprMode);
+        ResponseBuilder responseBuilder = null;
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        if(rendererContext instanceof Context2) {
+            final Context2 renderContext2 = (Context2) rendererContext;
+
+            final List<ContentNegotiationService> contentNegotiationServices =
+                    lookupService(renderContext2, ContentNegotiationService.class);
+            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndProperty);
+                if(responseBuilder != null) {
+                    break;
+                }
+            }
+        }
+
+        if(responseBuilder == null) {
+            // fall through
+
+            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
+            renderer.with(objectAndProperty)
+                    .usingLinkTo(rendererContext.getAdapterLinkTo())
+                    .withMemberMode(memberReprMode);
+
+            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        }
+
         return buildResponse(responseBuilder);
     }
 
@@ -109,12 +145,32 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndCollection objectAndCollection,
             final MemberReprMode memberReprMode) {
 
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(rendererContext);
-        renderer.with(objectAndCollection)
-                .usingLinkTo(rendererContext.getAdapterLinkTo())
-                .withMemberMode(memberReprMode);
+        ResponseBuilder responseBuilder = null;
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        if(rendererContext instanceof Context2) {
+            final Context2 renderContext2 = (Context2) rendererContext;
+
+            final List<ContentNegotiationService> contentNegotiationServices =
+                    lookupService(renderContext2, ContentNegotiationService.class);
+            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndCollection);
+                if(responseBuilder != null) {
+                    break;
+                }
+            }
+        }
+
+        if(responseBuilder == null) {
+            // fall through
+            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(rendererContext);
+            renderer.with(objectAndCollection)
+                    .usingLinkTo(rendererContext.getAdapterLinkTo())
+                    .withMemberMode(memberReprMode);
+
+            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        }
+
+
         return buildResponse(responseBuilder);
     }
 
@@ -128,12 +184,32 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final Context rendererContext,
             final ObjectAndAction objectAndAction) {
 
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
-        renderer.with(objectAndAction)
-                .usingLinkTo(rendererContext.getAdapterLinkTo())
-                .asStandalone();
+        ResponseBuilder responseBuilder = null;
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        if(rendererContext instanceof Context2) {
+            final Context2 renderContext2 = (Context2) rendererContext;
+
+            final List<ContentNegotiationService> contentNegotiationServices =
+                    lookupService(renderContext2, ContentNegotiationService.class);
+            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndAction);
+                if(responseBuilder != null) {
+                    break;
+                }
+            }
+        }
+
+        if(responseBuilder == null) {
+            // fall through
+            final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
+            renderer.with(objectAndAction)
+                    .usingLinkTo(rendererContext.getAdapterLinkTo())
+                    .asStandalone();
+
+            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        }
+
+
         return buildResponse(responseBuilder);
     }
 
@@ -148,60 +224,37 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
+        ResponseBuilder responseBuilder = null;
+
         if(rendererContext instanceof Context2) {
             final Context2 renderContext2 = (Context2) rendererContext;
 
-            final List<MediaType> acceptableMediaTypes = renderContext2.getAcceptableMediaTypes();
-
-            MediaType xmlMediaType = matchingActionResultXmlWithXRoDomainType(acceptableMediaTypes);
-            if(xmlMediaType != null) {
-
-                final String xRoDomainType = xmlMediaType.getParameters().get("x-ro-domain-type");
-
-                final Class<?> domainType;
-                try {
-                    domainType = InstanceUtil.loadClass(xRoDomainType);
-                }catch (final Exception ex) {
-                    throw RestfulObjectsApplicationException.createWithCause(RestfulResponse.HttpStatusCode.BAD_REQUEST, ex);
+            final List<ContentNegotiationService> contentNegotiationServices =
+                    lookupService(renderContext2, ContentNegotiationService.class);
+            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndActionInvocation);
+                if(responseBuilder != null) {
+                    break;
                 }
-
-                final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-                if(returnedAdapter == null) {
-                    throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
-                }
-                final Object domainObject = returnedAdapter.getObject();
-
-                if(!domainType.isAssignableFrom(domainObject.getClass())) {
-                    throw RestfulObjectsApplicationException.createWithMessage(
-                            RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE,
-                            "Requested object of type '%s' however the object returned by the domain object is not assignable (is '%s')",
-                            xRoDomainType, domainObject.getClass().getName());
-                }
-
-                return buildResponse(Response.ok(domainObject, xmlMediaType));
             }
         }
 
+        if (responseBuilder == null) {
+            // fall through
+            final ActionResultReprRenderer renderer = new ActionResultReprRenderer(rendererContext, selfLink);
+            renderer.with(objectAndActionInvocation)
+                    .using(rendererContext.getAdapterLinkTo());
 
-        // fall through
+            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+            Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
+        }
 
-        final ActionResultReprRenderer renderer = new ActionResultReprRenderer(rendererContext, selfLink);
-        renderer.with(objectAndActionInvocation)
-                .using(rendererContext.getAdapterLinkTo());
-
-        final ResponseBuilder respBuilder = Responses.ofOk(renderer, Caching.NONE);
-        Responses.addLastModifiedAndETagIfAvailable(respBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
-        return buildResponse(respBuilder);
+        return buildResponse(responseBuilder);
     }
 
-    /**
-     * search for an accept header in form:
-     * "application/xml;profile=urn:org.restfulobjects:repr-types/action-result;x-ro-domain-type=todoapp.dto.module.todoitem.ToDoItemDto"
-     */
-    private static MediaType matchingActionResultXmlWithXRoDomainType(final List<MediaType> mediaTypes) {
-        return RepresentationType.ACTION_RESULT.matchingXmlWithXRoDomainType(mediaTypes);
+    protected <T> List<T> lookupService(final Context2 renderContext2, final Class<T> serviceClass) {
+        return renderContext2.getPersistenceSession().getServicesInjector().lookupServices(serviceClass);
     }
-
 
     /**
      * Overridable to allow further customization.
