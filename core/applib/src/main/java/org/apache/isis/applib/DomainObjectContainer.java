@@ -228,10 +228,17 @@ public interface DomainObjectContainer {
 
     //endregion
 
-    //region > injectServicesInto
+    //region > injectServicesInto, lookupService, lookupServices
 
     @Programmatic
     <T> T injectServicesInto(final T domainObject);
+
+    @Programmatic
+    <T> T lookupService(Class<T> service);
+
+    @Programmatic
+    <T> Iterable<T> lookupServices(Class<T> service);
+
 
     //endregion
 
@@ -705,7 +712,6 @@ public interface DomainObjectContainer {
      */
     @Programmatic
     <T> T uniqueMatch(Query<T> query);
-
 
     //endregion
 

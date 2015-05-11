@@ -56,8 +56,17 @@ public interface DomainObjectServices extends Injectable {
      */
     ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
 
+
+    // ///////////////////////////////////////////
+    // services
+    // ///////////////////////////////////////////
+
     void injectServicesInto(Object domainObject);
-    
+
+    <T> T lookupService(Class<T> service);
+
+    <T> Iterable<T> lookupServices(Class<T> service);
+
     // ///////////////////////////////////////////
     // retrieve
     // ///////////////////////////////////////////
@@ -161,8 +170,5 @@ public interface DomainObjectServices extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     List<String> getPropertyNames();
-
-
-
 
 }

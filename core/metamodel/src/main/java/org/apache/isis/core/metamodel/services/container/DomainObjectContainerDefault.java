@@ -221,6 +221,18 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         return domainObject;
     }
 
+    @Programmatic
+    @Override
+    public <T> T lookupService(final Class<T> service) {
+        return getDomainObjectServices().lookupService(service);
+    }
+
+    @Programmatic
+    @Override
+    public <T> Iterable<T> lookupServices(final Class<T> service) {
+        return getDomainObjectServices().lookupServices(service);
+    }
+
     //endregion
 
     //region > resolve, objectChanged (deprecated)
