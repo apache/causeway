@@ -3,13 +3,10 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-== Disallowing deprecated annotations
+include::_user-guide_extending_programming-model_custom-validator.adoc[leveloffset=+1]
 
-== Custom validator
+include::_user-guide_extending_programming-model_finetuning.adoc[leveloffset=+1]
 
-== Finetuning the Programming Model
-
-== Layout metadata reader
+include::_user-guide_extending_programming-model_layout-metadata-reader.adoc[leveloffset=+1]
 

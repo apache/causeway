@@ -7,7 +7,6 @@
 IMPORTANT: TODO
 
 
-
 include::_user-guide_reference_domain-services_action-invocation-context.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_auditing-service.adoc[leveloffset=+1]
@@ -24,6 +23,10 @@ include::_user-guide_reference_domain-services_command-context.adoc[leveloffset=
 
 include::_user-guide_reference_domain-services_command-service.adoc[leveloffset=+1]
 
+include::_user-guide_reference_domain-services_content-mapping-service.adoc[leveloffset=+1]
+
+include::_user-guide_reference_domain-services_content-negotiation-service.adoc[leveloffset=+1]
+
 include::_user-guide_reference_domain-services_deep-link-service.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_domain-object-container.adoc[leveloffset=+1]
@@ -38,7 +41,11 @@ include::_user-guide_reference_domain-services_exception-recognizer.adoc[levelof
 
 include::_user-guide_reference_domain-services_isis-jdo-support.adoc[leveloffset=+1]
 
+include::_user-guide_reference_domain-services_locale-provider.adoc[leveloffset=+1]
+
 include::_user-guide_reference_domain-services_memento-service.adoc[leveloffset=+1]
+
+include::_user-guide_reference_domain-services_metamodel-service.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_publishing-service.adoc[leveloffset=+1]
 
@@ -47,6 +54,10 @@ include::_user-guide_reference_domain-services_query-results-cache.adoc[leveloff
 include::_user-guide_reference_domain-services_scratch-pad.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_settings-service.adoc[leveloffset=+1]
+
+include::_user-guide_reference_domain-services_translation-service.adoc[leveloffset=+1]
+
+include::_user-guide_reference_domain-services_translations-resolver.adoc[leveloffset=+1]
 
 include::_user-guide_reference_domain-services_user-profile-service.adoc[leveloffset=+1]
 

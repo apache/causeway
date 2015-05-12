@@ -28,6 +28,12 @@ IMPORTANT: WIP...
 | `true`,`false` (`_false_`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
+|`isis.services.` +
+`translation.po.mode`
+| `read`,`write`
+|Whether to force the `TranslationService` into either read or write mode. +
+See <<_i18n, i18n support>> to learn more about the translation service.
+
 |`isis.persistor.` +
 `disableConcurrencyChecking`
 | `true`,`false` (`_false_`)
@@ -36,12 +42,49 @@ IMPORTANT: WIP...
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex.
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+See <<_user-guide_how-tos_ui-hints_action-icons-and-css, UI hints>> for more details.
 
 |`isis.reflector.facet.` +
 `cssClass.patterns`
 |regex:css1,regex2:css2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex.
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+See <<_user-guide_how-tos_ui-hints_action-icons-and-css, UI hints>> for more details.
+
+|`isis.reflector.facets`
+|`FQCN`
+|Fully qualified class names of a custom implementation of `ProgrammingModel` interface.
+See <<_finetuning, finetuning the programming model>> for more details.
+
+|`isis.reflector.facets.` +
+`include`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
+See <<_finetuning, finetuning the programming model>> for more details.
+
+|`isis.reflector.facets.` +
+`exclude`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
+See <<_finetuning, finetuning the programming model>> for more details.
+
+|`isis.reflector.validator`
+|`FQCN`
+|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
+See <<_custom_validator, Custom Validator>> to learn more.
+
+|`isis.reflector.validator.` +
+`allowDeprecated`
+| `true`,`false` (`_true_`)
+| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
+
+|`isis.reflector.` +
+`layoutMetadataReaders`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for <<_dynamic_object_layout, dynamic layout>>s. +
+See <<_layout_metadata_reader, Layout Metadata Reader>> for more information.
 
 |===
+
+
 
