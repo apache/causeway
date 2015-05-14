@@ -80,7 +80,7 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 
         unless regenerate == "" then
 
-            cmd = "asciidoctor #{regenerate} --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+            cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
             unless priming then
                 puts ""

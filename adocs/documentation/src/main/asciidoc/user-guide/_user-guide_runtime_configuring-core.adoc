@@ -9,7 +9,6 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 Configuration properties for the viewers can be found in the <<Wicket Viewer>> chapter and the <<Restful Objects Viewer>> chapter.
 
-IMPORTANT: WIP...
 
 .Core Configuration Properties
 [cols="2a,1,3a", options="header"]
@@ -85,6 +84,5 @@ See <<_custom_validator, Custom Validator>> to learn more.
 See <<_layout_metadata_reader, Layout Metadata Reader>> for more information.
 
 |===
-
 
 

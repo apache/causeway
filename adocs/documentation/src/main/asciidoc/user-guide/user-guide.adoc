@@ -18,7 +18,9 @@ include::_user-guide_wicket-viewer.adoc[leveloffset=+1]
 
 include::_user-guide_restfulobjects-viewer.adoc[leveloffset=+1]
 
-include::_user-guide_runtime-configuration.adoc[leveloffset=+1]
+include::_user-guide_security.adoc[leveloffset=+1]
+
+include::_user-guide_runtime.adoc[leveloffset=+1]
 
 include::_user-guide_deployment.adoc[leveloffset=+1]
 
@@ -33,4 +35,3 @@ include::_user-guide_extending.adoc[leveloffset=+1]
 include::_user-guide_troubleshooting.adoc[leveloffset=+1]
 
 include::_user-guide_appendices.adoc[leveloffset=+1]
-

@@ -9,6 +9,9 @@ gem 'wdm', '>= 0.1.0' if Gem.win_platform?
 gem 'listen', '~> 2.7' # this prevents upgrading to 3.x
 gem 'asciidoctor'
 
+#gem 'asciidoctor-diagram', '~> 1.2.0.pre
+gem 'asciidoctor-diagram', '~> 1.2.1'
+
 gem 'tilt'
 gem 'thread_safe'
 gem 'coderay'
