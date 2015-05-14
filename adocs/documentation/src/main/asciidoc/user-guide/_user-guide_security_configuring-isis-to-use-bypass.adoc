@@ -4,10 +4,21 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
-
 The bypass security component consists of an implementation of both the `AuthenticationManager` and `AuthorizationManager` APIs, and are intended for prototyping use only.
 
 The authentication manager allows access with any credentials (in a sense, "bypassing" authentication), while the authorization manager provides access to all class members (in a sense, "bypassing" authorization).
+
+
+== Specifying bypass as the security mechanism
+
+To tell Apache Isis to bypass security, update the `WEB-INF/isis.properties` file:
+
+[source,ini]
+----
+isis.authentication=bypass
+isis.authorization=bypass
+----
+
+This installs the appropriate no-op implementations for both authentication and authorization:
 
 image::{_imagesdir}security/security-apis-impl/configure-isis-to-use-bypass.png[width="600px"]

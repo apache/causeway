@@ -16,7 +16,16 @@ Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.mode
 | Renders
 
 | SIGN_IN
-| The initial sign-in page
+| The initial sign-in (aka login) page
+
+| SIGN_UP
+| The sign-up page (if <<_user_registration, user registration>> is enabled).
+
+| SIGN_UP_VERIFY
+| The sign-up verification page (if <<_user_registration, user registration>> is enabled; as accessed by link from verification email)
+
+| PASSWORD_RESET
+| The password reset page (if enabled).
 
 | HOME
 | The home page, displaying either the welcome message or dashboard

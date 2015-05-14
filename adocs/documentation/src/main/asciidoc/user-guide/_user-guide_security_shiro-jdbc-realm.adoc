@@ -7,14 +7,15 @@
 
 There is nothing to stop you from using some other `Realm` implementation (or indeed writing one yourself).  For example, you could use Shiro's own JDBC realm that loads user/password details from a database.
 
-If you go down this route, then the architecture is as follows:
-
-image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png[width="600px"]
-
 [WARNING]
 ====
 If you are happy to use a database then we strongly recommend you use the http://github.com/isisaddons/isis-module-security}[Isis addons' security] module instead of a vanilla JDBC; it is far more sophisticated and moreover gives you the ability to administer the system from within your Isis application.
 ====
+
+If you go down this route, then the architecture is as follows:
+
+image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-custom-jdbc-realm.png[width="600px"]
+
 
 
 
@@ -46,12 +47,12 @@ We next need to tell the realm how to query the database.  Shiro supports any sc
 [source,ini]
 ----
 
-jdbcRealm.authenticationQuery =         \              # <5>
+jdbcRealm.authenticationQuery =         \              # <1>
         select password                 \
           from users                    \
          where username = ?
 
-jdbcRealm.userRolesQuery =              \              # <6>
+jdbcRealm.userRolesQuery =              \              # <2>
         select r.label                  \
           from users_roles ur           \
     inner join roles r                  \
@@ -61,7 +62,7 @@ jdbcRealm.userRolesQuery =              \              # <6>
              from users                 \
             where username = ?);        \
 
-jdbcRealm.permissionsQuery=             \               # <7>
+jdbcRealm.permissionsQuery=             \               # <3>
         select p.permission             \
           from roles_permissions rp     \
     inner join permissions p            \
@@ -71,12 +72,12 @@ jdbcRealm.permissionsQuery=             \               # <7>
              from roles                 \
             where label = ?);
 
-jdbcRealm.permissionsLookupEnabled=true                 # <8>
+jdbcRealm.permissionsLookupEnabled=true                 # <4>
 ----
-<5> query to find password for user
-<6> query to find roles for user
-<7> query to find permissions for role
-<8> enable permissions lookup
+<1> query to find password for user
+<2> query to find roles for user
+<3> query to find permissions for role
+<4> enable permissions lookup
 
 [WARNING]
 ====
@@ -87,27 +88,27 @@ We also should ensure that the passwords are not stored as plain-text:
 
 [source,ini]
 ----
-dps = org.apache.shiro.authc.credential.DefaultPasswordService   # <9>
-pm = org.apache.shiro.authc.credential.PasswordMatcher           # <10>
+dps = org.apache.shiro.authc.credential.DefaultPasswordService   # <1>
+pm = org.apache.shiro.authc.credential.PasswordMatcher           # <2>
 pm.passwordService = $dps
-jdbcRealm.credentialsMatcher = $pm                               # <11>
+jdbcRealm.credentialsMatcher = $pm                               # <3>
 ----
-<9> mechanism to encrypts password
-<10> service to match passwords
-<11> instruct JDBC realm to use password matching service when authenticating
+<1> mechanism to encrypts password
+<2> service to match passwords
+<3> instruct JDBC realm to use password matching service when authenticating
 
 
 And finally we need to tell Shiro to use the realm, in the usual fashion:
 
 [source,ini]
 ----
-securityManager.realms = $jdbcRealm                     # <12>
+securityManager.realms = $jdbcRealm
 ----
 
 Using the above configuration you will also need to setup a `DataSource`.  The details vary by servlet container, for example this is link:https://tomcat.apache.org/tomcat-8.0-doc/jndi-datasource-examples-howto.html[how to do the setup on Tomcat 8.0].
 
 [WARNING]
 ====
-The name of the Datasource can also vary by servlet container; see for example link:http://stackoverflow.com/a/23784702/56880[this StackOverflow answer].
+The name of the `DataSource` can also vary by servlet container; see for example link:http://stackoverflow.com/a/23784702/56880[this StackOverflow answer].
 ====
 
