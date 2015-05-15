@@ -15,29 +15,22 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|<<__code_cssClass_code, `cssClass()`>>
+|<<__code_cssclass_code, `cssClass()`>>
 |Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with css/application.css, can therefore provide custom styling of an object instance wherever it is rendered.
 See also <<__code_title_code, `title()`>> and <<__code_iconName_code, `iconName()`>>.
 
-|<<__code_iconName_code, `iconName()`>>
+|<<__code_iconname_code, `iconName()`>>
 |Provides the name of the image to render, usually alongside the title, to represent the object. If not provided, then the class name is used to locate an image.
 See also <<__code_title_code, `title()`>> and <<__code_cssClass_code, `cssClass()`>>
 
-|<<__code_getId_code, `getId()`>>
-|Y
+|<<__code_getid_code, `getId()`>>
 |Provides an optional unique identifier of a service. +
 If not provided, the services fully-qualified class name is used.
 
 |<<__code_title_code, `title()`>>
-|Y
 |Provides a title for the object. +
-Alternatively, use the <<__code_title_code, <<__code_@Title`>> annotation. It is also possible to use `toString_code, `@Title`>> annotation. It is also possible to use `toString()`>>. +
+Alternatively, use the <<__code_title_code, `@Title`>> annotation. +
 See also `iconName()` and <<__code_cssClass_code, `cssClass()`>>
-
-|<<__code_toString_code, `toString()`>>
-|Y
-|Used as the fallback title for an object if there is no <<__code_title_code, `title()`>> method or properties annotated with the <<__code_title_code, `@Title`>> annotation.
-
 
 |===
 
@@ -100,25 +93,23 @@ Some lifecycle methods have been deprecated:
 |Method
 |Notes
 
-|<<__code_deleted_code, `deleted()`>>
+|`deleted()`
 |Replaced by <<__code_removed_code, `removed()`>>
 
-|<<__code_deleting_code, `deleting()`>>
+|`deleting()`
 |Replaced by removing()`
 
-|`loading`
+|`loading()`
 |callback for when the (persistent) object is just about to be loaded from the object store. +
 [WARNING]
 ====
 This method is never called.
 ====
 
-|<<__code_saved_code, `saved()`>>
-|Y
+|`saved()`
 |Replaced by persisted()`
 
-|<<__code_saving_code, `saving()`>>
-|Y
+|`saving()`
 |Replaced by <<__code_persisting_code, `persisting()`>>
 
 |===

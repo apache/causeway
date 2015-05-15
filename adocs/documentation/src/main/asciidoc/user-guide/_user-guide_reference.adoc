@@ -5,13 +5,21 @@
 
 IMPORTANT: TODO
 
+Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Isis will inject the service into your object.  These services' API are all defined in Isis' applib (`o.a.i.core:isis-core-applib` module); this minimizes the coupling between your code and Isis.  It also allows you to easily mock out these services in your unit tests.
+
+Some of the services defined in the applib are intended to be used (primarily) not by your domain objects but instead by Isis itself.  A good example of this is the <<__code_auditingservice3_code, `AuditingService3`>> service; if an implementation is present then Isis will call that service in order to record audit log entries.  If no implementation is available then Isis will carry on regardless.
+
+Some domain services can be considered both API and SPI; a good example is the `EmailService` that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the user registration functionality supported by the <<_wicket_viewer, Wicket viewer>>.   The same is true of the <<__code_eventbusservice_code, `EventBusService`>>; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events eg for `@Action(domainEvent=...)`.  For these hybrid services we we have categorized the service as an "API" service.
+
+
 include::_user-guide_reference_annotations.adoc[leveloffset=+1]
 include::_user-guide_reference_prefixes.adoc[leveloffset=+1]
 include::_user-guide_reference_methods.adoc[leveloffset=+1]
-include::_user-guide_reference_services.adoc[leveloffset=+1]
+include::_user-guide_reference_services-api.adoc[leveloffset=+1]
+include::_user-guide_reference_services-spi.adoc[leveloffset=+1]
+include::_user-guide_reference_superclasses.adoc[leveloffset=+1]
 include::_user-guide_reference_value-types.adoc[leveloffset=+1]
 include::_user-guide_reference_applib-utility-classes.adoc[leveloffset=+1]
-include::_user-guide_reference_convenience-superclasses.adoc[leveloffset=+1]
 include::_user-guide_reference_mixins.adoc[leveloffset=+1]
 include::_user-guide_reference_addons.adoc[leveloffset=+1]
 

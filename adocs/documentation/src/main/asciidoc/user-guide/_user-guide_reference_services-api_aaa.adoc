@@ -4,7 +4,9 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO - briefly discuss the different types of services
+
+IMPORTANT: TODO
+
 
 == Applib Services
 
@@ -22,35 +24,12 @@ Impl'n (g: a:)
 
 |<<__code_actioninvocationcontext_code, `o.a.i.applib.` +
 `services.actinv` +
-`ActionInvocationContext`>>
+`ActionInvocation-` +
+`Context`>>
 |``o.a.i.core`` +
 ``isis-core-applib``
 |`ActionInvocationContext`
 |API is also concrete class
-
-|<<__code_auditingservice3_code, `o.a.i.applib.` +
-`services.audit` +
-`AuditingService3`>>
-|``o.ia.m.audit`` +
-``isis-module-audit``
-|`AuditingService`
-|related services:
-`AuditingService-` +
-`Contributions`,
-`AuditingService-` +
-`Repository`
-
-|<<__code_backgroundcommandservice_code, `o.a.i.applib.` +
-`services.background` +
-`BackgroundCommandService`>>
-|``o.ia.m.command`` +
-``isis-module-command``
-|`BackgroundCommandServiceJdo`
-|related services:
-`BackgroundCommandService-` +
-`JdoContributions`,
-`BackgroundCommandService-` +
-`JdoRepository`
 
 |<<__code_backgroundservice_code, `o.a.i.applib.` +
 `services.background` +
@@ -73,15 +52,6 @@ Impl'n (g: a:)
 `BookmarkHolder-` ++
 `AssociationContributions`
 
-|<<__code_classdiscoveryservice_code, `o.a.i.applib.` +
-`services.classdiscovery` +
-`ClassDiscoveryService`>>
-|``o.a.i.core`` +
-``isis-core-applib``
-|`ClassDiscoveryService-` +
-`UsingReflections`
-|requires `org.reflections:reflections` as Maven dependency
-
 |<<__code_clockservice_code, `o.a.i.applib.` +
 `services.clock` +
 `ClockService`>>
@@ -100,18 +70,6 @@ Impl'n (g: a:)
 depends on: +
 `CommandService` for persistent `Command`, else in-memory impl. used
 
-|<<__code_commandservice_code, `o.a.i.applib.` +
-`services.command.spi` +
-`CommandService`>>
-|``o.ia.m.command`` +
-``isis-module-command``
-|`CommandServiceJdo`
-|related services: +
-`CommandService-` ++
-`JdoContributions`,
-`CommandService-` ++
-`JdoRepository`
-
 |<<__code_deeplinkservice_code, `o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`>>
@@ -126,16 +84,6 @@ depends on: +
 ``isis-core-metamodel``
 |`DomainObjectContainerDefault`
 |
-
-|<<__code_emailnotificationservice_code, `o.a.i.applib.` +
-`services.userreg` +
-`EmailNotificationService`>>
-|``o.a.i.core`` +
-``isis-core-runtime``
-|`EmailNotificationService-` ++
-`Default`
-|depends on: +
-a configured `EmailService`
 
 |<<__code_emailservice_code, `o.a.i.applib.` +
 `services.email` +
@@ -153,34 +101,6 @@ a configured `EmailService`
 |`EventBusServiceJdo`
 |
 
-|<<__code_eventserializer_code, `o.a.i.applib.` +
-`services.publish` +
-`EventSerializer`>>
-|``o.ia.m.publishing`` +
-``isis-module-publishing``
-|`RestfulObjects-` +
-`SpecEventSerializer`
-|
-
-|<<__code_exceptionrecognizer_code, `o.a.i.applib.` +
-`services.exceprecog` +
-`ExceptionRecognizer`>>
-|``o.a.i.core`` +
-``isis-core-applib``
-|`ExceptionRecognizer-` +
-`CompositeFor-` +
-`JdoObjectStore`
-|Extensible using composite pattern if required
-
-|<<__code_fixturescripts_code, `o.a.i.applib.` +
-`fixturescripts` +
-`FixtureScripts`>>
-|``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|depends on: +
-`ClassDiscoveryService`
-
 |<<__code_guicebeanprovider_code, `o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`>>
@@ -195,14 +115,6 @@ a configured `EmailService`
 |``o.a.i.core`` +
 ``isis-core-objectstore-jdo-datanucleus``
 |`IsisJdoSupportImpl`
-|
-
-|<<__code_localeprovider_code, `o.a.i.applib.` +
-`services.i18n` +
-`LocaleProvider`>>
-|``o.a.i.viewer`` +
-``isis-viewer-wicket-impl``
-|`LocaleProviderWicket`
 |
 
 |<<__code_mementoservice_code, `o.a.i.applib.` +
@@ -220,20 +132,6 @@ a configured `EmailService`
 ``isis-core-metamodel``
 |`MetaModelServiceDefault`
 |
-
-|<<__code_publishingservice_code, `o.a.i.applib.` +
-`services.publish` +
-`PublishingService`>>
-|``o.ia.m.publishing`` +
-``isis-module-publishing``
-|`PublishingService`
-|related services:
-`PublishingService-` ++
-`Contributions`,
-`PublishingService-` ++
-`Repository`.  +
-depends on: +
-`EventSerializer`
 
 |<<__code_queryresultscache_code, `o.a.i.applib.` +
 `services.` +
@@ -260,41 +158,6 @@ depends on: +
 |`SudoServiceDefault`
 |API is also a concrete class
 
-|<<__code_translationservice_code, `o.a.i.applib.` +
-`services.i18n` +
-`TranslationService`>>
-|``o.a.i.core`` +
-``isis-core-runtime``
-|`TranslationServicePo`
-|related services: `TranslationServicePoMenu` +
-depends on: +
-`TranslationsResolver`, `LocaleProvider`
-
-|<<__code_translationsresolver_code, `o.a.i.applib.` +
-`services.i18n` +
-`TranslationsResolver`>>
-|``o.a.i.viewer`` +
-``isis-viewer-wicket-impl``
-|`TranslationsResolverWicket`
-|
-
-|<<__code_userprofileservice_code, `o.a.i.applib.` +
-`services.userprof` +
-`UserProfileService`>>
-|
-|
-|SPI only
-
-|<<__code_userregistrationservice_code, `o.a.i.applib.` +
-`services.userreg` +
-`UserRegistrationService`>>
-|``o.ia.m.security`` +
-``isis-module-security``
-|`SecurityModule-` +
-`AppUserRegistrationService`
-|depends (implicitly) on: +
-a configured `EmailService`
-
 |<<__code_wrapperfactory_code, `o.a.i.applib.` +
 `services.wrapper` +
 `WrapperFactory`>>
@@ -319,59 +182,6 @@ Key:
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
 
 
-All domain services are automatically registered (annotated with <<__code_domainservice_code, `@DomainService`>> except:
-
-* `FixtureScripts` +
-+
-Subclass and either annotate with `@DomainService` or register in `isis.properties`
-
-* `ExceptionRecognizer` +
-+
-Register explicitly in isis.properties (so is extensible)
-
-
-
-
-
-== "Internal" APIs/SPIs
-
-These services definitions depend on the internals of the framework; we do not guarantee that semver will be honoured for these APIs.
-
-.Semi-public SPI
-[cols="3,3,2,2a", options="header"]
-|===
-
-|API
-|Maven Module +
-Impl'n (g: a:)
-|Implementation
-|Notes
-
-
-|<<__code_contentmappingservice_code, `o.a.i.v.ro.` +
-`rendering.service.conneg.` +
-`ContentMappingService`>>
-|
-|
-|SPI only, no default implementation.
-
-|<<__code_contentnegotiationservice_code, `o.a.i.v.ro.` +
-`rendering.service.conneg.` +
-`ContentNegotiationService`>>
-|``o.a.i.core`` +
-`isis-core-viewer-restfulobjects-rendering`
-|`ContentNegotiationService-` +
-`XRoDomainType`
-|
-
-|===
-
-Key:
-
-* `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`
-
-
-
 
 
 == Deprecated Services
@@ -388,10 +198,11 @@ Impl'n (g: a:)
 |Implementation
 |Notes
 
-|`o.a.i.applib.annotation`
+|`o.a.i.applib.` +
+`annotation`
 `Bulk.InteractionContext`
-|g:`o.a.i.core`
-a:`isis-core-applib`
+|``o.a.i.core`` +
+``isis-core-applib``
 |`Bulk.InteractionContext`
 |Replaced by `ActionInvocationContext`
 
@@ -399,5 +210,6 @@ a:`isis-core-applib`
 |===
 
 Key:
+
 * `o.a.i` is an abbreviation for `org.apache.isis`
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`

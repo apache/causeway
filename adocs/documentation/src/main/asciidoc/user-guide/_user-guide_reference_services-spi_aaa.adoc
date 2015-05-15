@@ -1,0 +1,214 @@
+= Summary
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+IMPORTANT: TODO
+
+== Applib SPIs
+
+IMPORTANT: TODO
+
+.Domain Services
+[cols="2,4a,1,1", options="header"]
+|===
+
+|API
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
+|Notes
+
+|<<__code_auditingservice3_code, `o.a.i.applib.` +
+`services.audit` +
+`AuditingService3`>>
+|``o.ia.m.audit`` +
+``isis-module-audit``
+|`AuditingService`
+|related services:
+`AuditingService-` +
+`Contributions`,
+`AuditingService-` +
+`Repository`
+
+|<<__code_backgroundcommandservice_code, `o.a.i.applib.` +
+`services.background` +
+`BackgroundCommandService`>>
+|``o.ia.m.command`` +
+``isis-module-command``
+|`BackgroundCommandServiceJdo`
+|related services:
+`BackgroundCommandService-` +
+`JdoContributions`,
+`BackgroundCommandService-` +
+`JdoRepository`
+
+|<<__code_classdiscoveryservice_code, `o.a.i.applib.` +
+`services.classdiscovery` +
+`ClassDiscoveryService`>>
+|``o.a.i.core`` +
+``isis-core-applib``
+|`ClassDiscoveryService-` +
+`UsingReflections`
+|requires `org.reflections:reflections` as Maven dependency
+
+|<<__code_commandservice_code, `o.a.i.applib.` +
+`services.command.spi` +
+`CommandService`>>
+|``o.ia.m.command`` +
+``isis-module-command``
+|`CommandServiceJdo`
+|related services: +
+`CommandService-` ++
+`JdoContributions`,
+`CommandService-` ++
+`JdoRepository`
+
+|<<__code_emailnotificationservice_code, `o.a.i.applib.` +
+`services.userreg` +
+`EmailNotificationService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
+|`EmailNotificationService-` ++
+`Default`
+|depends on: +
+a configured `EmailService`
+
+|<<__code_eventserializer_code, `o.a.i.applib.` +
+`services.publish` +
+`EventSerializer`>>
+|``o.ia.m.publishing`` +
+``isis-module-publishing``
+|`RestfulObjects-` +
+`SpecEventSerializer`
+|
+
+|<<__code_exceptionrecognizer_code, `o.a.i.applib.` +
+`services.exceprecog` +
+`ExceptionRecognizer`>>
+|``o.a.i.core`` +
+``isis-core-applib``
+|`ExceptionRecognizer-` +
+`CompositeFor-` +
+`JdoObjectStore`
+|Extensible using composite pattern if required
+
+|<<__code_localeprovider_code, `o.a.i.applib.` +
+`services.i18n` +
+`LocaleProvider`>>
+|``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|`LocaleProviderWicket`
+|
+
+|<<__code_publishingservice_code, `o.a.i.applib.` +
+`services.publish` +
+`PublishingService`>>
+|``o.ia.m.publishing`` +
+``isis-module-publishing``
+|`PublishingService`
+|related services:
+`PublishingService-` ++
+`Contributions`,
+`PublishingService-` ++
+`Repository`.  +
+depends on: +
+`EventSerializer`
+
+|<<__code_translationservice_code, `o.a.i.applib.` +
+`services.i18n` +
+`TranslationService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
+|`TranslationServicePo`
+|related services: `TranslationServicePoMenu` +
+depends on: +
+`TranslationsResolver`, `LocaleProvider`
+
+|<<__code_translationsresolver_code, `o.a.i.applib.` +
+`services.i18n` +
+`TranslationsResolver`>>
+|``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|`TranslationsResolverWicket`
+|
+
+|<<__code_userprofileservice_code, `o.a.i.applib.` +
+`services.userprof` +
+`UserProfileService`>>
+|
+|
+|SPI only
+
+|<<__code_userregistrationservice_code, `o.a.i.applib.` +
+`services.userreg` +
+`UserRegistrationService`>>
+|``o.ia.m.security`` +
+``isis-module-security``
+|`SecurityModule-` +
+`AppUserRegistrationService`
+|depends (implicitly) on: +
+a configured `EmailService`
+
+
+|===
+
+
+Key:
+
+* `o.a.i` is an abbreviation for `org.apache.isis`
+* `o.ia.m` is an abbreviation for `org.isisaddons.module`
+
+
+All domain services are automatically registered (annotated with <<__code_domainservice_code, `@DomainService`>>) except:
+
+
+
+* `ExceptionRecognizer` +
++
+Register explicitly in isis.properties (so is extensible)
+
+
+
+
+
+== "Internal" SPIs
+
+These services definitions depend on the internals of the framework; we do not guarantee that link:semver.org[semantic versioning] will be honoured for these APIs.
+
+
+.Semi-public SPI
+[cols="3,3,2,2a", options="header"]
+|===
+
+|SPI
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
+|Notes
+
+
+|<<__code_contentmappingservice_code, `o.a.i.v.ro.` +
+`rendering.service.conneg.` +
+`ContentMappingService`>>
+|
+|
+|No default implementation.
+
+|<<__code_contentnegotiationservice_code, `o.a.i.v.ro.` +
+`rendering.service.conneg.` +
+`ContentNegotiationService`>>
+|``o.a.i.core`` +
+`isis-core-viewer-restfulobjects-rendering`
+|`ContentNegotiationService-` +
+`XRoDomainType`
+|
+
+
+|===
+
+Key:
+
+* `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`

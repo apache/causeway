@@ -169,6 +169,27 @@
     </style>
 
     <style>
+
+        body div#toc .tocify-subheader li {
+            font-size: 14px;
+        }
+        body div#toc .tocify li, .tocify ul {
+            line-height: 20px;
+        }
+
+        body div#toc li.tocify-item.active:before,
+        body div#toc2 li.tocify-item.active:before {
+            content: "\00BB \0020";
+            margin-left: -12px;
+        }
+
+        body div#toc li.tocify-item.active a,
+        body div#toc2 li.tocify-item.active a {
+            color: red;
+        }
+    </style>
+
+    <style>
         footer {
             margin-top: 1000px;
         }
@@ -266,11 +287,20 @@
         */
         .header--hidden
         {
+        /*
             -webkit-transform: translateY( -100% );
             -ms-transform: translateY( -100% );
             transform: translateY( -100% );
+        */
         }
     </style>
+
+    <style>
+        .tocify {
+            margin-top: 80px;
+        }
+    </style>
+
 
 </script>
 
@@ -399,7 +429,9 @@
 
     <div class="large-3 medium-3 xcolumns">
         <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
-          <%= converter.convert_with_options @document, 'outline', :toclevels => 6  %>
+            <div class="fallback-toc">
+                <%= converter.convert_with_options @document, 'outline', :toclevels => 4 %>
+            </div>
         </div>
     </div>
 
@@ -410,14 +442,36 @@
 <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
 
 
+<!-- Tocify - nice dynamic autoscrolling TOC -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/stylesheets/jquery.tocify.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js"></script>
+
+
 <script type="text/javascript">
+    $(function () {
+        $("#toc").tocify({
+            scrollTo: 50,
+            extendPage: true,
+            context: "#doc-content",
+            highlightOnScroll: true,
+            hashGenerator: "pretty",
+            hideEffect: "slideUp",
+            selectors: "h2,h3,h4,h5"
+        });
+        $(".fallback-toc").hide();
+    });
+</script>
+
+<xscript type="text/javascript">
       $(document).foundation();
 
       $(document).ready(function(){
         // Cache selectors
         var lastId,
             topMenu = $("div#toc ul"),
-            topMenuHeight = 70,
+            topMenuHeight = 100,
 
             menuItems = topMenu.find("a"),
             menuItemsHrefs = menuItems.map(function(){
@@ -454,8 +508,6 @@
 
            if (lastId !== id && id) {
                scrollTo(id);
-               $(".header").addClass("header--hidden");
-
            }
 
            window.history.pushState({}, "", window.location.origin + window.location.pathname + "#" + id);
@@ -517,7 +569,7 @@
 
       });
 
-</script>
+</xscript>
 
 <script>
 

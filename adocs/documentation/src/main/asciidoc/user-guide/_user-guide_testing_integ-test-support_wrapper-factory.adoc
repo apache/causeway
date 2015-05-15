@@ -11,6 +11,8 @@ The `WrapperFactory` service is responsible for wrapping a domain object in a dy
 `WrapperFactory` uses link:javassist.org[javassist] to perform its magic; this is the same technology that ORMs such as link:http://hibernate.org/[Hibernate] use to manage lazy loading/dirty tracking (DataNucleus uses a different mechanism).
 ====
 
+
+
 It does this by allowing through method invocations that would be allowed if the user were interacting with the domain object through one of the viewers, but throwing an exception if the user attempts to interact with the domain object in a way that would not be possible if using the UI.
 
 The mechanics are as follows:
@@ -25,51 +27,125 @@ The mechanics are as follows:
 
 . if the business rule checks pass, then the underlying member is invoked.  Otherwise an exception is thrown.
 
-The type of exception depends upon what sort of check failed.  It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'l get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
+The type of exception depends upon what sort of check failed.  It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'll get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
 
 image::{_imagesdir}testing/wrapper-factory.png[width="600px"]
 
-Let's look in a bit more deatil at what the test can do with the wrapper.
+Let's look in a bit more detail at what the test can do with the wrapper.
 
-== Methods
+
+
+
+== Wrapping and Unwrapping
+
+Wrapping a domain object is very straightforward; simply call `WrapperFactory#wrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer customer = ...;
+Customer wrappedCustomer = wrapperFactory.wrap(wrappedCustomer);
+----
+
+
+Going the other way -- getting hold of the underlying (wrapped) domain object -- is just as easy; call `WrapperFactory#unwrap(...)`.
+
+For example:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = wrapperFactory.unwrap(wrappedCustomer);
+----
+
+If you prefer, you also can get the underlying object from the wrapper itself, by downcasting to `WrappingObject` and calling `__isis_wrapped()` method:
+
+[source,java]
+----
+Customer wrappedCustomer = ...;
+Customer customer = (Customer)((WrappingObject)wrappedCustomer).__isis_wrapped());
+----
+
+We're not sure that's any easier (in fact we're certain it looks rather obscure).  Stick with calling `unwrap(...)`!
+
+
+
+
+== Using the wrapper
 
 As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.  That means:
 
-* for object properties the test can call the getter or setter method
+* for *_object properties_* the test can call the getter or setter method
 
-* for object collections the test can call the getter.  +
+* for *_object collections_* the test can call the getter.  +
 +
-If there is a supporting `addTo(...)` or `removeFrom(...)` method, then these can be called.  It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself. +
+If there is a supporting `addTo...()` or `removeFrom...()` method, then these can be called.  It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself. +
 +
 [NOTE]
 ====
 In this respect the wrapper is more functional than the <<_wicket_viewer, Wicket viewer>> (which does not expose the ability to mutate collections directly).
 ====
 
-* for object actions the test can call the action method itself.
+* for *_object actions_* the test can call the action method itself.
 
-As a convenience, we also allow the test to call any `defaultXxx()`, `choicesXxx()` or `autoCompleteXxx()` method.  These are often useful for obtaining a valid value to use.
+As a convenience, we also allow the test to call any `default...()`,`choices...()` or `autoComplete...()` method.  These are often useful for obtaining a valid value to use.
 
-What the test can't call is any of the remaining supporting methods, such as `hideXxx()`, `disableXxx()` or `validateXxx`.  That's because their value is implied by the exception being thrown.
+What the test can't call is any of the remaining supporting methods, such as `hide...()`, `disable...()` or `validate...()`.  That's because their value is implied by the exception being thrown.
 
-The wrapper does also allow the object's `title()` method or its `toString()` method to be called, however this is of no use for objects whose title is built up using the `@Title` annotation.
-
-
-
-
-obtaining the wrapper from the proxy.
-
-
-can only invoke methods that correspond to members of the Isis metamodel.  Can't call supporting methods (such as disable, hide etc).
-
-that it receives (the method invoked)
-
-The wrapper
+The wrapper _does_ also allow the object's `title()` method or its  `toString()` , however this is little use for objects whose title is built up using the `@Title` annotation.  Instead, we recommend that your test verifies an object's title by calling `DomainObjectContainer#titleOf(...)` method.
 
 
 
 
-* also triggers domain events
+
+== Firing Domain Events
+
+As well as enforcing business rules, the wrapper has another important feature, namely that it will cause domain events to be fired.
+
+For example, if we have an action annotated with `@Action(domainEvent=...`):
+
+[source,java]
+----
+public class ToDoItem ... {
+    @Action(
+            domainEvent =CompletedEvent.class
+    )
+    public ToDoItem completed() { ... }
+    ...
+}
+----
+
+then invoking the action through the proxy will cause the event (`CompletedEvent` above) to be fired to any subscribers.  A test might therefore look like:
+
+[source,java]
+----
+@Inject
+private EventBusService eventBusService;
+
+@Test
+public void subscriberReceivesEvents() throws Exception {
+    // given
+    final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1];
+    eventBusService.register(new Object() {
+        @Subscribe
+        public void on(final ToDoItem.CompletedEvent ev) {
+            evHolder[0] = ev;
+        }
+    });
+
+    // when
+    toDoItem.completed();
+
+    // then
+    then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));
+    then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
+}
+----
+
+
+
+The wrapper will also fire domain events for properties (if annotated with `@Property(domainEvent=...)`) or collections (if annotated with `@Collection(domainEvent=...)`).
 
 
 
