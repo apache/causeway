@@ -36,6 +36,7 @@ Let's look in a bit more detail at what the test can do with the wrapper.
 
 
 
+
 == Wrapping and Unwrapping
 
 Wrapping a domain object is very straightforward; simply call `WrapperFactory#wrap(...)`.
@@ -121,52 +122,40 @@ then invoking the action through the proxy will cause the event (`CompletedEvent
 [source,java]
 ----
 @Inject
-private EventBusService eventBusService;
+private EventBusService eventBusService;                                          // <1>
 
 @Test
 public void subscriberReceivesEvents() throws Exception {
+
     // given
-    final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1];
+    final ToDoItem.CompletedEvent[] evHolder = new ToDoItem.CompletedEvent[1];    // <2>
     eventBusService.register(new Object() {
         @Subscribe
-        public void on(final ToDoItem.CompletedEvent ev) {
+        public void on(final ToDoItem.CompletedEvent ev) {                        // <3>
             evHolder[0] = ev;
         }
     });
 
     // when
-    toDoItem.completed();
+    toDoItem.completed();                                                         // <4>
 
     // then
-    then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));
+    then(evHolder[0].getSource()).isEqualTo(unwrap(toDoItem));                    // <5>
     then(evHolder[0].getIdentifier().getMemberName()).isEqualTo("completed");
 }
 ----
-
+<1> inject <<__code_EventBusService_code, `EventBusService`>> into this test
+<2> holder for subscriber to capture event to
+<3> subscriber's callback, using the guava subscriber syntax
+<4> invoking the domain object using the wrapper
+<5> assert that the event was populated
 
 
 The wrapper will also fire domain events for properties (if annotated with `@Property(domainEvent=...)`) or collections (if annotated with `@Collection(domainEvent=...)`).
 
 
-
 [NOTE]
 ====
 It isn't possible to use the `WrapperFactory` in a unit test, because there needs to be a running instance of Isis that holds the metamodel.
-====
-
-
-
-
-
-[NOTE]
-====
-The `WrapperFactory` service also provides a numer of overloads of the `wrap()` method:
-
-* `wrapNoExecute(...)` will check the business rules but suppresses the actual execution
-* `wrapSkipRules(...)` does the opposite: skip business rules but executing the action.
-
-We mention them only to say that these two methods are not of particular significance for integration tests, however they are useful when domain objects in one module need to interact (in a decoupled fashion) with domain objects in some other module.
-
-For more details, see <<_wrapper_factory, Wrapper Factory>> service.
 ====
 

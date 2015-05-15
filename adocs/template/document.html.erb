@@ -30,15 +30,21 @@
     <meta http-equiv="pragma" content="no-cache" />
     <meta http-equiv="expires" content="-1" />
 
+
+    <-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
     <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
     <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
     <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
     <link href="<%= (attr :_basedir) %>css/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
+
+
+
     <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.css" rel="stylesheet" />
     <!--[if lt IE 9]>
       <link href="<%= (attr :_basedir) %>css/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.css" rel="stylesheet" />
     <![endif]-->
+
 
     <style type="text/css">
         <%= ::Asciidoctor::Stylesheets.instance.coderay_stylesheet_data %>
@@ -170,11 +176,15 @@
 
     <style>
 
+        body div#toc .tocify-subheader ul {
+            margin-bottom: 0px;
+        }
+
         body div#toc .tocify-subheader li {
             font-size: 14px;
         }
-        body div#toc .tocify li, .tocify ul {
-            line-height: 20px;
+        .tocify li.tocify-item, .tocify ul.tocify-item {
+            line-height: 24px;
         }
 
         body div#toc li.tocify-item.active:before,
@@ -287,11 +297,14 @@
         */
         .header--hidden
         {
-        /*
             -webkit-transform: translateY( -100% );
             -ms-transform: translateY( -100% );
             transform: translateY( -100% );
-        */
+
+            transition-duration: .5s;
+            transition-timing-function: cubic-bezier( 0.215, 0.610, 0.355, 1.000 );
+            -webkit-transition-property: -webkit-transform;
+            transition-property: transform;
         }
     </style>
 
@@ -442,11 +455,10 @@
 <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/foundation.min.js"></script>
 
 
-<!-- Tocify - nice dynamic autoscrolling TOC -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/stylesheets/jquery.tocify.min.css" rel="stylesheet">
-<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tocify/1.9.0/javascripts/jquery.tocify.min.js"></script>
+<link href="<%= (attr :_basedir) %>css/jquery.tocify/1.9.0/jquery.tocify.css" rel="stylesheet">
+<script src="<%= (attr :_basedir) %>js/jqueryui/1.11.4/jquery-ui.min.js"></script> -->
+<script src="<%= (attr :_basedir) %>js/jquery.tocify/1.9.0/jquery.tocify.js"></script>
+
 
 
 <script type="text/javascript">
