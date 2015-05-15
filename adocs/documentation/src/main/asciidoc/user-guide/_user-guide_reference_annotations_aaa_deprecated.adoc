@@ -1,0 +1,328 @@
+= Deprecated Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+.Deprecated Annotations
+[cols="2,4a,3a,1,1", options="header"]
+|===
+|Annotation
+|Purpose
+|Use instead
+|Layer
+|`.layout +
+.json`?
+
+|`@ActionOrder`
+|Order of buttons and menu items representing actions.
+|`@MemberOrder`
+|UI
+|Yes
+
+|`@ActionInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after an action has been invoked.
+|`@Action#domainEvent()`
+|Domain
+|
+
+|`@ActionSemantics`
+|Query-only, idempotent or non-idempotent.
+|`@Action#semantics()`
+|Domain
+|
+
+|`@Audited`
+|Audit changes to an object.
+|`@DomainObject#` +
+`auditing()`
+|Domain
+|
+
+|`@AutoComplete`
+|Repository method to search for entities
+|`@DomainObject` +
+`#autoCompleteRepository()`
+|UI/Domain
+|
+
+|`@Bookmarkable`
+|Whether (and how) to create a bookmark for visited object.
+|`@DomainObjectLayout` +
+`#bookmarking()`
+|UI
+|
+
+|`@Bounded`
+|Bounded (and limited) number of instances of an entity type, translates into a drop-down for any property of that type.
+|`@DomainObject#bounded()`
+|Domain
+|
+
+|`@Bulk`
+|Indicates an action is a bulk action, can be applied to multiple instances.
+|`@Action#invokeOn()`
+|UI, Domain
+|
+
+|`@CollectionInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a collection has been added to or removed from.
+|`@Collection#domainEvent()`
+|Domain
+|
+
+|`@Command`
+|Action invocation should be reified as a command object, optionally persistable for profiling and enhanced auditing, and background/async support.
+|`@Action#command()`
+|Domain
+|
+
+|`@CssClass`
+|Allow visual representation of individual objects or object members layout to be customized by application-specific CSS.
+|`#cssClass()` attribute for: `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|UI
+|Yes
+
+|`@CssClassFa`
+|So that font awesome icons can be applied to action buttons/menu items and optionally as an object icon.
+|`@ActionLayout#cssClassFa()`
+|UI
+|Yes
+
+|`@Debug`
+|Action only invokable in debug mode.
+|Use prototype mode instead (`@Action#restrictTo()`)
+|UI
+|
+
+|`@DescribedAs`
+|Provide a longer description/tool-tip of an object or object member.
+|`#describedAs()` attribute for `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|UI
+|Yes
+
+|`@Disabled`
+|Object property cannot be edited, an object collection cannot be added to/removed from, or an object action cannot be invoked.
+|`#editing()` attribute for `@Property` and `@Collection#editing()`; see also `@DomainObject`
+|UI, Domain
+|Yes
+
+|`@Exploration`
+|Action available in special 'exploration' mode.
+|`@Action#restrictTo()` (combines exploration and prototyping modes).
+|UI
+|
+
+|`@FieldOrder`
+|Order of properties and collections.
+|`@MemberOrder`
+|UI
+|Yes
+
+|`@Hidden`
+|Object member is not visible, or on domain service (to indicate that none of its actions are visible).
+|For domain object members, use `@Action#hidden()`, `@Property#hidden()` or `@Collection#hidden()`. +
+For domain service, use `@DomainService(nature=DOMAIN)`
+|UI, Domain
+|Yes
+
+|`@Idempotent`
+|Whether an action is idempotent (can be invoked multiple times with same post-condition).
+|`@Action#semantics`
+|Domain
+|
+
+|`@Ignore`
+|Exclude this method from the metamodel.
+|`@Programmatic`
+|Domain
+|
+
+|`@Immutable`
+|An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from). Actions can still be invoked.
+|`@DomainObject#editing()`
+|Domain
+|
+
+|`@Mask`
+|How to parse/render values (never properly supported)
+|(None)
+|UI/domain
+|
+
+|`@MaxLength`
+|Maximum length of a property value (strings).
+|`#maxLength()` attribute for `@Property` or `@Parameter`
+|Domain
+|
+
+|`@MemberGroups`
+|Layout of properties and collections of a domain object or view model object.
+|`@MemberGroupLayout` or dynamic layout.
+|UI
+|Yes
+
+|`@MultiLine`
+|Render string property over multiple lines (a textarea rather than a textbox).
+|`#multiLine()` attribute for `@PropertyLayout` and`@ParameterLayout`
+|UI
+|Yes
+
+|`@MustSatisfy`
+|Specify arbitrary specification constraints on a property or action parameter.
+|`#mustSatisfy()` attribute for `@Property` and `@Parameter`
+|Domain
+|
+
+|`@Named`
+|Override name inferred from class. Required for parameter names (prior to Java8).
+|`#named()` attribute for `@DomainServiceLayout`, `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|UI
+|Yes
+
+|`@NotContributed`
+|Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters. For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
+|Use `@DomainService#nature()` to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
+For individual actions, use `@ActionLayout` to specify whether any individual action should be contributed only as an action or as an association (property or collection).
+|UI
+|
+
+|`@NotInServiceMenu`
+|Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).
+|`@DomainService#nature()` to specify none of the actions in a domain service should appear in the menu bars
+|UI
+|
+
+|`@NotPersisted`
+|Indicates that an object property is not persisted (meaning it is excluded from view model mementos, and should not be audited).
+|`@Property#notPersisted()`
+|Domain, Persistence
+|
+
+|`@ObjectType`
+|For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer). Also part of the toString representation of bookmarks, if using the Bookmark Service
+|`@DomainObject#objectType()`
+|Domain
+|
+
+|`@Optional`
+|Specifies that a property or action parameter is not mandatory.
+|`#optionality()` attribute for `@Property` or `@Parameter`
+|Domain
+|
+
+|`@Paged`
+|Number of instances to display in tables representing (standalone or parented) collections.
+|`#paged()` attribute for `@DomainObjectLayout` or `@CollectionLayout`
+|UI
+|Yes
+
+|`@Plural`
+|For the irregular plural form of an entity type.
+|`@DomainObjectLayout#plural()`
+|UI
+|
+
+|`@PostsAction` +
+`InvokedEvent`
+|Post a domain event to the Event Bus Service indicating that an action has been invoked.
+|`@Action#domainEvent()`
+|Domain
+|
+
+|`@PostsCollection` +
+`AddedToEvent`
+|Post a domain event to the Event Bus Service indicating that an element has been added to a collection.
+|`@Collection#domainEvent()`
+|Domain
+|
+
+|`@PostsCollection` +
+`RemovedFromEvent`
+|Post a domain event to the Event Bus Service indicating that an element has been removed from a collection.
+|`@Collection#domainEvent()`
+|Domain
+|
+
+|`@PostsProperty` +
+`ChangedEvent`
+|Post a domain event to the Event Bus Service indicating that the value of a property has changed.
+|`@Property#domainEvent()`
+|Domain
+|
+
+|`@PropertyInteraction`
+|Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a property has been modified or cleared.
+|`@Property#domainEvent()`
+|Domain
+|
+
+|`@Prototype`
+|Indicates that an action should only be visible in 'prototype' mode.
+|`@Action#restrictTo()`
+|UI
+|Yes
+
+|`@PublishedAction`
+|Action invocation should be serialized and published by configured PublishingService (if any), eg to other systems.|`@Action#publishing()`
+|Domain
+|
+
+|`@PublishedObject`
+|Change to object should be serialized and published by configured PublishingService (if any), eg to other systems.
+|`@DomainObject#publishing()`
+|Domain
+|
+
+|`@QueryOnly`
+|Whether an action is query-only (has no side-effects).
+|`@Action#semantics()`
+|Domain
+|
+
+|`@RegEx`
+|Validate change to value of string property.
+|`#regexPattern()` for `@Property` or `@Parameter`.
+|Domain
+|
+
+|`@Render`
+|Eagerly (or lazily) render the contents of a collection.
+|`@CollectionLayout#render()`
+|UI
+|Yes
+
+|`@RenderedAsDayBefore`
+|Render dates as the day before; ie store [a,b) internally but render [a,b-1]) to end-user.
+|`#renderedAsDayBefore()` attribute for `@PropertyLayout` and `@ParameterLayout`.
+|UI
+|
+
+|`@Resolve`
+|Eagerly (or lazily) render the contents of a collection (same as `@Render)`
+|`@CollectionLayout#render()`
+|UI
+|Yes
+
+|`@SortedBy`
+|Display instances in collections in the order determined by the provided Comparator.
+|`@CollectionLayout#sortedBy()`
+|UI
+|Yes
+
+|`@TypeOf`
+|The type of entity stored within a collection, or as the result of invoking an action, if cannot be otherwise inferred, eg from generics.
+|`#typeOf()` attribute for `@Collection` and `@Action`
+|Domain
+|
+
+|`@TypicalLength`
+|The typical length of a string property, eg to determine a sensible length for a textbox.
+|`#typicalLength()` attribute for `@PropertyLayout` and `@ParameterLayout`
+|UI
+|Yes
+
+|===
+

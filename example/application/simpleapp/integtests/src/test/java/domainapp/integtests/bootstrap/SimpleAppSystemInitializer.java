@@ -19,12 +19,11 @@
 package domainapp.integtests.bootstrap;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
-public class SimpleAppSystemInitializer extends IntegrationTestAbstract {
+public class SimpleAppSystemInitializer {
 
     public static void initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();

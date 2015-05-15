@@ -210,7 +210,9 @@ public interface TranslatableException {
 
 So much for the API; but as noted, it is also necessary to ensure that the required translations are recorded (by the `TranslationService`) into the `.pot` file.
 
-For this, we recommend that you ensure that all such methods are tested through _an integration test_ (not unit test). For example, here's the corresponding integration test for the "Exclamation mark" example from the simpleapp (above):
+For this, we recommend that you ensure that all such methods are tested through an <<_integration_test_support, integration test>> (not unit test).
+
+For example, here's the corresponding integration test for the "Exclamation mark" example from the simpleapp (above):
 
 [source,java]
 ----
@@ -248,6 +250,8 @@ To ensure your app is fully internationalized app, you must therefore:
 [NOTE]
 ====
 We make no apologies for this requirement: one of the reasons that we decided to implement Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
+
+Behind the scenes Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.  These are simply passed through to the registered <<_exception_recognizer, ``ExceptionRecognizer``>>s so that any messages are recorded as requiring translation.
 ====
 
 

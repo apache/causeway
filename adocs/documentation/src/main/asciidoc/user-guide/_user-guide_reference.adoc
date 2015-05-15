@@ -5,7 +5,7 @@
 
 IMPORTANT: TODO
 
-include::_user-guide_reference_recognized-methods.adoc[leveloffset=+1]
+include::_user-guide_reference_methods.adoc[leveloffset=+1]
 
 include::_user-guide_reference_annotations.adoc[leveloffset=+1]
 

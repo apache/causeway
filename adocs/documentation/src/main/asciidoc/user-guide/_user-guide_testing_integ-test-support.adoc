@@ -4,27 +4,23 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+As discussed in the introductory overview of this chapter, Apache Isis allows you to integration test your domain objects from within JUnit.  There are several parts to this:
+
+* configuring the Isis runtime so it can be bootstrapped (mostly boilerplate)
+* defining a base class to perform said bootstrapping
+* using fixture scripts to set up the app
+* using `WrapperFactory` so that the UI can be simulated.
+
+We'll get to all that shortly, but let's start by taking a look at what a typical integration test looks like.
 
 
-== Test Class
-
-IMPORTANT: TODO
-
+include::_user-guide_testing_integ-test-support_typical-usage.adoc[leveloffset=+1]
 
 include::_user-guide_testing_integ-test-support_bootstrapping.adoc[leveloffset=+1]
 
+include::_user-guide_testing_integ-test-support_wrapper-factory.adoc[leveloffset=+1]
 
-
-
-
-
-== WrapperFactory
-
-IMPORTANT: TODO
-
-
-
+include::_user-guide_testing_integ-test-support_maven-configuration.adoc[leveloffset=+1]
 
 
 

@@ -5,7 +5,7 @@
 
 
 
-The Isis Addons' https://github.com/isisaddons/isis-module-security[security module] (not ASF) provides a complete
+The https://github.com/isisaddons/isis-module-security[Isis Addons' security module] (not ASF) provides a complete
 security subdomain for users, roles, permissions; all are persisted as domain entities.
 
 What that means, of course, that they can also be administered through your Isis application.  Moreover, the set of permissions (to features) is derived completely from your application's metamodel; in essence the permissions are "type-safe".  

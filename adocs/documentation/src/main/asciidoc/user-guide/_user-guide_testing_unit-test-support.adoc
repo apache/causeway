@@ -3,21 +3,14 @@
 :_basedir: ../
 :_imagesdir: images/
 
-Isis Core provides a number of unit test helpers for you to use (if you wish) to test your domain objects.  To use, update the `pom.xml`:
-
-[source,xml]
-----
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-unittestsupport</artifactId>
-    <scope>test</scope> // <1>
-</dependency>
-----
-<1> Normally `test`; usual Maven scoping rules apply.
+Isis Core provides a number of unit test helpers for you to use (if you wish) to unit test your domain objects.
 
 
+== Contract Tests
 
-== ``SortedSet``s Contract Test
+Contract tests ensure that all instances of a particular idiom/pattern that occur within your codebase are implemented correctly.  You could think of them as being a way to enforce a certain type of coding standard.  Implementation-wise they use link:https://code.google.com/p/reflections/[Reflections] library to scan for classes.
+
+=== ``SortedSet``s Contract Test
 
 This contract test automatically checks that all fields of type `java.util.Collection` are declared as `java.util.SortedSet`. In other words, it precludes either `java.util.List` or `java.util.Set` from being used as a collection.
 
@@ -41,15 +34,15 @@ public class SomeDomainObject {
 }
 ----
 
-If using the JDO/DataNucleus Objectstore then we strongly recommend that you implement this test, for several reasons:
+If using DataNucleus against an RDBMS (as you probably are) then we strongly recommend that you implement this test, for several reasons:
 
-* First, ``Set``s align more closely to the relational model than do `List`s. A `List` must have an additional index to specify order.
+* first, ``Set``s align more closely to the relational model than do `List`s. A `List` must have an additional index to specify order.
 
-* Second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer).
-
+* second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer). +
++
 The <<ObjectContracts>> utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
-* Third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship. See link:../components/objectstores/jdo/managed-1-to-m-relationships.html[here] for further discussion.
+* third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship.
 
 To use the contract test, subclass `SortedSetsContractTestAbstract`, specifying the root package to search for domain classes.
 
@@ -68,44 +61,7 @@ public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
 
 
-
-== Injected Services Method Contract Test
-
-It is quite common for some basic services to be injected in a project-specific domain object superclass; for example a `ClockService` might generally be injected everywhere:
-
-[source,java]
-----
-public abstract class EstatioDomainObject {
-    protected ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
-}
-----
-
-If a subclass inadvertantly overrides this method and provides its own `ClockService` field, then the field in the superclass will never initialized. As you might imagine, ``NullPointerException``s could then arise.
-
-This contract test automatically checks that the `injectXxx(...)` method, to allow for injected services, is not overridable, ie `final`.
-
-To use the contract test, , subclass `SortedSetsContractTestAbstract`, specifying the root package to search for domain classes.
-
-For example:
-
-[source,java]
-----
-public class InjectServiceMethodMustBeFinalContractTestAll extends InjectServiceMethodMustBeFinalContractTestAbstract {
-
-    public InjectServiceMethodMustBeFinalContractTestAll() {
-        super("org.estatio.dom");
-        withLoggingTo(System.out);
-    }
-}
-----
-
-
-
-
-== Bidirectional Contract Test
+=== Bidirectional Contract Test
 
 This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the link:../more-advanced-topics/how-to-04-060-How-to-set-up-and-maintain-bidirectional-relationships.html[mutual registration pattern]
 
@@ -143,10 +99,79 @@ The example tests can be found https://github.com/apache/isis/tree/master/core/u
 
 
 
+=== Injected Services Method Contract Test
+
+It is quite common for some basic services to be injected in a project-specific domain object superclass; for example a `ClockService` might generally be injected everywhere:
+
+[source,java]
+----
+public abstract class EstatioDomainObject {
+    protected ClockService clockService;
+    public void injectClockService(ClockService clockService) {
+        this.clockService = clockService;
+    }
+}
+----
+
+If a subclass inadvertantly overrides this method and provides its own `ClockService` field, then the field in the superclass will never initialized. As you might imagine, ``NullPointerException``s could then arise.
+
+This contract test automatically checks that the `injectXxx(...)` method, to allow for injected services, is not overridable, ie `final`.
+
+[NOTE]
+====
+This contract test is semi-obsolete; most of the time you will want to use `@javax.inject.Inject` on fields rather than the `injectXxx()` method.  The feature dates from a time before Isis supported the `@Inject` annotation.
+====
+
+
+To use the contract test, , subclass `SortedSetsContractTestAbstract`, specifying the root package to search for domain classes.
+
+For example:
+
+[source,java]
+----
+public class InjectServiceMethodMustBeFinalContractTestAll extends InjectServiceMethodMustBeFinalContractTestAbstract {
+
+    public InjectServiceMethodMustBeFinalContractTestAll() {
+        super("org.estatio.dom");
+        withLoggingTo(System.out);
+    }
+}
+----
+
+=== Value Objects Contract Test
+
+The `ValueTypeContractTestAbstract` automatically tests that a custom value type implements `equals()` and `hashCode()` correctly.
+
+For example, testing JDK's own `java.math.BigInteger` can be done as follows:
+
+[source,java]
+----
+public class ValueTypeContractTestAbstract_BigIntegerTest extends ValueTypeContractTestAbstract<BigInteger> {
+
+    @Override
+    protected List<BigInteger> getObjectsWithSameValue() {
+        return Arrays.asList(new BigInteger("1"), new BigInteger("1"));
+    }
+
+    @Override
+    protected List<BigInteger> getObjectsWithDifferentValue() {
+        return Arrays.asList(new BigInteger("2"));
+    }
+}
+----
+
+The example unit tests can be found https://github.com/apache/isis/tree/master/core/unittestsupport/src/test/java/org/apache/isis/core/unittestsupport/value[here].
+
+
 
 == JMock Extensions
 
-`JUnitRuleMockery2` is an extension to the JMock's `JunitRuleMockery`, providing a simpler API and also providing support for autowiring.
+`JUnitRuleMockery2` is an extension to the link:http://www.jmock.org/[JMock]'s `JunitRuleMockery`, providing a simpler API and also providing support for autowiring.
+
+[TIP]
+====
+We're fans of JMock, and we're even bigger fans of JMock's authors, Steve Freeman and Nat Pryce.  If testing is even a little bit of interest to you, check out their great link:http://www.growing-object-oriented-software.com/[GOOS] book, and check out their blogs, in particular link:http://natpryce.com/articles.html[Nat's].
+====
 
 For example, here we see that the class under test, an instance of `CollaboratingUsingSetterInjection`, is automatically wired up with its `Collaborator`:
 
@@ -170,31 +195,31 @@ public class JUnitRuleMockery2Test_autoWiring_setterInjection_happyCase {
 }
 ----
 
+[NOTE]
+====
+Isis also includes (and automatically uses) a link:http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/[Javassist]-based implementation of JMock's link:http://www.jmock.org/mocking-classes.html[`ClassImposteriser`] interface, so that you can mock out concrete classes as well as interfaces.  We've provided this rather than JMock's own cglib-based implementation (which is problematic for us given its own dependencies on link:http://asm.ow2.org/[asm]).
+====
+
+
 The example tests can be found https://github.com/apache/isis/tree/master/core/unittestsupport/src/test/java/org/apache/isis/core/unittestsupport/jmocking[here]
 
 
 
 
-== Value Objects Contract Test
 
-The `ValueTypeContractTestAbstract` automatically tests that a custom value type implements `equals()` and `hashCode()` correctly.
 
-For example, testing JDK's own `java.math.BigInteger` can be done as follows:
+== Maven Configuration
 
-[source,java]
+Apache Isis' unit test support is automatically configured if you use the <<_simpleapp_archetype, SimpleApp archetype>>.  To set it up manually, update the `pom.xml` of your domain object model module:
+
+[source,xml]
 ----
-public class ValueTypeContractTestAbstract_BigIntegerTest extends ValueTypeContractTestAbstract<BigInteger> {
-
-    @Override
-    protected List<BigInteger> getObjectsWithSameValue() {
-        return Arrays.asList(new BigInteger("1"), new BigInteger("1"));
-    }
-
-    @Override
-    protected List<BigInteger> getObjectsWithDifferentValue() {
-        return Arrays.asList(new BigInteger("2"));
-    }
-}
+<dependency>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis-core-unittestsupport</artifactId>
+    <scope>test</scope> // <1>
+</dependency>
 ----
+<1> Normally `test`; usual Maven scoping rules apply.
 
-The example unit tests can be found https://github.com/apache/isis/tree/master/core/unittestsupport/src/test/java/org/apache/isis/core/unittestsupport/value[here].
+

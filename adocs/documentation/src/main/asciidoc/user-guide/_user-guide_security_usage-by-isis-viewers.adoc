@@ -57,7 +57,7 @@ The sign-in verification page to render is pluggable; see <<_custom_pages, exten
 
 User registration is only available if the <<_user_registration_service, `UserRegistrationService`>> is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
-Because Shiro realms are pluggable, the Isis framework does not provide default implementations of this service.  However, if you are using the Isis addons' http://github.com/isisaddons/isis-module-security}[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
+Because Shiro realms are pluggable, the Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security}[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
 
 If you are using an LDAP realm and want to enable user-self registration then you'll need to write your own implementation of this service.
 

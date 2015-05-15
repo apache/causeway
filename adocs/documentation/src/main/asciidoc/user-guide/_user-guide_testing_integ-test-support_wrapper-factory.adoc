@@ -1,0 +1,96 @@
+= Wrapper Factory
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `WrapperFactory` service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.  And the role of this wrapper is to simulate the UI.
+
+[NOTE]
+====
+`WrapperFactory` uses link:javassist.org[javassist] to perform its magic; this is the same technology that ORMs such as link:http://hibernate.org/[Hibernate] use to manage lazy loading/dirty tracking (DataNucleus uses a different mechanism).
+====
+
+It does this by allowing through method invocations that would be allowed if the user were interacting with the domain object through one of the viewers, but throwing an exception if the user attempts to interact with the domain object in a way that would not be possible if using the UI.
+
+The mechanics are as follows:
+
+. the integration test calls the `WrapperFactory` to obtain a wrapper for the domain object under test.  This is usually done in the test's `setUp()` method.
+
+. the test calls the methods on the wrapper rather than the domain object itself
+
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Isis metamodel
+
+. (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
+
+. if the business rule checks pass, then the underlying member is invoked.  Otherwise an exception is thrown.
+
+The type of exception depends upon what sort of check failed.  It's straightforward enough: if the member is invisible then a `HiddenException` is thrown; if it's not usable then you'l get a `DisabledException`, if the args are not valid then catch an `InvalidException`.
+
+image::{_imagesdir}testing/wrapper-factory.png[width="600px"]
+
+Let's look in a bit more deatil at what the test can do with the wrapper.
+
+== Methods
+
+As the wrapper is intended to simulate the UI, only those methods that correspond to the "primary" methods of the domain object's members are allowed to be called.  That means:
+
+* for object properties the test can call the getter or setter method
+
+* for object collections the test can call the getter.  +
++
+If there is a supporting `addTo(...)` or `removeFrom(...)` method, then these can be called.  It can also call `add(...)` or `remove(...)` on the collection (returned by the gettter) itself. +
++
+[NOTE]
+====
+In this respect the wrapper is more functional than the <<_wicket_viewer, Wicket viewer>> (which does not expose the ability to mutate collections directly).
+====
+
+* for object actions the test can call the action method itself.
+
+As a convenience, we also allow the test to call any `defaultXxx()`, `choicesXxx()` or `autoCompleteXxx()` method.  These are often useful for obtaining a valid value to use.
+
+What the test can't call is any of the remaining supporting methods, such as `hideXxx()`, `disableXxx()` or `validateXxx`.  That's because their value is implied by the exception being thrown.
+
+The wrapper does also allow the object's `title()` method or its `toString()` method to be called, however this is of no use for objects whose title is built up using the `@Title` annotation.
+
+
+
+
+obtaining the wrapper from the proxy.
+
+
+can only invoke methods that correspond to members of the Isis metamodel.  Can't call supporting methods (such as disable, hide etc).
+
+that it receives (the method invoked)
+
+The wrapper
+
+
+
+
+* also triggers domain events
+
+
+
+[NOTE]
+====
+It isn't possible to use the `WrapperFactory` in a unit test, because there needs to be a running instance of Isis that holds the metamodel.
+====
+
+
+
+
+
+[NOTE]
+====
+The `WrapperFactory` service also provides a numer of overloads of the `wrap()` method:
+
+* `wrapNoExecute(...)` will check the business rules but suppresses the actual execution
+* `wrapSkipRules(...)` does the opposite: skip business rules but executing the action.
+
+We mention them only to say that these two methods are not of particular significance for integration tests, however they are useful when domain objects in one module need to interact (in a decoupled fashion) with domain objects in some other module.
+
+For more details, see <<_wrapper_factory, Wrapper Factory>> service.
+====
+
