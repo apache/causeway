@@ -34,7 +34,8 @@ import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementa
  * Holds common runtime logic for EventBusService implementations.
  */
 public abstract class EventBusServiceDefault extends EventBusService {
-    
+
+
     //region > register
     /**
      * {@inheritDoc}
@@ -58,7 +59,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
                 throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
             }
             // a singleton
-            if(this.eventBusImplementation != null) {
+            if (!allowLateRegistration && this.eventBusImplementation != null) {
                 // ... coming too late to the party.
                 throw new IllegalStateException("Event bus has already been created; too late to register any further (singleton) subscribers");
             }
@@ -72,18 +73,22 @@ public abstract class EventBusServiceDefault extends EventBusService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
-        final String implementation = properties.get("isis.services.eventbus.implementation");
 
+        final String allowLateRegistrationStr = properties.get("isis.services.eventbus.allowLateRegistration");
+        this.allowLateRegistration = !Strings.isNullOrEmpty(allowLateRegistrationStr) && Boolean.parseBoolean(allowLateRegistrationStr);
+
+        final String implementation = properties.get("isis.services.eventbus.implementation");
         if(Strings.isNullOrEmpty(implementation) || "guava".equalsIgnoreCase(implementation)) {
             this.implementation = "guava";
-            return;
-        }
-        if("axon".equalsIgnoreCase(implementation)) {
+        } else if("axon".equalsIgnoreCase(implementation)) {
             this.implementation = "axon";
+        } else {
+            this.implementation = implementation;
         }
-        this.implementation = implementation;
     }
     //endregion
+
+    private boolean allowLateRegistration;
 
     /**
      * Either &lt;guava&gt; or &lt;axon&gt;, or else the fully qualified class name of an

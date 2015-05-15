@@ -156,7 +156,11 @@ public abstract class EventBusService {
      * need to.
      */
     protected void doRegister(Object domainService) {
-        subscribers.add(domainService);
+        if(eventBusImplementation == null) {
+            subscribers.add(domainService);
+        } else {
+            eventBusImplementation.register(domainService);
+        }
     }
 
     /**

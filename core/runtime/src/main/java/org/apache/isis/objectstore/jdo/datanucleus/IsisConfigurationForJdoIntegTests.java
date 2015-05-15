@@ -84,6 +84,8 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
 
         add("isis.deploymentType", "server_prototype");
+
+        add("isis.services.eventbus.allowLateRegistration", "true");
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
