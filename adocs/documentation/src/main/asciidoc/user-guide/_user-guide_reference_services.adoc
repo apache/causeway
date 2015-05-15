@@ -6,13 +6,14 @@
 
 IMPORTANT: TODO
 
-include::_user-guide_reference_services_aaa.adoc[]
+include::_user-guide_reference_services_aaa.adoc[leveloffset=+1]
 
 include::_user-guide_reference_services_action-invocation-context.adoc[leveloffset=+1]
 include::_user-guide_reference_services_auditing-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_background-command-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_background-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_bookmark-service.adoc[leveloffset=+1]
+include::_user-guide_reference_services_class-discovery-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_clock-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_command-context.adoc[leveloffset=+1]
 include::_user-guide_reference_services_command-service.adoc[leveloffset=+1]
@@ -23,7 +24,10 @@ include::_user-guide_reference_services_domain-object-container.adoc[leveloffset
 include::_user-guide_reference_services_email-notification-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_email-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_event-bus-service.adoc[leveloffset=+1]
+include::_user-guide_reference_services_event-serializer.adoc[leveloffset=+1]
 include::_user-guide_reference_services_exception-recognizer.adoc[leveloffset=+1]
+include::_user-guide_reference_services_fixture-scripts.adoc[leveloffset=+1]
+include::_user-guide_reference_services_guice-bean-provider.adoc[leveloffset=+1]
 include::_user-guide_reference_services_isis-jdo-support.adoc[leveloffset=+1]
 include::_user-guide_reference_services_locale-provider.adoc[leveloffset=+1]
 include::_user-guide_reference_services_memento-service.adoc[leveloffset=+1]
@@ -31,13 +35,11 @@ include::_user-guide_reference_services_metamodel-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_publishing-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_query-results-cache.adoc[leveloffset=+1]
 include::_user-guide_reference_services_scratch-pad.adoc[leveloffset=+1]
-include::_user-guide_reference_services_settings-service.adoc[leveloffset=+1]
+include::_user-guide_reference_services_sudo-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_translation-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_translations-resolver.adoc[leveloffset=+1]
 include::_user-guide_reference_services_user-profile-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_user-registration-service.adoc[leveloffset=+1]
 include::_user-guide_reference_services_wrapper-factory.adoc[leveloffset=+1]
 include::_user-guide_reference_services_xml-snapshot-service.adoc[leveloffset=+1]
-
-
 

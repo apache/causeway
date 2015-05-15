@@ -1,210 +1,391 @@
-// = Overview
+= Summary
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
+IMPORTANT: TODO - briefly discuss the different types of services
+
+== Applib Services
+
+The table below summarizes all the APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Isis itself, or provided by one of the in http://isisaddons.org[Isis Addons] (non-ASF)modules.
 
 .Domain Services
 [cols="2,4a,1,1", options="header"]
 |===
 
 |API
-|Impl'n +
-Maven Module
-|Impl'n +
-Class
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
 |Notes
 
-|`o.a.i.applib.services.audit` +
-`AuditingService3`
-|g:`o.ia.m.audit` +
-a:`isis-module-audit`
+|<<__code_actioninvocationcontext_code, `o.a.i.applib.` +
+`services.actinv` +
+`ActionInvocationContext`>>
+|``o.a.i.core`` +
+``isis-core-applib``
+|`ActionInvocationContext`
+|API is also concrete class
+
+|<<__code_auditingservice3_code, `o.a.i.applib.` +
+`services.audit` +
+`AuditingService3`>>
+|``o.ia.m.audit`` +
+``isis-module-audit``
 |`AuditingService`
-|related services: `AuditingServiceContributions`, `AuditingServiceRepository`
+|related services:
+`AuditingService-` +
+`Contributions`,
+`AuditingService-` +
+`Repository`
 
-|`o.a.i.applib.services.background` +
-`BackgroundCommandService`
-|g:`o.ia.m.command` +
-a:`isis-module-command`
+|<<__code_backgroundcommandservice_code, `o.a.i.applib.` +
+`services.background` +
+`BackgroundCommandService`>>
+|``o.ia.m.command`` +
+``isis-module-command``
 |`BackgroundCommandServiceJdo`
-|related services: `BackgroundCommandServiceJdoContributions`, `BackgroundCommandServiceJdoRepository`
+|related services:
+`BackgroundCommandService-` +
+`JdoContributions`,
+`BackgroundCommandService-` +
+`JdoRepository`
 
-|`o.a.i.applib.services.background` +
-`BackgroundService`
-|g:`o.a.i.core` +
-a:`isis-core-runtime`
+|<<__code_backgroundservice_code, `o.a.i.applib.` +
+`services.background` +
+`BackgroundService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
 |`BackgroundServiceDefault`
-|Depends on: `BackgroundCommandService`
+|depends on: +
+`BackgroundCommandService`
 
-|`o.a.i.applib.services.bookmark` +
-`BookmarkService`
-|g:`o.a.i.core` +
-a:`isis-core-metamodel`
+|<<__code_bookmarkservice_code, `o.a.i.applib.` +
+`services.bookmark` +
+`BookmarkService`>>
+|``o.a.i.core`` +
+``isis-core-metamodel``
 |`BookmarkServiceDefault`
-|related services: `BookmarkHolderActionContributions`, `BookmarkHolderAssociationContributions`
+|related services:
+`BookmarkHolder-` ++
+`ActionContributions`,
+`BookmarkHolder-` ++
+`AssociationContributions`
 
-|`o.a.i.applib.services.classdiscovery` +
-|`ClassDiscoveryService`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
-|`ClassDiscoveryService` +
+|<<__code_classdiscoveryservice_code, `o.a.i.applib.` +
+`services.classdiscovery` +
+`ClassDiscoveryService`>>
+|``o.a.i.core`` +
+``isis-core-applib``
+|`ClassDiscoveryService-` +
 `UsingReflections`
 |requires `org.reflections:reflections` as Maven dependency
 
-|`o.a.i.applib.services.clock` +
-`ClockService`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
+|<<__code_clockservice_code, `o.a.i.applib.` +
+`services.clock` +
+`ClockService`>>
+|``o.a.i.core`` +
+``isis-core-applib``
 |`ClockService`
 |API is also a concrete class.
 
-|`o.a.i.applib.services.command` +
-`CommandContext`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
+|<<__code_commandcontext_code, `o.a.i.applib.` +
+`services.command` +
+`CommandContext`>>
+|``o.a.i.core`` +
+``isis-core-applib``
 |`CommandContext`
 |API is also a concrete class. +
-Depends on: `CommandService` for persistent `Command`, else in-memory impl. used
+depends on: +
+`CommandService` for persistent `Command`, else in-memory impl. used
 
-|`o.a.i.applib.services.command.spi` +
-`CommandService`
-|g:`o.ia.m.command` +
-a:`isis-module-command`
+|<<__code_commandservice_code, `o.a.i.applib.` +
+`services.command.spi` +
+`CommandService`>>
+|``o.ia.m.command`` +
+``isis-module-command``
 |`CommandServiceJdo`
-|related services: `CommandServiceJdoContributions`, `CommandServiceJdoRepository`
+|related services: +
+`CommandService-` ++
+`JdoContributions`,
+`CommandService-` ++
+`JdoRepository`
 
-|`o.a.i.applib` +
-`DomainObjectContainer`
-|g:`o.a.i.core` +
-a:`isis-core-metamodel`
+|<<__code_deeplinkservice_code, `o.a.i.applib` +
+`services.deeplink` +
+`DeepLinkService`>>
+|``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|`DeepLinkServiceWicket`
+|Implementation only usable within Wicket viewer
+
+|<<__code_domainobjectcontainer_code, `o.a.i.applib` +
+`DomainObjectContainer`>>
+|``o.a.i.core`` +
+``isis-core-metamodel``
 |`DomainObjectContainerDefault`
 |
 
-|`o.a.i.applib.services.userreg` +
-`EmailNotificationService`
-|g:`o.a.i.core` +
-a:`isis-core-runtime`
-|`EmailNotificationServiceDefault`
-|depends on: `EmailService`
+|<<__code_emailnotificationservice_code, `o.a.i.applib.` +
+`services.userreg` +
+`EmailNotificationService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
+|`EmailNotificationService-` ++
+`Default`
+|depends on: +
+a configured `EmailService`
 
-|`o.a.i.applib.services.email` +
-`EmailService`
-|g:`o.a.i.core` +
-a:`isis-core-runtime`
+|<<__code_emailservice_code, `o.a.i.applib.` +
+`services.email` +
+`EmailService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
 |`EmailServiceDefault`
 |
 
-|`o.a.i.applib.services.eventbus` +
-`EventBusService`
-|g:`o.a.i.core` +
-a:`isis-core-objectstore-jdo-datanucleus`
+|<<__code_eventbusservice_code, `o.a.i.applib.` +
+`services.eventbus` +
+`EventBusService`>>
+|``o.a.i.core`` +
+``isis-core-objectstore-jdo-datanucleus``
 |`EventBusServiceJdo`
 |
 
-|`o.a.i.applib.services.exceprecog` +
-`ExceptionRecognizer`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
-|`ExceptionRecognizerComposite` +
-`ForJdoObjectStore`
+|<<__code_eventserializer_code, `o.a.i.applib.` +
+`services.publish` +
+`EventSerializer`>>
+|``o.ia.m.publishing`` +
+``isis-module-publishing``
+|`RestfulObjects-` +
+`SpecEventSerializer`
+|
+
+|<<__code_exceptionrecognizer_code, `o.a.i.applib.` +
+`services.exceprecog` +
+`ExceptionRecognizer`>>
+|``o.a.i.core`` +
+``isis-core-applib``
+|`ExceptionRecognizer-` +
+`CompositeFor-` +
+`JdoObjectStore`
 |Extensible using composite pattern if required
 
-o.a.i.applib.fixturescripts
-FixtureScripts
-|g:`o.a.i.core`
-a:`isis-core-applib`
+|<<__code_fixturescripts_code, `o.a.i.applib.` +
+`fixturescripts` +
+`FixtureScripts`>>
+|``o.a.i.core`` +
+``isis-core-applib``
 |(abstract class)
-|depends on: `ClassDiscoveryService`
+|depends on: +
+`ClassDiscoveryService`
 
-|`o.a.i.applib.services.jdosupport` +
-`IsisJdoSupport`
-|g:`o.a.i.core` +
-a:`isis-core-objectstore-jdo-datanucleus`
+|<<__code_guicebeanprovider_code, `o.a.i.applib.` +
+`services.guice` +
+`GuiceBeanProvider`>>
+|``o.a.i.core`` +
+``isis-viewer-wicket-impl``
+|`GuiceBeanProviderWicket`
+|
+
+|<<__code_isisjdosupport_code, `o.a.i.applib.` +
+`services.jdosupport` +
+`IsisJdoSupport`>>
+|``o.a.i.core`` +
+``isis-core-objectstore-jdo-datanucleus``
 |`IsisJdoSupportImpl`
 |
 
-|`o.a.i.applib.services.memento` +
-`MementoService`
-|g:`o.a.i.core` +
-a:`isis-core-runtime`
+|<<__code_localeprovider_code, `o.a.i.applib.` +
+`services.i18n` +
+`LocaleProvider`>>
+|``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|`LocaleProviderWicket`
+|
+
+|<<__code_mementoservice_code, `o.a.i.applib.` +
+`services.memento` +
+`MementoService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
 |`MementoServiceDefault`
 |
 
-|`o.a.i.applib.services.publish` +
-`EventSerializer`
-|g:`o.ia.m.publishing` +
-a:`isis-module-publishing`
-|`RestfulObjectsSpecEventSerializer`
+|<<__code_metamodelservice_code, `o.a.i.applib.` +
+`services.metamodel` +
+`MetaModelService`>>
+|``o.a.i.core`` +
+``isis-core-metamodel``
+|`MetaModelServiceDefault`
 |
 
-|`o.a.i.applib.services.publish` +
-`PublishingService`
-|g:`o.ia.m.publishing` +
-a:`isis-module-publishing`
+|<<__code_publishingservice_code, `o.a.i.applib.` +
+`services.publish` +
+`PublishingService`>>
+|``o.ia.m.publishing`` +
+``isis-module-publishing``
 |`PublishingService`
-|related services: `PublishingServiceContributions`, `PublishingServiceRepository`.  +
-depends on: `EventSerializer`
+|related services:
+`PublishingService-` ++
+`Contributions`,
+`PublishingService-` ++
+`Repository`.  +
+depends on: +
+`EventSerializer`
 
-|`o.a.i.applib.services.queryresultscache` +
-`QueryResultsCache`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
+|<<__code_queryresultscache_code, `o.a.i.applib.` +
+`services.` +
+`queryresultscache` +
+`QueryResultsCache`>>
+|``o.a.i.core`` +
+``isis-core-applib``
 |`QueryResultsCache`
 |API is also a concrete class
 
-|`o.a.i.applib.services.scratchpad` +
-`Scratchpad`
-|g:`o.a.i.core` +
-a:`isis-core-applib`
+|<<__code_scratchpad_code, `o.a.i.applib.` +
+`services.scratchpad` +
+`Scratchpad`>>
+|``o.a.i.core`` +
+``isis-core-applib``
 |`Scratchpad`
 |API is also a concrete class
 
-|`o.a.i.applib.services.userreg` +
-`UserRegistrationService`
-|g:`o.ia.m.security` +
-a:`isis-module-security`
-|`SecurityModuleAppUserRegistrationService`
+|<<__code_scratchpad_code, `o.a.i.applib.` +
+`services.sudo` +
+`SudoService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
+|`SudoServiceDefault`
+|API is also a concrete class
+
+|<<__code_translationservice_code, `o.a.i.applib.` +
+`services.i18n` +
+`TranslationService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
+|`TranslationServicePo`
+|related services: `TranslationServicePoMenu` +
+depends on: +
+`TranslationsResolver`, `LocaleProvider`
+
+|<<__code_translationsresolver_code, `o.a.i.applib.` +
+`services.i18n` +
+`TranslationsResolver`>>
+|``o.a.i.viewer`` +
+``isis-viewer-wicket-impl``
+|`TranslationsResolverWicket`
 |
 
-|`o.a.i.applib.services.wrapper` +
-`WrapperFactory`
-|g:`o.a.i.core` +
-a:`isis-core-wrapper`
+|<<__code_userprofileservice_code, `o.a.i.applib.` +
+`services.userprof` +
+`UserProfileService`>>
+|
+|
+|SPI only
+
+|<<__code_userregistrationservice_code, `o.a.i.applib.` +
+`services.userreg` +
+`UserRegistrationService`>>
+|``o.ia.m.security`` +
+``isis-module-security``
+|`SecurityModule-` +
+`AppUserRegistrationService`
+|depends (implicitly) on: +
+a configured `EmailService`
+
+|<<__code_wrapperfactory_code, `o.a.i.applib.` +
+`services.wrapper` +
+`WrapperFactory`>>
+|``o.a.i.core`` +
+``isis-core-wrapper``
 |`WrapperFactoryDefault`
 |
 
-|`o.a.i.applib.services.xmlsnapshot` +
-`XmlSnapshotService`
-|g:`o.a.i.core` +
-a:`isis-core-runtime`
+|<<__code_xmlsnapshotservice_code, `o.a.i.applib.` +
+`services.xmlsnapshot` +
+`XmlSnapshotService`>>
+|``o.a.i.core`` +
+``isis-core-runtime``
 |`XmlSnapshotServiceDefault`
 |
 
 |===
 
 Key:
+
 * `o.a.i` is an abbreviation for `org.apache.isis`
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
 
 
 All domain services are automatically registered (annotated with <<__code_domainservice_code, `@DomainService`>> except:
 
-`FixtureScripts`::
+* `FixtureScripts` +
++
 Subclass and either annotate with `@DomainService` or register in `isis.properties`
-`ExceptionRecognizer`::
-Register in isis.properties
 
+* `ExceptionRecognizer` +
++
+Register explicitly in isis.properties (so is extensible)
+
+
+
+
+
+== "Internal" APIs/SPIs
+
+These services definitions depend on the internals of the framework; we do not guarantee that semver will be honoured for these APIs.
+
+.Semi-public SPI
+[cols="3,3,2,2a", options="header"]
+|===
+
+|API
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
+|Notes
+
+
+|<<__code_contentmappingservice_code, `o.a.i.v.ro.` +
+`rendering.service.conneg.` +
+`ContentMappingService`>>
+|
+|
+|SPI only, no default implementation.
+
+|<<__code_contentnegotiationservice_code, `o.a.i.v.ro.` +
+`rendering.service.conneg.` +
+`ContentNegotiationService`>>
+|``o.a.i.core`` +
+`isis-core-viewer-restfulobjects-rendering`
+|`ContentNegotiationService-` +
+`XRoDomainType`
+|
+
+|===
+
+Key:
+
+* `o.a.i.v.ro` is an abbreviation for `org.apache.isis.viewer.restfulobjects`
+
+
+
+
+
+== Deprecated Services
+
+There is also a number of deprecated domain services.
 
 .Deprecated Domain Services
 [cols="2,4a,1,1", options="header"]
 |===
 
 |API
-|Impl'n +
-Maven Module
-|Impl'n +
-Class
+|Maven Module +
+Impl'n (g: a:)
+|Implementation
 |Notes
 
 |`o.a.i.applib.annotation`
@@ -213,7 +394,6 @@ Class
 a:`isis-core-applib`
 |`Bulk.InteractionContext`
 |Replaced by `ActionInvocationContext`
-
 
 
 |===

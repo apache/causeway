@@ -1,0 +1,151 @@
+= Summary
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The table below lists the method prefixes that are recognized as part of Apache Isis' default programming model.
+
+.Recognized Method Prefixes
+[cols="2,1,1,1,1,1,4a", options="header"]
+|===
+
+|Prefix
+|Object
+|Property
+|Collection
+|Action
+|Action +
+Param
+|Description
+
+|<<__code_addto_code, `addTo...()`>>
+|
+|
+|Y
+|
+|
+|add object to a collection (nb: not currently supported by Wicket viewer) +
+See also <<__code_removefrom_code, `removeFrom...()`>>`
+
+|<<__code_autocomplete_code, `autoComplete...()`>>
+|
+|Y
+|
+|
+|Y
+|Return a list of matching elements for a property or an action parameter. +
+Alternatively, can specify for a class using <<__code_domainobject_code, `@DomainObject#autoComplete`>> +
++
+See also choices
+
+|<<__code_choices_code, `choices...()`>>
+|
+|Y
+|
+|
+|Y
+|Provide list of choices for a property or action parameter
+See also <<__code_autocomplete_code, `autoComplete...()`>>.
+
+|<<__code_clear_code, `clear...()`>>
+|
+|Y
+|
+|
+|
+|Clear a property (set it to null). Allows business logic to be placed apart from the setter.
+See also <<__code_modify_code, `modify...()`>>
+
+
+|<<__code_default_code, `default...()`>>
+|
+|Y
+|
+|
+|Y
+|Default value for a property or an action parameter.
+
+|<<__code_disable_code, `disable...()`>>
+|Y
+|Y
+|Y
+|Y
+|
+|Disables (makes read-only) a property, a collection or an action.
+
+|<<__code_get_code, `get...()`>>
+|
+|Y
+|Y
+|
+|
+|Access the value of a property or collection. +
+See also <<__code_set_code, `set...()`>>.
+
+|<<__code_hide_code, `hide...()`>>
+|
+|Y
+|Y
+|Y
+|
+|Hides a property, a collection or an action.
+
+|<<__code_modify_code, `modify...()`>>
+|
+|Y
+|
+|
+|
+|Modify a property (set it to a non-null) value. Allows business logic to be placed apart from the setter. +
+See also <<__code_clear_code, `clear...()`>>`.
+
+|<<__code_removeFrom_code, `removeFrom...()`>>
+|
+|
+|Y
+|
+|
+|remove object from a collection (nb: not currently supported by Wicket viewer) +
+See also <<__code_addto_code, `addTo...()`>>`
+
+|<<__code_set_code, `set...()`>>
+|
+|Y
+|Y
+|
+|
+|Sets the value of a property or a collection.
+
+|<<__code_validate_code, `validate...()`>>
+|Y
+|
+|
+|Y
+|Y
+|Check that a proposed value of a property or an action parameter is valid. +
+See also <<__code_validateaddto_code, validateAddTo...()`>> and <<__code_validateremovefrom_code, `validateRemoveFrom...()`>> for collections.
+
+|<<__code_validateaddto_code, `validate +
+AddTo...()`>>
+|
+|Y
+|
+|
+|
+|Check that a proposed object to add to a collection is valid. +
+See also <<__code_validateremovefrom_code, `validateRemoveFrom...()`>>, and <<__code_validate_code, `validate...()`>> for properties and collections.
+
+|<<__code_validateremovefrom_code, `validate +
+RemoveFrom...()`>>
+|
+|Y
+|
+|
+|
+|Check that a proposed object to add to a collection is valid.
+See also <<__code_validateaddto_code, `validateAddTo...()`>>, and <<__code_validate_code, `validate...()`>> for properties and collections.
+
+|===
+
+

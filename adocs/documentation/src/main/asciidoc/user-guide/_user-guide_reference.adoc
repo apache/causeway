@@ -5,15 +5,13 @@
 
 IMPORTANT: TODO
 
-include::_user-guide_reference_methods.adoc[leveloffset=+1]
-
 include::_user-guide_reference_annotations.adoc[leveloffset=+1]
-
-include::_user-guide_reference_domain-services.adoc[leveloffset=+1]
-
+include::_user-guide_reference_prefixes.adoc[leveloffset=+1]
+include::_user-guide_reference_methods.adoc[leveloffset=+1]
+include::_user-guide_reference_services.adoc[leveloffset=+1]
 include::_user-guide_reference_value-types.adoc[leveloffset=+1]
-
 include::_user-guide_reference_applib-utility-classes.adoc[leveloffset=+1]
-
 include::_user-guide_reference_convenience-superclasses.adoc[leveloffset=+1]
+include::_user-guide_reference_mixins.adoc[leveloffset=+1]
+include::_user-guide_reference_addons.adoc[leveloffset=+1]
 
