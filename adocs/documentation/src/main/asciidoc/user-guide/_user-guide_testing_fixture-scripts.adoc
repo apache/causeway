@@ -3,63 +3,41 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
-## API and Usage
+When writing integration tests (and implementing the glue for BDD specs) it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.  Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-IMPORTANT: TODO
+On a very simple system you could probably get away with using SQL to insert directly into the database, or you could use a toolkit such as link:http://dbunit.sourceforge.net/howto.html[dbunit] to upload data from flat files.  Such approaches aren't particularly maintainable though.  If in the future the domain entities (and therefore corresponding database tables) change their structure, then all of those data sets will need updating.
 
-## SudoService (1.9.0-SNAPSHOT)
+Even more significantly, there's no way to guarantee that the data that's being loaded is logically consistent with the business behaviour of the domain objects themselves.  That is, there's nothing to stop your test from putting data into the database that would be invalid if one attempted to add it through the app.
 
-Sometimes in our fixture scripts we want to perform a business action runnin as a particular user.  This might be for the usual reason - so that our fixtures accurately reflect the reality of the system with all business constraints enforced using the `WrapperFactory` - or more straightforwardly it might be simply that the action depends on the identity of the user invoking the action.
+The solution that Isis provides is a small library called *_fixture scripts_*.  A fixture script is basically a wrapper for executing arbitrary work, but that work almost always invoking a business action.
 
-An example of the latter case is in the link:[todoapp]'s `ToDoItem` class:
+[TIP]
+====
+If you want to learn more on this topic (with live coding!), check out this https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[presentation] given at BDD Exchange 2014.
+====
 
-[source,java]
-.Production code that depends on current user
-----
-public ToDoItem newToDo(
-        @Parameter(regexPattern = "\\w[@&:\\-\\,\\.\\+ \\w]*") @ParameterLayout(named="Description")
-        final String description,
-        @ParameterLayout(named="Category")
-        final Category category,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Subcategory")
-        final Subcategory subcategory,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Due by")
-        final LocalDate dueBy,
-        @Parameter(optionality = Optionality.OPTIONAL) @ParameterLayout(named="Cost")
-        final BigDecimal cost) {
-    return newToDo(description, category, subcategory, currentUserName(), dueBy, cost);
-}
-private String currentUserName() {
-    return container.getUser().getName(); // <1>
-}
-----
-<1> is the current user.
+There is another benefit to Isis' fixture script approach; the fixtures can be (in prototyping mode) run from your application.  This means that fixture scripts can actually help all the way through the development lifecycle:
 
-The fixture for this can use the `SudoService` to run a block of code as a specified user:
+* when specifying a new feature, you can write a fixture script to get the system into the "given" state, and then start exploring the required functionality with the domain expert actually _within_ the application +
++
+And if you can't write a fixture script for the story, it probably means that there's some prerequisite feature that needs implementing that you hadn't previously recognized
 
-[source,java]
-.Fixture Script
-----
-final String description = ...
-final Category category = ...
-final Subcategory subcategory = ...
-final LocalDate dueBy = ...
-final BigDecimal cost = ...
-final Location location = ...
+* when the developer implements the story, s/he has a precanned script to run when they manually verify the functionality works
 
-toDoItem = sudoService.sudo(username,
-        new Callable<ToDoItem>() {
-            @Override
-            public ToDoItem call() {
-                final ToDoItem toDoItem = wrap(toDoItems).newToDo(
-                        description, category, subcategory, dueBy, cost);
-                wrap(toDoItem).setLocation(location);
-                return toDoItem;
-            }
-        });
-----
+* when the developer automates the story's acceptance test as an integration test, they already have the "given" part of the test implemented
 
-Behind the scenes the `SudoService` simply talks to the `DomainObjectContainer` to override the user returned by the `getUser()` API.  It is possible to override both users and roles.
+* when you want to pass the feature over to the QA/tester for additional manual exploratory testing, they have a fixture script to get them to a jumping off point for their explorations
+
+* when you want to demonstrate the implemented feature to your domain expert, your demo can use the fixture script so you don't bore your audience in performing lots of boring setup before getting to the actual feature
+
+* when you want to roll out training to your users, you can write fixture scripts as part of their training exercises
+
+
+The following  sections explain the API and how to go about using the API.
+
+
+include::_user-guide_testing_fixture-scripts_api-and-usage.adoc[leveloffset=+1]
+include::_user-guide_testing_fixture-scripts_sudo-service.adoc[leveloffset=+1]
+

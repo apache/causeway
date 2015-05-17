@@ -50,7 +50,7 @@ Customer wrappedCustomer = wrapperFactory.wrap(wrappedCustomer);
 ----
 
 
-Going the other way -- getting hold of the underlying (wrapped) domain object -- is just as easy; call `WrapperFactory#unwrap(...)`.
+Going the other way -- getting hold of the underlying (wrapped) domain object -- is just as easy; just call `WrapperFactory#unwrap(...)`.
 
 For example:
 

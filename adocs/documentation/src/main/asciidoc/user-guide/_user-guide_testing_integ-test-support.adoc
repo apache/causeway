@@ -15,11 +15,8 @@ We'll get to all that shortly, but let's start by taking a look at what a typica
 
 
 include::_user-guide_testing_integ-test-support_typical-usage.adoc[leveloffset=+1]
-
 include::_user-guide_testing_integ-test-support_bootstrapping.adoc[leveloffset=+1]
-
 include::_user-guide_testing_integ-test-support_wrapper-factory.adoc[leveloffset=+1]
-
 include::_user-guide_testing_integ-test-support_maven-configuration.adoc[leveloffset=+1]
 
 

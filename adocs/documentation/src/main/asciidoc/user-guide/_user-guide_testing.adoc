@@ -9,12 +9,8 @@ If you are going to use Apache Isis for developing complex business-critical app
 
 
 include::_user-guide_testing_overview.adoc[leveloffset=+1]
-
 include::_user-guide_testing_unit-test-support.adoc[leveloffset=+1]
-
 include::_user-guide_testing_integ-test-support.adoc[leveloffset=+1]
-
 include::_user-guide_testing_bdd-spec-support.adoc[leveloffset=+1]
-
 include::_user-guide_testing_fixture-scripts.adoc[leveloffset=+1]
 

@@ -4,19 +4,19 @@
 :_imagesdir: images/
 
 
-Apache Isis' integration test support is automatically configured if you use the <<_simpleapp_archetype, SimpleApp archetype>>.  To set it up manually, update the `pom.xml` of your domain object model module:
+Apache Isis' unit test support is automatically configured if you use the <<_simpleapp_archetype, SimpleApp archetype>>.  To set it up manually, update the `pom.xml` of your domain object model module:
 
-[source]
+[source,xml]
 ----
 <dependency>
     <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-integtestsupport</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.apache.isis.core</groupId>
-    <artifactId>isis-core-wrapper</artifactId>
+    <artifactId>isis-core-unittestsupport</artifactId>
+    <scope>test</scope> // <1>
 </dependency>
 ----
+<1> Normally `test`; usual Maven scoping rules apply.
+
+
 
 We also recommend that you configure the `maven-surefire-plugin` to pick up the following class patterns:
 

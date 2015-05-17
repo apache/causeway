@@ -16,13 +16,14 @@ Dependencies of that object are mocked out.  These are written by a developer an
 +
 These are tests that represent the acceptance criteria of some business story; their intent should make sense to the domain expert (even if the domain expert is "non-technical")
 
-To put it another way: integration tests are to ensure that you are *_building the right system_*, while unit tests help ensure that you are *_building the system right_*.
+To put it another way:
 
 [TIP]
 ====
-Isis provides autowiring dependency injection into every domain object.  This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
-====
+Integration tests help ensure that you are *_building the right system_*
 
+Unit tests help ensure that you are *_building the system right_*.
+====
 
 
 
@@ -34,7 +35,7 @@ We further sub-divide integration tests into:
 +
 Even if a domain expert understands the intent of these tests, the actual implementation will be opaque to them.  Also, the only output from the tests is a (hopefully) green CI job
 
-* tests (or rather, specifications) that are implemented in a BDD language such as link:https://cucumber.io/[Cucumber] (we call these _"BDD specs"_) +
+* tests (or rather, specifications) that are implemented in a _behaviour-driven design_ (BDD) language such as link:https://cucumber.io/[Cucumber] (we call these _"BDD specs"_) +
 +
 The natural language specification then maps down onto some glue code that is used to drive the application.  But the benefits of taking a BDD approach include the fact that your domain expert will be able to read the tests/specifications, and that when you run the specs, you also get documentation of the application's behaviour ("living documentation").
 
@@ -61,6 +62,42 @@ What this means is that an Isis application can be tested end-to-end without hav
 
 
 
+== Dependency Injection
+
+Isis provides autowiring dependency injection into every domain object.  This is most useful when writing unit tests; simply mock out the service and inject into the domain object.
+
+There are a number of syntaxes supported, but the simplest is to use `@javax.inject.Inject` annotation; for example:
+
+[source,java]
+----
+@javax.inject.Inject
+CustomerRepository customers;
+----
+
+Isis can inject into this even if the field has package-level (or even `private`) visibility.  We recommend that you use package-level visibility, though, so that your unit tests (in the same package as the class under test) are able to inject mocks.
+
+Isis does also support a couple of other syntaxes:
+
+[source,java]
+----
+public void setCustomerRepository(CustomerRepository customers) { ... }
+----
+
+or
+
+[source,java]
+----
+public void injectCustomerRepository(CustomerRepository customers) { ... }
+----
+
+
+[TIP]
+====
+Apache Isis also supports automatic dependency injection into integration tests; just declare the service dependency in the usual fashion and it will be automatically injected.
+====
+
+
+
 
 == Given/When/Then
 
@@ -69,22 +106,6 @@ Whatever type of test/spec you are writing, we recommend you follow the given/wh
 * *given* the system is in this state (preconditions)
 * *when* I poke it with a stick
 * *then* it looks like this (postconditions)
-
-For unit tests with a mocking library (we tend to use link:http://jmock.org[JMock] but others are also fine) it can be worth considering four steps:
-
-* *given* the system is in this state
-* *expecting* these interactions (set up the mock expectations here)
-* *when* I poke it with a stick
-* *then* these interactions should have occurred.
-
-[TIP]
-.Distinguish between queries vs mutators
-====
-For mock interactions that simply retrieve some data, your test should not need to verify that it occurred.  If the system were to be refactored and starts caching some data, you don't really want your tests to start breaking because they are no longer performing a query that once they did.  If using JMock API this means using the `allowing(..)` method to set up the expectation.
-
-On the other hand mocks that mutate the state of the system you probably should assert have occurred.  If using JMock this typically means using the `oneOf(...)` method.
-====
-
 
 A good test should be 5 to 10 lines long; the test should be there to help you reason about the behaviour of the system.  Certainly if the test becomes more than 20 lines it'll be too difficult to understand.
 
@@ -103,16 +124,8 @@ In the previous section we discussed using given/when/then as a form of organizi
 
 For integration tests though it can be difficult to keep the "given" short; there could be a lot of prerequisite data that needs to exist before you can actually exercise your system.  Moreover, however we do set up that data, but we also want to do so in a way that is resilient to the system changing over time.
 
-On a very simple system you could probably get away with using SQL to insert directly into the database, or you could use a toolkit such as link:http://dbunit.sourceforge.net/howto.html[dbunit] to upload data from flat files.  Such approaches aren't particularly maintainable though.  If in the future the domain entities (and therefore corresponding database tables) change their structure, then all of those data sets will need updating.
+The solution that Isis provides is a domain service called <<_fixture_scripts, Fixture Scripts>>, that defines a pattern and supporting classes to help ensure that the "data setup" for your tests are reusable and maintainable over time.
 
-Even more significantly, there's no way to guarantee that the data that's being loaded is logically consistent with the business behaviour of the domain objects themselves.  That is, there's nothing to stop your test from putting data into the database that would be invalid if one attempted to add it through the app.
-
-The solution that Isis provides is a small library called *_fixture scripts_*.  A fixture script is basically a wrapper for executing arbitrary work, but that work almost always invoking a business action.  These fixture scripts can then be organized either in a fairly flat structure (eg as in the http://github.com/isisaddons/isis-app-todoapp}[Isis addons' todoapp], or as a composite pattern (eg as in https://github.com/estatio/estatio/blob/ea20a6ce257acede50de6ce4fd2ff29713fcd689/estatioapp/fixture/src/main/java/org/estatio/fixture/invoice/InvoiceForLeaseItemTypeOfDiscountOneQuarterForOxfMiracle005.java#L66)[Estatio open source app].
-
-[TIP]
-====
-If you want to learn more on this topic (with live coding!), check out this https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[presentation] given at BDD Exchange 2014.
-====
 
 
 
@@ -131,6 +144,20 @@ Apache Isis does not, itself, ship with a fake data library.  However, the http:
 ====
 Using fake data works very well with fixture scripts; the fixture script can invoke the business action with sensible (fake/random) defaults, and only require that the essential information is passed into it by the test.
 ====
+
+
+
+
+== Feature Toggles
+
+Writing automated tests is just good development practice.  Also good practice is developing on the mainline (master, trunk); so that your continuous integration system really is integrating all code.  Said another way: link:http://martinfowler.com/bliki/FeatureBranch.html[don't use branches]!
+
+Sometimes, though, a feature will take longer to implement than your iteration cycle.  In such a case, how do you use continuous integration to keep everyone working on the mainline without revealing a half-implemented feature on your releases?  One option is to use link:http://martinfowler.com/bliki/FeatureToggle.html[feature toggle]s.
+
+Apache Isis does not, itself, ship with a feature toggle library.  However, the http://github.com/isisaddons/isis-module-togglz}[Isis addons' togglz] module (non-ASF) does provide exactly this capability.
+
+
+
 
 
 With all that said, let's look in detail at the testing features provided by Apache Isis.
