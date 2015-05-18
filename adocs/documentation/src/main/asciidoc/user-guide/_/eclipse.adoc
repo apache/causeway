@@ -1,0 +1,158 @@
+Title: Setting up Eclipse (with JDO/DataNucleus)
+
+____
+
+See also:
+
+* setting up link:./intellij.html[IntelliJ IDE].
+* setting up link:../../../other/jrebel.html[Eclipse and JRebel].
+* link:../../resources/editor-templates.html[IDE templates for Eclipse].
+
+____
+
+We highly recommend that you develop your Isis application using an IDE. Isis is built with Maven, and all modern IDEs can import Maven projects. The most commonly used IDE is http://www.eclipse.org[Eclipse], which can be downloaded in various configurations, all of which are free for use. We recommend you download the "Eclipse JEE package".
+
+If using the link:../../../components/objectstores/jdo/about.html[JDO Objectstore] (the default if using the link:../simple-archetype.html[simple] archetype), then the development environment must be configured such that the Java bytecode can be enhanced by a http://db.apache.org/jdo/enhancement.html[JDO enhancer]. If working in Eclipse, then JDO enhancement is most easily done by installing the http://www.datanucleus.org/products/datanucleus/jdo/guides/eclipse.html[DataNucleus' plugin]. This hooks the bytecode enhancement of your domain objects into Eclipse's normal incremental compilation. This plugin needs to be configured for each of your domain modules (usually just one in any given app).
+
+The steps are therefore:
+
+* import the project into Eclipse
+* configure the DataNucleus enhancer
+* run the app from the `.launch` file
+
+== <a name="screencast"></a>Screencast
+
+The following screencast shows how to import an Apache Isis maven-based application into Eclipse and configure to use with the JDO Objectstore
+
+<iframe width="640" height="480" src="http://www.youtube.com/embed/RgcYfjQ8yJA" frameborder="0" allowfullscreen></iframe>
+
+== Importing the Project
+
+Use File &gt; Import, then Maven &gt; Existing Maven Projects.
+
+== Add DataNucleus support
+
+____
+
+note:
+Make sure you are in the 'Java' Perspective, not the 'Java EE' Perspective. 
+
+____
+
+In Eclipse, for the _domain object model_ project, first add DataNucleus support:
+
+<img src="images/eclipse-100-project-support.png"  width="600px"/>
+
+Then turn on Auto-Enhancement:
+
+<img src="images/eclipse-110-project-support.png"  width="600px"/>
+
+==== Update the classpath
+
+DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs. So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
+
+Add the following to your `pom.xml`:
+
+[source]
+----
+<dependencies>
+    <dependency>
+        <groupId>org.apache.isis.core</groupId>
+        <artifactId>isis-core-applib</artifactId>
+    </dependency>
+
+    <dependency>
+        <groupId>org.apache.isis.objectstore</groupId>
+        <artifactId>isis-objectstore-jdo-applib</artifactId>
+    </dependency>
+
+    <!-- DataNucleus (horrid, but needed to run the enhancer)-->
+    <dependency>
+        <groupId>javax.jdo</groupId>
+        <artifactId>jdo-api</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.datanucleus</groupId>
+        <artifactId>datanucleus-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.datanucleus</groupId>
+        <artifactId>datanucleus-enhancer</artifactId>
+        <exclusions>
+            <exclusion>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>org.datanucleus</groupId>
+        <artifactId>datanucleus-api-jdo</artifactId>
+        </dependency>
+</dependencies>
+----
+
+Then, tell DataNucleus to use the project classpath:
+
+<img src="images/eclipse-010-windows-preferences.png" width="600px"/>
+
+When the enhancer runs, it will print out to the console:
+
+<img src="images/eclipse-120-console.png" width="500px"/>
+
+==== Workaround for path limits (the DN plugin to use the persistence.xml)
+
+If running on Windows then the DataNucleus plugin is very likely to hit the Windows path limit.
+
+To fix this, we configure the enhancer to read from the `persistence.xml` file. (This fix is also required if link:../../../components/objectstores/jdo/datanucleus-and-maven.html[working with Maven]).
+
+As a prerequisite, first make sure that your domain object has a `persistence.xml` file. The details of how to do this can be found link:../../../components/objectstores/jdo/persistence_xml.html[here].
+
+Then specify the `persistence-unit` in the project properties:
+
+<img src="images/eclipse-025-project-properties.png"  width="600px"/>
+
+==== Workaround: If the enhancer fails
+
+On occasion it appears that Eclipse can attempt to run two instances of the DataNucleus enhancer. This is probably due to multiple Eclipse builders being defined; we've noticed multiple entries in the Eclipse's `Debug` view:
+<img src="images/eclipse-210-enhancer-fails-duplicates.png"/>
+
+At any rate, you'll know you've encountered this error if you see the following in the console:
+<img src="images/eclipse-200-enhancer-fails-duplicates.png" width="600px"/>
+
+The best solution is to remove DataNucleus support and then to re-add it:
+<img src="images/eclipse-220-enhancer-fails-duplicates.png"  width="600px"/>
+
+If you consistently hit problems, then the final recourse is to disable the automatic enhancement and to remember to manually enhance your domain object model before each run. 
+
+Not ideal, we know. Please feel free to contribute a better solution :-)
+
+== Running the App
+
+The simpleapp archetype automatically provides a `.launch` configurations in the `webapp` module. You can therefore very simply run the application by right-clicking on one of these files, and choosing "Run As…" or "Debug As…".
+
+____
+
+the screencast shows this in action.
+
+____
+
+== Other domain projects.
+
+There is nothing to prevent you having multiple domain projects. You might want to do such that each domain project corresponds to a http://www.methodsandtools.com/archive/archive.php?id=97p2[DDD module], thus guaranteeing that there are no cyclic dependencies between your modules.
+
+If you do this, make sure that each project has its own `persistence.xml` file.
+
+And, remember also to configure Eclipse's DataNucleus plugin for these other domain projects.
+
+==== JDO Applib domain projects.
+
+The JDO objectstore also defines some of its own persistable domain entities, these being used in its implementation of the link:../../../components/objectstores/jdo/services/publishing-service-jdo.html[Publishing Service] and the link:../../../components/objectstores/jdo/services/settings-services-jdo.html[Settings Services]. These persistable domain entities are defined in the JDO applib, and must be enhanced.
+
+If just using released versions of Isis, then there is nothing to be done.
+
+However, if building Isis from source code and in Eclipse, and if you plan to use either of these services, then you must also configure Eclipse's DataNucleus plugin.
+
+As noted in the link:../../../components/objectstores/jdo/persistence_xml.html[page describing persistence.xml], the `persistence-unit` name is: `jdo-applib`. You should therefore configure the enhance the DataNucleus enhancer for the `isis-objectstore-jdo-applib` project, and configure the plugin as shown below:
+
+<img src="images/jdo-applib-dn-project-configuration.png"  width="600px"/>
