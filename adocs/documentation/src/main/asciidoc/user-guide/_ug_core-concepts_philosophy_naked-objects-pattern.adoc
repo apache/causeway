@@ -50,5 +50,16 @@ This is the way that the link:http://metawidget.org/[MetaWidget] team, in partic
 We compare Apache Isis' with MetaWidget <<_vs_metawidget,here>>.
 ====
 
+== What this means in practice
+
+The screencast below shows what all of this means in practice, showing the relationship between a running app and the actual code underneath.
+
+.How Apache Isis builds a webapp from the underlying domain object model…
+video::ludOLyi6VyY[youtube,width="640px",height="472px"]
+
+[NOTE]
+====
+This screencast shows Apache Isis v1.0.0, Jan 2013.  The UI has been substantially refined since that release.
+====
 
 

@@ -21,7 +21,7 @@ Finding your way around:
 ** link:introducing-apache-isis/common-use-cases/common-use-cases.html[Common Use Cases]
 
 * User Guide
-** link:user-guide/user-guide.html[User Guide]
+** link:user-guide/ug.html[User Guide]
 
 
 

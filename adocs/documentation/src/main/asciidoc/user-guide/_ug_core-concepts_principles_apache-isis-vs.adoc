@@ -6,7 +6,9 @@
 Many other frameworks promise rapid application development and provide automatically generated user interfaces, so how
 do they compare to Apache Isis?
 
-## vs MVC server-side frameworks
+
+
+== vs MVC server-side frameworks
 
 Some of most commonly used frameworks today are link:http://www.springframework.org/[Spring MVC], link:http://rubyonrails.org/[Ruby on Rails] and link:http://www.grails.org[Grails], all of which implement one flavour or another of the server-side MVC pattern.  The MVC 1.0 specification (scheduled for JavaEE 8) is also similar.
 
@@ -19,9 +21,20 @@ Although these frameworks all provide their own ecosystems of extensions, Isis' 
 In terms of testing support, each of these other frameworks provide mechanisms to allow the webapp to be tested from within a JUnit test harness. Isis' support is similar.  Where Isis differs though is that it enables end-to-end testing without the need for slow and fragile Selenium tests. Instead, Isis provides a "<<_using_the_wrapper_factory,WrapperFactory>>" domain service that allows the generic UI provided to in essence be simulated. On a more pragmatic level, the http://github.com/isisaddons/isis-module-fakedata}[Isis addons' fakedata] module does "what it says on the tin", allowing both unit- and integration-tests to focus on the salient data and fake out the rest.
 
 
-## vs Angular
 
-## vs MetaWidget
+== vs CQRS
+
+
+
+== vs Event Sourcing
+
+
+
+== vs Angular
+
+
+
+== vs MetaWidget
 
 MetaWidget (mentioned <<_object_interface_mapping, earlier>> has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.  And like Apache Isis, MetaWidget builds its own metamodel of the domain objects and uses this to render the object.
 
@@ -32,5 +45,5 @@ In contrast, Apache Isis is full-stack and does generate a complete UI; we then 
 Also, it's worth noting that MetaWidget does have an elegant pipeline architecture, with APIs to allow even its metamodel to be replaced.  It would be feasible and probably quite straightforward to use Isis' own metamodel as an implementation of the MetaWidget API.  This would allow MetaWidget to be able to render an Isis domain application.
 
 
-## vs OpenXava
+== vs OpenXava
 

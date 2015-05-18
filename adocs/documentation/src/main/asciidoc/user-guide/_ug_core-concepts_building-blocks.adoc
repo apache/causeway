@@ -49,7 +49,7 @@ For convenience you can inherit from AbstractService or one of its subclasses, b
 
 .Factories, Repositories and Services
 ****
-A distinction is sometimes made between a factory (that creates object) and a repository (that is used to find existing objects).  You will find them discussed separately in Evans' link:Domain Driven Design[http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC], for example.
+A distinction is sometimes made between a factory (that creates object) and a repository (that is used to find existing objects).  You will find them discussed separately in Evans' link:http://books.google.com/books/about/Domain_Driven_Design.html?id=hHBf4YxMnWMC[Domain Driven Design], for example.
 
 In Apache Isis these are all implemented as domain services.  Indeed, it is quite common to have a domain service that acts as both a factory and a repository.
 ****

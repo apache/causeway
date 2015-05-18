@@ -12,13 +12,10 @@ Parts of this chapter have been adapted from Dan Haywood's 2009 book, 'Domain Dr
 
 
 include::_ug_core-concepts_philosophy.adoc[leveloffset=+1]
-
 include::_ug_core-concepts_principles.adoc[leveloffset=+1]
-
 include::_ug_core-concepts_building-blocks.adoc[leveloffset=+1]
-
 include::_ug_core-concepts_framework-provided-services.adoc[leveloffset=+1]
-
 include::_ug_core-concepts_add-ons.adoc[leveloffset=+1]
+include::_ug_core-concepts_other-deployment-options.adoc[leveloffset=+1]
 
 
