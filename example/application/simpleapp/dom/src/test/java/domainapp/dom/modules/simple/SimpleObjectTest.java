@@ -19,8 +19,6 @@ package domainapp.dom.modules.simple;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleObjectTest {

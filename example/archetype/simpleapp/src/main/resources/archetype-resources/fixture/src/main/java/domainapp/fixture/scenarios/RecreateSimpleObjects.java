@@ -22,15 +22,17 @@
 
 package domainapp.fixture.scenarios;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
-import domainapp.fixture.modules.simple.SimpleObjectCreate;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+import domainapp.dom.modules.simple.SimpleObject;
+import domainapp.fixture.modules.simple.SimpleObjectCreate;
+import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
 
 public class RecreateSimpleObjects extends FixtureScript {
 

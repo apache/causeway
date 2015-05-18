@@ -19,10 +19,10 @@
 
 package domainapp.fixture.modules.simple;
 
-import domainapp.dom.modules.simple.SimpleObjects;
-import domainapp.dom.modules.simple.SimpleObject;
-
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+import domainapp.dom.modules.simple.SimpleObject;
+import domainapp.dom.modules.simple.SimpleObjects;
 
 public class SimpleObjectCreate extends FixtureScript {
 
@@ -59,7 +59,7 @@ public class SimpleObjectCreate extends FixtureScript {
 
         String name = checkParam("name", ec, String.class);
 
-        this.simpleObject = simpleObjects.create(name);
+        this.simpleObject = wrap(simpleObjects).create(name);
 
         // also make available to UI
         ec.addResult(this, simpleObject);

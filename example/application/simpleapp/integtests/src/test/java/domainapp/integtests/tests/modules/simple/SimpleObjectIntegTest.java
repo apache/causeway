@@ -58,10 +58,8 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
         @Test
         public void accessible() throws Exception {
-
             // when
             final String name = simpleObjectWrapped.getName();
-            //
             // then
             assertThat(name).isEqualTo(fs.NAMES.get(0));
         }

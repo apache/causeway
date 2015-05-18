@@ -21,9 +21,8 @@
  */
 package domainapp.fixture;
 
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
-
 import java.util.List;
+
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -33,7 +32,8 @@ import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
-import org.apache.isis.applib.fixturescripts.SimpleFixtureScript;
+
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
 /**
  * Enables fixtures to be installed from the application.
@@ -52,7 +52,7 @@ public class DomainAppFixturesService extends FixtureScripts {
 
     @Override
     public FixtureScript default0RunFixtureScript() {
-        return findFixtureScriptFor(SimpleFixtureScript.class);
+        return findFixtureScriptFor(RecreateSimpleObjects.class);
     }
 
     @Override

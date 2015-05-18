@@ -15,7 +15,7 @@
 #  limitations under the License.
 #
 @SimpleObjectsFixture
-Feature: List and Create New Simple Objectts
+Feature: List and Create New Simple Objects
 
   @integration
   Scenario: Existing simple objects can be listed and new ones created
