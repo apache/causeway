@@ -19,10 +19,10 @@
  */
 package domainapp.integtests.specglue;
 
+import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
+
 import cucumber.api.java.Before;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
-
-import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
 
 public class CatalogOfFixturesGlue extends CukeGlueAbstract {
 

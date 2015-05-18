@@ -21,11 +21,12 @@
  */
 package domainapp.dom.app.homepage;
 
+import java.util.List;
+
+import org.apache.isis.applib.annotation.ViewModel;
+
 import domainapp.dom.modules.simple.SimpleObject;
 import domainapp.dom.modules.simple.SimpleObjects;
-
-import java.util.List;
-import org.apache.isis.applib.annotation.ViewModel;
 
 @ViewModel
 public class HomePageViewModel {
