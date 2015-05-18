@@ -5,22 +5,22 @@
 
 
 
-include::_user-guide_reference_prefixes_aaa.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_aaa.adoc[leveloffset=+1]
 
-include::_user-guide_reference_prefixes_manpage_addTo.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_autoComplete.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_choices.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_clear.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_default.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_disable.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_get.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_hide.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_modify.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_removeFrom.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_set.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_validate.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_validateAddTo.adoc[leveloffset=+1]
-include::_user-guide_reference_prefixes_manpage_validateRemoveFrom.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_addTo.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_autoComplete.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_choices.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_clear.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_default.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_disable.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_get.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_hide.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_modify.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_removeFrom.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_set.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_validate.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_validateAddTo.adoc[leveloffset=+1]
+include::_ug_reference_prefixes_manpage_validateRemoveFrom.adoc[leveloffset=+1]
 
 
 

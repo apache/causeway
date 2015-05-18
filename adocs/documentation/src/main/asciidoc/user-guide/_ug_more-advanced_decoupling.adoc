@@ -15,11 +15,11 @@ The <<_assembling, following section>> describes how to re-assemble an applicati
 There is some overlap with OSGi and Java 9's Jigsaw concepts of "module"; in the future we expect to refactor Isis to leverage these module systems.
 ====
 
-include::_user-guide_more-advanced_decoupling_db-schemas.adoc[leveloffset=+1]
+include::_ug_more-advanced_decoupling_db-schemas.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_decoupling_contributions.adoc[leveloffset=+1]
+include::_ug_more-advanced_decoupling_contributions.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_decoupling_event-bus.adoc[leveloffset=+1]
+include::_ug_more-advanced_decoupling_event-bus.adoc[leveloffset=+1]
 
 
 

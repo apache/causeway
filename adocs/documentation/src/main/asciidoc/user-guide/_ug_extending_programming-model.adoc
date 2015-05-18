@@ -4,9 +4,9 @@
 :_imagesdir: images/
 
 
-include::_user-guide_extending_programming-model_custom-validator.adoc[leveloffset=+1]
+include::_ug_extending_programming-model_custom-validator.adoc[leveloffset=+1]
 
-include::_user-guide_extending_programming-model_finetuning.adoc[leveloffset=+1]
+include::_ug_extending_programming-model_finetuning.adoc[leveloffset=+1]
 
-include::_user-guide_extending_programming-model_layout-metadata-reader.adoc[leveloffset=+1]
+include::_ug_extending_programming-model_layout-metadata-reader.adoc[leveloffset=+1]
 

@@ -6,25 +6,25 @@
 IMPORTANT: TODO
 
 
-include::_user-guide_more-advanced_decoupling.adoc[leveloffset=+1]
+include::_ug_more-advanced_decoupling.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_assembling.adoc[leveloffset=+1]
+include::_ug_more-advanced_assembling.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_bulk-actions.adoc[leveloffset=+1]
+include::_ug_more-advanced_bulk-actions.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_view-models.adoc[leveloffset=+1]
+include::_ug_more-advanced_view-models.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_transactions-and-errors.adoc[leveloffset=+1]
+include::_ug_more-advanced_transactions-and-errors.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_i18n.adoc[leveloffset=+1]
+include::_ug_more-advanced_i18n.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_multi-tenancy.adoc[leveloffset=+1]
+include::_ug_more-advanced_multi-tenancy.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_persistence-lifecycle.adoc[leveloffset=+1]
+include::_ug_more-advanced_persistence-lifecycle.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_neo4j.adoc[leveloffset=+1]
+include::_ug_more-advanced_neo4j.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks.adoc[leveloffset=+1]
 
 
 

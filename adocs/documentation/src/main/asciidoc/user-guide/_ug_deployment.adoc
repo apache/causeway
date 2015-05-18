@@ -5,13 +5,13 @@
 
 This chapter provides guidance on some common deployment scenarios.
 
-include::_user-guide_deployment_cmd-line.adoc[leveloffset=+1]
+include::_ug_deployment_cmd-line.adoc[leveloffset=+1]
 
-include::_user-guide_deployment_tomcat.adoc[leveloffset=+1]
+include::_ug_deployment_tomcat.adoc[leveloffset=+1]
 
-include::_user-guide_deployment_gae.adoc[leveloffset=+1]
+include::_ug_deployment_gae.adoc[leveloffset=+1]
 
-include::_user-guide_deployment_jvm-flags.adoc[leveloffset=+1]
+include::_ug_deployment_jvm-flags.adoc[leveloffset=+1]
 
 
 

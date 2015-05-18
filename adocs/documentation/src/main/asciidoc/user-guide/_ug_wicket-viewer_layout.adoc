@@ -8,11 +8,11 @@ In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pat
 
 This section describes how this is done both for domain objects -- statically or dynamically -- and for the application menu bar (containing domain service' actions).
 
-include::_user-guide_wicket-viewer_layout_static-object-layout.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_layout_static-object-layout.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_layout_dynamic-object-layout.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_layout_dynamic-object-layout.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_layout_application-menu-layout.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_layout_application-menu-layout.adoc[leveloffset=+1]
 
 
 

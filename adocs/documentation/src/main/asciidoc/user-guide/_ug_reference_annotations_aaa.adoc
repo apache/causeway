@@ -5,10 +5,10 @@
 
 
 
-include::_user-guide_reference_annotations_aaa_main.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_aaa_other.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_aaa_jee.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_aaa_deprecated.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_aaa_partial.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa_main.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa_other.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa_jee.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa_deprecated.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa_partial.adoc[leveloffset=+1]
 
 

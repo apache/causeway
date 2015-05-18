@@ -21,19 +21,19 @@ You can learn more about extending Isis programming model <<_extending_the_progr
 ====
 
 
-include::_user-guide_how-tos_class-structure_class-definition.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_class-definition.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_properties.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_properties.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_collections.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_collections.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_actions.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_actions.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_action-parameters.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_action-parameters.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_properties-vs-parameters.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_properties-vs-parameters.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_class-structure_ignoring-methods.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_ignoring-methods.adoc[leveloffset=+1]
 
 
 

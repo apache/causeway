@@ -5,13 +5,13 @@
 
 IMPORTANT: TODO
 
-include::_user-guide_how-tos_ui-hints_object-titles-and-icons.adoc[leveloffset=+1]
+include::_ug_how-tos_ui-hints_object-titles-and-icons.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_ui-hints_names-and-descriptions.adoc[leveloffset=+1]
+include::_ug_how-tos_ui-hints_names-and-descriptions.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_ui-hints_layout.adoc[leveloffset=+1]
+include::_ug_how-tos_ui-hints_layout.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_ui-hints_eager-rendering.adoc[leveloffset=+1]
+include::_ug_how-tos_ui-hints_eager-rendering.adoc[leveloffset=+1]
 
-include::_user-guide_how-tos_ui-hints_action-icons-and-css.adoc[leveloffset=+1]
+include::_ug_how-tos_ui-hints_action-icons-and-css.adoc[leveloffset=+1]
 

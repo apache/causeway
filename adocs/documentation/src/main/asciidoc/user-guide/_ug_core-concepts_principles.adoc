@@ -10,8 +10,8 @@ The first of these relate to how we believe your domain application should be wr
 
 The section concludes by contrasting the framework with some other open source frameworks commonly used.
 
-include::_user-guide_core-concepts_principles_your-apps.adoc[leveloffset=+1]
+include::_ug_core-concepts_principles_your-apps.adoc[leveloffset=+1]
 
-include::_user-guide_core-concepts_principles_isis-itself.adoc[leveloffset=+1]
+include::_ug_core-concepts_principles_isis-itself.adoc[leveloffset=+1]
 
-include::_user-guide_core-concepts_principles_apache-isis-vs.adoc[leveloffset=+1]
+include::_ug_core-concepts_principles_apache-isis-vs.adoc[leveloffset=+1]

@@ -6,34 +6,34 @@
 IMPORTANT: TODO
 
 
-include::_user-guide_reference_annotations_aaa.adoc[leveloffset=+1]
+include::_ug_reference_annotations_aaa.adoc[leveloffset=+1]
 
-include::_user-guide_reference_annotations_manpage_action.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_actionlayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_collection.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_collectionlayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_domainobject.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_domainobjectlayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_domainservice.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_domainservicelayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_parameter.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_property.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_propertylayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_viewmodel.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_viewmodellayout.adoc[leveloffset=+1]
-
-
-include::_user-guide_reference_annotations_manpage_facets.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_homepage.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_membergrouplayout.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_memberorder.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_programmatic.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_minlength.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_title.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_action.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_actionlayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_collection.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_collectionlayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_domainobject.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_domainobjectlayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_domainservice.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_domainservicelayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_parameter.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_property.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_propertylayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_viewmodel.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_viewmodellayout.adoc[leveloffset=+1]
 
 
-include::_user-guide_reference_annotations_manpage_requestscoped.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_inject.adoc[leveloffset=+1]
-include::_user-guide_reference_annotations_manpage_digits.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_facets.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_homepage.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_membergrouplayout.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_memberorder.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_programmatic.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_minlength.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_title.adoc[leveloffset=+1]
+
+
+include::_ug_reference_annotations_manpage_requestscoped.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_inject.adoc[leveloffset=+1]
+include::_ug_reference_annotations_manpage_digits.adoc[leveloffset=+1]
 
 

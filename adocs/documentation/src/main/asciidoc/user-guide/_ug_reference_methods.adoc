@@ -5,10 +5,10 @@
 
 
 
-include::_user-guide_reference_methods_aaa.adoc[leveloffset=+1]
+include::_ug_reference_methods_aaa.adoc[leveloffset=+1]
 
 
-include::_user-guide_reference_methods_manpage_cssClass.adoc[leveloffset=+1]
-include::_user-guide_reference_methods_manpage_iconName.adoc[leveloffset=+1]
-include::_user-guide_reference_methods_manpage_getId.adoc[leveloffset=+1]
-include::_user-guide_reference_methods_manpage_title.adoc[leveloffset=+1]
+include::_ug_reference_methods_manpage_cssClass.adoc[leveloffset=+1]
+include::_ug_reference_methods_manpage_iconName.adoc[leveloffset=+1]
+include::_ug_reference_methods_manpage_getId.adoc[leveloffset=+1]
+include::_ug_reference_methods_manpage_title.adoc[leveloffset=+1]

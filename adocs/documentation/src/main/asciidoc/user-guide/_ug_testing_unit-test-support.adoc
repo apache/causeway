@@ -6,7 +6,7 @@
 Isis Core provides a number of unit test helpers for you to use (if you wish) to unit test your domain objects.
 
 
-include::_user-guide_testing_unit-test-support_contract-tests.adoc[leveloffset=+1]
-include::_user-guide_testing_unit-test-support_jmock-extensions.adoc[leveloffset=+1]
-include::_user-guide_testing_unit-test-support_maven-configuration.adoc[leveloffset=+1]
+include::_ug_testing_unit-test-support_contract-tests.adoc[leveloffset=+1]
+include::_ug_testing_unit-test-support_jmock-extensions.adoc[leveloffset=+1]
+include::_ug_testing_unit-test-support_maven-configuration.adoc[leveloffset=+1]
 

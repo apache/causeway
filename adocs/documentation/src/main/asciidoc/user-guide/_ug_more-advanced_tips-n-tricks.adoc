@@ -6,15 +6,15 @@
 IMPORTANT: TODO
 
 
-include::_user-guide_more-advanced_tips-n-tricks_are-you-sure.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_are-you-sure.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_simulating-collections-of-values.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_simulating-collections-of-values.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_render-all-properties-in-tables.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_render-all-properties-in-tables.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_per-user-themes.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_per-user-themes.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_suppress-actions-from-the-ui.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_suppress-actions-from-the-ui.adoc[leveloffset=+1]
 
-include::_user-guide_more-advanced_tips-n-tricks_enhance-only.adoc[leveloffset=+1]
+include::_ug_more-advanced_tips-n-tricks_enhance-only.adoc[leveloffset=+1]
 

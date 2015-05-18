@@ -8,15 +8,15 @@ This chapter describes end-user features, configuration and customization of the
 Note that extending the Wicket viewer is described in the <<Extending>> chapter.
 
 
-include::_user-guide_wicket-viewer_features.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_features.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_configuration_properties.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_configuration_properties.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_request-parameters.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_request-parameters.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_layout.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_layout.adoc[leveloffset=+1]
 
-include::_user-guide_wicket-viewer_customisation.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_customisation.adoc[leveloffset=+1]
 
 
 
@@ -25,5 +25,5 @@ include::_user-guide_wicket-viewer_customisation.adoc[leveloffset=+1]
 APIs to extend the Wicket viewer are discussed in the <<_extending_the_wicket_viewer, Extending>> chapter.
 
 
-include::_user-guide_wicket-viewer_isis-addons.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_isis-addons.adoc[leveloffset=+1]
 

@@ -12,6 +12,6 @@ The http://isisaddons.org[Isis Addons], while maintained by Isis committers, are
 ====
 
 
-include::_user-guide_reference_addons_settings-module.adoc[leveloffset=+1]
+include::_ug_reference_addons_settings-module.adoc[leveloffset=+1]
 
 

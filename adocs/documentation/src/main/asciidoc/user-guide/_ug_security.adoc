@@ -32,21 +32,21 @@ Isis does not itself provide any in-built implementations of these APIs, but the
 
 
 
-include::_user-guide_security_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
+include::_ug_security_configuring-isis-to-use-shiro.adoc[leveloffset=+1]
 
-include::_user-guide_security_shiro-ini-realm.adoc[leveloffset=+1]
+include::_ug_security_shiro-ini-realm.adoc[leveloffset=+1]
 
-include::_user-guide_security_shiro-isis-ldap-realm.adoc[leveloffset=+1]
+include::_ug_security_shiro-isis-ldap-realm.adoc[leveloffset=+1]
 
-include::_user-guide_security_shiro-isisaddons-security-module-realm.adoc[leveloffset=+1]
+include::_ug_security_shiro-isisaddons-security-module-realm.adoc[leveloffset=+1]
 
-include::_user-guide_security_shiro-jdbc-realm.adoc[leveloffset=+1]
+include::_ug_security_shiro-jdbc-realm.adoc[leveloffset=+1]
 
-include::_user-guide_security_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
+include::_ug_security_shiro-isis-enhanced-wildcard-permission.adoc[leveloffset=+1]
 
-include::_user-guide_security_configuring-isis-to-use-bypass.adoc[leveloffset=+1]
+include::_ug_security_configuring-isis-to-use-bypass.adoc[leveloffset=+1]
 
-include::_user-guide_security_api-for-applications.adoc[leveloffset=+1]
+include::_ug_security_api-for-applications.adoc[leveloffset=+1]
 
-include::_user-guide_security_usage-by-isis-viewers.adoc[leveloffset=+1]
+include::_ug_security_usage-by-isis-viewers.adoc[leveloffset=+1]
 

@@ -38,6 +38,6 @@ And if you can't write a fixture script for the story, it probably means that th
 The following  sections explain the API and how to go about using the API.
 
 
-include::_user-guide_testing_fixture-scripts_api-and-usage.adoc[leveloffset=+1]
-include::_user-guide_testing_fixture-scripts_sudo-service.adoc[leveloffset=+1]
+include::_ug_testing_fixture-scripts_api-and-usage.adoc[leveloffset=+1]
+include::_ug_testing_fixture-scripts_sudo-service.adoc[leveloffset=+1]
 

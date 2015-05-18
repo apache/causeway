@@ -8,9 +8,9 @@
 If you are going to use Apache Isis for developing complex business-critical applications, then being able to write automated tests for those applications becomes massively important.  As such Apache Isis treats the topic of testing very seriously, and (though we say it ourselves) has support that goes way above what is provided by other application frameworks.
 
 
-include::_user-guide_testing_overview.adoc[leveloffset=+1]
-include::_user-guide_testing_unit-test-support.adoc[leveloffset=+1]
-include::_user-guide_testing_integ-test-support.adoc[leveloffset=+1]
-include::_user-guide_testing_bdd-spec-support.adoc[leveloffset=+1]
-include::_user-guide_testing_fixture-scripts.adoc[leveloffset=+1]
+include::_ug_testing_overview.adoc[leveloffset=+1]
+include::_ug_testing_unit-test-support.adoc[leveloffset=+1]
+include::_ug_testing_integ-test-support.adoc[leveloffset=+1]
+include::_ug_testing_bdd-spec-support.adoc[leveloffset=+1]
+include::_ug_testing_fixture-scripts.adoc[leveloffset=+1]
 
