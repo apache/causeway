@@ -3,10 +3,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 include::_ug_appendices_dev-env.adoc[leveloffset=+1]
-
 include::_ug_appendices_release-notes.adoc[leveloffset=+1]
-
 include::_ug_appendices_migration-notes.adoc[leveloffset=+1]

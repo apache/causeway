@@ -176,9 +176,11 @@
     </style>
 
     <style>
-        body div#toc ul {
-            margin-left: -20px;
+
+        @media only screen and (min-width: 768px) {
+          #toc.toc2 ul ul { margin-left: -20px; }
         }
+
 
         body div#toc .tocify-subheader ul {
             margin-bottom: 0px;

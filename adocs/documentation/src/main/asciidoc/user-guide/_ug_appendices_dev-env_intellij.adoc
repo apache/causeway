@@ -5,12 +5,19 @@
 :toc: right
 
 
+This appendix describes how to install and setup IntelliJ, then how to import an application into IntelliJ and run it.
+
+
+[NOTE]
+====
+This document relates to IntelliJ Community Edition 14.1.1, with screenshots taken for Windows.
+====
 
 == Installing and Setting up
 
-=== Download and Install
+This section covers installation and setup.
 
-WARNING: This doc used IntelliJ Community Edition 14.1.1, with screenshots taken for Windows.  If you're a MacOS user, I'm sure you can adapt :-)
+=== Download and Install
 
 https://www.jetbrains.com/idea/download/[Download] latest version of IntelliJ Community Edition, and install:
 

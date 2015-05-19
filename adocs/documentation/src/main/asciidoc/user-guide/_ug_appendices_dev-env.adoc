@@ -3,12 +3,9 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+This section describes how to build Isis applications either from the command line (as per your link:http://en.wikipedia.org/wiki/Continuous_integration[continuous integration] server or within an IDE.
 
 include::_ug_appendices_dev-env_cmd-line.adoc[leveloffset=+1]
-
 include::_ug_appendices_dev-env_intellij.adoc[leveloffset=+1]
-
 include::_ug_appendices_dev-env_eclipse.adoc[leveloffset=+1]
 
-include::_ug_appendices_dev-env_isis-maven-plugin.adoc[leveloffset=+1]
