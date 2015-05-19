@@ -1,0 +1,623 @@
+= anchor:reference-annotations_manpage-[]`@Action`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `Action` annotation groups together all domain-specific metadata for an invokable action on a domain object or domain service.  The table below summarizes the annotation's attributes.
+
+
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_command[`command()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the action invocation should be reified into a `org.apache.isis.applib.services.command.Command` object.
+
+|`commandExecuteIn()`
+|`FOREGROUND`,`BACKGROUND` +
+(`FOREGROUND`)
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of `CommandService` has been configured) such that a background scheduler can execute the command asynchronously
+
+|`commandPersistence()`
+|`PERSISTED`,`NOT_PERSISTED`,`IF_HINTED` +
+(`PERSISTED`)
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of `CommandService` has been configured).
+
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_domainevent[`domainEvent()`]
+|subtype of `ActionDomainEvent` +
+(`ActionDomainEvent.Default`)
+|the event type to be posted to the <<__code_eventbusservice_code, `EventBusService`>> to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execution).
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_hidden[`hidden()`]
+|`true`,`false` +
+(`false`)
+|indicates where (in the UI) the action is not visible to the user.
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_invokeon[`invokeOn()`]
+|`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
+(`OBJECT_ONLY`)
+|whether an action can be invoked on a single object and/or on many objects in a collection.
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_publishing[`publishing()`]
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether changes to the object should be published to the registered link:../publishing-service.html[publishing service].
+
+|`publishingPayloadFactory()`
+|subtype of `PublishingPayloadFactoryForAction` (none)
+|specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event
+
+
+|xref:__a_id_reference_annotations_manpage_action_a_restrictto[`restrictTo()`]
+|`NO_RESTRICTIONS`,`PROTOTYPING` +
+(`NO_RESTRICTIONS`)
+|whether the action is only available in prototyping mode, or whether it is available also in production mode.
+
+|xref:__a_id_reference_annotations_manpage_action_a_semantics[`semantics()`]
+|`QUERY`, `IDEMPOTENT`, `NON_IDEMPOTENT` +
+(`NON_IDEMPOTENT`)
+|the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change)
+
+|xref:__a_id_reference_annotations_manpage_action_a_typeof[`typeOf()`]
+|(none)
+|if the action returns a collection, hints as to the run-time type of the objects within that collection (as a fallback)
+
+|===
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]Command
+
+Using `@Action(command=...)` allows an action invocation to be made into a concrete object such that it can be inspected and persisted, for various purposes. These include enhanced profiling/auditing, as well as being able to defer the execution of the action and have it be invoked in the background.
+
+The annotation works (and influences the behaviour of) the `CommandContext`, `CommandService`, `BackgroundService` and `BackgroundCommandService` domain services (documented link:../../../reference/services/command-context.html[here] and link:../../../reference/services/background-service.html[here]).
+
+By default, actions are invoked in directly in the thread of the invocation.
+
+Each action invocation is reified by the `CommandContext` service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
+
+If an appropriate `CommandService` service is configured (for example the link:../../../components/objectstores/jdo/services/command-service-jdo.html[CommandServiceJdo] JDO implementation), then the `Command` itself is persisted.
+
+If the `BackgroundService` is configured, then commands can be invoked by means of a separate background process. If an appropriate `BackgroundCommandService` service is configured (for example, the link:../../../components/objectstores/jdo/services/background-command-service-jdo.html[BackgroundCommandServiceJdo] JDO implementation), then the background command is persisted.
+
+=== `command()`
+
+The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the `CommandContext` service).
+
+The default is `AS_CONFIGURED`, meaning that the configuration property:
+
+[source,ini]
+----
+isis.services.command.actions
+----
+
+IMPORTANT: TODO - document this property in the runtime configuration chapter
+
+is used to determine the whether the action is reified:
+
+* `all` - all actions are reified
+* `ignoreSafe` (or `ignoreQueryOnly`) - actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+* `none` - no actions are reifired.
+
+This default can be overridden on an action-by-action basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the action is NOT reified irrespective of the configured value.
+
+The `@Action(command=...)` annotation can be annotated on action methods, to influence this behaviour:
+
+[source,java]
+----
+public class Order {
+    @Action(command=CommandReification.ENABLED)
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+corresponds to the behaviour described above; the `Command` object is persisted (assuming an appropriate `CommandService` is defined, and executed immediately in the foreground).
+
+
+
+=== `commandPersistence()`
+
+If the action has been reified, then the `commandPersistence()` attribute determines whether that `Command` object
+should then also be persisted (the default), or not persisted, or only if hinted.
+
+To explain this last alternative:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandPersistence=CommandPersistence.IF_HINTED)
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will suppress the persistence of the `Command` object _unless_ a child background `Command` has been created in the body of the action by way of the `BackgroundService`.
+
+Next:
+
+[source,java]
+----
+public class Order {
+    @Command(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,
+        commandPersistence=CommandPersistence.NOT_PERSISTED)
+    public Invoice generateInvoice(...) { ... }
+
+}
+----
+
+will prevent the parent `Command` object from being persisted, _even if_ a child background `Command` is created.
+
+
+=== `commandExecuteIn()`
+
+For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the
+foreground (the default) or executed in the background.
+
+Background execution means that the command is not executed immediately, but is available for a configured
+link:../services/background-service.html[background service] to execute, eg by way of an in-memory scheduler such as Quartz.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.BACKGROUND)
+    public Invoice generateInvoice(...) { ... }
+}
+----
+
+will result in the `Command` being persisted but its execution deferred to a background execution mechanism. The
+returned object from this action is the persisted `Command` itself.
+
+
+[NOTE]
+====
+Replaces the deprecated `@Command` annotation.
+====
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]domainEvent()
+
+Every interaction with a domain object action causes multiple events to be fired, in the following phases:
+
+* Hide phase: to check that the action is visible (has not been hidden)
+* Disable phase: to check that the action is usable (has not been disabled)
+* Validate phase: to check that the action's arguments are valid
+* Pre-execute phase: before the invocation of the action
+* Post-execute: after the invocation of the action
+
+
+
+Subscribers subscribe through the link:../services/event-bus-service.html[Event Bus Service]
+using Guava annotations and can influence each of these phases.
+
+By default the event raised is `ActionDomainEvent.Default`. For example:
+
+[source,java]
+----
+public class ToDoItem {
+    ...
+    @Action()
+    public ToDoItem completed() { ... }
+}
+----
+
+
+Optionally a subclass can be declared:
+
+[source,java]
+----
+public class ToDoItem {
+
+    public static class CompletedEvent extends AbstractActionDomainEvent {
+        private static final long serialVersionUID = 1L;
+        public CompletedEvent(
+                final ToDoItem source,
+                final Identifier identifier,
+                final Object... arguments) {
+            super("completed", source, identifier, arguments);
+        }
+    }
+
+    @Action(domainEvent=CompletedEvent.class)
+    public ToDoItem completed() { ... }
+
+}
+----
+
+
+=== Subscribers
+
+Subscribers (which must be domain services) subscribe using the Guava API.
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source,java]
+----
+@DomainService
+public class SomeSubscriber {
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(ActionInteractionEvent ev) {
+        ...
+    }
+}
+----
+
+or can be fine-grained by subscribing to specific event subtypes:
+
+[source,java]
+----
+@DomainService
+public class SomeSubscriber {
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(ToDoItem.CompletedEvent ev) {
+        ...
+    }
+}
+----
+
+The subscriber's method is called (up to) 5 times:
+
+* whether to veto visibility (hide)
+* whether to veto usability (disable)
+* whether to veto execution (validate)
+* steps to perform prior to the action being invoked.
+* steps to perform after the action has been invoked.
+
+The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the general form is:
+
+[source,java]
+----
+@Programmatic
+@com.google.common.eventbus.Subscribe
+public void on(ActionInteractionEvent ev) {
+    switch(ev.getPhase()) {
+        case HIDE:
+            ...
+            break;
+        case DISABLE:
+            ...
+            break;
+        case VALIDATE:
+            ...
+            break;
+        case EXECUTING:
+            ...
+            break;
+        case EXECUTED:
+            ...
+            break;
+    }
+}
+----
+
+[IMPORTANT]
+====
+TODO: Axon framework annotations also supported
+====
+
+
+Vetoing is performed by calling the appropriate method on the event:
+
+* To hide:
+
+`ev.hide()`
+
+or
+
+`ev.veto(&quot;&quot;)`
+
+* To disable:
+
+`ev.disable(&quot;...&quot;);`
+
+or
+
+`ev.veto(&quot;...&quot;);`
+
+* To invalidate:
+
+`ev.invalidate(&quot;...&quot;);`
+
+or
+
+`ev.veto(&quot;...&quot;);`
+
+It is also possible to abort the transaction during the executing or executed
+phases by throwing an exception. If the exception is a subtype of `RecoverableException`
+then the exception will be rendered as a user-friendly warning (eg Growl/toast)
+rather than an error.
+
+=== Raising events programmatically.
+
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
+wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
+
+
+[NOTE]
+====
+Replaces the deprecated `@ActionInteraction` annotation.
+====
+
+
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]`hidden()`
+
+Actions can be hidden at the domain-level, indicating that they are not visible to the end-user. For example:
+
+[source,java]
+----
+public class Customer {
+
+    @Action(hidden=EVERYWHERE)
+    public void updateStatus() { ... }
+    ...
+}
+----
+
+The only value that currently makes sense is `EVERYWHERE` (or its synonym `ANYWHERE`).
+
+
+
+=== See also
+
+It is also possible to use `@ActionLayout` or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts]
+such that the action can be hidden at the view layer. Both options are provided with a view that in the future the
+view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics cannot be overridden
+or modified by the user.
+
+For `DomainService` actions, the action's visibility is dependent upon its `DomainService#nature()` and for contributed
+actions on how it is `ActionLayout#contributed()`.
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]`invokeOn()`
+
+Indicates whether the an action can be invoked on a single object (the default) and/or on many objects in a collection.
+
+For example:
+
+[source]
+----
+public class ToDoItem {
+    ...
+    @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+    public void markAsCompleted() {
+        setCompleted(true);
+    }
+}
+----
+
+
+Actions to be invoked on collection (currently) have a number of constraints:
+
+* It must take no arguments
+* It cannot be hidden (any annotations or supporting methods to that effect will be ignored
+* It cannot be disabled (any annotations or supporting methods to that effect will be ignored).
+
+
+The example given above is probably ok, because `setCompleted()` is most likely idempotent. However, if the action also called some other method, then we should add a guard.
+
+For example, rather than:
+
+[source,java]
+----
+    @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+    public void markAsCompleted() {
+        setCompleted(true);
+        todoTotalizer.incrementNumberCompleted();
+    }
+----
+
+the action should instead be written:
+
+[source,java]
+----
+    @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+    public void markAsCompleted() {
+        if(isCompleted()) {
+            return;
+        }
+        setCompleted(true);
+        todoTotalizer.incrementNumberCompleted();
+    }
+----
+
+
+Note also that this attribute has no meaning if annotated on an action of a domain service.
+
+[NOTE]
+====
+Replaces the deprecated `@Bulk` annotation.
+====
+
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]Publishing
+
+Publishing (to the registered implementation of a `PublishingService` is managed by the `publishing()` and `publishingPayloadFactory()` attributes.
+
+
+=== `publishing()`
+
+Indicates whether the action invocation should be published to the link:../publishing-service.html[publishing service].
+
+The default is `AS_CONFIGURED`, meaning that the configuration property:
+
+[source,ini]
+----
+isis.services.publish.actions
+----
+
+[IMPORTANT]
+====
+TODO: document this setting in runtime configuration
+====
+
+
+is used to determine the whether the action is published:
+
+* `all` - all actions are published
+* `ignoreSafe` (or `ignoreQueryOnly`) - actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+* `none` - no actions are published
+
+This default can be overridden on an action-by-action basis; if `command()` is set to `ENABLED` then the action is reified irrespective of the configured value; if set to `DISABLED` then the action is NOT reified irrespective of the configured value.
+
+=== `publishingPayloadFactory()`
+
+The `publishingPayloadFactory()` specifies the class to use to create the (payload of the) event to be published by the publishing factory.
+Rather than simply broadcast that the action was invoked, the payload factory allows a "fatter" payload to be isntantiated
+that can eagerly push commonly-required information to all subscribers. For at least some subscribers this should avoid
+the necessity to query back for additional information.
+
+
+[NOTE]
+====
+Replaces the deprecated `@PublishedAction` annotation.
+====
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]`restrictTo()`
+
+Whether the action is restricted to prototyping.
+
+By default there are no restrictions, with the action being available in all environments.
+
+
+The `@Prototype` annotation marks an action method as available in
+prototype mode only, and therefore not intended for use in the
+production system.
+
+For example:
+
+[source]
+----
+public class Customer {
+    public Order placeNewOrder() { ... }
+    @Action(restrictTo=RestrictTo.PROTOTYPING)
+    public List<Order> listRecentOrders() { ... }
+    ...
+}
+----
+
+
+
+[NOTE]
+====
+Replaces the deprecated `@Exploration` and `@Prototype` annotations.
+====
+
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]`semantics()`
+
+This annotation, which applies only to actions, describes whether the
+invocation is safe (as no side-effects), is idempotent (may have
+side-effects but always has the same post-conditions), or is neither safe
+nor idempotent. If the annotation is missing then the framework assumes
+non-idempotent.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @Action(semantics=SemanticsOf.SAFE)
+    public CreditRating checkCredit() { ... }
+
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public void changeOfAddress(Address address) { ... }
+
+    @Action(semantics=SemanticsOf.NON_IDEMPOTENT)
+    public Order placeNewOrder() { ... }
+    ...
+}
+----
+
+The annotation was introduced for the restfulobjects viewer in order
+that action invocations could be made available using either HTTP GET,
+PUT or POST (respectively). It is now also used in core runtime's
+in-built concurrency checking; the invocation of a safe action does not
+perform a concurrency check, whereas non-safe actions do perform a
+concurrency check.
+
+
+[NOTE]
+====
+This attribute replaces the deprecated `@QueryOnly` and `Idempotent` annotations and also the `@ActionSemantics` annotation.
+====
+
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-Action[]`typeOf()`
+
+Specifies the type-of the elements returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
+
+
+For example:
+
+[source]
+----
+public void AccountService {
+    @Action(typeOf=Customer.class)
+    public List errantAccounts() {
+        return CustomerDatabase.allNewCustomers();
+    }
+    ...
+}
+----
+
+[NOTE]
+====
+Replaces the deprecated `@TypeOf` annotation.
+====
+

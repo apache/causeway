@@ -5,13 +5,17 @@
 :numbered:
 
 
+
 //include::_ug_core-concepts.adoc[leveloffset=+1]
 //include::_ug_isis-in-pictures.adoc[leveloffset=+1]
 //include::_ug_getting-started.adoc[leveloffset=+1]
-include::_ug_tutorials.adoc[leveloffset=+1]
+//include::_ug_tutorials.adoc[leveloffset=+1]
 //include::_ug_how-tos.adoc[leveloffset=+1]
 //include::_ug_more-advanced.adoc[leveloffset=+1]
-//include::_ug_reference.adoc[leveloffset=+1]
+include::_ug_reference-annotations.adoc[leveloffset=+1]
+include::_ug_reference-methods.adoc[leveloffset=+1]
+include::_ug_reference-services.adoc[leveloffset=+1]
+include::_ug_reference-classes.adoc[leveloffset=+1]
 //include::_ug_wicket-viewer.adoc[leveloffset=+1]
 //include::_ug_restfulobjects-viewer.adoc[leveloffset=+1]
 //include::_ug_security.adoc[leveloffset=+1]
@@ -23,4 +27,4 @@ include::_ug_tutorials.adoc[leveloffset=+1]
 //include::_ug_isis-addons-modules.adoc[leveloffset=+1]
 //include::_ug_extending.adoc[leveloffset=+1]
 //include::_ug_troubleshooting.adoc[leveloffset=+1]
-include::_ug_appendices.adoc[leveloffset=+1]
+//include::_ug_appendices.adoc[leveloffset=+1]

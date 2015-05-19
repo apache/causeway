@@ -1,0 +1,553 @@
+= anchor:reference-annotations_manpage-[]`@ParameterLayout`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+Title: @ParameterLayout (1.8.0)
+
+The `@ParameterLayout` annotation applies to action parameters, collecting together all UI hints within a single
+annotation.
+
+* `cssClass` - the css class that a parameter should have, to allow more targetted styling in `application.css`
+* `describedAs` - description of this parameter, eg to be rendered in a tooltip.
+* `labelPosition` - in forms, the positioning of the label (LEFT, TOP or NONE) relative to the parameter value. For boolean parameters it is also possible to specify RIGHT. Defaults to LEFT unless `multiLine` also specified (see below)
+* `named` -the name of this parameter. For Java 7 this is generally required. For Java 8, the name can be inferred from the code so this attribute allows the name to be overridden.
+* `namedEscaped` - whether to HTML escape the name of this parameter. Defaults to true.
+* `multiLine` - for string parameters, render as a text area over multiple lines. If set &gt;1, then `labelPosition` defaults to TOP unless otherwise specified.
+* `renderedAsDayBefore` - for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
+* `typicalLength` -the typical entry length of a field, use to determine the optimum width for display
+
+For example:
+
+[source]
+----
+public class ToDoItem {
+
+    public ToDoItem updateDescription(
+                            @ParameterLayout(
+                                cssClass="x-key",
+                                describedAs="What needs to be done",
+                                labelPosition=LabelPosition.LEFT,
+                                named="Description of this <i>item</i>",
+                                namedEscaped=false,
+                                typicalLength=80)
+                            final String description) {
+        setDescription(description);
+        return this;
+    }
+
+    public ToDoItem updateNotes(
+                        @ParameterLayout(
+                            describedAs="Additional notes",
+                            labelPosition=LabelPosition.TOP,
+                            named="Notes",
+                            multiLine=8)
+                        final String notes) {
+        setNotes(notes);
+        return this;
+    }
+
+    ...
+}
+----
+
+== Alternatives (`.layout.json`)
+
+Unlike link:./PropertyLayout.html[properties], it (currently) isn't possible to specify layout hints for action parameters using the `.layout.json` file.
+
+== Specifying a default setting
+
+If you want a consistent look-n-feel throughout the app, eg all action parameter labels to the top, then it'd be rather frustrating to have to annotate every property.
+
+Instead, a default can be specified in `isis.properties`:
+
+[source]
+----
+isis.viewers.parameterLayout.labelPosition=TOP
+----
+
+or
+
+[source]
+----
+isis.viewers.parameterLayout.labelPosition=LEFT
+----
+
+If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+
+== See also
+
+Similar layout annotations exist for other elements of the metamodel:
+
+* link:./PropertyLayout.html[@PropertyLayout] for properties
+* link:./CollectionLayout.html[@CollectionLayout] for collections
+* link:./ActionLayout.html[@ActionLayout] for actions
+* link:./DomainObjectLayout.html[@DomainObjectLayout]
+* link:./DomainServiceLayout.html[@DomainServiceLayout]
+* link:./ViewModelLayout.html[@ViewModelLayout]
+
+Corresponding domain semantics:
+
+* link:./Parameter.html[@Parameter]
+
+
+
+
+== `cssClass()`
+
+Title: @CssClass
+
+____
+
+Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClass()], link:./PropertyLayout.html[@PropertyLayout#cssClass()], link:./CollectionLayout.html[@CollectionLayout#cssClass()], link:./ActionLayout.html[@ActionLayout#cssClass()] and link:./ParameterLayout.html[@ParameterLayout#cssClass()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+The `CssClass` annotation applies to object and also to any object member
+(property, collection or action). It is used by the Wicket viewer as a UI hint
+to render specified CSS classes around the representation of the element.
+
+Application-specific CSS can then be used to target and adjust the UI representation
+of that particular element.
+
+For example:
+
+[source]
+----
+@CssClass("x-main")
+public class ToDoItem { ... }
+----
+
+or
+
+[source]
+----
+public class ToDoItem {
+
+    @CssClass("x-key")
+    public LocalDate getDueBy() { ... }
+
+}
+----
+
+== Alternatives (`.layout.json`)
+
+As an alternative to using the `@CssClass` annotation, the `.layout.json`
+link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
+can be specified, eg:
+
+[source]
+----
+{
+    "span": 6,
+    "memberGroups": {
+        "Priority": {
+            "members": {
+                ...
+                "dueBy": {
+                    "cssClass": { "value": "x-key" }
+                }
+                ....
+            }
+        },
+        ...
+    }
+}
+----
+
+Note that this (currently) only supports class members, not classes
+
+== See also (1.8.0)
+
+The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint
+to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
+to be rendered on action butotns or as the icon for classes.
+
+
+
+
+== `describedAs()`
+
+Title: @DescribedAs
+
+____
+
+Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#describedAs()], link:./PropertyLayout.html[@PropertyLayout#describedAs()], link:./CollectionLayout.html[@CollectionLayout#describedAs()], link:./ActionLayout.html[@ActionLayout#describedAs()] and link:./ParameterLayout.html[@ParameterLayout#describedAs()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+The `@DescribedAs` annotation is used to provide a short description of
+something that features on the user interface. How this description is
+used will depend upon the viewing mechanism - but it may be thought of
+as being like a 'tool tip'.
+
+Descriptions may be provided for objects, members (properties,
+collections and actions), and for individual parameters within an action
+method. `@DescribedAs` therefore works in a very similar manner to
+`@Named` <!--(see ?)-->.
+
+=== Providing a description for an object
+
+To provide a description for an object, use the `@DescribedAs`
+annotation immediately before the declaration of that object class.
+
+For example:
+
+[source]
+----
+@DescribedAs("A customer who may have originally become known to us via " +
+             "the marketing system or who may have contacted us directly.")
+public class ProspectiveSale {
+   ...
+}
+----
+
+=== Providing a description for an object member
+
+Any member (property, collection or action) may provide a description.
+To specify this description, use the `@DescribedAs` annotation
+immediately before the declaration of that member.
+
+For example:
+
+[source]
+----
+public class Customer {
+    @DescribedAs("The name that the customer has indicated that they wish to be " +
+                 "addressed as (e.g. Johnny rather than Jonathan)")
+    public String getFirstName() { ... }
+}
+----
+
+=== Providing a description for an action parameter
+
+To provide a description for an individual action parameter, use the
+`@DescribedAs` annotation in-line i.e. immediately before the parameter
+declaration.
+
+For example:
+
+[source]
+----
+public class Customer {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity")
+                      @DescribedAs("The quantity of the product being ordered")
+                      int quantity) {
+        Order order = createTransientInstance(Order.class);
+        order.modifyCustomer(this);
+        order.modifyProduct(product);
+        order.setQuantity(quantity);
+        return order;
+    }
+    ...
+}
+----
+
+
+
+
+
+== `multiLine()`
+
+Title: @MultiLine
+
+____
+
+Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#multiLine()] and link:./ParameterLayout.html[@ParameterLayout#multiLine()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+The `@MultiLine` annotation provides information about the carriage
+returns in a `String` property or action parameter, or for a
+string-based value type. It also implies a hint to the viewer that the
+widget to be used should be over multiple lines (eg a text area rather
+than a text field), with appropriate wrapping and/or scrollbars.
+
+More formally, the annotation indicates that:
+
+*
+
+the `String` property or parameter may contain carriage returns, and
+
+*
+
+(optionally) the typical number of such carriage returns (meaning
+the number of rows in the text area), and
+
+*
+
+(optionally) that the text should be wrapped (the default is that
+text is not wrapped).
+
+The syntax is:
+
+`@MultiLine([numberOfLines=&lt;typicalNumberOfCRs&gt;]
+        [,preventWrapping=&lt;false|true&gt;])`
+
+For example:
+
+[source]
+----
+public class BugReport {
+    @MultiLine(numberOfLines=10)
+    public String getStepsToReproduce() { ... }
+    public void setStepsToReproduce(String stepsToReproduce) { ... }
+    ...
+}
+----
+
+Here the `stepsToReproduce` may be displayed in a text area of 10 rows,
+with no wrapping. A horizontal scrollbar may appear if the number of
+characters on any given row exceeds the width.
+
+Another example:
+
+[source]
+----
+public class Email {
+    @MultiLine(numberOfLines=20, preventWrapping=false)
+    public String getBody() { ... }
+    public void setBody(String body) { ... }
+    ...
+}
+----
+
+Here the body should be displayed in a text area of 20 rows, with
+wrapping.
+
+If the annotation is combined with the `@TypicalLength`, then the
+expected width of the text area in the user interface will be determined
+by the value of the typical length divided by the number of specified
+lines. For example:
+
+[source]
+----
+public class Email {
+    @MultiLine(numberOfLines=20, preventWrapping=false)
+    @TypicalLength(800)
+    public String getBody() { ... }
+    public void setBody(String body) { ... }
+    ...
+}
+----
+
+Here the body will (likely be) displayed in a text area of 20 rows, with
+40 columns.
+
+
+
+
+
+
+
+
+
+
+
+
+
+== `named()`
+
+Title: @Named
+
+____
+
+Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#named()], link:./PropertyLayout.html[@PropertyLayout#named()], link:./CollectionLayout.html[@CollectionLayout#named()], link:./ActionLayout.html[@ActionLayout#named()] and link:./ParameterLayout.html[@ParameterLayout#named()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+The `@Named` annotation is used when you want to specify the way
+something is named on the user interface i.e. when you do not want to
+use the name generated automatically by the system. It can be applied to
+objects, members (properties, collections, and actions) and to
+parameters within an action method.
+
+____
+
+*Warning*
+
+Generally speaking it is better to rename the property, collection or
+action. The only common case where `@Named` is common is to rename
+parameters for built-in value types. Even here though a custom value
+type can be defined using `@Value` so that the value type is used as the
+parameter name. `@Named` may also be used if the name needs punctuation
+or other symbols in the name presented to the user.
+
+____
+
+=== Specifying the name of an object
+
+By default the name of an object is derived, reflectively from the class
+name. To specify a different name for an object, use the `@Named`
+annotation in front of the class declaration.
+
+For example:
+
+[source]
+----
+@Named("Customer")
+public class CustomerImpl implements Customer{
+   ...
+}
+----
+
+See also the `@Plural` annotation <!--, ?-->.
+
+=== Specifying the name of a class member
+
+By default, the name of a class member (a property, collection or
+action) presented to the user is derived, reflectively, from the name of
+the member defined in the program code. To specify a different name use
+the `@Named
+`annotation immediately before the member declaration.
+
+For example:
+
+[source]
+----
+public class Customer {
+
+    public String getFirstName() { ... }
+
+    public String getSurname() { ... }
+
+    public CreditRating getCreditRating() { ... }
+}
+----
+
+Note that the framework provides a separate and more powerful mechanism
+for internationalisation.
+
+=== Specifying the name for an action parameter
+
+The most common usage of `@Named` is be to specify names for the
+parameters of an action. This is because the parameter name declared in
+the code for the action method cannot be picked up reflectively (by
+default, the user interface will use the type of the parameter as the
+name; for a `String` or a `Boolean`, this is almost certainly not what is
+required).
+
+To specify the name of a parameter, the `@Named` annotation is applied
+'in-line' (i.e. preceding the individual parameter declaration.
+
+For example:
+
+[source]
+----
+public class Customer {
+    public Order placeOrder(
+            Product product
+           ,@Named("Quantity")
+            int quantity) {
+        Order order = newTransientInstance(Order.class);
+        order.modifyCustomer(this);
+        order.modifyProduct(product);
+        order.setQuantity(quantity);
+        return order;
+    }
+    ...
+}
+----
+
+An alternative is to use a value type (though this introduces additional mapping complexity for both viewers and objectstore) <!--, as described in ?-->.
+
+
+
+
+
+== `renderedAsDayBefore()`
+
+Title: @RenderedAsDayBefore
+
+____
+
+Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#renderedAsDayBefore()] and link:./ParameterLayout.html[@ParameterLayout#renderedAsDayBefore()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+A rendering hint, instructing the viewer that the date should as one day prior to the actually stored date.
+
+This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
+
+For example:
+
+[source]
+----
+public LocalDate getStartDate() { ... }
+
+@RenderedAsDayBefore
+public LocalDate getEndDate() { ... }
+----
+
+Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.
+
+What is stored in the domain object, itself, however, the value stored is 1-jun-2013.
+
+
+
+
+
+
+== `typicalLength()`
+
+Title: @TypicalLength
+
+____
+
+Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#typicalLength()] and link:./ParameterLayout.html[@ParameterLayout#typicalLength()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+
+____
+
+The `@TypicalLength` annotation indicates the typical length of a
+`String` property or `String` parameter in an action. It can also be
+specified for string-based value types.
+
+The information is generally used by the viewing mechanism to determine
+the space that should be given to that property or parameter in the
+appropriate view. If the typical length is the same as the `@MaxLength`
+<!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If
+the value specified is zero or negative then it will be ignored.
+
+For example, for a property:
+
+[source]
+----
+public class Customer {
+    @MaxLength(30)
+    @TypicalLength(20)
+    public String getFirstName() { ... }
+    public void setFirstName(String firstName) { ... }
+}
+----
+
+Or, for a parameter:
+
+[source]
+----
+public class CustomerRepository {
+    public Customer newCustomer(
+            @TypicalLength(20)
+            @Named("First Name") String firstName
+           ,@TypicalLength(20)
+            @Named("Last Name") String lastName) {
+        ...
+    }
+    ...
+}
+----
+
+Or, for value type:
+
+[source]
+----
+@Value(...)
+@TypicalLength(20)
+public class FirstName {
+    ...
+}
+----

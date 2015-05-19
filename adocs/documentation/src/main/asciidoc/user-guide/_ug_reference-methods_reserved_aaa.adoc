@@ -1,0 +1,126 @@
+= Summary
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+The table below lists the reserved methods that are recognized as part of Apache Isis' default programming model.
+
+.Reserved Methods
+[cols="1,4a", options="header"]
+|===
+
+|Method
+|Description
+
+|<<__code_cssclass_code, `cssClass()`>>
+|Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with css/application.css, can therefore provide custom styling of an object instance wherever it is rendered.
+See also <<__code_title_code, `title()`>> and <<__code_iconName_code, `iconName()`>>.
+
+|<<__code_disable_code, `disable(...)`>>
+|Disable all or some of an object's properties
+
+|<<__code_hide_code, `hide(...)`>>
+|Hide all or some of an object's properties
+
+|<<__code_iconname_code, `iconName()`>>
+|Provides the name of the image to render, usually alongside the title, to represent the object. If not provided, then the class name is used to locate an image.
+See also <<__code_title_code, `title()`>> and <<__code_cssClass_code, `cssClass()`>>
+
+|<<__code_getid_code, `getId()`>>
+|Provides an optional unique identifier of a service. +
+If not provided, the service's fully-qualified class name is used.
+
+|<<__code_title_code, `title()`>>
+|Provides a title for the object. +
+Alternatively, use the <<__code_title_code, `@Title`>> annotation. +
+See also `iconName()` and <<__code_cssClass_code, `cssClass()`>>
+
+|<<__code_validate_code, `validate()`>>
+|Validate the object's state prior to persisting.
+
+|===
+
+
+
+
+
+The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.  For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
+
+[WARNING]
+====
+We believe there may some scenarios (not yet fully catalogued) where the lifecycle method is not called.  As such we recommend that you don't rely on these methods and/or fully test they are called as required in your apps
+
+As an alternative, consider using Isis' event bus and domain events.
+====
+
+The lifecycle methods are:
+
+.Lifecycle methods (partial support)
+[cols="1,4a", options="header"]
+|===
+
+|Method
+|Description
+
+|<<__code_created_code, `created()`>>
+|called when an object has just been created using <<__code_newTransientInstance_code, `newTransientInstance()`>>
+
+|<<__code_loaded_code, `loaded()`>>
+|called when a (persistent) object has just been loaded from the object store.
+
+|<<__code_persisted_code, `persisted()`>>
+|called when object has just been persisted from the object store.
+
+|<<__code_persisting_code, `persisting()`>>
+|called when a (not-yet-persistent) object is just about to be persisted from the object store
+
+|<<__code_removed_code, `removed()`>>
+|called when a (persistent) object has just been persisted from the object store
+
+|<<__code_removing_code, `removing()`>>
+|called when a (persistent) object is just about to be deleted from the object store
+
+|<<__code_updated_code, `updated()`>>
+|called when a (persistent) object has just been updated in the object store
+
+|<<__code_updating_code, `updating()`>>
+|called when a (persistent) object is just about to be updated in the object store
+
+|===
+
+
+
+Some lifecycle methods have been deprecated:
+
+.Deprecated lifecycle methods
+[cols="1,4a", options="header"]
+|===
+
+|Method
+|Notes
+
+|`deleted()`
+|Replaced by <<__code_removed_code, `removed()`>>
+
+|`deleting()`
+|Replaced by removing()`
+
+|`loading()`
+|callback for when the (persistent) object is just about to be loaded from the object store. +
+[WARNING]
+====
+This method is never called.
+====
+
+|`saved()`
+|Replaced by persisted()`
+
+|`saving()`
+|Replaced by <<__code_persisting_code, `persisting()`>>
+
+|===
+
+

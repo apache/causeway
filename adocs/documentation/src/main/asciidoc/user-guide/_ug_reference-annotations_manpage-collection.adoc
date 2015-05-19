@@ -1,0 +1,538 @@
+= anchor:reference-annotations_manpage-[]`@Collection`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+Title: @Collection (1.8.0)
+
+____
+
+stub
+
+____
+
+The `@Collection` annotation applies to collections collecting together all domain semantics within a single annotation.
+
+It is also possible to apply the annotation to actions of domain services that are acting as link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed collections].
+
+== Source code
+
+See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/Collection.java">@Collection</a> source code.
+
+== See also
+
+Other domain semantics:
+
+* link:./Property.html[@Property]
+* link:./Action.html[@Action]
+* link:./Parameter.html[@Parameter]
+* link:./DomainObject.html[@DomainObject]
+* link:./DomainService.html[@DomainService]
+* link:./ViewModel.html[@ViewModel]
+
+Corresponding view layer ("Layout") annotation:
+
+* link:./CollectionLayout.html[@CollectionLayout]
+
+
+
+== `domainEvent()`
+
+Title: @CollectionInteraction
+
+____
+
+Deprecated, use instead link:./Collection.html[@Collection#domainEvent()].
+
+Support
+
+The Wicket viewer does NOT support collection modification; instead write a pair of actions to add to/remove from the collection.
+
+It _is_ possible to fire collection interaction events using the wrapper factory; see below for more details.
+
+____
+
+The `@CollectionInteraction` annotation applies to domain entity collections, allowing
+subscribers to optionally veto, validate or otherwise perform tasks before
+or after the collection has been added to/removed from.
+
+Subscribers subscribe through the link:../services/event-bus-service.html[Event Bus Service] using Guava annotations.
+
+By default the event raised is `CollectionInteractionEvent.Default`. For example:
+
+[source]
+----
+public class ToDoItem {
+    ...
+    @CollectionInteraction
+    public SortedSet<ToDoItem> getDependencies() { ... }
+}
+----
+
+Optionally a subclass can be declared:
+
+[source]
+----
+public class ToDoItem {
+
+    public static class DependenciesChangedEvent extends CollectionInteractionEvent<ToDoItem, ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        public DependenciesChangedEvent(ToDoItem source, Identifier identifier, Of of, ToDoItem value) {
+            super(source, identifier, of, value);
+        }
+    }
+
+}
+----
+
+The `of` field indicates if the collection is being accessed, added to or removed from.
+
+== Subscribers
+
+Subscribers (which must be domain services) subscribe using the Guava API.
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source]
+----
+@DomainService
+public class SomeSubscriber {
+
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(CollectionInteractionEvent ev) {
+
+        ...
+    }
+
+}
+----
+
+or can be fine-grained by subscribing to specific event subtypes:
+
+[source]
+----
+@DomainService
+public class SomeSubscriber {
+
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(ToDoItem.DependenciesChangedEvent ev) {
+
+        ...
+    }
+
+}
+----
+
+The subscriber's method is called (up to) 5 times:
+
+* whether to veto visibility (hide)
+* whether to veto usability (disable)
+* whether to veto execution (validate)
+* steps to perform prior to the property being modified
+* steps to perform after the property has been modified.
+
+The subscriber can distinguish these by calling `ev.getPhase()`. Thus the general form is:
+
+[source]
+----
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(CollectionInteractionEvent ev) {
+
+    switch(ev.getPhase()) {
+        case HIDE:
+            ...
+            break;
+        case DISABLE:
+            ...
+            break;
+        case VALIDATE:
+            ...
+            break;
+        case EXECUTING:
+            ...
+            break;
+        case EXECUTED:
+            ...
+            break;
+    }
+}
+----
+
+Vetoing is performed by calling the appropriate method on the event:
+
+*
+
+To hide:
+
+ev.hide()
+
+*
+
+To disable:
+
+ev.disable("…");
+
+*
+
+To invalidate:
+
+ev.invalidate("…");
+
+It is also possible to abort the transaction during the executing or executed
+phases by throwing an exception. If the exception is a subtype of `RecoverableException`
+then the exception will be rendered as a user-friendly warning (eg Growl/toast)
+rather than an error.
+
+== Raising events programmatically.
+
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
+wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
+
+== See also
+
+Interaction events can also be raised for link:./ActionInteraction.html[actions] and link:./PropertyInteraction.html[properties] .
+
+
+
+
+== `editing()`
+
+Title: @Disabled
+
+____
+
+Deprecated, use instead link:./Property.html[@Property#editing()], link:./Collection.html[@Collection#editing()], and also link:./DomainObject.html[@DomainObject#editing()]
+
+*Support*
+
+* Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
+
+____
+
+The `@Disabled` annotation means that the member cannot be used in any
+instance of the class. When applied to the property it means that the
+user may not modify the value of that property (though it may still be
+modified programmatically). When applied to an action method, it means
+that the user cannot invoke that method.
+
+For example:
+
+[source]
+----
+public class Customer {
+    @Disabled
+    public void assessCreditWorthiness() { ... }
+
+    @Disabled
+    public int getInitialCreditRating(){ ... }
+    public void setInitialCreditRating(int initialCreditRating) { ... }
+}
+----
+
+Note that if an action is marked as `@Disabled`, it will be shown on the
+user interface but cannot ever be invoked. The only possible reason we
+can think to do this is during prototyping, to indicate an action that
+is still to be developed. If a method is intended for programmatic use,
+but not intended ever to be invoked directly by a user, then it should
+be marked as `@Hidden` instead.
+
+This annotation can also take two parameter indicating where (in the UI)
+it is to be disabled, and when (in the object's lifecycle) it is to be
+disabled. For example:
+
+[source]
+----
+public class Customer {
+    (when=When.UNTIL_PERSISTED)
+    public void assessCreditWorthiness() { ... }
+}
+----
+
+would disable the action until the object has been saved. And:
+
+[source]
+----
+public class Customer {
+    (where=Where.PARENTED_TABLES)
+    public void getFirstName() { ... }
+}
+----
+
+would disable the property in parented tables but not in regular object
+forms (though note: this would only be used by viewers that provide
+in-table editing capability).
+
+The acceptable values for the `where` parameter are:
+
+* `Where.ANYWHERE` +
++
+The member should be disabled everywhere.
+
+* `Where.OBJECT_FORMS` +
++
+The member should be disabled when displayed within an object form.
+For most viewers, this applies to property and collection members,
+not actions.
+
+* `Where.PARENTED_TABLES` +
++
+The member should be disabled when displayed as a column of a table
+within a parent object's collection. For most (all?) viewers, this
+will have meaning only if applied to a property member.
+
+* `Where.STANDALONE_TABLES` +
++
+The member should be disabled when displayed as a column of a table
+showing a standalone list of objects, for example as returned by a
+repository query. For most (all?) viewers, this will have meaning
+only if applied to a property member.
+
+* `Where.ALL_TABLES` +
++
+The member should be disabled when displayed as a column of a table,
+either an object's * collection or a standalone list. This combines
+`PARENTED_TABLES` and `STANDALONE_TABLES`
+
+* `Where.NOWHERE` +
++
+Has no meaning for the `@Disabled` annotation (though is used by the
+`@Hidden` annotation which also uses the `Where` enum<!--, see ?-->).
+
+The acceptable values for the `when` parameter are:
+
+* `When.ALWAYS` +
++
+The member should be disabled at all times.
+
+* `When.NEVER` +
++
+The member should never be disabled (unless disabled through some
+other mechanism, for example an imperative disableXxx() supporting
+method)..
+
+* `When.ONCE_PERSISTED` +
++
+The member should be enabled for transient objects, but disabled for
+persisted objects.
+
+* `When.UNTIL_PERSISTED` +
++
+The member should be disabled for transient objects, but enabled for
+persisted objects.
+
+By default the annotated property or action is always disabled (ie
+defaults to `Where.ANYWHERE`, `When.ALWAYS`).
+
+
+
+
+== `hidden()`
+
+Title: @Hidden
+
+____
+
+Deprecated. For object members use link:./Property.html[@Property#hidden()] or link:./PropertyLayout.html[@PropertyLayout#hidden()], link:./Collection.html[@Collection#hidden()] or link:./CollectionLayout.html[@CollectionLayout#hidden()], and link:./ActionLayout.html[@ActionLayout#hidden()]. For domain servicesm use [@DomainService#nature()]
+
+____
+
+The `@Hidden` annotation indicates that the member (property, collection
+or action) to which it is applied should never be visible to the user.
+It can also be applied to service types (it has no effect if applied to
+entities or values).
+
+For example:
+
+[source]
+----
+public class Customer {
+    @Hidden
+    public int getInternalId() { ... }
+
+    @Hidden
+    public void updateStatus() { ... }
+    ...
+}
+----
+
+Or, applied to a service:
+
+[source]
+----
+@Hidden
+public class EmailService {
+    public void sendEmail(...) { ... }
+    ...
+}
+----
+
+This annotation can also take a parameters indicating where and when it
+is to be hidden. For example:
+
+[source]
+----
+public class Customer {
+    @Hidden(when=When.ONCE_PERSISTED)
+    public int getInternalId() { ... }
+    ...
+}
+----
+
+would show the `Id` until the object has been saved, and then would hide
+it. And:
+
+[source]
+----
+public class Customer {
+    @Hidden(where=Where.ALL_TABLES)
+    public int getDateOfBirth() { ... }
+    ...
+}
+----
+
+would suppress the `dateOfBirth` property of a Customer from all tables.
+
+The acceptable values for the `where` parameter are:
+
+* `Where.ANYWHERE` +
++
+The member should be hidden everywhere.
+
+* `Where.OBJECT_FORMS` +
++
+The member should be hidden when displayed within an object form.
+For most viewers, this applies to property and collection members,
+not actions.
+
+* `Where.PARENTED_TABLES` +
++
+The member should be hidden when displayed as a column of a table
+within a parent object's collection. For most (all?) viewers, this
+will have meaning only if applied to a property member.
+
+* `Where.STANDALONE_TABLES` +
++
+The member should be hidden when displayed as a column of a table
+showing a standalone list of objects, for example as returned by a
+repository query. For most (all?) viewers, this will have meaning
+only if applied to a property member.
+
+* `Where.ALL_TABLES` +
++
+The member should be /hidden when displayed as a column of a table,
+either an object's * collection or a standalone list. This combines
+`PARENTED_TABLES` and `STANDALONE_TABLES`.
+
+* `Where.NOWHERE` +
++
+Acts as an override if a member would normally be hidden as a result
+of some other convention. For example, if a property is annotated
+with `@Title` <!--(see ?)-->, then normally this should be hidden from all
+tables. Additionally annotating with `@Hidden(where=Where.NOWHERE)`
+overrides this.
+
+The acceptable values for the `when` parameter are:
+
+* `When.ALWAYS` +
++
+The member should be hidden at all times.
+
+* `When.NEVER` +
++
+The member should never be hidden (unless disabled through some
+other mechanism, for example an imperative disableXxx() supporting
+method)..
+
+* `When.ONCE_PERSISTED` +
++
+The member should be visible for transient objects, but hidden for
+persisted objects.
+
+* `When.UNTIL_PERSISTED` +
++
+The member should be hidden for transient objects, but visible for
+persisted objects.
+
+By default the annotated property or action is always hidden (ie
+defaults to `Where.ANYWHERE`, `When.ALWAYS`).
+
+
+
+
+
+
+
+== `notPersisted()`
+
+Title: @NotPersisted
+
+The `@NotPersisted` annotation indicates that the property is not to be
+persisted.
+
+____
+
+*Note*
+
+In many cases the same thing can be achieved simply by providing the
+property with a 'getter' but no 'setter'.
+
+____
+
+For example:
+
+[source]
+----
+public class Order {
+
+    @NotPersisted
+    public Order getPreviousOrder() {...}
+    public void setPreviousOrder(Order previousOrder) {...}
+
+    ...
+}
+----
+
+
+
+
+
+== `typeOf()`
+
+Title: @TypeOf
+
+____
+
+Deprecated, use instead link:./Collection.html[@Collection#typeOf] or link:./Action.html[@Action#typeOf].
+
+____
+
+The `@TypeOf` annotation is used to specify the type of elements in a
+collection, when for whatever reason it is not possible to use generics.
+
+____
+
+*Note*
+
+Given that Apache Isis only supports Java 1.6 and later, it's not that
+obvious what such a reason might be…
+
+____
+
+For example:
+
+[source]
+----
+public void AccountService {
+    @TypeOf(Customer.class)
+    public List errantAccounts() {
+        return CustomerDatabase.allNewCustomers();
+    }
+    ...
+}
+----
+

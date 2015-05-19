@@ -1,0 +1,38 @@
+= Reference: Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+include::_ug_reference-annotations_aaa.adoc[leveloffset=+1]
+
+include::_ug_reference-annotations_manpage-Action.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ActionLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Collection.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Collectionlayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainService.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainServiceLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Property.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-PropertyLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Viewmodel.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ViewmodelLayout.adoc[leveloffset=+1]
+
+include::_ug_reference-annotations_manpage-Facets.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-HomePage.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-MemberGroupLayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-MemberOrder.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-MinLength.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Programmatic.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Title.adoc[leveloffset=+1]
+
+include::_ug_reference-annotations_manpage-Digits.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Inject.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-RequestScoped.adoc[leveloffset=+1]
+
+

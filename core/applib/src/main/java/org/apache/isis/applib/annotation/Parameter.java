@@ -40,7 +40,10 @@ public @interface Parameter {
      * <p>
      *     The default value (<code>-1</code>) indicates that no minLength has been specified.
      * </p>
+     *
+     * @deprecated  - should use {@link MinLength} instead, because the autocomplete search argument is not, formally speaking, an action parameter (it is merely the parameter of one of the action's supporting methods).
      */
+    @Deprecated
     int minLength() default -1;
 
     // //////////////////////////////////////

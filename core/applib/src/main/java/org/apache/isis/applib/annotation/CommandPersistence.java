@@ -20,12 +20,6 @@ package org.apache.isis.applib.annotation;
 
 /**
  * Whether the command should be persisted.
- *
- * <p>
- *     Note: this enum is <i>not</i> an inner class of the {@link org.apache.isis.applib.annotation.Action} annotation
- *     because in the future we may also support commands for {@link org.apache.isis.applib.annotation.Property} and
- *     {@link org.apache.isis.applib.annotation.Collection}.
- * </p>
  */
 public enum CommandPersistence {
     /**

@@ -1,0 +1,416 @@
+= anchor:reference-annotations_manpage-[]`@DomainObject`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+Title: @DomainObject (1.8.0)
+
+____
+
+stub
+
+____
+
+The `@DomainObject` annotation applies to domain objects, collecting together all domain semantics within a single annotation.
+
+== Source code
+
+See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/DomainObject.java">@DomainObject</a> source code.
+
+== See also
+
+Other domain semantics:
+
+* link:./Property.html[@Property]
+* link:./Collection.html[@Collection]
+* link:./Action.html[@Action]
+* link:./Parameter.html[@Parameter]
+* link:./DomainService.html[@DomainService]
+* link:./ViewModel.html[@ViewModel]
+
+Corresponding view layer ("Layout") annotation:
+
+* link:./DomainObjectLayout.html[@DomainObjectLayout]
+
+
+
+== `auditing()`
+
+Title: @Audited
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#auditing()].
+
+____
+
+This annotation, which applies only to objects, indicates that if the
+object is modified, then it should be submitted to the
+`AuditingService`, if one has been configured.
+
+For example:
+
+[source]
+----
+@Audited
+public class Customer extends AbstractDomainObject {
+   ....
+}
+----
+
+The `AuditingService` is defined within the applib (in the
+`org.apache.isis.applib.services.audit` package):
+
+[source]
+----
+public interface AuditingService {
+    @Hidden
+    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
+}
+----
+
+At the time of writing only the JDO Object Store supported this
+annotation. Check with the documentation of the object store or ask on
+the mailing list to determine whether auditing is supported for other object stores.
+
+
+
+
+
+== `autoComplete()`
+
+Title: @AutoComplete
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#autoCompleteRepository].
+
+____
+
+This annotation is to support an auto-complete capability for reference
+properties and action parameters, the idea being that the user enters a
+few characters to locate a reference, and these are shown - for example
+- in a drop-down list box.
+
+The annotation is specified on the type, and specifies an action on a
+repository; this action should take a single string and should return a
+list of the type.
+
+For example:
+
+[source]
+----
+@AutoComplete(repository=Customers.class, action="autoComplete")
+public class Customer extends AbstractDomainObject {
+   ....
+}
+----
+
+where:
+
+[source]
+----
+public interface Customers {
+
+    @Hidden
+    List<Customer> autoComplete(String search);
+    ...
+}
+----
+
+____
+
+{note
+In many cases you may require additional control. For this, you can use the `autoComplete` method prefix, associated either with link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[action parameter] or with the link:../../how-tos/how-to-03-015-How-to-specify-an-autocomplete-for-a-property.html[property].
+}
+
+____
+
+
+
+
+== `bounded()`
+
+Title: @Bounded
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#bounded()].
+
+____
+
+For immutable objects where there is a bounded set of instances, the
+`@Bounded` annotation can be used.
+
+For example:
+
+[source]
+----
+@Bounded
+public class County {
+    ...
+}
+----
+
+The number of instances is expected to be small enough that all instance
+can be held in memory. The viewer will use this information to render
+all the instances of this class in a drop-down list or equivalent.
+
+____
+
+*Note*
+
+Although this is not enforced, `@Bounded` is intended for use on
+`final` classes. Its behaviour when used on interfaces, or classes
+with sub-classes is not specified
+
+____
+
+
+
+
+
+
+
+
+== `editing()`
+
+Title: @Disabled
+
+____
+
+Deprecated, use instead link:./Property.html[@Property#editing()], link:./Collection.html[@Collection#editing()], and also link:./DomainObject.html[@DomainObject#editing()]
+
+*Support*
+
+* Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
+
+____
+
+The `@Disabled` annotation means that the member cannot be used in any
+instance of the class. When applied to the property it means that the
+user may not modify the value of that property (though it may still be
+modified programmatically). When applied to an action method, it means
+that the user cannot invoke that method.
+
+For example:
+
+[source]
+----
+public class Customer {
+    @Disabled
+    public void assessCreditWorthiness() { ... }
+
+    @Disabled
+    public int getInitialCreditRating(){ ... }
+    public void setInitialCreditRating(int initialCreditRating) { ... }
+}
+----
+
+Note that if an action is marked as `@Disabled`, it will be shown on the
+user interface but cannot ever be invoked. The only possible reason we
+can think to do this is during prototyping, to indicate an action that
+is still to be developed. If a method is intended for programmatic use,
+but not intended ever to be invoked directly by a user, then it should
+be marked as `@Hidden` instead.
+
+This annotation can also take two parameter indicating where (in the UI)
+it is to be disabled, and when (in the object's lifecycle) it is to be
+disabled. For example:
+
+[source]
+----
+public class Customer {
+    (when=When.UNTIL_PERSISTED)
+    public void assessCreditWorthiness() { ... }
+}
+----
+
+would disable the action until the object has been saved. And:
+
+[source]
+----
+public class Customer {
+    (where=Where.PARENTED_TABLES)
+    public void getFirstName() { ... }
+}
+----
+
+would disable the property in parented tables but not in regular object
+forms (though note: this would only be used by viewers that provide
+in-table editing capability).
+
+The acceptable values for the `where` parameter are:
+
+* `Where.ANYWHERE` +
++
+The member should be disabled everywhere.
+
+* `Where.OBJECT_FORMS` +
++
+The member should be disabled when displayed within an object form.
+For most viewers, this applies to property and collection members,
+not actions.
+
+* `Where.PARENTED_TABLES` +
++
+The member should be disabled when displayed as a column of a table
+within a parent object's collection. For most (all?) viewers, this
+will have meaning only if applied to a property member.
+
+* `Where.STANDALONE_TABLES` +
++
+The member should be disabled when displayed as a column of a table
+showing a standalone list of objects, for example as returned by a
+repository query. For most (all?) viewers, this will have meaning
+only if applied to a property member.
+
+* `Where.ALL_TABLES` +
++
+The member should be disabled when displayed as a column of a table,
+either an object's * collection or a standalone list. This combines
+`PARENTED_TABLES` and `STANDALONE_TABLES`
+
+* `Where.NOWHERE` +
++
+Has no meaning for the `@Disabled` annotation (though is used by the
+`@Hidden` annotation which also uses the `Where` enum<!--, see ?-->).
+
+The acceptable values for the `when` parameter are:
+
+* `When.ALWAYS` +
++
+The member should be disabled at all times.
+
+* `When.NEVER` +
++
+The member should never be disabled (unless disabled through some
+other mechanism, for example an imperative disableXxx() supporting
+method)..
+
+* `When.ONCE_PERSISTED` +
++
+The member should be enabled for transient objects, but disabled for
+persisted objects.
+
+* `When.UNTIL_PERSISTED` +
++
+The member should be disabled for transient objects, but enabled for
+persisted objects.
+
+By default the annotated property or action is always disabled (ie
+defaults to `Where.ANYWHERE`, `When.ALWAYS`).
+
+
+
+
+
+Title: @Immutable
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#editing()].
+
+____
+
+The `@Immutable` annotation may be applied to a class, and indicates to
+the framework that the state of such objects may not be changed. The
+viewers will prevent any change through the user interface, and moreover
+the object stores will reject any changes to the objects that might have
+occurred programmatically.
+
+For example:
+
+[source]
+----
+@Immutable
+public class Country {
+    ...
+}
+----
+
+This annotation can also take a single parameter indicating when it is
+to become immutable. For example:
+
+[source]
+----
+@Immutable(When.ONCE_PERSISTED)
+public class Email {
+    ...
+}
+----
+
+This would allow the user to create an email object and set it up, and
+then prevent any changes once it has been saved.
+
+The acceptable values for the parameter are:
+
+* `When.ALWAYS`
+
+* `When.NEVER`
+
+* `When.ONCE_PERSISTED`
+
+* `When.UNTIL_PERSISTED`
+
+By default the annotated property or action is always immutable (ie
+defaults to `When.ALWAYS`).
+
+
+
+
+
+
+
+
+== `objectType()`
+
+Title: @ObjectType
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#objectType()].
+
+____
+
+The `@ObjectType` annotation is used to provide a unique abbreviation for
+the object's class name. This is used internally to generate a string
+representation of an objects identity (the `Oid`).
+
+For example:
+
+[source]
+----
+@ObjectType("ORD")
+public class Order {
+
+    ...
+}
+----
+
+If no `@ObjectType` annotation is present, then the framework uses the
+fully-qualified class name.
+
+If an `@ObjectType` is not unique, then the framework will fail to boot.
+
+
+
+
+
+== `publishing()`
+
+Title: @PublishedObject
+
+____
+
+Deprecated, use instead link:./DomainObject.html[@DomainObject#publishing()].
+
+____
+
+This annotation on an entity type causes an events to be published by the registered implementation of a `PublishingService` if an instance of that type is inserted, updated or deleted .
+
+A fuller description of the publishing architecture can be found http://isis.apache.org/core/services/publishing-service.html[here].
+
