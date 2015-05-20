@@ -1,4 +1,4 @@
-= i18n
+= anchor:more-advanced[]i18n
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -103,7 +103,7 @@ However, for an application to be fully internationalized, any validation messag
 
 The first part of the puzzle is tackled by an extension to Isis' programming model.  Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
-Here's a (silly) example from the xref:_simpleapp_archetype[SimpleApp archetype]:
+Here's a (silly) example from the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype]:
 
 [source,java]
 ----
