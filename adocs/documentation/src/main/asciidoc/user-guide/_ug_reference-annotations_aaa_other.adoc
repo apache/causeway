@@ -14,40 +14,40 @@
 |`.layout +
 .json`?
 
-|<<__code_facets_code, `@Facets`>>
+|xref:__code_facets_code[`@Facets`]
 |Install arbitrary facets within the Isis metamodel.
 |(any)
 |
 
-|<<__code_homepage_code, `@HomePage`>>
+|xref:__code_homepage_code[`@HomePage`]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI
 |
 
-|<<__code_membergrouplayout_code, `@MemberGroupLayout`>>
+|xref:__code_membergrouplayout_code[`@MemberGroupLayout`]
 |Grouping of properties into groups, and organizing of properties, collections into columns.
 |UI
 |Yes
 
 
-|<<__code_memberorder_code, `@MemberOrder`>>
+|xref:__code_memberorder_code[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI
 |Yes
 
 
-|<<__code_minlength_code, `@MinLength`>>
+|xref:__code_minlength_code[`@MinLength`]
 |Minimum number of characters required for an auto-complete search argument.
 |UI
 |
 
 
-|<<__code_programmatic_code, `@Programmatic`>>
+|xref:__code_programmatic_code[`@Programmatic`]
 |Ignore a public method, excluded from the Isis metamodel.
 |Domain
 |
 
-|<<__code_title_code, `@Title`>>
+|xref:__code_title_code[`@Title`]
 |Indicates which of the object's properties should be used to build up a title for the object.
 |UI
 

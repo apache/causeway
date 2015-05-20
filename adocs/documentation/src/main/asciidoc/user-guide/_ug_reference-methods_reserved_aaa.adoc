@@ -15,30 +15,30 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|<<__code_cssclass_code, `cssClass()`>>
+|xref:__code_cssclass_code[`cssClass()`]
 |Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with css/application.css, can therefore provide custom styling of an object instance wherever it is rendered.
-See also <<__code_title_code, `title()`>> and <<__code_iconName_code, `iconName()`>>.
+See also xref:__code_title_code[`title()`] and xref:__code_iconName_code[`iconName()`].
 
-|<<__code_disable_code, `disable(...)`>>
+|xref:__code_disable_code[`disable(...)`]
 |Disable all or some of an object's properties
 
-|<<__code_hide_code, `hide(...)`>>
+|xref:__code_hide_code[`hide(...)`]
 |Hide all or some of an object's properties
 
-|<<__code_iconname_code, `iconName()`>>
+|xref:__code_iconname_code[`iconName()`]
 |Provides the name of the image to render, usually alongside the title, to represent the object. If not provided, then the class name is used to locate an image.
-See also <<__code_title_code, `title()`>> and <<__code_cssClass_code, `cssClass()`>>
+See also xref:__code_title_code[`title()`] and xref:__code_cssClass_code[`cssClass()`]
 
-|<<__code_getid_code, `getId()`>>
+|xref:__code_getid_code[`getId()`]
 |Provides an optional unique identifier of a service. +
 If not provided, the service's fully-qualified class name is used.
 
-|<<__code_title_code, `title()`>>
+|xref:__code_title_code[`title()`]
 |Provides a title for the object. +
-Alternatively, use the <<__code_title_code, `@Title`>> annotation. +
-See also `iconName()` and <<__code_cssClass_code, `cssClass()`>>
+Alternatively, use the xref:__code_title_code[`@Title`] annotation. +
+See also `iconName()` and xref:__code_cssClass_code[`cssClass()`]
 
-|<<__code_validate_code, `validate()`>>
+|xref:__code_validate_code[`validate()`]
 |Validate the object's state prior to persisting.
 
 |===
@@ -65,28 +65,28 @@ The lifecycle methods are:
 |Method
 |Description
 
-|<<__code_created_code, `created()`>>
-|called when an object has just been created using <<__code_newTransientInstance_code, `newTransientInstance()`>>
+|xref:__code_created_code[`created()`]
+|called when an object has just been created using xref:__code_newTransientInstance_code[`newTransientInstance()`]
 
-|<<__code_loaded_code, `loaded()`>>
+|xref:__code_loaded_code[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
 
-|<<__code_persisted_code, `persisted()`>>
+|xref:__code_persisted_code[`persisted()`]
 |called when object has just been persisted from the object store.
 
-|<<__code_persisting_code, `persisting()`>>
+|xref:__code_persisting_code[`persisting()`]
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-|<<__code_removed_code, `removed()`>>
+|xref:__code_removed_code[`removed()`]
 |called when a (persistent) object has just been persisted from the object store
 
-|<<__code_removing_code, `removing()`>>
+|xref:__code_removing_code[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
 
-|<<__code_updated_code, `updated()`>>
+|xref:__code_updated_code[`updated()`]
 |called when a (persistent) object has just been updated in the object store
 
-|<<__code_updating_code, `updating()`>>
+|xref:__code_updating_code[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
 
 |===
@@ -103,7 +103,7 @@ Some lifecycle methods have been deprecated:
 |Notes
 
 |`deleted()`
-|Replaced by <<__code_removed_code, `removed()`>>
+|Replaced by xref:__code_removed_code[`removed()`]
 
 |`deleting()`
 |Replaced by removing()`
@@ -119,7 +119,7 @@ This method is never called.
 |Replaced by persisted()`
 
 |`saving()`
-|Replaced by <<__code_persisting_code, `persisting()`>>
+|Replaced by xref:__code_persisting_code[`persisting()`]
 
 |===
 

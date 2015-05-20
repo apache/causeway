@@ -58,7 +58,7 @@ image::{_imagesdir}appendices/dev-env/eclipse/eclipse-110-project-support.png[wi
 
 DataNucleus' enhancer uses the domain object model's own classpath to reference DataNucleus JARs. So, even though your domain objects are unlikely to depend on DataNucleus, these references must still be present.
 
-See the earlier section on <<_datanucleus_enhancer,DataNucleus enhancer>> for details of the contents of the `pom.xml`.  Chances are it is already set up from running the <<_simpleapp_archetype, SimpleApp archetype>>.
+See the earlier section on xref:_datanucleus_enhancer[DataNucleus enhancer] for details of the contents of the `pom.xml`.  Chances are it is already set up from running the xref:_simpleapp_archetype[SimpleApp archetype].
 
 
 Then, tell DataNucleus to use the project classpath:

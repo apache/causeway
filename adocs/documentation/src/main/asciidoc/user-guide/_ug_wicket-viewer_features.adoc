@@ -77,14 +77,14 @@ The above annotations mean that titles usually "just work", altering according t
 
 [TIP]
 ====
-It is also possible to configure the Wicket viewer to <<_abbreviating_suppressing_titles_in_tables, abbreviate titles or suppress them>> completely.
+It is also possible to configure the Wicket viewer to xref:_abbreviating_suppressing_titles_in_tables[abbreviate titles or suppress them] completely.
 ====
 
 
 
 == File upload/download
 
-The Isis application library provides the <<_blob, Blob>> value type (binary large objects) and also the <<_clob, Clob>>
+The Isis application library provides the xref:_blob[Blob] value type (binary large objects) and also the xref:_clob[Clob]
 value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
 
 A class can define a property using either of these types, for example:
@@ -184,7 +184,7 @@ The `Blob` and `Clob` types can also be used as parameters to actions.
 
 == Bookmarked pages
 
-The Wicket viewer supports the bookmarking of both domain objects and query-only (<<_actionsemantics, @ActionSemantics>>) actions.
+The Wicket viewer supports the bookmarking of both domain objects and query-only (xref:_actionsemantics[@ActionSemantics]) actions.
 
 Domain objects, if bookmarkable, can be nested.
 
@@ -216,7 +216,7 @@ Some - like `Property`, `Lease` and `Party` - are root nodes. However, `LeaseIte
 
 === Domain Code
 
-To indicate a class is bookmarkable, use the <<_domainobjectlayout, @DomainObjectLayout>> annotation:
+To indicate a class is bookmarkable, use the xref:_domainobjectlayout[@DomainObjectLayout] annotation:
 
 [source,java]
 ----
@@ -236,7 +236,7 @@ To indicate a class is bookmarkable but only as a child of some parent bookmark,
 public class LeaseItem { ... }
 ----
 
-To indicate that a safe (query only) action is bookmarkable, use the <<_actionlayout, @ActionLayout>> annotation:
+To indicate that a safe (query only) action is bookmarkable, use the xref:_actionlayout[@ActionLayout] annotation:
 
 [source,java]
 ----
@@ -264,7 +264,7 @@ Alternatively, `alt+[` will toggle open/close the panel; it can also be closed u
 
 === Related functionality
 
-The <<_recent_pages, Recent Pages>> also lists recently visited pages, selected from a drop-down.
+The xref:_recent_pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
 
 === Configuration
 
@@ -303,7 +303,7 @@ Selecting the domain object from the list causes the viewer to automatically nav
 
 === Related functionality
 
-The <<_bookmarked_pages, bookmarked pages>> (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
+The xref:_bookmarked_pages[bookmarked pages] (sliding panel) also provides links to recently visited objects, but only those explicitly marked as `@DomainObject(bookmarking=...)`.  The bookmarks panel also nests related objects together hierarchically (the recent pages drop-down does not).
 
 === Configuration
 
@@ -398,9 +398,9 @@ In a similar way, if the user has forgotten their password then they can request
 
 To support this the framework requires three services to be registered and configured:
 
-* the <<_user_registration_service, user registration service>>, which provides an API to create the user account
-* the <<_email_notification_service, email notification service>>, which provides an API for to send the verification emails
-* the <<_email_service, email service>>, that is used by the email notification service to actually send the email.
+* the xref:_user_registration_service[user registration service], which provides an API to create the user account
+* the xref:_email_notification_service[email notification service], which provides an API for to send the verification emails
+* the xref:_email_service[email service], that is used by the email notification service to actually send the email.
 
 The Isis core framework provides a default implementation of both the email notification service and the email service. If your application uses the https://github.com/isisaddons/isis-module-security[Isis addons security module] (not ASF) then an implementation is provided by that module; just add to the classpath. Otherwise you will need to provide your own implementation.
 
@@ -445,13 +445,13 @@ image::{_imagesdir}wicket-viewer/user-registration/sign-up-after-registration.pn
 
 There are two prerequisites:
 
-* register an implementation of the <<_user_registration_service, user registration service>> (eg by using the https://github.com/isisaddons/isis-module-security[Isis addons security module])
+* register an implementation of the xref:_user_registration_service[user registration service] (eg by using the https://github.com/isisaddons/isis-module-security[Isis addons security module])
 
-* configure the <<_email_service, email service>>
+* configure the xref:_email_service[email service]
 
 The latter is required if you are using the default email notification service and email service. If you are using your own alternative implementation of the email notification service then it may be omitted (and configure your own alternative implementation as required).
 
-It is also possible to configure the Wicket viewer to suppress <<_suppressing_sign_up, the sign-up page link>> and/or the <<_suppressing_password_reset, password reset page>>.
+It is also possible to configure the Wicket viewer to suppress xref:_suppressing_sign_up[the sign-up page link] and/or the xref:_suppressing_password_reset[password reset page].
 
 
 

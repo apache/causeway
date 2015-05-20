@@ -6,7 +6,7 @@
 
 
 
-Apache Isis' BDD spec support is automatically configured if you use the <<_simpleapp_archetype, SimpleApp archetype>>.  To set it up manually, update the `pom.xml` of your domain object model module:
+Apache Isis' BDD spec support is automatically configured if you use the xref:_simpleapp_archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]
 ----

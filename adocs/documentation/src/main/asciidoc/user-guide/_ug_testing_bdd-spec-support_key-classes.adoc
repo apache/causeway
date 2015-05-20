@@ -8,7 +8,7 @@
 
 There are some key framework classes that make up the spec support; these are discussed below.
 
-NOTE: some of these are also used by Isis' <<_integration_test_support, Integration Test support>>.
+NOTE: some of these are also used by Isis' xref:_integration_test_support[Integration Test support].
 
 
 

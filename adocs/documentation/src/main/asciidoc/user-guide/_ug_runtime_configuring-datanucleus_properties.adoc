@@ -22,7 +22,7 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 `RegisterEntities.packagePrefix`
 | fully qualified package names (CSV)
 | of class names; specifies the entities early rather than allow DataNucleus to find the entities lazily.  Strongly recommended (subtle issues can sometimes arise if lazy discovery is used).
-Further <<_registering_entity_types, discussion below>>.
+Further xref:_registering_entity_types[discussion below].
 
 |`isis.persistor.datanucleus.` +
 `PublishingService.serializedForm`
@@ -51,7 +51,7 @@ Further <<_registering_entity_types, discussion below>>.
 `datanucleus.persistenceByReachabilityAtCommit`
 |`false`
 |We recommend this setting is disabled.  +
-Further <<_disabling_persistence_by_reachability, discussion below>>.
+Further xref:_disabling_persistence_by_reachability[discussion below].
 
 |===
 

@@ -5,7 +5,7 @@
 
 In Isis, every action invocation (in fact, every interaction) is automatically wrapped in a transaction, and any repository query automatically does a flush.
 
-What that means is that there's no need to explicitly start or commit transactions in Isis; this will be done for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the <<_isis_jdo_support, IsisJdoSupport>> domain service, then you are likely to confuse Isis and get a stack trace for your trouble.
+What that means is that there's no need to explicitly start or commit transactions in Isis; this will be done for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:_isis_jdo_support[IsisJdoSupport] domain service, then you are likely to confuse Isis and get a stack trace for your trouble.
 
 == Aborting Transactions
 

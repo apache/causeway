@@ -19,46 +19,46 @@ The table below lists the method prefixes that are recognized as part of Apache 
 Param
 |Description
 
-|<<__code_addto_code, `addTo...()`>>
+|xref:__code_addto_code[`addTo...()`]
 |
 |
 |Y
 |
 |
 |add object to a collection (nb: not currently supported by Wicket viewer) +
-See also <<__code_removefrom_code, `removeFrom...()`>>`
+See also xref:__code_removefrom_code[`removeFrom...()`]`
 
-|<<__code_autocomplete_code, `autoComplete...()`>>
+|xref:__code_autocomplete_code[`autoComplete...()`]
 |
 |Y
 |
 |
 |Y
 |Return a list of matching elements for a property or an action parameter. +
-Alternatively, can specify for a class using <<__code_domainobject_code, `@DomainObject#autoComplete`>> +
+Alternatively, can specify for a class using xref:__code_domainobject_code[`@DomainObject#autoComplete`] +
 +
 See also choices
 
-|<<__code_choices_code, `choices...()`>>
+|xref:__code_choices_code[`choices...()`]
 |
 |Y
 |
 |
 |Y
 |Provide list of choices for a property or action parameter
-See also <<__code_autocomplete_code, `autoComplete...()`>>.
+See also xref:__code_autocomplete_code[`autoComplete...()`].
 
-|<<__code_clear_code, `clear...()`>>
+|xref:__code_clear_code[`clear...()`]
 |
 |Y
 |
 |
 |
 |Clear a property (set it to null). Allows business logic to be placed apart from the setter.
-See also <<__code_modify_code, `modify...()`>>
+See also xref:__code_modify_code[`modify...()`]
 
 
-|<<__code_default_code, `default...()`>>
+|xref:__code_default_code[`default...()`]
 |
 |Y
 |
@@ -66,7 +66,7 @@ See also <<__code_modify_code, `modify...()`>>
 |Y
 |Default value for a property or an action parameter.
 
-|<<__code_disable_code, `disable...()`>>
+|xref:__code_disable_code[`disable...()`]
 |Y
 |Y
 |Y
@@ -74,16 +74,16 @@ See also <<__code_modify_code, `modify...()`>>
 |
 |Disables (makes read-only) a property, a collection or an action.
 
-|<<__code_get_code, `get...()`>>
+|xref:__code_get_code[`get...()`]
 |
 |Y
 |Y
 |
 |
 |Access the value of a property or collection. +
-See also <<__code_set_code, `set...()`>>.
+See also xref:__code_set_code[`set...()`].
 
-|<<__code_hide_code, `hide...()`>>
+|xref:__code_hide_code[`hide...()`]
 |
 |Y
 |Y
@@ -91,25 +91,25 @@ See also <<__code_set_code, `set...()`>>.
 |
 |Hides a property, a collection or an action.
 
-|<<__code_modify_code, `modify...()`>>
+|xref:__code_modify_code[`modify...()`]
 |
 |Y
 |
 |
 |
 |Modify a property (set it to a non-null) value. Allows business logic to be placed apart from the setter. +
-See also <<__code_clear_code, `clear...()`>>`.
+See also xref:__code_clear_code[`clear...()`]`.
 
-|<<__code_removeFrom_code, `removeFrom...()`>>
+|xref:__code_removeFrom_code[`removeFrom...()`]
 |
 |
 |Y
 |
 |
 |remove object from a collection (nb: not currently supported by Wicket viewer) +
-See also <<__code_addto_code, `addTo...()`>>`
+See also xref:__code_addto_code[`addTo...()`]`
 
-|<<__code_set_code, `set...()`>>
+|xref:__code_set_code[`set...()`]
 |
 |Y
 |Y
@@ -117,14 +117,14 @@ See also <<__code_addto_code, `addTo...()`>>`
 |
 |Sets the value of a property or a collection.
 
-|<<__code_validate_code, `validate...()`>>
+|xref:__code_validate_code[`validate...()`]
 |Y
 |
 |
 |Y
 |Y
 |Check that a proposed value of a property or an action parameter is valid. +
-See also <<__code_validateaddto_code, validateAddTo...()`>> and <<__code_validateremovefrom_code, `validateRemoveFrom...()`>> for collections.
+See also xref:__code_validateaddto_code[validateAddTo...()`] and xref:__code_validateremovefrom_code[`validateRemoveFrom...()`] for collections.
 
 |<<__code_validateaddto_code, `validate +
 AddTo...()`>>
@@ -134,7 +134,7 @@ AddTo...()`>>
 |
 |
 |Check that a proposed object to add to a collection is valid. +
-See also <<__code_validateremovefrom_code, `validateRemoveFrom...()`>>, and <<__code_validate_code, `validate...()`>> for properties and collections.
+See also xref:__code_validateremovefrom_code[`validateRemoveFrom...()`], and xref:__code_validate_code[`validate...()`] for properties and collections.
 
 |<<__code_validateremovefrom_code, `validate +
 RemoveFrom...()`>>
@@ -144,7 +144,7 @@ RemoveFrom...()`>>
 |
 |
 |Check that a proposed object to add to a collection is valid.
-See also <<__code_validateaddto_code, `validateAddTo...()`>>, and <<__code_validate_code, `validate...()`>> for properties and collections.
+See also xref:__code_validateaddto_code[`validateAddTo...()`], and xref:__code_validate_code[`validate...()`] for properties and collections.
 
 |===
 

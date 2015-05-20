@@ -18,7 +18,7 @@ include::_ug_restfulobjects-viewer_hints-and-tips.adoc[leveloffset=+1]
 
 == Extending the viewer
 
-Discussed in <<_extending_the_restful_viewer, Extending the Restful viewer>>.
+Discussed in xref:_extending_the_restful_viewer[Extending the Restful viewer].
 
 
 

@@ -17,7 +17,7 @@ In the same way that Java packages act as a namespace for domain objects, it's g
 
 [TIP]
 ====
-For more on this topic, see <<_using_modules,Using Modules>>.
+For more on this topic, see xref:_using_modules[Using Modules].
 ====
 
 

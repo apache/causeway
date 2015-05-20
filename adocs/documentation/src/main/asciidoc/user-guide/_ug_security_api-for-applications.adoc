@@ -12,7 +12,7 @@ Still, on very rare occasion you may have a need, in which case you can either u
 
 == Using Isis` `DomainObjectContainer`
 
-The <<_domain_object_container, `DomainObjectContainer`>> service exposes the following API:
+The xref:_domain_object_container[`DomainObjectContainer`] service exposes the following API:
 
 [source,java]
 ----

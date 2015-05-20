@@ -14,17 +14,17 @@
 |`.layout +
 .json`?
 
-|<<__code_requestscoped_code_javax, `@javax.enterprise.context.RequestScoped`>>
+|xref:__code_requestscoped_code_javax[`@javax.enterprise.context.RequestScoped`]
 |Specify that a domain service has request-scope (rather than a singleton).
 |Domain
 |
 
-|<<__code_inject_code_javax, `@javax.inject.Inject`>>
+|xref:__code_inject_code_javax[`@javax.inject.Inject`]
 |Inject domain service into a domain object (entity or view model) or another domain service.
 |Domain
 |
 
-|<<__code_digits_code_javax, `@javax.validation.constraints.Digits`>>
+|xref:__code_digits_code_javax[`@javax.validation.constraints.Digits`]
 |Precision/scale for BigDecimal values.
 |Domain
 |

@@ -90,7 +90,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the <<_wicket_viewer, Wicket viewer>> and the <<_restful_objects_viewer, Restful Objects viewer>>.  The archetype also configures the [JDO Objectstore](../../components/objectstores/jdo/about.html) to use an in-memory HSQLDB connection.
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:_wicket_viewer[Wicket viewer] and the xref:_restful_objects_viewer[Restful Objects viewer].  The archetype also configures the [JDO Objectstore](../../components/objectstores/jdo/about.html) to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
 
@@ -146,7 +146,7 @@ You can also take the built WAR file and deploy it into a standalone servlet con
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the appendices for details on <<_setting_up_eclipse, setting up Eclipse>> or <<_setting_up_intellij_idea, setting up IntelliJ IDEA>>.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the <<_datanucleus_enhancer, DataNucleus enhancer>> has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the appendices for details on xref:_setting_up_eclipse[setting up Eclipse] or xref:_setting_up_intellij_idea[setting up IntelliJ IDEA].  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:_datanucleus_enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
@@ -156,7 +156,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_im
 
 == Running the App with Fixtures
 
-It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a <<_fixture_scripts, fixture script>> on the command line.
+It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:_fixture_scripts[fixture script] on the command line.
 
 If running the self-hosted console, you can specify the fixtures using the `--initParam` flag:
 
@@ -178,7 +178,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png[width="600
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the <<_wicket_viewer, Wicket viewer>> or the <<_restful_objects_viewer, Restful Objects viewer>>:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:_wicket_viewer[Wicket viewer] or the xref:_restful_objects_viewer[Restful Objects viewer]:
 
 image::{_imagesdir}getting-started/using-simple-app/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/010-root-page.png"]
 
@@ -187,7 +187,7 @@ The Wicket viewer provides a human usable web UI (implemented, as you might have
 
 image::{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/020-login-to-wicket-viewer.png"]
 
-The app itself is configured to run using <<_security, shiro security>>, as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
+The app itself is configured to run using xref:_security[shiro security], as configured in the `WEB-INF/shiro.ini` config file.  You can login with:
 
 * username: _sven_
 * password: _pass_

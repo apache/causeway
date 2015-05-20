@@ -47,7 +47,7 @@ This is the way that the link:http://metawidget.org/[MetaWidget] team, in partic
 
 [NOTE]
 ====
-We compare Apache Isis' with MetaWidget <<_vs_metawidget,here>>.
+We compare Apache Isis' with MetaWidget xref:_vs_metawidget[here].
 ====
 
 == What this means in practice

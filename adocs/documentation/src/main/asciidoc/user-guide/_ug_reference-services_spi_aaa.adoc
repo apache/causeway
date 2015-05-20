@@ -162,7 +162,7 @@ Key:
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
 
 
-All domain services are automatically registered (annotated with <<__code_domainservice_code, `@DomainService`>>) except:
+All domain services are automatically registered (annotated with xref:__code_domainservice_code[`@DomainService`]) except:
 
 
 

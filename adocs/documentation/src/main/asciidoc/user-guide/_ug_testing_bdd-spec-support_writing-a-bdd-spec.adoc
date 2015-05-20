@@ -20,10 +20,10 @@ For example, given a feature that involves `Customer` and `Order`, have the step
 +
 The `glue` attribute of the Cucumber-JVM JUnit runner eallows you to indicate which package(s) should be recursively searched to find any glue.
 
-* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in <<_integration_test_support, Integration Test Support>>, bootstrapping section).
+* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in xref:_integration_test_support[Integration Test Support], bootstrapping section).
 
 
-Here's an example of a feature from the <<_simpleapp_archetype, SimpleApp archetype>>:
+Here's an example of a feature from the xref:_simpleapp_archetype[SimpleApp archetype]:
 
 [source]
 ----
@@ -48,7 +48,7 @@ Apache Isis does also support running BDD specs in unit test mode; by annotating
 
 To support unit testing scope Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.  Use of this utility class is optional.
 
-Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the <<_simpleapp_archetype, SimpleApp archetype>>.  For those who do require faster-executing test suite, it's worthwhile knowing that Isis can support this.
+Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:_simpleapp_archetype[SimpleApp archetype].  For those who do require faster-executing test suite, it's worthwhile knowing that Isis can support this.
 
 ====
 
@@ -71,7 +71,7 @@ public class RunSpecs {
 }
 ----
 
-The JSON formatter allows integration with enhanced reports, for example as provided by http://www.masterthought.net/section/cucumber-reporting[Masterthought.net] (screenshots at end of page). (Commented out) configuration for this is provided in the <<_simpleapp_archetype, SimpleApp archetype>>.
+The JSON formatter allows integration with enhanced reports, for example as provided by http://www.masterthought.net/section/cucumber-reporting[Masterthought.net] (screenshots at end of page). (Commented out) configuration for this is provided in the xref:_simpleapp_archetype[SimpleApp archetype].
 
 The bootstrapping of Isis can be moved into a `BootstrappingGlue` step definition:
 

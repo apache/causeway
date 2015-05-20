@@ -166,5 +166,5 @@ Meanwhile the http://github.com/isisaddons/isis-module-devutils[devutils] module
 so forth - on a "Prototyping" top-level menu, on the SECONDARY menu bar.
 
 Currently there is no facility to alter the placement of these services. However, their UI can be suppressed
-using security or using a <<_vetoing_visibility, vetoing subscriber>>.
+using security or using a xref:_vetoing_visibility[vetoing subscriber].
 

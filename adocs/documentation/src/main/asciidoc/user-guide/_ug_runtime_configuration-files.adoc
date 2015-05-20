@@ -10,9 +10,9 @@ The `WEBINF/isis.properties` file is always read and must exist.
 
 In addition, the following other properties are searched for and if present also read:
 
-* `viewer_wicket.properties` - if the <<_wicket_viewer_2, Wicket UI (viewer)>> is in use
+* `viewer_wicket.properties` - if the xref:_wicket_viewer_2[Wicket UI (viewer)] is in use
 
-* `viewer_restfulobjects.properties` - if the <<_restful_objects_viewer, Restful Objects REST API (viewer)>> is in use
+* `viewer_restfulobjects.properties` - if the xref:_restful_objects_viewer[Restful Objects REST API (viewer)] is in use
 
 * `viewer.properties` - for any shared UI configuration
 
@@ -64,7 +64,7 @@ The `isis.properties` file has three configuration properties in particular that
 The values "datanucleus", "shiro" etc are actually aliases for concrete implementations listed in Isis' `installer-registry.properties` file (in `isis-core-runtime.jar`).  It is -- at least in theory -- possible to specify a fully qualified class name to replace any of these components.  In practice only the two security APIs are actually simple enough for this to be viable.
 ====
 
-As for the viewers, these are specified indirectly by way of the filters and servlets in the `web.xml` file (discussed <<_configuring_the_webapp, below>>).  However, the configuration of which viewers to initialize is declared through a context parameter:
+As for the viewers, these are specified indirectly by way of the filters and servlets in the `web.xml` file (discussed xref:_configuring_the_webapp[below]).  However, the configuration of which viewers to initialize is declared through a context parameter:
 
 
 [source,xml]

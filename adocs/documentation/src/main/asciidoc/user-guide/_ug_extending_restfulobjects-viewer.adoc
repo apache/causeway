@@ -26,7 +26,7 @@ it is possible to plugin a custom representation generator that can produce any 
 
 [TIP]
 ====
-If all that is required is a very simple representations (of objects), you can instead reconfigure RO viewer to provide a simplified output, as described <<_simplified_object_representation, here>>.  Or, it is also possible to simply suppress certain elements, as described  <<_suppressing_elements_of_the_representations, here>>.
+If all that is required is a very simple representations (of objects), you can instead reconfigure RO viewer to provide a simplified output, as described xref:_simplified_object_representation[here].  Or, it is also possible to simply suppress certain elements, as described  xref:_suppressing_elements_of_the_representations[here].
 ====
 
 

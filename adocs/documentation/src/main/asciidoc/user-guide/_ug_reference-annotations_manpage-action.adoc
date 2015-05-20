@@ -36,7 +36,7 @@ The `Action` annotation groups together all domain-specific metadata for an invo
 |xref:__a_id_reference_annotations_manpage_action_a_domainevent[`domainEvent()`]
 |subtype of `ActionDomainEvent` +
 (`ActionDomainEvent.Default`)
-|the event type to be posted to the <<__code_eventbusservice_code, `EventBusService`>> to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execution).
+|the event type to be posted to the xref:__a_id_reference_services_api_manpage_a_code_eventbusservice_code[`EventBusService`] to broadcast the action's business rule checking (hide, disable, validate) and its invocation (pre-execute and post-execution).
 
 
 |xref:__a_id_reference_annotations_manpage_action_a_hidden[`hidden()`]

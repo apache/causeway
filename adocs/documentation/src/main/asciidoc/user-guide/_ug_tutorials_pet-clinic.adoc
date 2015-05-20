@@ -4,7 +4,7 @@
 :_imagesdir: images/
 
 
-This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the <<_simpleapp_archetype, SimpleApp archetype>>.
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:_simpleapp_archetype[SimpleApp archetype].
 
 It consists of just three domain classes:
 
@@ -165,7 +165,7 @@ Go back to the splash screen, and quit the app. Note that the database runs in-m
 
 == Dev environment
 
-Set up <<_setting_up_a_development_environment, an IDE>> and import the project to be able to run and debug the app.
+Set up xref:_setting_up_a_development_environment[an IDE] and import the project to be able to run and debug the app.
 
 Then set up a launch configuration so that you can run the app from within the IDE. To save having to run the fixtures
 every time, specify the following system properties:

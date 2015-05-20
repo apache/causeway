@@ -146,21 +146,21 @@ image::{_imagesdir}wicket-viewer/layouts/4-0-8-0.png[width="720px",link="{_image
 
 As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations:
 
-* <<_domainservicelayout, `@DomainServiceLayout`>>
-* <<_domainobjectlayout, `@DomainObjectLayout`>>
-* <<_viewmodellayout, `@ViewModelLayout`>>
-* <<_propertylayout, `@PropertyLayout`>>
-* <<_collectionlayout, `@CollectionLayout`>>
-* <<_actionlayout, `@ActionLayout`>>
-* <<_parameterlayout, `@ParameterLayout`>>
+* xref:_domainservicelayout[`@DomainServiceLayout`]
+* xref:_domainobjectlayout[`@DomainObjectLayout`]
+* xref:_viewmodellayout[`@ViewModelLayout`]
+* xref:_propertylayout[`@PropertyLayout`]
+* xref:_collectionlayout[`@CollectionLayout`]
+* xref:_actionlayout[`@ActionLayout`]
+* xref:_parameterlayout[`@ParameterLayout`]
 
 Prior to 1.8.0 a variety of annotations (now deprecated) are available, including:
 
-* <<_named, `@Named`>>
-* <<_describedas, `@DescribedAs`>>
-* <<_multiline, `@MultiLine`>>
-* <<_typicallength, `@TypicalLength`>>
-* <<_render, `@Render`>>
-* <<_cssclass, `@CssClass`>>
-* <<_cssclassfa, `@CssClassFa`>>
+* xref:_named[`@Named`]
+* xref:_describedas[`@DescribedAs`]
+* xref:_multiline[`@MultiLine`]
+* xref:_typicallength[`@TypicalLength`]
+* xref:_render[`@Render`]
+* xref:_cssclass[`@CssClass`]
+* xref:_cssclassfa[`@CssClassFa`]
 

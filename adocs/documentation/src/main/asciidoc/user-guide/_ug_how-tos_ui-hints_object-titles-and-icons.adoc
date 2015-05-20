@@ -4,11 +4,11 @@
 :_imagesdir: images/
 
 
-In Apache Isis every object is identified to the user by a <<_object_title, title>> (label) and an <<_object_icon, icon>>.  This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
+In Apache Isis every object is identified to the user by a xref:_object_title[title] (label) and an xref:_object_icon[icon].  This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-It is also possible for an object to return a <<_object_css_styling, CSS class>>.  In conjunction with <<_tweaking_css_classes, customized CSS>> this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to return a xref:_object_css_styling[CSS class].  In conjunction with xref:_tweaking_css_classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -68,7 +68,7 @@ could return "Arthur C. Clarke".
 
 [TIP]
 ====
-Titles can sometimes get be long and therefore rather cumbersome in "parented" tables.  If `@Title` has been used then the Wicket viewer will automatically exclude portions of the title belonging to the owning object.  See <<_titles_in_tables, here>> for further discussion.
+Titles can sometimes get be long and therefore rather cumbersome in "parented" tables.  If `@Title` has been used then the Wicket viewer will automatically exclude portions of the title belonging to the owning object.  See xref:_titles_in_tables[here] for further discussion.
 ====
 
 
@@ -89,6 +89,6 @@ IMPORTANT: TODO
 == Object CSS Styling
 
 
-It is also possible for an object to return a <<_object_css_styling, CSS class>>.  In conjunction with <<_tweaking_css_classes, customized CSS>> this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to return a xref:_object_css_styling[CSS class].  In conjunction with xref:_tweaking_css_classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 IMPORTANT: TODO

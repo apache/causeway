@@ -83,7 +83,7 @@ protected void init() {
 }
 ----
 
-If you have developed a custom Bootstrap theme (as described <<_custom_bootstrap_theme, here>>) then this can also be specified using the https://github.com/l0rdn1kk0n/wicket-bootstrap/wiki/Themes[Wicket Bootstrap API].
+If you have developed a custom Bootstrap theme (as described xref:_custom_bootstrap_theme[here]) then this can also be specified using the https://github.com/l0rdn1kk0n/wicket-bootstrap/wiki/Themes[Wicket Bootstrap API].
 
 
 
@@ -152,7 +152,7 @@ If none of these are found, then no version is displayed.
 
 [TIP]
 ====
-This configuration is included within the <<_simpleapp_archetype, SimpleApp archetype>>.
+This configuration is included within the xref:_simpleapp_archetype[SimpleApp archetype].
 ====
 
 ==== Adding attributes to the WAR's manifest
@@ -325,7 +325,7 @@ div.x-myapp-highlight span.scalarName {
 }
 ----
 
-Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a <<_dynamic_layouts, dynamic layout>> JSON file:
+Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:_dynamic_layouts[dynamic layout] JSON file:
 
 [source,javascript]
 ----
@@ -355,7 +355,7 @@ You can therefore use this CSS class as a way of building your own "theme" for t
 
 [TIP]
 ====
-Alternatively you could "do it properly" and create your <<_custom_bootstrap_theme, own Bootstrap theme>>, as described in the <<Extending>> chapter.
+Alternatively you could "do it properly" and create your xref:_custom_bootstrap_theme[own Bootstrap theme], as described in the <<Extending>> chapter.
 ====
 
 
@@ -398,7 +398,7 @@ The Wicket viewer ships with embedded JQuery, so this can be leveraged to perfor
 ====
 Just because something is possible, it doesn't necessarily mean we encourage it.  Please be aware that there is no formal API for any custom javascript that you might implement to target; future versions of Isis might break your code.
 
-If possible, consider using the `ComponentFactory` API described in the <<_extending_the_wicket_viewer, Extending>> chapter.
+If possible, consider using the `ComponentFactory` API described in the xref:_extending_the_wicket_viewer[Extending] chapter.
 ====
 
 To register your Javascript code, adjusting the Guice bindings (part of Isis' bootstrapping) in your custom subclass of `IsisWicketApplication`:

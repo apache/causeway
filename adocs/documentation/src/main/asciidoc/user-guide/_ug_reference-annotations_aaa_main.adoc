@@ -14,72 +14,72 @@
 |`.layout +
 .json`?
 
-|<<__code_action_code, `@Action`>>
+|xref:__code_action_code[`@Action`]
 |Domain semantics for actions
 |Domain
 |
 
-|<<__code_actionlayout_code, `@ActionLayout`>>
+|xref:__code_actionlayout_code[`@ActionLayout`]
 |User interface hints for actions
 |UI
 |Yes
 
-|<<__code_collection_code, `@Collection`>>
+|xref:__code_collection_code[`@Collection`]
 |Domain semantics for collections
 |Domain
 |
 
-|<<__code_collectionlayout_code, `@CollectionLayout`>>
+|xref:__code_collectionlayout_code[`@CollectionLayout`]
 |User interface hints for collections
 |UI
 |Yes
 
-|<<__code_domainobject_code, `@DomainObject`>>
+|xref:__code_domainobject_code[`@DomainObject`]
 |Domain semantics for domain object (entities and optionally view models, see also `@ViewModel)`
 |Domain
 |
 
-|<<__code_domainobjectlayout_code, `@DomainObjectLayout`>>
+|xref:__code_domainobjectlayout_code[`@DomainObjectLayout`]
 |User interface hints for domain object (entities and optionally view models, see also `@ViewModelLayout)`
 |UI
 |Yes
 
-|<<__code_domainservice_code, `@DomainService`>>
+|xref:__code_domainservice_code[`@DomainService`]
 |Class is a domain service (rather than an entity or view model)
 |Domain
 |
 
-|<<__code_domainservicelayout_code, `@DomainServiceLayout`>>
+|xref:__code_domainservicelayout_code[`@DomainServiceLayout`]
 |User interface hints for domain services
 |UI
 |
 
-|<<__code_parameter_code, `@Parameter`>>
+|xref:__code_parameter_code[`@Parameter`]
 |Domain semantics for action parameters
 |Domain
 |
 
-|<<__code_propertylayout_code, `@PropertyLayout`>>
+|xref:__code_propertylayout_code[`@PropertyLayout`]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes
 
-|<<__code_property_code, `@Property`>>
+|xref:__code_property_code[`@Property`]
 |Domain semantics for properties
 |Domain
 |
 
-|<<__code_propertylayout_code, `@PropertyLayout`>>
+|xref:__code_propertylayout_code[`@PropertyLayout`]
 |Layout hints for a property
 |UI
 |Yes
 
-|<<__code_viewmodel_code, `@ViewModel`>>
+|xref:__code_viewmodel_code[`@ViewModel`]
 |Specify that a class is a view model (as opposed to an entity or domain service); equivalent to `@DomainObject(nature`=VIEW_MODEL).
 |Domain, Persistence
 |
 
-|<<__code_ViewModelLayout_code, `@ViewModelLayout`>>
+|xref:__code_ViewModelLayout_code[`@ViewModelLayout`]
 |User interface hints for view models.
 For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
 |UI
