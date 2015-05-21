@@ -6,10 +6,5 @@
 IMPORTANT: TODO
 
 
-Title: @javax.enterprise.context.RequestScoped
+as per `@javax.enterprise.context.RequestScoped`
 
-____
-
-this is a stub
-
-____

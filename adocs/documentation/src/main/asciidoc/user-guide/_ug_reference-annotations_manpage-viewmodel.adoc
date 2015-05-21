@@ -3,10 +3,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-Title: @ViewModel
 
 The `@ViewModel` annotation, applied to a class, is the simplest way to indicate that the class is a view model.
 View models are not persisted to the database, instead their state is encoded within their identity (ultimately
@@ -14,7 +11,7 @@ represented in the URL). As such, view models are immutable.
 
 For example:
 
-[source]
+[source,java]
 ----
 @ViewModel
 public class MyViewModel {
@@ -33,11 +30,12 @@ View models must have a no-arg constructor, but there are few other constraints.
 * instantiate directly and then inject explicitly using `DomainObjectContainer#injectServicesInto(.)`
 * if the view model has no dependencies on domain services, then just instantiate directly
 
-____
 
+[TIP]
+====
 Note that there is a `DomainObjectContainer#newViewModelInstance(.)`; this is for view models that implement `ViewModel` interface and can be safely ignored.
+====
 
-____
 
 The view model's memento will be derived from the value of the view model object's properties. Any http://isis.apache.org/reference/recognized-annotations/NotPersistent.html[@NotPersistent] properties will be excluded from the memento, as will any http://isis.apache.org/reference/recognized-annotations/Programmatic.html[@Programmatic] properties. Properties that are merely http://isis.apache.org/reference/recognized-annotations/Hidden-deprecated.html[@Hidden] are included in the memento.
 
@@ -47,152 +45,4 @@ Only properties supported by the configured link:../reference/services/memento-s
 * view models cannot hold collections other view models (simple properties _are_ supported, though)
 * collections (of either view models or entities) are ignored.
 
-== See also
-
-Other domain semantics:
-
-* link:./Property.html[@Property]
-* link:./Collection.html[@Collection]
-* link:./Action.html[@Action]
-* link:./Parameter.html[@Parameter]
-* link:./DomainObject.html[@DomainObject]
-* link:./DomainService.html[@DomainService]
-
-Corresponding view layer ("Layout") annotation:
-
-* link:./ViewModelLayout.html[@ViewModelLayout]
-
-
-
-
-
-
-
-== `editing()`
-
-Title: @Disabled
-
-____
-
-Deprecated, use instead link:./Property.html[@Property#editing()], link:./Collection.html[@Collection#editing()], and also link:./DomainObject.html[@DomainObject#editing()]
-
-*Support*
-
-* Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
-
-____
-
-The `@Disabled` annotation means that the member cannot be used in any
-instance of the class. When applied to the property it means that the
-user may not modify the value of that property (though it may still be
-modified programmatically). When applied to an action method, it means
-that the user cannot invoke that method.
-
-For example:
-
-[source]
-----
-public class Customer {
-    @Disabled
-    public void assessCreditWorthiness() { ... }
-
-    @Disabled
-    public int getInitialCreditRating(){ ... }
-    public void setInitialCreditRating(int initialCreditRating) { ... }
-}
-----
-
-Note that if an action is marked as `@Disabled`, it will be shown on the
-user interface but cannot ever be invoked. The only possible reason we
-can think to do this is during prototyping, to indicate an action that
-is still to be developed. If a method is intended for programmatic use,
-but not intended ever to be invoked directly by a user, then it should
-be marked as `@Hidden` instead.
-
-This annotation can also take two parameter indicating where (in the UI)
-it is to be disabled, and when (in the object's lifecycle) it is to be
-disabled. For example:
-
-[source]
-----
-public class Customer {
-    (when=When.UNTIL_PERSISTED)
-    public void assessCreditWorthiness() { ... }
-}
-----
-
-would disable the action until the object has been saved. And:
-
-[source]
-----
-public class Customer {
-    (where=Where.PARENTED_TABLES)
-    public void getFirstName() { ... }
-}
-----
-
-would disable the property in parented tables but not in regular object
-forms (though note: this would only be used by viewers that provide
-in-table editing capability).
-
-The acceptable values for the `where` parameter are:
-
-* `Where.ANYWHERE` +
-+
-The member should be disabled everywhere.
-
-* `Where.OBJECT_FORMS` +
-+
-The member should be disabled when displayed within an object form.
-For most viewers, this applies to property and collection members,
-not actions.
-
-* `Where.PARENTED_TABLES` +
-+
-The member should be disabled when displayed as a column of a table
-within a parent object's collection. For most (all?) viewers, this
-will have meaning only if applied to a property member.
-
-* `Where.STANDALONE_TABLES` +
-+
-The member should be disabled when displayed as a column of a table
-showing a standalone list of objects, for example as returned by a
-repository query. For most (all?) viewers, this will have meaning
-only if applied to a property member.
-
-* `Where.ALL_TABLES` +
-+
-The member should be disabled when displayed as a column of a table,
-either an object's * collection or a standalone list. This combines
-`PARENTED_TABLES` and `STANDALONE_TABLES`
-
-* `Where.NOWHERE` +
-+
-Has no meaning for the `@Disabled` annotation (though is used by the
-`@Hidden` annotation which also uses the `Where` enum<!--, see ?-->).
-
-The acceptable values for the `when` parameter are:
-
-* `When.ALWAYS` +
-+
-The member should be disabled at all times.
-
-* `When.NEVER` +
-+
-The member should never be disabled (unless disabled through some
-other mechanism, for example an imperative disableXxx() supporting
-method)..
-
-* `When.ONCE_PERSISTED` +
-+
-The member should be enabled for transient objects, but disabled for
-persisted objects.
-
-* `When.UNTIL_PERSISTED` +
-+
-The member should be disabled for transient objects, but enabled for
-persisted objects.
-
-By default the annotated property or action is always disabled (ie
-defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 

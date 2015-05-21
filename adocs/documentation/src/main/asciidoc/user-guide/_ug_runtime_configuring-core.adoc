@@ -33,6 +33,16 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 |Whether to force the `TranslationService` into either read or write mode. +
 See xref:_i18n[i18n support] to learn more about the translation service.
 
+|`isis.services.` +
+`command.actions`
+| `all`,`ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically reified into commands (for actions annotated with xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action(command=CommandReification.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+
+|`isis.services.` +
+`publish.actions`
+| `all`,`ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically published (for actions annotated with xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action(publishing=Publishing.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+
 |`isis.persistor.` +
 `disableConcurrencyChecking`
 | `true`,`false` (`_false_`)

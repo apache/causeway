@@ -3,60 +3,74 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-
-Title: @Parameter (1.8.0)
-
-____
-
-stub
-
-____
 
 The `@Parameter` annotation applies to action parameters collecting together all domain semantics within a single annotation.
 
-== Source code
+The table below summarizes the annotation's attributes.
 
-See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/Parameter.java">@Parameter</a> source code.
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
 
-== See also
-
-Other domain semantics:
-
-* link:./Property.html[@Property]
-* link:./Collection.html[@Collection]
-* link:./Action.html[@Action]
-* link:./DomainObject.html[@DomainObject]
-* link:./DomainService.html[@DomainService]
-* link:./ViewModel.html[@ViewModel]
-
-Corresponding view layer ("Layout") annotation:
-
-* link:./ParameterLayout.html[@ParameterLayout]
+| Attribute
+| Values (default)
+| Description
 
 
+|xref:__a_id_reference_annotations_manpage_parameter_a_code_maxlength_code[`maxLength()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_parameter_a_code_minlength_code[`minLength()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_parameter_a_code_mustsatisfy_code[`mustSatisfy()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_parameter_a_code_optionality_code[`optionality()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_parameter_a_regex[regex()]
+|
+|
+
+
+|`regexPatternFlags()`
+|
+|
+
+
+|`regexPatternReplacement()`
+|
+|
+
+
+|===
 
 
 
-== `maxLength()`
 
-Title: @MaxLength
 
-____
 
-Deprecated, use instead link:./Property.html[@Property#maxLength()] and link:./Parameter.html[@Parameter#maxLength()] .
 
-____
 
-The `@MaxLength` annotation indicates the maximum number of characters
-that the user may enter into a `String` property, or a `String`
-parameter in an action, or for a string-based value type. It is ignored
-if applied to any other type.
+== anchor:reference-annotations_manpage-Parameter[]`maxLength()`
+
+IMPORTANT: WIP ... this section
+
+
+The `@MaxLength` annotation indicates the maximum number of characters that the user may enter into a `String` property, or a `String` parameter in an action, or for a string-based value type. It is ignored if applied to any other type.
 
 For example, on a property:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @MaxLength(30)
@@ -68,7 +82,7 @@ public class Customer {
 
 Or, on an action parameter:
 
-[source]
+[source,java]
 ----
 public class CustomerRepository {
     public Customer newCustomer(
@@ -82,7 +96,7 @@ public class CustomerRepository {
 
 Or, for a value type:
 
-[source]
+[source,java]
 ----
 @Value(...)
 @MaxLength(30)
@@ -100,13 +114,17 @@ parameters.
 
 
 
-Title: @MinLength
+
+== anchor:reference-annotations_manpage-Parameter[]`minLength()`
+
+IMPORTANT: WIP ... this section
+
 
 The `@MinLength` annotation is used to specify the minimum number of characters in a search of an link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[auto-complete].
 
 For example:
 
-[source]
+[source,java]
 ----
 public ToDoItem add(
         @TypicalLength(20)
@@ -129,34 +147,17 @@ public List<ToDoItem> autoComplete0Add(
 
 
 
-== `mustSatisfy()`
 
-Title: @MustSatisfy
+== anchor:reference-annotations_manpage-Parameter[]`mustSatisfy()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./Property.html[@Property#mustSatisfy()] and link:./Parameter.html[@Parameter#mustSatisfy()].
 
-____
+The `@MustSatisfy` annotation allows validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.
 
-The `@MustSatisfy` annotation allows validation to be applied to
-properties and parameters using an (implementation of a)
-`org.apache.isis.applib.spec.Specification` object.
+For example:
 
-For example, on a property:
-
-[source]
-----
-public class Customer {
-    @MustSatisfy(StartWithCapitalLetterSpecification.class)
-    public String getFirstName() { ... }
-    ...
-}
-----
-
-Or, on an action parameter:
-
-[source]
+[source,java]
 ----
 public class CustomerRepository {
     public Customer newCustomer(
@@ -176,19 +177,20 @@ proposed value.
 An alternative to using `@MustSatisfy` is to define a custom value type (though this introduces additional mapping complexity for both viewers and objectstore).
 
 
+[TIP]
+====
+Can also specify on property, so the specification class can be reused.
+====
 
 
 
 
-== `optionality()`
 
-Title: @Optional
 
-____
+== anchor:reference-annotations_manpage-Parameter[]`optionality()`
 
-Deprecated, use instead link:./Property.html[@Property#optionality()] and link:./Parameter.html[@Parameter#optionality()].
+IMPORTANT: WIP ... this section
 
-____
 
 By default, the system assumes that all properties of an object are
 required, and therefore will not let the user save a new object unless a
@@ -197,26 +199,21 @@ system assumes that all parameters in an action are required and will
 not let the user execute that action unless values have been specified
 for each parameter.
 
-To indicate that either a property, or an action parameter, is optional,
-use the `@Optional` annotation.
+To indicate that an action parameter is optional use the `@Optional` annotation.
 
-____
 
-*Note*
+[TIP]
+====
+The `@Optional`annotation has no meaning for a primitive property (or parameter) such as `int` - because primitives will always return a default value (e.g. zero). If optionality is required, then use the corresponding wrapper class (e.g. `java.lang.Integer`).
+====
 
-The `@Optional`annotation has no meaning for a primitive property (or
-parameter) such as `int` - because primitives will always return a
-default value (e.g. zero). If optionality is required, then use the
-corresponding wrapper class (e.g. `java.lang.Integer`).
-
-____
 
 === Making a property optional
 
 Annotate the getter to indicate that a property is `@Optional`. For
 example:
 
-[source]
+[source,java]
 ----
 public class Order {
     public Product getProduct() { ... }
@@ -239,7 +236,7 @@ To indicate that an action may be invoked without having to specify a
 value for a particular parameter, annotate with `@Optional`. For
 example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     public Order placeOrder(
@@ -255,15 +252,21 @@ public class Customer {
 
 
 
-== `regexPattern()`
+
+
+
+
+== anchor:reference-annotations_manpage-Parameter[]Regex`
 
 Title: @RegEx
 
-____
 
-Deprecated, use instead link:./Property.html[@Property#regex()] and link:./Parameter.html[@Parameter#regex()].
+=== `regexPattern()`
 
-____
+=== `regexPatternFlags()`
+
+=== `regexPatternReplacement()`
+
 
 The `@RegEx` annotation may be applied to any string property, or to any
 parameter within an action method. It can also be applied to any
@@ -282,7 +285,7 @@ formatting", and `caseSensitive` defaults to false.
 
 For example, on a property:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
@@ -293,7 +296,7 @@ public class Customer {
 
 Or, on a parameter:
 
-[source]
+[source,java]
 ----
 public class Customer {
     public void updateEmail(
@@ -307,7 +310,7 @@ public class Customer {
 
 Or, on a value type:
 
-[source]
+[source,java]
 ----
 @Value(...)
 @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")

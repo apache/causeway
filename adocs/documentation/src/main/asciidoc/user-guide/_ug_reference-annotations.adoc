@@ -3,7 +3,24 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+Apache Isis uses annotations to provide additional metadata about the domain objects.
+
+To give just a few examples:
+
+* if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
+* if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`
+* if a class is a domain service and should be automatically instantiated as a singleton, then it can be annotated using `@DomainService`
+* if an action is idempotent, then it can be annotated using `@Action(semantics=SemanticsOf.IDEMPOTENT)`.
+* if an action parameter is optional, it can be annotated using `@Parameter(optionality=Optionality.OPTIONAL)`
+
+Some annotations act as UI hints, for example:
+
+* if a collection should be rendered "open" rather than collapsed, it can be annotated using `@CollectionLayout(render=RenderType.EAGERLY)`
+* if an action has a tooltip, it can be annotated using `@ActionLayout(describedAs=...)`
+* if a domain object is bookmarkable, it can be annotated using `@DomainObjectLayout(bookmarking=BookmarkPolicy.AS_ROOT`).
+
+This chapter documents all the annotations currently supported by Isis.  It also identifies a number of annotations that are now deprecated, and indicates their replacement.
 
 
 include::_ug_reference-annotations_aaa.adoc[leveloffset=+1]
@@ -12,27 +29,27 @@ include::_ug_reference-annotations_manpage-Action.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-ActionLayout.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-Collection.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-Collectionlayout.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Digits.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainObject.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainObjectLayout.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainService.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainServiceLayout.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Parameter.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-ParameterLayout.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Property.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-PropertyLayout.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Viewmodel.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-ViewmodelLayout.adoc[leveloffset=+1]
-
 include::_ug_reference-annotations_manpage-Facets.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-HomePage.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Inject.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-MemberGroupLayout.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-MemberOrder.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-MinLength.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-Programmatic.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Title.adoc[leveloffset=+1]
-
-include::_ug_reference-annotations_manpage-Digits.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Inject.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Property.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-PropertyLayout.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-RequestScoped.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Title.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Viewmodel.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ViewmodelLayout.adoc[leveloffset=+1]
+
+
 
 

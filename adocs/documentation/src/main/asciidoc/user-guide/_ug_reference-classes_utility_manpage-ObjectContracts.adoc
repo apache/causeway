@@ -4,7 +4,6 @@
 :_imagesdir: images/
 
 
-
 The `ObjectContracts` test provides a series of methods to make it easy for your domain objects to:
 
 * implement `Comparable` (eg so can be stored in ``java.util.SortedSet``s)
@@ -52,7 +51,7 @@ isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=fa
 
 ====
 
-### Explanation of the issue in more detail
+== Explanation of the issue in more detail
 
 Consider the entities:
 

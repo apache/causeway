@@ -3,26 +3,68 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-
-Title: @CollectionLayout (1.8.0)
 
 The `@CollectionLayout` annotation applies to collections, collecting together all UI hints within a single
-annotation.
+annotation.  It is also possible to apply the annotation to actions of domain services that are acting as contributed collections.
 
-* `cssClass` - the css class that a collection should have, to allow more targetted styling in `application.css`
-* `describedAs` - description of this collection, eg to be rendered in a tooltip.
-* `hidden` - indicates where in the UI the collection should _not_ be visible in the UI (only NOWHERE or EVERWHERE/ANYWHERE)
-* `named` -the name of this collection (overriding the name derived from its name in code)
-* `namedEscaped` - whether to HTML escape the name of this property. Defaults to true.
-* `paged` - the page size for instances of this class when rendered within a table.
-* `render` - that the rendering of a collection should be performed LAZILY or EAGERLY
-* `sortedBy` - Indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the natural sort order, as defined by the specified{@link java.util.Comparator}
+The table below summarizes the annotation's attributes.
+
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_cssclass_code[`cssClass()`]
+|
+|the css class that a collection should have, to allow more targetted styling in `application.css`
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_describedas_code[`describedAs()`]
+|
+|description of this collection, eg to be rendered in a tooltip.
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_hidden_code[`hidden()`]
+|
+|indicates where in the UI the collection should _not_ be visible in the UI (only NOWHERE or EVERWHERE/ANYWHERE)
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_named[named()]
+|
+|the name of this collection (overriding the name derived from its name in code)
+
+
+|namedEscaped(]
+|`true`,`false` (`true`)
+|whether to HTML escape the name of this property.
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_paged_code[`paged()`]
+|
+|the page size for instances of this class when rendered within a table.
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_render_code[`render()`]
+|
+|that the rendering of a collection should be performed LAZILY or EAGERLY
+
+
+|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_sortedby_code[`sortedBy()`]
+|
+|indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the natural sort order, as defined by the specified `Comparator`.
+
+|===
+
+
+
 
 For example:
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -40,34 +82,16 @@ public class ToDoItem {
 }
 ----
 
-It is also possible to apply the annotation to actions of domain services that are acting as link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed collections].
-
-== See also
-
-Similar layout annotations exist for other elements of the metamodel:
-
-* link:./PropertyLayout.html[@PropertyLayout] for properties
-* link:./ActionLayout.html[@ActionLayout] for actions
-* link:./ParameterLayout.html[@ParameterLayout] for action parameters
-* link:./DomainObjectLayout.html[@DomainObjectLayout]
-* link:./DomainServiceLayout.html[@DomainServiceLayout]
-* link:./ViewModelLayout.html[@ViewModelLayout]
-
-Corresponding domain semantics:
-
-* link:./Collection.html[@Collection]
 
 
 
-== `cssClass()`
 
-Title: @CssClass
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClass()], link:./PropertyLayout.html[@PropertyLayout#cssClass()], link:./CollectionLayout.html[@CollectionLayout#cssClass()], link:./ActionLayout.html[@ActionLayout#cssClass()] and link:./ParameterLayout.html[@ParameterLayout#cssClass()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+== anchor:reference-annotations_manpage-CollectionLayout[]`cssClass()`
 
-____
+IMPORTANT: WIP ... this section
+
 
 The `CssClass` annotation applies to object and also to any object member
 (property, collection or action). It is used by the Wicket viewer as a UI hint
@@ -78,7 +102,7 @@ of that particular element.
 
 For example:
 
-[source]
+[source,java]
 ----
 @CssClass("x-main")
 public class ToDoItem { ... }
@@ -86,7 +110,7 @@ public class ToDoItem { ... }
 
 or
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -96,13 +120,13 @@ public class ToDoItem {
 }
 ----
 
-== Alternatives (`.layout.json`)
+=== Alternatives (`.layout.json`)
 
 As an alternative to using the `@CssClass` annotation, the `.layout.json`
 link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
 can be specified, eg:
 
-[source]
+[source,javascript]
 ----
 {
     "span": 6,
@@ -123,25 +147,21 @@ can be specified, eg:
 
 Note that this (currently) only supports class members, not classes
 
-== See also (1.8.0)
 
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint
-to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered on action butotns or as the icon for classes.
-
-
+[NOTE]
+====
+The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
+====
 
 
 
-== `describedAs()`
 
-Title: @DescribedAs
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#describedAs()], link:./PropertyLayout.html[@PropertyLayout#describedAs()], link:./CollectionLayout.html[@CollectionLayout#describedAs()], link:./ActionLayout.html[@ActionLayout#describedAs()] and link:./ParameterLayout.html[@ParameterLayout#describedAs()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+== anchor:reference-annotations_manpage-CollectionLayout[]`describedAs()`
+
+IMPORTANT: WIP ... this section
 
 The `@DescribedAs` annotation is used to provide a short description of
 something that features on the user interface. How this description is
@@ -153,31 +173,11 @@ collections and actions), and for individual parameters within an action
 method. `@DescribedAs` therefore works in a very similar manner to
 `@Named` <!--(see ?)-->.
 
-=== Providing a description for an object
 
-To provide a description for an object, use the `@DescribedAs`
-annotation immediately before the declaration of that object class.
 
 For example:
 
-[source]
-----
-@DescribedAs("A customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")
-public class ProspectiveSale {
-   ...
-}
-----
-
-=== Providing a description for an object member
-
-Any member (property, collection or action) may provide a description.
-To specify this description, use the `@DescribedAs` annotation
-immediately before the declaration of that member.
-
-For example:
-
-[source]
+[source,java]
 ----
 public class Customer {
     @DescribedAs("The name that the customer has indicated that they wish to be " +
@@ -186,44 +186,13 @@ public class Customer {
 }
 ----
 
-=== Providing a description for an action parameter
-
-To provide a description for an individual action parameter, use the
-`@DescribedAs` annotation in-line i.e. immediately before the parameter
-declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity")
-                      @DescribedAs("The quantity of the product being ordered")
-                      int quantity) {
-        Order order = createTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
 
 
 
+== anchor:reference-annotations_manpage-CollectionLayout[]`hidden()`
 
-== `hidden()`
+IMPORTANT: WIP ... this section
 
-Title: @Hidden
-
-____
-
-Deprecated. For object members use link:./Property.html[@Property#hidden()] or link:./PropertyLayout.html[@PropertyLayout#hidden()], link:./Collection.html[@Collection#hidden()] or link:./CollectionLayout.html[@CollectionLayout#hidden()], and link:./ActionLayout.html[@ActionLayout#hidden()]. For domain servicesm use [@DomainService#nature()]
-
-____
 
 The `@Hidden` annotation indicates that the member (property, collection
 or action) to which it is applied should never be visible to the user.
@@ -232,7 +201,7 @@ entities or values).
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden
@@ -246,7 +215,7 @@ public class Customer {
 
 Or, applied to a service:
 
-[source]
+[source,java]
 ----
 @Hidden
 public class EmailService {
@@ -258,7 +227,7 @@ public class EmailService {
 This annotation can also take a parameters indicating where and when it
 is to be hidden. For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(when=When.ONCE_PERSISTED)
@@ -270,7 +239,7 @@ public class Customer {
 would show the `Id` until the object has been saved, and then would hide
 it. And:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(where=Where.ALL_TABLES)
@@ -352,19 +321,21 @@ defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 
 
 
+== anchor:reference-annotations_manpage-CollectionLayout[]Named
+
+By default, the name of a class member (a property, collection or action) presented to the user is derived, reflectively, from the name of the member defined in the program code. To specify a different name use the `@Named `annotation immediately before the member declaration.
+
+[TIP]
+====
+Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
+====
 
 
 
+=== named()
 
-== `named()`
+IMPORTANT: WIP ... this section
 
-Title: @Named
-
-____
-
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#named()], link:./PropertyLayout.html[@PropertyLayout#named()], link:./CollectionLayout.html[@CollectionLayout#named()], link:./ActionLayout.html[@ActionLayout#named()] and link:./ParameterLayout.html[@ParameterLayout#named()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
-
-____
 
 The `@Named` annotation is used when you want to specify the way
 something is named on the user interface i.e. when you do not want to
@@ -372,48 +343,11 @@ use the name generated automatically by the system. It can be applied to
 objects, members (properties, collections, and actions) and to
 parameters within an action method.
 
-____
 
-*Warning*
-
-Generally speaking it is better to rename the property, collection or
-action. The only common case where `@Named` is common is to rename
-parameters for built-in value types. Even here though a custom value
-type can be defined using `@Value` so that the value type is used as the
-parameter name. `@Named` may also be used if the name needs punctuation
-or other symbols in the name presented to the user.
-
-____
-
-=== Specifying the name of an object
-
-By default the name of an object is derived, reflectively from the class
-name. To specify a different name for an object, use the `@Named`
-annotation in front of the class declaration.
 
 For example:
 
-[source]
-----
-@Named("Customer")
-public class CustomerImpl implements Customer{
-   ...
-}
-----
-
-See also the `@Plural` annotation <!--, ?-->.
-
-=== Specifying the name of a class member
-
-By default, the name of a class member (a property, collection or
-action) presented to the user is derived, reflectively, from the name of
-the member defined in the program code. To specify a different name use
-the `@Named
-`annotation immediately before the member declaration.
-
-For example:
-
-[source]
+[source,java]
 ----
 public class Customer {
 
@@ -428,38 +362,10 @@ public class Customer {
 Note that the framework provides a separate and more powerful mechanism
 for internationalisation.
 
-=== Specifying the name for an action parameter
 
-The most common usage of `@Named` is be to specify names for the
-parameters of an action. This is because the parameter name declared in
-the code for the action method cannot be picked up reflectively (by
-default, the user interface will use the type of the parameter as the
-name; for a `String` or a `Boolean`, this is almost certainly not what is
-required).
+=== namedEscaped()
 
-To specify the name of a parameter, the `@Named` annotation is applied
-'in-line' (i.e. preceding the individual parameter declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-            Product product
-           ,@Named("Quantity")
-            int quantity) {
-        Order order = newTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
-
-An alternative is to use a value type (though this introduces additional mapping complexity for both viewers and objectstore) <!--, as described in ?-->.
+IMPORTANT: WIP ... this section
 
 
 
@@ -467,20 +373,10 @@ An alternative is to use a value type (though this introduces additional mapping
 
 
 
+== anchor:reference-annotations_manpage-CollectionLayout[]`paged()`
 
+IMPORTANT: WIP ... this section
 
-
-
-
-== `paged()`
-
-Title: @Paged
-
-____
-
-Deprecated, use instead link:./CollectionLayout.html[@CollectionLayout] and link:./DomainObjectLayout.html[@DomainObjectLayout].
-
-____
 
 This annotation is used to indicate that parented and/or standalone
 collections should be paginated.
@@ -491,7 +387,7 @@ size of a standalone collection.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Paged(30)
 public class Order {
@@ -509,7 +405,7 @@ the configured defaults in `isis.properties` will be used.
 
 For example:
 
-[source]
+[source,ini]
 ----
 isis.viewers.paged.standalone=20
 isis.viewers.paged.parented=5
@@ -523,15 +419,13 @@ of 20 for standalone collections.
 
 
 
-== `render()`
 
-Title: @Render
 
-____
 
-Deprecated, use instead link:./CollectionLayout.html[@CollectionLayout#render()]
+== anchor:reference-annotations_manpage-CollectionLayout[]`render()`
 
-____
+IMPORTANT: WIP ... this section
+
 
 The `@Render` annotation is a hint for properties and collections to
 indicate that a value property should be rendered lazily (rather than
@@ -557,7 +451,7 @@ of values that represent blobs or clobs.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Order {
     @Render(Type.EAGERLY)
@@ -577,22 +471,18 @@ Indeed, some object stores may choose use their own specific annotations
 
 
 
-== `sortedBy()`
 
-Title: @SortedBy
+== anchor:reference-annotations_manpage-CollectionLayout[]`sortedBy()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./CollectionLayout.html[@CollectionLayout#sortedBy].
-
-____
 
 The `@SortedBy` annotation is an instruction hint for (`SortedSet`) collections to use the specified comparator rather than the natural ordering of the entity
 (as would usually be the case).
 
 For example, this is taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
 
-[source]
+[source,java]
 ----
 public class ToDoItem implements Comparable<ToDoItem> {
 

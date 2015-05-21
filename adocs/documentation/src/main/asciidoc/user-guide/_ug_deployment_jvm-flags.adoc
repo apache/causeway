@@ -10,7 +10,7 @@ for the `WrapperFactory` (uses link:http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/jav
 
 using:
 
-[source]
+[source,ini]
 ----
 -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
 ----

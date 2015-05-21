@@ -25,7 +25,7 @@ The `glue` attribute of the Cucumber-JVM JUnit runner eallows you to indicate wh
 
 Here's an example of a feature from the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype]:
 
-[source]
+[source,java]
 ----
 @SimpleObjectsFixture
 Feature: List and Create New Simple Objects

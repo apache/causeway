@@ -3,26 +3,68 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The `@PropertyLayout` annotation applies to properties collecting together all UI hints within a single annotation.
 
 
-Title: @PropertyLayout (1.8.0)
+The table below summarizes the annotation's attributes.
 
-The `@PropertyLayout` annotation applies to properties collecting together all UI hints within a single annotation:
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
 
-* `cssClass` - the css class that a property should have, to allow more targetted styling in `application.css`
-* `describedAs` - description of this property, eg to be rendered in a tooltip.
-* `labelPosition` - in forms, the positioning of the label (LEFT, TOP or NONE) relative to the property value. For boolean properties it is also possible to specify RIGHT. Defaults to LEFT unless `multiLine` also specified (see below)
-* `hidden` - indicates where in the UI the property should _not_ be visible in the UI
-* `named` -the name of this property (overriding the name derived from its name in code)
-* `namedEscaped` - whether to HTML escape the name of this property. Defaults to true.
-* `multiLine` - for string properties, render as a text area over multiple lines. If set &gt;1, then `labelPosition` defaults to TOP unless otherwise specified.
-* `renderedAsDayBefore` - for date properties only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
-* `typicalLength` -the typical entry length of a field, use to determine the optimum width for display
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_cssclass_code[`cssClass()`]
+|
+|the css class that a property should have, to allow more targetted styling in `application.css`
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_describedas_code[`describedAs()`]
+|
+|description of this property, eg to be rendered in a tooltip.
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_labelposition_code[`labelPosition()`]
+|
+|in forms, the positioning of the label (LEFT, TOP or NONE) relative to the property value. For boolean properties it is also possible to specify RIGHT. Defaults to LEFT unless `multiLine` also specified (see below)
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_multiline_code[`multiLine()`]
+|
+|for string propertys, render as a text area over multiple lines. If set &gt;1, then `labelPosition` defaults to TOP unless otherwise specified.
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_named[`named()`]
+|
+|the name of this property. For Java 7 this is generally required. For Java 8, the name can be inferred from the code so this attribute allows the name to be overridden.
+
+
+|`namedEscaped()`
+|
+|whether to HTML escape the name of this property. Defaults to true.
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_renderedasdaybefore_code[`renderedAsDayBefore()`]
+|
+|for date propertys only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
+
+
+|xref:__a_id_reference_annotations_manpage_propertylayout_a_code_typicallength_code[`typicalLength()`]
+|
+|the typical entry length of a field, use to determine the optimum width for display
+
+|===
+
+
+
 
 For example:
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -47,13 +89,12 @@ public class ToDoItem {
 
 It is also possible to apply the annotation to actions of domain services that are acting as link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed properties].
 
-== Alternatives (`.layout.json`)
 
-As an alternative to using the `@PropertyLayout` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
 
-[source]
+As an alternative to using the `@PropertyLayout` annotation, the xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[]
+  can be specified, eg:
+
+[source,javascript]
 ----
 {
     "span": 6,
@@ -84,73 +125,48 @@ can be specified, eg:
 }
 ----
 
-== Specifying a default setting for label positions
-
+[TIP]
+.Specifying a default setting for label positions
+====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
 frustrating to have to annotate every property.
 
 Instead, a default can be specified in `isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.viewers.propertyLayout.labelPosition=TOP
 ----
 
 or
 
-[source]
+[source,ini]
 ----
 isis.viewers.propertyLayout.labelPosition=LEFT
 ----
 
 If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+====
 
-== See also
 
-Similar layout annotations exist for other elements of the metamodel:
-
-* link:./CollectionLayout.html[@CollectionLayout] for collections
-* link:./ActionLayout.html[@ActionLayout] for actions
-* link:./ParameterLayout.html[@ParameterLayout] for action parameters
-* link:./DomainObjectLayout.html[@DomainObjectLayout]
-* link:./DomainServiceLayout.html[@DomainServiceLayout]
-* link:./ViewModelLayout.html[@ViewModelLayout]
-
-Corresponding domain semantics:
-
-* link:./Property.html[@Property]
+IMPORTANT: TODO - ensure these properties are in the runtime config chapter
 
 
 
 
-== `cssClass()`
 
-Title: @CssClass
+== anchor:reference-annotations_manpage-PropertyLayout[]`cssClass()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClass()], link:./PropertyLayout.html[@PropertyLayout#cssClass()], link:./CollectionLayout.html[@CollectionLayout#cssClass()], link:./ActionLayout.html[@ActionLayout#cssClass()] and link:./ParameterLayout.html[@ParameterLayout#cssClass()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+The `CssClass` annotation applies to object and also to any object member (property, collection or action). It is used by the Wicket viewer as a UI hint to render specified CSS classes around the representation of the element.
 
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
-
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
+Application-specific CSS can then be used to target and adjust the UI representation of that particular element.
 
 For example:
 
-[source]
-----
-@CssClass("x-main")
-public class ToDoItem { ... }
-----
-
-or
-
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -160,13 +176,11 @@ public class ToDoItem {
 }
 ----
 
-== Alternatives (`.layout.json`)
+=== Alternatives (`.layout.json`)
 
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
+As an alternative to using the `@CssClass` annotation, the `.layout.json` link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file] can be specified, eg:
 
-[source]
+[source,javascript]
 ----
 {
     "span": 6,
@@ -187,46 +201,31 @@ can be specified, eg:
 
 Note that this (currently) only supports class members, not classes
 
-== See also (1.8.0)
 
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint
-to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered on action butotns or as the icon for classes.
-
-
+[NOTE]
+====
+The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
+====
 
 
-== `cssClassFa()`
 
-Title: @CssClassFa (1.8.0)
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClassFa()], link:./PropertyLayout.html[@PropertyLayout#cssClassFa()], link:./ActionLayout.html[@ActionLayout#cssClassFa()] and link:./ViewModelLayout.html[@ViewModelLayout#cssClassFa()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
 
-The `CssClassFa` annotation applies to objects and also to object actions,
-and is used by the Wicket viewer as a UI hint.
+== anchor:reference-annotations_manpage-PropertyLayout[]`cssClassFa()`
 
-For object actions, the viewer will render the specified
-http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon]
-on the action's button (or menu item).
+IMPORTANT: WIP ... this section
 
-For objects, it will be used as an icon. Note that this is only used if
-the object does not have a `getIconName()` method.
+The `CssClassFa` annotation applies to objects and also to object actions, and is used by the Wicket viewer as a UI hint.
+
+For object actions, the viewer will render the specified http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] on the action's button (or menu item).
+
+For objects, it will be used as an icon. Note that this is only used if the object does not have a `getIconName()` method.
 
 For example:
 
-[source]
-----
-@CssClassFa("fa-check-circle")
-public class ToDoItem { ... }
-----
-
-or
-
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -239,16 +238,13 @@ public class ToDoItem {
 }
 ----
 
-There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
-is no need to include the "fa" class; it will be automatically appended.
+There can be multiple "fa-" classes, eg to mirror or rotate the icon. There is no need to include the "fa" class; it will be automatically appended.
 
-== Alternatives (`.layout.json`)
+=== Alternatives (`.layout.json`)
 
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
+As an alternative to using the `@CssClass` annotation, the `.layout.json` link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file] can be specified, eg:
 
-[source]
+[source,javascript]
 ----
 {
     "span": 6,
@@ -276,60 +272,28 @@ can be specified, eg:
 
 Note that this (currently) only supports class members, not classes.
 
-== See also
 
-The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint
-to apply CSS, but for wrapping the representation of an object or object
-member so that it can be styled in an application-specific way.
-
-
+[NOTE]
+====
+The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+====
 
 
-== `describedAs()`
 
-Title: @DescribedAs
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#describedAs()], link:./PropertyLayout.html[@PropertyLayout#describedAs()], link:./CollectionLayout.html[@CollectionLayout#describedAs()], link:./ActionLayout.html[@ActionLayout#describedAs()] and link:./ParameterLayout.html[@ParameterLayout#describedAs()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+== anchor:reference-annotations_manpage-PropertyLayout[]`describedAs()`
 
-The `@DescribedAs` annotation is used to provide a short description of
-something that features on the user interface. How this description is
-used will depend upon the viewing mechanism - but it may be thought of
-as being like a 'tool tip'.
+IMPORTANT: WIP ... this section
 
-Descriptions may be provided for objects, members (properties,
-collections and actions), and for individual parameters within an action
-method. `@DescribedAs` therefore works in a very similar manner to
-`@Named` <!--(see ?)-->.
+The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
 
-=== Providing a description for an object
-
-To provide a description for an object, use the `@DescribedAs`
-annotation immediately before the declaration of that object class.
+Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method. `@DescribedAs` therefore works in a very similar manner to `@Named`.
 
 For example:
 
-[source]
-----
-@DescribedAs("A customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")
-public class ProspectiveSale {
-   ...
-}
-----
-
-=== Providing a description for an object member
-
-Any member (property, collection or action) may provide a description.
-To specify this description, use the `@DescribedAs` annotation
-immediately before the declaration of that member.
-
-For example:
-
-[source]
+[source,java]
 ----
 public class Customer {
     @DescribedAs("The name that the customer has indicated that they wish to be " +
@@ -338,45 +302,15 @@ public class Customer {
 }
 ----
 
-=== Providing a description for an action parameter
-
-To provide a description for an individual action parameter, use the
-`@DescribedAs` annotation in-line i.e. immediately before the parameter
-declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity")
-                      @DescribedAs("The quantity of the product being ordered")
-                      int quantity) {
-        Order order = createTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
 
 
 
 
 
-== `hidden()`
 
-Title: @Hidden
+== anchor:reference-annotations_manpage-PropertyLayout[]`hidden()`
 
-____
-
-Deprecated. For object members use link:./Property.html[@Property#hidden()] or link:./PropertyLayout.html[@PropertyLayout#hidden()], link:./Collection.html[@Collection#hidden()] or link:./CollectionLayout.html[@CollectionLayout#hidden()], and link:./ActionLayout.html[@ActionLayout#hidden()]. For domain servicesm use [@DomainService#nature()]
-
-____
+IMPORTANT: WIP ... this section
 
 The `@Hidden` annotation indicates that the member (property, collection
 or action) to which it is applied should never be visible to the user.
@@ -385,7 +319,7 @@ entities or values).
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden
@@ -397,21 +331,10 @@ public class Customer {
 }
 ----
 
-Or, applied to a service:
-
-[source]
-----
-@Hidden
-public class EmailService {
-    public void sendEmail(...) { ... }
-    ...
-}
-----
-
 This annotation can also take a parameters indicating where and when it
 is to be hidden. For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(when=When.ONCE_PERSISTED)
@@ -423,7 +346,7 @@ public class Customer {
 would show the `Id` until the object has been saved, and then would hide
 it. And:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(where=Where.ALL_TABLES)
@@ -501,16 +424,20 @@ defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 
 
 
+== anchor:reference-annotations_manpage-ParameterLayout[]`labelPosition()`
 
-== `multiLine()`
+IMPORTANT: WIP ... this section
 
-Title: @MultiLine
 
-____
 
-Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#multiLine()] and link:./ParameterLayout.html[@ParameterLayout#multiLine()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+
+
+
+== anchor:reference-annotations_manpage-PropertyLayout[]`multiLine()`
+
+IMPORTANT: WIP ... this section
+
 
 The `@MultiLine` annotation provides information about the carriage
 returns in a `String` property or action parameter, or for a
@@ -520,18 +447,12 @@ than a text field), with appropriate wrapping and/or scrollbars.
 
 More formally, the annotation indicates that:
 
-*
+* the `String` property or parameter may contain carriage returns, and
 
-the `String` property or parameter may contain carriage returns, and
-
-*
-
-(optionally) the typical number of such carriage returns (meaning
+* (optionally) the typical number of such carriage returns (meaning
 the number of rows in the text area), and
 
-*
-
-(optionally) that the text should be wrapped (the default is that
+* (optionally) that the text should be wrapped (the default is that
 text is not wrapped).
 
 The syntax is:
@@ -541,7 +462,7 @@ The syntax is:
 
 For example:
 
-[source]
+[source,java]
 ----
 public class BugReport {
     @MultiLine(numberOfLines=10)
@@ -557,7 +478,7 @@ characters on any given row exceeds the width.
 
 Another example:
 
-[source]
+[source,java]
 ----
 public class Email {
     @MultiLine(numberOfLines=20, preventWrapping=false)
@@ -575,7 +496,7 @@ expected width of the text area in the user interface will be determined
 by the value of the typical length divided by the number of specified
 lines. For example:
 
-[source]
+[source,java]
 ----
 public class Email {
     @MultiLine(numberOfLines=20, preventWrapping=false)
@@ -598,66 +519,25 @@ Here the body will (likely be) displayed in a text area of 20 rows, with
 
 
 
+== anchor:reference-annotations_manpage-PropertyLayout[]`named()`
+
+IMPORTANT: WIP ... this section
+
+The `@Named` annotation is used when you want to specify the way something is named on the user interface i.e. when you do not want to use the name generated automatically by the system. It can be applied to objects, members (properties, collections, and actions) and to parameters within an action method.
 
 
-== `named()`
+[WARNING]
+====
+Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
+====
 
-Title: @Named
 
-____
-
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#named()], link:./PropertyLayout.html[@PropertyLayout#named()], link:./CollectionLayout.html[@CollectionLayout#named()], link:./ActionLayout.html[@ActionLayout#named()] and link:./ParameterLayout.html[@ParameterLayout#named()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
-
-____
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-____
-
-*Warning*
-
-Generally speaking it is better to rename the property, collection or
-action. The only common case where `@Named` is common is to rename
-parameters for built-in value types. Even here though a custom value
-type can be defined using `@Value` so that the value type is used as the
-parameter name. `@Named` may also be used if the name needs punctuation
-or other symbols in the name presented to the user.
-
-____
-
-=== Specifying the name of an object
-
-By default the name of an object is derived, reflectively from the class
-name. To specify a different name for an object, use the `@Named`
-annotation in front of the class declaration.
-
-For example:
-
-[source]
-----
-@Named("Customer")
-public class CustomerImpl implements Customer{
-   ...
-}
-----
-
-See also the `@Plural` annotation <!--, ?-->.
-
-=== Specifying the name of a class member
-
-By default, the name of a class member (a property, collection or
-action) presented to the user is derived, reflectively, from the name of
-the member defined in the program code. To specify a different name use
-the `@Named
+By default, the name of a class member (a property, collection or action) presented to the user is derived, reflectively, from the name of the member defined in the program code. To specify a different name use the `@Named
 `annotation immediately before the member declaration.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
 
@@ -672,51 +552,13 @@ public class Customer {
 Note that the framework provides a separate and more powerful mechanism
 for internationalisation.
 
-=== Specifying the name for an action parameter
-
-The most common usage of `@Named` is be to specify names for the
-parameters of an action. This is because the parameter name declared in
-the code for the action method cannot be picked up reflectively (by
-default, the user interface will use the type of the parameter as the
-name; for a `String` or a `Boolean`, this is almost certainly not what is
-required).
-
-To specify the name of a parameter, the `@Named` annotation is applied
-'in-line' (i.e. preceding the individual parameter declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-            Product product
-           ,@Named("Quantity")
-            int quantity) {
-        Order order = newTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
-
-An alternative is to use a value type (though this introduces additional mapping complexity for both viewers and objectstore) <!--, as described in ?-->.
 
 
 
 
-== `renderedAsDayBefore()`
+== anchor:reference-annotations_manpage-PropertyLayout[]`renderedAsDayBefore()`
 
-Title: @RenderedAsDayBefore
-
-____
-
-Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#renderedAsDayBefore()] and link:./ParameterLayout.html[@ParameterLayout#renderedAsDayBefore()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
-
-____
+IMPORTANT: WIP ... this section
 
 A rendering hint, instructing the viewer that the date should as one day prior to the actually stored date.
 
@@ -724,7 +566,7 @@ This is intended to be used so that an exclusive end date of an interval can be 
 
 For example:
 
-[source]
+[source,java]
 ----
 public LocalDate getStartDate() { ... }
 
@@ -741,29 +583,19 @@ What is stored in the domain object, itself, however, the value stored is 1-jun-
 
 
 
-== `typicalLength()`
 
-Title: @TypicalLength
+== anchor:reference-annotations_manpage-PropertyLayout[]`typicalLength()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./PropertyLayout.html[@PropertyLayout#typicalLength()] and link:./ParameterLayout.html[@ParameterLayout#typicalLength()] or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+The `@TypicalLength` annotation indicates the typical length of a `String` property or `String` parameter in an action. It can also be specified for string-based value types.
 
-The `@TypicalLength` annotation indicates the typical length of a
-`String` property or `String` parameter in an action. It can also be
-specified for string-based value types.
+The information is generally used by the viewing mechanism to determine the space that should be given to that property or parameter in the appropriate view. If the typical length is the same as the `@MaxLength` <!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If the value specified is zero or negative then it will be ignored.
 
-The information is generally used by the viewing mechanism to determine
-the space that should be given to that property or parameter in the
-appropriate view. If the typical length is the same as the `@MaxLength`
-<!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If
-the value specified is zero or negative then it will be ignored.
+For example:
 
-For example, for a property:
-
-[source]
+[source,java]
 ----
 public class Customer {
     @MaxLength(30)
@@ -773,29 +605,3 @@ public class Customer {
 }
 ----
 
-Or, for a parameter:
-
-[source]
-----
-public class CustomerRepository {
-    public Customer newCustomer(
-            @TypicalLength(20)
-            @Named("First Name") String firstName
-           ,@TypicalLength(20)
-            @Named("Last Name") String lastName) {
-        ...
-    }
-    ...
-}
-----
-
-Or, for value type:
-
-[source]
-----
-@Value(...)
-@TypicalLength(20)
-public class FirstName {
-    ...
-}
-----

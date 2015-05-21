@@ -4,6 +4,7 @@
 :_imagesdir: images/
 
 
+This section summarizes the various annotations supported by Isis.  They break out into five categories.
 
 include::_ug_reference-annotations_aaa_main.adoc[leveloffset=+1]
 include::_ug_reference-annotations_aaa_other.adoc[leveloffset=+1]

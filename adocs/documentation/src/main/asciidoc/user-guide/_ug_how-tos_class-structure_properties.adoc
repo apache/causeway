@@ -97,7 +97,7 @@ The `@Property(optionality=...)` annotation is equivalent to the older but still
 
 An alternative way to achieve this is to leave the JDO annotation on the field (where it is invisible to Isis), and rely on Isis' default, eg:
 
-[source]
+[source,java]
 ----
 @javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
 public class SomeSubtype extends SomeSuperType {

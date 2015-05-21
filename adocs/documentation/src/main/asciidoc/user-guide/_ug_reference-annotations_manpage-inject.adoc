@@ -6,10 +6,3 @@
 IMPORTANT: TODO
 
 
-Title: @javax.inject.Inject
-
-____
-
-this is a stub
-
-____

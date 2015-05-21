@@ -87,7 +87,7 @@ Because these are wildcards, a '*' can be used at any level. Additionally, missi
 
 Thus:
 
-[source]
+[source,ini]
 ----
 com.mycompany.myapp:Customer:firstName:r,w   # view or edit customer's firstName
 com.mycompany.myapp:Customer:lastName:r      # view customer's lastName only

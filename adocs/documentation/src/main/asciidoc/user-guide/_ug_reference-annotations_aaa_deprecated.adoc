@@ -4,6 +4,11 @@
 :_imagesdir: images/
 
 
+As Apache Isis has evolved and grown, we found ourselves adding more and more annotations; but most of these related to either an object type (entity, view model, service) or an object member (property, collection, action).  It became harder and harder for end programmers to discover these new features.
+
+Accordingly, we decided to unify the semantics into the core annotations listed xref:__a_id_reference_annotations_summary_a_core_annotations[above].
+
+The annotations listed in the table below are still supported by Apache Isis, but will be retired in Isis v2.0.
 
 
 .Deprecated Annotations
@@ -13,8 +18,7 @@
 |Purpose
 |Use instead
 |Layer
-|`.layout +
-.json`?
+|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
 
 |`@ActionOrder`
 |Order of buttons and menu items representing actions.

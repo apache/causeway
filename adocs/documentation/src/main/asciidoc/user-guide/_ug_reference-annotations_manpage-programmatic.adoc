@@ -3,17 +3,12 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any xref:__a_id_reference_services_api_manpage_a_code_mementoservice_code[memento]s or xref:__a_id_reference_services_api_manpage_a_code_xmlsnapshotservice_code[snapshot]s.
 
-Title: @Programmatic
+A common use-case is to ignore implementation-level artifacts. For example:
 
-The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any mementos/snapshots.
-
-A common use-case is to ignore implementation-level artifacts. For
-example:
-
-[source]
+[source,java]
 ----
 public class Customer implements Comparable<Customer> {
     ...
@@ -25,21 +20,17 @@ public class Customer implements Comparable<Customer> {
 }
 ----
 
-Note that `@Programmatic` does not simply imply `@Hidden` and `@NotPersisted`;
-it actually means that the class member will not be part of the Isis
-metamodel.
+
+Note that `@Programmatic` does not simply imply `@Hidden`; it actually means that the class member will not be part of the Isis metamodel.
 
 
 
-Title: @Ignore (deprecated)
 
-____
+`@Ignore` (deprecated) is equivalent to using `@Programmatic`.
 
-Deprecated, use instead link:./Action.html[@Action#semantics()].
+[TIP]
+====
+The `@Programmatic` annotation was introduced because `@Ignore` can easily clash with `@org.junit.Ignore`.
+====
 
-____
 
-Equivalent to using `@Programmatic`.
-
-The `@Programmatic` annotation was
-introduced because `@Ignore` can easily clash with `@org.junit.Ignore`.

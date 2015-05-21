@@ -35,7 +35,7 @@ image::{_imagesdir}reference/configuration-properties/datanucleus-objectstore/pa
 
 [TIP]
 ====
-[source]
+[source,ini]
 .DSL (http://yuml.me/edit/b8681268[yuml.me/b8681268])
 ----
 [Party|reference]<--->*[AgreementRole|startDate]

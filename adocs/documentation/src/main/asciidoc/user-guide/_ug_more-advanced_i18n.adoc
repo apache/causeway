@@ -323,7 +323,7 @@ Then this directory will be used as the base for searching for translations (rat
 
 As noted above, if running in prototype mode then `TranslationServicePo` will be in write mode, if in production mode then will be in read mode. To force read mode (ie use translations) even if in prototype mode, add the following configuration property to `isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.services.translation.po.mode=read
 ----
@@ -587,7 +587,7 @@ As per <a href='https://issues.apache.org/jira/browse/ISIS-802'>ISIS-802</a>, th
 
 Specifically, remove any dependencies on `org.apache.isis:isis-core-profilestore`:
 
-[source]
+[source,xml]
 ----
 <dependency>
     <groupId>org.apache.isis.core</groupId>

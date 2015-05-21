@@ -6,7 +6,7 @@
 
 Apache Isis' integration test support is automatically configured if you use the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
 
-[source]
+[source,xml]
 ----
 <dependency>
     <groupId>org.apache.isis.core</groupId>

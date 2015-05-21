@@ -3,57 +3,67 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-Title: @DomainObject (1.8.0)
-
-____
-
-stub
-
-____
 
 The `@DomainObject` annotation applies to domain objects, collecting together all domain semantics within a single annotation.
 
-== Source code
+The table below summarizes the annotation's attributes.
 
-See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/DomainObject.java">@DomainObject</a> source code.
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
 
-== See also
-
-Other domain semantics:
-
-* link:./Property.html[@Property]
-* link:./Collection.html[@Collection]
-* link:./Action.html[@Action]
-* link:./Parameter.html[@Parameter]
-* link:./DomainService.html[@DomainService]
-* link:./ViewModel.html[@ViewModel]
-
-Corresponding view layer ("Layout") annotation:
-
-* link:./DomainObjectLayout.html[@DomainObjectLayout]
+| Attribute
+| Values (default)
+| Description
 
 
+|xref:__a_id_reference_annotations_manpage_domainobject_a_code_auditing_code[`auditing()`]
+|
+|
 
-== `auditing()`
 
-Title: @Audited
+|xref:__a_id_reference_annotations_manpage_domainobject_a_code_autocomplete_code[`autoComplete()`]
+|
+|
 
-____
 
-Deprecated, use instead link:./DomainObject.html[@DomainObject#auditing()].
+|xref:__a_id_reference_annotations_manpage_domainobject_a_code_bounded_code[`bounded()`]
+|
+|
 
-____
 
-This annotation, which applies only to objects, indicates that if the
-object is modified, then it should be submitted to the
-`AuditingService`, if one has been configured.
+|xref:__a_id_reference_annotations_manpage_domainobject_a_code_editing_code[`editing()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_domainobject_a_publishing[`publishing()`]
+|
+|
+
+
+|`publishingPayloadFactory()`
+|
+|
+
+|===
+
+
+
+
+
+
+== anchor:reference-annotations_manpage-DomainObject[]`auditing()`
+
+IMPORTANT: WIP ... this section
+
+
+This annotation, which applies only to objects, indicates that if the object is modified, then it should be submitted to the  xref:__a_id_reference_services_spi_manpage_a_code_auditingservice3_code[`AuditingService3`], if one has been configured.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Audited
 public class Customer extends AbstractDomainObject {
@@ -64,7 +74,7 @@ public class Customer extends AbstractDomainObject {
 The `AuditingService` is defined within the applib (in the
 `org.apache.isis.applib.services.audit` package):
 
-[source]
+[source,java]
 ----
 public interface AuditingService {
     @Hidden
@@ -80,15 +90,14 @@ the mailing list to determine whether auditing is supported for other object sto
 
 
 
-== `autoComplete()`
 
-Title: @AutoComplete
 
-____
 
-Deprecated, use instead link:./DomainObject.html[@DomainObject#autoCompleteRepository].
 
-____
+== anchor:reference-annotations_manpage-DomainObject[]`autoComplete()`
+
+IMPORTANT: WIP ... this section
+
 
 This annotation is to support an auto-complete capability for reference
 properties and action parameters, the idea being that the user enters a
@@ -101,7 +110,7 @@ list of the type.
 
 For example:
 
-[source]
+[source,java]
 ----
 @AutoComplete(repository=Customers.class, action="autoComplete")
 public class Customer extends AbstractDomainObject {
@@ -111,7 +120,7 @@ public class Customer extends AbstractDomainObject {
 
 where:
 
-[source]
+[source,java]
 ----
 public interface Customers {
 
@@ -121,33 +130,27 @@ public interface Customers {
 }
 ----
 
-____
 
-{note
+[NOTE]
+====
 In many cases you may require additional control. For this, you can use the `autoComplete` method prefix, associated either with link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[action parameter] or with the link:../../how-tos/how-to-03-015-How-to-specify-an-autocomplete-for-a-property.html[property].
-}
-
-____
+====
 
 
 
 
-== `bounded()`
 
-Title: @Bounded
+== anchor:reference-annotations_manpage-DomainObject[]`bounded()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./DomainObject.html[@DomainObject#bounded()].
-
-____
 
 For immutable objects where there is a bounded set of instances, the
 `@Bounded` annotation can be used.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Bounded
 public class County {
@@ -155,50 +158,37 @@ public class County {
 }
 ----
 
-The number of instances is expected to be small enough that all instance
-can be held in memory. The viewer will use this information to render
-all the instances of this class in a drop-down list or equivalent.
+The number of instances is expected to be small enough that all instance can be held in memory. The viewer will use this information to render all the instances of this class in a drop-down list or equivalent.
 
-____
 
-*Note*
+[NOTE]
+====
+Although this is not enforced, `@Bounded` is intended for use on `final` classes. Its behaviour when used on interfaces, or classes with sub-classes is not specified
 
-Although this is not enforced, `@Bounded` is intended for use on
-`final` classes. Its behaviour when used on interfaces, or classes
-with sub-classes is not specified
-
-____
+====
 
 
 
 
 
 
+== anchor:reference-annotations_manpage-DomainObject[]`editing()`
+
+IMPORTANT: WIP ... this section
 
 
-== `editing()`
+[NOTE]
+====
+Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
+====
 
-Title: @Disabled
 
-____
 
-Deprecated, use instead link:./Property.html[@Property#editing()], link:./Collection.html[@Collection#editing()], and also link:./DomainObject.html[@DomainObject#editing()]
-
-*Support*
-
-* Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
-
-____
-
-The `@Disabled` annotation means that the member cannot be used in any
-instance of the class. When applied to the property it means that the
-user may not modify the value of that property (though it may still be
-modified programmatically). When applied to an action method, it means
-that the user cannot invoke that method.
+The `@Disabled` annotation means that the member cannot be used in any instance of the class. When applied to the property it means that the user may not modify the value of that property (though it may still be modified programmatically). When applied to an action method, it means that the user cannot invoke that method.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Disabled
@@ -221,7 +211,7 @@ This annotation can also take two parameter indicating where (in the UI)
 it is to be disabled, and when (in the object's lifecycle) it is to be
 disabled. For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     (when=When.UNTIL_PERSISTED)
@@ -231,7 +221,7 @@ public class Customer {
 
 would disable the action until the object has been saved. And:
 
-[source]
+[source,java]
 ----
 public class Customer {
     (where=Where.PARENTED_TABLES)
@@ -308,23 +298,12 @@ defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 
 
 
-Title: @Immutable
 
-____
-
-Deprecated, use instead link:./DomainObject.html[@DomainObject#editing()].
-
-____
-
-The `@Immutable` annotation may be applied to a class, and indicates to
-the framework that the state of such objects may not be changed. The
-viewers will prevent any change through the user interface, and moreover
-the object stores will reject any changes to the objects that might have
-occurred programmatically.
+The `@Immutable` annotation may be applied to a class, and indicates to the framework that the state of such objects may not be changed. The viewers will prevent any change through the user interface, and moreover the object stores will reject any changes to the objects that might have occurred programmatically.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Immutable
 public class Country {
@@ -335,7 +314,7 @@ public class Country {
 This annotation can also take a single parameter indicating when it is
 to become immutable. For example:
 
-[source]
+[source,java]
 ----
 @Immutable(When.ONCE_PERSISTED)
 public class Email {
@@ -366,23 +345,15 @@ defaults to `When.ALWAYS`).
 
 
 
-== `objectType()`
+== anchor:reference-annotations_manpage-DomainObject[]`objectType()`
 
-Title: @ObjectType
+IMPORTANT: WIP ... this section
 
-____
-
-Deprecated, use instead link:./DomainObject.html[@DomainObject#objectType()].
-
-____
-
-The `@ObjectType` annotation is used to provide a unique abbreviation for
-the object's class name. This is used internally to generate a string
-representation of an objects identity (the `Oid`).
+The `@ObjectType` annotation is used to provide a unique abbreviation for the object's class name. This is used internally to generate a string representation of an objects identity (the `Oid`).
 
 For example:
 
-[source]
+[source,java]
 ----
 @ObjectType("ORD")
 public class Order {
@@ -400,17 +371,19 @@ If an `@ObjectType` is not unique, then the framework will fail to boot.
 
 
 
-== `publishing()`
 
-Title: @PublishedObject
+== anchor:reference-annotations_manpage-DomainObject[]Publishing
 
-____
 
-Deprecated, use instead link:./DomainObject.html[@DomainObject#publishing()].
+This annotation on an entity type causes an events to be published by the registered implementation of a xref:__a_id_reference_services_spi_manpage_a_code_publishingservice_code[`PublishingService`] if an instance of that type is inserted, updated or deleted .
 
-____
 
-This annotation on an entity type causes an events to be published by the registered implementation of a `PublishingService` if an instance of that type is inserted, updated or deleted .
 
-A fuller description of the publishing architecture can be found http://isis.apache.org/core/services/publishing-service.html[here].
+=== `publishing()`
+
+IMPORTANT: WIP ... this section
+
+=== `publishingPayloadFactory()`
+
+IMPORTANT: WIP ... this section
 

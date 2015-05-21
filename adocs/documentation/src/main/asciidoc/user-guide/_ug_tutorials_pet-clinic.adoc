@@ -13,7 +13,7 @@ image::{_imagesdir}tutorials/pet-clinic/domain-model.png[link="{_imagesdir}tutor
 
 [TIP]
 ====
-[source]
+[source,ini]
 .DSL (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 ----
 [Pet|-name:String{bg:green}]<-0..*[Visit|-checkIn:LocalDate;-checkout:LocalDate;-diagnosis:String|{bg:pink}]

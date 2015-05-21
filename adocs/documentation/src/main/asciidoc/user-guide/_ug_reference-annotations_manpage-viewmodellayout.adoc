@@ -3,93 +3,97 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-
-Title: @ViewModelLayout (1.8.0)
-
-____
-
-stub
-
-____
 
 The `@ViewModelLayout` annotation is identical to the link:./DomainObjectLayout.html[@DomainObjectLayout], but is provided
-for symmetry with domain objects that have been annotated using link:./ViewModel.html[@ViewModel] (rather than `@DomainObject(nature=VIEW_MODEL)`).
+for symmetry with domain objects that have been annotated using xref:__a_id_reference_annotations_manpage_a_code_viewmodel_code[`@ViewModel`] (rather than xref:__a_id_reference_annotations_manpage_a_code_domainobject_code[`@DomainObject(nature=VIEW_MODEL)`]).
 
-[source]
+
+The table below summarizes the annotation's attributes.
+
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_code_cssclass_code[`cssClass()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_cssclassfa[`cssClassFa()`]
+|
+|
+
+
+|`cssClassFaPosition()`
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_code_describedas_code[`describedAs()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_code_named_code[`named()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_code_paged_code[`paged()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_viewmodellayout_a_code_plural_code[`plural()`]
+|
+|
+
+|===
+
+
+
+
+
+[source,java]
 ----
 @ViewModel(...)
 @ViewModelLayout(...)
 public class MyViewModel { ... }
 ----
 
-== Source code
-
-See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/ViewModelLayout.java">@ViewModelLayout</a> source code.
-
-== See also
-
-Similar layout annotations exist for other elements of the metamodel:
-
-* link:./ActionLayout.html[@ActionLayout] for actions
-* link:./CollectionLayout.html[@CollectionLayout] for collections
-* link:./PropertyLayout.html[@PropertyLayout] for properties
-* link:./ParameterLayout.html[@ParameterLayout] for action parameters
-* link:./DomainObjectLayout.html[@DomainObjectLayout]
-* link:./DomainServiceLayout.html[@DomainServiceLayout]
-
-Corresponding domain semantics:
-
-* link:./ViewModel.html[@ViewModel]
 
 
 
 
-== `cssClass()`
+== anchor:reference-annotations_manpage-ViewModelLayout[]`cssClass()`
 
-Title: @CssClass
+IMPORTANT: WIP ... this section
 
-____
+The `CssClass` annotation applies to object and also to any object member (property, collection or action). It is used by the Wicket viewer as a UI hint to render specified CSS classes around the representation of the element.
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClass()], link:./PropertyLayout.html[@PropertyLayout#cssClass()], link:./CollectionLayout.html[@CollectionLayout#cssClass()], link:./ActionLayout.html[@ActionLayout#cssClass()] and link:./ParameterLayout.html[@ParameterLayout#cssClass()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
-
-____
-
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
-
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
+Application-specific CSS can then be used to target and adjust the UI representation of that particular element.
 
 For example:
 
-[source]
+[source,java]
 ----
 @CssClass("x-main")
 public class ToDoItem { ... }
 ----
 
-or
 
-[source]
-----
-public class ToDoItem {
-
-    @CssClass("x-key")
-    public LocalDate getDueBy() { ... }
-
-}
-----
-
-== Alternatives (`.layout.json`)
+=== Alternatives (`.layout.json`)
 
 As an alternative to using the `@CssClass` annotation, the `.layout.json`
 link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
 can be specified, eg:
 
-[source]
+[source,javascript]
 ----
 {
     "span": 6,
@@ -110,24 +114,30 @@ can be specified, eg:
 
 Note that this (currently) only supports class members, not classes
 
-== See also (1.8.0)
-
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint
-to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered on action butotns or as the icon for classes.
 
 
+[NOTE]
+====
+The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
+====
 
 
-== `cssClassFa()`
 
-Title: @CssClassFa (1.8.0)
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#cssClassFa()], link:./PropertyLayout.html[@PropertyLayout#cssClassFa()], link:./ActionLayout.html[@ActionLayout#cssClassFa()] and link:./ViewModelLayout.html[@ViewModelLayout#cssClassFa()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
+
+
+
+
+== anchor:reference-annotations_manpage-ViewModelLayout[]`cssClassFa()`
+
+
+
+=== `cssClassFa()
+
+IMPORTANT: WIP ... this section
+
 
 The `CssClassFa` annotation applies to objects and also to object actions,
 and is used by the Wicket viewer as a UI hint.
@@ -141,7 +151,7 @@ the object does not have a `getIconName()` method.
 
 For example:
 
-[source]
+[source,java]
 ----
 @CssClassFa("fa-check-circle")
 public class ToDoItem { ... }
@@ -149,7 +159,7 @@ public class ToDoItem { ... }
 
 or
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -165,13 +175,13 @@ public class ToDoItem {
 There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
 is no need to include the "fa" class; it will be automatically appended.
 
-== Alternatives (`.layout.json`)
+=== Alternatives (`.layout.json`)
 
 As an alternative to using the `@CssClass` annotation, the `.layout.json`
 link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
 can be specified, eg:
 
-[source]
+[source,javascript]
 ----
 {
     "span": 6,
@@ -199,60 +209,38 @@ can be specified, eg:
 
 Note that this (currently) only supports class members, not classes.
 
-== See also
-
-The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint
-to apply CSS, but for wrapping the representation of an object or object
-member so that it can be styled in an application-specific way.
 
 
+[NOTE]
+====
+The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+
+====
 
 
-== `describedAs()`
+=== `cssClassFaPosition()
 
-Title: @DescribedAs
+IMPORTANT: WIP ... this section
 
-____
 
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#describedAs()], link:./PropertyLayout.html[@PropertyLayout#describedAs()], link:./CollectionLayout.html[@CollectionLayout#describedAs()], link:./ActionLayout.html[@ActionLayout#describedAs()] and link:./ParameterLayout.html[@ParameterLayout#describedAs()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
 
-____
 
-The `@DescribedAs` annotation is used to provide a short description of
-something that features on the user interface. How this description is
-used will depend upon the viewing mechanism - but it may be thought of
-as being like a 'tool tip'.
 
-Descriptions may be provided for objects, members (properties,
-collections and actions), and for individual parameters within an action
-method. `@DescribedAs` therefore works in a very similar manner to
-`@Named` <!--(see ?)-->.
 
-=== Providing a description for an object
 
-To provide a description for an object, use the `@DescribedAs`
-annotation immediately before the declaration of that object class.
+== anchor:reference-annotations_manpage-ViewModelLayout[]`describedAs()`
+
+IMPORTANT: WIP ... this section
+
+
+The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
+
+Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method. `@DescribedAs` therefore works in a very similar manner to `@Named` <!--(see ?)-->.
+
 
 For example:
 
-[source]
-----
-@DescribedAs("A customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")
-public class ProspectiveSale {
-   ...
-}
-----
-
-=== Providing a description for an object member
-
-Any member (property, collection or action) may provide a description.
-To specify this description, use the `@DescribedAs` annotation
-immediately before the declaration of that member.
-
-For example:
-
-[source]
+[source,java]
 ----
 public class Customer {
     @DescribedAs("The name that the customer has indicated that they wish to be " +
@@ -261,74 +249,29 @@ public class Customer {
 }
 ----
 
-=== Providing a description for an action parameter
-
-To provide a description for an individual action parameter, use the
-`@DescribedAs` annotation in-line i.e. immediately before the parameter
-declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity")
-                      @DescribedAs("The quantity of the product being ordered")
-                      int quantity) {
-        Order order = createTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
 
 
 
 
 
 
+== anchor:reference-annotations_manpage-ViewModelLayout[]`named()`
 
+IMPORTANT: WIP ... this section
 
+The `@Named` annotation is used when you want to specify the way something is named on the user interface i.e. when you do not want to use the name generated automatically by the system. It can be applied to objects, members (properties, collections, and actions) and to parameters within an action method.
 
-
-
-
-
-== `named()`
-
-Title: @Named
-
-____
-
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#named()], link:./PropertyLayout.html[@PropertyLayout#named()], link:./CollectionLayout.html[@CollectionLayout#named()], link:./ActionLayout.html[@ActionLayout#named()] and link:./ParameterLayout.html[@ParameterLayout#named()], or use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
-
-____
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-____
-
-*Warning*
-
+[WARNING]
+====
 Generally speaking it is better to rename the property, collection or
 action. The only common case where `@Named` is common is to rename
 parameters for built-in value types. Even here though a custom value
 type can be defined using `@Value` so that the value type is used as the
 parameter name. `@Named` may also be used if the name needs punctuation
 or other symbols in the name presented to the user.
+====
 
-____
 
-=== Specifying the name of an object
 
 By default the name of an object is derived, reflectively from the class
 name. To specify a different name for an object, use the `@Named`
@@ -336,80 +279,13 @@ annotation in front of the class declaration.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Named("Customer")
 public class CustomerImpl implements Customer{
    ...
 }
 ----
-
-See also the `@Plural` annotation <!--, ?-->.
-
-=== Specifying the name of a class member
-
-By default, the name of a class member (a property, collection or
-action) presented to the user is derived, reflectively, from the name of
-the member defined in the program code. To specify a different name use
-the `@Named
-`annotation immediately before the member declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-
-    public String getFirstName() { ... }
-
-    public String getSurname() { ... }
-
-    public CreditRating getCreditRating() { ... }
-}
-----
-
-Note that the framework provides a separate and more powerful mechanism
-for internationalisation.
-
-=== Specifying the name for an action parameter
-
-The most common usage of `@Named` is be to specify names for the
-parameters of an action. This is because the parameter name declared in
-the code for the action method cannot be picked up reflectively (by
-default, the user interface will use the type of the parameter as the
-name; for a `String` or a `Boolean`, this is almost certainly not what is
-required).
-
-To specify the name of a parameter, the `@Named` annotation is applied
-'in-line' (i.e. preceding the individual parameter declaration.
-
-For example:
-
-[source]
-----
-public class Customer {
-    public Order placeOrder(
-            Product product
-           ,@Named("Quantity")
-            int quantity) {
-        Order order = newTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
-
-An alternative is to use a value type (though this introduces additional mapping complexity for both viewers and objectstore) <!--, as described in ?-->.
-
-
-
-
-
-
-
 
 
 
@@ -419,28 +295,18 @@ An alternative is to use a value type (though this introduces additional mapping
 
 Title: @Paged
 
-____
 
-Deprecated, use instead link:./CollectionLayout.html[@CollectionLayout] and link:./DomainObjectLayout.html[@DomainObjectLayout].
+This annotation is used to indicate that parented and/or standalone collections should be paginated.
 
-____
-
-This annotation is used to indicate that parented and/or standalone
-collections should be paginated.
-
-When annotated on a collection, `@Paged` indicates the page size of a
-parented collection. When annotated on a type, `@Paged` indicates the page
-size of a standalone collection.
+When annotated on a collection, `@Paged` indicates the page size of a parented collection. When annotated on a type, `@Paged` indicates the page size of a standalone collection.
 
 For example:
 
-[source]
+[source,java]
 ----
-@Paged(30)
+@ViewModel(paged=30)
 public class Order {
 
-    @Paged(15)
-    public List<LineItem> getDetails() {...}
 }
 ----
 
@@ -452,7 +318,7 @@ the configured defaults in `isis.properties` will be used.
 
 For example:
 
-[source]
+[source,ini]
 ----
 isis.viewers.paged.standalone=20
 isis.viewers.paged.parented=5
@@ -465,28 +331,15 @@ of 20 for standalone collections.
 
 
 
+
 == `plural()`
 
-Title: @Plural
 
-____
-
-Deprecated, use instead link:./DomainObjectLayout.html[@DomainObjectLayout#plural()].
-
-____
-
-When the framework displays a collection of several objects it may use
-the plural form of the object type in the title. By default the plural
-name will be created by adding an 's' to the end of the singular name
-(whether that is the class name or another name specified using
-`@Named`). Where the single name ends in 'y' then the default plural
-name will end in 'ies' - for example a collection of `Country` objects
-will be titled 'Countries'. Where these conventions do not work, the
-programmer may specify the plural form of the name using `@Plural`.
+When the framework displays a collection of several objects it may use the plural form of the object type in the title. By default the plural name will be created by adding an 's' to the end of the singular name (whether that is the class name or another name specified using `@Named`). Where the single name ends in 'y' then the default plural name will end in 'ies' - for example a collection of `Country` objects will be titled 'Countries'. Where these conventions do not work, the programmer may specify the plural form of the name using `@Plural`.
 
 For example:
 
-[source]
+[source,java]
 ----
 @Plural("Children")
 public class Child {

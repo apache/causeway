@@ -3,18 +3,13 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:__a_id_reference_methods_prefixes_manpage_a_code_autocomplete_code[`autoComplete...()`] supporting method.
 
-
-
-Title: @MinLength
-
-The `@MinLength` annotation is used to specify the minimum number of characters in a search of an link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[auto-complete].
 
 For example:
 
-[source]
+[source,java]
 ----
 public ToDoItem add(
         @TypicalLength(20)

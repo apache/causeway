@@ -3,93 +3,53 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
-Title: @DomainService
-
-Indicates that the (concrete) class should be automatically instantiated as a domain service.
+The `@DomainService` annotation indicates that the (concrete) class should be automatically instantiated as a domain service.
 
 Domain services with this annotation do NOT need to be registered explicitly in `isis.properties`; they will be
 discovered automatically on the CLASSPATH.
 
-The following attributes can be specified:
+The table below summarizes the annotation's attributes.
 
-*
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
 
-`nature` - the nature of this service: providing actions for menus, contributed actions, or neither (1.8.0)
+| Attribute
+| Values (default)
+| Description
 
-*
 
-`repositoryFor` - if this domain service acts as a repository for an entity type, specify that entity type. (This is currently informational only)
+|xref:__a_id_reference_annotations_manpage_domainservice_a_code_nature_code[`nature()`]
+|
+|the nature of this service: providing actions for menus, contributed actions, or neither (1.8.0)
 
-*
 
-`menuOrder` - the order of the service's menu with respect to other service's (deprecated in 1.8.0)
+|xref:__a_id_reference_annotations_manpage_domainservice_a_code_repositoryfor_code[`repositoryFor()`]
+|
+|if this domain service acts as a repository for an entity type, specify that entity type. (This is currently informational only)
 
-For example:
 
-[source]
-----
-@DomainService(menuOrder = "10", repositoryFor = ToDoItem.class)
-public class ToDoItems {
-    ...
-}
-----
+|xref:__a_id_reference_annotations_manpage_domainservice_a_code_menuorder_code[`menuOrder()`]
+|
+|the order of the service's menu with respect to other service's (deprecated in 1.8.0)
 
-or:
-
-[source]
-----
-@DomainService(menuBar = DomainService.MenuBar.SECONDARY, menuOrder = "1")
-public class ToDoItemsFixturesService extends FixtureScripts {
-    ...
-}
-----
-
-It is not (currently) possible to specify the UI hints through any other means (specifically: is _not_ supported through a `.layout.json` file).
-
-== Source code
-
-See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/DomainObject.java">@DomainObject</a> source code.
-
-== See also
-
-Other domain semantics:
-
-* link:./Property.html[@Property]
-* link:./Collection.html[@Collection]
-* link:./Action.html[@Action]
-* link:./Parameter.html[@Parameter]
-* link:./DomainObject.html[@DomainObject]
-* link:./DomainService.html[@DomainService]
-* link:./ViewModel.html[@ViewModel]
-
-Corresponding view layer ("Layout") annotation:
-
-* link:./PropertyLayout.html[@PropertyLayout]
-* link:./CollectionLayout.html[@CollectionLayout]
-* link:./ActionLayout.html[@ActionLayout]
-* link:./DomainObjectLayout.html[@DomainObjectLayout]
-* link:./DomainServiceLayout.html[@DomainServiceLayout]
-* link:./ViewModelLayout.html[@ViewModelLayout]
+|===
 
 
 
 
 
-== `natureOfService()`
-
-now also VIEW_REST_ONLY
 
 
-Title: @NotContributed
+== anchor:reference-annotations_manpage-DomainService[]`nature()`
 
-____
+IMPORTANT: WIP ... this section
 
-Deprecated, use instead link:./DomainService.html[@DomainService#nature()] to specify whether a service's actions are contributed, and use link:./ActionLayout.html[@ActionLayout#contributed()] to specify how they are contributed.
+IMPORTANT: TODO - now also VIEW_REST_ONLY
 
-____
+
 
 The `@NotContributed` annotation applies only to action methods, and
 specifically to the actions of services. If present, it indicates that
@@ -98,7 +58,7 @@ arguments.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class OrderServices {
     @NotContributed
@@ -110,17 +70,13 @@ public class OrderServices {
 If the action should neither be contributed nor appear in the service's
 service menu, then you could instead simply mark it as `@Hidden`.
 
-== Contributing of one-arg actions
+=== Contributing of one-arg actions
 
 Actions that accept a single argument will, by default, also be contributed as an association:
 
-*
+* if the action returns a single object (value or entity) then the action will be contributed as a property
 
-if the action returns a single object (value or entity) then the action will be contributed as a property
-
-*
-
-if the action returns a list then the action will be contributed as a collection
+* if the action returns a list then the action will be contributed as a collection
 
 This behaviour can be influenced by specifying the "As." attribute:
 
@@ -132,23 +88,12 @@ This behaviour can be influenced by specifying the "As." attribute:
 
 
 
-Title: @NotInServiceMenu
+The `@NotInServiceMenu` annotation applies only to action methods, and specifically to the actions of services. If present, it indicates that the action should not appear in the service menu for the service. It may, however, still be contributed to any of its domain object arguments.
 
-____
-
-Deprecated, use instead link:./DomainService.html[@DomainService#nature()] to specify whether a service's actions are visible on the menu bar.
-
-____
-
-The `@NotInServiceMenu` annotation applies only to action methods, and
-specifically to the actions of services. If present, it indicates that
-the action should not appear in the service menu for the service. It
-may, however, still be contributed to any of its domain object
-arguments.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class OrderServices {
     @NotInServiceMenu
@@ -156,7 +101,6 @@ public class OrderServices {
     ...
 }
 ----
-
 
 
 

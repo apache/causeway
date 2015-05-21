@@ -75,7 +75,7 @@ As noted link:../../how-tos/how-to-09-010-How-to-register-domain-services,-repos
 
 For example:
 
-[source]
+[source,ini]
 ----
 isis.services = com.mycompany.myapp.employee.Employees\,
                 com.mycompany.myapp.claim.Claims\,
@@ -86,7 +86,7 @@ This will then result in the framework instantiating a single instance of each o
 
 If all services reside under a common package, then the `isis.services.prefix` can specify this prefix:
 
-[source]
+[source,ini]
 ----
 isis.services.prefix = com.mycompany.myapp
 isis.services = employee.Employees,\
@@ -106,7 +106,7 @@ Sometimes though a service's lifetime is applicable only to a single request; in
 
 The CDI annotation `@javax.enterprise.context.RequestScoped` is used to indicate this fact:
 
-[source]
+[source,java]
 ----
  @javax.enterprise.context.RequestScoped
  public class MyService extends AbstractService {
@@ -122,7 +122,7 @@ Any n-parameter action provided by a service will automatically be contributed t
 
 For example, given a service:
 
-[source]
+[source,java]
 ----
 public interface Library {
     public Loan borrow(Loanable l, Borrower b);
@@ -131,14 +131,14 @@ public interface Library {
 
 and the entities:
 
-[source]
+[source,java]
 ----
 public class Book implements Loanable { ... }y
 ----
 
 and
 
-[source]
+[source,java]
 ----
 public class LibraryMember implements Borrower { ... }
 ----
@@ -151,7 +151,7 @@ If necessary, though, this behaviour can be suppressed by annotating the service
 
 For example:
 
-[source]
+[source,java]
 ----
 public interface Library {
     @NotContributed
@@ -169,7 +169,7 @@ By default every action of a service (by which we also mean repositories and fac
 
 For example:
 
-[source]
+[source,java]
 ----
 public interface Library {
     @NotInServiceMenu
@@ -181,7 +181,7 @@ Note that an action annotated as being `@NotInServiceMenu` will still be contrib
 
 Alternatively, this can be performed using a supporting method:
 
-[source]
+[source,java]
 ----
 public class LibraryImpl implements Library {
     public Loan borrow(Loanable l, Borrower b) { ... }
@@ -195,7 +195,7 @@ If none of the service menu items should appear, then the service itself should 
 
 For example:
 
-[source]
+[source,java]
 ----
 @Hidden
 public interface EmailService {
@@ -226,7 +226,7 @@ Shutdown is similar; the framework will call any method annotated with `@javax.a
 
 Optionally, a service may provide a `getId()` method:
 
-[source]
+[source,java]
 ----
 public String getId()
 ----

@@ -3,67 +3,69 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-
-Title: @Collection (1.8.0)
-
-____
-
-stub
-
-____
 
 The `@Collection` annotation applies to collections collecting together all domain semantics within a single annotation.
 
-It is also possible to apply the annotation to actions of domain services that are acting as link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed collections].
+The table below summarizes the annotation's attributes.
 
-== Source code
+.`@Action` attributes
+[cols="2,2,4", options="header"]
+|===
 
-See <a href="https://issues.apache.org/jira/browse/ISIS-970">ISIS-970</a> and <a href="https://github.com/apache/isis/blob/master/core/applib/src/main/java/org/apache/isis/applib/annotation/Collection.java">@Collection</a> source code.
-
-== See also
-
-Other domain semantics:
-
-* link:./Property.html[@Property]
-* link:./Action.html[@Action]
-* link:./Parameter.html[@Parameter]
-* link:./DomainObject.html[@DomainObject]
-* link:./DomainService.html[@DomainService]
-* link:./ViewModel.html[@ViewModel]
-
-Corresponding view layer ("Layout") annotation:
-
-* link:./CollectionLayout.html[@CollectionLayout]
+| Attribute
+| Values (default)
+| Description
 
 
+|xref:__a_id_reference_annotations_manpage_collection_a_code_domainevent_code[`domainEvent()`]
+|
+|
 
-== `domainEvent()`
 
-Title: @CollectionInteraction
+|xref:__a_id_reference_annotations_manpage_collection_a_code_editing_code[`editing()`]
+|
+|
 
-____
 
-Deprecated, use instead link:./Collection.html[@Collection#domainEvent()].
+|xref:__a_id_reference_annotations_manpage_collection_a_code_hidden_code[`hidden()`]
+|
+|
 
-Support
 
+|xref:__a_id_reference_annotations_manpage_collection_a_code_notpersisted_code[`notPersisted()`]
+|
+|
+
+
+|xref:__a_id_reference_annotations_manpage_collection_a_code_typeof_code[`typeOf()`]
+|
+|
+
+|===
+
+
+
+
+
+== anchor:reference-annotations_manpage-Collection[]`domainEvent()`
+
+IMPORTANT: WIP ... this section
+
+[WARNING]
+====
 The Wicket viewer does NOT support collection modification; instead write a pair of actions to add to/remove from the collection.
 
-It _is_ possible to fire collection interaction events using the wrapper factory; see below for more details.
+However, it _is_ possible to fire collection interaction events using the wrapper factory; see below for more details.
+====
 
-____
 
-The `@CollectionInteraction` annotation applies to domain entity collections, allowing
-subscribers to optionally veto, validate or otherwise perform tasks before
-or after the collection has been added to/removed from.
+The `@CollectionInteraction` annotation applies to domain entity collections, allowing subscribers to optionally veto, validate or otherwise perform tasks before or after the collection has been added to/removed from.
 
-Subscribers subscribe through the link:../services/event-bus-service.html[Event Bus Service] using Guava annotations.
+Subscribers subscribe through the xref:__a_id_reference_services_api_manpage_a_code_eventbusservice_code[`EventBusService`] using Guava annotations.
 
 By default the event raised is `CollectionInteractionEvent.Default`. For example:
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
     ...
@@ -74,7 +76,7 @@ public class ToDoItem {
 
 Optionally a subclass can be declared:
 
-[source]
+[source,java]
 ----
 public class ToDoItem {
 
@@ -90,12 +92,13 @@ public class ToDoItem {
 
 The `of` field indicates if the collection is being accessed, added to or removed from.
 
-== Subscribers
+
+=== Subscribers
 
 Subscribers (which must be domain services) subscribe using the Guava API.
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
-[source]
+[source,java]
 ----
 @DomainService
 public class SomeSubscriber {
@@ -112,7 +115,7 @@ public class SomeSubscriber {
 
 or can be fine-grained by subscribing to specific event subtypes:
 
-[source]
+[source,java]
 ----
 @DomainService
 public class SomeSubscriber {
@@ -137,7 +140,7 @@ The subscriber's method is called (up to) 5 times:
 
 The subscriber can distinguish these by calling `ev.getPhase()`. Thus the general form is:
 
-[source]
+[source,java]
 ----
     @Programmatic
     @com.google.common.eventbus.Subscribe
@@ -188,41 +191,39 @@ phases by throwing an exception. If the exception is a subtype of `RecoverableEx
 then the exception will be rendered as a user-friendly warning (eg Growl/toast)
 rather than an error.
 
-== Raising events programmatically.
+
+=== Raising events programmatically.
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
 wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
 
-== See also
 
-Interaction events can also be raised for link:./ActionInteraction.html[actions] and link:./PropertyInteraction.html[properties] .
+[NOTE]
+====
+domain events can also be raised for actions and properties.
+====
 
 
 
 
-== `editing()`
 
-Title: @Disabled
 
-____
 
-Deprecated, use instead link:./Property.html[@Property#editing()], link:./Collection.html[@Collection#editing()], and also link:./DomainObject.html[@DomainObject#editing()]
 
-*Support*
+== anchor:reference-annotations_manpage-Collection[]`editing()`
 
-* Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
+IMPORTANT: WIP ... this section
 
-____
+[NOTE]
+====
+Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
+====
 
-The `@Disabled` annotation means that the member cannot be used in any
-instance of the class. When applied to the property it means that the
-user may not modify the value of that property (though it may still be
-modified programmatically). When applied to an action method, it means
-that the user cannot invoke that method.
+The `@Disabled` annotation means that the member cannot be used in any instance of the class. When applied to the property it means that the user may not modify the value of that property (though it may still be modified programmatically). When applied to an action method, it means that the user cannot invoke that method.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Disabled
@@ -245,7 +246,7 @@ This annotation can also take two parameter indicating where (in the UI)
 it is to be disabled, and when (in the object's lifecycle) it is to be
 disabled. For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     (when=When.UNTIL_PERSISTED)
@@ -255,7 +256,7 @@ public class Customer {
 
 would disable the action until the object has been saved. And:
 
-[source]
+[source,java]
 ----
 public class Customer {
     (where=Where.PARENTED_TABLES)
@@ -331,24 +332,20 @@ defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 
 
 
-== `hidden()`
 
-Title: @Hidden
 
-____
 
-Deprecated. For object members use link:./Property.html[@Property#hidden()] or link:./PropertyLayout.html[@PropertyLayout#hidden()], link:./Collection.html[@Collection#hidden()] or link:./CollectionLayout.html[@CollectionLayout#hidden()], and link:./ActionLayout.html[@ActionLayout#hidden()]. For domain servicesm use [@DomainService#nature()]
 
-____
 
-The `@Hidden` annotation indicates that the member (property, collection
-or action) to which it is applied should never be visible to the user.
-It can also be applied to service types (it has no effect if applied to
-entities or values).
+== anchor:reference-annotations_manpage-Collection[]`hidden()`
+
+IMPORTANT: WIP ... this section
+
+The `@Hidden` annotation indicates that the member (property, collection or action) to which it is applied should never be visible to the user. It can also be applied to service types (it has no effect if applied to entities or values).
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden
@@ -362,7 +359,7 @@ public class Customer {
 
 Or, applied to a service:
 
-[source]
+[source,java]
 ----
 @Hidden
 public class EmailService {
@@ -374,7 +371,7 @@ public class EmailService {
 This annotation can also take a parameters indicating where and when it
 is to be hidden. For example:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(when=When.ONCE_PERSISTED)
@@ -386,7 +383,7 @@ public class Customer {
 would show the `Id` until the object has been saved, and then would hide
 it. And:
 
-[source]
+[source,java]
 ----
 public class Customer {
     @Hidden(where=Where.ALL_TABLES)
@@ -466,26 +463,22 @@ defaults to `Where.ANYWHERE`, `When.ALWAYS`).
 
 
 
+== anchor:reference-annotations_manpage-Collection[]`notPersisted()`
 
-== `notPersisted()`
-
-Title: @NotPersisted
+IMPORTANT: WIP ... this section
 
 The `@NotPersisted` annotation indicates that the property is not to be
 persisted.
 
-____
 
-*Note*
-
-In many cases the same thing can be achieved simply by providing the
-property with a 'getter' but no 'setter'.
-
-____
+[TIP]
+====
+In many cases the same thing can be achieved simply by providing the property with a 'getter' but no 'setter'.
+====
 
 For example:
 
-[source]
+[source,java]
 ----
 public class Order {
 
@@ -501,31 +494,26 @@ public class Order {
 
 
 
-== `typeOf()`
 
-Title: @TypeOf
 
-____
 
-Deprecated, use instead link:./Collection.html[@Collection#typeOf] or link:./Action.html[@Action#typeOf].
 
-____
+== anchor:reference-annotations_manpage-Collection[]`typeOf()`
 
-The `@TypeOf` annotation is used to specify the type of elements in a
-collection, when for whatever reason it is not possible to use generics.
+IMPORTANT: WIP ... this section
 
-____
 
-*Note*
+The `@TypeOf` annotation is used to specify the type of elements in a collection, when for whatever reason it is not possible to use generics.
 
-Given that Apache Isis only supports Java 1.6 and later, it's not that
-obvious what such a reason might be…
+[NOTE]
+====
+Given that Apache Isis only supports Java 1.7 and later, it's not that obvious what such a reason might be...
+====
 
-____
 
 For example:
 
-[source]
+[source,java]
 ----
 public void AccountService {
     @TypeOf(Customer.class)

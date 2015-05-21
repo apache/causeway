@@ -77,7 +77,7 @@ image::{_imagesdir}headless-access/BackgroundCommandExecution.png[width="400px"]
 
 [TIP]
 ====
-[source]
+[source,ini]
 .DSL (http://yuml.me/edit/363b335f[yuml.me/363b335f])
 ----
 [AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
@@ -103,7 +103,7 @@ image::{_imagesdir}headless-access/BackgroundCommandExecutionFromBackgroundComma
 
 [TIP]
 ====
-[source]
+[source,java]
 .DSL (http://yuml.me/edit/25343da1[yuml.me/25343da1]):
 ----
 [AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]

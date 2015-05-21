@@ -4,6 +4,18 @@
 :_imagesdir: images/
 
 
+In Apache Isis every domain object is either a domain entity, a view model or a domain service.  And each of these are made up of properties, collections and actions (domain services only have actions).
+
+For each of these domain types and members there is are two annotations.  One covers the semantics intrinsic to the domain (eg whether an action parameter is optional or not), then other (suffix `...Layout`) captures semantics relating to the UI/presentation layer.
+
+[TIP]
+====
+UI semantics can also be specified using xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[dynamic object layout].
+====
+
+
+The table below summarizes these most commonly used annotations in Isis.
+
 
 .Core annotations for domain objects, services and members (as of 1.8.0)
 [cols="2,4a,1,1", options="header"]
@@ -11,75 +23,74 @@
 |Annotation
 |Purpose
 |Layer
-|`.layout +
-.json`?
+|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
 
-|xref:__code_action_code[`@Action`]
+|xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action`]
 |Domain semantics for actions
 |Domain
 |
 
-|xref:__code_actionlayout_code[`@ActionLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_actionlayout_code[`@ActionLayout`]
 |User interface hints for actions
 |UI
 |Yes
 
-|xref:__code_collection_code[`@Collection`]
+|xref:__a_id_reference_annotations_manpage_a_code_collection_code[`@Collection`]
 |Domain semantics for collections
 |Domain
 |
 
-|xref:__code_collectionlayout_code[`@CollectionLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_collectionlayout_code[`@CollectionLayout`]
 |User interface hints for collections
 |UI
 |Yes
 
-|xref:__code_domainobject_code[`@DomainObject`]
+|xref:__a_id_reference_annotations_manpage_a_code_domainobject_code[`@DomainObject`]
 |Domain semantics for domain object (entities and optionally view models, see also `@ViewModel)`
 |Domain
 |
 
-|xref:__code_domainobjectlayout_code[`@DomainObjectLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_domainobjectlayout_code[`@DomainObjectLayout`]
 |User interface hints for domain object (entities and optionally view models, see also `@ViewModelLayout)`
 |UI
 |Yes
 
-|xref:__code_domainservice_code[`@DomainService`]
+|xref:__a_id_reference_annotations_manpage_a_code_domainservice_code[`@DomainService`]
 |Class is a domain service (rather than an entity or view model)
 |Domain
 |
 
-|xref:__code_domainservicelayout_code[`@DomainServiceLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_domainservicelayout_code[`@DomainServiceLayout`]
 |User interface hints for domain services
 |UI
 |
 
-|xref:__code_parameter_code[`@Parameter`]
+|xref:__a_id_reference_annotations_manpage_a_code_parameter_code[`@Parameter`]
 |Domain semantics for action parameters
 |Domain
 |
 
-|xref:__code_propertylayout_code[`@PropertyLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_propertylayout_code[`@PropertyLayout`]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes
 
-|xref:__code_property_code[`@Property`]
+|xref:__a_id_reference_annotations_manpage_a_code_property_code[`@Property`]
 |Domain semantics for properties
 |Domain
 |
 
-|xref:__code_propertylayout_code[`@PropertyLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_propertylayout_code[`@PropertyLayout`]
 |Layout hints for a property
 |UI
 |Yes
 
-|xref:__code_viewmodel_code[`@ViewModel`]
+|xref:__a_id_reference_annotations_manpage_a_code_viewmodel_code[`@ViewModel`]
 |Specify that a class is a view model (as opposed to an entity or domain service); equivalent to `@DomainObject(nature`=VIEW_MODEL).
 |Domain, Persistence
 |
 
-|xref:__code_ViewModelLayout_code[`@ViewModelLayout`]
+|xref:__a_id_reference_annotations_manpage_a_code_ViewModelLayout_code[`@ViewModelLayout`]
 |User interface hints for view models.
 For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
 |UI

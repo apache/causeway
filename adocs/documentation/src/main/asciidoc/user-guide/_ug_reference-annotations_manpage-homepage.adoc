@@ -8,13 +8,12 @@ IMPORTANT: TODO
 
 Title: @HomePage
 
-____
 
-Support
+[NOTE]
+====
+Currently only by the xref:__a_id_chapter_a_wicket_viewer[Wicket Viewer].
+====
 
-Currently only by the Wicket viewer
-
-____
 
 The `@HomePage` annotation should be applied to a single (no-arg) action on a domain service, and the results used as the contents for the home page.
 
