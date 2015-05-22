@@ -15,7 +15,8 @@
 
 include::_ug_reference-annotations.adoc[leveloffset=+1]
 include::_ug_reference-methods.adoc[leveloffset=+1]
-include::_ug_reference-services.adoc[leveloffset=+1]
+include::_ug_reference-services-api.adoc[leveloffset=+1]
+include::_ug_reference-services-spi.adoc[leveloffset=+1]
 include::_ug_reference-classes.adoc[leveloffset=+1]
 
 include::_ug_wicket-viewer.adoc[leveloffset=+1]

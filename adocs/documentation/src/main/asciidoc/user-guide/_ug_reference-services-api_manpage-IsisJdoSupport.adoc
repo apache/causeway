@@ -1,0 +1,130 @@
+[[reference-services-api_manpage-IsisJdoSupport]]
+= `IsisJdoSupport`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `IsisJdoSupport` service provides a number of general purpose methods for working with the JDO/DataNucleus objectstore.
+
+
+== API
+
+The API provided by `IsisJdoSupport` is:
+
+[source,java]
+----
+public interface IsisJdoSupport {
+    List<Map<String, Object>> executeSql(String sql);
+    Integer executeUpdate(String sql);
+    void deleteAll(Class<?>... pcClasses);
+    <T> T refresh(T domainObject);
+    void ensureLoaded(Collection<?> collectionOfDomainObjects);
+    PersistenceManager getJdoPersistenceManager();
+}
+----
+
+Each of these methods are discussed in more details below.
+
+
+== Executing arbitrary SQL
+
+The `executeSql(...)` method allows arbitrary queries to be submitted:
+
+[source,java]
+----
+List<Map<String, Object>> results = isisJdoSupport.executeSql("select * from custMgmt.customers");
+----
+
+The result set is automatically converted into a list of maps, where the map key is the column name.
+
+
+In a similar manner, the `executeUpdate(...)` allows arbitrary updates to be performed.
+
+[source,java]
+----
+int count = isisJdoSupport.executeUpdate("select count(*) from custMgmt.customers);
+----
+
+The returned value is the number of rows updated.
+
+
+
+== Fixture support
+
+The `deleteAll(...)` method is provided pretty much exclusively for tearing down fixture data:
+
+[source,java]
+----
+deleteAll(Order.class);
+deleteAll(CustomerAddress.class);
+deleteAll(Customer.class);
+----
+
+[NOTE]
+====
+It can occasionally be the case that Isis' internal adapter for the domain object is
+still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion,
+which under normal circumstances would cause Isis to throw a concurrency exception.  Therefore
+to prevent this from happening (ie to <i>force</i> the deletion of all instances), concurrency checking
+is temporarily disabled while this method is performed.
+====
+
+
+
+== Reloading entities
+
+A http://www.datanucleus.org/products/datanucleus/jdo/orm/relationships.html[known limitation] of DataNucleus' implementation of JDO is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
+
+The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).
+
+For example:
+
+[source,java]
+----
+public Order newOrder(final Customer customer) {
+    Order order = newTransientInstance(Order.class);
+    order.setCustomer(customer);
+    persist(customer);
+    getContainer().flush(); // <1>
+    isisJdoSupport.refresh(customer); // <2>
+    return order;
+}
+----
+<1> flush to database
+<2> reload parent from database
+
+
+[NOTE]
+====
+The particular example that led to this method being added was a 1:m bidirectional relationship,
+analogous to `Customer <-> * Order`.  Persisting the child `Order` object did not cause
+the parent ``Customer``'s collection of orders to be updated.  In fact, JDO does not make any
+such guarantee to do so.  Options are therefore either to maintain the collection in code, or to
+refresh the parent.
+
+====
+
+
+
+
+== Using JDO `PersistenceManager` directly
+
+Apache Isis provides a simplified API on top of only supports JDO, and so does not support all of JDO's features.  For example, Isis (currently) only supports named queries.  If you require more flexibility than this, eg for dynamically constructed queries, then the service provides access to the underlying JDO `PersistenceManager` API:
+
+[source,java]
+----
+public List<Order> findOrders(...) {
+    javax.jdo.PersistenceManager pm = isisJdoSupport.getPersistenceManager();
+
+    // knock yourself out...
+
+    return someListOfOrders;
+}
+----
+
+
+
+== Registering the Service
+
+The `IsisJdoSupportImpl` class provides the default implementation and (as of 1.6.0+) is automatically registered using `@DomainService`.  No further configuration is necessary.
