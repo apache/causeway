@@ -115,6 +115,27 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
 
     //endregion
 
+    //region > parameterNames
+    private List<String> parameterNames;
+    public List<String> getParameterNames() {
+        return parameterNames;
+    }
+    public void setParameterNames(final List<String> parameterNames) {
+        this.parameterNames = parameterNames;
+    }
+    //endregion
+
+    //region > parameterTypes
+    private List<Class<?>> parameterTypes;
+    public List<Class<?>> getParameterTypes() {
+        return parameterTypes;
+    }
+
+    public void setParameterTypes(final List<Class<?>> parameterTypes) {
+        this.parameterTypes = parameterTypes;
+    }
+    //endregion
+
     //region > arguments
     private List<Object> arguments;
     /**
@@ -133,7 +154,7 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     }
     //endregion
 
-
+    //region > returnValue
     /**
      *
      */
@@ -159,6 +180,7 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     public void setReturnValue(final Object returnValue) {
         this.returnValue = returnValue;
     }
+    //endregion
 
     //region > toString
     @Override

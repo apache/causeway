@@ -21,6 +21,12 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.command.Command;
@@ -37,7 +43,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class DomainEventHelper {
 
@@ -80,6 +86,10 @@ public class DomainEventHelper {
                     // should always be the case...
                     final ObjectAction objectAction = (ObjectAction) identified;
                     event.setActionSemantics(objectAction.getSemantics());
+
+                    final List<ObjectActionParameter> parameters = objectAction.getParameters();
+                    event.setParameterNames(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_NAME)));
+                    event.setParameterTypes(immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_TYPE)));
                 }
             }
 
@@ -113,6 +123,10 @@ public class DomainEventHelper {
         } catch (Exception e) {
             throw new FatalException(e);
         }
+    }
+
+    private static <T> List<T> immutableList(final Iterable<T> iterable) {
+        return Collections.unmodifiableList(Lists.newArrayList(iterable));
     }
 
     @SuppressWarnings("unchecked")

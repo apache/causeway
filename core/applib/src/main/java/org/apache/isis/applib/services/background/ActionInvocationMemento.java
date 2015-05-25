@@ -75,11 +75,19 @@ public class ActionInvocationMemento {
     public String getActionId() {
         return memento.get("actionId", String.class);
     }
-    
+
+    /**
+     * @deprecated - always returns <tt>null</tt>; use {@link #getActionId()} instead.
+     */
+    @Deprecated
     public String getTargetClassName() {
         return memento.get("targetClassName", String.class);
     }
-    
+
+    /**
+     * @deprecated - always returns <tt>null</tt>; use {@link #getActionId()} instead.
+     */
+    @Deprecated
     public String getTargetActionName() {
         return memento.get("targetActionName", String.class);
     }

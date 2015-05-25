@@ -23,9 +23,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.base.Strings;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.ViewModel;
@@ -184,6 +187,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         owningAction, targetAdapter, arguments,
                         command,
                         null);
+
 
         // ... invoke the action
         final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);

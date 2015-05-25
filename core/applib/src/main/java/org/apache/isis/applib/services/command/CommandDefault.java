@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionInteractionEvent;
 import org.apache.isis.applib.util.ObjectContracts;
 
-public class CommandDefault implements Command2, Command3 {
+public class CommandDefault implements Command3 {
 
     public CommandDefault() {
         setExecutor(Executor.OTHER);
@@ -80,7 +80,9 @@ public class CommandDefault implements Command2, Command3 {
     public void setTargetAction(String targetAction) {
         this.targetAction = targetAction;
     }
-    
+
+
+
     // //////////////////////////////////////
     // arguments (property)
     // //////////////////////////////////////
@@ -428,7 +430,5 @@ public class CommandDefault implements Command2, Command3 {
     public String toString() {
         return ObjectContracts.toString(this, "startedAt,user,memberIdentifier,target,transactionId");
     }
-    
-    
 
 }

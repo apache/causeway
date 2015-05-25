@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import com.google.common.base.Function;
+
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -142,5 +144,20 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
                 return parameter.getSpecification().isNotCollection();
             }
         };
+    }
+    public static class Functions {
+        public static final Function<ObjectActionParameter, String> GET_NAME = new Function<ObjectActionParameter, String>() {
+            @Override public String apply(final ObjectActionParameter input) {
+                return input.getName();
+            }
+        };
+        public static final Function<ObjectActionParameter, Class<?>> GET_TYPE = new Function<ObjectActionParameter, Class<?>>() {
+            @Override public Class<?> apply(final ObjectActionParameter input) {
+                return input.getSpecification().getCorrespondingClass();
+            }
+        };
+
+        private Functions(){}
+
     }
 }

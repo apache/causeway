@@ -58,6 +58,10 @@ public class EventPayloadForActionInvocation<T> implements EventPayload {
         this.stringifier = stringifier;
     }
 
+    @Programmatic
+    public List<? extends Object> getArguments() {
+        return arguments;
+    }
 
     public T getTarget() {
         return target;

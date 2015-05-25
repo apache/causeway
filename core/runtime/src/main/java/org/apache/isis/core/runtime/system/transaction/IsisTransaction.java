@@ -84,6 +84,8 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -586,14 +588,31 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String targetAction = command.getTargetAction();
             final Bookmark target = command.getTarget();
             final String memberIdentifier = command.getMemberIdentifier();
+            final List<String> parameterNames;
+            final List<Class<?>> parameterTypes;
+            if(action instanceof ObjectAction) {
+                // should always be the case
+                ObjectAction objectAction = (ObjectAction) action;
+                final List<ObjectActionParameter> parameters = objectAction.getParameters();
+                parameterNames = immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_NAME));
+                parameterTypes = immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_TYPE));
+            } else {
+                parameterNames = null;
+                parameterTypes = null;
+            }
             
-            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier);
+            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
             ActionInvocationFacet.currentInvocation.set(null);
         }
     }
+
+    private static <T> List<T> immutableList(final Iterable<T> iterable) {
+        return Collections.unmodifiableList(Lists.newArrayList(iterable));
+    }
+
 
     /**
      * @return the adapters that were published (if any were).
@@ -623,7 +642,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
             final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
             
-            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null);
+            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null);
         
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
@@ -671,11 +690,21 @@ public class IsisTransaction implements TransactionScopedComponent {
         return objectStringifier;
     }
 
-    private EventMetadata newEventMetadata(final EventType eventType, final String currentUser, final java.sql.Timestamp timestampEpoch, final String title, String targetClass, String targetAction, Bookmark target, String memberIdentifier) {
+    private EventMetadata newEventMetadata(
+            final EventType eventType,
+            final String currentUser,
+            final Timestamp timestampEpoch,
+            final String title,
+            String targetClass,
+            String targetAction,
+            Bookmark target,
+            String memberIdentifier,
+            final List<String> parameterNames,
+            final List<Class<?>> parameterTypes) {
         int nextEventSequence = nextEventSequence();
         return new EventMetadata(
                 getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title, 
-                targetClass, targetAction, target, memberIdentifier);
+                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes);
     }
 
     private int nextEventSequence() {
