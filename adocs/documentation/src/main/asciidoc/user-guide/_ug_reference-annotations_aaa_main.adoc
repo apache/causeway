@@ -25,7 +25,7 @@ The table below summarizes these most commonly used annotations in Isis.
 |Layer
 |xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
 
-|xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action`]
+|xref:_ug_reference_annotations_manpage_code_action_code[`@Action`]
 |Domain semantics for actions
 |Domain
 |
