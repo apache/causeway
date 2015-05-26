@@ -21,7 +21,7 @@ If working from the Maven command line, JDO enhancement is done using the `maven
 
 [TIP]
 ====
-The configuration described below is automatically set up by the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype].
+The configuration described below is automatically set up by the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype].
 ====
 
 
@@ -75,7 +75,7 @@ The configuration described below is automatically set up by the xref:__a_id_get
 </profile>
 ----
 
-The xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype]  sets up the plugin correctly in the `dom` (domain object model) module.  (It's actually a little bit more complex to cater for users of the Eclipse IDE using Eclipse's m2e plugin).
+The xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype]  sets up the plugin correctly in the `dom` (domain object model) module.  (It's actually a little bit more complex to cater for users of the Eclipse IDE using Eclipse's m2e plugin).
 
 
 
@@ -97,11 +97,11 @@ It's also a good idea to ensure that the `dom` module has a JDO `META-INF/persis
 ----
 <1> change as required; typically is the name of the app.
 
-Again, the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype] does this.
+Again, the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype] does this.
 
 [WARNING]
 ====
 If running on Windows, then there's a good chance you'll hit the http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath[maximum path length limit].   In this case the `persistence.xml` file is mandatory rather than optional.
 
-This file is also required if you are using developing in Eclipse and relying on the DataNucleus plugin for Eclipse rather than the DataNucleus plugin for Maven.  More information can be found xref:_setting_up_eclipse[here].
+This file is also required if you are using developing in Eclipse and relying on the DataNucleus plugin for Eclipse rather than the DataNucleus plugin for Maven.  More information can be found xref:_ug_appendices_dev-env_eclipse[here].
 ====

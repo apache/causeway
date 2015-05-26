@@ -7,11 +7,11 @@
 
 The Wicket viewer allows you to customize the GUI in several (progressively more sophisticated) ways:
 
-* by xref:_tweak_the_ui_with_css[tweaking the UI using CSS]
-* by xref:_tweak_the_ui_with_javascript[tweaking the UI using Javascript]
-* by writing a xref:_writing_a_custom_theme[custom bootstrap theme]
-* by xref:_replacing_page_elements[replacing elements of the page] using the `ComponentFactory` interface
-* by implementing xref:_custom_pages[replacement page implementations] for the standard page types
+* by xref:_ug_wicket-viewer_customisation_tweaking-css-classes[tweaking the UI using CSS]
+* by xref:_ug_wicket-viewer_customisation_custom-javascript[tweaking the UI using Javascript]
+* by writing a xref:_ug_extending_wicket-viewer_custom-bootstrap-theme[custom bootstrap theme]
+* by xref:_ug_extending_wicket-viewer_replacing-page-elements[replacing elements of the page] using the `ComponentFactory` interface
+* by implementing xref:_ug_extending_wicket-viewer_custom-pages[replacement page implementations] for the standard page types
 
 The first two of these options are discussed in the <<Wicket Viewer>> chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
 

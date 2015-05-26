@@ -25,7 +25,7 @@ It is possible to replacing automatically-registered domain services.
 
 Unless indicated as SPI, each of the following has an implementation in Isis core.
 
-A full list of services (including those with implementations in http://isisaddons.org[Isis Addons] (non-ASF)) can be found in the xref:_domain_services_2[Domain Services] section.
+A full list of services (including those with implementations in http://isisaddons.org[Isis Addons] (non-ASF)) can be found in the xref:_ug_domain-services-spi[Domain Services (SPI)] chapter.
 
 ### `DomainObjectContainer`
 

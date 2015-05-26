@@ -12,7 +12,7 @@ The Restful Objects viewer also provides a number of proprietary extensions.
 
 include::_ug_restfulobjects-viewer_features.adoc[leveloffset=+1]
 
-include::_ug_restfulobjects-viewer_configuration_properties.adoc[leveloffset=+1]
+include::_ug_restfulobjects-viewer_configuration-properties.adoc[leveloffset=+1]
 
 include::_ug_restfulobjects-viewer_hints-and-tips.adoc[leveloffset=+1]
 

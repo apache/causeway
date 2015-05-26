@@ -11,7 +11,7 @@ Note that extending the Wicket viewer is described in the <<Extending>> chapter.
 
 include::_ug_wicket-viewer_features.adoc[leveloffset=+1]
 
-include::_ug_wicket-viewer_configuration_properties.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_configuration-properties.adoc[leveloffset=+1]
 
 include::_ug_wicket-viewer_request-parameters.adoc[leveloffset=+1]
 

@@ -104,7 +104,7 @@ However, for an application to be fully internationalized, any validation messag
 
 The first part of the puzzle is tackled by an extension to Isis' programming model.  Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
-Here's a (silly) example from the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype]:
+Here's a (silly) example from the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype]:
 
 [source,java]
 ----

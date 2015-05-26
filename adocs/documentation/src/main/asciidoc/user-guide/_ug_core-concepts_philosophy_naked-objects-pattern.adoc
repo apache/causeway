@@ -38,18 +38,17 @@ Reenskaug then goes on to say that "this simple and powerful idea failed because
 In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.  Rather, the object inspects the object and uses that to decide how to render the object.  This is also extensible.  In the http://isisaddons.org[Isis Addons] (non-ASF) the http://github.com/isisaddons/isis-wicket-gmap3}[Isis addons' gmap3 modue] renders any object with latitude/longitude on a map, while http://github.com/isisaddons/isis-wicket-fullcalendar2}[Isis addons' fullcalendar2 wicket extension] renders any object with date(s) on a calendar.
 ====
 
-== Object Interface Mapping
 
-Another -- more technical -- way to think about the naked objects pattern is as an _object interface mapper_, or `OIM`.  We sometimes use this idea to explain naked objects to a bunch of developers.
 
-Just as an ORM (such as link:http://datanucleus.org[DataNucleus] or link:http:hibernate.org[Hibernate]) maps domain entities to a database, you can think of the naked objects pattern as representing the concept of mapping domain objects to a user interface.
 
-This is the way that the link:http://metawidget.org/[MetaWidget] team, in particular Richard Kennard, the primary contributor, likes to describe their tool.  MetaWidget has a number of ideas in common with Apache Isis, specifically the runtime generation of a UI for domain objects.  You can hear more from Kennard and others on this http://devchat.tv/js-jabber/150-jsj-oims[Javascript Jabber podcast].
 
-[NOTE]
-====
-We compare Apache Isis' with MetaWidget xref:_vs_metawidget[here].
-====
+include::_ug_core-concepts_philosophy_naked-objects-pattern_object-interface-mapping.adoc[leveloffset=+1]
+
+
+
+
+
+
 
 == What this means in practice
 

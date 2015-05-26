@@ -6,7 +6,7 @@
 
 As of 1.8.0 Apache Isis has experimental support for Neo4J, courtesy of DataNucleus' http://www.datanucleus.org/products/datanucleus/datastores/neo4j.html[Neo4J Datastore] implementation.
 
-The xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype] has been updated so that they can be optionally run under Neo4J.
+The xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated so that they can be optionally run under Neo4J.
 
 [TIP]
 ====
@@ -44,13 +44,13 @@ Add the following dependency to the `webapp` project's `pom.xml`:
 ----
 <1> for 1.8.0, use the value shown.  for 1.9.0-SNAPSHOT, use 4.0.5.
 
-In the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
+In the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
 
 == Try it out!
 
 If you want to quickly try out neo4j for yourself:
 
-* run the xref:__a_id_getting_started_a_simpleapp_archetype[SimpleApp archetype] (v1.8.0)
+* run the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype] (v1.8.0)
 
 * build the app:
 
