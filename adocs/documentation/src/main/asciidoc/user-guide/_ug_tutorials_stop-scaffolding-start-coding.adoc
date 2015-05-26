@@ -1,10 +1,11 @@
-= anchor:tutorials[]Stop scaffolding, start coding
+[[_ug_tutorials_stop-scaffolding-start-coding]]
+= Stop scaffolding, start coding
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
-This is a half-day tutorial on developing domain-driven apps using Apache Isis.  Actually, you could probably spend a full day working through this tutorial if you wanted to… so pick and choose the bits that look interesting.
+This is a half-day tutorial on developing domain-driven apps using Apache Isis.  Actually, you could probably spend a full day working through this tutorial if you wanted to� so pick and choose the bits that look interesting.
 
 There's a bit of overlap with the xref:_pet_clinic[Pet Clinic] tutorial initially, but it then sets off on its own.
 
@@ -251,7 +252,7 @@ Fixture scripts are used to setup the app into a known state. They are great for
 
 == Actions
 
-Most business functionality is implemented using actions… basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
+Most business functionality is implemented using actions� basically a `public` method accepting domain classes and primitives as its parameter types. The action can return a domain entity, or a collection of entities, or a primitive/String/value, or void. If a domain entity is returned then that object is rendered immediately; if a collection is returned then the Wicket viewer renders a table. Such collections are sometimes called "standalone" collections.
 
 * write an action to update the domain property (originally called `SimpleObject#name`, though renamed by now)
 * use the xref:__code_parameterlayout_code[`@ParameterLayout(named=...)`] annotation to specify the name of action parameters
@@ -344,7 +345,7 @@ Quick detour: often we want to set up defaults to go with choices. Sensible defa
 
 == Collections
 
-Returning back to references, Isis also supports vector (multi-valued) references to another object instances… in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
+Returning back to references, Isis also supports vector (multi-valued) references to another object instances� in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
 
 * Ensure that all domain classes implement `java.lang.Comparable`
 ** use the xref:__code_objectcontracts_code[`ObjectContracts`] utility class to help implement `Comparable`
@@ -531,7 +532,7 @@ Thus:
 * Inject the xref:__code_actioninteractioncontext_code[`ActionInteractionContext`] (request-scoped) service
 * Use the `ActionInteractionContext` service to determine whether the action was invoked in bulk or as a regular action.
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
-** (if return non-null, then Wicket viewer will navigate to the object of the last invocation… generally not what is required)
+** (if return non-null, then Wicket viewer will navigate to the object of the last invocation� generally not what is required)
 
 The similar xref:__code_scratchpad_code[`ScratchPad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 

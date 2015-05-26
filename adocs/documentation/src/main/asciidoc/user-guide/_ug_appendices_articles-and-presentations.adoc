@@ -6,7 +6,7 @@
 
 
 
-Some articles and recorded material relating to either Apache Isis (or its predecessor, the Naked Objects framework), or its 'sister' open source project on the .NET platform, Naked Objects .NET. We've *highlighted* some of the better ones…
+Some articles and recorded material relating to either Apache Isis (or its predecessor, the Naked Objects framework), or its 'sister' open source project on the .NET platform, Naked Objects .NET. We've *highlighted* some of the better ones?
 
 
 [cols="1,1,5a", options="header"]
@@ -18,7 +18,7 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 .2+|2014
 |Presentation, BDD Exchange
-|https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[To those whom much is given, much is expected… ] (45 min. video)
+|https://skillsmatter.com/skillscasts/5638-to-those-whom-much-is-given-much-is-expected[To those whom much is given, much is expected? ] (45 min. video)
 
 | Presentation, JEEConf
 | https://www.youtube.com/watch?v=BNGUqZ6YE-M[Extremely rapid application development with Apache Isis] (50 min. video)
