@@ -20,19 +20,21 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_domainservicelayout_a_code_named_code[`named()`]
-|string, eg "Customers"
-|name of this class (overriding the name derived from its name in code)
-
-
-|xref:__a_id_reference_annotations_manpage_domainservicelayout_a_code_menubar_code[`menuBar()`]
+|xref:_ug_reference-annotations_manpage-DomainServiceLayout_menuBar[`menuBar()`]
 |`PRIMARY`, `SECONDARY`, `TERTIARY` (`PRIMARY`).
 |the menubar in which the menu that holds this service's actions should reside.
 
 
-|xref:__a_id_reference_annotations_manpage_domainservicelayout_a_code_menuorder_code[`menuOrder()`]
+|xref:_ug_reference-annotations_manpage-DomainServiceLayout_menuOrder[`menuOrder()`]
 |
 |the order of the service's menu with respect to other service's.
+
+
+|xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[`named()`]
+|string, eg "Customers"
+|name of this class (overriding the name derived from its name in code)
+
+
 
 |===
 
@@ -42,56 +44,10 @@ It is not (currently) possible to specify the UI hints through any other means (
 
 
 
+include::_ug_reference-annotations_manpage-DomainServiceLayout_menuBar.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainServiceLayout_menuOrder.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainServiceLayout_named.adoc[leveloffset=+1]
 
 
 
-== anchor:reference-annotations_manpage-DomainServiceLayout[]`named()`
-
-IMPORTANT: WIP ... this section
-
-
-By default the name of an object is derived, reflectively from the class name.
-
-To specify a different name for an object, use the `@Named` annotation in front of the class declaration.
-
-The `@Named` annotation is used when you want to specify the way something is named on the user interface i.e. when you do not want to use the name generated automatically by the system. It can be applied to objects, members (properties, collections, and actions) and to parameters within an action method.
-
-
-[WARNING]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
-====
-
-
-For example:
-
-[source,java]
-----
-@Named("Customer")
-public class CustomerImpl implements Customer{
-   ...
-}
-----
-
-See also the `@Plural` annotation <!--, ?-->.
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainServiceLayout[]`menuBar()`
-
-IMPORTANT: WIP ... this section
-
-
-In the xref:__a_id_chapter_a_wicket_viewer[Wicket viewer] the `PRIMARY` menu bar is left-aligned, the `SECONDARY` menu bar is right aligned, and the `TERTIARY` menu bar is associated with the user's name (far top-right).
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainServiceLayout[]`menuOrder()`
-
-IMPORTANT: WIP ... this section
 

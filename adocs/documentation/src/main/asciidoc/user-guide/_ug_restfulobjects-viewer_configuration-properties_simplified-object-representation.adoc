@@ -9,7 +9,7 @@
 The representations specified by the http://restfulobjects.org[Restful Object spec] are very rich in hypermedia
 controls and metadata, intended to support a wide variety of possible REST clients.
 
-As described xref:_suppressing_elements_of_the_representations[above], it is possible to suppress various elements of these representations. Even then, though, the representations may be too complex for some bespoke REST clients that require a very "flat" object representation.
+As described xref:_ug_restfulobjects-viewer_configuration-properties_suppressing-elements[above], it is possible to suppress various elements of these representations. Even then, though, the representations may be too complex for some bespoke REST clients that require a very "flat" object representation.
 
 The Restful Objects viewer therefore supports generating a much simpler representation of objects using the following configuration property (typically added to `WEB-INF/viewer_restfulobjects.properties`):
 
@@ -65,4 +65,4 @@ This generates a representation such as:
 In the future we might extend this per-request.  Raise/vote on a JIRA ticket if you require this feature.
 ====
 
-If the above isn't flexible and you need complete control over all representations see the section on xref:_extending_the_restful_viewer[Extending the Restful viewer].
+If the above isn't flexible and you need complete control over all representations see the section on xref:_ug_extending_restfulobjects-viewer[Extending the Restful Objects viewer].

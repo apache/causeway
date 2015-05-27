@@ -20,14 +20,99 @@ Impl'n (g: a:)
 |Notes
 
 
-|<<__code_fixturescripts_code, `o.a.i.applib.` +
+|xref:_ug_reference-classes_super_manpage-AbstractContainedObject[`o.a.i.applib.` +
+`AbstractContainedObject`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-AbstractDomainEvent[`o.a.i.applib.` +
+`AbstractDomainEvent`]
+|``o.a.i.core`` +
+``services.eventbus`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-AbstractDomainObject[`o.a.i.applib.` +
+`AbstractDomainObject`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-AbstractFactoryAndRepository[`o.a.i.applib.` +
+`AbstractFactoryAndRepository`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-AbstractService[`o.a.i.applib.` +
+`AbstractService`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-AbstractViewModel[`o.a.i.applib.` +
+`AbstractViewModel`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-ActionDomainEvent[`o.a.i.applib.` +
+`ActionDomainEvent`]
+|``o.a.i.core`` +
+``services.eventbus`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-CollectionDomainEvent[`o.a.i.applib.` +
+`CollectionDomainEvent`]
+|``o.a.i.core`` +
+``services.eventbus`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|xref:_ug_reference-classes_super_manpage-FixtureScript[`o.a.i.applib.` +
+`fixturescript` +
+`FixtureScript`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
+|_ug_reference-classes_super_manpage-FixtureScripts[`o.a.i.applib.` +
 `fixturescripts` +
-`FixtureScripts`>>
+`FixtureScripts`]
 |``o.a.i.core`` +
 ``isis-core-applib``
 |(abstract class)
 |depends on: +
 `ClassDiscoveryService`
+
+
+|xref:_ug_reference-classes_super_manpage-PropertyDomainEvent[`o.a.i.applib.` +
+`PropertyDomainEvent`]
+|``o.a.i.core`` +
+``services.eventbus`` +
+``isis-core-applib``
+|(abstract class)
+|
 
 
 
@@ -44,19 +129,8 @@ include::_ug_reference-classes_super_manpage-AbstractService.adoc[leveloffset=+1
 include::_ug_reference-classes_super_manpage-AbstractViewModel.adoc[leveloffset=+1]
 include::_ug_reference-classes_super_manpage-ActionDomainEvent.adoc[leveloffset=+1]
 include::_ug_reference-classes_super_manpage-CollectionDomainEvent.adoc[leveloffset=+1]
+include::_ug_reference-classes_super_manpage-FixtureScript.adoc[leveloffset=+1]
 include::_ug_reference-classes_super_manpage-FixtureScripts.adoc[leveloffset=+1]
 include::_ug_reference-classes_super_manpage-PropertyDomainEvent.adoc[leveloffset=+1]
 
 
-
-== `AbstractDomainObject`
-
-IMPORTANT: TODO
-
-== `AbstractDomainService`
-
-IMPORTANT: TODO
-
-== `AbstractFactoryAndRepository`
-
-IMPORTANT: TODO

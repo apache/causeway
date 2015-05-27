@@ -7,7 +7,7 @@
 
 As Apache Isis has evolved and grown, we found ourselves adding more and more annotations; but most of these related to either an object type (entity, view model, service) or an object member (property, collection, action).  It became harder and harder for end programmers to discover these new features.
 
-Accordingly, we decided to unify the semantics into the core annotations listed xref:__a_id_reference_annotations_summary_a_core_annotations[above].
+Accordingly, we decided to unify the semantics into the main (core) annotations listed xref:_ug_reference-annotations_aaa_main[above].
 
 The annotations listed in the table below are still supported by Apache Isis, but will be retired in Isis v2.0.
 
@@ -19,7 +19,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Purpose
 |Use instead
 |Layer
-|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
+|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
 
 |`@ActionOrder`
 |Order of buttons and menu items representing actions.

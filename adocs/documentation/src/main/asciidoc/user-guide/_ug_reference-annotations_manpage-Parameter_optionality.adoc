@@ -1,0 +1,48 @@
+[[_ug_reference-annotations_manpage-Parameter_optionality]]
+= `optionality()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+IMPORTANT: WIP ... this section
+
+
+By default, the system assumes that all properties of an object are
+required, and therefore will not let the user save a new object unless a
+value has been specified for each property. Similarly, by default, the
+system assumes that all parameters in an action are required and will
+not let the user execute that action unless values have been specified
+for each parameter.
+
+To indicate that an action parameter is optional use the `@Optional` annotation.
+
+
+[TIP]
+====
+The `@Optional`annotation has no meaning for a primitive property (or parameter) such as `int` - because primitives will always return a default value (e.g. zero). If optionality is required, then use the corresponding wrapper class (e.g. `java.lang.Integer`).
+====
+
+
+
+To indicate that an action may be invoked without having to specify a value for a particular parameter, annotate with `@Optional`.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public Order placeOrder(
+            Product product
+           ,@Named("Quantity") int quantity
+           ,@Optional @Named("Special Instructions") String instr) {
+        ...
+    }
+    ...
+}
+----
+
+
+
+

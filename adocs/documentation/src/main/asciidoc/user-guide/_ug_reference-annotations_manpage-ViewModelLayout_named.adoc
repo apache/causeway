@@ -1,0 +1,41 @@
+[[_ug_reference-annotations_manpage-ViewModelLayout_named]]
+= `named()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+IMPORTANT: WIP ... this section
+
+The `@Named` annotation is used when you want to specify the way something is named on the user interface i.e. when you do not want to use the name generated automatically by the system. It can be applied to objects, members (properties, collections, and actions) and to parameters within an action method.
+
+[WARNING]
+====
+Generally speaking it is better to rename the property, collection or
+action. The only common case where `@Named` is common is to rename
+parameters for built-in value types. Even here though a custom value
+type can be defined using `@Value` so that the value type is used as the
+parameter name. `@Named` may also be used if the name needs punctuation
+or other symbols in the name presented to the user.
+====
+
+
+
+By default the name of an object is derived, reflectively from the class
+name. To specify a different name for an object, use the `@Named`
+annotation in front of the class declaration.
+
+For example:
+
+[source,java]
+----
+@Named("Customer")
+public class CustomerImpl implements Customer{
+   ...
+}
+----
+
+
+

@@ -1,0 +1,37 @@
+[[_ug_reference-annotations_manpage-ParameterLayout_renderedAsDayBefore]]
+= `renderedAsDayBefore()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+IMPORTANT: WIP ... this section
+
+
+A rendering hint, instructing the viewer that the date should as one day prior to the actually stored date.
+
+This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
+
+For example:
+
+[source,java]
+----
+public void changeDates(
+    @ParameterLayout(named="Start Date")
+    LocalDate startDate,
+    @ParameterLayout(
+        named="End Date",
+        renderedAsDayBefore=true
+    )
+    LocalDate endDate) {
+    ...
+}
+----
+
+Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.
+
+What is stored in the domain object, itself, however, the value stored is 1-jun-2013.
+
+

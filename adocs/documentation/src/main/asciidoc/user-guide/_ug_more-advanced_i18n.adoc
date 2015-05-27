@@ -88,8 +88,8 @@ If however the service is configured to run in write mode, then it instead recor
 
 To make the service as convenient as possible to use, the service configures itself as follows:
 
-* if running in xref:_deployment_types[prototype mode] or during integration tests, then the service runs in _write_ mode, in which case it records all translations into the `.pot` file.  The `.pot` file is written out when the system is shutdown.
-* if running in xref:_deployment_types[server (production) mode], then the service runs in _read_ mode. It is also possible to set a configuration setting in `isis.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
+* if running in xref:_ug_runtime_configuration-files_deployment-types[prototype mode] or during integration tests, then the service runs in _write_ mode, in which case it records all translations into the `.pot` file.  The `.pot` file is written out when the system is shutdown.
+* if running in xref:_ug_runtime_configuration-files_deployment-types[server (production) mode], then the service runs in _read_ mode. It is also possible to set a configuration setting in `isis.properties` to force read mode even if running in prototype mode (useful to manually test/demo the translations).
 
 When running in write mode the original text is returned to the caller untranslated. If in read mode, then the translated `.po` files are read and translations provided as required.
 
@@ -169,7 +169,7 @@ msgstr "Iche heisse {firstName} {lastName}."
 then the translation would be: "Ich heisse James Bond".
 
 
-The same class is used in xref:_domain_object_container[`DomainObjectContainer`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
+The same class is used in xref:_ug_reference-services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] so that you can raise translatable info, warning and error messages; each of the relevant methods are overloaded.
 
 For example:
 
@@ -188,7 +188,7 @@ public interface DomainObjectContainer {
 
 === `TranslatableException`
 
-Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:_exception_recognizer[`ExceptionRecognizer`].
+Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`].
 
 In this case, if the exception implements `TranslatableException`, then the message will automatically be translated before being rendered.  The `TranslatableException` itself takes the form:
 
@@ -211,7 +211,7 @@ public interface TranslatableException {
 
 So much for the API; but as noted, it is also necessary to ensure that the required translations are recorded (by the `TranslationService`) into the `.pot` file.
 
-For this, we recommend that you ensure that all such methods are tested through an xref:_integration_test_support[integration test] (not unit test).
+For this, we recommend that you ensure that all such methods are tested through an xref:_ug_testing_integ-test-support[integration test] (not unit test).
 
 For example, here's the corresponding integration test for the "Exclamation mark" example from the simpleapp (above):
 
@@ -252,7 +252,7 @@ To ensure your app is fully internationalized app, you must therefore:
 ====
 We make no apologies for this requirement: one of the reasons that we decided to implement Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
 
-Behind the scenes Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.  These are simply passed through to the registered xref:_exception_recognizer[``ExceptionRecognizer``]s so that any messages are recorded as requiring translation.
+Behind the scenes Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.  These are simply passed through to the registered xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 
 

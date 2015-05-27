@@ -17,7 +17,7 @@ Also, be aware enabling these settings makes the representations with respect to
 ====
 
 
-.RestfulObjects Viewer Configuration Properties
+.Restful Objects Viewer Configuration Properties
 [cols="2a,1,3", options="header"]
 |===
 |Property
@@ -28,12 +28,12 @@ Also, be aware enabling these settings makes the representations with respect to
 |`isis.viewer.restfulobjects.` +
 `honorUiHints`
 | `true`,`false` (`_false_`)
-| See xref:_honor_ui_hints[discussion], below.
+| See xref:_ug_restfulobjects-viewer_configuration-properties_honor-ui-hints[discussion], below.
 
 |`isis.viewer.restfulobjects.` +
 `suppressDescribedByLinks`
 | `true`,`false` (`_false_`)
-.6+| See xref:_suppressing_elements_of_the_representation[discussion], below.
+.6+| See xref:_ug_restfulobjects-viewer_configuration-properties_suppressing-elements[discussion], below.
 
 |`isis.viewer.restfulobjects.` +
 `suppressUpdateLink`
@@ -58,7 +58,7 @@ Also, be aware enabling these settings makes the representations with respect to
 |`isis.viewer.restfulobjects.` +
 `objectPropertyValuesOnly`
 | `true`,`false` (`_false_`)
-| See xref:_simplified_object_representation[discussion], below.
+| See xref:_ug_restfulobjects-viewer_configuration-properties_simplified-object[discussion], below.
 
 |===
 

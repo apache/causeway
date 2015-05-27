@@ -8,7 +8,7 @@ IMPORTANT: TODO
 
 
 
-NOTE: see also xref:_i18n[Internationalization]
+NOTE: see also xref:_ug_more-advanced_i18n[Internationalization]
 
 == Class (object)
 

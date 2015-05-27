@@ -20,23 +20,17 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_bookmarking_code[`bookmarking()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking[`bookmarking()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_cssclass_code[`cssClass()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssclass[`cssClass()`]
 |
 |the css class that a domain class (type) should have, to allow more targetted styling in `application.css`
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_describedas_code[`describedAs()`]
-|
-|description of this class, eg to be rendered in a tooltip.
-
-
-
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_cssclassfa[`cssClassFa()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`cssClassFa()`]
 |
 |the name of this class (overriding the name derived from its name in code)
 
@@ -46,23 +40,27 @@ The table below summarizes the annotation's attributes.
 |the name of this class (overriding the name derived from its name in code)
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_named_code[`named()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[`describedAs()`]
+|
+|description of this class, eg to be rendered in a tooltip.
+
+
+
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[`named()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_paged_code[`paged()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[`paged()`]
 |
 |the page size for instances of this class when rendered within a table.
 
 
-|xref:__a_id_reference_annotations_manpage_domainobjectlayout_a_code_plural_code[`plural()`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_plural[`plural()`]
 |
 |the plural name of the class
 
 |===
-
-
 
 
 
@@ -88,373 +86,12 @@ equivalent link:./ViewModelLayout.html[@ViewModelLayout] can be used.
 
 
 
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`bookmarking()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@Bookmarkable` annotation indicates that an entity or an action (with safe link:./ActionSemantics.html[action semantics]) is automatically bookmarked.
-
-(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel that slides out from the left:
-
-<img src="images/Bookmarkable.png" width="640px"/>
-
-For example:
-
-[source,java]
-----
-@Bookmarkable
-public class ToDoItem ... {
-    ...
-}
-----
-
-indicates that the `ToDoItem` class is bookmarkable, while:
-
-[source,java]
-----
-@Named("ToDos")
-public class ToDoItems {
-
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "1")
-    public List<ToDoItem> notYetComplete() {
-        ...
-    }
-
-}
-----
-
-indicates that the "not yet complete" action is bookmarkable.
-
-It is also possible to nest bookmarkable entities. For example, this screenshot is taken from http://github.com/estatio/estatio[Estatio]:
-
-<img src="images/Bookmarkable-nested.png" width="640px"/>
-
-For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark (the default), but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark if its parent `Property` has already been visited. This is accomplished with the following annotations:
-
-[source,java]
-----
-@Bookmarkable
-public class Property { ... }
-----
-
-and
-
-[source,java]
-----
-@Bookmarkable(BookmarkPolicy.AS_CHILD)
-public abstract class Unit { ... }
-----
-
-The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting 3 deep: `Lease` -&gt; `LeaseItem` -&gt; `LeaseTerm`.
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`cssClass()`
-
-IMPORTANT: WIP ... this section
-
-
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
-
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
-
-For example:
-
-[source,java]
-----
-@CssClass("x-main")
-public class ToDoItem { ... }
-----
-
-or
-
-[source,java]
-----
-public class ToDoItem {
-
-    @CssClass("x-key")
-    public LocalDate getDueBy() { ... }
-
-}
-----
-
-=== Alternatives (`.layout.json`)
-
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
-
-[source,javascript]
-----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                "dueBy": {
-                    "cssClass": { "value": "x-key" }
-                }
-                ....
-            }
-        },
-        ...
-    }
-}
-----
-
-Note that this (currently) only supports class members, not classes
-
-
-[NOTE]
-====
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint
-to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered on action butotns or as the icon for classes.
-====
-
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]cssClassFa
-
-
-=== `cssClassFa()`
-
-IMPORTANT: WIP ... this section
-
-
-The `CssClassFa` annotation applies to objects and also to object actions,
-and is used by the Wicket viewer as a UI hint.
-
-For object actions, the viewer will render the specified
-http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon]
-on the action's button (or menu item).
-
-For objects, it will be used as an icon. Note that this is only used if
-the object does not have a `getIconName()` method.
-
-For example:
-
-[source,java]
-----
-@CssClassFa("fa-check-circle")
-public class ToDoItem { ... }
-----
-
-or
-
-[source,java]
-----
-public class ToDoItem {
-
-    @CssClass("fa-step-backward")
-    public ToDoItem previous() { ... }
-
-    @CssClass("fa-step-forward")
-    public ToDoItem next() { ... }
-
-}
-----
-
-There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
-is no need to include the "fa" class; it will be automatically appended.
-
-=== Alternatives (`.layout.json`)
-
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
-
-[source,javascript]
-----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                 "relativePriority": {
-                    "actions": {
-                        "previous": {
-                            "cssClassFa": { "value": "fa-step-backward" }
-                        },
-                        "next": {
-                            "cssClassFa": { "value": "fa-step-forward" }
-                        }
-                    }
-                },
-                ....
-            }
-        },
-        ...
-    }
-}
-----
-
-Note that this (currently) only supports class members, not classes.
-
-
-[TIP]
-====
-The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint
-to apply CSS, but for wrapping the representation of an object or object
-member so that it can be styled in an application-specific way.
-====
-
-
-
-
-=== `cssClassFaPosition()`
-
-IMPORTANT: WIP ... this section
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`describedAs()`
-
-IMPORTANT: WIP ... this section
-
-The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
-
-Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method. `@DescribedAs` therefore works in a very similar manner to `@Named`.
-
-For example:
-
-[source,java]
-----
-@DescribedAs("A customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")
-public class ProspectiveSale {
-   ...
-}
-----
-
-
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`named()`
-
-IMPORTANT: WIP ... this section
-
-
-By default the name of an object is derived, reflectively from the class
-name. To specify a different name for an object, use the `@Named`
-annotation in front of the class declaration.
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-
-[WARNING]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
-====
-
-
-For example:
-
-[source,java]
-----
-@Named("Customer")
-public class CustomerImpl implements Customer{
-   ...
-}
-----
-
-See also the `@Plural` annotation <!--, ?-->.
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`paged()`
-
-IMPORTANT: WIP ... this section
-
-This annotation is used to indicate that parented and/or standalone
-collections should be paginated.
-
-When annotated on a collection, `@Paged` indicates the page size of a parented collection. When annotated on a type, `@Paged` indicates the page size of a standalone collection.
-
-For example:
-
-[source,java]
-----
-@Paged(30)
-public class Order {
-
-}
-----
-
-This indicates a page size of 30 for standalone collections.
-
-When omitting a parameter value or omitting the annotation completely,
-the configured defaults in `isis.properties` will be used.
-
-For example:
-
-[source,ini]
-----
-isis.viewers.paged.standalone=20
-isis.viewers.paged.parented=5
-----
-
-IMPORTANT: TODO - update runtime config chapter.
-
-
-This indicates a page size of 5 for parented collections and a page size
-of 20 for standalone collections.
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObjectLayout[]`plural()`
-
-IMPORTANT: WIP ... this section
-
-When the framework displays a collection of several objects it may use the plural form of the object type in the title. By default the plural name will be created by adding an 's' to the end of the singular name (whether that is the class name or another name specified using `@Named`). Where the single name ends in 'y' then the default plural name will end in 'ies' - for example a collection of `Country` objects will be titled 'Countries'. Where these conventions do not work, the programmer may specify the plural form of the name using `@Plural`.
-
-For example:
-
-[source,java]
-----
-@Plural("Children")
-public class Child {
-    // members and actions here
-}
-----
-
-
-
+include::_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_cssClass.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_describedAs.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_named.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_paged.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObjectLayout_plural.adoc[leveloffset=+1]
 
 

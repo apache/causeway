@@ -27,7 +27,7 @@ The value of this property can be a comma-separated list (if there is more than 
 
 == Integration Testing
 
-The `IsisConfigurationForJdoIntegTests`, recommended for use in xref:_integration_testing[Integration Testing] provides the `#addRegisterEntitiesPackagePrefix()` method to set up this configuration property:
+The `IsisConfigurationForJdoIntegTests`, recommended for use in xref:_ug_testing_integ-test-support[Integration Testing] provides the `#addRegisterEntitiesPackagePrefix()` method to set up this configuration property:
 
 [source,java]
 .Integration test bootstrapping

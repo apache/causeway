@@ -52,9 +52,9 @@ IMPORTANT: TODO
 |<<__code_classdiscoveryservice_code, `o.a.i.applib.` +
 `services.classdiscovery` +
 `ClassDiscoveryService`>>
-|Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:__a_id_reference_annotations_manpage_a_code_domainservice_code[`@DomainService`])
+|Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:_ug_reference-annotations_manpage-DomainService[`@DomainService`])
 
-Subtypes of a given type (eg xref:__a_id_reference_classes_super_manpage_a_code_fixturescript_code[`FixtureScript`]).
+Subtypes of a given type (eg xref:_ug_reference-classes_super_manpage-FixtureScript[`FixtureScript`]).
 |`ClassDiscoveryService-` +
 `UsingReflections` +
 ``o.a.i.core`` +
@@ -79,7 +79,7 @@ Subtypes of a given type (eg xref:__a_id_reference_classes_super_manpage_a_code_
 |<<__code_emailnotificationservice_code, `o.a.i.applib.` +
 `services.userreg` +
 `EmailNotificationService`>>
-|Notify a user during xref:__a_id_reference_services_spi_manpage_a_code_userregistrationservice_code[self-registration] of users.
+|Notify a user during xref:_ug_reference-services-spi_manpage-UserRegistrationService[self-registration] of users.
 |`EmailNotificationService-` +
 `Default` +
 ``o.a.i.core`` +
@@ -90,7 +90,7 @@ a configured `EmailService`
 |<<__code_eventserializer_code, `o.a.i.applib.` +
 `services.publish` +
 `EventSerializer`>>
-|Creates a representation of either an action invocation or a changed object being published through the xref:__a_id_reference_services_spi_manpage_a_code_publishingservice_code[`PublishingService`].
+|Creates a representation of either an action invocation or a changed object being published through the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 |`RestfulObjects-` +
 `SpecEventSerializer` +
 ``o.ia.m.publishing`` +
@@ -113,7 +113,7 @@ a configured `EmailService`
 |<<__code_localeprovider_code, `o.a.i.applib.` +
 `services.i18n` +
 `LocaleProvider`>>
-|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:__a_id_reference_services_spi_manpage_a_code_translationservice_code[`TranslationService`].
+|Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`].
 |`LocaleProviderWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
@@ -138,7 +138,7 @@ depends on: +
 |<<__code_translationservice_code, `o.a.i.applib.` +
 `services.i18n` +
 `TranslationService`>>
-|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:__a_id_reference_services_spi_manpage_a_code_localprovider_code[`LocalProvider`].
+|Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:_ug_reference-services-spi_manpage-LocaleProvider[`LocalProvider`].
 |`TranslationServicePo` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
@@ -150,7 +150,7 @@ depends on: +
 |<<__code_translationsresolver_code, `o.a.i.applib.` +
 `services.i18n` +
 `TranslationsResolver`>>
-|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:__a_id_reference_services_spi_manpage_a_code_translationservice_code[`TranslationService`]
+|Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`]
 |`TranslationsResolverWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
@@ -185,7 +185,7 @@ Key:
 * `o.ia.m` is an abbreviation for `org.isisaddons.module`
 
 
-Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:__a_id_reference_annotations_manpage_a_code_domainservice_code[`@DomainService`].  The one exception is xref:__a_id_reference_services_spi_manpage_a_code_exceptionrecognizer_code[`ExceptionRecognizer`], which must be registered explicitly in `isis.properties`; this makes the service extensible (for new exceptions to be recognized).
+Where an implementation is available (on the classpath) then it is always registered automatically (that is, they are all (with one exception) annotated with xref:_ug_reference-annotations_manpage-DomainService[`@DomainService`].  The one exception is xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`], which must be registered explicitly in `isis.properties`; this makes the service extensible (for new exceptions to be recognized).
 
 
 
@@ -222,7 +222,7 @@ Impl'n (g: a:)
 |<<__code_contentnegotiationservice_code, `o.a.i.v.ro.` +
 `rendering.service.conneg.` +
 `ContentNegotiationService`>>
-|Encodes the algorithm that delegate to any registered xref:__a_id_reference_services_spi_manpage_a_code_contentmappingservice_code[`ContentMappingService`]s.
+|Encodes the algorithm that delegate to any registered xref:_ug_reference-services-spi_manpage-ContentMappingService[`ContentMappingService`]s.
 |`ContentNegotiationService-` +
 `XRoDomainType` +
 ``o.a.i.core`` +

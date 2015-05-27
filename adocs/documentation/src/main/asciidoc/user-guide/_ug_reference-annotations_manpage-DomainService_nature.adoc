@@ -1,0 +1,74 @@
+[[_ug_reference-annotations_manpage-DomainService_nature]]
+= `nature()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+IMPORTANT: WIP ... this section; also VIEW_REST_ONLY
+
+
+
+The `@NotContributed` annotation applies only to action methods, and
+specifically to the actions of services. If present, it indicates that
+the action should not be contributed to any of its domain object
+arguments.
+
+For example:
+
+[source,java]
+----
+public class OrderServices {
+    @NotContributed
+    public void cancel(Order order);
+    ...
+}
+----
+
+If the action should neither be contributed nor appear in the service's
+service menu, then you could instead simply mark it as `@Hidden`.
+
+=== Contributing of one-arg actions
+
+Actions that accept a single argument will, by default, also be contributed as an association:
+
+* if the action returns a single object (value or entity) then the action will be contributed as a property
+
+* if the action returns a list then the action will be contributed as a collection
+
+This behaviour can be influenced by specifying the "As." attribute:
+
+* use `@NotContributed(As.ACTION)` to contribute the action as an association
+* use `@NotContributed(As.ASSOCIATION)` to contribute the action as an action
+* use `@NotContributed` to not contribute the action at all.
+
+
+
+
+
+The `@NotInServiceMenu` annotation applies only to action methods, and specifically to the actions of services. If present, it indicates that the action should not appear in the service menu for the service. It may, however, still be contributed to any of its domain object arguments.
+
+
+For example:
+
+[source,java]
+----
+public class OrderServices {
+    @NotInServiceMenu
+    public void cancel(Order order);
+    ...
+}
+----
+
+
+
+If the action should neither be contributed (see ?) nor appear in the
+service's service menu, then you could instead simply mark it as `@Hidden`
+<!--(see ?)-->.
+
+
+
+
+
+

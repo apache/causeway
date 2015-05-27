@@ -18,27 +18,27 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_parameter_a_code_maxlength_code[`maxLength()`]
+|xref:_ug_reference-annotations_manpage-Parameter_maxLength[`maxLength()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_parameter_a_code_minlength_code[`minLength()`]
+|xref:_ug_reference-annotations_manpage-Parameter_minLength[`minLength()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_parameter_a_code_mustsatisfy_code[`mustSatisfy()`]
+|xref:_ug_reference-annotations_manpage-Parameter_mustSatisfy[`mustSatisfy()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_parameter_a_code_optionality_code[`optionality()`]
+|xref:_ug_reference-annotations_manpage-Parameter_optionality[`optionality()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_parameter_a_regex[regex()]
+|xref:_ug_reference-annotations_manpage-Parameter_regex[regex()]
 |
 |
 
@@ -58,265 +58,10 @@ The table below summarizes the annotation's attributes.
 
 
 
+include::_ug_reference-annotations_manpage-Parameter_maxLength.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter_minLength.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter_mustSatisfy.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter_optionality.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter_regex.adoc[leveloffset=+1]
 
-
-
-
-== anchor:reference-annotations_manpage-Parameter[]`maxLength()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@MaxLength` annotation indicates the maximum number of characters that the user may enter into a `String` property, or a `String` parameter in an action, or for a string-based value type. It is ignored if applied to any other type.
-
-For example, on a property:
-
-[source,java]
-----
-public class Customer {
-    @MaxLength(30)
-    public String getFirstName() { ... }
-    public void setFirstName(String firstName) { ... }
-    ...
-}
-----
-
-Or, on an action parameter:
-
-[source,java]
-----
-public class CustomerRepository {
-    public Customer newCustomer(
-        @MaxLength(30)
-        @Named("First Name") String firstName
-       ,@MaxLength(30)
-        @Named("Last Name") String lastName) {
-    ...
-}
-----
-
-Or, for a value type:
-
-[source,java]
-----
-@Value(...)
-@MaxLength(30)
-public class CustomerFirstName {
-    ...
-}
-----
-
-If the model is being persisted to a relational database then
-`@MaxLength` should be specified for all `String` properties and action
-parameters.
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-Parameter[]`minLength()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@MinLength` annotation is used to specify the minimum number of characters in a search of an link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[auto-complete].
-
-For example:
-
-[source,java]
-----
-public ToDoItem add(
-        @TypicalLength(20)
-        final ToDoItem toDoItem) {
-    getDependencies().add(toDoItem);
-    return this;
-}
-public List<ToDoItem> autoComplete0Add(
-        final @MinLength(2)
-        String search) {
-    final List<ToDoItem> list = toDoItems.autoComplete(search);
-    list.removeAll(getDependencies());
-    list.remove(this);
-    return list;
-}
-----
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-Parameter[]`mustSatisfy()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@MustSatisfy` annotation allows validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.
-
-For example:
-
-[source,java]
-----
-public class CustomerRepository {
-    public Customer newCustomer(
-            @MustSatisfy(StartWithCapitalLetterSpecification.class)
-            @Named("First Name") firstName
-           ,@MustSatisfy(StartWithCapitalLetterSpecification.class)
-            @Named("Last Name") lastName) {
-        ...
-    }
-    ...
-}
-----
-
-The `Specification` is consulted during validation, being passed the
-proposed value.
-
-An alternative to using `@MustSatisfy` is to define a custom value type (though this introduces additional mapping complexity for both viewers and objectstore).
-
-
-[TIP]
-====
-Can also specify on property, so the specification class can be reused.
-====
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-Parameter[]`optionality()`
-
-IMPORTANT: WIP ... this section
-
-
-By default, the system assumes that all properties of an object are
-required, and therefore will not let the user save a new object unless a
-value has been specified for each property. Similarly, by default, the
-system assumes that all parameters in an action are required and will
-not let the user execute that action unless values have been specified
-for each parameter.
-
-To indicate that an action parameter is optional use the `@Optional` annotation.
-
-
-[TIP]
-====
-The `@Optional`annotation has no meaning for a primitive property (or parameter) such as `int` - because primitives will always return a default value (e.g. zero). If optionality is required, then use the corresponding wrapper class (e.g. `java.lang.Integer`).
-====
-
-
-=== Making a property optional
-
-Annotate the getter to indicate that a property is `@Optional`. For
-example:
-
-[source,java]
-----
-public class Order {
-    public Product getProduct() { ... }
-
-    public java.util.Date getShipDate() { ... }
-    public void setShipDate(Date java.util.shipDate) { ... }
-
-    @Optional
-    public String getComments() { ... }
-    public void setComments(String comments) { ... }
-}
-----
-
-Here the `product` and `shipDate` properties are both required, but the
-`comments` property is optional.
-
-=== Making an action parameter optional
-
-To indicate that an action may be invoked without having to specify a
-value for a particular parameter, annotate with `@Optional`. For
-example:
-
-[source,java]
-----
-public class Customer {
-    public Order placeOrder(
-            Product product
-           ,@Named("Quantity") int quantity
-           ,@Optional @Named("Special Instructions") String instr) {
-        ...
-    }
-    ...
-}
-----
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-Parameter[]Regex`
-
-Title: @RegEx
-
-
-=== `regexPattern()`
-
-=== `regexPatternFlags()`
-
-=== `regexPatternReplacement()`
-
-
-The `@RegEx` annotation may be applied to any string property, or to any
-parameter within an action method. It can also be applied to any
-string-based value type. It serves both to validate and potentially to
-normalise the format of the input. `@Regex` is therefore similar in use
-to `@Mask` <!--(see ?)--> but provides more flexibility.
-
-The syntax is:
-
-`@RegEx(validation = &quot;regEx string&quot;,
-        format = &quot;regEx string&quot;, caseSensitive =
-        &lt;true|false&gt;)`
-
-Only the first parameter is required; the `format` defaults to "no
-formatting", and `caseSensitive` defaults to false.
-
-For example, on a property:
-
-[source,java]
-----
-public class Customer {
-    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
-    public String getEmail() {}
-    ...
-}
-----
-
-Or, on a parameter:
-
-[source,java]
-----
-public class Customer {
-    public void updateEmail(
-            @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
-            @Named("Email") String email) {
-        ...
-    }
-    ...
-)
-----
-
-Or, on a value type:
-
-[source,java]
-----
-@Value(...)
-@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
-public class EmailAddress {
-   ...
-}
-----
 

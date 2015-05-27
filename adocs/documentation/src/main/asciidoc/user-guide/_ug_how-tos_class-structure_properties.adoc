@@ -15,7 +15,7 @@ IMPORTANT: TODO
 
 IMPORTANT: WIP
 
-The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in the xref:_properties_vs_parameters[Properties vs Parameters] section provides a handy reference of each.
+The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in the xref:_ug_how-tos_class-structure_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
 
 
 

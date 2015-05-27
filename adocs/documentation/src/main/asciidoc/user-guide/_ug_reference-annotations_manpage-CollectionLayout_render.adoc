@@ -1,0 +1,49 @@
+[[_ug_reference-annotations_manpage-CollectionLayout_render]]
+= `render()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+IMPORTANT: WIP ... this section
+
+
+The `@Render` annotation is a hint for properties and collections to
+indicate that a value property should be rendered lazily (rather than
+eagerly, as usual), or that a reference property or collection should be
+rendered eagerly (rather than lazily, as usual).
+
+Viewers can use this to present the property/collection in an
+appropriate manner:
+
+* an ``Order``'s `lineItems` collection might initially be rendered expanded
+form so that the user could see a list of line items immediately
+when the order is rendered. This is the most common use case.
+
+* a (reference) property of type `Address` might show the details of the
+referenced `Address` in a box
+
+At the same time, an object store might use this to defer lazy loading
+of values that represent blobs or clobs.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    @Render(Type.EAGERLY)
+    public List<LineItem> getDetails() { ... }
+
+    ...
+}
+----
+
+For properties and collections there is some similarity between this
+concept and that of eager-loading as supported by some object stores.
+Indeed, some object stores may choose use their own specific annotations
+(eg a JDO default fetch group) in order to infer this semantic.
+
+
+

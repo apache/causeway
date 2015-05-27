@@ -13,7 +13,7 @@ Still, on very rare occasion you may have a need, in which case you can either u
 
 == Using Isis` `DomainObjectContainer`
 
-The xref:_domain_object_container[`DomainObjectContainer`] service exposes the following API:
+The xref:_ug_reference-services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] service exposes the following API:
 
 [source,java]
 ----

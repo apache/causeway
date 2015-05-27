@@ -1,0 +1,28 @@
+[[_ug_reference-annotations_manpage-PropertyLayout_typicalLength]]
+= `typicalLength()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+IMPORTANT: WIP ... this section
+
+
+The `@TypicalLength` annotation indicates the typical length of a `String` property or `String` parameter in an action. It can also be specified for string-based value types.
+
+The information is generally used by the viewing mechanism to determine the space that should be given to that property or parameter in the appropriate view. If the typical length is the same as the `@MaxLength` <!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If the value specified is zero or negative then it will be ignored.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @MaxLength(30)
+    @TypicalLength(20)
+    public String getFirstName() { ... }
+    public void setFirstName(String firstName) { ... }
+}
+----
+

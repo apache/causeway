@@ -1,0 +1,69 @@
+[[_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking]]
+= `bookmarking()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+IMPORTANT: WIP ... this section
+
+
+The `@Bookmarkable` annotation indicates that an entity or an action (with safe link:./ActionSemantics.html[action semantics]) is automatically bookmarked.
+
+(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel that slides out from the left:
+
+<img src="images/Bookmarkable.png" width="640px"/>
+
+For example:
+
+[source,java]
+----
+@Bookmarkable
+public class ToDoItem ... {
+    ...
+}
+----
+
+indicates that the `ToDoItem` class is bookmarkable, while:
+
+[source,java]
+----
+@Named("ToDos")
+public class ToDoItems {
+
+    @Bookmarkable
+    @ActionSemantics(Of.SAFE)
+    @MemberOrder(sequence = "1")
+    public List<ToDoItem> notYetComplete() {
+        ...
+    }
+
+}
+----
+
+indicates that the "not yet complete" action is bookmarkable.
+
+It is also possible to nest bookmarkable entities. For example, this screenshot is taken from http://github.com/estatio/estatio[Estatio]:
+
+<img src="images/Bookmarkable-nested.png" width="640px"/>
+
+For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark (the default), but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark if its parent `Property` has already been visited. This is accomplished with the following annotations:
+
+[source,java]
+----
+@Bookmarkable
+public class Property { ... }
+----
+
+and
+
+[source,java]
+----
+@Bookmarkable(BookmarkPolicy.AS_CHILD)
+public abstract class Unit { ... }
+----
+
+The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting 3 deep: `Lease` -&gt; `LeaseItem` -&gt; `LeaseTerm`.
+
+

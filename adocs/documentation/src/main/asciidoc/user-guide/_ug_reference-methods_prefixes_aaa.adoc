@@ -20,46 +20,46 @@ The table below lists the method prefixes that are recognized as part of Apache 
 Param
 |Description
 
-|xref:__code_addto_code[`addTo...()`]
+|xref:_ug_reference-methods_prefixes_manpage-addTo[`addTo...()`]
 |
 |
 |Y
 |
 |
 |add object to a collection (nb: not currently supported by Wicket viewer) +
-See also xref:__code_removefrom_code[`removeFrom...()`]`
+See also xref:_ug_reference-methods_prefixes_manpage-removefrom[`removeFrom...()`]`
 
-|xref:__code_autocomplete_code[`autoComplete...()`]
+|xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`]
 |
 |Y
 |
 |
 |Y
 |Return a list of matching elements for a property or an action parameter. +
-Alternatively, can specify for a class using xref:__code_domainobject_code[`@DomainObject#autoComplete`] +
+Alternatively, can specify for a class using xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`@DomainObject#autoComplete`] +
 +
 See also choices
 
-|xref:__code_choices_code[`choices...()`]
+|xref:_ug_reference-methods_prefixes_manpage-choices[`choices...()`]
 |
 |Y
 |
 |
 |Y
 |Provide list of choices for a property or action parameter
-See also xref:__code_autocomplete_code[`autoComplete...()`].
+See also xref:_ug_reference-methods_prefixes_manpage-choices[`autoComplete...()`].
 
-|xref:__code_clear_code[`clear...()`]
+|xref:_ug_reference-methods_prefixes_manpage-clear[`clear...()`]
 |
 |Y
 |
 |
 |
 |Clear a property (set it to null). Allows business logic to be placed apart from the setter.
-See also xref:__code_modify_code[`modify...()`]
+See also xref:_ug_reference-methods_prefixes_manpage-modify[`modify...()`]
 
 
-|xref:__code_default_code[`default...()`]
+|xref:_ug_reference-methods_prefixes_manpage-default[`default...()`]
 |
 |Y
 |
@@ -67,7 +67,7 @@ See also xref:__code_modify_code[`modify...()`]
 |Y
 |Default value for a property or an action parameter.
 
-|xref:__code_disable_code[`disable...()`]
+|xref:_ug_reference-methods_prefixes_manpage-disable[`disable...()`]
 |Y
 |Y
 |Y
@@ -75,16 +75,16 @@ See also xref:__code_modify_code[`modify...()`]
 |
 |Disables (makes read-only) a property, a collection or an action.
 
-|xref:__code_get_code[`get...()`]
+|xref:_ug_reference-methods_prefixes_manpage-get[`get...()`]
 |
 |Y
 |Y
 |
 |
 |Access the value of a property or collection. +
-See also xref:__code_set_code[`set...()`].
+See also xref:_ug_reference-methods_prefixes_manpage-set[`set...()`].
 
-|xref:__code_hide_code[`hide...()`]
+|xref:_ug_reference-methods_prefixes_manpage-hide[`hide...()`]
 |
 |Y
 |Y
@@ -92,25 +92,25 @@ See also xref:__code_set_code[`set...()`].
 |
 |Hides a property, a collection or an action.
 
-|xref:__code_modify_code[`modify...()`]
+|xref:_ug_reference-methods_prefixes_manpage-modify[`modify...()`]
 |
 |Y
 |
 |
 |
 |Modify a property (set it to a non-null) value. Allows business logic to be placed apart from the setter. +
-See also xref:__code_clear_code[`clear...()`]`.
+See also xref:_ug_reference-methods_prefixes_manpage-clear[`clear...()`]`.
 
-|xref:__code_removeFrom_code[`removeFrom...()`]
+|xref:_ug_reference-methods_prefixes_manpage-removeFrom[`removeFrom...()`]
 |
 |
 |Y
 |
 |
 |remove object from a collection (nb: not currently supported by Wicket viewer) +
-See also xref:__code_addto_code[`addTo...()`]`
+See also xref:_ug_reference-methods_prefixes_manpage-addTo[`addTo...()`]`
 
-|xref:__code_set_code[`set...()`]
+|xref:_ug_reference-methods_prefixes_manpage-set[`set...()`]
 |
 |Y
 |Y
@@ -118,34 +118,34 @@ See also xref:__code_addto_code[`addTo...()`]`
 |
 |Sets the value of a property or a collection.
 
-|xref:__code_validate_code[`validate...()`]
+|xref:_ug_reference-methods_prefixes_manpage-validate[`validate...()`]
 |Y
 |
 |
 |Y
 |Y
 |Check that a proposed value of a property or an action parameter is valid. +
-See also xref:__code_validateaddto_code[validateAddTo...()`] and xref:__code_validateremovefrom_code[`validateRemoveFrom...()`] for collections.
+See also xref:_ug_reference-methods_prefixes_manpage-validateAddTo[validateAddTo...()`] and xref:_ug_reference-methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] for collections.
 
-|<<__code_validateaddto_code, `validate +
-AddTo...()`>>
+|xref:_ug_reference-methods_prefixes_manpage-validateAddTo[`validate +
+AddTo...()`]
 |
 |Y
 |
 |
 |
 |Check that a proposed object to add to a collection is valid. +
-See also xref:__code_validateremovefrom_code[`validateRemoveFrom...()`], and xref:__code_validate_code[`validate...()`] for properties and collections.
+See also xref:_ug_reference-methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`], and xref:_ug_reference-methods_prefixes_manpage-validate[`validate...()`] for properties and collections.
 
-|<<__code_validateremovefrom_code, `validate +
-RemoveFrom...()`>>
+|xref:_ug_reference-methods_prefixes_manpage-validateRemoveFrom[`validate +
+RemoveFrom...()`]
 |
 |Y
 |
 |
 |
 |Check that a proposed object to add to a collection is valid.
-See also xref:__code_validateaddto_code[`validateAddTo...()`], and xref:__code_validate_code[`validate...()`] for properties and collections.
+See also xref:_ug_reference-methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], and xref:_ug_reference-methods_prefixes_manpage-validate[`validate...()`] for properties and collections.
 
 |===
 

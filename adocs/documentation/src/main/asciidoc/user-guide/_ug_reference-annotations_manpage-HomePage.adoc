@@ -12,7 +12,7 @@ Title: @HomePage
 
 [NOTE]
 ====
-Currently only by the xref:__a_id_chapter_a_wicket_viewer[Wicket Viewer].
+Currently only by the xref:_ug_wicket-viewer[Wicket Viewer].
 ====
 
 

@@ -1,0 +1,49 @@
+[[_ug_reference-annotations_manpage-ParameterLayout_cssClass]]
+= `cssClass()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+IMPORTANT: WIP ... this section
+
+
+The `CssClass` annotation applies to object and also to any object member
+(property, collection or action). It is used by the Wicket viewer as a UI hint
+to render specified CSS classes around the representation of the element.
+
+Application-specific CSS can then be used to target and adjust the UI representation
+of that particular element.
+
+For example:
+
+[source,java]
+----
+@CssClass("x-main")
+public class ToDoItem { ... }
+----
+
+or
+
+[source,java]
+----
+public class ToDoItem {
+
+    @CssClass("x-key")
+    public LocalDate getDueBy() { ... }
+
+}
+----
+
+
+[NOTE]
+====
+The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
+====
+
+
+
+
+

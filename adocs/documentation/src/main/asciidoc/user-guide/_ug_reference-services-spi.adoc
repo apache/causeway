@@ -5,11 +5,11 @@
 :_imagesdir: images/
 
 
-Apache Isis includes an extensive number of domain services for your domain objects to use; these are listed in xref:__a_id_chapter_a_reference_domain_services_(api)[Reference: Domain Services (API)].  But some of the services interfaces defined in the applib are intended to be used (primarily) not by your domain objects but instead by Isis itself.
+Apache Isis includes an extensive number of domain services for your domain objects to use; these are listed in xref:_ug_reference-services-api[Reference: Domain Services (API)].  But some of the services interfaces defined in the applib are intended to be used (primarily) not by your domain objects but instead by Isis itself.
 
-A good example of this is the xref:__code_auditingservice3_code[`AuditingService3`] service; if an implementation is present then Isis will call that service in order to record audit log entries.  If no implementation is available then Isis will carry on regardless.
+A good example of this is the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService3`] service; if an implementation is present then Isis will call that service in order to record audit log entries.  If no implementation is available then Isis will carry on regardless.
 
-Some domain services can be considered both API and SPI; a good example is the `EmailService` that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the user registration functionality supported by the xref:_wicket_viewer[Wicket viewer].   The same is true of the xref:__code_eventbusservice_code[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events eg for `@Action(domainEvent=...)`.  For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only the strictly SPI services.
+Some domain services can be considered both API and SPI; a good example is the `EmailService` that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the user registration functionality supported by the xref:_ug_wicket-viewer[Wicket viewer].   The same is true of the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events eg for `@Action(domainEvent=...)`.  For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only the strictly SPI services.
 
 include::_ug_reference-services-spi_aaa.adoc[leveloffset=+1]
 

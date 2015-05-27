@@ -19,22 +19,22 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_cssclass_code[`cssClass()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[`cssClass()`]
 |
 |the css class that a collection should have, to allow more targetted styling in `application.css`
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_describedas_code[`describedAs()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[`describedAs()`]
 |
 |description of this collection, eg to be rendered in a tooltip.
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_hidden_code[`hidden()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[`hidden()`]
 |
 |indicates where in the UI the collection should _not_ be visible in the UI (only NOWHERE or EVERWHERE/ANYWHERE)
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_named[named()]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_named[named()]
 |
 |the name of this collection (overriding the name derived from its name in code)
 
@@ -44,17 +44,17 @@ The table below summarizes the annotation's attributes.
 |whether to HTML escape the name of this property.
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_paged_code[`paged()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_paged[`paged()`]
 |
 |the page size for instances of this class when rendered within a table.
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_render_code[`render()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`render()`]
 |
 |that the rendering of a collection should be performed LAZILY or EAGERLY
 
 
-|xref:__a_id_reference_annotations_manpage_collectionlayout_a_code_sortedby_code[`sortedBy()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_sortedBy[`sortedBy()`]
 |
 |indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the natural sort order, as defined by the specified `Comparator`.
 
@@ -87,435 +87,15 @@ public class ToDoItem {
 
 
 
+include::_ug_reference-annotations_manpage-CollectionLayout_cssClass.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_describedAs.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_hidden.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_named.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_paged.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_render.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-CollectionLayout_sortedBy.adoc[leveloffset=+1]
 
 
-== anchor:reference-annotations_manpage-CollectionLayout[]`cssClass()`
-
-IMPORTANT: WIP ... this section
-
-
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
-
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
-
-For example:
-
-[source,java]
-----
-@CssClass("x-main")
-public class ToDoItem { ... }
-----
-
-or
-
-[source,java]
-----
-public class ToDoItem {
-
-    @CssClass("x-key")
-    public LocalDate getDueBy() { ... }
-
-}
-----
-
-=== Alternatives (`.layout.json`)
-
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
-can be specified, eg:
-
-[source,javascript]
-----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                "dueBy": {
-                    "cssClass": { "value": "x-key" }
-                }
-                ....
-            }
-        },
-        ...
-    }
-}
-----
-
-Note that this (currently) only supports class members, not classes
-
-
-[NOTE]
-====
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
-====
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]`describedAs()`
-
-IMPORTANT: WIP ... this section
-
-The `@DescribedAs` annotation is used to provide a short description of
-something that features on the user interface. How this description is
-used will depend upon the viewing mechanism - but it may be thought of
-as being like a 'tool tip'.
-
-Descriptions may be provided for objects, members (properties,
-collections and actions), and for individual parameters within an action
-method. `@DescribedAs` therefore works in a very similar manner to
-`@Named` <!--(see ?)-->.
-
-
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    @DescribedAs("The name that the customer has indicated that they wish to be " +
-                 "addressed as (e.g. Johnny rather than Jonathan)")
-    public String getFirstName() { ... }
-}
-----
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]`hidden()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@Hidden` annotation indicates that the member (property, collection
-or action) to which it is applied should never be visible to the user.
-It can also be applied to service types (it has no effect if applied to
-entities or values).
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    @Hidden
-    public int getInternalId() { ... }
-
-    @Hidden
-    public void updateStatus() { ... }
-    ...
-}
-----
-
-Or, applied to a service:
-
-[source,java]
-----
-@Hidden
-public class EmailService {
-    public void sendEmail(...) { ... }
-    ...
-}
-----
-
-This annotation can also take a parameters indicating where and when it
-is to be hidden. For example:
-
-[source,java]
-----
-public class Customer {
-    @Hidden(when=When.ONCE_PERSISTED)
-    public int getInternalId() { ... }
-    ...
-}
-----
-
-would show the `Id` until the object has been saved, and then would hide
-it. And:
-
-[source,java]
-----
-public class Customer {
-    @Hidden(where=Where.ALL_TABLES)
-    public int getDateOfBirth() { ... }
-    ...
-}
-----
-
-would suppress the `dateOfBirth` property of a Customer from all tables.
-
-The acceptable values for the `where` parameter are:
-
-* `Where.ANYWHERE` +
-+
-The member should be hidden everywhere.
-
-* `Where.OBJECT_FORMS` +
-+
-The member should be hidden when displayed within an object form.
-For most viewers, this applies to property and collection members,
-not actions.
-
-* `Where.PARENTED_TABLES` +
-+
-The member should be hidden when displayed as a column of a table
-within a parent object's collection. For most (all?) viewers, this
-will have meaning only if applied to a property member.
-
-* `Where.STANDALONE_TABLES` +
-+
-The member should be hidden when displayed as a column of a table
-showing a standalone list of objects, for example as returned by a
-repository query. For most (all?) viewers, this will have meaning
-only if applied to a property member.
-
-* `Where.ALL_TABLES` +
-+
-The member should be /hidden when displayed as a column of a table,
-either an object's * collection or a standalone list. This combines
-`PARENTED_TABLES` and `STANDALONE_TABLES`.
-
-* `Where.NOWHERE` +
-+
-Acts as an override if a member would normally be hidden as a result
-of some other convention. For example, if a property is annotated
-with `@Title` <!--(see ?)-->, then normally this should be hidden from all
-tables. Additionally annotating with `@Hidden(where=Where.NOWHERE)`
-overrides this.
-
-The acceptable values for the `when` parameter are:
-
-* `When.ALWAYS` +
-+
-The member should be hidden at all times.
-
-* `When.NEVER` +
-+
-The member should never be hidden (unless disabled through some
-other mechanism, for example an imperative disableXxx() supporting
-method)..
-
-* `When.ONCE_PERSISTED` +
-+
-The member should be visible for transient objects, but hidden for
-persisted objects.
-
-* `When.UNTIL_PERSISTED` +
-+
-The member should be hidden for transient objects, but visible for
-persisted objects.
-
-By default the annotated property or action is always hidden (ie
-defaults to `Where.ANYWHERE`, `When.ALWAYS`).
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]Named
-
-By default, the name of a class member (a property, collection or action) presented to the user is derived, reflectively, from the name of the member defined in the program code. To specify a different name use the `@Named `annotation immediately before the member declaration.
-
-[TIP]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
-====
-
-
-
-=== named()
-
-IMPORTANT: WIP ... this section
-
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-
-
-For example:
-
-[source,java]
-----
-public class Customer {
-
-    public String getFirstName() { ... }
-
-    public String getSurname() { ... }
-
-    public CreditRating getCreditRating() { ... }
-}
-----
-
-Note that the framework provides a separate and more powerful mechanism
-for internationalisation.
-
-
-=== namedEscaped()
-
-IMPORTANT: WIP ... this section
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]`paged()`
-
-IMPORTANT: WIP ... this section
-
-
-This annotation is used to indicate that parented and/or standalone
-collections should be paginated.
-
-When annotated on a collection, `@Paged` indicates the page size of a
-parented collection. When annotated on a type, `@Paged` indicates the page
-size of a standalone collection.
-
-For example:
-
-[source,java]
-----
-@Paged(30)
-public class Order {
-
-    @Paged(15)
-    public List<LineItem> getDetails() {...}
-}
-----
-
-This indicates a page size of 15 for parented collections, and a page
-size of 30 for standalone collections.
-
-When omitting a parameter value or omitting the annotation completely,
-the configured defaults in `isis.properties` will be used.
-
-For example:
-
-[source,ini]
-----
-isis.viewers.paged.standalone=20
-isis.viewers.paged.parented=5
-----
-
-This indicates a page size of 5 for parented collections and a page size
-of 20 for standalone collections.
-
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]`render()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@Render` annotation is a hint for properties and collections to
-indicate that a value property should be rendered lazily (rather than
-eagerly, as usual), or that a reference property or collection should be
-rendered eagerly (rather than lazily, as usual).
-
-Viewers can use this to present the property/collection in an
-appropriate manner:
-
-*
-
-an `Order`'s `lineItems` collection might initially be rendered expanded
-form so that the user could see a list of line items immediately
-when the order is rendered. This is the most common use case.
-
-*
-
-a (reference) property of type `Address` might show the details of the
-referenced `Address` in a box
-
-At the same time, an object store might use this to defer lazy loading
-of values that represent blobs or clobs.
-
-For example:
-
-[source,java]
-----
-public class Order {
-    @Render(Type.EAGERLY)
-    public List<LineItem> getDetails() { ... }
-
-    ...
-}
-----
-
-For properties and collections there is some similarity between this
-concept and that of eager-loading as supported by some object stores.
-Indeed, some object stores may choose use their own specific annotations
-(eg a JDO default fetch group) in order to infer this semantic.
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-CollectionLayout[]`sortedBy()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@SortedBy` annotation is an instruction hint for (`SortedSet`) collections to use the specified comparator rather than the natural ordering of the entity
-(as would usually be the case).
-
-For example, this is taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
-
-[source,java]
-----
-public class ToDoItem implements Comparable<ToDoItem> {
-
-    ...
-    public static class DependenciesComparator implements Comparator<ToDoItem> {
-        @Override
-        public int compare(ToDoItem p, ToDoItem q) {
-            return ORDERING_BY_DESCRIPTION
-                    .compound(Ordering.<ToDoItem>natural())
-                    .compare(p, q);
-        }
-    }
-
-    ...
-    @SortedBy(DependenciesComparator.class)
-    public SortedSet<ToDoItem> getDependencies() { ... }
-
-    public int compareTo(final ToDoItem other) {
-        return ORDERING_BY_COMPLETE
-                .compound(ORDERING_BY_DUE_BY)
-                .compound(ORDERING_BY_DESCRIPTION)
-                .compare(this, other);
-    }
-    ...
-}
-----
-
-When the `dependencies` collection is rendered, the elements are sorted by the `description` property first:
-
-![](images/sortedby-dependencies.png)
-
-Without this annotation, the order would have been inverted (because the natural ordering places items not completed before those items that have been completed.
 
 
 

@@ -1,0 +1,93 @@
+[[_ug_reference-annotations_manpage-ActionLayout_cssClassFa]]
+= `cssClassFa()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+IMPORTANT: WIP ... this section
+
+
+
+The `CssClassFa` annotation applies to objects and also to object actions,
+and is used by the Wicket viewer as a UI hint.
+
+For object actions, the viewer will render the specified
+http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon]
+on the action's button (or menu item).
+
+For objects, it will be used as an icon. Note that this is only used if
+the object does not have a `getIconName()` method.
+
+For example:
+
+[source,java]
+----
+@CssClassFa("fa-check-circle")
+public class ToDoItem { ... }
+----
+
+or
+
+[source,java]
+----
+public class ToDoItem {
+
+    @CssClass("fa-step-backward")
+    public ToDoItem previous() { ... }
+
+    @CssClass("fa-step-forward")
+    public ToDoItem next() { ... }
+
+}
+----
+
+There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
+is no need to include the "fa" class; it will be automatically appended.
+
+
+
+
+== Alternatives (`.layout.json`)
+
+As an alternative to using the `@CssClass` annotation, the `.layout.json`
+link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
+can be specified, eg:
+
+[source,javascript]
+----
+{
+    "span": 6,
+    "memberGroups": {
+        "Priority": {
+            "members": {
+                ...
+                 "relativePriority": {
+                    "actions": {
+                        "previous": {
+                            "cssClassFa": { "value": "fa-step-backward" }
+                        },
+                        "next": {
+                            "cssClassFa": { "value": "fa-step-forward" }
+                        }
+                    }
+                },
+                ....
+            }
+        },
+        ...
+    }
+}
+----
+
+Note that this (currently) only supports class members, not classes.
+
+
+[NOTE]
+====
+The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+====
+
+
+
+

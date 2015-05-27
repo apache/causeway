@@ -19,27 +19,32 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_domainobject_a_code_auditing_code[`auditing()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_auditing[`auditing()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobject_a_code_autocomplete_code[`autoComplete()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`autoComplete()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobject_a_code_bounded_code[`bounded()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_bounded[`bounded()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobject_a_code_editing_code[`editing()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_editing[`editing()`]
 |
 |
 
 
-|xref:__a_id_reference_annotations_manpage_domainobject_a_publishing[`publishing()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_objectType[`objectType()`]
+|
+|
+
+
+|xref:_ug_reference-annotations_manpage-DomainObject_publishing[`publishing()`]
 |
 |
 
@@ -53,338 +58,14 @@ The table below summarizes the annotation's attributes.
 
 
 
+include::_ug_reference-annotations_manpage-DomainObject_auditing.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_autoComplete.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_bounded.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_editing.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_objectType.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_publishing.adoc[leveloffset=+1]
 
 
-== anchor:reference-annotations_manpage-DomainObject[]`auditing()`
 
-IMPORTANT: WIP ... this section
 
-
-This annotation, which applies only to objects, indicates that if the object is modified, then it should be submitted to the  xref:__a_id_reference_services_spi_manpage_a_code_auditingservice3_code[`AuditingService3`], if one has been configured.
-
-For example:
-
-[source,java]
-----
-@Audited
-public class Customer extends AbstractDomainObject {
-   ....
-}
-----
-
-The `AuditingService` is defined within the applib (in the
-`org.apache.isis.applib.services.audit` package):
-
-[source,java]
-----
-public interface AuditingService {
-    @Hidden
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
-}
-----
-
-At the time of writing only the JDO Object Store supported this
-annotation. Check with the documentation of the object store or ask on
-the mailing list to determine whether auditing is supported for other object stores.
-
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObject[]`autoComplete()`
-
-IMPORTANT: WIP ... this section
-
-
-This annotation is to support an auto-complete capability for reference
-properties and action parameters, the idea being that the user enters a
-few characters to locate a reference, and these are shown - for example
-- in a drop-down list box.
-
-The annotation is specified on the type, and specifies an action on a
-repository; this action should take a single string and should return a
-list of the type.
-
-For example:
-
-[source,java]
-----
-@AutoComplete(repository=Customers.class, action="autoComplete")
-public class Customer extends AbstractDomainObject {
-   ....
-}
-----
-
-where:
-
-[source,java]
-----
-public interface Customers {
-
-    @Hidden
-    List<Customer> autoComplete(String search);
-    ...
-}
-----
-
-
-[NOTE]
-====
-In many cases you may require additional control. For this, you can use the `autoComplete` method prefix, associated either with link:../../how-tos/how-to-03-025-How-to-specify-an-autocomplete-for-an-action-parameter.html[action parameter] or with the link:../../how-tos/how-to-03-015-How-to-specify-an-autocomplete-for-a-property.html[property].
-====
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObject[]`bounded()`
-
-IMPORTANT: WIP ... this section
-
-
-For immutable objects where there is a bounded set of instances, the
-`@Bounded` annotation can be used.
-
-For example:
-
-[source,java]
-----
-@Bounded
-public class County {
-    ...
-}
-----
-
-The number of instances is expected to be small enough that all instance can be held in memory. The viewer will use this information to render all the instances of this class in a drop-down list or equivalent.
-
-
-[NOTE]
-====
-Although this is not enforced, `@Bounded` is intended for use on `final` classes. Its behaviour when used on interfaces, or classes with sub-classes is not specified
-
-====
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObject[]`editing()`
-
-IMPORTANT: WIP ... this section
-
-
-[NOTE]
-====
-Fully supported by: Wicket viewer; other viewers do not yet support the `where` attribute.
-====
-
-
-
-The `@Disabled` annotation means that the member cannot be used in any instance of the class. When applied to the property it means that the user may not modify the value of that property (though it may still be modified programmatically). When applied to an action method, it means that the user cannot invoke that method.
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    @Disabled
-    public void assessCreditWorthiness() { ... }
-
-    @Disabled
-    public int getInitialCreditRating(){ ... }
-    public void setInitialCreditRating(int initialCreditRating) { ... }
-}
-----
-
-Note that if an action is marked as `@Disabled`, it will be shown on the
-user interface but cannot ever be invoked. The only possible reason we
-can think to do this is during prototyping, to indicate an action that
-is still to be developed. If a method is intended for programmatic use,
-but not intended ever to be invoked directly by a user, then it should
-be marked as `@Hidden` instead.
-
-This annotation can also take two parameter indicating where (in the UI)
-it is to be disabled, and when (in the object's lifecycle) it is to be
-disabled. For example:
-
-[source,java]
-----
-public class Customer {
-    (when=When.UNTIL_PERSISTED)
-    public void assessCreditWorthiness() { ... }
-}
-----
-
-would disable the action until the object has been saved. And:
-
-[source,java]
-----
-public class Customer {
-    (where=Where.PARENTED_TABLES)
-    public void getFirstName() { ... }
-}
-----
-
-would disable the property in parented tables but not in regular object
-forms (though note: this would only be used by viewers that provide
-in-table editing capability).
-
-The acceptable values for the `where` parameter are:
-
-* `Where.ANYWHERE` +
-+
-The member should be disabled everywhere.
-
-* `Where.OBJECT_FORMS` +
-+
-The member should be disabled when displayed within an object form.
-For most viewers, this applies to property and collection members,
-not actions.
-
-* `Where.PARENTED_TABLES` +
-+
-The member should be disabled when displayed as a column of a table
-within a parent object's collection. For most (all?) viewers, this
-will have meaning only if applied to a property member.
-
-* `Where.STANDALONE_TABLES` +
-+
-The member should be disabled when displayed as a column of a table
-showing a standalone list of objects, for example as returned by a
-repository query. For most (all?) viewers, this will have meaning
-only if applied to a property member.
-
-* `Where.ALL_TABLES` +
-+
-The member should be disabled when displayed as a column of a table,
-either an object's * collection or a standalone list. This combines
-`PARENTED_TABLES` and `STANDALONE_TABLES`
-
-* `Where.NOWHERE` +
-+
-Has no meaning for the `@Disabled` annotation (though is used by the
-`@Hidden` annotation which also uses the `Where` enum<!--, see ?-->).
-
-The acceptable values for the `when` parameter are:
-
-* `When.ALWAYS` +
-+
-The member should be disabled at all times.
-
-* `When.NEVER` +
-+
-The member should never be disabled (unless disabled through some
-other mechanism, for example an imperative disableXxx() supporting
-method)..
-
-* `When.ONCE_PERSISTED` +
-+
-The member should be enabled for transient objects, but disabled for
-persisted objects.
-
-* `When.UNTIL_PERSISTED` +
-+
-The member should be disabled for transient objects, but enabled for
-persisted objects.
-
-By default the annotated property or action is always disabled (ie
-defaults to `Where.ANYWHERE`, `When.ALWAYS`).
-
-
-
-
-
-
-The `@Immutable` annotation may be applied to a class, and indicates to the framework that the state of such objects may not be changed. The viewers will prevent any change through the user interface, and moreover the object stores will reject any changes to the objects that might have occurred programmatically.
-
-For example:
-
-[source,java]
-----
-@Immutable
-public class Country {
-    ...
-}
-----
-
-This annotation can also take a single parameter indicating when it is
-to become immutable. For example:
-
-[source,java]
-----
-@Immutable(When.ONCE_PERSISTED)
-public class Email {
-    ...
-}
-----
-
-This would allow the user to create an email object and set it up, and
-then prevent any changes once it has been saved.
-
-The acceptable values for the parameter are:
-
-* `When.ALWAYS`
-
-* `When.NEVER`
-
-* `When.ONCE_PERSISTED`
-
-* `When.UNTIL_PERSISTED`
-
-By default the annotated property or action is always immutable (ie
-defaults to `When.ALWAYS`).
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObject[]`objectType()`
-
-IMPORTANT: WIP ... this section
-
-The `@ObjectType` annotation is used to provide a unique abbreviation for the object's class name. This is used internally to generate a string representation of an objects identity (the `Oid`).
-
-For example:
-
-[source,java]
-----
-@ObjectType("ORD")
-public class Order {
-
-    ...
-}
-----
-
-If no `@ObjectType` annotation is present, then the framework uses the
-fully-qualified class name.
-
-If an `@ObjectType` is not unique, then the framework will fail to boot.
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-DomainObject[]Publishing
-
-
-This annotation on an entity type causes an events to be published by the registered implementation of a xref:__a_id_reference_services_spi_manpage_a_code_publishingservice_code[`PublishingService`] if an instance of that type is inserted, updated or deleted .
-
-
-
-=== `publishing()`
-
-IMPORTANT: WIP ... this section
-
-=== `publishingPayloadFactory()`
-
-IMPORTANT: WIP ... this section
 

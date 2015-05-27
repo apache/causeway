@@ -1,0 +1,49 @@
+[[_ug_reference-annotations_manpage-ParameterLayout_named]]
+= `named()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+IMPORTANT: WIP ... this section
+
+
+The `@Named` annotation is used when you want to specify the way
+something is named on the user interface i.e. when you do not want to
+use the name generated automatically by the system. It can be applied to
+objects, members (properties, collections, and actions) and to
+parameters within an action method.
+
+
+
+The most common usage of `@Named` is be to specify names for the
+parameters of an action. This is because the parameter name declared in
+the code for the action method cannot be picked up reflectively (by
+default, the user interface will use the type of the parameter as the
+name; for a `String` or a `Boolean`, this is almost certainly not what is
+required).
+
+To specify the name of a parameter, the `@Named` annotation is applied
+'in-line' (i.e. preceding the individual parameter declaration.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public Order placeOrder(
+            Product product
+           ,@Named("Quantity")
+            int quantity) {
+        Order order = newTransientInstance(Order.class);
+        order.modifyCustomer(this);
+        order.modifyProduct(product);
+        order.setQuantity(quantity);
+        return order;
+    }
+    ...
+}
+----
+
+

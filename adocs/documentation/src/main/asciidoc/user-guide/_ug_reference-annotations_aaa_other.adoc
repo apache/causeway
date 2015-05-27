@@ -13,42 +13,42 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
+|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
 
-|xref:__a_id_reference_annotations_manpage_a_code_facets_code[`@Facets`]
+|xref:_ug_reference-annotations_manpage-Facets[`@Facets`]
 |Install arbitrary facets within the Isis metamodel.
 |(any)
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_homepage_code[`@HomePage`]
+|xref:_ug_reference-annotations_manpage-HomePage[`@HomePage`]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_membergrouplayout_code[`@MemberGroupLayout`]
+|xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`]
 |Grouping of properties into groups, and organizing of properties, collections into columns.
 |UI
 |Yes
 
 
-|xref:__a_id_reference_annotations_manpage_a_code_memberorder_code[`@MemberOrder`]
+|xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI
 |Yes
 
 
-|xref:__a_id_reference_annotations_manpage_a_code_minlength_code[`@MinLength`]
+|xref:_ug_reference-annotations_manpage-MinLength[`@MinLength`]
 |Minimum number of characters required for an auto-complete search argument.
 |UI
 |
 
 
-|xref:__a_id_reference_annotations_manpage_a_code_programmatic_code[`@Programmatic`]
+|xref:_ug_reference-annotations_manpage-Programmatic[`@Programmatic`]
 |Ignore a public method, excluded from the Isis metamodel.
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_title_code[`@Title`]
+|xref:_ug_reference-annotations_manpage-Title[`@Title`]
 |Indicates which of the object's properties should be used to build up a title for the object.
 |UI
 

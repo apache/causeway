@@ -11,7 +11,7 @@ For each of these domain types and members there is are two annotations.  One co
 
 [TIP]
 ====
-UI semantics can also be specified using xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[dynamic object layout].
+UI semantics can also be specified using xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic object layout].
 ====
 
 
@@ -24,74 +24,74 @@ The table below summarizes these most commonly used annotations in Isis.
 |Annotation
 |Purpose
 |Layer
-|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
+|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
 
 |xref:_ug_reference_annotations_manpage_code_action_code[`@Action`]
 |Domain semantics for actions
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_actionlayout_code[`@ActionLayout`]
+|xref:_ug_reference-annotations_manpage-ActionLayout[`@ActionLayout`]
 |User interface hints for actions
 |UI
 |Yes
 
-|xref:__a_id_reference_annotations_manpage_a_code_collection_code[`@Collection`]
+|xref:_ug_reference-annotations_manpage-Collection[`@Collection`]
 |Domain semantics for collections
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_collectionlayout_code[`@CollectionLayout`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout[`@CollectionLayout`]
 |User interface hints for collections
 |UI
 |Yes
 
-|xref:__a_id_reference_annotations_manpage_a_code_domainobject_code[`@DomainObject`]
+|xref:_ug_reference-annotations_manpage-DomainObject[`@DomainObject`]
 |Domain semantics for domain object (entities and optionally view models, see also `@ViewModel)`
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_domainobjectlayout_code[`@DomainObjectLayout`]
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`]
 |User interface hints for domain object (entities and optionally view models, see also `@ViewModelLayout)`
 |UI
 |Yes
 
-|xref:__a_id_reference_annotations_manpage_a_code_domainservice_code[`@DomainService`]
+|xref:_ug_reference-annotations_manpage-DomainService[`@DomainService`]
 |Class is a domain service (rather than an entity or view model)
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_domainservicelayout_code[`@DomainServiceLayout`]
+|xref:_ug_reference-annotations_manpage-DomainServiceLayout[`@DomainServiceLayout`]
 |User interface hints for domain services
 |UI
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_parameter_code[`@Parameter`]
+|xref:_ug_reference-annotations_manpage-Parameter[`@Parameter`]
 |Domain semantics for action parameters
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_propertylayout_code[`@PropertyLayout`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParaameterLayout`]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes
 
-|xref:__a_id_reference_annotations_manpage_a_code_property_code[`@Property`]
+|xref:_ug_reference-annotations_manpage-Property[`@Property`]
 |Domain semantics for properties
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_propertylayout_code[`@PropertyLayout`]
+|xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`]
 |Layout hints for a property
 |UI
 |Yes
 
-|xref:__a_id_reference_annotations_manpage_a_code_viewmodel_code[`@ViewModel`]
+|xref:_ug_reference-annotations_manpage-ViewModel[`@ViewModel`]
 |Specify that a class is a view model (as opposed to an entity or domain service); equivalent to `@DomainObject(nature`=VIEW_MODEL).
 |Domain, Persistence
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_ViewModelLayout_code[`@ViewModelLayout`]
+|xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`]
 |User interface hints for view models.
 For use with `@ViewModel`. If specifying view models using `@DomainObject(nature=VIEW_MODEL)` then use `@DomainObjectLayout`)
 |UI

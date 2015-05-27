@@ -19,27 +19,27 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_cssclass_code[`cssClass()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[`cssClass()`]
 |
 |the css class that a parameter should have, to allow more targetted styling in `application.css`
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_describedas_code[`describedAs()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[`describedAs()`]
 |
 |description of this parameter, eg to be rendered in a tooltip.
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_labelposition_code[`labelPosition()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_labelPosition[`labelPosition()`]
 |
 |in forms, the positioning of the label (LEFT, TOP or NONE) relative to the parameter value. For boolean parameters it is also possible to specify RIGHT. Defaults to LEFT unless `multiLine` also specified (see below)
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_multiline_code[`multiLine()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_multiLine[`multiLine()`]
 |
 |for string parameters, render as a text area over multiple lines. If set &gt;1, then `labelPosition` defaults to TOP unless otherwise specified.
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_named[`named()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_named[`named()`]
 |
 |the name of this parameter. For Java 7 this is generally required. For Java 8, the name can be inferred from the code so this attribute allows the name to be overridden.
 
@@ -49,20 +49,16 @@ The table below summarizes the annotation's attributes.
 |whether to HTML escape the name of this parameter. Defaults to true.
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_renderedasdaybefore_code[`renderedAsDayBefore()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
 |
 |for date parameters only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
 
 
-|xref:__a_id_reference_annotations_manpage_parameterlayout_a_code_typicallength_code[`typicalLength()`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout_typicalLength[`typicalLength()`]
 |
 |the typical entry length of a field, use to determine the optimum width for display
 
 |===
-
-
-
-
 
 
 
@@ -134,308 +130,12 @@ IMPORTANT: TODO - ensure this is also in the runtime config chapter
 
 
 
+include::_ug_reference-annotations_manpage-ParameterLayout_cssClass.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_describedAs.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_labelPosition.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_multiLine.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_named.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_renderedAsDayBefore.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ParameterLayout_typicalLength.adoc[leveloffset=+1]
 
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`cssClass()`
-
-IMPORTANT: WIP ... this section
-
-
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
-
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
-
-For example:
-
-[source,java]
-----
-@CssClass("x-main")
-public class ToDoItem { ... }
-----
-
-or
-
-[source,java]
-----
-public class ToDoItem {
-
-    @CssClass("x-key")
-    public LocalDate getDueBy() { ... }
-
-}
-----
-
-
-[NOTE]
-====
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
-====
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`describedAs()`
-
-IMPORTANT: WIP ... this section
-
-The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
-
-Descriptions may be provided for objects, members (properties,
-collections and actions), and for individual parameters within an action
-method. `@DescribedAs` therefore works in a very similar manner to
-`@Named` <!--(see ?)-->.
-
-
-To provide a description for an individual action parameter, use the
-`@DescribedAs` annotation in-line i.e. immediately before the parameter
-declaration.
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity")
-                      @DescribedAs("The quantity of the product being ordered")
-                      int quantity) {
-        Order order = createTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`labelPosition()`
-
-IMPORTANT: WIP ... this section
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`multiLine()`
-
-IMPORTANT: WIP ... this section
-
-The `@MultiLine` annotation provides information about the carriage
-returns in a `String` property or action parameter, or for a
-string-based value type. It also implies a hint to the viewer that the
-widget to be used should be over multiple lines (eg a text area rather
-than a text field), with appropriate wrapping and/or scrollbars.
-
-More formally, the annotation indicates that:
-
-* the `String` property or parameter may contain carriage returns, and
-
-* (optionally) the typical number of such carriage returns (meaning
-the number of rows in the text area), and
-
-* (optionally) that the text should be wrapped (the default is that
-text is not wrapped).
-
-The syntax is:
-
-`@MultiLine([numberOfLines=&lt;typicalNumberOfCRs&gt;]
-        [,preventWrapping=&lt;false|true&gt;])`
-
-For example:
-
-[source,java]
-----
-public class BugReport {
-    @MultiLine(numberOfLines=10)
-    public String getStepsToReproduce() { ... }
-    public void setStepsToReproduce(String stepsToReproduce) { ... }
-    ...
-}
-----
-
-Here the `stepsToReproduce` may be displayed in a text area of 10 rows,
-with no wrapping. A horizontal scrollbar may appear if the number of
-characters on any given row exceeds the width.
-
-Another example:
-
-[source,java]
-----
-public class Email {
-    @MultiLine(numberOfLines=20, preventWrapping=false)
-    public String getBody() { ... }
-    public void setBody(String body) { ... }
-    ...
-}
-----
-
-Here the body should be displayed in a text area of 20 rows, with
-wrapping.
-
-If the annotation is combined with the `@TypicalLength`, then the
-expected width of the text area in the user interface will be determined
-by the value of the typical length divided by the number of specified
-lines. For example:
-
-[source,java]
-----
-public class Email {
-    @MultiLine(numberOfLines=20, preventWrapping=false)
-    @TypicalLength(800)
-    public String getBody() { ... }
-    public void setBody(String body) { ... }
-    ...
-}
-----
-
-Here the body will (likely be) displayed in a text area of 20 rows, with
-40 columns.
-
-
-
-
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`named()`
-
-IMPORTANT: WIP ... this section
-
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-[WARNING]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
-====
-
-
-
-
-=== Specifying the name of an object
-
-By default the name of an object is derived, reflectively from the class
-name. To specify a different name for an object, use the `@Named`
-annotation in front of the class declaration.
-
-For example:
-
-[source,java]
-----
-@Named("Customer")
-public class CustomerImpl implements Customer{
-   ...
-}
-----
-
-
-
-The most common usage of `@Named` is be to specify names for the
-parameters of an action. This is because the parameter name declared in
-the code for the action method cannot be picked up reflectively (by
-default, the user interface will use the type of the parameter as the
-name; for a `String` or a `Boolean`, this is almost certainly not what is
-required).
-
-To specify the name of a parameter, the `@Named` annotation is applied
-'in-line' (i.e. preceding the individual parameter declaration.
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    public Order placeOrder(
-            Product product
-           ,@Named("Quantity")
-            int quantity) {
-        Order order = newTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
-    }
-    ...
-}
-----
-
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`renderedAsDayBefore()`
-
-IMPORTANT: WIP ... this section
-
-
-A rendering hint, instructing the viewer that the date should as one day prior to the actually stored date.
-
-This is intended to be used so that an exclusive end date of an interval can be rendered as 1 day before the actual value stored.
-
-For example:
-
-[source,java]
-----
-public void changeDates(
-    @ParameterLayout(named="Start Date")
-    LocalDate startDate,
-    @ParameterLayout(
-        named="End Date",
-        renderedAsDayBefore=true
-    )
-    LocalDate endDate) {
-    ...
-}
-----
-
-Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates 1-may-2013 for the start date but using 31-may-2013 (the day before) for the end date.
-
-What is stored in the domain object, itself, however, the value stored is 1-jun-2013.
-
-
-
-
-
-== anchor:reference-annotations_manpage-ParameterLayout[]`typicalLength()`
-
-IMPORTANT: WIP ... this section
-
-The `@TypicalLength` annotation indicates the typical length of a `String` property or `String` parameter in an action. It can also be specified for string-based value types.
-
-The information is generally used by the viewing mechanism to determine the space that should be given to that property or parameter in the appropriate view. If the typical length is the same as the `@MaxLength` <!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If the value specified is zero or negative then it will be ignored.
-
-For example:
-
-[source,java]
-----
-public class CustomerRepository {
-    public Customer newCustomer(
-            @TypicalLength(20)
-            @Named("First Name") String firstName
-           ,@TypicalLength(20)
-            @Named("Last Name") String lastName) {
-        ...
-    }
-    ...
-}
-----
 

@@ -16,19 +16,19 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Annotation
 |Purpose
 |Layer
-|xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[Dynamic layout]?
+|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
 
-|xref:__a_id_reference_annotations_manpage_a_code_requestscoped_code_javax[`@javax.enterprise.context.RequestScoped`]
+|xref:_ug_reference-annotations_manpage-RequestScoped[`@javax.enterprise.context.RequestScoped`]
 |Specify that a domain service has request-scope (rather than a singleton).
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_inject_code_javax[`@javax.inject.Inject`]
+|xref:_ug_reference-annotations_manpage-Inject[`@javax.inject.Inject`]
 |Inject domain service into a domain object (entity or view model) or another domain service.
 |Domain
 |
 
-|xref:__a_id_reference_annotations_manpage_a_code_digits_code_javax[`@javax.validation.constraints.Digits`]
+|xref:_ug_reference-annotations_manpage-Digits[`@javax.validation.constraints.Digits`]
 |Precision/scale for BigDecimal values.
 |Domain
 |

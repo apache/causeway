@@ -1,0 +1,168 @@
+[[_ug_reference-annotations_manpage-Collection_domainEvent]]
+= `domainEvent()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+IMPORTANT: WIP ... this section
+
+[WARNING]
+====
+The Wicket viewer does NOT support collection modification; instead write a pair of actions to add to/remove from the collection.
+
+However, it _is_ possible to fire collection interaction events using the wrapper factory; see below for more details.
+====
+
+
+The `@CollectionInteraction` annotation applies to domain entity collections, allowing subscribers to optionally veto, validate or otherwise perform tasks before or after the collection has been added to/removed from.
+
+Subscribers subscribe through the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] using Guava annotations.
+
+By default the event raised is `CollectionInteractionEvent.Default`. For example:
+
+[source,java]
+----
+public class ToDoItem {
+    ...
+    @CollectionInteraction
+    public SortedSet<ToDoItem> getDependencies() { ... }
+}
+----
+
+Optionally a subclass can be declared:
+
+[source,java]
+----
+public class ToDoItem {
+
+    public static class DependenciesChangedEvent extends CollectionInteractionEvent<ToDoItem, ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        public DependenciesChangedEvent(ToDoItem source, Identifier identifier, Of of, ToDoItem value) {
+            super(source, identifier, of, value);
+        }
+    }
+
+}
+----
+
+The `of` field indicates if the collection is being accessed, added to or removed from.
+
+
+
+
+
+== Subscribers
+
+Subscribers (which must be domain services) subscribe using the Guava API.
+Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
+
+[source,java]
+----
+@DomainService
+public class SomeSubscriber {
+
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(CollectionInteractionEvent ev) {
+
+        ...
+    }
+
+}
+----
+
+or can be fine-grained by subscribing to specific event subtypes:
+
+[source,java]
+----
+@DomainService
+public class SomeSubscriber {
+
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(ToDoItem.DependenciesChangedEvent ev) {
+
+        ...
+    }
+
+}
+----
+
+The subscriber's method is called (up to) 5 times:
+
+* whether to veto visibility (hide)
+* whether to veto usability (disable)
+* whether to veto execution (validate)
+* steps to perform prior to the property being modified
+* steps to perform after the property has been modified.
+
+The subscriber can distinguish these by calling `ev.getPhase()`. Thus the general form is:
+
+[source,java]
+----
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(CollectionInteractionEvent ev) {
+
+    switch(ev.getPhase()) {
+        case HIDE:
+            ...
+            break;
+        case DISABLE:
+            ...
+            break;
+        case VALIDATE:
+            ...
+            break;
+        case EXECUTING:
+            ...
+            break;
+        case EXECUTED:
+            ...
+            break;
+    }
+}
+----
+
+Vetoing is performed by calling the appropriate method on the event:
+
+*
+
+To hide:
+
+ev.hide()
+
+*
+
+To disable:
+
+ev.disable("…");
+
+*
+
+To invalidate:
+
+ev.invalidate("…");
+
+It is also possible to abort the transaction during the executing or executed
+phases by throwing an exception. If the exception is a subtype of `RecoverableException`
+then the exception will be rendered as a user-friendly warning (eg Growl/toast)
+rather than an error.
+
+
+
+
+== Raising events programmatically.
+
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
+wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
+
+
+[NOTE]
+====
+domain events can also be raised for actions and properties.
+====
+
+
+

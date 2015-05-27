@@ -6,7 +6,7 @@
 
 This section lists the core/runtime configuration properties recognized by Apache Isis.
 
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:_configuring_datanucleus[Configuring DataNucleus] section elsewhere in this chapter.
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:_ug_runtime_configuring-datanucleus[Configuring DataNucleus] section elsewhere in this chapter.
 
 Configuration properties for the viewers can be found in the <<Wicket Viewer>> chapter and the <<Restful Objects Viewer>> chapter.
 
@@ -32,17 +32,17 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 `translation.po.mode`
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
-See xref:_i18n[i18n support] to learn more about the translation service.
+See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
 
 |`isis.services.` +
 `command.actions`
 | `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically reified into commands (for actions annotated with xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action(command=CommandReification.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+|Whether actions should be automatically reified into commands (for actions annotated with xref:_ug_reference-annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
 |`isis.services.` +
 `publish.actions`
 | `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically published (for actions annotated with xref:__a_id_reference_annotations_manpage_a_code_action_code[`@Action(publishing=Publishing.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+|Whether actions should be automatically published (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
 |`isis.persistor.` +
 `disableConcurrencyChecking`
@@ -64,24 +64,24 @@ See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 |`isis.reflector.facets`
 |`FQCN`
 |Fully qualified class names of a custom implementation of `ProgrammingModel` interface.
-See xref:_finetuning[finetuning the programming model] for more details.
+See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:_finetuning[finetuning the programming model] for more details.
+See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
-See xref:_finetuning[finetuning the programming model] for more details.
+See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.validator`
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
-See xref:_custom_validator[Custom Validator] to learn more.
+See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `allowDeprecated`
@@ -91,8 +91,8 @@ See xref:_custom_validator[Custom Validator] to learn more.
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_dynamic_object_layout[dynamic layout]s. +
-See xref:_layout_metadata_reader[Layout Metadata Reader] for more information.
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout]s. +
+See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 |===
 

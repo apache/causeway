@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-This chapter tackles the topic of enabling access to an Isis application directly, or at least, not through either the xref:_wicket_viewer[Wicket] or xref:_restfulobjects_viewer[Restful] viewers.
+This chapter tackles the topic of enabling access to an Isis application directly, or at least, not through either the xref:_ug_wicket-viewer[Wicket] or xref:_ug_restfulobjects-viewer[Restful] viewers.
 
 There are several main use-cases:
 

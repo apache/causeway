@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:__a_id_reference_methods_prefixes_manpage_a_code_autocomplete_code[`autoComplete...()`] supporting method.
+The `@MinLength` annotation is used to specify the minimum number of characters in a search of an xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method.
 
 
 For example:

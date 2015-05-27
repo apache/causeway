@@ -109,14 +109,38 @@ IMPORTANT: TODO
 
 IMPORTANT: TODO
 
-=== Developer Utilities
+include::_ug_isis-addons-modules_devutils-module.adoc[leveloffset=+1]
+
+
+
 === Docx Mail merge
+
+IMPORTANT: TODO
+
 === Excel download/upload
+
+IMPORTANT: TODO
+
 === Fake Data
+
+IMPORTANT: TODO
+
 === Poly
+
+IMPORTANT: TODO
+
 === Session Logger
+
+IMPORTANT: TODO
+
 
 include::_ug_isis-addons-modules_settings-module.adoc[leveloffset=+1]
 
 === String interpolator
+
+IMPORTANT: TODO
+
+
 === Tags
+
+IMPORTANT: TODO

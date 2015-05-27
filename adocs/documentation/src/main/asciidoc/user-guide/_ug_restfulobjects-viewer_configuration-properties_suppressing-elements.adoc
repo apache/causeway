@@ -33,7 +33,7 @@ The defaults for all of these is false, meaning that the hypermedia/metadata is 
 In the future we might extend this per-request.  Raise/vote on a JIRA ticket if you require this feature.
 ====
 
-If an even simpler representations (of objects) are required, see xref:_simplified_object_representation[simplified object representation], immediately below.  And if the above isn't flexible and you need complete control over all representations see the section on xref:_extending_the_restful_viewer[Extending the Restful viewer] in the <<Extending>> chapter.
+If an even simpler representations (of objects) are required, see xref:_ug_restfulobjects-viewer_configuration-properties_simplified-object-representation[simplified object representation], immediately below.  And if the above isn't flexible and you need complete control over all representations see the section on xref:_ug_extending_restfulobjects-viewer[Extending the Restful Objects viewer] in the <<Extending>> chapter.
 
 
 

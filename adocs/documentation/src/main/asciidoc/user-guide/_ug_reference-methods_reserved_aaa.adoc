@@ -16,30 +16,30 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|xref:__code_cssclass_code[`cssClass()`]
+|xref:_ug_reference-methods_reserved_manpage-cssClass[`cssClass()`]
 |Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with css/application.css, can therefore provide custom styling of an object instance wherever it is rendered.
-See also xref:__code_title_code[`title()`] and xref:__code_iconName_code[`iconName()`].
+See also xref:_ug_reference-methods_reserved_manpage-title[`title()`] and xref:_ug_reference-methods_reserved_manpage-iconName[`iconName()`].
 
-|xref:__code_disable_code[`disable(...)`]
+|xref:_ug_reference-methods_reserved_manpage-disable[`disable(...)`]
 |Disable all or some of an object's properties
 
-|xref:__code_hide_code[`hide(...)`]
+|xref:_ug_reference-methods_reserved_manpage-hide[`hide(...)`]
 |Hide all or some of an object's properties
 
-|xref:__code_iconname_code[`iconName()`]
+|xref:_ug_reference-methods_reserved_manpage-iconName[`iconName()`]
 |Provides the name of the image to render, usually alongside the title, to represent the object. If not provided, then the class name is used to locate an image.
-See also xref:__code_title_code[`title()`] and xref:__code_cssClass_code[`cssClass()`]
+See also xref:_ug_reference-methods_reserved_manpage-title[`title()`] and xref:_ug_reference-methods_reserved_manpage-cssClass[`cssClass()`]
 
-|xref:__code_getid_code[`getId()`]
+|xref:_ug_reference-methods_reserved_manpage-getId[`getId()`]
 |Provides an optional unique identifier of a service. +
 If not provided, the service's fully-qualified class name is used.
 
-|xref:__code_title_code[`title()`]
+|xref:_ug_reference-methods_reserved_manpage-title[`title()`]
 |Provides a title for the object. +
-Alternatively, use the xref:__code_title_code[`@Title`] annotation. +
-See also `iconName()` and xref:__code_cssClass_code[`cssClass()`]
+Alternatively, use the xref:_ug_reference-annotations_manpage-Title[`@Title`] annotation. +
+See also `iconName()` and xref:_ug_reference-methods_reserved_manpage-cssClass[`cssClass()`]
 
-|xref:__code_validate_code[`validate()`]
+|xref:_ug_reference-methods_reserved_manpage-validate[`validate()`]
 |Validate the object's state prior to persisting.
 
 |===
@@ -66,28 +66,28 @@ The lifecycle methods are:
 |Method
 |Description
 
-|xref:__code_created_code[`created()`]
-|called when an object has just been created using xref:__code_newTransientInstance_code[`newTransientInstance()`]
+|xref:_ug_reference-methods_reserved_manpage-created[`created()`]
+|called when an object has just been created using xref:_ug_reference-services-api_manpage-DomainObjectContainer[`newTransientInstance()`]
 
-|xref:__code_loaded_code[`loaded()`]
+|xref:_ug_reference-methods_reserved_manpage-loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
 
-|xref:__code_persisted_code[`persisted()`]
+|xref:_ug_reference-methods_reserved_manpage-persisted[`persisted()`]
 |called when object has just been persisted from the object store.
 
-|xref:__code_persisting_code[`persisting()`]
+|xref:_ug_reference-methods_reserved_manpage-persisting[`persisting()`]
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-|xref:__code_removed_code[`removed()`]
+|xref:_ug_reference-methods_reserved_manpage-removed[`removed()`]
 |called when a (persistent) object has just been persisted from the object store
 
-|xref:__code_removing_code[`removing()`]
+|xref:_ug_reference-methods_reserved_manpage-removing[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
 
-|xref:__code_updated_code[`updated()`]
+|xref:_ug_reference-methods_reserved_manpage-updated[`updated()`]
 |called when a (persistent) object has just been updated in the object store
 
-|xref:__code_updating_code[`updating()`]
+|xref:_ug_reference-methods_reserved_manpage-updating[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
 
 |===
@@ -104,7 +104,7 @@ Some lifecycle methods have been deprecated:
 |Notes
 
 |`deleted()`
-|Replaced by xref:__code_removed_code[`removed()`]
+|Replaced by xref:_ug_reference-methods_reserved_manpage-removed[`removed()`]
 
 |`deleting()`
 |Replaced by removing()`
@@ -120,7 +120,7 @@ This method is never called.
 |Replaced by persisted()`
 
 |`saving()`
-|Replaced by xref:__code_persisting_code[`persisting()`]
+|Replaced by xref:_ug_reference-methods_reserved_manpage-persisting[`persisting()`]
 
 |===
 

@@ -9,7 +9,7 @@ reason about all the classes in that package/namespace as a single unit, or modu
 
 This section describes how to use Isis' features to ensure that your domain application remains decoupled.  The techniques described here are also the ones that have been adopted by the various http://github.com/isisaddons[Isis Addons] modules (not ASF) for security, commands, auditing etc.
 
-The xref:_assembling[following section] describes how to re-assemble an application, in particular where some modules are in-house but others are potentially third-party (eg the Isis Addons modules).
+The following sections describe how to re-assemble an application, in particular where some modules are in-house but others are potentially third-party (eg the Isis Addons modules).
 
 [NOTE]
 ====

@@ -16,7 +16,7 @@ Or, actually, you can, because that is a valid mapping supported by JDO/DataNucl
 
 One workaround is to mark the collection as `@Programmatic`, as described in xref:_ignoring_methods[Ignoring Methods].  This ensures that the collection is ignored by Isis.
 
-Another workaround is to wrap each value in a view model, as explained in this xref:_simulating_collections_of_values[tip].
+Another workaround is to wrap each value in a view model, as explained in this xref:_ug_more-advanced_tips-n-tricks_simulating-collections-of-values[tip].
 ====
 
 

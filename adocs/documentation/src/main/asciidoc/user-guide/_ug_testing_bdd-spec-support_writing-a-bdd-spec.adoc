@@ -21,7 +21,7 @@ For example, given a feature that involves `Customer` and `Order`, have the step
 +
 The `glue` attribute of the Cucumber-JVM JUnit runner eallows you to indicate which package(s) should be recursively searched to find any glue.
 
-* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in xref:_integration_test_support[Integration Test Support], bootstrapping section).
+* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in xref:_ug_testing_integ-test-support[Integration Test Support], bootstrapping section).
 
 
 Here's an example of a feature from the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype]:

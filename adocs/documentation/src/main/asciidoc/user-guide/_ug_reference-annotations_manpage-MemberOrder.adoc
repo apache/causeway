@@ -9,7 +9,7 @@ IMPORTANT: TODO
 
 
 
-See also xref:__a_id_wicket_viewer_layout_a_dynamic_object_layout[dynamic object layouts].
+See also xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic object layouts].
 
 `@MemberOrder` is the recommended mechanism for specifying the order in
 which fields and/or actions are presented to the user. (`@ActionOrder`
@@ -56,7 +56,7 @@ will be indeterminate.
 
 [NOTE]
 ====
-The xref:__a_id_chapter_a_wicket_viewer[Wicket viewer] lays out an object's properties and its collections separately, in which case the relative member order of properties and collections will be evaluated separately. In general, though, consider the layout of all properties and collections together, and of all actions together.
+The xref:_ug_wicket-viewer[Wicket viewer] lays out an object's properties and its collections separately, in which case the relative member order of properties and collections will be evaluated separately. In general, though, consider the layout of all properties and collections together, and of all actions together.
 ====
 
 

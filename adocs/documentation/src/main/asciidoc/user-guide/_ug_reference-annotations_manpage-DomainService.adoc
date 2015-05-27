@@ -22,19 +22,19 @@ The table below summarizes the annotation's attributes.
 | Description
 
 
-|xref:__a_id_reference_annotations_manpage_domainservice_a_code_nature_code[`nature()`]
+|xref:_ug_reference-annotations_manpage-DomainService_nature[`nature()`]
 |
 |the nature of this service: providing actions for menus, contributed actions, or neither (1.8.0)
 
 
-|xref:__a_id_reference_annotations_manpage_domainservice_a_code_repositoryfor_code[`repositoryFor()`]
+|xref:_ug_reference-annotations_manpage-DomainService_repositoryFor[`repositoryFor()`]
 |
 |if this domain service acts as a repository for an entity type, specify that entity type. (This is currently informational only)
 
 
-|xref:__a_id_reference_annotations_manpage_domainservice_a_code_menuorder_code[`menuOrder()`]
+|`menuOrder()`
 |
-|the order of the service's menu with respect to other service's (deprecated in 1.8.0)
+|Deprecated in 1.8.0; use instead `@DomainServiceLayout(menuOrder=...)`
 
 |===
 
@@ -42,73 +42,8 @@ The table below summarizes the annotation's attributes.
 
 
 
-
-
-== anchor:reference-annotations_manpage-DomainService[]`nature()`
-
-IMPORTANT: WIP ... this section
-
-IMPORTANT: TODO - now also VIEW_REST_ONLY
-
-
-
-The `@NotContributed` annotation applies only to action methods, and
-specifically to the actions of services. If present, it indicates that
-the action should not be contributed to any of its domain object
-arguments.
-
-For example:
-
-[source,java]
-----
-public class OrderServices {
-    @NotContributed
-    public void cancel(Order order);
-    ...
-}
-----
-
-If the action should neither be contributed nor appear in the service's
-service menu, then you could instead simply mark it as `@Hidden`.
-
-=== Contributing of one-arg actions
-
-Actions that accept a single argument will, by default, also be contributed as an association:
-
-* if the action returns a single object (value or entity) then the action will be contributed as a property
-
-* if the action returns a list then the action will be contributed as a collection
-
-This behaviour can be influenced by specifying the "As." attribute:
-
-* use `@NotContributed(As.ACTION)` to contribute the action as an association
-* use `@NotContributed(As.ASSOCIATION)` to contribute the action as an action
-* use `@NotContributed` to not contribute the action at all.
-
-
-
-
-
-The `@NotInServiceMenu` annotation applies only to action methods, and specifically to the actions of services. If present, it indicates that the action should not appear in the service menu for the service. It may, however, still be contributed to any of its domain object arguments.
-
-
-For example:
-
-[source,java]
-----
-public class OrderServices {
-    @NotInServiceMenu
-    public void cancel(Order order);
-    ...
-}
-----
-
-
-
-If the action should neither be contributed (see ?) nor appear in the
-service's service menu, then you could instead simply mark it as `@Hidden`
-<!--(see ?)-->.
-
+include::_ug_reference-annotations_manpage-DomainService_nature.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainService_repositoryFor.adoc[leveloffset=+1]
 
 
 

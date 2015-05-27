@@ -28,7 +28,7 @@
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12325318[viewer-wicket-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326462[archetype-simpleapp-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326461[archetype-todoapp-1.6.0]
-| RestfulObjects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as http://isisaddons.org[Isis Addons] (non-ASF).
+| Restful Objects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as http://isisaddons.org[Isis Addons] (non-ASF).
 
 | 1.5.0
 | 08-jun-2014
