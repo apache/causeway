@@ -21,7 +21,7 @@ protected void init() {
 }
 ----
 
-If you have developed a custom Bootstrap theme (as described xref:_custom_bootstrap_theme[here]) then this can also be specified using the https://github.com/l0rdn1kk0n/wicket-bootstrap/wiki/Themes[Wicket Bootstrap API].
+If you have developed a custom Bootstrap theme (as described xref:_ug_extending_wicket-viewer_custom-bootstrap-theme[here]) then this can also be specified using the https://github.com/l0rdn1kk0n/wicket-bootstrap/wiki/Themes[Wicket Bootstrap API].
 
 
 

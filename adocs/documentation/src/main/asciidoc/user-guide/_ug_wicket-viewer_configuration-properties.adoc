@@ -52,17 +52,17 @@ Note that action pages are still used for bookmarked actions.
 |`isis.viewer.wicket.` +
 `maxTitleLengthInParentedTables`
 | +ve integer, (`_12_`)
-| See discussion xref:_abbreviating_suppressing_titles_in_tables[below].
+| See discussion xref:_ug_wicket-viewer_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInStandaloneTables`
 | +ve integer, (`_12_`)
-| See discussion xref:_abbreviating_suppressing_titles_in_tables[below].
+| See discussion xref:_ug_wicket-viewer_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInTables`
 | +ve integer, (`_12_`)
-| See discussion xref:_abbreviating_suppressing_titles_in_tables[below].
+| See discussion xref:_ug_wicket-viewer_configuration-properties_abbreviating-titles[below].
 
 |`isis.viewer.wicket.` +
 `regularCase`
@@ -72,12 +72,12 @@ Note that action pages are still used for bookmarked actions.
 |`isis.viewer.wicket.` +
 `stripWicketTags`
 | `true`,`false` (`_true_`)
-| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:_stripped_wicket_tags[below].
+| Whether to force Wicket tags to be stripped in prototype/development mode.  See discussion xref:_ug_wicket-viewer_configuration-properties_stripped-wicket-tags[below].
 
 |`isis.viewer.wicket.` +
 `suppressPasswordReset`
 | `true`,`false` (`_false_`)
-|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:_suppressing_password_reset[below].
+|If user registration is enabled, whether to suppress the "password reset" link on the login page.  See discussion xref:_ug_wicket-viewer_configuration-properties_suppressing-password-reset[below].
 
 |`isis.viewer.wicket.` +
 `suppressRememberMe`
@@ -87,17 +87,17 @@ Note that action pages are still used for bookmarked actions.
 |`isis.viewer.wicket.` +
 `suppressSignUp`
 | `true`,`false` (`_false_`)
-|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:_suppressing_sign_up[below].
+|If user registration is enabled, whether to suppress the "sign up" link on the login page.  See discussion xref:_ug_wicket-viewer_configuration-properties_suppressing-sign-up[below].
 
 |`isis.viewer.wicket.` +
 `themes.enabled`
 | comma separated list ...
-| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:_showing_a_theme_chooser[below].
+| ... of bootswatch themes.  Only applies if `themes.showChooser`==`true`.  See discussion xref:_ug_wicket-viewer_configuration-properties_showing-theme-chooser[below].
 
 |`isis.viewer.wicket.` +
 `themes.showChooser`
 | `true`,`false` (`_false_`)
-| Whether to show chooser for Bootstrap themes.  See discussion xref:_showing_a_theme_chooser[below]
+| Whether to show chooser for Bootstrap themes.  See discussion xref:_ug_wicket-viewer_configuration-properties_showing-theme-chooser[below]
 
 |===
 

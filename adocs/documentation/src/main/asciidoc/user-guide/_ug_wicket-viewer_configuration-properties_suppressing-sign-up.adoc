@@ -41,7 +41,7 @@ isis.viewer.wicket.suppressSignUp=true
 
 == See also
 
-The xref:_suppressing_password_reset[password reset link] can be suppressed in a similar manner.
+The xref:_ug_wicket-viewer_configuration-properties_suppressing-password-reset[password reset link] can be suppressed in a similar manner.
 
 
 

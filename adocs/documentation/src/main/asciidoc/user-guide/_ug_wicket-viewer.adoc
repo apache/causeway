@@ -23,7 +23,7 @@ include::_ug_wicket-viewer_customisation.adoc[leveloffset=+1]
 
 == Extending the viewer
 
-APIs to extend the Wicket viewer are discussed in the xref:__a_id_chapter_a_extending[Extending] chapter.
+APIs to extend the Wicket viewer are discussed in the xref:_ug_extending[Extending] chapter.
 
 
 include::_ug_wicket-viewer_isis-addons.adoc[leveloffset=+1]

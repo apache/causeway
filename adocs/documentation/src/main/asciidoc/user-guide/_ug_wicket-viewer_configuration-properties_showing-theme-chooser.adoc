@@ -8,7 +8,7 @@
 
 The Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
 
-Unless a xref:_specifying_a_default_theme[default theme has been specified], the viewer uses the default bootstrap theme. However,
+Unless a xref:_ug_wicket-viewer_customisation_default-theme[default theme has been specified], the viewer uses the default bootstrap theme. However,
 the viewer can also be configured to allow the end-user to switch theme to another theme, in particular one of those provided by http://bootswatch.com[bootswatch.com].
 
 This is done using the following configuration property (in `WEB-INF/viewer_wicket.properties`):
@@ -37,7 +37,7 @@ where the value is the list of themes (from http://bootswatch.com[bootswatch.com
 
 [TIP]
 ====
-You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:_custom_bootstrap_theme[Extending] chapter for further details.
+You can also develop and install a custom themes (eg to fit your company's look-n-feel/interface guidelines); see the xref:_ug_extending_wicket-viewer_custom-bootstrap-theme[Extending] chapter for further details.
 ====
 
 
