@@ -19,7 +19,7 @@ Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads user
 
 Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.  Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 
-In addition, the http://isisaddons.org[Isis Addons] (non-ASF) provides the http://github.com/isisaddons/isis-module-security}[Isis addons' security] module, which also provides an implementation of the Shiro `Realm` API.  However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Isis itself.  Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
+In addition, the http://isisaddons.org[Isis Addons] (non-ASF) provides the http://github.com/isisaddons/isis-module-security[Isis addons' security] module, which also provides an implementation of the Shiro `Realm` API.  However, the security module also represents users, roles and permissions as domain objects, allowing them to be administered through Isis itself.  Moreover, the security module can optionally delegate password management to a subsidiary (delegate) realm (usually LDAP as discussed above).
 
 In addition to Isis' Shiro-based implementation of its authentication and authorization APIs, Isis also provides a "bypass" implementation, useful for quick-n-dirty prototyping when you want to in effect disable (bypass) security completely.
 
@@ -28,7 +28,7 @@ In addition to Isis' Shiro-based implementation of its authentication and author
 ====
 A further aspect of security is auditing: recording what data was modified by which user.   Apache Isis does define two service APIs -- xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] and xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] -- that provide hooks to track which actions (commands) are invoked, and what data was modified as a result (auditing).
 
-Isis does not itself provide any in-built implementations of these APIs, but there are implementations within http://isisaddons.org[Isis Addons] (non-ASF), namely the http://github.com/isisaddons/isis-module-command}[Isis addons' command] module and the http://github.com/isisaddons/isis-module-auditing}[Isis addons' auditing] module.
+Isis does not itself provide any in-built implementations of these APIs, but there are implementations within http://isisaddons.org[Isis Addons] (non-ASF), namely the http://github.com/isisaddons/isis-module-command[Isis addons' command] module and the http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module.
 ====
 
 

@@ -5,9 +5,9 @@
 :_imagesdir: images/
 
 
-The http://github.com/isisaddons/isis-module-settings}[Isis addons' settings] module provides a simple way to store both global (application-level) settings as well as per-user settings.
+The http://github.com/isisaddons/isis-module-settings[Isis addons' settings] module provides a simple way to store both global (application-level) settings as well as per-user settings.
 
-The settings service is documented here for your convenience; the full README can be found on the http://github.com/isisaddons/isis-module-settings}[github site].
+The settings service is documented here for your convenience; the full README can be found on the http://github.com/isisaddons/isis-module-settings[github site].
 
 
 == Application Settings
@@ -52,15 +52,15 @@ All actions from the services emit domain events.  If you wish to hide/disable t
 
 
 
-Title: Settings Services
-
-{note
+[NOTE]
+====
 In 1.6.0 this implementation was released as part of _org.apache.isis.core:isis-module-settings-jdo:1.6.0_ and was also released as an http://github.com/isisaddons/isis-module-settings[Isis addon] module. *In 1.7.0+ only the http://github.com/isisaddons/isis-module-settings[Isis addon] implementation is released.*
-}
+====
+
 
 The `ApplicationSettingsService` and the `UserSettingsService` are two similar services that provide the ability to store either configuration settings. With `ApplicationSettingsService` these settings have global scope; for the `UserSettingsService` the settings are stored per user.
 
-The core applib defines only interfaces and some convenience abstract classes. The JDO objectstore provides an link:../../components/objectstores/jdo/services/settings-services-jdo.html[implementation], alternatively you could write your own implementation.
+
 
 == ApplicationSettingsService
 

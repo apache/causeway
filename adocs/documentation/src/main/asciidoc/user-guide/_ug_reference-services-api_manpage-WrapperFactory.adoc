@@ -29,7 +29,7 @@ The 'wrapper' factory provides the ability to enforce business rules for program
 
 This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@MaxLength` or `@Regex`.
 
-This capability is frequently used within link:../../core/integtestsupport.html[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
+This capability is frequently used within xref:_ug_testing_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
 
 === In a little more detail
 
@@ -117,9 +117,10 @@ public class CustomerAgent {
 Here the `Order`'s `refund()` action has various business logic. Rather than
 re-implement this logic, the `CustomerAgent` wraps the order in order to interact with it.
 
+
 === Hints and Tips
 
-The link:./exception-recognizers.html[Exception Recognizers] provides the possibility
+The xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s provide the possibility
 to remove the boilerplate; any `InteractionException` could be automatically
 recognized and converted into a suitable message. The calling method could therefore
 simply propogate the exception:

@@ -41,11 +41,11 @@ If you just want to debug (writing to stderr), you can instead configure `org.ap
 
 === Explicitly marking an object as audited
 
-The typical way to indicate that an object should be audited is to annotate it with the  link:../recognized-annotations/Audited.html[@Audited] annotation, for example:
+The typical way to indicate that an object should be audited is to annotate it with the xref:_ug_reference-annotations_manpage_DomainObject_auditing[`@DomainObject#auditing()`] annotation, for example:
 
 [source,java]
 ----
-@Audited
+@DomainObject(auditing=Auditing.ENABLED)
 public class ToDoItem ... {
     ...
 }
@@ -80,4 +80,4 @@ If the key is not present in `isis.properties`, then objects are not audited by 
 
 === Related Services
 
-A similar service that you may want to use alongside or instead of the auditing service is the link:publishing-service.html[Publishing Service].
+A similar service that you may want to use alongside or instead of the auditing service is the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].

@@ -9,7 +9,7 @@ IMPORTANT: TODO
 
 Title: Bulk Interaction
 
-The `Bulk.InteractionContext` domain service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service intended to support the implementation of link:../recognized-annotations/Bulk.html[@Bulk] actions. That is, when a bulk action is invoked over a collection of objects, each object instance "knows where it is" in the collection. In essence, the `Bulk.InteractionContext` service acts a little like an iterator.
+The `Bulk.InteractionContext` domain service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service intended to support the implementation of xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk] actions. That is, when a bulk action is invoked over a collection of objects, each object instance "knows where it is" in the collection. In essence, the `Bulk.InteractionContext` service acts a little like an iterator.
 
 === API
 
@@ -46,7 +46,7 @@ For bulk actions that are void or that return null, Isis will return to the list
 actions that are non-void, Isis will render the returned object/value from the last object invoked (and simply
 discards the object/value of all actions except the last).
 
-One idiom is for the domain objects to also use the link:./scratchpad.html[Scratchpad] service to share information,
+One idiom is for the domain objects to also use the xref:_ug_reference-services-api_manpage-Scratchpad[`Scratchpad`] service to share information,
 for example to aggregate values. The `Bulk.InteractionContext#isLast()` method can then be used to determine if
 all the information has been gathered, and then do something with it (eg derive variance across a range of values,
 render a graph etc).

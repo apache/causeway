@@ -7,24 +7,27 @@
 IMPORTANT: TODO
 
 
-Title: Background Service
 
 The `BackgroundService`, and its companion `BackgroundCommandService`, enable action invocations to be persisted such that they may be invoked in the background.
 
-The `BackgroundService` is responsible for capturing a memento representing the action invocation, and persisting it. The default `BackgroundServiceDefault` implementation (provided by isis-core) uses (a private copy of) link:./memento-service.html[MementoService], and then delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService`. One such implementation is `isis-module-command-jdo`'s link:./background-command-service.html[BackgroundCommandServiceJdo].
+The `BackgroundService` is responsible for capturing a memento representing the action invocation, and persisting it. The default `BackgroundServiceDefault` implementation (provided by isis-core) uses (a private copy of) xref:_ug_reference-services-api_manpage-MementoService[`MementoService`], and then delegates the persistence of the memento to an appropriate implementation of the companion `BackgroundCommandService`. One such implementation is `isis-module-command-jdo`'s xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`].
 
-The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them. The `BackgroundCommandExecution` abstract class (discussed link:#BackgroundCommandExecution[below] provides infrastructure to do this; the concrete
+The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them. The `BackgroundCommandExecution` abstract class (discussed xref:_ug_reference-services-api_manpage-BackgroundService_BackgroundCommandExecution[below] provides infrastructure to do this; the concrete
 implementation of this class depends on the configured `BackgroundCommandService` (in order to query for the persisted (background) `Command`s.
 
-== BackgroundService
+
+
+
 
 The `BackgroundService` is the entry point for domain classes wishing to perform actions asynchronously. This can be done in a typesafe way; the (default implementation of) `BackgroundService` actually uses a proxy wrapper around the target so that it can capture the action to invoke and its arguments, and then persist them rather than execute them.
 
-=== API &amp; Implementation
+
+
+== API & Implementation
 
 Returns a proxy around the object which is then used to obtain the signature of the action to be invoked in the background.
 
-[source]
+[source,java]
 ----
 public interface BackgroundService {
 
@@ -37,11 +40,13 @@ The default implementation is provided by core:
 
 * `org.apache.isis.core.runtime.services.background.BackgroundServiceDefault`
 
-=== Usage
+
+
+== Usage
 
 Using the `BackgroundService` is very straight-forward. For example:
 
-[source]
+[source,java]
 ----
 public void submitCustomerInvoices() {
     for(Customer customer: customerRepository.findCustomersToInvoice()) {
@@ -57,19 +62,22 @@ The action method invoked must be part of the Isis metamodel, which is to say it
 
 In fact, when invoked by the background service, no business rules (hidden, disabled, validation) are enforced; the action method must take responsibility for performing appropriate validation and error checking.
 
-=== End-user experience
+
+
+
+== End-user experience
 
 For the end-user, executing an action that delegates work off to the `BackgroundService` raises the problem of how does the user know the work is complete?
 
 One option is for the background jobs to take responsibility to notify the user themselves. In the above example, this would be the `submitInvoice()` method called upon each customer. One could imagine more complex designs where only the final command executed notifies the user.
 
-However, an alternative is to rely on the fact that the `BackgroundService` will automatically hint that the `Command` representing the original interaction (to `submitCustomerInvoices()` in the example above) should be persisted. This will be available if the related `CommandContext` and `CommandService` domain services are configured, and the `CommandService` supports persistent commands. You can read more about `CommandContext` and `CommandService` link:./command-context.html[here].
+However, an alternative is to rely on the fact that the `BackgroundService` will automatically hint that the `Command` representing the original interaction (to `submitCustomerInvoices()` in the example above) should be persisted. This will be available if the related xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] and xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] domain services are configured, and the `CommandService` supports persistent commands.
 
 Thus, the original action can run a query to obtain it corresponding `Command`, and return this to the user. The child `Command`s created by the `BackgroundService` will then be associated with it.
 
 We could therefore refactor the method as follows:
 
-[source]
+[source,java]
 ----
 public Command submitCustomerInvoices() {
     for(Customer customer: customerRepository.findCustomersToInvoice()) {
@@ -81,13 +89,18 @@ public Command submitCustomerInvoices() {
 
 where `commandContext` field is the injected `CommandContext` domain service.
 
+
+
+
 == Related Services
 
-This service is closely related to the link:./command-context.html[CommandContext] and also that service's supporting link:./command-service.html[CommandService] service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s. The latter is analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s.
+This service is closely related to the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] and also that service's supporting xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s. The latter is analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s.
 
-The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way. The `isis-module-command-jdo` module provides implementations of both (see link:../../components/objectstores/jdo/services/command-service-jdo.html[CommandServiceJdo] and link:../../components/objectstores/jdo/services/background-command-service-jdo.html[BackgroundCommandServiceJdo]).
+The implementations of `CommandService` and `BackgroundCommandService` go together; typically both parent `Command`s and child background `Command`s will be persisted in the same way. The `isis-module-command-jdo` module provides implementations of both (see xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] and xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]).
 
-== BackgroundCommandExecution abstract class
+
+[[_ug_reference-services-api_manpage-BackgroundService_BackgroundCommandExecution]]
+== `BackgroundCommandExecution` abstract class
 
 The `BackgroundCommandExecution` (in isis-core) is an abstract template class provided by isis-core that defines an abstract hook method to obtain background `Command`s to be executed:
 

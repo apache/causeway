@@ -27,6 +27,6 @@ The main downsides of using dynamic layouts are a lack of typesafety (a typo wil
 
 === Best of both worlds?
 
-Using the (third-party) http://github.com/isisaddons/isis-jrebel-plugin}[Isis addons' jrebel] plugin (non-ASF) comes close to getting the best of both words: metadata is specified in a type-safe way using annotations, but can be reloaded automatically.
+Using the (third-party) link:http://github.com/isisaddons/isis-jrebel-plugin[Isis addons' jrebel] plugin (non-ASF) comes close to getting the best of both words: metadata is specified in a type-safe way using annotations, but can be reloaded automatically.
 
 The downsides are licensing cost, and also the fact that metadata for contributed actions in the contributee class cannot be specified.

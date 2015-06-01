@@ -57,7 +57,7 @@ The table below summarizes the annotation's attributes.
 |xref:_ug_reference-annotations_manpage-Action_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered link:../publishing-service.html[publishing service].
+|whether changes to the object should be published to the registered xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 
 |`publishingPayloadFactory()`
 |subtype of `PublishingPayloadFactoryForAction` (none)

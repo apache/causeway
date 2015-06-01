@@ -68,7 +68,7 @@ where as before:
 but also:
 
 - `archetypeVersion` is the SNAPSHOT version of Isis.
-- `archetypeRepository` specifies the location of our snapshot repo (hosted on [CloudBees](http://www.cloudbees.com)), and
+- `archetypeRepository` specifies the location of our snapshot repo (hosted on link:http://www.cloudbees.com[CloudBees]), and
 
 The archetype generation process will then run; it only takes a few seconds.
 

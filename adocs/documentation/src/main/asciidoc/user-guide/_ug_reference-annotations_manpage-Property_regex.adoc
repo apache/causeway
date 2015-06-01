@@ -37,15 +37,19 @@ public class Customer {
 
 
 
-=== `regexPattern()`
+== `regexPattern()`
 
 IMPORTANT: WIP ... this section
 
-=== `regexPatternFlags()`
+
+
+== `regexPatternFlags()`
 
 IMPORTANT: WIP ... this section
 
-=== `regexPatternReplacement()`
+
+
+== `regexPatternReplacement()`
 
 IMPORTANT: WIP ... this section
 

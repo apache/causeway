@@ -1,5 +1,5 @@
-[[_ug_reference-services-api_manpage-ScratchPad]]
-= `ScratchPad`
+[[_ug_reference-services-api_manpage-Scratchpad]]
+= `Scratchpad`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -7,15 +7,17 @@
 IMPORTANT: TODO
 
 
-Title: Scratchpad
 
 The `Scratchpad` service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service to allow objects to exchange information even if they do not directly call each other.
 
-=== API &amp; Implementation
+
+
+
+== API & Implementation
 
 The API of `Scratchpad` service is:
 
-[source]
+[source,java]
 ----
 @RequestScoped
 public class Scratchpad {
@@ -31,13 +33,17 @@ In fact, this is a concrete class:
 
 * `org.apache.isis.applib.services.scratchpad.Scratchpad`
 
-=== Usage
 
-The most common use-case is for link:../recognized-annotations/Bulk.html[Bulk] actions that link:../../more-advanced-topics/how-to-01-065-How-to-add-an-action-to-be-called-on-every-object-in-a-list.html[act upon multiple objects in a list]. The (same) `Scratchpad` service is injected into each of these objects, and they can use pass information.
+
+
+== Usage
+
+The most common use-case is for xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk] actions that link:../../more-advanced-topics/how-to-01-065-How-to-add-an-action-to-be-called-on-every-object-in-a-list.html[act upon multiple objects in a list]. The (same) `Scratchpad` service is injected into each of these objects, and they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
-[source]
+
+[source,java]
 ----
 @ActionSemantics(Of.SAFE)
 @Bulk(AppliesTo.BULK_ONLY)
@@ -56,7 +62,7 @@ public void injectScratchpad(Scratchpad scratchpad) {
 }
 ----
 
-A more complex example could use a link:../../more-advanced-topics/ViewModel.html[view model] to enable bulk updates to a set of objects. The view model's job is to keep track of the items to be updated:
+A more complex example could use a xref:_ug_more-advanced_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to keep track of the items to be updated:
 
 [source]
 ----
@@ -72,7 +78,7 @@ public class ToDoItemUpdateBulkUpdate extends AbstractViewModel {
 
 The bulk action in the objects simply adds the selected item to the view model:
 
-[source]
+[source,java]
 ----
 @ActionSemantics(Of.SAFE)
 @Bulk(AppliesTo.BULK_ONLY)
@@ -98,12 +104,17 @@ public void injectScratchpad(Scratchpad scratchpad) {
 
 If using the Wicket viewer, the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
 
-=== Registering the Service
+
+
+== Registering the Service
 
 The `Scratchpad` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
-=== Related Services
 
-The link:./bulk-interaction.html[Bulk.Interaction] service allows link:../recognized-annotations/Bulk.html[@Bulk] actions to co-ordinate with each other.
 
-The link:./query-results-cache.html[QueryResultsCache] is useful for caching the results of expensive method calls.
+
+== Related Services
+
+The xref:_ug_reference-services-api_manpage-ActionInteractionContext[`ActionInteractionContext`] service allows xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk actions] to co-ordinate with each other.
+
+The xref:_ug_reference-services-api_manpage-QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.

@@ -6,11 +6,6 @@
 
 
 
-=== `regexPattern()`
-
-=== `regexPatternFlags()`
-
-=== `regexPatternReplacement()`
 
 
 The `@RegEx` annotation may be applied to any string property, or to any parameter within an action method. It can also be applied to any string-based value type. It serves both to validate and potentially to normalise the format of the input. `@Regex` is therefore similar in use to `@Mask` <!--(see ?)--> but provides more flexibility.
@@ -38,3 +33,20 @@ public class Customer {
 )
 ----
 
+
+
+== `regexPattern()`
+
+IMPORTANT: WIP ... this section
+
+
+
+== `regexPatternFlags()`
+
+IMPORTANT: WIP ... this section
+
+
+
+== `regexPatternReplacement()`
+
+IMPORTANT: WIP ... this section

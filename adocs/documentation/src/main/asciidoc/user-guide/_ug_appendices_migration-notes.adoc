@@ -264,7 +264,7 @@ under `<build>/<pluginManagement>/<plugins>`, add (or update) maven-enforcer-plu
 
 [TIP]
 ====
-The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)` or `@Named()`.  The necessary configuration is provided in an http://github.com/isisaddons/isis-metamodel-paraname8}[Isis addons' paraname8]  metamodel extension (non-ASF).
+The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)` or `@Named()`.  The necessary configuration is provided in an http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8]  metamodel extension (non-ASF).
 ====
 
 We also recommend that you add the `maven-enforcer-plugin` (if not used already).  Again, this resides under `<build>/<pluginManagement>/<plugins>`:

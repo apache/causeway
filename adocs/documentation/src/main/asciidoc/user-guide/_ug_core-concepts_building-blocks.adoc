@@ -97,7 +97,7 @@ isis.services = employee.Employees,\
 
 This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
 
-Examples of framework-provided services (as defined in the applib) can be found referenced from the main link:../../documentation.html[documentation] page. They include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management.
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:_ug_reference-services-api[here] and _ug_reference-services-spi[here] for further details.
 
 === Service scopes
 
@@ -115,7 +115,8 @@ The CDI annotation `@javax.enterprise.context.RequestScoped` is used to indicate
  }
 ----
 
-The framework provides a number of request-scoped services; these can be found referenced from the main link:../../documentation.html[documentation] page. They include scratchpad service, query results caching, and support for co-ordinating bulk actions.
+The framework provides a number of request-scoped services, include a scratchpad service, query results caching, and support for co-ordinating bulk actions.  See xref:_ug_reference-services-api[here] and xref:_ug_reference-services-spi[here] for further details.
+
 
 === (Suppressing) contributed actions
 

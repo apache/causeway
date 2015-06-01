@@ -7,27 +7,33 @@
 IMPORTANT: TODO
 
 
-Title: CommandContext
 
 The `CommandContext` service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
 
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone. The optional
- supporting `CommandService` enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the `isis-command-module-jdo`'s link:./command-service.html[CommandServiceJdo]) the `Command` may then be persisted.
+ supporting `CommandService` enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the `isis-command-module-jdo`'s xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`]) the `Command` may then be persisted.
 
 Persistent `Command`s support several use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* they act as a parent to any background commands that might be invoked through the link:./background-service.html[BackgroundService]
-* if link:./auditing-service.html[auditing] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
-* if link:./publishing-service.html[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* they act as a parent to any background commands that might be invoked through the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`]
+* if xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
+* if xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
 
-Assuming that the `CommandService` supports persistent `Command`s, the associated link:../recognized-annotations/Command.html[@Command] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
+Assuming that the `CommandService` supports persistent `Command`s, the associated xref:_ug_reference-annotations_manpage_Action_command[`@Action#command()`] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
-== <a name="screencast">Screencast</a>
+
+
+
+[[_ug_reference-services-api_manpage-CommandContext_screencast]]
+== Screencast
 
 The screencast provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
 <iframe width="560" height="315" src="//www.youtube.com/embed/tqXUZkPB3EI" frameborder="0" allowfullscreen></iframe>
+
+
+
 
 == API
 
@@ -94,9 +100,13 @@ and where `Command` has the members:
 * `getResult()` - bookmark to object returned by action, if any
 * `getException()` - exception stack trace if action threw exception
 
+
+
+
 == Implementation
 
-==== CommandContext
+
+=== CommandContext
 
 The `CommandContext` implementation is part of the core framework (isis-core), in fact is a concrete class in the applib:
 
@@ -104,30 +114,30 @@ The `CommandContext` implementation is part of the core framework (isis-core), i
 
 ==== CommandService (for persistent `Command`s)
 
-The `CommandService` interface - which acts as the factory for different `Command` implementations - is pluggable. The link:command-service.html[isis-module-command-jdo] implementation persists `Command`s to an RDBMS.
+The xref:_ug_reference-services-api_manpage-CommandService[`CommandService`] interface - which acts as the factory for different `Command` implementations - is pluggable.  The  (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module implementation persists `Command`s to an RDBMS.
+
+
+
 
 == Usage
 
-==== Explicitly treating an action as a command
+=== Explicitly treating an action as a command
 
-The typical way to indicate that an action should be treated as a command is to annotate it with the link:../recognized-annotations/Command.html[@Command] annotation, for example:
+The typical way to indicate that an action should be treated as a command is to annotate it with the xref:_ug_reference-annotations_manpage_Action_command[`@Action#command()`] annotation, for example:
 
-[source]
+[source,java]
 ----
 public class ToDoItem ... {
-
-    @Command
+    @Action(command=CommandReification.ENABLED)
     public ToDoItem completed() { ... }
-
 }
 ----
 
 The annotation can also be used to specify whether the command should be performed in the background, for example:
 
-[source]
+[source,java]
 ----
 public class ToDoItem ... {
-
     @Command(executeIn=ExecuteIn.BACKGROUND)
     public ToDoItem scheduleImplicitly() {
         completeSlowly(3000);
@@ -138,29 +148,31 @@ public class ToDoItem ... {
 
 When a background command is invoked, the user is returned the command object itself (to provide a handle to the command being invoked).
 
-This requires that an implementation of `CommandService` that persists the commands (such as `isis-module-command-jdo`'s `CommandService` link:./command-service.html[implementation]) is configured. It also requires that a scheduler is configured to execute the background commands, see link:./background-command-service.html[BackgroundCommandService]).
+This requires that an implementation of xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] that persists the commands (such as the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's `CommandService`) is configured. It also requires that a scheduler is configured to execute the background commands, see xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]).
 
-==== Making commands the default
+
+
+=== Making commands the default
 
 As an alternative to annotating every action with `@Command`, alternatively this can be configured as the default.
 
 To treat every action as a command, add the following to `isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.services.command.actions=all
 ----
 
-For some applications it may be required to record (as commands) only those actions that update objects; in other words queries and searches can be ignored. Put another way, only actions annotated (with link:../recognized-annotations/ActionSemantics.html[@ActionSemantics]) as IDEMPOTENT or NON_IDEMPOTENT should be treated as commands. In this case, use:
+For some applications it may be required to record (as commands) only those actions that update objects; in other words queries and searches can be ignored. Put another way, only actions annotated (with xref:_ug_reference-annotations_manpage_Action_semantics[`@Action#semantics()`]) as IDEMPOTENT or NON_IDEMPOTENT should be treated as commands. In this case, use:
 
-[source]
+[source,ini]
 ----
 isis.services.command.actions=ignoreQueryOnly
 ----
 
 To prevent an action from being treated as a command (even if globally enabled), use the `@Command` annotation with the `disabled` attribute:
 
-[source]
+[source,java]
 ----
 @Command(disabled=true)
 public void notACommand() { ... }
@@ -168,20 +180,25 @@ public void notACommand() { ... }
 
 To disable globally, use:
 
-[source]
+
+[source,ini]
 ----
 isis.services.command.actions=none
 ----
 
 If the key is not present in `isis.properties`, then commands are disabled by default.
 
-==== Interacting with the services
+
+
+=== Interacting with the services
 
 Typically the domain objects have little need to interact with the `CommandContext` and `Command` directly; what is more useful is that these are persisted in support of the various use cases identified above.
 
 One case however where a domain object might want to obtain the `Command` is to determine whether it has been invoked in the foreground, or in the background. It can do this using the `getExecutedIn()` method:
 
-[source]
+
+
+[source,java]
 ----
 ExecutedIn executedIn = commandContext.getCommand().getExecutedIn();
 ----
@@ -190,7 +207,7 @@ If run in the background, it might then notify the user (eg by email) if all wor
 
 This leads us onto a related point, distinguishng the effective user vs the real user. When running in the foreground, the current user can be obtained from the `DomainObjectContainer`, using:
 
-[source]
+[source,java]
 ----
 String user = container.getUser().getName();
 ----
@@ -199,24 +216,30 @@ If running in the background, however, then the current user will be the credent
 
 The domain object can still obtain the original ("effective") user that caused the job to be created, using:
 
-[source]
+[source,java]
 ----
 String user = commandContext.getCommand().getUser();
 ----
+
+
+
 
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured:
 
-[source]
+[source,ini]
 ----
 isis.services-installer=configuration-and-annotation
 ----
 
 then the `CommandContext` service is automatically registered and injected into your entities/services; no further configuration is required.
 
+
+
+
 == Related Services
 
-As discussed above, the supporting link:./command-service.html[CommandService] enables `Command` objects to be persisted. Other related services are the link:./background-service.html[BackgroundService] and link:./background-service.html[BackgroundCommandService]). For `BackgroundService` captures commands for execution in the background, while the [BackgroundCommandService] persists such commands for execution.
+As discussed above, the supporting xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] enables `Command` objects to be persisted. Other related services are the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] and xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]). For `BackgroundService` captures commands for execution in the background, while the [BackgroundCommandService] persists such commands for execution.
 
 The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.

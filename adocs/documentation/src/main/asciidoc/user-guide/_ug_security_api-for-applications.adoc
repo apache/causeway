@@ -42,11 +42,11 @@ If using the Wicket viewer, then note there will also be another role which is u
 
 == Accessing user/roles from the Servlet API
 
-On occasion you may find it necessary to reach below Isis and to the underlying servlet API.  For example, the http://github.com/isisaddons/isis-module-togglz}[Isis addons' togglz] module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
+On occasion you may find it necessary to reach below Isis and to the underlying servlet API.  For example, the http://github.com/isisaddons/isis-module-togglz[Isis addons' togglz] module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
 
 [TIP]
 ====
-If you do need to access the servlet API and are running within the context of Wicket viewer, the http://github.com/isisaddons/isis-module-servletapi}[Isis addons' servletapi] module can provide access to the `HttpServletRequest`, `HttpServletResponse` and `ServletContext`.
+If you do need to access the servlet API and are running within the context of Wicket viewer, the http://github.com/isisaddons/isis-module-servletapi[Isis addons' servletapi] module can provide access to the `HttpServletRequest`, `HttpServletResponse` and `ServletContext`.
 ====
 
 In this situation, you can still obtain some information about the user and its roles:

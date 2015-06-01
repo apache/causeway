@@ -14,17 +14,19 @@ For 1.7.0+, see the http://github.com/isisaddons/isis-module-command[Isis addons
 
 Title: CommandService (isis-module-command-jdo)
 
-The `CommandService` service supports the link:./command-context.html[CommandContext] service such that `Command` objects (that reify the invocation of an action on a domain object into an object) can be persisted.
+The `CommandService` service supports the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service such that `Command` objects (that reify the invocation of an action on a domain object into an object) can be persisted.
 
 Persistent `Command`s support several use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
-* they act as a parent to any background commands that might be invoked through the link:./background-service.html[BackgroundService]
-* if link:./auditing-service.html[auditing] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
-* if link:./publishing-service.html[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
-* the associated link:../recognized-annotations/Command.html[@Command] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
+* they act as a parent to any background commands that might be invoked through the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`]
+* if xref:_ug_reference-services-spi_manpage-AuditingService[auditing] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
+* if xref:_ug_reference-services-spi_manpage-PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* the associated xref:_ug_reference-annotations_manpage_Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
-== <a name="screencast">Screencast</a>
+
+[[_ug_reference-services-spi_manpage-CommandService_screencast]]
+== Screencast
 
 The screencast provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
@@ -53,11 +55,14 @@ public interface CommandService {
     }
 ----
 
-where `Command` is defined as defined by the link:./command-context.html[CommandContext] service.
+where `Command` is defined as defined by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service.
+
+
+
 
 == Implementation
 
-==== CommandService (for persistent `Command`s)
+=== CommandService (for persistent `Command`s)
 
 The `CommandService` interface (defined in the Isis applib) is implemented within `isis-module-command-jdo` by:
 
@@ -71,31 +76,28 @@ In addition, there is a supporting contributions service that contributes action
 
 * `org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoContributions`
 
-== Usage
+
+
+
 
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured:
 
-[source]
+[source,ini]
 ----
 isis.services-installer=configuration-and-annotation
 ----
 
-then the `CommandServiceJdo` and `CommandServiceJdoRepository` services are automatically registered if the `isis-module-command-jdo` module
-is on the classpath. The `CommandServiceJdoContributions` service (because it influences the user interface) must be explicitly
-registered:
+then the services are automatically registered if the `isis-module-command-jdo` Maven module
+is on the classpath (they are annotated with `@DomainService`).
 
-[source]
-----
-isis.services=...,\
-              org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoContributions,\
-              ...
-----
+
+
 
 == Related Services
 
-As discussed above, this service supports the link:./command-context.html[CommandContext], providing the ability for `Command` objects to be
-persisted. This is closely related to the link:./background-command-service.html[BackgroundCommandService] that allows the link:./background-service.html[BackgroundService]) to schedule commands for background/asynchronous execution.
+As discussed above, this service supports the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`], providing the ability for `Command` objects to be
+persisted. This is closely related to the xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]that allows the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] to schedule commands for background/asynchronous execution.
 
 The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.

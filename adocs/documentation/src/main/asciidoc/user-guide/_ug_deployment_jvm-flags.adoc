@@ -7,7 +7,7 @@
 IMPORTANT: TODO
 
 
-for the `WrapperFactory` (uses link:http://www.csg.ci.i.u-tokyo.ac.jp/~chiba/javassist/[Javassist])
+for the `WrapperFactory` (uses link:http://www.javassist.org[Javassist])
 
 using:
 

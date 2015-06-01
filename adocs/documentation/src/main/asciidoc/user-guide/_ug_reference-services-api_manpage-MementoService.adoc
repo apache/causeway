@@ -8,13 +8,15 @@ IMPORTANT: TODO
 
 
 
-Title: Memento Service
 
-The `MementoService` was originally introduced to simplify the implementation of link:../../more-advanced-topics/ViewModel.html[ViewModel]s, which are required to return a string representation of all of their backing state, moreover which is safe for use within a URL.
+The `MementoService` was originally introduced to simplify the implementation of xref:_ug_more-advanced_view-models[ViewModel]s, which are required to return a string representation of all of their backing state, moreover which is safe for use within a URL.
 
-However, it can also be used to create a memento of arbitrary objects. Indeed, it is used internally by the core implementation of link:./background-service.html[BackgroundService] for capture the state of action invocations so that they can be executed by a background process.
+However, it can also be used to create a memento of arbitrary objects. Indeed, it is used internally by the core implementation of xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] for capture the state of action invocations so that they can be executed by a background process.
 
-=== API
+
+
+
+== API
 
 The API defined by `MementoService` is:
 
@@ -63,7 +65,10 @@ In the case of the default implementation provided by the core framework, the ty
 
 If using another implementation, the `canSet(...)` method can be used to check if the candidate object's type is supported.
 
-=== Usage
+
+
+
+== Usage
 
 To use in your code, simply define a field for the `MementoService` type and annotate with `@javax.inject.Inject`.
 
@@ -82,7 +87,10 @@ public class MyEntity {
 }
 ----
 
-=== Implementations
+
+
+
+== Implementations
 
 The core framework provides a default implementation of this API:
 
@@ -94,10 +102,16 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 
 However, you are of course free to write some other implementation of `MementoService`, perhaps based on `MementoServiceDefault` code if you wish.
 
-=== Related Services
 
-The memento service is used by the link:./command-context.html[CommandContext] service and also link:./background-service.html[BackgroundCommandService]. These both use a memento to capture a representation of an action invocation.
 
-=== Register the Service
+
+== Related Services
+
+The memento service is used by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service and also xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]. These both use a memento to capture a representation of an action invocation.
+
+
+
+
+== Register the Service
 
 As of 1.6.0, the `MementoServiceDefault` service is automatically registered and available for injection (it is annotated with `@DomainService`).

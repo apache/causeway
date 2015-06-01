@@ -11,11 +11,15 @@ This annotation on an entity type causes an events to be published by the regist
 
 
 
-=== `publishing()`
+== `publishing()`
 
 IMPORTANT: WIP ... this section
 
-=== `publishingPayloadFactory()`
+
+
+
+
+== `publishingPayloadFactory()`
 
 IMPORTANT: WIP ... this section
 

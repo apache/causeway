@@ -12,7 +12,7 @@ Is it possible to have each of our resellers (using our Isis application) use th
 
 Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
 
-The http://github.com/isisaddons/isis-app-todoapp}[Isis addons' todoapp] (non-ASF) actually link:https://github.com/isisaddons/isis-app-todoapp/blob/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the http://github.com/isisaddons/isis-module-settings}[Isis addons' settings module] settings modules:
+The http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF) actually link:https://github.com/isisaddons/isis-app-todoapp/tree/61b8114a8e01dbb3c380b31cf09eaed456407570[does this], storing the info via the http://github.com/isisaddons/isis-module-settings[Isis addons' settings module] settings modules:
 
 [source,java]
 .IActiveThemeProvider implementation

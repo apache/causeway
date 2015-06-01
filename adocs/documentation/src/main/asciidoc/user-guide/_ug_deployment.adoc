@@ -8,6 +8,7 @@ This chapter provides guidance on some common deployment scenarios.
 
 include::_ug_deployment_cmd-line.adoc[leveloffset=+1]
 include::_ug_deployment_tomcat.adoc[leveloffset=+1]
+include::_ug_deployment_externalized-configuration.adoc[leveloffset=+1]
 include::_ug_deployment_gae.adoc[leveloffset=+1]
 include::_ug_deployment_neo4j.adoc[leveloffset=+1]
 include::_ug_deployment_jvm-flags.adoc[leveloffset=+1]

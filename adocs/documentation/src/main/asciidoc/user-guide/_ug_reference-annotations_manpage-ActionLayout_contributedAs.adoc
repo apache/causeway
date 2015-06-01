@@ -27,7 +27,11 @@ public class OrderServices {
 If the action should neither be contributed nor appear in the service's
 service menu, then you could instead simply mark it as `@Hidden`.
 
-=== Contributing of one-arg actions
+
+
+
+
+== Contributing of one-arg actions
 
 Actions that accept a single argument will, by default, also be contributed as an association:
 

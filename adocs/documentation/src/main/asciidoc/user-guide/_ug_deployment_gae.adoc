@@ -52,7 +52,7 @@ We still need to try out Andy's recipe, above.
 
 === A GAE compatible version of `ToDoItem.java`
 
-... as per the http://github.com/isisaddons/isis-app-todoapp}[Isis addons' todoapp] (non-ASF), is as follows:
+... as per the http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF), is as follows:
 
 [source,java]
 ----

@@ -74,7 +74,7 @@ This will accomplish the same thing, though the webapp is mounted at a slightly 
 
 == Using the app
 
-Navigate to the Wicket UI (eg http://localhost:8080/wicket)[http://localhost:8080/wicket)], and login (sven/pass).
+Navigate to the Wicket UI (eg link:http://localhost:8080/wicket[http://localhost:8080/wicket]), and login (sven/pass).
 
 Once at the home page:
 

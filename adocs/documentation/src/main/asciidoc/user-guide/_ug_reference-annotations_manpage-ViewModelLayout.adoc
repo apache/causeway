@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `@ViewModelLayout` annotation is identical to the link:./DomainObjectLayout.html[@DomainObjectLayout], but is provided
+The `@ViewModelLayout` annotation is identical to the xref:_ug_reference-annotations_manpage_DomainObjectLayout[`@DomainObjectLayout`], but is provided
 for symmetry with domain objects that have been annotated using xref:_ug_reference-annotations_manpage-ViewModel[`@ViewModel`] (rather than xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject(nature=VIEW_MODEL)`]).
 
 

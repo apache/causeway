@@ -12,7 +12,6 @@ IMPORTANT: TODO
 For 1.7.0+, see the http://github.com/isisaddons/isis-module-publishing[Isis addons' Publishing module] (non-ASF).
 
 
-Title: Publishing Service
 
 The Publishing Service enables Isis to publish both changes to domain objects, and also action invocations to third parties. A typical use case is to publish onto a pub/sub bus such as http://servicemix.apache.org/[ServiceMix] or http://activemq.apache.org/[ActiveMQ] to keep other systems up to date.
 
@@ -28,11 +27,11 @@ This is done in the usual way, registering the service in the `isis.properties` 
 
 Over and above this, the service does provide considerable flexibility for fine-tuning the serialized form and the contents (payload) of the event.
 
-____
 
-Publishing of action invocations is supported by all objectstores. Publishing of changed objects is currently only supported by the link:../../components/objectstores/jdo/about.html[JDO objectstore].
 
-____
+
+
+
 
 == Annotating the Domain Model
 
@@ -43,6 +42,9 @@ Similarly, to indicate that any changes to an object should be published, use th
 Either or both of these annotations can be used.
 
 As described further down in this article, it is possible to fine-tune the payload. However, simply using the above annotations will suffice in many cases.
+
+
+
 
 == API
 
@@ -70,6 +72,9 @@ to handle. Strings are a good lowest common denominator, but (if custom implemen
 `PublishingService` were in use) then it might also be some other type, for example an
 `org.w3c.dom.Document` or an `org.json.JSONObject` might be returned instead.
 
+
+
+
 === Fine-tuning the payload
 
 The `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the
@@ -86,7 +91,8 @@ by including that state within the payload.
 To accomplish this, an implementation of a "`PayloadFactory`" must be specified in the annotation. For actions,
 implement `@PublishedAction.PayloadFactory`:
 
-[source]
+
+[source,java]
 ----
 public @interface PublishedAction {
     public interface PayloadFactory {
@@ -104,7 +110,7 @@ the object instance returned from `payLoadFor(...)`.
 
 For objects, the interface to implement is `@PublishedObject.PayloadFactory`:
 
-[source]
+[source,java]
 ----
 public @interface PublishedObject {
 
@@ -137,7 +143,7 @@ public class ToDoItem {
 
 where `ToDoItemPayloadFactory` is defined as:
 
-[source]
+[source,java]
 ----
 public class ToDoItemChangedPayloadFactory implements PayloadFactory {
     public static class ToDoItemPayload
@@ -158,13 +164,16 @@ public class ToDoItemChangedPayloadFactory implements PayloadFactory {
 }
 ----
 
+
+
+
 == Default Implementations
 
 A simple implementation of `PublishingService` (which must be configured as a domain service) is available; it simply writes to stderr.
 
 The implementation is as follows:
 
-[source]
+[source,java]
 ----
 public interface PublishingService {
 ...
@@ -209,32 +218,45 @@ public interface EventSerializer {
 
 The default `PublishingService` (or indeed any implementation) can be configured to run with a different `EventSerializer` by configuring the serializer implementation in the `isis.properties` file.
 
-==== Configuration
+
+
+=== Configuration
 
 To configure the above, add the following to `isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.services=...,\
               org.apache.isis.applib.services.publish.PublishingService$StdErr,\
               ...
 ----
 
+
+
+
 == Alternative Implementations
 
-An alternative implementation of the `PublishingService` is provided by the link:../../components/objectstores/jdo/services/publishing-service-jdo.html[JDO Objectstore]. This implementation persists the events to a table.
+An alternative implementation of the `PublishingService` is provided by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module. This implementation persists the events to a table.
 
-An alternative implementation of the `EventSerializer` is provided by the link:../../components/viewers/restfulobjects/event-serializer-rospec.html[Restful Objects viewer]. This implementation serializes the payload using the conventions of the http://restfulobjects.org[Restful Objects spec].
+It also provides an implementation of the `EventSerializer` that (using API exposed by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer] serializes the payload using the conventions of the link:http://restfulobjects.org[Restful Objects spec].
+
+
 
 == Related Services
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with link:../recognized-annotations/PublishedAction.html[`@PublishedAction`]) and of changed objects (for objects annotated with link:../recognized-annotations/PublishedObject.html[@PublishedObject].
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:_ug_reference-annotations_manpage_Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:_ug_reference-annotations_manpage_DomainObject_publishing[`@DomainObject#publishing()`].
 
-The link:./event-bus-service.html[EventBusService] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propogation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+The xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propogation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+
+
+
 
 == Third-party integrations
 
 Dan Haywood's https://github.com/danhaywood/camel-isis-pubsubjdo[camel-isis-pubsubjdo] project up on github shows how to poll and process the persisted `PublishedEvent` table using http://camel.apache.org[Apache Camel].
+
+
+
 
 == Design Notes
 

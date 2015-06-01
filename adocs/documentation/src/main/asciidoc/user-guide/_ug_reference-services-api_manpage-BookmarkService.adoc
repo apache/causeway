@@ -42,9 +42,9 @@ If a domain class implements the `org.apache.isis.applib.bookmarks.BookmarkHolde
 
 == Usage within the framework
 
-Bookmarks are used by the link:./background-service.html[BackgroundCommandService], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+Bookmarks are used by the xref:_ug_reference-services-api_manpage-BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
-Bookmarks are also used by the link:./publishing-service.html[PublishingService] and the link:./auditing-service.html[AuditingService].
+Bookmarks are also used by the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] and the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`].
 
 == Implementations
 

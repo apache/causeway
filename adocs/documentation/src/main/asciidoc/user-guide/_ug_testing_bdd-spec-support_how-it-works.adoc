@@ -12,7 +12,7 @@ At a high level, here's how Cucumber works
 
 * Cucumber-JVM itself is a JUnit runner, and searches for https://github.com/cucumber/cucumber/wiki/Feature-Introduction[feature files] on the classpath.
 
-* These in turn are matched to http://cukes.info/step-definitions.html[step definition]s through regular expressions. +
+* These in turn are matched to link:https://github.com/cucumber/cucumber/wiki/Step-Definitions[step definition]s through regular expressions. +
 +
 It is the step definitions (the "glue") that exercise the system.
 

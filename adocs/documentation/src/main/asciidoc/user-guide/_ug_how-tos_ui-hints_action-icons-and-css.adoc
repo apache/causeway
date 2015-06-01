@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Apache Isis allows link:fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
+Apache Isis allows link:http://fortawesome.github.io/Font-Awesome/icons/[font awesome] icons to be associated with each action, and for link:http://getbootstrap.com/css/#buttons[Bootstrap CSS] to be applied to action rendered as buttons.
 
 These UI hint can be applied either to individual actions, or can be applied en-masse using pattern matching.
 
@@ -41,7 +41,7 @@ isis.reflector.facet.cssClassFa.patterns=\
                         run.*:fa-bolt
 ----
 
-where the key is a regex matching action names (eg `create.*`) and the value is a link:fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex.
+where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex.
 
 Similarly, the `isis.reflector.facet.cssClass.patterns` is a comma separated list of key:value pairs, eg:
 

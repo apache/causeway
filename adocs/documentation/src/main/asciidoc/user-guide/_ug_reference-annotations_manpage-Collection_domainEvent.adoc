@@ -156,7 +156,7 @@ rather than an error.
 == Raising events programmatically.
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
-wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
+wrapping the target object using the xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`] service.
 
 
 [NOTE]

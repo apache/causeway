@@ -9,7 +9,7 @@ The `WrapperFactory` service is responsible for wrapping a domain object in a dy
 
 [NOTE]
 ====
-`WrapperFactory` uses link:javassist.org[javassist] to perform its magic; this is the same technology that ORMs such as link:http://hibernate.org/[Hibernate] use to manage lazy loading/dirty tracking (DataNucleus uses a different mechanism).
+`WrapperFactory` uses link:http://www.javassist.org[javassist] to perform its magic; this is the same technology that ORMs such as link:http://hibernate.org/[Hibernate] use to manage lazy loading/dirty tracking (DataNucleus uses a different mechanism).
 ====
 
 

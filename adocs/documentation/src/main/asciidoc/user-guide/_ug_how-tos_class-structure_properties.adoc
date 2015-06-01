@@ -124,6 +124,7 @@ IMPORTANT: TODO
 
 
 
+[[_ug_how-tos_class-structure_properties_mapping-joda-dates]]
 == Mapping JODA Dates
 
 Isis' JDO objectstore bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
@@ -190,7 +191,7 @@ More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_
 
 Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
 
-As for link:mapping-joda-dates.html[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation. However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
+As for xref:_ug_how-tos_class-structure_properties_mapping-joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation. However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
 
 === Mapping Blobs
 

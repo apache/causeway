@@ -19,21 +19,24 @@ The modules themselves fall into four broad groups:
 
 * modules that provide an implementations of API defined by Apache Isis +
 +
-where Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command}[command], http://github.com/isisaddons/isis-module-auditing}[auditing], http://github.com/isisaddons/isis-module-publishing}[publishing], http://github.com/isisaddons/isis-module-security}[security]  and http://github.com/isisaddons/isis-module-sessionlogger}[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
+where Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditing], http://github.com/isisaddons/isis-module-publishing[publishing], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
 
 * modules that provide standalone domain services with their own API and implementation +
 +
-These are simply intended to be used by domain objects.  The http://github.com/isisaddons/isis-module-docx}[docx], http://github.com/isisaddons/isis-module-excel}[excel], http://github.com/isisaddons/isis-module-settings}[settings] and http://github.com/isisaddons/isis-module-stringinterpolator}[stringinterpolator] fall into this category.
+These are simply intended to be used by domain objects.  The http://github.com/isisaddons/isis-module-docx[docx], http://github.com/isisaddons/isis-module-excel[excel], http://github.com/isisaddons/isis-module-settings[settings] and http://github.com/isisaddons/isis-module-stringinterpolator[stringinterpolator] fall into this category.
 
 * modules that provide standalone domain entities (and supporting services) for a particular subdomain +
 +
-The http://github.com/isisaddons/isis-module-tags}[tags] module falls into this category
+The http://github.com/isisaddons/isis-module-tags[tags] module falls into this category
 
 * modules that provide developer utilities +
 +
-Not intended for use by either the framework or domain objects, but provide utilities that the developer themselves might use.  The http://github.com/isisaddons/isis-module-devutils}[devutils] module (not suprisingly) falls into this category
+Not intended for use by either the framework or domain objects, but provide utilities that the developer themselves might use.  The http://github.com/isisaddons/isis-module-devutils[devutils] module (not suprisingly) falls into this category
 
 Each of the modules has a full README and example application demonstrating their usage.  The sections below briefly outline the capabilities of these modules.
+
+
+
 
 == Command Service (persistence)
 
@@ -41,6 +44,7 @@ IMPORTANT: TODO
 
 === API
 === Isis addons implementation
+
 
 
 
@@ -76,7 +80,7 @@ IMPORTANT: TODO
 
 Isis' PublishingService API also has a companion API, the `EventSerializer`.  This provides a pluggable mechanism by which the event can be rendered into different formats.
 
-The http://github.com/isisaddons/isis-module-publishing}[Isis addons' publishing] module provides an implementation of this API -- `RestfulObjectsSpecEventSerializer` -- that reuses part of the implementation of the Restful Objects viewer to serialize the the provided `EventPayload` into the form specified by the http://restfulobjects.org[Restful Objects spec].
+The http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an implementation of this API -- `RestfulObjectsSpecEventSerializer` -- that reuses part of the implementation of the Restful Objects viewer to serialize the the provided `EventPayload` into the form specified by the http://restfulobjects.org[Restful Objects spec].
 
 For example, this is the JSON generated on an action invocation:
 

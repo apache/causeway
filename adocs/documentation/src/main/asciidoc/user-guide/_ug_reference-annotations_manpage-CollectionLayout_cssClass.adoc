@@ -41,7 +41,7 @@ public class ToDoItem {
 == Alternatives (`.layout.json`)
 
 As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
+xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file]
 can be specified, eg:
 
 [source,javascript]
@@ -68,7 +68,7 @@ Note that this (currently) only supports class members, not classes
 
 [NOTE]
 ====
-The similar link:./CssClassFa-deprecated.html[CssClassFa] annotation is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
+The similar xref:_ug_reference-annotations_manpage_CollectionLayout_cssClassFa[`@CollectionLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons] to be rendered on action butotns or as the icon for classes.
 ====
 
 

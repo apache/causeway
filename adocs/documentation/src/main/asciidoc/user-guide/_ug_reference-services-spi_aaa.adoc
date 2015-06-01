@@ -196,7 +196,7 @@ These services definitions depend on the internals of the framework.
 
 [WARNING]
 ====
-We do not guarantee that link:semver.org[semantic versioning] will be honoured for these APIs.
+We do not guarantee that link:http://semver.org[semantic versioning] will be honoured for these APIs.
 ====
 
 

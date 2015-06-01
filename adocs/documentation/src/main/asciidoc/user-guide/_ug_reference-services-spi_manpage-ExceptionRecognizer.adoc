@@ -4,25 +4,24 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+IMPORTANT: WIP
 
 
 
-Title: Exception Recognizers
 
 The `ExceptionRecognizer` API (in the `org.apache.isis.applib.services.exceprecog` package) provides the mechanism for
 both the domain programmer and also for components to be able to recognize and handle certain exceptions that may be
 thrown by the system.
 
-For example, the link:../../components/objectstores/jdo/about.html[JDO Objectstore] provides a set of recognizers to
-recognize and handle SQL constraint exceptions such as uniqueness violations. These can then be rendered back to the
-user as expected errors, rather than fatal stacktraces.
+For example, the JDO Objectstore provides a set of recognizers to recognize and handle SQL constraint exceptions such as uniqueness violations. These can then be rendered back to the user as expected errors, rather than fatal stacktraces.
+
+
 
 == API
 
 The `ExceptionRecognizer` interface is defined as:
 
-[source]
+[source,java]
 ----
 public interface ExceptionRecognizer {
     public String recognize(Throwable ex);
@@ -131,11 +130,11 @@ composite implementation that bundles up your fine-grained implementation; see t
 
 == Support
 
-In 1.7.0, only the link:../../components/viewers/wicket/about.html[Wicket viewer] supported this API.
+In 1.7.0, only the xref:_ug_wicket-viewer[Wicket viewer] supported this API.
 
 In 1.8.0, some checking of exception recognizers has moved deeper into core, specifically the (JDO) objectstore.
 In particular, if an exception is raised from the loading of an individual object, then this is passed by the
 registered ExceptionRecognizers. If any of these recognize the exception as representing a not-found exception, then
 a Isis `ObjectNotFoundException` is raised. Both the viewers interprets this correctly (the
-link:../../components/viewers/wicket/about.html[Wicket viewer] as a suitable error page, the
-link:../../components/viewers/restfulobjects/about.html[Restful Objects] viewer as a 404 status return code.
+xref:_ug_wicket-viewer[Wicket viewer] as a suitable error page, the
+xref:_ug_restfulobjects-viewer[Restful Objects viewer] as a 404 status return code.

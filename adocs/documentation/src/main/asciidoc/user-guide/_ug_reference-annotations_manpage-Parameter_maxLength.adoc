@@ -22,6 +22,7 @@ public class CustomerRepository {
         @Named("Last Name") String lastName) {
     ...
 }
+----
 
 
 If the model is being persisted to a relational database then `@MaxLength` should be specified for all `String` properties and action parameters.

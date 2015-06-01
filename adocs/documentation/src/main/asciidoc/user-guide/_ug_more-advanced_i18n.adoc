@@ -306,7 +306,7 @@ The basename for translation files is always `translations`; this cannot be alte
 
 === Externalized translation files
 
-Normally Isis configuration files are read from the `WEB-INF` file. However, Isis can be configured to read config files from an link:../reference/externalized-configuration.html[external directory]; this is also supported for translations.
+Normally Isis configuration files are read from the `WEB-INF` file. However, Isis can be configured to read config files from an xref:_ug_deployment_externalized-configuration[external directory]; this is also supported for translations.
 
 Thus, if in `web.xml` the external configuration directory has been set:
 
@@ -370,7 +370,7 @@ This allows a translator to edit the appropriate `translations-xx-XX.po` file an
 
 == Migrating from v1.6.0 to 1.7.0
 
-In v1.7.0 we've continued the work started in link:migrating-to-1.6.0.html[1.6.0] in modularizing the framework. The most important change to note is that all Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to [http://www.isisaddons.org](Isis Addons).
+In v1.7.0 we've continued the work started in v1.6.0 in modularizing the framework. The most important change to note is that all Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to [http://www.isisaddons.org](Isis Addons).
 
 In addition, we've retired some obsolete (and unused) functionality, specifically the `ProfileStore` component.
 

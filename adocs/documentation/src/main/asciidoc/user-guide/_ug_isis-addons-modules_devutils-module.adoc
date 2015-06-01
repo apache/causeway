@@ -5,14 +5,18 @@
 :_imagesdir: images/
 
 
-
-{note
+[NOTE]
+====
 In 1.6.0 this implementation was released as part of _org.apache.isis.core:isis-module-devutils-jdo:1.6.0_ and was also released as an http://github.com/isisaddons/isis-module-devutils[Isis addon] module. *In 1.7.0+ only the http://github.com/isisaddons/isis-module-devutils[Isis addon] implementation is released.*
-}
+====
 
-The `DeveloperUtilitiesService` service provides a number of development-time utilities, mostly related to accessing/interacting with the Isis metamodel. These are visible in the UI, either as menu actions or as contributed actions. All actions are annotated with link:../recognized-annotations/Prototype-deprecated.html[@Prototype], so are suppressed in link:../deployment-type.html[production mode].
 
-=== API
+The `DeveloperUtilitiesService` service provides a number of development-time utilities, mostly related to accessing/interacting with the Isis metamodel. These are visible in the UI, either as menu actions or as contributed actions. All actions are annotated with xref:_ug_reference-annotations_manpage_Action_restrictTo[`@Action#restrictTo()`] to restrict to prototype mode (suppressed from production mode).
+
+
+
+
+== API
 
 The API defined by `DeveloperUtilitiesService` (some annotations omitted) is:
 
@@ -44,7 +48,7 @@ The developer can then review the metadata that has Isis has captured about each
 
 * `downloadLayouts()` allows the developer can download a ZIP file of `Xxx.layout.json` files for each domain type in the Isis metamodel.
 
-This is useful if converting a domain model to use link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts].
+This is useful if converting a domain model to use xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts].
 
 * `downloadLayout()` (contributed action) allows the developer can download the `Xxx.layout.json` for an individual object
 
@@ -52,21 +56,19 @@ This is useful if converting a domain model to use link:../../components/viewers
 
 `refreshServices()` allows the developer to rebuild the Isis metamodel of all domain services. This is particularly useful for picking up changes to link:../../more-advanced-topics/how-to-01-062-How-to-decouple-dependencies-using-contributions.html[contributed actions]
 
-The `refreshLayout()` (which rebuild the Isis metamodel of the current object so that the UI refreshes) has been deprecated and hidden; the link:../../components/viewers/wicket/about.html[Wicket viewer]) (when running in prototype mode) now automatically does this does this.
+The `refreshLayout()` (which rebuild the Isis metamodel of the current object so that the UI refreshes) has been deprecated and hidden; the xref:_ug_wicket-viewer[Wicket viewer]) (when running in prototype mode) now automatically does this does this.
 
-=== Implementations
+
+
+
+== Implementations
 
 The core framework provides a default implementation of this API:
 
 * `org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault`
 
-=== Register the Service
 
-The service is registered, like any other, in `isis.properties`:
 
-[source]
-----
-isis.services=...,\
-              org.apache.isis.core.metamodel.services.devutils.DeveloperUtilitiesServiceDefault,\
-              ...
-----
+== Register the Service
+
+So long as the Maven module is on the classpath, the domain services are automatically registered.

@@ -153,11 +153,11 @@ rather than an error.
 == Raising events programmatically.
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
-wrapping the target object using the link:../services/wrapper-factory.html[Wrapper Factory] service.
+wrapping the target object using the xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`] service.
 
 
 [NOTE]
 ====
-Interaction events can also be raised for link:./ActionInteraction.html[actions] and link:./CollectionInteraction.html[collections].
+Domain events can also be raised for xref:_ug_reference-annotations_manpage_Action_domainEvent[actions] and xref:_ug_reference-annotations_manpage_Collection_domainEvent[collections].
 ====
 

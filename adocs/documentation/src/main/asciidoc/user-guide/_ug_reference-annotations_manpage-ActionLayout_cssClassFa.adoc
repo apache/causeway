@@ -50,8 +50,7 @@ is no need to include the "fa" class; it will be automatically appended.
 
 == Alternatives (`.layout.json`)
 
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layout file]
+As an alternative to using the `@CssClass` annotation, the `.layout.json` xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file]
 can be specified, eg:
 
 [source,javascript]
@@ -85,7 +84,7 @@ Note that this (currently) only supports class members, not classes.
 
 [NOTE]
 ====
-The similar link:./CssClass-deprecated.html[CssClass] annotation is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:_ug_reference-annotations_manpage_ActionLayout_cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
 
 

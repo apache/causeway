@@ -19,7 +19,7 @@ By default, actions are invoked in directly in the thread of the invocation.
 
 Each action invocation is reified by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service into a `Command` object, capturing details of the target object, the action, the parameter arguments, the user, a timestamp and so on.
 
-If an appropriate `CommandService` is configured (for example using (non-ASF) http://github.com/isisaddons/isis-module-command}[Isis addons' command] module), then the `Command` itself is persisted.  If there is an implementation of `BackgroundCommandService` (as the http://github.com/isisaddons/isis-module-command}[Isis addons' command] module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
+If an appropriate `CommandService` is configured (for example using (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module), then the `Command` itself is persisted.  If there is an implementation of `BackgroundCommandService` (as the http://github.com/isisaddons/isis-module-command[Isis addons' command] module does provide), then this means in turn that the `BackgroundService` can be used by the domain object code to programmatically create background ``Command``s.
 
 [NOTE]
 ====

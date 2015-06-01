@@ -79,7 +79,7 @@ public class ToDoItem {
 ----
 
 For view models that have been annotated with `@ViewModel` (rather than `@DomainObject(nature=VIEW_MODEL)` the
-equivalent link:./ViewModelLayout.html[@ViewModelLayout] can be used.
+equivalent xref:_ug_reference-annotations_manpage_VewModelLayout[`@VewModelLayout`] can be used.
 
 
 

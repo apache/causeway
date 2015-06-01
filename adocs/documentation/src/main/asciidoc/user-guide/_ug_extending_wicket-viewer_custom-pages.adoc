@@ -6,7 +6,7 @@
 
 
 
-In the vast majority of cases customization should be sufficient by link:./customizing-the-viewer.html[replacing elements of a page]. However, it is also possible to define an entirely new page for a given page type.
+In the vast majority of cases customization should be sufficient by xref:_ug_extending_wicket-viewer_replacing-page-elements[replacing elements of a page]. However, it is also possible to define an entirely new page for a given page type.
 
 Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.models.PageType` enum):
 

@@ -52,7 +52,7 @@ See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translatio
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
 See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +

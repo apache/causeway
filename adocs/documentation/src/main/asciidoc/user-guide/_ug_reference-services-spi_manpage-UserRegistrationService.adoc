@@ -10,11 +10,11 @@ IMPORTANT: TODO
 
 Title: User Registration Service (1.8.0)
 
-The user registration service API provides the ability for users to sign-up to access an application by providing a valid email address. The Wicket viewer will check whether an implementation of this service (and also the link:./email-notification-service.html[email notification service]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned link:./email-notification-service.html[email notification service]) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls this service in order to create an account for them, and then logs the user on.
+The user registration service API provides the ability for users to sign-up to access an application by providing a valid email address. The Wicket viewer will check whether an implementation of this service (and also the xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls this service in order to create an account for them, and then logs the user on.
 
 The user registration API also includes the ability to reset password, again by sending a verification email to the provided email address.
 
-See link:../../components/viewers/wicket/user-registration.html[here] for more on the Wicket viewer's support.
+See xref:_ug_wicket-viewer_features_user-registration[here] for more on the Wicket viewer's support.
 
 Domain objects may also use this service; it will be injected into domain object or other domain services in the usual way. (That said, we expect that such use cases will be comparatively rare; the primary use case is for the Wicket viewer's sign-up page).
 
@@ -59,8 +59,8 @@ There is no default implementation of the service provided by the core framework
 
 The most common use case is to allow users to sign-up through Isis' Wicket viewer. Because the process requires email to be sent, the following services must be configured:
 
-* `EmailService` (as described link:./email-service.html[here]).
-* `EmailNotificationService` (as described link:./email-notification-service.html[here]).
+* xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]
+* xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`]
 * `UserRegistrationService` (this service)
 
 The `EmailService` in particular requires additional configuration properties to specify the external SMTP service.

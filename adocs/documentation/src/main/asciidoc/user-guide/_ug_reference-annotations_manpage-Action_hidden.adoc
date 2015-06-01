@@ -26,7 +26,7 @@ The only value that currently makes sense is `EVERYWHERE` (or its synonym `ANYWH
 
 [TIP]
 ====
-It is also possible to use `@ActionLayout` or link:../../components/viewers/wicket/dynamic-layouts.html[dynamic layouts] such that the action can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+It is also possible to use `@ActionLayout` or xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] such that the action can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
 [NOTE]

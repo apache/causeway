@@ -21,59 +21,7 @@ Another workaround is to wrap each value in a view model, as explained in this x
 
 
 
-== Managed 1-m bidirectional relationships
 
-When an object is added to a 1:m bidirectional relationship, the child object must refer to the parent and the child must be added to the parent's children collection.
-
-If there were no database involved then we would have recommended that you use the link:http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf[mutual registration] pattern to ensure that both the parent and child are updated correctly.
-
-[TIP]
-====
-The `modifyXxx()` and `clearXxx()` supporting methods were introduced in the framework primarily to help support implement the mutual registration pattern.  This dates from
-====
-
-However, in a relational database, these two operations in the domain object model correspond simply to updating the foreign key of the child table to reference the parent's primary key.
-
-So long as the parent's children collection is a `java.util.Set` (rather than a `Collection` or a `List`), the JDO Objectstore will automatically maintain both sides of the relationship. All that is necessary is to set the child to refer to the parent.
-
-For example, all you need write is:
-
-[source,java]
-----
-public class Department {
-    @javax.jdo.annotations.Persistent(mappedBy="department") // <1>
-    private SortedSet<Employee> employees = new TreeSet<Employee>();
-
-    public SortedSet<Employee> getEmployees() { ... }
-    public void setEmployees(SortedSet<Employee> employees) { ... }
-    ...
-}
-
-public class Employee {
-    private Department department;
-    public Department getDepartment() { ... }
-    public void setDepartment(Department department) { ... }
-    ...
-}
-----
-<1> it's the `mappedBy` attribute that tells DataNucleus this is a bidirectional relationship.  The value "department" refers to the Employee#department property.
-
-Moreover, when maintaining a bidirectional 1-n relationship that is automatically managed by DataNucleus, it's preferred to "add" to the parent's child collection, don't set the parent on the child.
-
-[WARNING]
-====
-If you don't do this then you may (as of Isis 1.4.1) hit an NullPointerException. This may be a bug in DataNucleus, we are not completely sure, but the above idiom seems to fix the issue.
-
-For more information, see http://isis.markmail.org/thread/ipu2lzqqikqdglox[this thread] on the Isis users mailing list, including this http://markmail.org/message/hblptpw675mlw723[message] with the above recommendation.
-====
-
-[WARNING]
-====
-In fact, not only do you not need to manually maintain the relationship, we have noted on at least http://markmail.org/message/agnwmzocvdfht32f[one occasion] a subtle error if the code is programmatically added.
-
-The error in that case was that the same object was contained in the parents collection. This of course should not happen for a `TreeSet`. However, JDO/DataNucleus replaces the `TreeSet` with its own implementation, and (either by design or otherwise) this does not enforce `Set` semantics.
-
-The upshot is that you should NEVER programmatically add the child object to the parent's collection if using JDO Objectstore.
-====
+include::_ug_how-tos_class-structure_collections_managed-1-to-m-bidirectional-relationships.adoc[leveloffset=+1]
 
 

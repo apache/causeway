@@ -101,7 +101,7 @@ Some articles and recorded material relating to either Apache Isis (or its prede
 
 .2+|2004
 |University College, Dublin
-|*Richard Pawson's link:resouces/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
+|*Richard Pawson's link:resources/core-concepts/Pawson-Naked-Objects-thesis.pdf[PhD thesis on Naked Objects]*
 
 |Article series, TheServerSide
 |* Part 1 - http://www.theserverside.com/news/1365562/Part-1-The-Case-for-Naked-Objects-Getting-Back-to-the-Object-Oriented-Ideal[The Case for Naked Objects - Getting Back to the Object-Oriented Ideal]

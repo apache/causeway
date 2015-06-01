@@ -98,7 +98,7 @@ public class ToDoItem {
 }
 ----
 
-Unlike link:./PropertyLayout.html[properties], it (currently) isn't possible to specify layout hints for action parameters using the `.layout.json` file.
+Unlike xref:_ug_reference-annotations_manpage_PropertyLayout[`@PropertyLayout`], it (currently) isn't possible to specify layout hints for action parameters using the `.layout.json` file.
 
 
 [TIP]

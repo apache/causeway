@@ -116,4 +116,4 @@ The `QueryResultsCache` class is automatically registered (it is annotated with 
 
 === Related Services
 
-The link:./scratchpad.html[ScratchPad] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the link:../recognized-annotations/Bulk.html[@Bulk] annotation.
+The xref:_ug_reference-services-api_manpage-Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:_ug_reference-annotations_manpage_Action_invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

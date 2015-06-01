@@ -13,11 +13,13 @@ For 1.7.0+, see the http://github.com/isisaddons/isis-module-command[Isis addons
 
 
 
-The `BackgroundCommandService` supports the link:./background-service.html[BackgroundService], persisting action invocations as commands such that they can subsequently be invoked in the background.
+The `BackgroundCommandService` supports the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`], persisting action invocations as commands such that they can subsequently be invoked in the background.
 
-The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the `BackgroundCommandService` to actually persist it. The `isis-module-command-jdo` module provides an implementation of `BackgroundCommandService` (link:../../components/objectstores/jdo/services/background-command-service-jdo.html[BackgroundCommandServiceJdo]) that persists to an RBMS entities.
+The `BackgroundService` is responsible for capturing a memento representing the action invocation, and then hands off to the xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] `BackgroundCommandService` to actually persist it. The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation of `BackgroundCommandService` that persists to an RBMS entities.
 
-The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them. The abstract link:./background-service.html#BackgroundCommandExecution[BackgroundCommandExecution] provides a mechanism to do this; the `isis-module-command-jdo` provides a concrete subclass (`BackgroundCommandExecutionFromBackgroundCommandServiceJdo`) that knows how to query for persisted (background) `Command`s such that they can be executed by a scheduler.
+The persisting of commands is only half the story; there needs to be a separate process to read the commands and execute them. The abstract xref:_ug_reference-services-api_manpage-BackgroundService_BackgroundCommandExecution[`BackgroundCommandExecution`] provides a mechanism to do this.  The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides a concrete subclass (`BackgroundCommandExecutionFromBackgroundCommandServiceJdo`) that knows how to query for persisted (background) `Command`s such that they can be executed by a scheduler.
+
+
 
 == BackgroundCommandService
 
@@ -39,7 +41,7 @@ public interface BackgroundCommandService {
 }
 ----
 
-where `ActionInvocationMemento` is a wrapper around a link:./memento-service.html[MementoService]'s `Memento`, capturing the details of an action invocation (for execution later on).
+where `ActionInvocationMemento` is a wrapper around a xref:_ug_reference-services-api_manpage-MementoService[`MementoService`]'s `Memento`, capturing the details of an action invocation (for execution later on).
 
 For the record, the API of `ActionInvocationMemento` is:
 
@@ -63,7 +65,7 @@ The `asMementoString()` method therefore lets the `BackgroundCommandService` imp
 
 === Implementation
 
-The `isis-module-command-jdo` module provides the link:../../components/objectstores/jdo/services/background-command-service-jdo.html[BackgroundCommandServiceJdo] implementation that persists `Command`s to an RDBMS.
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides the  `BackgroundCommandServiceJdo` implementation that persists `Command`s to an RDBMS.
 
 There is also a supporting repository to query persisted background `Command`s:
 
@@ -79,11 +81,11 @@ As noted above, this service isn't intended to be called from domain classes; ra
 
 == Related Services
 
-As discussed above, this service supports the link:./background-service.html[BackgroundService], persisting `Command`s such that they can be executed in the background.
+As discussed above, this service supports the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] , persisting `Command`s such that they can be executed in the background.
 
-There is also a tie-up with the link:./command-context.html[CommandContext] and its supporting `CommandService` service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s (analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s). The `BackgroundCommandService` ensures that these background `Command`s are associated with the parent "foreground" `Command`.
+There is also a tie-up with the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] and its supporting xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] domain service. The `CommandContext` service is responsible for providing a parent `Command` with which the background `Command`s can then be associated as children, while the `CommandService` is responsible for persisting those parent `Command`s (analogous to the way in which the `BackgroundCommandService` persists the child background `Command`s). The `BackgroundCommandService` ensures that these background `Command`s are associated with the parent "foreground" `Command`.
 
-What that means is that the implementations of `CommandService` and `BackgroundCommandService` go together, hence both implemented in the `isis-module-command-jdo` module: (link:../../components/objectstores/jdo/services/command-service-jdo.html[CommandServiceJdo] and link:../../components/objectstores/jdo/services/background-command-service-jdo.html[BackgroundCommandServiceJdo]).
+What that means is that the implementations of `CommandService` and `BackgroundCommandService` go together, hence both implemented in the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module.).
 
 == BackgroundCommandExecution concrete implementation
 
@@ -107,7 +109,7 @@ The `isis-module-command-jdo` module provides a concrete subclass that queries f
 
 == Quartz Scheduler Configuration
 
-Details are provided on the link:./background-service.html[BackgroundService] page.
+Details are provided on the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] page.
 
 == Registering the Services
 

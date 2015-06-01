@@ -63,7 +63,7 @@ image::{_imagesdir}testing/fixture-scripts/prompt.png[width="700px",link="{_imag
 
 when this is executed, the resultant objects (actually, instances of FixtureResult`) are shown in the UI:
 
-image::{_imagesdir}testing/fixture-scripts/result-list.png[width="700px",link="_imagesdir}testing/fixture-scripts/result-list.png"]
+image::{_imagesdir}testing/fixture-scripts/result-list.png[width="700px",link="{_imagesdir}testing/fixture-scripts/result-list.png"]
 
 
 
@@ -144,7 +144,7 @@ public class RecreateSimpleObjects extends FixtureScript {                   // 
 }
 ----
 <1> inherit from `org.apache.isis.applib.fixturescripts.FixtureScript`
-<2> a hard-coded list of values for the names.  Note that the http://github.com/isisaddons/isis-module-fakedata}[Isis addons' fakedata] module (non-ASF) could also have been used
+<2> a hard-coded list of values for the names.  Note that the http://github.com/isisaddons/isis-module-fakedata[Isis addons' fakedata] module (non-ASF) could also have been used
 <3> whether the script is "discoverable"; in other words whether it should be rendered in the drop-down by the `FixtureScripts` service
 <4> input property: the number of objects to create, up to 10; for the calling test to specify, but note this is optional and has a default (see below).  It's important that a wrapper class is used (ie `java.lang.Integer`, not `int`)
 <5> output property: the generated list of objects, for the calling test to grab
@@ -256,25 +256,25 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 There are lots of ways to organize fixture scripts, but we've used them as either:
 
-* a fairly flat style, eg as in the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype], also as in the http://github.com/isisaddons/isis-app-todoapp}[Isis addons' todoapp];
+* a fairly flat style, eg as in the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype], also as in the http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp];
 
 * in a "composite pattern" style, eg as in the https://github.com/estatio/estatio/blob/ea20a6ce257acede50de6ce4fd2ff29713fcd689/estatioapp/fixture/src/main/java/org/estatio/fixture/invoice/InvoiceForLeaseItemTypeOfDiscountOneQuarterForOxfMiracle005.java#L66)[Estatio open source app].
 
 These two styles are probably best illustrated with, well, some illustrations.  Here's a fixture script in the "flat" style for setting up a customer with some orders, a number of which has been placed:
 
-image::{_imagesdir}testing/fixture-scripts/flat-1.png[width="700px",link="_imagesdir}testing/fixture-scripts/flat-1.png"]
+image::{_imagesdir}testing/fixture-scripts/flat-1.png[width="700px",link="{_imagesdir}testing/fixture-scripts/flat-1.png"]
 
 Notice how we have a single script that's in control of the overall process, and takes responsibility for passing data from one fixture script to the next.
 
 Here's a similar, simpler script, from the same fictional app, to set up two customers:
 
-image::{_imagesdir}testing/fixture-scripts/flat-2.png[width="500px",link="_imagesdir}testing/fixture-scripts/flat-2.png"]
+image::{_imagesdir}testing/fixture-scripts/flat-2.png[width="500px",link="{_imagesdir}testing/fixture-scripts/flat-2.png"]
 
 We can reuse the same fixture "customer" script, either calling it twice or (perhaps better) passing it an array of customer details to set up.
 
 With the composite style, we rely on each fixture script to set up its own prerequisites.  Thus:
 
-image::{_imagesdir}testing/fixture-scripts/composite.png[width="550px",link="_imagesdir}testing/fixture-scripts/composite.png"]
+image::{_imagesdir}testing/fixture-scripts/composite.png[width="550px",link="{_imagesdir}testing/fixture-scripts/composite.png"]
 
 Back in the earlier section we noted the `MultipleExecutionStrategy` setting.  We can now explain the meaning of this: the enum value of `EXECUTE` is designed for the flat style (where every fixture script will be called), whereas the enum value of `IGNORE` is designed for the composite style, and ensures that any fixture scripts visited more than once (eg TearDown) are only every executed the first time.
 

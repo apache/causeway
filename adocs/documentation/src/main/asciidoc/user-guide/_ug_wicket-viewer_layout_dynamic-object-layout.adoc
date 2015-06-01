@@ -113,7 +113,7 @@ Note also that the layout file may contain entries for xref:_ug_how-tos_contribu
 
 == Downloading an initial layout file
 
-The fastest way to get started is to use the http://github.com/isisaddons/isis-module-devutils}[Isis addons' devutils] module (non-ASF) to download the layout file (derived from any existing static metadata defined by annotations).
+The fastest way to get started is to use the http://github.com/isisaddons/isis-module-devutils[Isis addons' devutils] module (non-ASF) to download the layout file (derived from any existing static metadata defined by annotations).
 
 
 
@@ -154,7 +154,7 @@ Therefore, make sure the following is added to the dom project's `pom.xml`:
 </resources>
 ----
 
-If using an Isis link:../../../intro/getting-started/simple-archetype.html[archetype], then the POM is already correctly configured.
+If using an Isis xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
 
 
 
