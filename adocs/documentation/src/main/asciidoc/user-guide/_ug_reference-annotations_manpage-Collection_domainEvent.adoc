@@ -34,6 +34,12 @@ public class ToDoItem {
 
 The purpose of the `domainEvent()` attribute is to allows a custom subclass to be emitted instead.
 
+[NOTE]
+====
+As you might expect, it is also possible to influence the domain event type raised for xref:_ug_reference-annotations_manpage-Action_domainEvent[actions] and xref:_ug_reference-annotations_manpage-Property_domainEvent[properties].
+====
+
+
 For example:
 
 [source,java]
@@ -55,11 +61,6 @@ public class ToDoItem {
 
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
-
-[NOTE]
-====
-As you might expect, it is also possible to influence the domain event type raised for xref:_ug_reference-annotations_manpage-Action_domainEvent[actions] and xref:_ug_reference-annotations_manpage-Property_domainEvent[properties].
-====
 
 
 

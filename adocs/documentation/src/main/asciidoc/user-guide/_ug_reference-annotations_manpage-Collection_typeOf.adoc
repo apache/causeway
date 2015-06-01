@@ -5,29 +5,27 @@
 :_imagesdir: images/
 
 
-
-IMPORTANT: WIP ... this section
-
-
-The `@TypeOf` annotation is used to specify the type of elements in a collection, when for whatever reason it is not possible to use generics.
+The `typeOf()` attribute specifies the expected type of an element contained within a collection when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
 
 [NOTE]
 ====
-Given that Apache Isis only supports Java 1.7 and later, it's not that obvious what such a reason might be...
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-Action_typeOf[actions].
 ====
-
 
 For example:
 
 [source,java]
 ----
-public void AccountService {
-    @TypeOf(Customer.class)
-    public List errantAccounts() {
-        return CustomerDatabase.allNewCustomers();
-    }
+public void Customer {
+    @TypeOf(Order.class)
+    public SortedSet getOutstandingOrders() { ... }
     ...
 }
 ----
+
+[TIP]
+====
+In general we recommend that you use generics instead, eg `SortedSet<Order>`.
+====
 
 

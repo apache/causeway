@@ -25,7 +25,7 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-Collection_editing[`editing()`]
-|`ENABLED`,`DISABLED`,`AS_CONFIGURED` +
+|`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
 (`AS_CONFIGURED`)
 |whether a collection can be added to or removed from within the UI
 
@@ -36,18 +36,26 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-Collection_hidden[`hidden()`]
-|
-|
+|`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the collection should be hidden from the user.
 
 
 |xref:_ug_reference-annotations_manpage-Collection_notPersisted[`notPersisted()`]
-|
-|
+|`true`, `false` +
+(`false`)
+|whether to exclude from snapshots. +
+
+[WARNING]
+====
+Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in order to not be persisted.
+====
+
 
 
 |xref:_ug_reference-annotations_manpage-Collection_typeOf[`typeOf()`]
 |
-|
+|hints as to the run-time type of the objects within that collection (as a fallback)
 
 |===
 

@@ -24,6 +24,9 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import javax.jdo.annotations.NotPersistent;
+
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.spec.Specification;
 
@@ -117,7 +120,11 @@ public @interface Property {
     // //////////////////////////////////////
 
     /**
-     * Indicates that the property should not be persisted.
+     * Indicates that the property should be excluded from snapshots.
+     *
+     * <p>
+     *     To ensure that the property is actually not persisted in the objectstore, also annotate with {@link NotPersistent}.
+     * </p>
      */
     boolean notPersisted() default false;
 

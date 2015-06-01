@@ -16,7 +16,7 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 |===
 |Property
 |Value +
-(_default value_)
+(default value)
 |Description
 
 |`isis.services`
@@ -32,38 +32,53 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 `translation.po.mode`
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
+
 See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
 
 |`isis.services.` +
 `command.actions`
 | `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically reified into commands (for actions annotated with xref:_ug_reference-annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+|Whether actions should be automatically reified into commands (for actions annotated with xref:_ug_reference-annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+
+`ignoreQueryOnly` is an alias for `ignoreSafe`.
 
 |`isis.services.` +
 `publish.actions`
 | `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically published (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`].  `ignoreQueryOnly` is an alias for `ignoreSafe`.
+|Whether actions should be automatically published (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+
+`ignoreQueryOnly` is an alias for `ignoreSafe`.
+
+|`isis.object.` +
+`editing`
+| `true`,`false` (`true`)
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:_ug_runtime_configuring-core_isis-objects-editing[below] for further discussion.
 
 |`isis.persistor.` +
 `disableConcurrencyChecking`
-| `true`,`false` (`_false_`)
-| Disables concurrency checking globally.  Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
+| `true`,`false` (`false`)
+| Disables concurrency checking globally.  +
+
+Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
 
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+
 See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `cssClass.patterns`
 |regex:css1,regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+
 See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facets`
 |`FQCN`
-|Fully qualified class names of a custom implementation of `ProgrammingModel` interface.
+|Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
+
 See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
@@ -76,24 +91,40 @@ See xref:_ug_extending_programming-model_finetuning[finetuning the programming m
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
+
 See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.validator`
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
+
 See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `allowDeprecated`
-| `true`,`false` (`_true_`)
+| `true`,`false` (`true`)
 | Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
 
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout]s. +
+
 See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 |===
 
+
+
+[[_ug_runtime_configuring-core_isis-objects-editing]]
+== `isis.objects.editing`
+
+This configuration property in effect allows editing to be disabled globally for an application:
+
+[source,ini]
+----
+isis.objects.editing=false
+----
+
+We recommend enabling this feature; it will help drive out the underlying business operations (processes and procedures) that require objects to change; these can then be captured as business actions.
 

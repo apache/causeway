@@ -32,7 +32,7 @@ The table below summarizes the annotation's attributes.
 
 
 |`commandPersistence()`
-|`PERSISTED`,`NOT_PERSISTED`,`IF_HINTED` +
+|`PERSISTED`, `NOT_PERSISTED`, `IF_HINTED` +
 (`PERSISTED`)
 |whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] has been configured).
 
@@ -44,7 +44,7 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-Action_hidden[`hidden()`]
-|`EVERYWHERE`,`NOWHERE` +
+|`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
@@ -63,7 +63,7 @@ Currently this is only supported for no-arg actions.
 |whether changes to the object should be published to the registered xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 
 |`publishingPayloadFactory()`
-|subtype of `PublishingPayloadFactoryForAction` (none)
+|subtype of `PublishingPayloadFactory-` `ForAction` (none)
 |specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event
 
 

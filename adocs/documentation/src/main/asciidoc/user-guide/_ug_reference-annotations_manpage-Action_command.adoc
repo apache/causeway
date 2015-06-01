@@ -28,10 +28,6 @@ If background ``Command``s are used, then an external scheduler, using xref:_ug_
 
 
 
-
-
-== `command()`
-
 The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service).
 
 The default is `AS_CONFIGURED`, meaning that the configuration property `isis.services.command.actions` is used to determine the whether the action is reified:
@@ -40,7 +36,7 @@ The default is `AS_CONFIGURED`, meaning that the configuration property `isis.se
 +
 all actions are reified
 
-* `ignoreSafe` (or `ignoreQueryOnly`)+
+* `ignoreSafe` (or `ignoreQueryOnly`) +
 +
 actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
 
@@ -84,7 +80,8 @@ To explain this last alternative:
 public class Order {
     @Action(
         command=CommandReification.ENABLED,
-        commandPersistence=CommandPersistence.IF_HINTED)
+        commandPersistence=CommandPersistence.IF_HINTED
+    )
     public Invoice generateInvoice(...) { ... }
 }
 ----
@@ -99,7 +96,8 @@ public class Order {
     @Command(
         command=CommandReification.ENABLED,
         commandExecuteIn=CommandExecuteIn.FOREGROUND,
-        commandPersistence=CommandPersistence.NOT_PERSISTED)
+        commandPersistence=CommandPersistence.NOT_PERSISTED
+    )
     public Invoice generateInvoice(...) { ... }
 }
 ----

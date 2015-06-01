@@ -28,14 +28,16 @@ It is also possible to apply the annotation to actions of domain services that a
 |the event type to be posted to the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
-|xref_ug_reference-annotations_manpage-Property_editing[`editing()`]
-|
-|
+|xref:_ug_reference-annotations_manpage-Property_editing[`editing()`]
+|`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
+(`AS_CONFIGURED`)
+|whether a property can be modified or cleared from within the UI
 
 
 |xref:_ug_reference-annotations_manpage-Property_hidden[`hidden()`]
-|
-|
+|`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the property should be hidden from the user.
 
 
 |xref:_ug_reference-annotations_manpage-Property_maxLength[`maxLength()`]
@@ -49,8 +51,14 @@ It is also possible to apply the annotation to actions of domain services that a
 
 
 |xref:_ug_reference-annotations_manpage-Property_notPersisted[`notPersisted()`]
-|
-|
+|`true`, `false` +
+(`false`)
+|whether to exclude from snapshots. +
+
+[WARNING]
+====
+Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in order to not be persisted.
+====
 
 
 |xref:_ug_reference-annotations_manpage-Property_optionality[`optionality()`]
