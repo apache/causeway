@@ -112,12 +112,31 @@ See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to l
 
 See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
+|`isis.viewers.` +
+`propertyLayout.labelPosition`
+|`TOP`, `LEFT` +
+(`LEFT`)
+|Default for label position for all properties if not explicitly specified using xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+
 |===
+
+
+[source,ini]
+----
+
+----
+
+or
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=LEFT
+----
 
 
 
 [[_ug_runtime_configuring-core_isis-objects-editing]]
-== `isis.objects.editing`
+== `objects.editing`
 
 This configuration property in effect allows editing to be disabled globally for an application:
 
@@ -128,3 +147,26 @@ isis.objects.editing=false
 
 We recommend enabling this feature; it will help drive out the underlying business operations (processes and procedures) that require objects to change; these can then be captured as business actions.
 
+
+
+[[_ug_runtime_configuring-core_isis-viewers-propertyLayout-labelPosition]]
+== `propertyLayout.labelPosition`
+
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
+frustrating to have to annotate every property.
+
+Instead, a default can be specified in `isis.properties`:
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=TOP
+----
+
+or
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=LEFT
+----
+
+If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.

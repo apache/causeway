@@ -15,3 +15,28 @@ can be used instead, eg:
 [source,javascript]
 ----
 ----
+
+
+
+[TIP]
+.Specifying a default setting for label positions
+====
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
+
+Instead, a default can be specified in `isis.properties`:
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=TOP
+----
+
+or
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=LEFT
+----
+
+If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+====
+

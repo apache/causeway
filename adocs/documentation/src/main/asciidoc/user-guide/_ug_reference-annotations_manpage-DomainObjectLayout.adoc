@@ -21,43 +21,47 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking[`bookmarking()`]
-|
-|
+|`AS_ROOT`, `AS_CHILD`, `NEVER` +
+(`NEVER`)
+|whether (and how) this domain object should be automatically bookmarked
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssclass[`cssClass()`]
-|
+|Any string valid as a CSS class
 |the css class that a domain class (type) should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`cssClassFa()`]
-|
-|the name of this class (overriding the name derived from its name in code)
+|Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
+|specify a font awesome icon for the action's menu link or icon. +
 
 
 |`cssClassFaPosition()`
-|
-|the name of this class (overriding the name derived from its name in code)
+|`LEFT`, `RIGHT` +
+(`LEFT`)
+|Currently unused.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[`describedAs()`]
-|
+|String.
 |description of this class, eg to be rendered in a tooltip.
 
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[`named()`]
-|
-|
+|String.
+|to override the name inferred from the action's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[`paged()`]
-|
+|Positive integer
 |the page size for instances of this class when rendered within a table.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_plural[`plural()`]
-|
+|String.
 |the plural name of the class
 
 |===

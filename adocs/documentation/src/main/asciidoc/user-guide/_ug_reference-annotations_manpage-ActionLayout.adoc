@@ -34,7 +34,7 @@ For a domain service action to be contributed, the domain services must have a x
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|an additional CSS class around the HTML that represents for the action, to allow additional styling. +
+|an additional CSS class around the HTML that represents for the action, to allow targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]. +
 
 Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
 
@@ -42,8 +42,6 @@ Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by 
 |xref:_ug_reference-annotations_manpage-ActionLayout_cssClassFa[`cssClassFa()`]
 |Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
 |specify a font awesome icon for the action's menu link or icon. +
-
-Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
 
 
 |`cssClassFaPosition()`
@@ -58,7 +56,7 @@ Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by 
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_hidden[`hidden()`]
-|`EVERYWHERE`,`NOWHERE` +
+|`EVERYWHERE`, `NOWHERE` +
 (`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 

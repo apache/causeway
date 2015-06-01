@@ -20,23 +20,26 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[`cssClass()`]
-|
+|Any string valid as a CSS class
 |the css class that a collection should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[`describedAs()`]
-|
+|String.
 |description of this collection, eg to be rendered in a tooltip.
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[`hidden()`]
-|
-|indicates where in the UI the collection should _not_ be visible in the UI (only NOWHERE or EVERWHERE/ANYWHERE)
+|`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the collection should be hidden from the user.
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_named[named()]
-|
-|the name of this collection (overriding the name derived from its name in code)
+|String.
+|to override the name inferred from the collection's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |namedEscaped()
@@ -45,18 +48,19 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_paged[`paged()`]
-|
+|Positive integer
 |the page size for instances of this class when rendered within a table.
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_render[`render()`]
-|
-|that the rendering of a collection should be performed LAZILY or EAGERLY
+|`EAGERLY`, `LAZILY` +
+(`LAZILY`)
+|whether the collection should be (eagerly) rendered open or (lazily) rendered closed
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_sortedBy[`sortedBy()`]
-|
-|indicates that the elements in a ({@link java.util.SortedSet}) collection should be sorted according to a different order than the natural sort order, as defined by the specified `Comparator`.
+|Subclass of `java.util.Comparator` for element type
+|indicates that the elements in the `java.util.SortedSet` collection should be sorted according to a specified `Comparator` rather than their natural sort order.
 
 |===
 

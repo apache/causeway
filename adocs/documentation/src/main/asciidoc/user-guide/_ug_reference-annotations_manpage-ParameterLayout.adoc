@@ -20,7 +20,7 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[`cssClass()`]
-|
+|Any string valid as a CSS class
 |the css class that a parameter should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
@@ -41,12 +41,14 @@ The table below summarizes the annotation's attributes.
 
 |xref:_ug_reference-annotations_manpage-ParameterLayout_named[`named()`]
 |
-|the name of this parameter. For Java 7 this is generally required. For Java 8, the name can be inferred from the code so this attribute allows the name to be overridden.
+|the name of this parameter. +
+
+For Java 7 this is generally required. For Java 8, the name can often be inferred from the code so this attribute allows the name to be overridden.  A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |`namedEscaped()`
-|
-|whether to HTML escape the name of this parameter. Defaults to true.
+|`true`, `false` (`true`)
+|whether to HTML escape the name of this parameter.
 
 
 |xref:_ug_reference-annotations_manpage-ParameterLayout_renderedAsDayBefore[`renderedAsDayBefore()`]

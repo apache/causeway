@@ -20,42 +20,67 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[`cssClass()`]
-|
+|Any string valid as a CSS class
 |the css class that a property should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[`describedAs()`]
-|
+|String
 |description of this property, eg to be rendered in a tooltip.
 
 
+|xref:_ug_reference-annotations_manpage-PropertyLayout_hidden[`hidden()`]
+|`EVERYWHERE`, `OBJECT_FORMS`, `PARENTED_TABLES`, `STANDALONE_TABLES`, `ALL_TABLES`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the property should be hidden from the user.
+
+
 |xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[`labelPosition()`]
-|
-|in forms, the positioning of the label (LEFT, TOP or NONE) relative to the property value. For boolean properties it is also possible to specify RIGHT. Defaults to LEFT unless `multiLine` also specified (see below)
+|`LEFT`, `TOP`, `RIGHT`, `NONE` +
+(`LEFT`)
+|in forms, the positioning of the label relative to the property value. +
+
+Defaults is `LEFT`, unless xref:_ug_reference-annotations_manpage-PropertyLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
+
+It is also possible to change the default through a xref:_ug_runtime_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_multiLine[`multiLine()`]
-|
-|for string propertys, render as a text area over multiple lines. If set &gt;1, then `labelPosition` defaults to TOP unless otherwise specified.
+|Positive integer
+|for string propertys, render as a text area over multiple lines.  +
+
+If set &gt;1, then xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[`labelPosition`] defaults to TOP.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_named[`named()`]
-|
-|the name of this property. For Java 7 this is generally required. For Java 8, the name can be inferred from the code so this attribute allows the name to be overridden.
+|String
+|to override the name inferred from the collection's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |`namedEscaped()`
-|
-|whether to HTML escape the name of this property. Defaults to true.
+|`true`, `false` +
+(`true`)
+|whether to HTML escape the name of this property.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
-|
-|for date propertys only, render the date as one day prior to the actually stored date (eg the end date of an open interval into a closed interval)
+|`true`, `false` +
+(`false`)
+|for date propertys only, render the date as one day prior to the actually stored date. +
+
+Useful for persisting an open interval, eg: +
+
+`[1-Apr-2015, 1-Jun-2015)` +
+
+but presenting the data as if a closed interval +
+
+`[1-Apr-2015, 31-May-2015]`.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_typicalLength[`typicalLength()`]
-|
+|Positive integer.
 |the typical entry length of a field, use to determine the optimum width for display
 
 |===
@@ -68,14 +93,14 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-
     @PropertyLayout(
         cssClass="x-key",
         named="Description of this <i>item</i>",
         namedEscaped=false,
         describedAs="What needs to be done",
         labelPosition=LabelPosition.LEFT,
-        typicalLength=80)
+        typicalLength=80
+    )
     public String getDescription() { ... }
 
     @PropertyLayout(
@@ -83,7 +108,6 @@ public class ToDoItem {
         labelPosition=LabelPosition.TOP,
         multiLine=8)
     public String getNotes() { ... }
-
     ...
 }
 ----
@@ -124,32 +148,6 @@ As an alternative to using the `@PropertyLayout` annotation, a dynamic layout us
     }
 }
 ----
-
-[TIP]
-.Specifying a default setting for label positions
-====
-If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
-frustrating to have to annotate every property.
-
-Instead, a default can be specified in `isis.properties`:
-
-[source,ini]
-----
-isis.viewers.propertyLayout.labelPosition=TOP
-----
-
-or
-
-[source,ini]
-----
-isis.viewers.propertyLayout.labelPosition=LEFT
-----
-
-If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
-====
-
-
-IMPORTANT: TODO - ensure these properties are in the runtime config chapter
 
 
 
