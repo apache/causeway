@@ -19,97 +19,9 @@ Note that the calling thread runs in the same process space as the Isis domain o
 The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the <<WrapperFactory>> service could be used to enforce such business rules if required.
 
 
-== AbstractIsisSessionTemplate
 
-The `AbstractIsisSessionTemplate` class (whose name is inspired by the Spring framework's naming convention for similar classes that query http://docs.spring.io/spring/docs/2.5.x/reference/jdbc.html#jdbc-JdbcTemplate[JDBC], http://docs.spring.io/spring/docs/2.5.x/reference/jms.html#jms-jmstemplate[JMS], http://docs.spring.io/spring/docs/2.5.x/reference/orm.html#orm-jpa-template[JPA] etc.) provides the mechanism to open up a 'session' within the Isis framework, in order to resolve and interact with entities.
-
-The class itself is intended to be subclassed:
-
-[source,java]
-----
-public abstract class AbstractIsisSessionTemplate {
-
-    public void execute(final AuthenticationSession authSession, final Object context) { ... } //<1>
-    protected abstract void doExecute(Object context); // <2>
-
-    protected ObjectAdapter adapterFor(final Object targetObject) { ... }
-    protected ObjectAdapter adapterFor(final RootOid rootOid) { ... }
-
-    protected PersistenceSession getPersistenceSession() { ... }
-    protected IsisTransactionManager getTransactionManager() { ... }
-    protected AdapterManager getAdapterManager() { ... }
-}
-----
-<1> `execute(...)` sets up the `IsisSession` and delegates to ...
-<2> `doExecute(...)`, the mandatory hook method for subclasses to implement.
-The passed object represents passes a context from the caller (eg the scheduler, cron job, JMS etc) that instantiated and executed the class.
-
-The `protected` methods expose key internal APIs within Isis, for the subclass to use as necessary.
-
-
-[TIP]
-====
-One notable feature of `AbstractIsisSessionTemplate` is that it will automatically inject any domain services into itself. Thus, it is relatively easy for the subclass to "reach into" the domain, through injected repository services.
-====
+include::_ug_headless-access_AbstractIsisSessionTemplate.adoc[leveloffset=+1]
+include::_ug_headless-access_BackgroundCommandExecution.adoc[leveloffset=+1]
 
 
 
-== BackgroundCommandExecution
-
-The `BackgroundCommandExecution` class (a subclass of <<AbstractIsisSessionTemplate>>) is intended to simplify the execution of background ``Command``s persisted by way of the <<CommandService>> and the <<BackgroundCommandService>>.
-
-Its signature is:
-
-[source,java]
-----
-public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemplate {
-    protected void doExecute(Object context) { ... }
-    protected abstract List<? extends Command> findBackgroundCommandsToExecute(); // <1>
-}
-----
-<1> `findBackgroundCommandsToExecute()` is a mandatory hook method for subclasses to implement.
-
-This allows for different implementations of the `CommandService` and `BackgroundCommandService` to persist to wherever.
-
-The diagram below shows the dependencies between these various classes:
-
-.Inheritance Hierarchy for `BackgroundCommandExecution`
-image::{_imagesdir}headless-access/BackgroundCommandExecution.png[width="400px"]
-
-[TIP]
-====
-[source,ini]
-.DSL (http://yuml.me/edit/363b335f[yuml.me/363b335f])
-----
-[AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
-[BackgroundCommandExecution]^-[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]
-[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]->injected[BackgroundCommandServiceJdoRepository|findBackgroundCommandsNotYetStarted()]
-----
-
-====
-
-
-
-=== Background Execution using Isis Addons Command Module (not ASF)
-
-The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of <<BackgroundCommandExecution>>, the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
-
-This implementation queries for ``Command``s persisted by the http://isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of <<CommandService>> and <<BackgroundCommandService>> using the `BackgroundCommandServiceJdoRepository`.
-
-The diagram below shows the inheritance hierarchy for this class:
-
-.Inheritance Hierarchy for `BackgroundCommandExecutionFromBackgroundCommandServiceJdo`
-image::{_imagesdir}headless-access/BackgroundCommandExecutionFromBackgroundCommandServiceJdo.png[width="500px"]
-
-
-[TIP]
-====
-[source,java]
-.DSL (http://yuml.me/edit/25343da1[yuml.me/25343da1]):
-----
-[AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
-[BackgroundCommandExecution]->injected[BookmarkService|lookup()]
-[BackgroundCommandExecution]->injected[CommandContext|setCommand()]
-----
-
-====

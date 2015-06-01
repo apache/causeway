@@ -4,6 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
+
 Apache Isis works by building a metamodel of the domain objects: entities, view models and services.  The class members of both entities and view models represent both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.  The class members of domain services is simpler: just behaviour, ie actions.
 
 In the automatically generated UI a property is rendered as a field.  This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.  A collection is generally rendered as a table.
@@ -23,14 +24,11 @@ You can learn more about extending Isis programming model xref:_ug_extending_pro
 
 
 include::_ug_how-tos_class-structure_class-definition.adoc[leveloffset=+1]
-
 include::_ug_how-tos_class-structure_properties.adoc[leveloffset=+1]
-
 include::_ug_how-tos_class-structure_collections.adoc[leveloffset=+1]
-
 include::_ug_how-tos_class-structure_actions.adoc[leveloffset=+1]
-
 include::_ug_how-tos_class-structure_action-parameters.adoc[leveloffset=+1]
+include::_ug_how-tos_class-structure_inject-services.adoc[leveloffset=+1]
 
 include::_ug_how-tos_class-structure_properties-vs-parameters.adoc[leveloffset=+1]
 

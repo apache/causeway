@@ -23,7 +23,7 @@ If an appropriate `CommandService` is configured (for example using (non-ASF) ht
 
 [NOTE]
 ====
-If background ``Command``s are used, then an external scheduler, using xref:_background_execution_using_isis_addons_command_module_not_asf[headless access], must also be configured.
+If background ``Command``s are used, then an external scheduler, using xref:_ug_headless-access_BackgroundCommandExecution[headless access], must also be configured.
 ====
 
 [NOTE]

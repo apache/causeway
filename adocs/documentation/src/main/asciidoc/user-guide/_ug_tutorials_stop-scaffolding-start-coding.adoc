@@ -364,7 +364,7 @@ Returning back to references, Isis also supports vector (multi-valued) reference
 The Wicket UI doesn't allow collections to be modified (added to/removed from). However, we can easily write actions to accomplish the same. Moreover, these actions can provide some additional business logic. For example: it probably shouldn't be possible to add an object twice into a collection, so it should not be presented in the list of choices/autoComplete; conversely, only those objects in the collection should be offered as choices to be removed.
 
 * Add domain actions to add/remove from the collection
-* to create objects, xref:how_to_inject_srvices_into_a_domain_entity_or_other_service[inject] associated domain service
+* to create objects, xref:_ug_how-tos_class-structure_inject-services[inject] associated domain service
 ** generally we recommend using the xref:_ug_reference-annotations_manpage-Inject[`@Inject`] annotation with either private or default visibility
 * the service itself should use xref:_ug_reference-services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
 * use the xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder(name=...)`] annotation to associate an action with a property or with a collection

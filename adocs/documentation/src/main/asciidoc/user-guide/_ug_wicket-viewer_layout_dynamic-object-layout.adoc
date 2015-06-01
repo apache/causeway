@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Because Isis implements the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], the domain objects are rendered in the UI based only metadata gleaned from the domain classes themselves. Traditionally this metadata has been specified statically, using annotations such as xref:_memberorder[`@MemberOrder`] and xref:_membergrouplayout[`@MemberGroupLayout`]. However, it is also possible to specify the layout data using a JSON file. This brings the advantage that the layout can be refreshed dynamically, without recompiling/redeploying the app.
+Because Isis implements the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], the domain objects are rendered in the UI based only metadata gleaned from the domain classes themselves. Traditionally this metadata has been specified statically, using annotations such as xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`] and xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`]. However, it is also possible to specify the layout data using a JSON file. This brings the advantage that the layout can be refreshed dynamically, without recompiling/redeploying the app.
 
 == Screencast
 
@@ -107,7 +107,7 @@ The format of the file is:
 Although advisable, it is not necessary to list all class members in this file. Any members not listed with be
 ordered according either to annotations (if present) or fallback/default values.
 
-Note also that the layout file may contain entries for xref:_contributed_members[contributed associations and actions]; this allows each contributee classes to define their own layout for their contributions, possibly overriding any static metadata on the original domain service contributor.
+Note also that the layout file may contain entries for xref:_ug_how-tos_contributed-members[contributed associations and actions]; this allows each contributee classes to define their own layout for their contributions, possibly overriding any static metadata on the original domain service contributor.
 
 
 
@@ -119,7 +119,7 @@ The fastest way to get started is to use the http://github.com/isisaddons/isis-m
 
 == Picking up new metadata
 
-When running in xref:_deployment_types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.
+When running in xref:_ug_runtime_configuration-files_deployment-types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.
 
 [NOTE]
 ====
