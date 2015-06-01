@@ -28,3 +28,10 @@ Here, the interval of the [1-may-2013,1-jun-2013) would be rendered as the dates
 What is stored in the domain object, itself, however, the value stored is 1-jun-2013.
 
 
+
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

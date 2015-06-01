@@ -5,40 +5,28 @@
 :_imagesdir: images/
 
 
-IMPORTANT: WIP ... this section
+The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.    The related `cssClassFaPosition()` attribute specifies the positioning of the icon, to the left or the right of the text.
 
-
-
-The `CssClassFa` annotation applies to objects and also to object actions,
-and is used by the Wicket viewer as a UI hint.
-
-For object actions, the viewer will render the specified
-http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon]
-on the action's button (or menu item).
-
-For objects, it will be used as an icon. Note that this is only used if
-the object does not have a `getIconName()` method.
+[NOTE]
+====
+These attributes can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects] and to xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
+====
 
 For example:
 
 [source,java]
 ----
-@CssClassFa("fa-check-circle")
-public class ToDoItem { ... }
-----
-
-or
-
-[source,java]
-----
 public class ToDoItem {
-
-    @CssClass("fa-step-backward")
+    @ActionLayout(
+        cssClassFa="fa-step-backward"
+    )
     public ToDoItem previous() { ... }
 
-    @CssClass("fa-step-forward")
+    @ActionLayout(
+        cssClassFa="fa-step-forward",
+        cssClassFaPosition=ActionLayout.CssClassFaPosition.RIGHT
+    )
     public ToDoItem next() { ... }
-
 }
 ----
 
@@ -46,47 +34,29 @@ There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
 is no need to include the "fa" class; it will be automatically appended.
 
 
-
-
-== Alternatives (`.layout.json`)
-
-As an alternative to using the `@CssClass` annotation, the `.layout.json` xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file]
-can be specified, eg:
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
 
 [source,javascript]
 ----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                 "relativePriority": {
-                    "actions": {
-                        "previous": {
-                            "cssClassFa": { "value": "fa-step-backward" }
-                        },
-                        "next": {
-                            "cssClassFa": { "value": "fa-step-forward" }
-                        }
-                    }
-                },
-                ....
-            }
-        },
-        ...
+"previous": {
+    "actionLayout": {
+        "cssClassFa": "fa-step-backward",
+        "cssClassFaPosition": "LEFT"
+    }
+},
+"next": {
+    "actionLayout": {
+        "cssClassFa": "fa-step-forward",
+        "cssClassFaPosition": "RIGHT"
     }
 }
 ----
 
-Note that this (currently) only supports class members, not classes.
 
 
 [NOTE]
 ====
-The similar xref:_ug_reference-annotations_manpage_ActionLayout_cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 ====
-
-
-
 

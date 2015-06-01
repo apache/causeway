@@ -13,8 +13,8 @@ discovered automatically on the CLASSPATH.
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@DomainService` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute

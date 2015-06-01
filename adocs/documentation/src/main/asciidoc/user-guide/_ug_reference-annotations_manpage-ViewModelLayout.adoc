@@ -5,14 +5,14 @@
 :_imagesdir: images/
 
 
-The `@ViewModelLayout` annotation is identical to the xref:_ug_reference-annotations_manpage_DomainObjectLayout[`@DomainObjectLayout`], but is provided
+The `@ViewModelLayout` annotation is identical to the xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`], but is provided
 for symmetry with domain objects that have been annotated using xref:_ug_reference-annotations_manpage-ViewModel[`@ViewModel`] (rather than xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject(nature=VIEW_MODEL)`]).
 
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@ViewModel` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -66,6 +66,12 @@ The table below summarizes the annotation's attributes.
 @ViewModelLayout(...)
 public class MyViewModel { ... }
 ----
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+====
 
 
 

@@ -47,7 +47,7 @@ image::{_imagesdir}headless-access/BackgroundCommandExecution.png[width="400px"]
 
 The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of <<BackgroundCommandExecution>>, the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
-This implementation queries for ``Command``s persisted by the http://isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of <<CommandService>> and <<BackgroundCommandService>> using the `BackgroundCommandServiceJdoRepository`.
+This implementation queries for ``Command``s persisted by the link:http://www.isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of <<CommandService>> and <<BackgroundCommandService>> using the `BackgroundCommandServiceJdoRepository`.
 
 The diagram below shows the inheritance hierarchy for this class:
 

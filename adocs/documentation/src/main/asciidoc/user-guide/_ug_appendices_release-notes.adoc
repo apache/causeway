@@ -12,7 +12,7 @@
 | 24-feb-2015
 | * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328845[core-1.8.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328847[archetype-1.8.0]
-| Wicket viewer moved into core; todoapp archetype moved to http://isisaddons.org[Isis Addons] (non-ASF).
+| Wicket viewer moved into core; todoapp archetype moved to link:http://www.isisaddons.org[Isis Addons] (non-ASF).
 
 | 1.7.0
 | 18-oct-2014
@@ -28,7 +28,7 @@
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12325318[viewer-wicket-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326462[archetype-simpleapp-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326461[archetype-todoapp-1.6.0]
-| Restful Objects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as http://isisaddons.org[Isis Addons] (non-ASF).
+| Restful Objects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as link:http://www.isisaddons.org[Isis Addons] (non-ASF).
 
 | 1.5.0
 | 08-jun-2014

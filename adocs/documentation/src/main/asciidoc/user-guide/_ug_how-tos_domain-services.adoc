@@ -13,7 +13,7 @@ IMPORTANT: TODO
 IMPORTANT: TODO
 
 
-It's worth extending the <<_hexagonal_architecture, Hexagonal Architecture> to show where domain services -- and in particular the domain services provided by http://isisaddons.org[Isis Addons] (non-ASF) -- fit in:
+It's worth extending the <<_hexagonal_architecture, Hexagonal Architecture> to show where domain services -- and in particular the domain services provided by link:http://www.isisaddons.org[Isis Addons] (non-ASF) -- fit in:
 
 .The hexagonal architecture with Isis addons
 image::{_imagesdir}how-tos/domain-services/hexagonal-architecture-addons.png[width="700px"]

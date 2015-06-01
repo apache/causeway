@@ -10,8 +10,8 @@ The `@ParameterLayout` annotation applies to action parameters, collecting toget
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@ParameterLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -21,7 +21,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[`cssClass()`]
 |
-|the css class that a parameter should have, to allow more targetted styling in `application.css`
+|the css class that a parameter should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[`describedAs()`]
@@ -98,8 +98,12 @@ public class ToDoItem {
 }
 ----
 
-Unlike xref:_ug_reference-annotations_manpage_PropertyLayout[`@PropertyLayout`], it (currently) isn't possible to specify layout hints for action parameters using the `.layout.json` file.
 
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+====
 
 [TIP]
 .Specifying a default setting

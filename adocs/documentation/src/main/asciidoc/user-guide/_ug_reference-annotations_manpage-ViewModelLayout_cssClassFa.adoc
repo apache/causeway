@@ -1,5 +1,5 @@
 [[_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa]]
-= Font awesome icons
+= `cssClassFa()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -12,6 +12,11 @@ IMPORTANT: WIP ... this section
 == `cssClassFa()
 
 IMPORTANT: WIP ... this section
+
+[NOTE]
+====
+These attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects] to specify the object's icon, and to xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] to specify an icon for the action's representation as a button or menu item.
+====
 
 
 The `CssClassFa` annotation applies to objects and also to object actions,
@@ -87,7 +92,7 @@ Note that this (currently) only supports class members, not classes.
 
 [NOTE]
 ====
-The similar xref:_ug_reference-annotations_manpage_ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
+The similar xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClass[`@ViewModelLayout#cssClass()`] annotation attribute is also used as a hint to apply CSS, but for wrapping the representation of an object or object member so that it can be styled in an application-specific way.
 
 ====
 

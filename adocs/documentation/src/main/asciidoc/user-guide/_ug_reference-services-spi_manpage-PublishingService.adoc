@@ -244,7 +244,7 @@ It also provides an implementation of the `EventSerializer` that (using API expo
 
 == Related Services
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:_ug_reference-annotations_manpage_Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:_ug_reference-annotations_manpage_DomainObject_publishing[`@DomainObject#publishing()`].
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`].
 
 The xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propogation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 

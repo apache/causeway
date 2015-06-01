@@ -116,3 +116,11 @@ persisted objects.
 
 By default the annotated property or action is always hidden (ie
 defaults to `Where.ANYWHERE`, `When.ALWAYS`).
+
+
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

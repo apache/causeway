@@ -29,7 +29,7 @@ Note: if you store a relationship with a String key it means that the parent obj
 
 Currently Isis' `Blob` and `Clob` types and the JODA types (`LocalDate` et al) are _not_ supported in GAE.
 
-Instead, GAE defines a https://developers.google.com/appengine/docs/java/datastore/entities#Properties_and_Value_Types[fixed set of value types], including `BlobKey`. Members of the Isis community have this working, though I haven't seen the code.
+Instead, GAE defines a link:https://cloud.google.com/appengine/docs/java/datastore/entities#Properties_and_Value_Types[fixed set of value types], including `BlobKey`. Members of the Isis community have this working, though I haven't seen the code.
 
 The above notwithstanding, Andy Jefferson at DataNucleus tells us:
 

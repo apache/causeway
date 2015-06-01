@@ -20,7 +20,7 @@ Persistent `Command`s support several use cases:
 * if xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
 * if xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
 
-Assuming that the `CommandService` supports persistent `Command`s, the associated xref:_ug_reference-annotations_manpage_Action_command[`@Action#command()`] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
+Assuming that the `CommandService` supports persistent `Command`s, the associated xref:_ug_reference-annotations_manpage-Action_command[`@Action#command()`] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
 
@@ -123,7 +123,7 @@ The xref:_ug_reference-services-api_manpage-CommandService[`CommandService`] int
 
 === Explicitly treating an action as a command
 
-The typical way to indicate that an action should be treated as a command is to annotate it with the xref:_ug_reference-annotations_manpage_Action_command[`@Action#command()`] annotation, for example:
+The typical way to indicate that an action should be treated as a command is to annotate it with the xref:_ug_reference-annotations_manpage-Action_command[`@Action#command()`] annotation, for example:
 
 [source,java]
 ----
@@ -163,7 +163,7 @@ To treat every action as a command, add the following to `isis.properties`:
 isis.services.command.actions=all
 ----
 
-For some applications it may be required to record (as commands) only those actions that update objects; in other words queries and searches can be ignored. Put another way, only actions annotated (with xref:_ug_reference-annotations_manpage_Action_semantics[`@Action#semantics()`]) as IDEMPOTENT or NON_IDEMPOTENT should be treated as commands. In this case, use:
+For some applications it may be required to record (as commands) only those actions that update objects; in other words queries and searches can be ignored. Put another way, only actions annotated (with xref:_ug_reference-annotations_manpage-Action_semantics[`@Action#semantics()`]) as IDEMPOTENT or NON_IDEMPOTENT should be treated as commands. In this case, use:
 
 [source,ini]
 ----

@@ -6,24 +6,18 @@
 
 
 
-
-The `invokeOn` attribute indicates whether the an action can be invoked on a single object (the default) and/or on many objects in a collection.
-
-[NOTE]
-====
-This attribute replaces the deprecated `@Bulk` annotation.
-====
+The `invokeOn()` attribute indicates whether the an action can be invoked on a single object (the default) and/or on many objects in a collection.
 
 For example:
 
 [source,java]
 ----
 public class ToDoItem {
-    ...
     @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
     public void markAsCompleted() {
         setCompleted(true);
     }
+    ...
 }
 ----
 
@@ -36,30 +30,35 @@ Actions to be invoked on collection (currently) have a number of constraints.  I
 
 The example given above is probably ok, because `setCompleted()` is most likely idempotent. However, if the action also called some other method, then we should add a guard.
 
-For example, rather than:
+For example, for this non-idempotent action:
 
 [source,java]
 ----
-    @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
-    public void markAsCompleted() {
-        setCompleted(true);
-        todoTotalizer.incrementNumberCompleted();
-    }
+@Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+public void markAsCompleted() {
+    setCompleted(true);
+    todoTotalizer.incrementNumberCompleted();
+}
 ----
 
-the action should instead be written:
+we should instead write it as:
 
 [source,java]
 ----
-    @Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
-    public void markAsCompleted() {
-        if(isCompleted()) {
-            return;
-        }
-        setCompleted(true);
-        todoTotalizer.incrementNumberCompleted();
+@Action(invokeOn=InvokeOn.OBJECT_AND_COLLECTION)
+public void markAsCompleted() {
+    if(isCompleted()) {
+        return;
     }
+    setCompleted(true);
+    todoTotalizer.incrementNumberCompleted();
+}
 ----
 
+[NOTE]
+====
+This attribute has no meaning if annotated on an action of a domain service.
+====
 
-Note also that this attribute has no meaning if annotated on an action of a domain service.
+
+

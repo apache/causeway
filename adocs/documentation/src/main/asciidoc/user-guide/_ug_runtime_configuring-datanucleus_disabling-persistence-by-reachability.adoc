@@ -31,7 +31,7 @@ If you do disable this feature, then you will (of course) need to ensure that yo
 
 Consider the entities:
 
-image::{_imagesdir}reference/configuration-properties/datanucleus-objectstore/party-agreementrole-agreement.png[width="750px"]
+image::{_imagesdir}runtime/configuring-datanucleus/disabling-persistence-by-reachability/party-agreementrole-agreement.png[width="750px"]
 
 
 [TIP]

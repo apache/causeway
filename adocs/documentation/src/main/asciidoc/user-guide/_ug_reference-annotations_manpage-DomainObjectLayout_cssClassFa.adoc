@@ -1,5 +1,5 @@
 [[_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa]]
-= Font-awesome icons
+= `cssClassFa()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -17,6 +17,14 @@ IMPORTANT: WIP ... this section
 
 The `CssClassFa` annotation applies to objects and also to object actions,
 and is used by the Wicket viewer as a UI hint.
+
+
+[NOTE]
+====
+These attributes can also be applied to xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[view models] to specify the object's icon, and to xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] to specify an icon for the action's representation as a button or menu item.
+====
+
+
 
 For object actions, the viewer will render the specified
 http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon]
@@ -51,44 +59,12 @@ public class ToDoItem {
 There can be multiple "fa-" classes, eg to mirror or rotate the icon. There
 is no need to include the "fa" class; it will be automatically appended.
 
-=== Alternatives (`.layout.json`)
 
-As an alternative to using the `@CssClass` annotation, the `.layout.json`
-xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file]
-can be specified, eg:
-
-[source,javascript]
-----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                 "relativePriority": {
-                    "actions": {
-                        "previous": {
-                            "cssClassFa": { "value": "fa-step-backward" }
-                        },
-                        "next": {
-                            "cssClassFa": { "value": "fa-step-forward" }
-                        }
-                    }
-                },
-                ....
-            }
-        },
-        ...
-    }
-}
-----
-
-Note that this (currently) only supports class members, not classes.
 
 
 [TIP]
 ====
-The similar xref:_ug_reference-annotations_manpage_DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint
+The similar xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] annotation attribute is also used as a hint
 to apply CSS, but for wrapping the representation of an object or object
 member so that it can be styled in an application-specific way.
 ====

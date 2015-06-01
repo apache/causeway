@@ -10,8 +10,8 @@ annotation.  It is also possible to apply the annotation to actions of domain se
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@CollectionLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -21,7 +21,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[`cssClass()`]
 |
-|the css class that a collection should have, to allow more targetted styling in `application.css`
+|the css class that a collection should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[`describedAs()`]
@@ -39,7 +39,7 @@ The table below summarizes the annotation's attributes.
 |the name of this collection (overriding the name derived from its name in code)
 
 
-|namedEscaped(]
+|namedEscaped()
 |`true`,`false` (`true`)
 |whether to HTML escape the name of this property.
 

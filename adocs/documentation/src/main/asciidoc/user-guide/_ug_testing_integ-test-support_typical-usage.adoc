@@ -88,7 +88,7 @@ public class ToDoItemIntegTest ... {
 }
 ----
 <1> the idiom we follow is to use nested static classes to identify the class responsibility being tested
-<2> the http://github.com/isisaddons/isis-app-todoapp[todoapp] uses link:http://assertj.org[AssertJ].
+<2> the http://github.com/isisaddons/isis-app-todoapp[todoapp] uses link:http://joel-costigliola.github.io/assertj[AssertJ].
 
 What about when a todo item is already completed?  The `disableCompleted()` method in the class says that it shouldn't be allowed (the action would be greyed out in the UI with an appropriate tooltip).  The following test verifies this:
 

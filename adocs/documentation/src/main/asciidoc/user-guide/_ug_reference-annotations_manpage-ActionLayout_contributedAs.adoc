@@ -6,48 +6,49 @@
 
 
 
-IMPORTANT: WIP ... this section
+For a domain service action that _can_ be contributed, the `contributedAs()` attribute determines how it is contributed: as an action or as an association (ie a property or collection).
 
-The `@NotContributed` annotation applies only to action methods, and
-specifically to the actions of services. If present, it indicates that
-the action should not be contributed to any of its domain object
-arguments.
+The distinction between property or collection is automatic: if the action returns a `java.util.Collection` (or subtype) then the action is contributed as a collection; otherwise it is contributed as a property.
+
+For a domain service action to be contributed, the domain services must have a xref:_ug_reference-annotations_manpage-DomainService_nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:_ug_reference-annotations_manpage-Action_semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 For example:
 
 [source,java]
 ----
-public class OrderServices {
-    @NotContributed
+@DomainService(nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY)
+public class CustomerContributions {
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(contributedAs=Contributed.AS_ASSOCIATION)
+    public List<Order> mostRecentOrders(Customer customer) { ... }
+    ...
+}
+----
+
+[TIP]
+====
+The `@ActionLayout` is not required if the action does not have safe semantics, or if the action takes more than one argument; in these cases the action can only be contributed _as_ an action.
+====
+
+
+It's also possible to use the attribute to suppress the action completely:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.VIEW)
+public class OrderContributions {
+    @ActionLayout(contributedAs=Contributed.AS_NEITHER)
     public void cancel(Order order);
     ...
 }
 ----
 
-If the action should neither be contributed nor appear in the service's
-service menu, then you could instead simply mark it as `@Hidden`.
+In such cases, though, it would probably make more sense to annotate the action as either xref:_ug_reference-annotations_manpage-Action_hidden[hidden] or indeed xref:_ug_reference-annotations_manpage-Programmatic[`@Programmatic`].
 
-
-
-
-
-== Contributing of one-arg actions
-
-Actions that accept a single argument will, by default, also be contributed as an association:
-
-* if the action returns a single object (value or entity) then the action will be contributed as a property
-* if the action returns a list then the action will be contributed as a collection
-
-This behaviour can be influenced by specifying the "As." attribute:
-
-* use `@NotContributed(As.ACTION)` to contribute the action as an association
-* use `@NotContributed(As.ASSOCIATION)` to contribute the action as an action
-* use `@NotContributed` to not contribute the action at all.
 
 
 [NOTE]
 ====
-Replaces the deprecated `@NotContributed` annotation.
+Unlike other `@ActionLayout` attributes, this attribute _cannot_ be specified dynamically in the `.layout.json` xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file] because it relates to the contributor domain service, not the contributee domain object.
 ====
-
 

@@ -17,7 +17,7 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Description
 
 |xref:_ug_reference-methods_reserved_manpage-cssClass[`cssClass()`]
-|Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with css/application.css, can therefore provide custom styling of an object instance wherever it is rendered.
+|Provides a CSS class for this object, which is added as a style in the containing when rendering the object within a table, or to a containing when rendering the object on a page. In conjunction with xref:_ug_runtime_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered.
 See also xref:_ug_reference-methods_reserved_manpage-title[`title()`] and xref:_ug_reference-methods_reserved_manpage-iconName[`iconName()`].
 
 |xref:_ug_reference-methods_reserved_manpage-disable[`disable(...)`]

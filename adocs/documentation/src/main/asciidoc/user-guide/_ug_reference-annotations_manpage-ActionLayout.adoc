@@ -9,8 +9,8 @@ The `@ActionLayout` annotation applies to actions, collecting together all UI hi
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@ActionLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -19,38 +19,55 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_bookmarking[`bookmarking()`]
-|
-|
+|`AS_ROOT`, `NEVER` +
+(`NEVER`)
+|indicates if an action (with safe xref:_ug_reference-annotations_manpage-Action_semantics[action semantics]) is automatically bookmarked.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_contributedAs[`contributedAs()`]
-|
-|
+|`AS_BOTH`, `AS_ACTION`, `AS_ASSOCIATION`, `AS_NEITHER` +
+(`AS_BOTH`)
+|for a domain service action that can be contributed, whether to contribute as an action or as an association (ie a property or collection). +
+
+For a domain service action to be contributed, the domain services must have a xref:_ug_reference-annotations_manpage-DomainService_nature[nature] nature of either `VIEW` or `VIEW_CONTRIBUTIONS_ONLY`, and the action must have xref:_ug_reference-annotations_manpage-Action_semantics[safe action semantics], and takes a single argument, namely the contributee domain object.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[`cssClass()`]
-|
-|
+|Any string valid as a CSS class
+|an additional CSS class around the HTML that represents for the action, to allow additional styling. +
+
+Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_cssClassFa[`cssClassFa()`]
-|
-|
+|Any valid link:http://fortawesome.github.io/Font-Awesome/[Font awesome] icon name
+|specify a font awesome icon for the action's menu link or icon. +
+
+Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
+
+
+|`cssClassFaPosition()`
+|`LEFT`, `RIGHT` +
+(`LEFT`)
+|Positioning of the icon on the button/menu item.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[`describedAs()`]
-|
-|
+|String.
+|provides a short description of the action, eg for rendering as a 'tool tip'.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_hidden[`hidden()`]
-|
-|
+|`EVERYWHERE`,`NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the action should be hidden from the user.
 
 
 |xref:_ug_reference-annotations_manpage-ActionLayout_named[`named()`]
-|
-|
+|String.
+|to override the name inferred from the action's name in code. +
+
+A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
 
 |===

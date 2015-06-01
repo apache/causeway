@@ -5,38 +5,49 @@
 :_imagesdir: images/
 
 
+The `named()` attribute explicitly specifies the action's name, overriding the name that would normally be inferred from the Java source code.
 
-IMPORTANT: WIP ... this section
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
-
-[WARNING]
+[NOTE]
 ====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-CollectionLayout_named[collections], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[action parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
 ====
 
 
 By default, the name of the action as presented to the user is derived, reflectively, from the name of the member defined in the program code. To specify a different name use the `@ActionLayout(named=...)` annotation immediately before the member declaration.
+
+
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-
-    public String getFirstName() { ... }
-
-    public String getSurname() { ... }
-
     @ActionLayout(named="Get credit rating")
     public CreditRating obtainCreditRating() { ... }
 }
 ----
 
-Note that the framework provides a separate and more powerful mechanism for internationalisation.
+
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+"obtainCreditRating": {
+    "actionLayout": { "named": "Get credit rating" }
+}
+----
+
+[TIP]
+====
+Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't repeat yourself] principle, we recommend that you only use this attribute when the desired name cannot be used in Java source code.  Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
+====
+
+
+[TIP]
+====
+The framework also provides a separate, powerful mechanism for xref:_ug_more-advanced_i18n[internationalization].
+====
+
+
 

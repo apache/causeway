@@ -6,73 +6,54 @@
 
 
 
+The `bookmarking()` attribute indicates if an action (with safe xref:_ug_reference-annotations_manpage-Action_semantics[action semantics]) is automatically bookmarked.
 
-IMPORTANT: WIP ... this section
+(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel:
 
-The `@Bookmarkable` annotation indicates that an entity or an action (with safe xref:_ug_reference-annotations_manpage_Action_semantics[action semantics]) is automatically bookmarked.
+image::{_imagesdir}reference-annotations/ActionLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/bookmarking.png"]
 
-(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel that slides out from the left:
+[NOTE]
+====
+It is also possible to mark domain entities as xref:_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking[bookmarkable]; the screenshot shows this.
 
-<img src="images/Bookmarkable.png" width="640px"/>
+Note also that this screenshot relates to a earlier version of the UI (specfically, pre 1.8.0).
+====
+
 
 For example:
 
 [source,java]
 ----
-@Bookmarkable
-public class ToDoItem ... {
-    ...
-}
-----
-
-indicates that the `ToDoItem` class is bookmarkable, while:
-
-[source,java]
-----
-@Named("ToDos")
 public class ToDoItems {
-
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
+    @Action(semantics=SemanticsOf.SAFE)
+    @ActionLayout(bookmarking=BookmarkPolicy.AS_ROOT)
     @MemberOrder(sequence = "1")
     public List<ToDoItem> notYetComplete() {
         ...
     }
-
 }
 ----
 
-indicates that the "not yet complete" action is bookmarkable.
+indicates that the `notYetComplete()` action is bookmarkable.
 
-It is also possible to nest bookmarkable entities. For example, this screenshot is taken from http://github.com/estatio/estatio[Estatio]:
 
-<img src="images/Bookmarkable-nested.png" width="640px"/>
-
-For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark (the default), but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark if its parent `Property` has already been visited. This is accomplished with the following annotations:
-
-[source,java]
-----
-@Bookmarkable
-public class Property { ... }
-----
-
-and
-
-[source,java]
-----
-@Bookmarkable(BookmarkPolicy.AS_CHILD)
-public abstract class Unit { ... }
-----
-
-The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting 3 deep: `Lease` -&gt; `LeaseItem` -&gt; `LeaseTerm`.
 
 [NOTE]
 ====
-Replaces deprecated `@Bookmarkable` annotation.
+The enum value `AS_CHILD` has no meaning for actions; it relates only to bookmarked xref:_ug_reference-annotations_manpage-DomainObject_bookmarking[domain object]s.
 ====
 
 
 
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+"notYetComplete": {
+    "actionLayout": { "bookmarking": "AS_ROOT" }
+}
+----
 
 
 

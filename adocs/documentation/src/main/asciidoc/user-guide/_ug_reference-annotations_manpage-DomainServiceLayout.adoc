@@ -11,8 +11,8 @@ within a single annotation.
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@DomainServiceLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -40,7 +40,10 @@ The table below summarizes the annotation's attributes.
 
 
 
-It is not (currently) possible to specify the UI hints through any other means (specifically: is _not_ supported through a `.layout.json` file).
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+====
 
 
 

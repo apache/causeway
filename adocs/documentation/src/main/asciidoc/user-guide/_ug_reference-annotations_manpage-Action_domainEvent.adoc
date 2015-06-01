@@ -5,15 +5,13 @@
 :_imagesdir: images/
 
 
-
-Every interaction with a domain object action causes multiple events to be fired, in the following phases:
+Whenever a domain object (or list of domain objects) is to be rendered, the framework fires off multiple domain events for every property, collection and action of the domain object.  In the cases of the domain object's actions, the events that are fired are:
 
 * hide phase: to check that the action is visible (has not been hidden)
 * disable phase: to check that the action is usable (has not been disabled)
 * validate phase: to check that the action's arguments are valid
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
-
 
 Subscribers subscribe through the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
@@ -22,19 +20,13 @@ By default the event raised is `ActionDomainEvent.Default`. For example:
 [source,java]
 ----
 public class ToDoItem {
-    ...
     @Action()
     public ToDoItem completed() { ... }
+    ...
 }
 ----
 
-
-This attribute allows a custom subclass to be declared.
-
-[NOTE]
-====
-This attribute replaces the deprecated `@ActionInteraction` annotation.
-====
+The purpose of the `domainEvent()` attribute is to allows a custom subclass to be emitted instead.
 
 For example:
 
@@ -58,11 +50,16 @@ public class ToDoItem {
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
 
+[NOTE]
+====
+As you might expect, it is also possible to influence the domain event type raised for xref:_ug_reference-annotations_manpage-Collection_domainEvent[collection] and xref:_ug_reference-annotations_manpage-Property_domainEvent[properties].
+====
+
 
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the Guava API or (if the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] has been appropriately configured) using the AxonFramework API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -78,7 +75,7 @@ public class SomeSubscriber {
 }
 ----
 
-or can be fine-grained by subscribing to specific event subtypes:
+or can be fine-grained (by subscribing to specific event subtypes):
 
 [source,java]
 ----
@@ -92,7 +89,7 @@ public class SomeSubscriber {
 }
 ----
 
-[NOTE]
+[TIP]
 ====
 If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` for `@org.axonframework.eventhandling.annotation.EventHandler`.
 ====
@@ -112,22 +109,17 @@ The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the g
 ----
 @Programmatic
 @com.google.common.eventbus.Subscribe
-public void on(ActionInteractionEvent ev) {
+public void on(ActionDomainEvent ev) {
     switch(ev.getPhase()) {
         case HIDE:
-            ...
             break;
         case DISABLE:
-            ...
             break;
         case VALIDATE:
-            ...
             break;
         case EXECUTING:
-            ...
             break;
         case EXECUTED:
-            ...
             break;
     }
 }
@@ -147,17 +139,14 @@ Vetoing is performed by calling the appropriate method on the event:
 
 `ev.invalidate("...")` or `ev.veto("...")`
 
-It is also possible to abort the transaction during the executing or executed
-phases by throwing an exception. If the exception is a subtype of `RecoverableException`
-then the exception will be rendered as a user-friendly warning (eg Growl/toast)
-rather than an error.
+It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 
 
 
 
-== Raising events programmatically.
+== Raising events programmatically
 
-Normally events are only raised for interactions through the UI. However, events can be raised programmatically by
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically either by calling the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] API directly, or by emulating the UI by
 wrapping the target object using the xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`] domain service.
 
 

@@ -84,3 +84,9 @@ Here the body will (likely be) displayed in a text area of 20 rows, with
 
 
 
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

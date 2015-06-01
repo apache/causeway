@@ -6,11 +6,13 @@
 
 
 
-The `semantics()` annotation describes whether the invocation is safe (as no side-effects), is idempotent (may have side-effects but always has the same post-conditions), or is neither safe nor idempotent. If the annotation is missing then the framework assumes non-idempotent.
+The `semantics()` attribute describes whether the invocation is safe (as no side-effects), is idempotent (may have side-effects but always has the same post-conditions), or is neither safe nor idempotent. If the annotation is missing then the framework assumes non-idempotent.
 
-[NOTE]
+[TIP]
 ====
-This attribute replaces the deprecated `@QueryOnly` and `Idempotent` annotations and also the `@ActionSemantics` annotation.
+The attribute was originally introduced for the xref:_ug_restfulobjects-viewer[RestfulObjects viewer] in order that action invocations could be made available using either HTTP GET, PUT or POST (respectively).
+
+Since then its use has been extended into the core runtime.  For example, it is now aso used for the in-built concurrency checking; the invocation of a safe action does not perform a concurrency check, whereas non-safe actions do perform a concurrency check.
 ====
 
 For example:
@@ -30,9 +32,5 @@ public class Customer {
 }
 ----
 
-[TIP]
-====
-The annotation was introduced for the Restful Objects viewer in order that action invocations could be made available using either HTTP GET, PUT or POST (respectively). It is now also used in core runtime's in-built concurrency checking; the invocation of a safe action does not perform a concurrency check, whereas non-safe actions do perform a concurrency check.
-====
 
 

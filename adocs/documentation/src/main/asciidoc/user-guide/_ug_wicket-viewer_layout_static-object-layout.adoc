@@ -100,7 +100,7 @@ public class ToDoItem {
 
 Four values are given in the `columnSpans` attribute. The first three are the relative widths of the three columns of property groups. The fourth, meanwhile, indicates the width of a final column that holds all the collections of the object.
 
-The values of these spans are taken as proportions of 12 virtual columns across the page (this taken from the http://twitter.github.io/bootstrap/[Bootstrap] library).
+The values of these spans are taken as proportions of 12 virtual columns across the page (this taken from the link:http://getbootstrap.com/2.3.2/[Bootstrap] library).
 
 For example:
 

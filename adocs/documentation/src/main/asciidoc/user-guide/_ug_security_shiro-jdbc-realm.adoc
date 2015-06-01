@@ -110,6 +110,6 @@ Using the above configuration you will also need to setup a `DataSource`.  The d
 
 [WARNING]
 ====
-The name of the `DataSource` can also vary by servlet container; see for example link:http://stackoverflow.com/a/23784702/56880[this StackOverflow answer].
+The name of the `DataSource` can also vary by servlet container; see for example link:http://stackoverflow.com/questions/17441019/how-to-configure-jdbcrealm-to-obtain-its-datasource-from-jndi/23784702#23784702[this StackOverflow answer].
 ====
 

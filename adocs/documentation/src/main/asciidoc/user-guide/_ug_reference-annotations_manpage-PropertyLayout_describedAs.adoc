@@ -11,6 +11,11 @@ IMPORTANT: WIP ... this section
 
 The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
 
+[NOTE]
+====
+The `describedAs()` attribute can also be specified for xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[collections],  xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[actions], xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_describedAs[view models].
+====
+
 Descriptions may be provided for objects, members (properties, collections and actions), and for individual parameters within an action method. `@DescribedAs` therefore works in a very similar manner to `@Named`.
 
 For example:
@@ -25,3 +30,9 @@ public class Customer {
 ----
 
 
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

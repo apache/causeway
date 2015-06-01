@@ -13,6 +13,12 @@ The `CssClass` annotation applies to object and also to any object member
 (property, collection or action). It is used by the Wicket viewer as a UI hint
 to render specified CSS classes around the representation of the element.
 
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClass[view models], xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[properties],  xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[collections] and xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[action parameters].
+====
+
+
 Application-specific CSS can then be used to target and adjust the UI representation
 of that particular element.
 
@@ -40,38 +46,14 @@ public class ToDoItem {
 
 
 
-== Alternatives (`.layout.json`)
-
-As an alternative to using the `@CssClass` annotation, the `.layout.json` xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout file]
-can be specified, eg:
-
-[source,javascript]
-----
-{
-    "span": 6,
-    "memberGroups": {
-        "Priority": {
-            "members": {
-                ...
-                "dueBy": {
-                    "cssClass": { "value": "x-key" }
-                }
-                ....
-            }
-        },
-        ...
-    }
-}
-----
-
-Note that this (currently) only supports class members, not classes
 
 
 [NOTE]
 ====
-The similar xref:_ug_reference-annotations_manpage_DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint
+The similar xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint
 to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
 to be rendered on action butotns or as the icon for classes.
 ====
+
 
 

@@ -10,8 +10,8 @@ The `@PropertyLayout` annotation applies to properties collecting together all U
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@PropertyLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -21,7 +21,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[`cssClass()`]
 |
-|the css class that a property should have, to allow more targetted styling in `application.css`
+|the css class that a property should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[`describedAs()`]

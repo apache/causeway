@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to
-their own (database) schemas. As of 1.9.0-SNAPSHOT, all the http://isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
+their own (database) schemas. As of 1.9.0-SNAPSHOT, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
 
 [source,java]
 ----

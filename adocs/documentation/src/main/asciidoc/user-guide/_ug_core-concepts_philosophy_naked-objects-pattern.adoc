@@ -35,7 +35,7 @@ One of the external examiners for Richard's PhD was link:http://en.wikipedia.org
 
 Reenskaug then goes on to say that "this simple and powerful idea failed because ... users were used to seeing [objects] from different perspectives. The visible and tangible object would get very complex if it should be able to show itself and be manipulated in many different ways."
 
-In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.  Rather, the object inspects the object and uses that to decide how to render the object.  This is also extensible.  In the http://isisaddons.org[Isis Addons] (non-ASF) the http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3] wicket extension renders any object with latitude/longitude on a map, while http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 wicket extension] renders any object with date(s) on a calendar.
+In Apache Isis the responsibility of rendering an object is not the object itself, it is the framework.  Rather, the object inspects the object and uses that to decide how to render the object.  This is also extensible.  In the link:http://www.isisaddons.org[Isis Addons] (non-ASF) the http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3] wicket extension renders any object with latitude/longitude on a map, while http://github.com/isisaddons/isis-wicket-fullcalendar2[Isis addons' fullcalendar2 wicket extension] renders any object with date(s) on a calendar.
 ====
 
 

@@ -41,7 +41,7 @@ If you just want to debug (writing to stderr), you can instead configure `org.ap
 
 === Explicitly marking an object as audited
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:_ug_reference-annotations_manpage_DomainObject_auditing[`@DomainObject#auditing()`] annotation, for example:
+The typical way to indicate that an object should be audited is to annotate it with the xref:_ug_reference-annotations_manpage-DomainObject_auditing[`@DomainObject#auditing()`] annotation, for example:
 
 [source,java]
 ----

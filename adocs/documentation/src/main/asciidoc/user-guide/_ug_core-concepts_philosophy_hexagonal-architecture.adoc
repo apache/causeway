@@ -12,7 +12,7 @@ A few years ago Alistair Cockburn reworked the traditional layered architecture 
 
 [TIP]
 ====
-The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture:[Ports and Adapters] architecture or (less frequently) as the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture.
+The hexagonal architecture is also known as the link:http://c2.com/cgi/wiki?PortsAndAdaptersArchitecture[Ports and Adapters] architecture or (less frequently) as the link:http://jeffreypalermo.com/blog/the-onion-architecture-part-1/[Onion] architecture.
 ====
 
 .The hexagonal architecture emphasizes multiple implementations of the different layers.

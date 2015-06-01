@@ -11,7 +11,7 @@ IMPORTANT: TODO
 
 == Applib Services
 
-The table below summarizes all the APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Isis itself, or provided by one of the in http://isisaddons.org[Isis Addons] (non-ASF)modules.
+The table below summarizes all the APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
 
 .Domain Services
 [cols="2,4a,3a,1", options="header"]

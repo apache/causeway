@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The http://isisaddons.org[Isis Addons] website provides a number of extensions to the Wicket viewer (leveraging the APIs described in <<Extending the Wicket viewer>> section, later.  While you are free to fork and adapt any of them to your needs, they are also intended for use "out-of-the-box".
+The (non-ASF) link:http://www.isisaddons.org[Isis Addons] website provides a number of extensions to the Wicket viewer (leveraging the APIs described in <<Extending the Wicket viewer>> section, later.  While you are free to fork and adapt any of them to your needs, they are also intended for use "out-of-the-box".
 
 [WARNING]
 ====

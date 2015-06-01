@@ -47,5 +47,12 @@ of 20 for standalone collections.
 
 
 
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----
+
 
 

@@ -51,3 +51,10 @@ Without this annotation, the order would have been inverted (because the natural
 
 
 
+
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

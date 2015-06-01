@@ -5,14 +5,9 @@
 :_imagesdir: images/
 
 
-The `restrictTo` attribute specifies whether the action is restricted to prototyping, or is generally available.
 
-[NOTE]
-====
-This attribute replaces the deprecated `@Exploration` and `@Prototype` annotations.
-====
 
-By default there are no restrictions, with the action being available in all environments.
+By default actions are available irrespective of the xref:_ug_runtime_configuration-files_deployment-types[deployment mode].  The `restrictTo()` attribute specifies whether the action should instead be restricted to only available in prototyping mode.
 
 For example:
 
@@ -21,13 +16,14 @@ For example:
 public class Customer {
     public Order placeNewOrder() { ... }
     public List<Order> listRecentOrders() { ... }
+
     @Action(restrictTo=RestrictTo.PROTOTYPING)
     public List<Order> listAllOrders() { ... }
     ...
 }
 ----
 
-In this case listing all orders probably doesn't make sense for production (there could be thousands or millions), but would be fine in a test or demo system where there are only a handful.
+In this case the listing of all orders (in the `listAllOrders()` action) probably doesn't make sense for production; there could be thousands or millions.  However, it would be useful to disaply how for a test or demo system where there are only a handful of orders.
 
 
 

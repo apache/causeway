@@ -9,8 +9,8 @@ The `@Parameter` annotation applies to action parameters collecting together all
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@Paramter` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute

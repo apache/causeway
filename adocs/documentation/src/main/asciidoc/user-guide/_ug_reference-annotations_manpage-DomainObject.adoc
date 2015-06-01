@@ -10,8 +10,8 @@ The `@DomainObject` annotation applies to domain objects, collecting together al
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@DomainObject` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute

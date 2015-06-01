@@ -18,7 +18,7 @@ Isis does not translate the values of your domain objects, though.  So, if you h
 Most Java frameworks tackle i18n by using Java's own `ResourceBundle` API.  However, there are some serious drawbacks in this approach, such as:
 
 * if a string appears more than once (eg "name" or "description") then it must be translated everywhere it appears in every resource bundle file
-* there is no support for plural forms (see this link:http://stackoverflow.com/a/14327683/56880[SO answer])
+* there is no support for plural forms (see this link:http://stackoverflow.com/questions/14326653/java-internationalization-i18n-with-proper-plurals/14327683#14327683[SO answer])
 * there is no tooling support for translators
 
 Apache Isis therefore takes a different approach, drawing inspiration from GNU's https://www.gnu.org/software/gettext/manual/index.html[gettext] API and specifically its `.pot` and `.po` files.  These are intended to be used as follows:

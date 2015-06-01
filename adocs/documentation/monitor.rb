@@ -44,9 +44,8 @@ targetBaseDir = File.absolute_path 'target/site'
 srcBasePath = Pathname.new srcBaseDir
 targetBasePath = Pathname.new targetBaseDir
 
-i=0
 
-def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
+def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,priming)
 
     workingDir = Dir.pwd
 
@@ -80,16 +79,24 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 
         unless regenerate == "" then
 
-            cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+	    # don't regenerate more often than every 5 seconds
+	    currentTime = Time.now
+	    if not priming and
+	       currentTime.to_i < lastTimeGenerated.to_i + 5 then
+	        puts "skipping regeneration (5 seconds not yet elapsed)"
+	    else
 
-            unless priming then
-                puts ""
-                puts "#{i}: #{cmd}"
-            end
+                cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
-            system cmd
+                unless priming then
+                    puts ""
+                    puts "#{i}: #{cmd}"
+                end
 
+                system cmd
 
+                lastTimeGenerated=Time.now
+	    end
         end
 
     else
@@ -111,10 +118,13 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,priming)
 
     Dir.chdir workingDir
 
-    return i+1
+    return i+1, lastTimeGenerated
 
 end
 
+
+i=0
+lastTimeGenerated = Time.now - 10
 
 #
 # process all files
@@ -131,7 +141,7 @@ if processAll then
 
     files.each { |file|
         absFile = File.absolute_path file
-        i = process absFile, srcBasePath, targetBasePath, templateDir, i, true
+        i,lastTimeGenerated = process absFile, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, true
     }
 end
 
@@ -155,12 +165,12 @@ directories = Dir.glob("src/main/asciidoc/**/*/")
 fileListener = Listen.to(directories) do |modified, added, removed|
     unless modified.length==0
         modified.each { |file|
-            i = process file, srcBasePath, targetBasePath, templateDir, i, false
+            i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
         }
     end
     unless added.length==0
         added.each { |file|
-            i = process file, srcBasePath, targetBasePath, templateDir, i, false
+            i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
         }
     end
     unless removed.length==0

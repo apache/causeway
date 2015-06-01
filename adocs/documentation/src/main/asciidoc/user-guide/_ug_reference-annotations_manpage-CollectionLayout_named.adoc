@@ -1,5 +1,5 @@
 [[_ug_reference-annotations_manpage-CollectionLayout_named]]
-= Named
+= `named()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -10,9 +10,13 @@ By default, the name of a class member (a property, collection or action) presen
 
 [TIP]
 ====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
+Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't repeat yourself] principle, we recommend that you only use this attribute when the desired name cannot be used in Java source code.  Examples of that include a name that would be a reserved Java keyword (eg "package"), or a name that has punctuation, eg apostrophes.
 ====
 
+[NOTE]
+====
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[action parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
+====
 
 
 == named()
@@ -56,3 +60,9 @@ IMPORTANT: WIP ... this section
 
 
 
+As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
+can be used instead, eg:
+
+[source,javascript]
+----
+----

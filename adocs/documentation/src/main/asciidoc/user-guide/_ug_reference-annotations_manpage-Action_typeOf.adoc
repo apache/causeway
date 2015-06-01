@@ -6,12 +6,7 @@
 
 
 
-Specifies the type-of the elements returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
-
-[NOTE]
-====
-This attribute replaces the deprecated `@TypeOf` annotation.
-====
+The `typeOf()` attribute specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
 
 For example:
 
@@ -20,9 +15,12 @@ For example:
 public void AccountService {
     @Action(typeOf=Customer.class)
     public List errantAccounts() {
-        return CustomerRepo.allNewCustomers();
+        return customers.allNewCustomers();
     }
     ...
+
+    @Inject
+    CustomerRepository customers;
 }
 ----
 

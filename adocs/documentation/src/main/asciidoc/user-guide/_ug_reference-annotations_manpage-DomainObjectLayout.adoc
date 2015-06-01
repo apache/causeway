@@ -11,8 +11,8 @@ annotation.
 
 The table below summarizes the annotation's attributes.
 
-.`@Action` attributes
-[cols="2,2,4", options="header"]
+.`@DomainObjectLayout` attributes
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -27,7 +27,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssclass[`cssClass()`]
 |
-|the css class that a domain class (type) should have, to allow more targetted styling in `application.css`
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:_ug_runtime_application-specific_application-css[`application.css`]
 
 
 |xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`cssClassFa()`]
@@ -79,7 +79,15 @@ public class ToDoItem {
 ----
 
 For view models that have been annotated with `@ViewModel` (rather than `@DomainObject(nature=VIEW_MODEL)` the
-equivalent xref:_ug_reference-annotations_manpage_VewModelLayout[`@VewModelLayout`] can be used.
+equivalent xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`] can be used.
+
+
+
+[NOTE]
+====
+Note that there is (currently) no support for specifying UI hints for domain objects through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+====
+
 
 
 

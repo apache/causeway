@@ -10,7 +10,7 @@ The `@Action` annotation groups together all domain-specific metadata for an inv
 The table below summarizes the annotation's attributes.
 
 .`@Action` attributes
-[cols="2,2,4", options="header"]
+[cols="2,2,4a", options="header"]
 |===
 
 | Attribute
@@ -21,19 +21,20 @@ The table below summarizes the annotation's attributes.
 |xref:_ug_reference-annotations_manpage-Action_command[`command()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether the action invocation should be reified into a `o.a.i.applib.services.command.Command` object.
+|whether the action invocation should be reified into a `o.a.i.applib.` +
+`services.command.Command` object.
 
 
 |`commandExecuteIn()`
 |`FOREGROUND`,`BACKGROUND` +
 (`FOREGROUND`)
-|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of `CommandService` has been configured) such that a background scheduler can execute the command asynchronously
+|whether to execute the command immediately, or to persist it (assuming that an appropriate implementation of xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] has been configured) such that a background scheduler can execute the command asynchronously
 
 
 |`commandPersistence()`
 |`PERSISTED`,`NOT_PERSISTED`,`IF_HINTED` +
 (`PERSISTED`)
-|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of `CommandService` has been configured).
+|whether the reified `Command` (as provided by the `CommandContext` domain service) should actually be persisted (assuming an appropriate implementation of xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] has been configured).
 
 
 |xref:_ug_reference-annotations_manpage-Action_domainEvent[`domainEvent()`]
@@ -43,8 +44,8 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-Action_hidden[`hidden()`]
-|`true`,`false` +
-(`false`)
+|`EVERYWHERE`,`NOWHERE` +
+(`NOWHERE`)
 |indicates where (in the UI) the action should be hidden from the user.
 
 
@@ -52,6 +53,8 @@ The table below summarizes the annotation's attributes.
 |`OBJECT_ONLY`, `COLLECTION_ONLY`, `OBJECT_AND_COLLECTION` +
 (`OBJECT_ONLY`)
 |whether an action can be invoked on a single object and/or on many objects in a collection.
+
+Currently this is only supported for no-arg actions.
 
 
 |xref:_ug_reference-annotations_manpage-Action_publishing[`publishing()`]

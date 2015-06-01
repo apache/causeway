@@ -6,7 +6,7 @@
 
 
 
-The http://isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.  This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
+The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.  This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
 
 [WARNING]
 ====

@@ -11,7 +11,7 @@ In 1.6.0 this implementation was released as part of _org.apache.isis.core:isis-
 ====
 
 
-The `DeveloperUtilitiesService` service provides a number of development-time utilities, mostly related to accessing/interacting with the Isis metamodel. These are visible in the UI, either as menu actions or as contributed actions. All actions are annotated with xref:_ug_reference-annotations_manpage_Action_restrictTo[`@Action#restrictTo()`] to restrict to prototype mode (suppressed from production mode).
+The `DeveloperUtilitiesService` service provides a number of development-time utilities, mostly related to accessing/interacting with the Isis metamodel. These are visible in the UI, either as menu actions or as contributed actions. All actions are annotated with xref:_ug_reference-annotations_manpage-Action_restrictTo[`@Action#restrictTo()`] to restrict to prototype mode (suppressed from production mode).
 
 
 

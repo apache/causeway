@@ -1,5 +1,5 @@
 [[_ug_reference-annotations_manpage-Action_publishing]]
-= Publishing
+= `publishing()`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -7,12 +7,7 @@
 
 
 
-Publishing (to the registered implementation of a xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`]) is managed by the `publishing()` and `publishingPayloadFactory()` attributes.
-
-[NOTE]
-====
-The following attributes replace the deprecated `@PublishedAction` annotation.
-====
+The `publishing()` attribute (and related `publishingPayloadFactory()` attribute) determine whether and how an action is published via the registered implementation of a xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`]).  A common use case is to notify external "downstream" systems of changes in the state of the Isis application.
 
 
 
@@ -22,11 +17,19 @@ This attribute indicates whether the action invocation should be published to th
 
 The default is `AS_CONFIGURED`, meaning that the configuration property `isis.services.publish.actions` is used to determine the whether the action is published:
 
-* `all` - all actions are published
-* `ignoreSafe` (or `ignoreQueryOnly`) - actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
-* `none` - no actions are published
+* `all` +
++
+all actions are published
 
-If there is no setting in `isis.properties` then publishing is automatically enabled.
+* `ignoreSafe` (or `ignoreQueryOnly`) +
++
+actions with safe (read-only) semantics are ignored, but actions which may modify data are not ignored
+
+* `none` +
++
+no actions are published
+
+If there is no configuration property in `isis.properties` then publishing is automatically enabled.
 
 This default can be overridden on an action-by-action basis; if `publishing()` is set to `ENABLED` then the action is published irrespective of the configured value; if set to `DISABLED` then the action is NOT published irrespective of the configured value.
 

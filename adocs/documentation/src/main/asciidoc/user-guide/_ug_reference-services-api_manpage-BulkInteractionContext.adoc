@@ -9,7 +9,7 @@ IMPORTANT: TODO
 
 Title: Bulk Interaction
 
-The `Bulk.InteractionContext` domain service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service intended to support the implementation of xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk] actions. That is, when a bulk action is invoked over a collection of objects, each object instance "knows where it is" in the collection. In essence, the `Bulk.InteractionContext` service acts a little like an iterator.
+The `Bulk.InteractionContext` domain service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service intended to support the implementation of xref:_ug_reference-annotations_manpage-Action_invokeOn[bulk] actions. That is, when a bulk action is invoked over a collection of objects, each object instance "knows where it is" in the collection. In essence, the `Bulk.InteractionContext` service acts a little like an iterator.
 
 === API
 

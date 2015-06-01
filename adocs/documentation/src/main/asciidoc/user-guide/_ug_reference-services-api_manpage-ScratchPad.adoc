@@ -38,7 +38,7 @@ In fact, this is a concrete class:
 
 == Usage
 
-The most common use-case is for xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk] actions that link:../../more-advanced-topics/how-to-01-065-How-to-add-an-action-to-be-called-on-every-object-in-a-list.html[act upon multiple objects in a list]. The (same) `Scratchpad` service is injected into each of these objects, and they can use pass information.
+The most common use-case is for xref:_ug_reference-annotations_manpage-Action_invokeOn[bulk] actions that link:../../more-advanced-topics/how-to-01-065-How-to-add-an-action-to-be-called-on-every-object-in-a-list.html[act upon multiple objects in a list]. The (same) `Scratchpad` service is injected into each of these objects, and they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
@@ -115,6 +115,6 @@ The `Scratchpad` class is automatically registered (it is annotated with `@Domai
 
 == Related Services
 
-The xref:_ug_reference-services-api_manpage-ActionInteractionContext[`ActionInteractionContext`] service allows xref:_ug_reference-annotations_manpage_Action_invokeOn[bulk actions] to co-ordinate with each other.
+The xref:_ug_reference-services-api_manpage-ActionInteractionContext[`ActionInteractionContext`] service allows xref:_ug_reference-annotations_manpage-Action_invokeOn[bulk actions] to co-ordinate with each other.
 
 The xref:_ug_reference-services-api_manpage-QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.
