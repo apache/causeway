@@ -7,10 +7,8 @@
 
 The `cssClassFa()` attribute is used to specify the name of a link:http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icon] name, to be rendered on the action's representation as a button or menu item.    The related `cssClassFaPosition()` attribute specifies the positioning of the icon, to the left or the right of the text.
 
-[NOTE]
-====
 These attributes can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[domain objects] and to xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
-====
+
 
 For example:
 

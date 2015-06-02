@@ -7,12 +7,7 @@
 
 
 
-Actions can be hidden at the domain-level, indicating that they are not visible to the end-user.
-
-[NOTE]
-====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-Property_hidden[properties] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
-====
+Actions can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-Property_hidden[properties] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
 
 [TIP]
 ====

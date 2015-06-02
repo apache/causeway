@@ -6,12 +6,7 @@
 
 
 
-The `hidden()` attribute indicates where (in the UI) the property should be hidden from the user.
-
-[NOTE]
-====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-Action_hidden[actions] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
-====
+The `hidden()` attribute indicates where (in the UI) the property should be hidden from the user.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-Action_hidden[actions] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
 
 [TIP]
 ====

@@ -8,11 +8,7 @@
 
 The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the domain object.   xref:_ug_runtime_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
-
-[NOTE]
-====
 This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClass[view models], xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[properties],  xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[collections] and xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[parameters].
-====
 
 
 For example:

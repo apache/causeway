@@ -5,12 +5,7 @@
 :_imagesdir: images/
 
 
-The `describedAs()` attribute is used to provide a short description of the view model to the user.  In the xref:_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.
-
-[NOTE]
-====
-The `describedAs()` attribute can also be specified for xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[collections],  xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[properties], xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[actions], xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[parameters] and xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[domain objects].
-====
+The `describedAs()` attribute is used to provide a short description of the view model to the user.  In the xref:_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[collections],  xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[properties], xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[actions], xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[parameters] and xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[domain objects].
 
 For example:
 

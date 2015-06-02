@@ -5,20 +5,19 @@
 :_imagesdir: images/
 
 
-The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only.  The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the property cannot be modified directly.
+The `editing()` attribute can be used to prevent a property from being modified or cleared, ie to make it read-only. This attribute can also be specified for xref:_ug_reference-annotations_manpage-Collection_editing[collections], and can also be specified for the xref:_ug_reference-annotations_manpage-DomainObject_editing[domain object].
 
-[NOTE]
-====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-Collection_editing[collections], and can also be specified for the xref:_ug_reference-annotations_manpage-DomainObject_editing[domain object].
-====
+The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the property cannot be modified directly.
 
-Whether a property is enabled or disabled depends upon three factors:
+Whether a property is enabled or disabled depends upon these factors:
 
 * whether the domain object has been configured as immutable through the xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`] attribute
 
 * else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:_ug_runtime_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's properties (and collections) are _not_ editable
 
-* else, then the value of the `@Property(editing=...)` attribute itself.
+* else, then the value of the `@Property(editing=...)` attribute itself
+
+* else, the result of invoking any supporting xref:_ug_reference-methods_prefixes_manpage-disable[`disable...()`] supporting methods
 
 
 Thus, to make a property read-only even if the object would otherwise be editable, use:

@@ -6,12 +6,7 @@
 
 
 
-Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.
-
-[NOTE]
-====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-ActionLayout_hidden[actions] and xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[collections].
-====
+Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-ActionLayout_hidden[actions] and xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[collections].
 
 [TIP]
 ====

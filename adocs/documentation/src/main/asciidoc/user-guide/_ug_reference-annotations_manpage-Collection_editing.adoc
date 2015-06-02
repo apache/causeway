@@ -6,28 +6,26 @@
 
 
 
+The `editing()` annotation indicates whether a collection can be added to or removed from within the UI.  This attribute can also be specified for xref:_ug_reference-annotations_manpage-Property_editing[properties], and can also be specified for the xref:_ug_reference-annotations_manpage-DomainObject_editing[domain object]
 
-
-
-The `editing()` annotation indicates whether a collection can be added to or removed from within the UI.  The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the collection cannot be modified directly.
-
-[NOTE]
-====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-Property_editing[properties], and can also be specified for the xref:_ug_reference-annotations_manpage-DomainObject_editing[domain object]
-====
+The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the collection cannot be modified directly.
 
 [WARNING]
 ====
-The xref:_ug_wicket-viewer[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  (The workaround is to create add/remove actions and use xref:_ug_reference-annotations_manpage-MemberOrder[UI hints] to render them close to the collection).
+The xref:_ug_wicket-viewer[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.
+
+The workaround is to create add/remove actions and use xref:_ug_reference-annotations_manpage-MemberOrder[UI hints] to render them close to the collection.
 ====
 
-Whether a collection is enabled or disabled depends upon three factors:
+Whether a collection is enabled or disabled depends upon these factors:
 
 * whether the domain object has been configured as immutable through the xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`] attribute
 
 * else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:_ug_runtime_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's collections (and properties) are _not_ editable
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.
+
+* else, the result of invoking any supporting xref:_ug_reference-methods_prefixes_manpage-disable[`disable...()`] supporting methods
 
 
 Thus, to make a collection read-only even if the object would otherwise be editable, use:

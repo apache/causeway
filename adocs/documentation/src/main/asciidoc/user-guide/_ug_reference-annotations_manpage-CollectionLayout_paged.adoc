@@ -5,12 +5,7 @@
 :_imagesdir: images/
 
 
-The `paged()` attribute specifies the number of rows to display in a (parented) collection.
-
-[NOTE]
-====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_paged[view models].
-====
+The `paged()` attribute specifies the number of rows to display in a (parented) collection. This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_paged[view models].
 
 
 [WARNING]

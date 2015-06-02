@@ -6,12 +6,7 @@
 
 
 
-The `typeOf()` attribute specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.
-
-[NOTE]
-====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-Collection_typeOf[collections].
-====
+The `typeOf()` attribute specifies the expected type of an element returned by the action (returning a collection), when for whatever reason the type cannot be inferred from the generic type, or to provide a hint about the actual run-time (as opposed to compile-time) type.  This attribute can also be specified for xref:_ug_reference-annotations_manpage-Collection_typeOf[collections].
 
 
 For example:

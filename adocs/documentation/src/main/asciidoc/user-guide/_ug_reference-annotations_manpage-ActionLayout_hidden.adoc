@@ -5,12 +5,7 @@
 :_imagesdir: images/
 
 
-The `hidden()` attribute indicates where (in the UI) the action should be hidden from the user.
-
-[NOTE]
-====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-PropertyLayout_hidden[properties] and xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[collections].
-====
+The `hidden()` attribute indicates where (in the UI) the action should be hidden from the user.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-PropertyLayout_hidden[properties] and xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[collections].
 
 [TIP]
 ====
