@@ -8,7 +8,7 @@
 
 The `editing()` attribute determines whether a domain object's properties and collections are not editable (are read-only).  The related `editingDisabledReason()` attribute specifies the a hard-coded reason why the object's properties and collections cannot be modified directly.
 
-The default is `AS_CONFIGURED`, meaning that the configuration property `isis.objects.editing` is used to determine the whether the object is modifiable:
+The default is `AS_CONFIGURED`, meaning that the xref:_ug_runtime_configuring-core[configuration property] `isis.objects.editing` is used to determine the whether the object is modifiable:
 
 * `true` +
 +

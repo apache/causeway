@@ -9,7 +9,7 @@
 
 The `publishing()` attribute determines whether and how an action is published via the registered implementation of a xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`]).  A common use case is to notify external "downstream" systems of changes in the state of the Isis application.
 
-The default value for the attribute is `AS_CONFIGURED`, meaning that the configuration property `isis.services.publish.actions` is used to determine the whether the action is published:
+The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:_ug_runtime_configuring-core[configuration property] `isis.services.publish.actions` is used to determine the whether the action is published:
 
 * `all` +
 +

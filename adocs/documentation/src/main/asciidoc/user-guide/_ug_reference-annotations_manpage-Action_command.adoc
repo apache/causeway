@@ -30,7 +30,7 @@ If background ``Command``s are used, then an external scheduler, using xref:_ug_
 
 The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service).
 
-The default is `AS_CONFIGURED`, meaning that the configuration property `isis.services.command.actions` is used to determine the whether the action is reified:
+The default is `AS_CONFIGURED`, meaning that the xref:_ug_runtime_configuring-core[configuration property] `isis.services.command.actions` is used to determine the whether the action is reified:
 
 * `all` +
 +

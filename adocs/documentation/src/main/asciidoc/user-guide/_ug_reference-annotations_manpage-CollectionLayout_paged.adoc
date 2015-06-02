@@ -5,45 +5,34 @@
 :_imagesdir: images/
 
 
+The `paged()` attribute specifies the number of rows to display in a (parented) collection.
 
-IMPORTANT: WIP ... this section
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_paged[view models].
+====
 
 
-This annotation is used to indicate that parented and/or standalone
-collections should be paginated.
+[WARNING]
+====
+The xref:_ug_restfulobjects-viewer[RestfulObjects viewer] currently does not support paging.   The xref:_ug_wicket-viewer[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.
 
-When annotated on a collection, `@Paged` indicates the page size of a
-parented collection. When annotated on a type, `@Paged` indicates the page
-size of a standalone collection.
+We therefore recommend that large collections should instead be modelled as actions (to allow filtering to be applied to limit the number of rows).
+====
+
 
 For example:
 
 [source,java]
 ----
-@Paged(30)
 public class Order {
-
-    @Paged(15)
-    public List<LineItem> getDetails() {...}
+    @CollectionLayout(paged=15)
+    public SortedSet<OrderLine> getDetails() {...}
 }
 ----
 
-This indicates a page size of 15 for parented collections, and a page
-size of 30 for standalone collections.
 
-When omitting a parameter value or omitting the annotation completely,
-the configured defaults in `isis.properties` will be used.
-
-For example:
-
-[source,ini]
-----
-isis.viewers.paged.standalone=20
-isis.viewers.paged.parented=5
-----
-
-This indicates a page size of 5 for parented collections and a page size
-of 20 for standalone collections.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:_ug_runtime_configuring-core[configuration property] `isis.viewer.paged.parented`.
 
 
 
@@ -52,7 +41,10 @@ can be used instead, eg:
 
 [source,javascript]
 ----
+"details": {
+    "collectionLayout": {
+        "paged": 15
+    }
+}
 ----
-
-
 

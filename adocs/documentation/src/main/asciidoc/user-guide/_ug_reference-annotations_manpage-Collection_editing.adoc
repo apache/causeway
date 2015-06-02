@@ -25,7 +25,7 @@ Whether a collection is enabled or disabled depends upon three factors:
 
 * whether the domain object has been configured as immutable through the xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`] attribute
 
-* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the `isis.objects.editing` configuration property.  If set to `false`, then the object's collections (and properties) are _not_ editable
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:_ug_runtime_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's collections (and properties) are _not_ editable
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.
 

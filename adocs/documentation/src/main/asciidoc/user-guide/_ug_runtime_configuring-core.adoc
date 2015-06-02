@@ -122,6 +122,17 @@ See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata 
 See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
 
 |`isis.viewers.` +
+`paged.parented`
+|positive integer (12)
+|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
+|`isis.viewers.` +
+`paged.standalone`
+|positive integer (25)
+|Default page size for standalone collections (as returned from an action invocation)
+
+
+|`isis.viewers.` +
 `propertyLayout.labelPosition`
 |`TOP`, `LEFT` +
 (`LEFT`)
