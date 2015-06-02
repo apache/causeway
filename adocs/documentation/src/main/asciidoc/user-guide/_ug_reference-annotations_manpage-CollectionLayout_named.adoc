@@ -6,7 +6,7 @@
 
 
 
-By default, the name of a class member (a property, collection or action) presented to the user is derived, reflectively, from the name of the member defined in the program code. To specify a different name use the `@Named `annotation immediately before the member declaration.
+The `named()` attribute explicitly specifies the collection's name, overriding the name that would normally be inferred from the Java source code.
 
 [TIP]
 ====
@@ -15,48 +15,25 @@ Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't re
 
 [NOTE]
 ====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[action parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
 ====
 
-
-== named()
-
-IMPORTANT: WIP ... this section
-
-
-The `@Named` annotation is used when you want to specify the way
-something is named on the user interface i.e. when you do not want to
-use the name generated automatically by the system. It can be applied to
-objects, members (properties, collections, and actions) and to
-parameters within an action method.
-
+By default the name is HTML escaped.  This can be disabled using the related `namedEscaped()` attribute (thus allowing the name to include HTML markup).
 
 
 For example:
 
 [source,java]
 ----
-public class Customer {
-
-    public String getFirstName() { ... }
-
-    public String getSurname() { ... }
-
-    public CreditRating getCreditRating() { ... }
+public class ToDoItem {
+    @CollectionLayout(
+        named="Todo items that are <i>dependencies</i> of this item",
+        namedEscaped=false
+    )
+    public SortedSet<ToDoItem getDependencies() { ... }
+    ...
 }
 ----
-
-Note that the framework provides a separate and more powerful mechanism
-for internationalisation.
-
-
-
-
-== namedEscaped()
-
-IMPORTANT: WIP ... this section
-
-
 
 
 
@@ -65,4 +42,16 @@ can be used instead, eg:
 
 [source,javascript]
 ----
+"dependencies": {
+    "collectionLayout": {
+        "named": "Todo items that are <i>dependencies</i> of this item",
+        "namedEscaped": false,
+    }
+}
 ----
+
+
+[TIP]
+====
+The framework also provides a separate, powerful mechanism for xref:_ug_more-advanced_i18n[internationalization].
+====

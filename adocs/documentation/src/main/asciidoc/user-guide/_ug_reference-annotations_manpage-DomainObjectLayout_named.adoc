@@ -5,13 +5,8 @@
 :_imagesdir: images/
 
 
+The `named()` attribute explicitly specifies the domain object's name, overriding the name that would normally be inferred from the Java source code.
 
-IMPORTANT: WIP ... this section
-
-
-By default the name of an object is derived, reflectively from the class
-name. To specify a different name for an object, use the `@Named`
-annotation in front of the class declaration.
 
 [TIP]
 ====
@@ -20,13 +15,7 @@ Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't re
 
 [NOTE]
 ====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-CollectionLayout_named[collections], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[action parameters], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
-====
-
-
-[WARNING]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-CollectionLayout_named[collections], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[parameters], xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models] and xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[domain services].
 ====
 
 
@@ -34,13 +23,20 @@ For example:
 
 [source,java]
 ----
-@Named("Customer")
+@DomainObjectLayout(
+   named="Customer"
+)
 public class CustomerImpl implements Customer{
    ...
 }
 ----
 
-See also the `@Plural` annotation <!--, ?-->.
+It's also possible to specify a xref:_ug_reference-annotations_manpage-DomainObjectLayout_plural[plural form] of the name, used by the framework when rendering a standalone collection of the domain object.
 
+
+[TIP]
+====
+The framework also provides a separate, powerful mechanism for xref:_ug_more-advanced_i18n[internationalization].
+====
 
 

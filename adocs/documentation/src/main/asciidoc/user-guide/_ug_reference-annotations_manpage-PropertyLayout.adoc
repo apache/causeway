@@ -102,12 +102,6 @@ public class ToDoItem {
         typicalLength=80
     )
     public String getDescription() { ... }
-
-    @PropertyLayout(
-        describedAs="Additional notes",
-        labelPosition=LabelPosition.TOP,
-        multiLine=8)
-    public String getNotes() { ... }
     ...
 }
 ----

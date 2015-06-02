@@ -6,116 +6,70 @@
 
 
 
-IMPORTANT: WIP ... this section
+The `hidden()` attribute indicates where (in the UI) the property should be hidden from the user.
 
-The `@Hidden` annotation indicates that the member (property, collection
-or action) to which it is applied should never be visible to the user.
-It can also be applied to service types (it has no effect if applied to
-entities or values).
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-Action_hidden[actions] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
+====
+
+[TIP]
+====
+It is also possible to use xref:_ug_reference-annotations_manpage-PropertyLayout_hidden[`@PropertyLayout#hidden()`] or xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] such that the property can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+====
+
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-    @Hidden
-    public int getInternalId() { ... }
-
-    @Hidden
-    public void updateStatus() { ... }
-    ...
-}
-----
-
-This annotation can also take a parameters indicating where and when it
-is to be hidden. For example:
-
-[source,java]
-----
-public class Customer {
-    @Hidden(when=When.ONCE_PERSISTED)
+    @PropertyLayout(
+        hidden=Where.ALL_TABLES
+    )
     public int getInternalId() { ... }
     ...
 }
 ----
-
-would show the `Id` until the object has been saved, and then would hide
-it. And:
-
-[source,java]
-----
-public class Customer {
-    @Hidden(where=Where.ALL_TABLES)
-    public int getDateOfBirth() { ... }
-    ...
-}
-----
-
-would suppress the `dateOfBirth` property of a Customer from all tables.
 
 The acceptable values for the `where` parameter are:
 
+* `Where.EVERYWHERE` or `Where.ANYWHERE` +
++
+The property should be hidden everywhere.
+
 * `Where.ANYWHERE` +
 +
-The member should be hidden everywhere.
+Synonym for everywhere.
 
 * `Where.OBJECT_FORMS` +
 +
-The member should be hidden when displayed within an object form.
-For most viewers, this applies to property and collection members,
-not actions.
+The property should be hidden when displayed within an object form.
 
 * `Where.PARENTED_TABLES` +
 +
-The member should be hidden when displayed as a column of a table
-within a parent object's collection. For most (all?) viewers, this
-will have meaning only if applied to a property member.
+The property should be hidden when displayed as a column of a table within a parent object's collection.
 
 * `Where.STANDALONE_TABLES` +
 +
-The member should be hidden when displayed as a column of a table
-showing a standalone list of objects, for example as returned by a
-repository query. For most (all?) viewers, this will have meaning
-only if applied to a property member.
+The property should be hidden when displayed as a column of a table showing a standalone list of objects, for example as returned by a repository query.
 
 * `Where.ALL_TABLES` +
 +
-The member should be /hidden when displayed as a column of a table,
-either an object's * collection or a standalone list. This combines
-`PARENTED_TABLES` and `STANDALONE_TABLES`.
+The property should be hidden when displayed as a column of a table, either an object's * collection or a standalone list. This combines `PARENTED_TABLES` and `STANDALONE_TABLES`.
 
 * `Where.NOWHERE` +
 +
-Acts as an override if a member would normally be hidden as a result
-of some other convention. For example, if a property is annotated
-with `@Title` <!--(see ?)-->, then normally this should be hidden from all
-tables. Additionally annotating with `@Hidden(where=Where.NOWHERE)`
-overrides this.
+The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
-The acceptable values for the `when` parameter are:
+For example, if a property is annotated with xref:_ug_reference-annotations_manpage-Title[`@Title`], then normally this should be hidden from all
+tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.
 
-* `When.ALWAYS` +
-+
-The member should be hidden at all times.
 
-* `When.NEVER` +
-+
-The member should never be hidden (unless disabled through some
-other mechanism, for example an imperative disableXxx() supporting
-method)..
-
-* `When.ONCE_PERSISTED` +
-+
-The member should be visible for transient objects, but hidden for
-persisted objects.
-
-* `When.UNTIL_PERSISTED` +
-+
-The member should be hidden for transient objects, but visible for
-persisted objects.
-
-By default the annotated property or action is always hidden (ie
-defaults to `Where.ANYWHERE`, `When.ALWAYS`).
+[NOTE]
+====
+The xref:_ug_restfulobjects-viewer[RestfulObjects viewer] has only partial support for these `Where` enums.
+====
 
 
 As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
@@ -123,4 +77,7 @@ can be used instead, eg:
 
 [source,javascript]
 ----
+"internalId": {
+    "propertyLayout": { "hidden": "ALL_TABLES" }
+}
 ----

@@ -23,131 +23,131 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@ActionOrder`
 |Order of buttons and menu items representing actions.
-|`@MemberOrder`
+|xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`]
 |UI
 |Yes
 
 |`@ActionInteraction`
 |Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after an action has been invoked.
-|`@Action#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Action_domainEvent[`@Action#domainEvent()`]
 |Domain
 |
 
 |`@ActionSemantics`
 |Query-only, idempotent or non-idempotent.
-|`@Action#semantics()`
+|xref:_ug_reference-annotations_manpage-Action_semantics[`@Action#semantics()`]
 |Domain
 |
 
 |`@Audited`
 |Audit changes to an object.
-|`@DomainObject#` +
-`auditing()`
+|xref:_ug_reference-annotations_manpage-DomainObject_auditing[`@DomainObject#` +
+`auditing()`]
 |Domain
 |
 
 |`@AutoComplete`
 |Repository method to search for entities
-|`@DomainObject` +
-`#autoCompleteRepository()`
+|xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`@DomainObject` +
+`#autoCompleteRepository()`]
 |UI/Domain
 |
 
 |`@Bookmarkable`
 |Whether (and how) to create a bookmark for visited object.
-|`@DomainObjectLayout` +
-`#bookmarking()`
+|xref:_ug_reference-annotations_manpage-DomainObjectLayout_bookmarking[`@DomainObjectLayout` +
+`#bookmarking()`]
 |UI
 |
 
 |`@Bounded`
 |Bounded (and limited) number of instances of an entity type, translates into a drop-down for any property of that type.
-|`@DomainObject#bounded()`
+|xref:_ug_reference-annotations_manpage-DomainObject_bounded[`@DomainObject#bounded()`]
 |Domain
 |
 
 |`@Bulk`
 |Indicates an action is a bulk action, can be applied to multiple instances.
-|`@Action#invokeOn()`
+|xref:_ug_reference-annotations_manpage-Action_invokeOn[`@Action#invokeOn()`]
 |UI, Domain
 |
 
 |`@CollectionInteraction`
 |Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a collection has been added to or removed from.
-|`@Collection#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`]
 |Domain
 |
 
 |`@Command`
 |Action invocation should be reified as a command object, optionally persistable for profiling and enhanced auditing, and background/async support.
-|`@Action#command()`
+|xref:_ug_reference-annotations_manpage-Action_command[`@Action#command()`]
 |Domain
 |
 
 |`@CssClass`
 |Allow visual representation of individual objects or object members layout to be customized by application-specific CSS.
-|`#cssClass()` attribute for: `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|`#cssClass()` attribute for: xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout`], xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[`@PropertyLayout`],  xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[`@CollectionLayout`], xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[`@ActionLayout`] and xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[`@ParameterLayout`]
 |UI
 |Yes
 
 |`@CssClassFa`
 |So that font awesome icons can be applied to action buttons/menu items and optionally as an object icon.
-|`@ActionLayout#cssClassFa()`
+|`cssClassFa()` attribute for: xref:_ug_reference-annotations_manpage-ActionLayout_cssClassFa[`@ActionLayout`], xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`DomainObjectLayout`] and xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[`ViewModelLayout`]
 |UI
 |Yes
 
 |`@Debug`
 |Action only invokable in debug mode.
-|Use prototype mode instead (`@Action#restrictTo()`)
+|Not supported by either the xref:_ug_wicket-viewer[Wicket viewer] or the xref:_ug_restfulobjects-viewer[RestfulObjects viewer]; use prototype mode instead (xref:_ug_reference-annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 
 |`@DescribedAs`
 |Provide a longer description/tool-tip of an object or object member.
-|`#describedAs()` attribute for `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|`#describedAs()` attribute for xref:_ug_reference-annotations_manpage-DomainObject_describedAs[`@DomainObjectLayout`], xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[`@PropertyLayout`], xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[`@CollectionLayout`], xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[`@ActionLayout`] and xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[`@ParameterLayout`]
 |UI
 |Yes
 
 |`@Disabled`
 |Object property cannot be edited, an object collection cannot be added to/removed from, or an object action cannot be invoked.
-|`#editing()` attribute for `@Property` and `@Collection#editing()`; see also `@DomainObject`
+|`#editing()` attribute for xref:_ug_reference-annotations_manpage-Property_editing[`@Property`],  xref:_ug_reference-annotations_manpage-Collection_editing[`@Collection`] and xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject`]
 |UI, Domain
 |Yes
 
 |`@Exploration`
 |Action available in special 'exploration' mode.
-|`@Action#restrictTo()` (combines exploration and prototyping modes).
+|Not supported by either the xref:_ug_wicket-viewer[Wicket viewer] or the xref:_ug_restfulobjects-viewer[RestfulObjects viewer]; use prototype mode instead (xref:_ug_reference-annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 
 |`@FieldOrder`
 |Order of properties and collections.
-|`@MemberOrder`
+|xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`]
 |UI
 |Yes
 
 |`@Hidden`
 |Object member is not visible, or on domain service (to indicate that none of its actions are visible).
-|For domain object members, use `@Action#hidden()`, `@Property#hidden()` or `@Collection#hidden()`. +
-For domain service, use `@DomainService(nature=DOMAIN)`
+|For domain object members, use `#hidden()` attribute of xref:_ug_reference-annotations_manpage-Action_hidden[`Action`], xref:_ug_reference-annotations_manpage-Property_hidden[`Property`] or xref:_ug_reference-annotations_manpage-Collection_hidden[`Collection`].  +
+For domain service, use xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService(nature=DOMAIN)`]
 |UI, Domain
 |Yes
 
 |`@Idempotent`
 |Whether an action is idempotent (can be invoked multiple times with same post-condition).
-|`@Action#semantics`
+|xref:_ug_reference-annotations_manpage-Action_semantics[`@Action#semantics`]
 |Domain
 |
 
 |`@Ignore`
 |Exclude this method from the metamodel.
-|`@Programmatic`
+|xref:_ug_reference-annotations_manpage-Programmatic[`@Programmatic`]
 |Domain
 |
 
 |`@Immutable`
 |An object's state cannot be changed (properties cannot be edited, collections cannot be added to or removed from). Actions can still be invoked.
-|`@DomainObject#editing()`
+|xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]
 |Domain
 |
 
@@ -159,173 +159,174 @@ For domain service, use `@DomainService(nature=DOMAIN)`
 
 |`@MaxLength`
 |Maximum length of a property value (strings).
-|`#maxLength()` attribute for `@Property` or `@Parameter`
+|`#maxLength()` attribute for xref:_ug_reference-annotations_manpage-Property_maxLength[`@Property`] or xref:_ug_reference-annotations_manpage-Parameter_maxLength[`@Parameter`]
 |Domain
 |
 
 |`@MemberGroups`
 |Layout of properties and collections of a domain object or view model object.
-|`@MemberGroupLayout` or dynamic layout.
+|xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`]
 |UI
 |Yes
 
 |`@MultiLine`
 |Render string property over multiple lines (a textarea rather than a textbox).
-|`#multiLine()` attribute for `@PropertyLayout` and`@ParameterLayout`
+|`#multiLine()` attribute for xref:_ug_reference-annotations_manpage-Property_multiLine[`@Property`] or xref:_ug_reference-annotations_manpage-Parameter_multiLine[`@Parameter`]
 |UI
 |Yes
 
 |`@MustSatisfy`
 |Specify arbitrary specification constraints on a property or action parameter.
-|`#mustSatisfy()` attribute for `@Property` and `@Parameter`
+|`#mustSatisfy()` attribute for xref:_ug_reference-annotations_manpage-Property_mustSatisfy[`@Property`] or xref:_ug_reference-annotations_manpage-Parameter_mustSatisfy[`@Parameter`]
 |Domain
 |
 
 |`@Named`
 |Override name inferred from class. Required for parameter names (prior to Java8).
-|`#named()` attribute for `@DomainServiceLayout`, `@DomainObjectLayout`, `@PropertyLayout`, `@CollectionLayout`, `@ActionLayout` and `@ParameterLayout`
+|`#named()` attribute for xref:_ug_reference-annotations_manpage-DomainServiceLayout_named[`@DomainServiceLayout`], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[`@DomainObjectLayout`], xref:_ug_reference-annotations_manpage-PropertyLayout_named[`@PropertyLayout`], xref:_ug_reference-annotations_manpage-CollectionLayout_named[`@CollectionLayout`], xref:_ug_reference-annotations_manpage-ActionLayout_named[`@ActionLayout`] and xref:_ug_reference-annotations_manpage-ParameterLayout_named[`@ParameterLayout`]
 |UI
 |Yes
 
 |`@NotContributed`
 |Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters. For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
-|Use `@DomainService#nature()` to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
-For individual actions, use `@ActionLayout` to specify whether any individual action should be contributed only as an action or as an association (property or collection).
+|Use xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService#nature()`] to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
+For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_contributedAs[`@ActionLayout#contributedAs`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
 |UI
 |
 
 |`@NotInServiceMenu`
 |Indicates that a domain service should not be rendered in the application menu (at top of page in Wicket viewer).
-|`@DomainService#nature()` to specify none of the actions in a domain service should appear in the menu bars
+|xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService#nature()`] to signify that none of the actions in a domain service should appear in the menu bars
 |UI
 |
 
 |`@NotPersisted`
 |Indicates that an object property is not persisted (meaning it is excluded from view model mementos, and should not be audited).
-|`@Property#notPersisted()`
+|`#notPersisted()` attribute of xref:_ug_reference-annotations_manpage-Property_notPersisted[`@Property`] and xref:_ug_reference-annotations_manpage-Collection_notPersisted[`@Collection`]
 |Domain, Persistence
 |
 
 |`@ObjectType`
 |For constructing the external identifier (URI) of an entity instance (part of its URL in both Wicket viewer and Restful Objects viewer). Also part of the toString representation of bookmarks, if using the Bookmark Service
-|`@DomainObject#objectType()`
+|xref:_ug_reference-annotations_manpage-DomainObject_objectType[`@DomainObject#objectType()`]
 |Domain
 |
 
 |`@Optional`
 |Specifies that a property or action parameter is not mandatory.
-|`#optionality()` attribute for `@Property` or `@Parameter`
+|`#optionality()` attribute for xref:_ug_reference-annotations_manpage-Property_optionality[`@Property`] or  xref:_ug_reference-annotations_manpage-Parameter_optionality[`@Parameter`]
 |Domain
 |
 
 |`@Paged`
 |Number of instances to display in tables representing (standalone or parented) collections.
-|`#paged()` attribute for `@DomainObjectLayout` or `@CollectionLayout`
+|`#paged()` attribute for xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[`@DomainObjectLayout`] or xref:_ug_reference-annotations_manpage-CollectionLayout_paged[`@CollectionLayout`]
 |UI
 |Yes
 
 |`@Plural`
 |For the irregular plural form of an entity type.
-|`@DomainObjectLayout#plural()`
+|xref:_ug_reference-annotations_manpage-DomainObject_plural[`@DomainObjectLayout#plural()`]
 |UI
 |
 
 |`@PostsAction` +
 `InvokedEvent`
 |Post a domain event to the Event Bus Service indicating that an action has been invoked.
-|`@Action#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Action_domainEvent[`@Action#domainEvent()`]
 |Domain
 |
 
 |`@PostsCollection` +
 `AddedToEvent`
 |Post a domain event to the Event Bus Service indicating that an element has been added to a collection.
-|`@Collection#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`]
 |Domain
 |
 
 |`@PostsCollection` +
 `RemovedFromEvent`
 |Post a domain event to the Event Bus Service indicating that an element has been removed from a collection.
-|`@Collection#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`]
 |Domain
 |
 
 |`@PostsProperty` +
 `ChangedEvent`
 |Post a domain event to the Event Bus Service indicating that the value of a property has changed.
-|`@Property#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Property_domainEvent[`@Property#domainEvent()`]
 |Domain
 |
 
 |`@PropertyInteraction`
 |Enable subscribers on the Event Bus Service to either veto, validate or take further steps before/after a property has been modified or cleared.
-|`@Property#domainEvent()`
+|xref:_ug_reference-annotations_manpage-Property_domainEvent[`@Property#domainEvent()`]
 |Domain
 |
 
 |`@Prototype`
 |Indicates that an action should only be visible in 'prototype' mode.
-|`@Action#restrictTo()`
+|xref:_ug_reference-annotations_manpage-Action_restrictTo[`@Action#restrictTo()`]
 |UI
 |Yes
 
 |`@PublishedAction`
-|Action invocation should be serialized and published by configured PublishingService (if any), eg to other systems.|`@Action#publishing()`
+|Action invocation should be serialized and published by configured PublishingService (if any), eg to other systems.
+|xref:_ug_reference-annotations_manpage-Action_publishing[`@Action#publishing()`]
 |Domain
 |
 
 |`@PublishedObject`
 |Change to object should be serialized and published by configured PublishingService (if any), eg to other systems.
-|`@DomainObject#publishing()`
+|xref:_ug_reference-annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`]
 |Domain
 |
 
 |`@QueryOnly`
 |Whether an action is query-only (has no side-effects).
-|`@Action#semantics()`
+|xref:_ug_reference-annotations_manpage-Action_semantics[`@Action#semantics()`]
 |Domain
 |
 
 |`@RegEx`
 |Validate change to value of string property.
-|`#regexPattern()` for `@Property` or `@Parameter`.
+|`#regexPattern()` for xref:_ug_reference-annotations_manpage-Property_regexPattern[`@Property`] or  xref:_ug_reference-annotations_manpage-Property_regexPattern[`@Parameter`].
 |Domain
 |
 
 |`@Render`
 |Eagerly (or lazily) render the contents of a collection.
-|`@CollectionLayout#render()`
+|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout#render()`]
 |UI
 |Yes
 
 |`@RenderedAsDayBefore`
 |Render dates as the day before; ie store [a,b) internally but render [a,b-1]) to end-user.
-|`#renderedAsDayBefore()` attribute for `@PropertyLayout` and `@ParameterLayout`.
+|`#renderedAsDayBefore()` attribute for xref:_ug_reference-annotations_manpage-PropertyLayout_renderedAsDayBefore[`@PropertyLayout`] and xref:_ug_reference-annotations_manpage-ParameterLayout_renderedAsDayBefore[`@ParameterLayout`].
 |UI
 |
 
 |`@Resolve`
 |Eagerly (or lazily) render the contents of a collection (same as `@Render)`
-|`@CollectionLayout#render()`
+|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout#render()`]
 |UI
 |Yes
 
 |`@SortedBy`
 |Display instances in collections in the order determined by the provided Comparator.
-|`@CollectionLayout#sortedBy()`
+|xref:_ug_reference-annotations_manpage-CollectionLayout_sortedBy[`@CollectionLayout#sortedBy()`]
 |UI
 |Yes
 
 |`@TypeOf`
 |The type of entity stored within a collection, or as the result of invoking an action, if cannot be otherwise inferred, eg from generics.
-|`#typeOf()` attribute for `@Collection` and `@Action`
+|`#typeOf()` attribute for xref:_ug_reference-annotations_manpage-Collection_typeOf[`@Collection`] and xref:_ug_reference-annotations_manpage-Action_typeOf[`@Action`]
 |Domain
 |
 
 |`@TypicalLength`
 |The typical length of a string property, eg to determine a sensible length for a textbox.
-|`#typicalLength()` attribute for `@PropertyLayout` and `@ParameterLayout`
+|`#typicalLength()` attribute for xref:_ug_reference-annotations_manpage-PropertyLayout_typicalLength[`@PropertyLayout`] and xref:_ug_reference-annotations_manpage-ParameterLayout_typicalLength[`@ParameterLayout`]
 |UI
 |Yes
 

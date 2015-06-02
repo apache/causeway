@@ -7,7 +7,7 @@
 
 In Apache Isis every domain object is either a domain entity, a view model or a domain service.  And each of these are made up of properties, collections and actions (domain services only have actions).
 
-For each of these domain types and members there is are two annotations.  One covers the semantics intrinsic to the domain (eg whether an action parameter is optional or not), then other (suffix `...Layout`) captures semantics relating to the UI/presentation layer.
+For each of these domain types and members there are two annotations.  One covers the semantics intrinsic to the domain (eg whether an action parameter is optional or not), then other (suffix `...Layout`) captures semantics relating to the UI/presentation layer.
 
 [TIP]
 ====

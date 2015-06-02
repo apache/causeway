@@ -9,6 +9,11 @@
 
 Actions can be hidden at the domain-level, indicating that they are not visible to the end-user.
 
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-Property_hidden[properties] and xref:_ug_reference-annotations_manpage-Collection_hidden[collections].
+====
+
 [TIP]
 ====
 It is also possible to use xref:_ug_reference-annotations_manpage-ActionLayout_hidden[`@ActionLayout#hidden()`] or xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] such that the action can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
@@ -27,13 +32,13 @@ public class Customer {
 
 The acceptable values for the `where` parameter are:
 
-* `Where.EVERYWHERE` +
+* `Where.EVERYWHERE` or `Where.ANYWHERE` +
 +
-The collection should be hidden everywhere.
+The action should be hidden at all times.
 
-* `Where.ANYWHERE` +
+* `Where.NOWHERE` +
 +
-Synonym for everywhere.
+The action should not be hidden.
 
 
 The other values of the `Where` enum have no meaning for a collection.

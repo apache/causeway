@@ -5,10 +5,7 @@
 :_imagesdir: images/
 
 
-
-IMPORTANT: WIP ... this section
-
-The `@DescribedAs` annotation is used to provide a short description of something that features on the user interface. How this description is used will depend upon the viewing mechanism - but it may be thought of as being like a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.
 
 [NOTE]
 ====

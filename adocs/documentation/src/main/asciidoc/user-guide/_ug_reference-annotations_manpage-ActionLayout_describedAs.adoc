@@ -6,7 +6,8 @@
 
 
 
-The `describedAs()` attribute is used to provide a short description of something that features on the user interface.  For example, in the xref:_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.
+
 
 [NOTE]
 ====

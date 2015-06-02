@@ -5,13 +5,7 @@
 :_imagesdir: images/
 
 
-
-
-IMPORTANT: WIP ... this section
-
-
-By default the name of an object is derived, reflectively from the class name.
-
+The `named()` attribute explicitly specifies the domain service's name, overriding the name that would normally be inferred from the Java source code.
 
 [TIP]
 ====
@@ -20,29 +14,27 @@ Following the link:http://en.wikipedia.org/wiki/Don%27t_repeat_yourself[don't re
 
 [NOTE]
 ====
-This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-CollectionLayout_named[collections], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[action parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models].
+This attribute can also be specified for xref:_ug_reference-annotations_manpage-ActionLayout_named[actions], xref:_ug_reference-annotations_manpage-CollectionLayout_named[collections], xref:_ug_reference-annotations_manpage-PropertyLayout_named[properties], xref:_ug_reference-annotations_manpage-ParameterLayout_named[parameters], xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[domain objects] and xref:_ug_reference-annotations_manpage-ViewModelLayout_named[view models].
 ====
 
-To specify a different name for an object, use the `@Named` annotation in front of the class declaration.
-
-The `@Named` annotation is used when you want to specify the way something is named on the user interface i.e. when you do not want to use the name generated automatically by the system. It can be applied to objects, members (properties, collections, and actions) and to parameters within an action method.
-
-
-[WARNING]
-====
-Generally speaking it is better to rename the property, collection or action. The only common case where `@Named` is common is to rename parameters for built-in value types. Even here though a custom value type can be defined using `@Value` so that the value type is used as the parameter name. `@Named` may also be used if the name needs punctuation or other symbols in the name presented to the user.
-====
 
 
 For example:
 
 [source,java]
 ----
-@Named("Customer")
-public class CustomerImpl implements Customer{
+@DomainService
+@DomainServiceLayout(
+    named="Customers")
+public class CustomerRepository {
    ...
 }
 ----
 
-See also the `@Plural` annotation <!--, ?-->.
+
+[TIP]
+====
+The framework also provides a separate, powerful mechanism for xref:_ug_more-advanced_i18n[internationalization].
+====
+
 

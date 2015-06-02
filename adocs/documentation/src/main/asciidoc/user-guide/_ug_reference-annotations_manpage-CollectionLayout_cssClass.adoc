@@ -10,7 +10,7 @@ The `cssClass()` attribute can be used to render additional CSS classes in the H
 
 [NOTE]
 ====
-This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClass[view models], xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[properties] and xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[action parameters].
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects], xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClass[view models], xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions], xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[properties] and xref:_ug_reference-annotations_manpage-ParameterLayout_cssClass[parameters].
 ====
 
 
@@ -19,8 +19,10 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    @CssClass("x-important")
-    public SortedSet<ToDoItem getDependencies() { ... }
+    @CollectionLayout(
+        cssClass="x-important"
+    )
+    public SortedSet<ToDoItem> getDependencies() { ... }
     ...
 }
 ----
@@ -32,7 +34,7 @@ can be used instead, eg:
 [source,javascript]
 ----
 "dependencies": {
-    "actionLayout": { "cssClass": "x-important" }
+    "collectionLayout": { "cssClass": "x-important" }
 }
 ----
 

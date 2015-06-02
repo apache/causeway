@@ -8,9 +8,14 @@
 
 Properties can be hidden at the domain-level, indicating that they are not visible to the end-user.
 
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-ActionLayout_hidden[actions] and xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[collections].
+====
+
 [TIP]
 ====
-It is also possible to use xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[`@CollectionLayout#hidden()`] or xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] such that the collection can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
+It is also possible to use xref:_ug_reference-annotations_manpage-Property_hidden[`@Property#hidden()`] to hide an action at the domain layer.  Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
 ====
 
 For example:
@@ -28,9 +33,9 @@ public class Customer {
 
 The acceptable values for the `where` parameter are:
 
-* `Where.EVERYWHERE` +
+* `Where.EVERYWHERE` or `Where.ANYWHERE` +
 +
-The collection should be hidden everywhere.
+The property should be hidden everywhere.
 
 * `Where.ANYWHERE` +
 +
@@ -54,7 +59,7 @@ The property should be hidden when displayed as a column of a table, either an o
 
 * `Where.NOWHERE` +
 +
-Acts as an override if a member would normally be hidden as a result of some other convention. +
+The property should not be hidden, overriding any other metadata/conventions that would normally cause the property to be hidden. +
 
 For example, if a property is annotated with xref:_ug_reference-annotations_manpage-Title[`@Title`], then normally this should be hidden from all
 tables. Annotating with `@Property(where=Where.NOWHERE)` overrides this.

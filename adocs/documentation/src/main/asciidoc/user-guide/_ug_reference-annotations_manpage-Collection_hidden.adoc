@@ -7,6 +7,11 @@
 
 Collections can be hidden at the domain-level, indicating that they are not visible to the end-user.
 
+[NOTE]
+====
+This attribute can also be applied to xref:_ug_reference-annotations_manpage-Action_hidden[actions] and xref:_ug_reference-annotations_manpage-Property_hidden[properties].
+====
+
 [TIP]
 ====
 It is also possible to use xref:_ug_reference-annotations_manpage-CollectionLayout_hidden[`@CollectionLayout#hidden()`] or xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] such that the collection can be hidden at the view layer. Both options are provided with a view that in the future the view-layer semantics may be under the control of (expert) users, whereas domain-layer semantics should never be overridden or modified by the user.
@@ -25,7 +30,7 @@ public class Customer {
 
 The acceptable values for the `where` parameter are:
 
-* `Where.EVERYWHERE` +
+* `Where.EVERYWHERE` or `Where.ANYWHERE` +
 +
 The collection should be hidden everywhere.
 
@@ -36,6 +41,10 @@ Synonym for everywhere.
 * `Where.OBJECT_FORMS` +
 +
 The collection should be hidden when displayed within an object form.
+
+* `Where.NOWHERE` +
++
+The collection should not be hidden.
 
 The other values of the `Where` enum have no meaning for a collection.
 
