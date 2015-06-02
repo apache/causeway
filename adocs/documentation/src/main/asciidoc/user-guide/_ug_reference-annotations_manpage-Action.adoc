@@ -22,7 +22,7 @@ The table below summarizes the annotation's attributes.
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
 |whether the action invocation should be reified into a `o.a.i.applib.` +
-`services.command.Command` object.
+`services.command.Command` object through the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service.
 
 
 |`commandExecuteIn()`
@@ -60,12 +60,12 @@ Currently this is only supported for no-arg actions.
 |xref:_ug_reference-annotations_manpage-Action_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
-|whether changes to the object should be published to the registered xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
+|whether the action invocation should be published to the registered xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 
-|`publishingPayloadFactory()`
+|`publishing-` +
+`PayloadFactory()`
 |subtype of `PublishingPayloadFactory-` `ForAction` (none)
-|specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event
-
+|specifies that a custom implementation of `PublishingPayloadFactoryForAction` be used to create the (payload of the) published event representing the action invocation
 
 |xref:_ug_reference-annotations_manpage-Action_restrictTo[`restrictTo()`]
 |`NO_RESTRICTIONS`,`PROTOTYPING` +

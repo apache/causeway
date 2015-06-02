@@ -14,7 +14,7 @@ The default is `AS_CONFIGURED`, meaning that the configuration property `isis.ob
 +
 the object's properties and collections are modifiable.
 
-* `false`+
+* `false` +
 +
 the object's properties and collections are read-only, ie _not_ modifiable.
 
@@ -47,6 +47,11 @@ public class Country {
     ...
 }
 ----
+
+[TIP]
+====
+Another interesting example of immutable reference data is to define an entity to represent individual dates; after all, for a system with an expected lifetime of 20 years that equates to only 7,300 days, a comparatively tiny number of rows to hold in a database.
+====
 
 
 

@@ -327,7 +327,7 @@ Domain entities can also reference other domain entities. These references may b
 ** use a xref:_ug_reference-methods_prefixes_manpage-choices[`choices...()`] supporting method
 *** on a property
 *** on an action parameter
-** use a xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`autoComplete...()`] supporting method
+** use a xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method
 *** on a property
 *** on an action parameter
 

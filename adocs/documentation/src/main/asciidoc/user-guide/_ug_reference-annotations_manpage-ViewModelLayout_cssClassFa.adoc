@@ -24,8 +24,6 @@ For example:
 
 [source,java]
 ----
-[source,java]
-----
 @ViewModel
 @ViewModelLayout(
     cssClassFa="fa-piechart"

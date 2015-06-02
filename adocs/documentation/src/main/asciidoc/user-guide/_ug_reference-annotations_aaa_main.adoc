@@ -71,7 +71,7 @@ The table below summarizes these most commonly used annotations in Isis.
 |Domain
 |
 
-|xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParaameterLayout`]
+|xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParameterLayout`]
 |Layout hints for an action parameter (currently: its label position either to top or the left).
 |UI
 |Yes

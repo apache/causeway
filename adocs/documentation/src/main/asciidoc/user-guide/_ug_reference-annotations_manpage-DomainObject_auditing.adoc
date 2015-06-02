@@ -5,37 +5,34 @@
 :_imagesdir: images/
 
 
+The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`], if one has been configured.
 
-IMPORTANT: WIP ... this section
+The default value for the attribute is `AS_CONFIGURED`, meaning that the configuration property `isis.services.audit.objects` is used to determine the whether the action is published:
 
+* `all` +
++
+all changed objects are published
 
-This annotation, which applies only to objects, indicates that if the object is modified, then it should be submitted to the  xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService3`], if one has been configured.
+* `none` +
++
+no changed objects are published
+
+If there is no configuration property in `isis.properties` then auditing is automatically enabled for domain objects.
+
+This default can be overridden on an object-by-object basis; if `auditing()` is set to `ENABLED` then changed properties of instances of the domain class are audited irrespective of the configured value; if set to `DISABLED` then the changed properties of instances are _not_ audited, again irrespective of the configured value.
 
 For example:
 
 [source,java]
 ----
-@Audited
-public class Customer extends AbstractDomainObject {
-   ....
+@DomainObject(
+    auditing=Auditing.ENABLED  // <1>
+)
+public class Customer {
+    ...
 }
 ----
-
-The `AuditingService` is defined within the applib (in the
-`org.apache.isis.applib.services.audit` package):
-
-[source,java]
-----
-public interface AuditingService {
-    @Programmatic
-    public void audit(String user, long currentTimestampEpoch, String objectType, String identifier, String preValue, String postValue);
-}
-----
-
-At the time of writing only the JDO Object Store supported this
-annotation. Check with the documentation of the object store or ask on
-the mailing list to determine whether auditing is supported for other object stores.
-
+<1> because set to enabled, will be audited irrespective of the configured value.
 
 
 

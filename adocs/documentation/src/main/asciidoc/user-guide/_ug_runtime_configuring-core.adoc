@@ -19,36 +19,6 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 (default value)
 |Description
 
-|`isis.services`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated as domain services.  Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to `@DomainServiceLayout#menuOrder()`).
-
-|`isis.services.` +
-`container.disableAutoFlush`
-| `true`,`false` (`_false_`)
-|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
-
-|`isis.services.` +
-`translation.po.mode`
-| `read`,`write`
-|Whether to force the `TranslationService` into either read or write mode. +
-
-See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
-
-|`isis.services.` +
-`command.actions`
-| `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically reified into commands (for actions annotated with xref:_ug_reference-annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
-
-`ignoreQueryOnly` is an alias for `ignoreSafe`.
-
-|`isis.services.` +
-`publish.actions`
-| `all`,`ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically published (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
-
-`ignoreQueryOnly` is an alias for `ignoreSafe`.
-
 |`isis.object.` +
 `editing`
 | `true`,`false` (`true`)
@@ -62,16 +32,16 @@ See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translatio
 Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
 
 |`isis.reflector.facet.` +
-`cssClassFa.patterns`
-|regex:fa-icon,regex2:fa-icon2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+`cssClass.patterns`
+|regex:css1,regex2:css2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
 
 See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
-`cssClass.patterns`
-|regex:css1,regex2:css2,...
-|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+`cssClassFa.patterns`
+|regex:fa-icon,regex2:fa-icon2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
 
 See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
@@ -82,16 +52,16 @@ See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
-`include`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
-
-|`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
+See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+
+|`isis.reflector.facets.` +
+`include`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
 See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.validator`
@@ -111,6 +81,45 @@ See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to l
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout]s. +
 
 See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+
+
+|`isis.services`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated as domain services.  Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to `@DomainServiceLayout#menuOrder()`).
+
+|`isis.services.` +
+`audit.objects`
+| `all`, `none` (`all`)
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+
+|`isis.services.` +
+`command.actions`
+| `all`, `ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically reified into commands (for actions annotated with xref:_ug_reference-annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+
+`ignoreQueryOnly` is an alias for `ignoreSafe`.
+
+|`isis.services.` +
+`container.disableAutoFlush`
+| `true`,`false` (`_false_`)
+|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+|`isis.services.` +
+`publish.objects`
+| `all`, `none` (`all`)
+|Whether changed objects should be automatically published (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+
+|`isis.services.` +
+`publish.actions`
+| `all`, `ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically published (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+
+|`isis.services.` +
+`translation.po.mode`
+| `read`,`write`
+|Whether to force the `TranslationService` into either read or write mode. +
+
+See xref:_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
 
 |`isis.viewers.` +
 `propertyLayout.labelPosition`

@@ -48,7 +48,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@AutoComplete`
 |Repository method to search for entities
-|xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`@DomainObject` +
+|xref:_ug_reference-annotations_manpage-DomainObject_autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository()`]
 |UI/Domain
 |
@@ -129,7 +129,8 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |`@Hidden`
 |Object member is not visible, or on domain service (to indicate that none of its actions are visible).
 |For domain object members, use `#hidden()` attribute of xref:_ug_reference-annotations_manpage-Action_hidden[`Action`], xref:_ug_reference-annotations_manpage-Property_hidden[`Property`] or xref:_ug_reference-annotations_manpage-Collection_hidden[`Collection`].  +
-For domain service, use xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService(nature=DOMAIN)`]
+For domain service, use xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService(` +
+`nature=DOMAIN)`]
 |UI, Domain
 |Yes
 
@@ -190,7 +191,8 @@ For domain service, use xref:_ug_reference-annotations_manpage-DomainService_nat
 |`@NotContributed`
 |Indicates that a domain service action is not rendered as an action on the (entity) types of its parameters. For 1-arg query-only actions, controls whether the domain service action is rendered as a property or collection on the entity type of its parameter.
 |Use xref:_ug_reference-annotations_manpage-DomainService_nature[`@DomainService#nature()`] to specify whether any of the actions in a domain service should appear in the menu bars (applies at type level, not action level).
-For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_contributedAs[`@ActionLayout#contributedAs`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
+For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_contributedAs[`@ActionLayout#` +
+`contributedAs()`] to specify whether any individual action should be contributed only as an action or as an association (property or collection).
 |UI
 |
 
@@ -226,7 +228,8 @@ For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_
 
 |`@Plural`
 |For the irregular plural form of an entity type.
-|xref:_ug_reference-annotations_manpage-DomainObject_plural[`@DomainObjectLayout#plural()`]
+|xref:_ug_reference-annotations_manpage-DomainObject_plural[`@DomainObjectLayout` +
+`#plural()`]
 |UI
 |
 
@@ -296,7 +299,8 @@ For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_
 
 |`@Render`
 |Eagerly (or lazily) render the contents of a collection.
-|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout#render()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout` +
+`#render()`]
 |UI
 |Yes
 
@@ -308,13 +312,15 @@ For individual actions, use xref:_ug_reference-annotations_manpage-ActionLayout_
 
 |`@Resolve`
 |Eagerly (or lazily) render the contents of a collection (same as `@Render)`
-|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout#render()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_render[`@CollectionLayout` +
+`#render()`]
 |UI
 |Yes
 
 |`@SortedBy`
 |Display instances in collections in the order determined by the provided Comparator.
-|xref:_ug_reference-annotations_manpage-CollectionLayout_sortedBy[`@CollectionLayout#sortedBy()`]
+|xref:_ug_reference-annotations_manpage-CollectionLayout_sortedBy[`@CollectionLayout` +
+`#sortedBy()`]
 |UI
 |Yes
 

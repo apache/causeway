@@ -36,7 +36,7 @@ See also xref:_ug_reference-methods_prefixes_manpage-removefrom[`removeFrom...()
 |
 |Y
 |Return a list of matching elements for a property or an action parameter. +
-Alternatively, can specify for a class using xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`@DomainObject#autoComplete`] +
+Alternatively, can specify for a class using xref:_ug_reference-annotations_manpage-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository`] +
 +
 See also choices
 

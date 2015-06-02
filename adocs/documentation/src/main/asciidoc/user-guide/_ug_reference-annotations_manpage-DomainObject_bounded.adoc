@@ -6,29 +6,29 @@
 
 
 
-IMPORTANT: WIP ... this section
+Some domain classes are immutable to the user, and moreover have only a fixed number of instances.  Often these are "reference" ("standing") data, or lookup data/pick lists.  Typical examples could include categories, countries, states, and tax or interest rate tables.
 
+Where the number of instances is relatively small, ie bounded, then the `bounded()` attribute can be used as a hint.  For such domain objects the framework will automatically allow instances to be selected; xref:_ug_wicket-viewer[Wicket viewer] displays these as a drop-down list.
 
-For immutable objects where there is a bounded set of instances, the
-`@Bounded` annotation can be used.
 
 For example:
 
 [source,java]
 ----
-@Bounded
-public class County {
+@DomainObject(
+    bounded=true,
+    editing=Editing.DISABLED  // <1>
+)
+public class Currency {
     ...
 }
 ----
+<1> This attribute is commonly combined with `editing=DISABLED` to enforce the fact that reference data is immutable
 
-The number of instances is expected to be small enough that all instance can be held in memory. The viewer will use this information to render all the instances of this class in a drop-down list or equivalent.
 
-
-[NOTE]
+[TIP]
 ====
-Although this is not enforced, `@Bounded` is intended for use on `final` classes. Its behaviour when used on interfaces, or classes with sub-classes is not specified
-
+There is nothing to prevent you from using this attribute for regular mutable entities, and indeed this is sometimes worth doing during early prototyping.  However, if there is no realistic upper bound to the number of instances of an entity that might be created, generally you should use xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method or the xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`@DomainObject#autoComplete()`] attribute instead.
 ====
 
 

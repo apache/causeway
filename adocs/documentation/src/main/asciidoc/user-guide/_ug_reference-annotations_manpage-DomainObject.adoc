@@ -20,38 +20,49 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObject_auditing[`auditing()`]
-|
-|
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|indicates whether each of the changed properties of an object should be submitted to the registered xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`].
 
 
-|xref:_ug_reference-annotations_manpage-DomainObject_autoComplete[`autoComplete()`]
-|
-|
+|xref:_ug_reference-annotations_manpage-DomainObject_autoCompleteRepository[`autoCompleteRepository()`]
+|Domain service class
+|nominate a method on a domain service to be used for looking up instances of the domain object
+
+
+|`autoCompleteAction()`
+|Method name +
+(`autoComplete()`)
+|override the method name to use on the auto-complete repository
 
 
 |xref:_ug_reference-annotations_manpage-DomainObject_bounded[`bounded()`]
-|
-|
+|`true`, `false` +
+(`false`)
+|Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
 
 
 |xref:_ug_reference-annotations_manpage-DomainObject_editing[`editing()`]
-|
-|
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether the object's properties and collections can be edited or not (ie whether the instance should be considered to be immutable)
 
 
 |xref:_ug_reference-annotations_manpage-DomainObject_objectType[`objectType()`]
-|
-|
+|(none, which implies fully qualified class name)
+|specify an alias for the domain class used to uniquely identify the object both within the Isis runtime and externally
 
 
 |xref:_ug_reference-annotations_manpage-DomainObject_publishing[`publishing()`]
-|
-|
+|`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
+(`AS_CONFIGURED`)
+|whether changes to the object should be published to the registered xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 
 
-|`publishingPayloadFactory()`
-|
-|
+|`publishing-` +
+`PayloadFactory()`
+|subtype of `PublishingPayloadFactory-` `ForObject` (none)
+|specifies that a custom implementation of `PublishingPayloadFactoryForObject` be used to create the (payload of the) published event representing the change to the object
 
 |===
 
@@ -61,12 +72,22 @@ For example:
 
 [source,java]
 ----
+@DomainObject(
+    auditing=Auditing.ENABLED,
+    autoCompleteRepository=CustomerRepository.class
+    editing=Editing.ENABLED,               // <1>
+    publishing=Publishing.ENABLED
+)
+public class Customer {
+    ...
+}
 ----
+<1> default value, so could be omitted
 
 
 
 include::_ug_reference-annotations_manpage-DomainObject_auditing.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-DomainObject_autoComplete.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-DomainObject_autoCompleteRepository.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainObject_bounded.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainObject_editing.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-DomainObject_objectType.adoc[leveloffset=+1]
