@@ -72,7 +72,6 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-
     @CollectionLayout(
         cssClass="x-key",
         named="Todo items that are <i>dependencies</i> of this item.",
@@ -82,11 +81,9 @@ public class ToDoItem {
         render=EAGERLY
         typicalLength=80)
     public SortedSet<ToDoItem> getDependencies() { ... }
-
     ...
 }
 ----
-
 
 
 

@@ -84,6 +84,40 @@ Currently this is only supported for no-arg actions.
 |===
 
 
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        public CompletedEvent(
+                final ToDoItem source,
+                final Identifier identifier,
+                final Object... arguments) {
+            super("completed", source, identifier, arguments);
+        }
+    }
+    @Action(
+        command=CommandReification.ENABLED,
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <1>
+        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <2>
+        domainEvent=CompletedEvent.class,
+        hidden = Where.NOWHERE,                                // <3>
+        invokeOn = InvokeOn.OBJECT_ONLY,                       // <4>
+        publishing = Publishing.ENABLED,
+        semantics = SemanticsOf.IDEMPOTENT
+    )
+    public ToDoItem completed() { ... }
+}
+----
+<1> default value, so could be omitted
+<2> default value, so could be omitted
+<3> default value, so could be omitted
+<4> default value, so could be omitted
+
+
+
 
 
 include::_ug_reference-annotations_manpage-Action_command.adoc[leveloffset=+1]

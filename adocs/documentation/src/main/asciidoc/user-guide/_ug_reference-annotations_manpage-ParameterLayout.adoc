@@ -71,31 +71,18 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-
     public ToDoItem updateDescription(
-                            @ParameterLayout(
-                                cssClass="x-key",
-                                describedAs="What needs to be done",
-                                labelPosition=LabelPosition.LEFT,
-                                named="Description of this <i>item</i>",
-                                namedEscaped=false,
-                                typicalLength=80)
-                            final String description) {
+                        @ParameterLayout(
+                            cssClass="x-key",
+                            describedAs="What needs to be done",
+                            labelPosition=LabelPosition.LEFT,
+                            named="Description of this <i>item</i>",
+                            namedEscaped=false,
+                            typicalLength=80)
+                        final String description) {
         setDescription(description);
         return this;
     }
-
-    public ToDoItem updateNotes(
-                        @ParameterLayout(
-                            describedAs="Additional notes",
-                            labelPosition=LabelPosition.TOP,
-                            named="Notes",
-                            multiLine=8)
-                        final String notes) {
-        setNotes(notes);
-        return this;
-    }
-
     ...
 }
 ----

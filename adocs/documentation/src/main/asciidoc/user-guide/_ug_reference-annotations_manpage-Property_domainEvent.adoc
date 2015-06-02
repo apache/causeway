@@ -38,13 +38,13 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class DueByChangedEvent extends PropertyInteractionEvent<ToDoItem, LocalDate> {
+    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { // <1>
         private static final long serialVersionUID = 1L;
-        public DueByChangedEvent(
-                ToDoItem source,
-                Identifier identifier,
-                LocalDate oldValue,
-                LocalDate newValue) {    // <1>
+        public DueByChangedEvent(                                                            // <2>
+                ToDoItem source,                                                             // <3>
+                Identifier identifier,                                                       // <4>
+                LocalDate oldValue,                                                          // <5>
+                LocalDate newValue) {                                                        // <6>
             super(source, identifier, oldValue, newValue);
         }
     }
@@ -53,7 +53,12 @@ public class ToDoItem {
     ...
 }
 ----
-<1> if the property is being cleared then the new value will be `null`.
+<1> inherit from `PropertyDomainEvent<T,P>` where `T` is the type of the domain object being interacted with, and `P` is the type of the property (`LocalDate` in this example)
+<2> constructor called reflectively by the framework
+<3> populated with the object being interacted with (the source of the event)
+<4> identifier of the property
+<5> current value of the property
+<6> proposed new value for the property; if being cleared then will be `null`.
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
@@ -98,6 +103,11 @@ public class SomeSubscriber {
 }
 ----
 
+[TIP]
+====
+If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
+====
+
 The subscriber's method is called (up to) 5 times:
 
 * whether to veto visibility (hide)
@@ -115,10 +125,14 @@ The subscriber can distinguish these by calling `ev.getPhase()`. Thus the genera
 public void on(PropertyDomainEvent ev) {
     switch(ev.getPhase()) {
         case HIDE:
+            // call ev.hide() or ev.veto("") to hide the property
             break;
         case DISABLE:
+            // call ev.disable("...") or ev.veto("...") to disable the property
             break;
         case VALIDATE:
+            // call ev.invalidate("...") or ev.veto("...")
+            // if proposed property value is invalid
             break;
         case EXECUTING:
             break;
@@ -127,20 +141,6 @@ public void on(PropertyDomainEvent ev) {
     }
 }
 ----
-
-Vetoing is performed by calling the appropriate method on the event:
-
-* To hide: +
-+
-`ev.hide()` or `ev.veto("")`
-
-* To disable: +
-+
-`ev.disable("...")` or `ev.veto("...")`
-
-* To invalidate: +
-
-`ev.invalidate("...")` or `ev.veto("...")`
 
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 

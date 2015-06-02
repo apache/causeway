@@ -65,19 +65,25 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 
 
 
+For example:
+
 [source,java]
 ----
-@ViewModel(...)
-@ViewModelLayout(...)
-public class MyViewModel { ... }
+@ViewModel                                 // <1>
+@ViewModelLayout(
+    cssClass="x-analysis",
+    cssClassFa="fa-piechart",
+    describedAs="Analysis of todo items by category"
+)
+public class CategoryPieChart { ... }
 ----
+<1> this annotation is intended for use with `@ViewModel`.  If a view model has been specified using the equivalent xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject(nature=Nature.VIEW_MODEL)`], then we recommend you use xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`] instead.
 
 
 [NOTE]
 ====
 Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
 ====
-
 
 
 

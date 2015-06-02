@@ -39,12 +39,12 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class CompletedEvent extends AbstractActionDomainEvent {
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { // <1>
         private static final long serialVersionUID = 1L;
-        public CompletedEvent(
-                final ToDoItem source,
-                final Identifier identifier,
-                final Object... arguments) {
+        public CompletedEvent(                                               // <2>
+                final ToDoItem source,                                       // <3>
+                final Identifier identifier,                                 // <4>
+                final Object... arguments) {                                 // <5>
             super("completed", source, identifier, arguments);
         }
     }
@@ -52,6 +52,12 @@ public class ToDoItem {
     public ToDoItem completed() { ... }
 }
 ----
+<1> inherit from `ActionDomainEvent<T>` where `T` is the type of the domain object being interacted with
+<2> constructor called reflectively by the framework
+<3> populated with the object being interacted with (the source of the event)
+<4> identifier of the collection
+<5> action argument(s)
+
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
@@ -92,7 +98,7 @@ public class SomeSubscriber {
 
 [TIP]
 ====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` for `@org.axonframework.eventhandling.annotation.EventHandler`.
+If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
 ====
 
 
@@ -113,10 +119,14 @@ The subscriber can distinguish these by calling `ev.getEventPhase()`. Thus the g
 public void on(ActionDomainEvent ev) {
     switch(ev.getPhase()) {
         case HIDE:
+            // call ev.hide() or ev.veto("") to hide the action
             break;
         case DISABLE:
+            // call ev.disable("...") or ev.veto("...") to disable the action
             break;
         case VALIDATE:
+            // call ev.invalidate("...") or ev.veto("...")
+            // if action arguments are invalid
             break;
         case EXECUTING:
             break;
@@ -125,20 +135,6 @@ public void on(ActionDomainEvent ev) {
     }
 }
 ----
-
-Vetoing is performed by calling the appropriate method on the event:
-
-* To hide: +
-+
-`ev.hide()` or `ev.veto("")`
-
-* To disable: +
-+
-`ev.disable("...")` or `ev.veto("...")`
-
-* To invalidate: +
-
-`ev.invalidate("...")` or `ev.veto("...")`
 
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 

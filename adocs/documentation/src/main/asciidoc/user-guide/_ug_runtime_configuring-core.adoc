@@ -121,18 +121,6 @@ See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata 
 |===
 
 
-[source,ini]
-----
-
-----
-
-or
-
-[source,ini]
-----
-isis.viewers.propertyLayout.labelPosition=LEFT
-----
-
 
 
 [[_ug_runtime_configuring-core_isis-objects-editing]]

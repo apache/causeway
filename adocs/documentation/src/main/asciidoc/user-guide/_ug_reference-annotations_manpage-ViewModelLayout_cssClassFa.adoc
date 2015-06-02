@@ -11,11 +11,13 @@ IMPORTANT: WIP ... this section
 
 == `cssClassFa()
 
+
+
 IMPORTANT: WIP ... this section
 
 [NOTE]
 ====
-These attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects] to specify the object's icon, and to xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[actions] to specify an icon for the action's representation as a button or menu item.
+These attribute can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[domain objects] to specify the object's icon, and to xref:_ug_reference-annotations_manpage-ActionLayout_cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
 ====
 
 

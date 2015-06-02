@@ -93,7 +93,7 @@ On the other hand:
 [source,java]
 ----
 public class Order {
-    @Command(
+    @Action(
         command=CommandReification.ENABLED,
         commandExecuteIn=CommandExecuteIn.FOREGROUND,
         commandPersistence=CommandPersistence.NOT_PERSISTED

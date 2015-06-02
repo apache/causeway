@@ -6,8 +6,14 @@
 
 
 
-The `@DomainObjectLayout` annotation applies to domain classes, collecting together all UI hints within a single
-annotation.
+The `@DomainObjectLayout` annotation applies to domain classes, collecting together all UI hints within a single annotation.
+
+
+[NOTE]
+====
+For view models that have been annotated with `@ViewModel` the equivalent xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`] can be used.
+====
+
 
 The table below summarizes the annotation's attributes.
 
@@ -82,8 +88,13 @@ public class ToDoItem {
 }
 ----
 
-For view models that have been annotated with `@ViewModel` (rather than `@DomainObject(nature=VIEW_MODEL)` the
-equivalent xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`] can be used.
+
+For example:
+
+[source,java]
+----
+----
+
 
 
 

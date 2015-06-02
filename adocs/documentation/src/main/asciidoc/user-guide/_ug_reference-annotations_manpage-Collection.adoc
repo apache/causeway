@@ -60,6 +60,38 @@ Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in
 |===
 
 
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class DependenciesChangedEvent
+            extends CollectionDomainEvent<ToDoItem, ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        public DependenciesChangedEvent(
+                ToDoItem source,
+                Identifier identifier,
+                Of of,
+                ToDoItem value) {
+            super(source, identifier, of, value);
+        }
+    }
+    @Collection(
+        domainEvent=DependenciesChangedEvent.class,
+        editing = Editing.ENABLED,
+        hidden = Where.NOWHERE,                       // <1>
+        notPersisted = false,                         // <2>
+        typeOf = ToDoItem.class                       // <3>
+    )
+    public SortedSet<ToDoItem> getDependencies() { ... }
+    ...
+}
+----
+<1> default value, so could be omitted
+<2> default value, so could be omitted
+<3> default value, so could be omitted
+
+
 
 
 

@@ -40,6 +40,12 @@ The table below summarizes the annotation's attributes.
 
 
 
+For example:
+
+[source,java]
+----
+----
+
 
 
 include::_ug_reference-annotations_manpage-DomainService_nature.adoc[leveloffset=+1]

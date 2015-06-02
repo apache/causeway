@@ -9,7 +9,7 @@ The `cssClassFa()` attribute is used to specify the name of a link:http://fortaw
 
 [NOTE]
 ====
-These attributes can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[domain objects] and to xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
+These attributes can also be applied to xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[domain objects] and to xref:_ug_reference-annotations_manpage-ViewModelLayout_cssClassFa[view models] to specify the object's icon.
 ====
 
 For example:

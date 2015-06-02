@@ -83,6 +83,13 @@ Property must also be annotated with `@javax.jdo.annotations.NotPersistent` in o
 |===
 
 
+For example:
+
+[source,java]
+----
+----
+
+
 
 
 include::_ug_reference-annotations_manpage-Property_domainEvent.adoc[leveloffset=+1]

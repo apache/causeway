@@ -18,7 +18,9 @@ Subscribers subscribe through the xref:_ug_reference-services-api_manpage-EventB
 
 [WARNING]
 ====
-The xref:_ug_wicket-viewer[Wicket viewer] does NOT currently support the modification of collections; they are rendered read-only.  However, domain events are still relevant to determine if such collections should be hidden.
+The xref:_ug_wicket-viewer[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  However, domain events are still relevant to determine if such collections should be hidden.
+
+The workaround is to create add/remove actions and use xref:_ug_reference-annotations_manpage-MemberOrder[UI hints] to render them close to the collection.
 ====
 
 By default the event raised is `CollectionDomainEvent.Default`. For example:
@@ -45,19 +47,30 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class DependenciesChangedEvent extends CollectionInteractionEvent<ToDoItem, ToDoItem> {
+    public static class DependenciesChangedEvent
+            extends CollectionDomainEvent<ToDoItem, ToDoItem> { // <1>
         private static final long serialVersionUID = 1L;
-        public DependenciesChangedEvent(
-                ToDoItem source, 
-                Identifier identifier, 
-                Of of,                                      // <1> 
-                ToDoItem value) {
+        public DependenciesChangedEvent(                        // <2>
+                ToDoItem source,                                // <3>
+                Identifier identifier,                          // <4>
+                Of of,                                          // <5>
+                ToDoItem value) {                               // <6>
             super(source, identifier, of, value);
         }
     }
+    @Collection(
+        domainEvent=DependenciesChangedEvent.class
+    )
+    public SortedSet<ToDoItem> getDependencies() { ... }
+    ...
 }
 ----
-<1> indicates if the collection is being accessed, added to or removed from.
+<1> inherit from `CollectionDomainEvent<T,E>` where `T` is the type of the domain object being interacted with, and `E` is the type of the element in the collection (both `ToDoItem` in this example)
+<2> constructor called reflectively by the framework
+<3> populated with the object being interacted with (the source of the event)
+<4> identifier of the collection
+<5> indicates if the collection is being accessed, added to or removed from.
+<6> the element being added or removed from the collection
 
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
@@ -98,7 +111,7 @@ public class SomeSubscriber {
 
 [TIP]
 ====
-If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` for `@org.axonframework.eventhandling.annotation.EventHandler`.
+If the AxonFramework is being used, replace `@com.google.common.eventbus.Subscribe` with `@org.axonframework.eventhandling.annotation.EventHandler`.
 ====
 
 The subscriber's method is called (up to) 5 times:
@@ -118,10 +131,14 @@ The subscriber can distinguish these by calling `ev.getPhase()`. Thus the genera
 public void on(CollectionDomainEvent ev) {
     switch(ev.getPhase()) {
         case HIDE:
+            // call ev.hide() or ev.veto("") to hide the collection
             break;
         case DISABLE:
+            // call ev.disable("...") or ev.veto("...") to disable the collection
             break;
         case VALIDATE:
+            // call ev.invalidate("...") or ev.veto("...")
+            // if object being added/removed to collection is invalid
             break;
         case EXECUTING:
             break;
@@ -130,20 +147,6 @@ public void on(CollectionDomainEvent ev) {
     }
 }
 ----
-
-Vetoing is performed by calling the appropriate method on the event:
-
-* To hide: +
-+
-`ev.hide()` or `ev.veto("")`
-
-* To disable: +
-+
-`ev.disable("...")` or `ev.veto("...")`
-
-* To invalidate: +
-
-`ev.invalidate("...")` or `ev.veto("...")`
 
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
 

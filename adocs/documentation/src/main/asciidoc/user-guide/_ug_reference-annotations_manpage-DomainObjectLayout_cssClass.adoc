@@ -6,12 +6,8 @@
 
 
 
-IMPORTANT: WIP ... this section
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the domain object.   xref:_ug_runtime_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
-
-The `CssClass` annotation applies to object and also to any object member
-(property, collection or action). It is used by the Wicket viewer as a UI hint
-to render specified CSS classes around the representation of the element.
 
 [NOTE]
 ====
@@ -19,40 +15,23 @@ This attribute can also be applied to xref:_ug_reference-annotations_manpage-Dom
 ====
 
 
-Application-specific CSS can then be used to target and adjust the UI representation
-of that particular element.
-
 For example:
 
 [source,java]
 ----
-@CssClass("x-main")
+@DomainObject(
+    cssClass="x-core-entity"
+)
 public class ToDoItem { ... }
 ----
-
-or
-
-[source,java]
-----
-public class ToDoItem {
-
-    @CssClass("x-key")
-    public LocalDate getDueBy() { ... }
-
-}
-----
-
-
-
 
 
 
 
 [NOTE]
 ====
-The similar xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint
-to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
-to be rendered on action butotns or as the icon for classes.
+The similar xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`] annotation attribute is also used as a hint to apply CSS, but in particular to allow http://fortawesome.github.io/Font-Awesome/icons/[Font Awesome icons]
+to be rendered as the icon for classes.
 ====
 
 

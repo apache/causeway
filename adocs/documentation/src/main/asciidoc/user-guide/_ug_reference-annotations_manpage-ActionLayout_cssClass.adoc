@@ -6,7 +6,7 @@
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML that represents the action.   Application-specific CSS can then be used to target and adjust the UI representation of that particular element.
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the action.   xref:_ug_runtime_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 [NOTE]
 ====
@@ -42,9 +42,3 @@ can be used instead, eg:
     "actionLayout": { "cssClass": "x-key" }
 }
 ----
-
-
-
-
-
-

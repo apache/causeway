@@ -18,7 +18,7 @@ This attribute can also be specified for xref:_ug_reference-annotations_manpage-
 
 [WARNING]
 ====
-The xref:_ug_wicket-viewer[Wicket viewer] does NOT currently support the modification of collections; they are rendered read-only.
+The xref:_ug_wicket-viewer[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  (The workaround is to create add/remove actions and use xref:_ug_reference-annotations_manpage-MemberOrder[UI hints] to render them close to the collection).
 ====
 
 Whether a collection is enabled or disabled depends upon three factors:
