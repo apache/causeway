@@ -34,9 +34,9 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 |API is also concrete class
 
 
-|xref:_ug_reference-services-api_manpage-BackgroundService[[`o.a.i.applib.` +
+|xref:_ug_reference-services-api_manpage-BackgroundService[`o.a.i.applib.` +
 `services.background` +
-`BackgroundService`]]
+`BackgroundService`]
 |Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
 |`BackgroundServiceDefault` +
 ``o.a.i.core`` +
@@ -57,17 +57,6 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 `ActionContributions`,
 `BookmarkHolder-` ++
 `AssociationContributions`
-
-
-|xref:_ug_reference-services-api_manpage-BulkInteractionContext[ `o.a.i.applib.` +
-`annotation` +
-`Bulk.Interaction-` +
-`Context`]
-|Deprecated, replaced by `ActionInvocationContext`
-|`Bulk.InteractionContext` +
-``o.a.i.core`` +
-``isis-core-applib``
-|API is also concrete class
 
 
 |xref:_ug_reference-services-api_manpage-ClockService[`o.a.i.applib.` +
@@ -239,22 +228,23 @@ Key:
 There is also a number of deprecated domain services.
 
 .Deprecated Domain Services
-[cols="2,4a,1,1", options="header"]
+[cols="2,4a,3a,1", options="header"]
 |===
 
 |API
-|Maven Module +
-Impl'n (g: a:)
+|Description
 |Implementation
 |Notes
 
 |`o.a.i.applib.` +
 `annotation`
 `Bulk.InteractionContext`
-|``o.a.i.core`` +
+|Request-scoped access to whether action is invoked on object and/or on collection of objects
+|`Bulk.InteractionContext` +
+``o.a.i.core`` +
 ``isis-core-applib``
-|`Bulk.InteractionContext`
-|Replaced by `ActionInvocationContext`
+|Replaced by xref:_ug_reference-services-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
+
 
 
 |===
