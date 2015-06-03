@@ -6,10 +6,38 @@
 
 
 
+The `menuBar()` attribute is a hint to specify where on the application menu a domain service's actions should be rendered.
 
-IMPORTANT: WIP ... this section
+For example:
+
+[source,java]
+----
+@DomainService
+@DomainServiceLayout(menuBar=MenuBar.PRIMARY)
+public class ToDoItems {
+    ...
+}
+----
+
+In the xref:_ug_wicket-viewer[Wicket viewer], domain services placed on the `PRIMARY` menu bar appears to the left:
+
+image::{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-primary.png[width="720px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-primary.png"]
+
+Domain services placed on the `SECONDARY` menu bar appear to the right:
+
+image::{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-secondary.png[width="720px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-secondary.png"]
 
 
-In the xref:_ug_wicket-viewer[Wicket viewer] the `PRIMARY` menu bar is left-aligned, the `SECONDARY` menu bar is right aligned, and the `TERTIARY` menu bar is associated with the user's name (far top-right).
+Domain services placed on the `TERTIARY` appear in the menu bar associated with the user's name (far top-right)
 
+image::{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-tertiary.png[width="720px",link="{_imagesdir}reference-annotations/DomainServiceLayout/menuBar-tertiary.png"]
+
+
+The grouping of multiple domain services actions within a single drop-down is managed by the xref:_ug_reference-annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
+
+
+[NOTE]
+====
+The xref:_ug_restfulobjects-viewer[RestfulObjects viewer] does not support this attribute.
+====
 

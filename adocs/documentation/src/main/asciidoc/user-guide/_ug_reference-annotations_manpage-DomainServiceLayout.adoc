@@ -44,6 +44,15 @@ For example:
 
 [source,java]
 ----
+@DomainService
+@DomainServiceLayout(
+    menuBar=MenuBar.PRIMARY,
+    menuOrder="100",
+    named="ToDos"
+)
+public class ToDoItems {
+    ...
+}
 ----
 
 
