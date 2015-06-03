@@ -6,10 +6,50 @@
 
 
 
+The `labelPosition()` attribute determines the positioning of labels for parameters.  This attribute can also be specified for xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[properties].
 
-== anchor:reference-annotations_manpage-ParameterLayout[]`labelPosition()`
+The positioning of labels is typically `LEFT`, but can be positioned to the `TOP`.  The one exception is xref:_ug_reference-annotations_manpage-ParameterLayout_multiLine[`multiLine()`] string parameters, where the label defaults to `TOP` automatically (to provide as much real-estate for the multiline text field as possible).
 
-IMPORTANT: WIP ... this section
+For boolean parameters a positioning of `RIGHT` is also allowed; this is ignored for all other types.
+
+For example:
+
+[source,java]
+----
+public class Order {
+    public Order changeStatus(
+                    OrderStatus newStatus
+                    @Parameter(
+                        optionality=Optionality.OPTIONAL
+                    )
+                    @ParameterLayout(
+                        named="Reason",
+                        labelPosition=LabelPosition.TOP
+                    )
+                    String reason) {
+        ...
+    }
+    ...
+}
+----
+
+
+To get an idea of how these are rendered (in the xref:_ug_wicket-viewer[Wicket viewer]), the default `LEFT` label positioning looks like:
+
+IMPORTANT: todo - wip
+
+
+The `TOP` label positioning is rendered:
+
+IMPORTANT: todo - wip
+
+
+And finally the `RIGHT` label positioning (for boolean checkboxes only) is rendered:
+
+IMPORTANT: todo - wip
+
+
+
 
 
 

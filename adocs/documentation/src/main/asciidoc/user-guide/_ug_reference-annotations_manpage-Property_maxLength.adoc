@@ -6,21 +6,44 @@
 
 
 
+The `maxLength()` attribute applies only to `String` properties, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).  The attribute It is ignored if applied to properties of any other type.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-Parameter_maxLength[parameters].
 
 
-IMPORTANT: WIP ... this section
-
-The `@MaxLength` annotation indicates the maximum number of characters that the user may enter into a `String` property, or a `String` parameter in an action, or for a string-based value type. It is ignored if applied to any other type.
+That said, properties are most commonly defined on persistent domain objects (entities), in which case the JDO xref:_ug_reference-annotations_manpage-Column[`@Column`] will in any case need to be specified.  Isis can infer the `maxLength` semantic directly from the equivalent `@Column#length()` annotation/attribute.
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-    @MaxLength(30)
+    @javax.jdo.annotations.Column(length=30)
     public String getFirstName() { ... }
     public void setFirstName(String firstName) { ... }
     ...
 }
 ----
+
+In this case there is therefore no need for the `@Property#maxLength()` attribute.
+
+
+
+== Non-persistent properties
+
+Of course, not every property is persistent (it could instead be derived), and neither is every domain object an entity (it could be a view model).  For these non persistable properties the `maxLength()` attribute is still required.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @javax.jdo.annotation.NotPersistent                    // <1>
+    @Property(maxLength=100)
+    public String getFullName() { ... }                    // <2>
+    public void setFullName(String fullName) { ... }       // <3>
+    ...
+}
+----
+<1> a non persisted (derived) property
+<2> implementation would most likely derive full name from constituent parts (eg first name, middle initial, last name)
+<3> implementation would most likely parse the input and update the constituent parts
 

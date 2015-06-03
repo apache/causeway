@@ -19,38 +19,41 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-Parameter_maxLength[`maxLength()`]
-|
-|
+|Positive integer
+|maximum number of characters for string parameters; ignored otherwise
 
 
-|xref:_ug_reference-annotations_manpage-Parameter_minLength[`minLength()`]
-|
-|
+|`minLength()`
+|Positive integer
+|Deprecated; use xref:_ug_reference-annotations_manpage-MinLength[`@MinLength`] instead. +
+
+Can be used to specify the minimum length for xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method; but because this _is a_ supporting method rather than the action method itself, we now feel it is misleading to use the `@Parameter` annotation in this situation.
 
 
 |xref:_ug_reference-annotations_manpage-Parameter_mustSatisfy[`mustSatisfy()`]
-|
-|
+|implementation of `o.a.i.applib.spec.Specification`
+|allows arbitrary validation to be applied
 
 
 |xref:_ug_reference-annotations_manpage-Parameter_optionality[`optionality()`]
-|
-|
+|`MANDATORY`, `OPTIONAL` (`MANDATORY`)
+|specifies a parameter is optional rather than mandatory
 
 
-|xref:_ug_reference-annotations_manpage-Parameter_regex[regex()]
-|
-|
+|xref:_ug_reference-annotations_manpage-Parameter_regexPattern[regexPattern()]
+|regular expression
+|validates the contents of a string parameter against the regular expression pattern
 
 
 |`regexPatternFlags()`
-|
-|
+|value of flags as normally passed to `java.util.regex.` +
+`Pattern#compile(...)`
+|modifies the compilation of the regular expression
 
 
 |`regexPatternReplacement()`
 |
-|
+|Unused.
 
 
 |===
@@ -62,13 +65,32 @@ For example:
 
 [source,java]
 ----
+public class Customer {
+    public static class EmailSpecification extends AbstractSpecification<String> {
+        public String satisfiesSafely(String proposed) {
+            return EmailUtil.ensureValidEmail(proposed);    // <1>
+        }
+    }
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public Customer updateEmail(
+        @Parameter(
+            maxLength=30,
+            mustSatisfy=EmailSpecification.class,
+            optionality=Optionality.OPTIONAL,
+            regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
+            regexPatternFlags=Pattern.CASE_INSENSITIVE
+        )
+        @ParameterLayout(named="New Email Address")
+        final String newEmailAddress
+        ...
+    }
+}
 ----
-
+<1> the (fictitious) `EmailUtil.ensureValid(...)` (omitted for brevity) returns a string explaining if an email is invalid
 
 include::_ug_reference-annotations_manpage-Parameter_maxLength.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Parameter_minLength.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-Parameter_mustSatisfy.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-Parameter_optionality.adoc[leveloffset=+1]
-include::_ug_reference-annotations_manpage-Parameter_regex.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-Parameter_regexPattern.adoc[leveloffset=+1]
 
 

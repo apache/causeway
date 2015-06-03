@@ -7,31 +7,40 @@
 
 
 
-IMPORTANT: WIP ... this section
+The `mustSatisfy()` attribute allows arbitrary validation to be applied to properties using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.
+ The attribute is also supported on xref:_ug_reference-annotations_manpage-Parameter_mustSatisfy[parameters].
 
+[TIP]
+====
+The specification implementations can (of course) be reused between properties and xref:_ug_reference-annotations_manpage-Parameter_mustSatisfy[parameters].
+====
 
-The `@MustSatisfy` annotation allows validation to be applied to
-properties and parameters using an (implementation of a)
-`org.apache.isis.applib.spec.Specification` object.
+The `Specification` is consulted during validation, being passed the proposed value.  If the proposed value fails, then the value returned is the used as the invalidity reason.
 
 For example:
 
 [source,java]
 ----
+public class StartWithCapitalLetterSpecification
+        extends AbstractSpecification<String> {            // <1>
+    public String satisfiesSafely(String proposed) {
+        return "".equals(proposed)
+            ? "Empty string"
+            : !Character.isUpperCase(proposed.charAt(0))
+                ? "Does not start with a capital letter"
+                : null;
+    }
+}
 public class Customer {
     @MustSatisfy(StartWithCapitalLetterSpecification.class)
     public String getFirstName() { ... }
     ...
 }
 ----
+<1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.  The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
 
 
-The `Specification` is consulted during validation, being passed the proposed value.
 
 
-[TIP]
-====
-Can also specify on property, so the specification class can be reused.
-====
 
 

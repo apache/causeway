@@ -24,14 +24,12 @@ For example:
 public class Customer {
     public Order placeOrder(
                       Product product,
-                      @Named("Quantity")
-                      @DescribedAs("The quantity of the product being ordered")
+                      @ParameterLayout(
+                          named="Quantity",
+                          describedAs="The quantity of the product being ordered"
+                      )
                       int quantity) {
-        Order order = createTransientInstance(Order.class);
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);
-        return order;
+        ...
     }
     ...
 }

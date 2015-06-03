@@ -5,10 +5,8 @@
 :_imagesdir: images/
 
 
-IMPORTANT: WIP ... this section
 
-
-The `@MaxLength` annotation indicates the maximum number of characters that the user may enter into a `String` property, or a `String` parameter in an action, or for a string-based value type. It is ignored if applied to any other type.
+The `maxLength()` attribute applies only to `String` parameters, indicating the maximum number of characters that the user may enter (for example in a text field in the UI).  It is ignored if applied to parameters of any other type.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-Property_maxLength[properties].
 
 For example:
 
@@ -16,16 +14,19 @@ For example:
 ----
 public class CustomerRepository {
     public Customer newCustomer(
-        @MaxLength(30)
-        @Named("First Name") String firstName
-       ,@MaxLength(30)
-        @Named("Last Name") String lastName) {
-    ...
+        @Parameter(maxLength=30)
+        @ParameterLayout(named="First Name")  // <1>
+        final String firstName,
+        @Parameter(maxLength=50)
+        @ParameterLayout(named="Last Name")
+        final String lastName) {
+        ...
+    }
 }
 ----
+<1> the `@ParameterLayout(named=...)` attribute is required for Java 7; for Java 8 it can be omitted if the (non-ASF) http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8] metamodel extension is used.
 
 
-If the model is being persisted to a relational database then `@MaxLength` should be specified for all `String` properties and action parameters.
 
 
 

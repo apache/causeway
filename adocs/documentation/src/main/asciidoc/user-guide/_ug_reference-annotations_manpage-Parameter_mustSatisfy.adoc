@@ -6,37 +6,45 @@
 
 
 
-IMPORTANT: WIP ... this section
+The `mustSatisfy()` attribute allows arbitrary validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.  The attribute is also supported on xref:_ug_reference-annotations_manpage-Property_mustSatisfy[properties].
 
+[TIP]
+====
+The specification implementations can (of course) be reused between parameters and xref:_ug_reference-annotations_manpage-Property_mustSatisfy[properties].
+====
 
-The `@MustSatisfy` annotation allows validation to be applied to parameters using an (implementation of a) `org.apache.isis.applib.spec.Specification` object.
+The `Specification` is consulted during validation, being passed the proposed value.  If the proposed value fails, then the value returned is the used as the invalidity reason.
 
 For example:
 
 [source,java]
 ----
+public class StartWithCapitalLetterSpecification
+        extends AbstractSpecification<String> {            // <1>
+    public String satisfiesSafely(String proposed) {
+        return "".equals(proposed)
+            ? "Empty string"
+            : !Character.isUpperCase(proposed.charAt(0))
+                ? "Does not start with a capital letter"
+                : null;
+    }
+}
 public class CustomerRepository {
     public Customer newCustomer(
-            @MustSatisfy(StartWithCapitalLetterSpecification.class)
-            @Named("First Name") firstName
-           ,@MustSatisfy(StartWithCapitalLetterSpecification.class)
-            @Named("Last Name") lastName) {
+            @Parameter(
+                mustSatisfy=StartWithCapitalLetterSpecification.class
+            )
+            @ParameterLayout(named="First Name")
+            final String firstName,
+            @Parameter(
+                mustSatisfy=StartWithCapitalLetterSpecification.class
+            )
+            @ParameterLayout(named="Last Name")
+            final String lastName) {
         ...
     }
     ...
 }
 ----
-
-The `Specification` is consulted during validation, being passed the
-proposed value.
-
-An alternative to using `@MustSatisfy` is to define a custom value type (though this introduces additional mapping complexity for both viewers and objectstore).
-
-
-[TIP]
-====
-Can also specify on property, so the specification class can be reused.
-====
-
-
+<1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.  The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
 

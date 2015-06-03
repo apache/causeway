@@ -67,6 +67,10 @@ Supported by the xref:_ug_wicket-viewer[Wicket viewer] but currently ignored by 
 
 A typical use case is if the desired name is a reserved Java keyword, such as `default` or `package`.
 
+|xref:_ug_reference-annotations_manpage-ActionLayout_position[`position()`]
+|`BELOW`, `RIGHT`, `PANEL`, `PANEL_DROPDOWN` (`BELOW`)
+|for actions associated (using xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder#named()`]) with properties, the positioning of the action's button with respect to the property
+
 
 |===
 
@@ -102,6 +106,7 @@ include::_ug_reference-annotations_manpage-ActionLayout_cssClassFa.adoc[leveloff
 include::_ug_reference-annotations_manpage-ActionLayout_describedAs.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-ActionLayout_hidden.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-ActionLayout_named.adoc[leveloffset=+1]
+include::_ug_reference-annotations_manpage-ActionLayout_position.adoc[leveloffset=+1]
 
 
 

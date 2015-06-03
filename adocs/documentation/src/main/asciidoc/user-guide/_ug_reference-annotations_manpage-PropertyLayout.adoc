@@ -47,9 +47,9 @@ It is also possible to change the default through a xref:_ug_runtime_configuring
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_multiLine[`multiLine()`]
 |Positive integer
-|for string propertys, render as a text area over multiple lines.  +
+|for string properties, render as a text area over multiple lines.  +
 
-If set &gt;1, then xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[`labelPosition`] defaults to TOP.
+If set > 1, then xref:_ug_reference-annotations_manpage-PropertyLayout_labelPosition[`labelPosition`] defaults to TOP.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_named[`named()`]
