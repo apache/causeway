@@ -39,32 +39,32 @@ public class Customer {
 <2> associate the "updateStatus" action with the "status" property
 <3> give the action an abbreviated name, because the fact that the "status" property is to be updated is implied by its positioning
 
+
 The default is `BELOW`, which is rendered (by the xref:_ug_wicket-viewer[Wicket viewer]) as shown below:
 
-
-IMPORTANT: todo - wip
+image::{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-BELOW.png.png"]
 
 
 If the action is positioned as `RIGHT`, then the action's button is rendered to the right of the property's field, in a compact drop-down.  This is ideal if there are many actions associated with a property:
 
-IMPORTANT: todo - wip
+image::{_imagesdir}reference-annotations/ActionLayout/position-RIGHT.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-RIGHT.png.png"]
 
 
 
 If the action is positioned as `PANEL`, then the action's button is rendered on the header of the panel that contains the property:
 
-IMPORTANT: todo - wip
+image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL.png.png"]
 
 
 
 And finally, if the action is positioned as `PANEL_DROPDOWN`, then the action's button is again rendered on the panel header, but as a drop-down:
 
 
-IMPORTANT: todo - wip
+image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png[width="720px",link="{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.png.png"]
 
 
 
-If there are multiple actions associated with a single property then the positioning can be mix'ed-and-match'ed as required.  If the `PANEL` or `PANEL_DROPDOWN` are used, then the actions from potentially multiple properties grouped by that panel will be shown together.
+If there are multiple actions associated with a single property then the positioning can be mix'ed-and-match'ed as required.  If the `PANEL` or `PANEL_DROPDOWN` are used, then (as the screenshots above show) the actions from potentially multiple properties grouped by that panel will be shown together.
 
 
 As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]

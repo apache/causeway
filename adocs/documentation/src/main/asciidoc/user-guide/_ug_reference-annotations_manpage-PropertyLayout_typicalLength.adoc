@@ -6,23 +6,20 @@
 
 
 
+The `typicalLength()` attribute indicates the typical length of a string property.  It is ignored for properties of other types.  The attribute is also supported for xref:_ug_reference-annotations_manpage-ParameterLayout_typicalLength[parameters].
 
-IMPORTANT: WIP ... this section
-
-
-The `@TypicalLength` annotation indicates the typical length of a `String` property or `String` parameter in an action. It can also be specified for string-based value types.
-
-The information is generally used by the viewing mechanism to determine the space that should be given to that property or parameter in the appropriate view. If the typical length is the same as the `@MaxLength` <!--(see ?)--> then there is no need to specify `@TypicalLength` as well. If the value specified is zero or negative then it will be ignored.
+The information is intended as a hint to the UI to determine the space that should be given to render a particular string property.  That said, note that the xref:_ug_wicket-viewer[Wicket viewer] uses the maximum space available for all fields, so in effect ignores this attribute.
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-    @MaxLength(30)
-    @TypicalLength(20)
+    @javax.jdo.annotations.Column(length=30)
+    @ParameterLayout(typicalLength=20)
     public String getFirstName() { ... }
     public void setFirstName(String firstName) { ... }
+    ...
 }
 ----
 

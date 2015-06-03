@@ -68,15 +68,7 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:_ug_reference-annotations_manpage-PropertyLayout_renderedAsDayBefore[`renderedAsDayBefore()`]
 |`true`, `false` +
 (`false`)
-|for date propertys only, render the date as one day prior to the actually stored date. +
-
-Useful for persisting an open interval, eg: +
-
-`[1-Apr-2015, 1-Jun-2015)` +
-
-but presenting the data as if a closed interval +
-
-`[1-Apr-2015, 31-May-2015]`.
+|for date properties only, render the date as one day prior to the actually stored date.
 
 
 |xref:_ug_reference-annotations_manpage-PropertyLayout_typicalLength[`typicalLength()`]

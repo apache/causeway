@@ -93,6 +93,7 @@ The sliding panel appears whenever the mouse pointer hovers over the thin blue t
 
 Alternatively, `alt+[` will toggle open/close the panel; it can also be closed using `Esc` key.
 
+
 === Related functionality
 
 The xref:_ug_wicket-viewer_features_recent-pages[Recent Pages] also lists recently visited pages, selected from a drop-down.
