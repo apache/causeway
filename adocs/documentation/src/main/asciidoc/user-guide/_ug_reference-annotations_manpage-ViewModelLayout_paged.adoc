@@ -8,6 +8,7 @@
 The `paged()` attribute specifies the number of rows to display in a standalone collection, as returned from an action invocation.  This attribute can also be applied to xref:_ug_reference-annotations_manpage-CollectionLayout_paged[collections] and xref:_ug_reference-annotations_manpage-DomainObjectLayout_paged[domain objects].
 
 
+
 [WARNING]
 ====
 The xref:_ug_restfulobjects-viewer[RestfulObjects viewer] currently does not support paging.   The xref:_ug_wicket-viewer[Wicket viewer] _does_ support paging, but note that the paging is performed client-side rather than server-side.

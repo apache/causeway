@@ -6,17 +6,19 @@
 
 
 
-IMPORTANT: WIP ... this section
+When Apache Isis displays a standalone collection of several objects, it will label the collection using the plural form of the object type.
 
-When the framework displays a collection of several objects it may use the plural form of the object type in the title. By default the plural name will be created by adding an 's' to the end of the singular name (whether that is the class name or another name specified using `@Named`). Where the single name ends in 'y' then the default plural name will end in 'ies' - for example a collection of `Country` objects will be titled 'Countries'. Where these conventions do not work, the programmer may specify the plural form of the name using `@Plural`.
+By default the plural name will be derived from the end of the singular name, with support for some basic English language defaults (eg using "ies" for names ending with a "y").
+
+The `plural()` attribute allows the plural form of the class name to be specified explicitly.  This attribute is also supported for xref:_ug_reference-annotations_manpage-ViewModelLayout_plural[view models].
 
 For example:
 
 [source,java]
 ----
-@Plural("Children")
+@DomainObjectLayout(plural="Children")
 public class Child {
-    // members and actions here
+    ...
 }
 ----
 

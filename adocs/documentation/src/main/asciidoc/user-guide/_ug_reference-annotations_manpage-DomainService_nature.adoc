@@ -5,73 +5,85 @@
 :_imagesdir: images/
 
 
+By default, a domain service's actions will be rendered in the application menu bar _and_ be contributed _and_ appear in the REST API _and_ (of course) be available to invoke programmatically wherever that domain service is injected.  This is great for initial prototyping, but later on you may prefer to add a little more structure.  This is the purpose of the `nature()` attribute: to indicates the intent of (all of) the actions defined within the domain service.
 
-IMPORTANT: WIP ... this section; also VIEW_REST_ONLY
+The values of the enum are:
 
+* `VIEW` +
++
+The default; the service's actions appear on menu bars, can be contributed, appear in the REST API
 
+* `VIEW_MENU_ONLY` +
++
+The service's actions appear on menus and in the REST API, but are not contributed to domain objects or view models
 
-The `@NotContributed` annotation applies only to action methods, and
-specifically to the actions of services. If present, it indicates that
-the action should not be contributed to any of its domain object
-arguments.
+* `VIEW_CONTRIBUTIONS_ONLY` +
++
+The service's actions are intended only to be used as contributed actions/associations to domain objects and view models. +
++
+The related xref:_ug_reference-annotations_manpage-ActionLayout_contributedAs[`@ActionLayout#contributedAs()`] determines whether any given (1-arg) action is contributed as an association rather than an action.
 
-For example:
+* `VIEW_REST_ONLY` +
++
+The service's actions are intended only to be listed in the REST API exposed by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
 
-[source,java]
-----
-public class OrderServices {
-    @NotContributed
-    public void cancel(Order order);
-    ...
-}
-----
-
-If the action should neither be contributed nor appear in the service's
-service menu, then you could instead simply mark it as `@Hidden`.
-
-
-
-
-== Contributing of one-arg actions
-
-Actions that accept a single argument will, by default, also be contributed as an association:
-
-* if the action returns a single object (value or entity) then the action will be contributed as a property
-
-* if the action returns a list then the action will be contributed as a collection
-
-This behaviour can be influenced by specifying the "As." attribute:
-
-* use `@NotContributed(As.ACTION)` to contribute the action as an association
-* use `@NotContributed(As.ASSOCIATION)` to contribute the action as an action
-* use `@NotContributed` to not contribute the action at all.
+* `DOMAIN` +
++
+The service and its actions are only intended to be invoked programmatically; they are a domain layer responsibility.
 
 
-
-
-
-The `@NotInServiceMenu` annotation applies only to action methods, and specifically to the actions of services. If present, it indicates that the action should not appear in the service menu for the service. It may, however, still be contributed to any of its domain object arguments.
-
+The actual class name of the domain service is only rendered for the `VIEW`, `VIEW_MENU_ONLY` and `VIEW_REST_ONLY` natures.  Thus, you might also want to adopt naming conventions for your domain classes so you can infer the nature from the class.  For example, the naming convention adopted (by and large) by the (non-ASF) link:http://isisaddons.org[Isis Addons] is `ProgrammaticServices` or `Repository` as a suffix for `DOMAIN` services, and `Contributions` as a suffix for `VIEW_CONTRIBUTIONS_ONLY` services.
 
 For example:
 
 [source,java]
 ----
-public class OrderServices {
-    @NotInServiceMenu
-    public void cancel(Order order);
-    ...
+@DomainService(
+    nature=NatureOfService.VIEW_CONTRIBUTIONS_ONLY
+)
+public class LoanContributions {                                  // <1>
+    @Action(semantics=SemanticsOf.SAFE)                           // <2>
+    @ActionLayout(contributed=Contributed.AS_ASSOCIATION )
+    public List<Loan> currentLoans(Borrower borrower) { ... }
+    public Borrower newLoan(Borrower borrower, Book book) { ... }
 }
 ----
+<1> `Contributions` as a suffix for a domain service that contributes a number of actions to ``Borrower``s.  Note that `Borrower` could be a (marker) interface, so this functionality is "mixed in" merely by the class (eg `LibraryMember`) implementing this interface
+<2> actions contibuted as associations (a collection in this case) must have safe semantics
+
+
+Another example:
+
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.DOMAIN
+)
+public class LoanRepository {                                  // <1>
+    @Programmatic                                              // <2>
+    public List<Loan> findLoansFor(Borrower borrower) { ... }
+}
+----
+<1> `Repository` as a suffix for a domain-layer service
+<2> methods on `DOMAIN` services are often xref:_ug_reference-annotations_manpage-Programmatic[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Isis' metamodel
 
 
 
-If the action should neither be contributed (see ?) nor appear in the
-service's service menu, then you could instead simply mark it as `@Hidden`
-<!--(see ?)-->.
+A final example:
 
-
-
-
+[source,java]
+----
+@DomainService(
+    nature=NatureOfService.VIEW_MENU_ONLY
+)
+public class Loans {                               // <1>
+    @Action(semantics=SemanticsOf.SAFE)
+    public List<Loan> findOverdueLoans() { ... }
+    @Inject
+    LoanRepository loanRepository;                 // <2>
+}
+----
+<1> name is intended to be rendered in the UI
+<2> it's common for domain-layer domain services to be injected into presentation layer services (such as `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`).
 
 

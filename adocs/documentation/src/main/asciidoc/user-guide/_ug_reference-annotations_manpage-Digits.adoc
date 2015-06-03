@@ -4,10 +4,11 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-Title: @javax.validation.constraints.Digits
 
-This is a stub.
+The `@javax.validation.constraints.Digits` annotation is recognized by Apache Isis as a means to specify the precision for properties and action parameters of type `java.math.BigDecimal`.
 
+For example:
+
+IMPORTANT: todo - wip
 

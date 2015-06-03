@@ -5,47 +5,41 @@
 :_imagesdir: images/
 
 
+The `sortedBy()` attribute specifies that the collection be ordered using the specified comparator, rather than the natural ordering of the entity (as would usually be the case).
 
-
-IMPORTANT: WIP ... this section
-
-
-The `@SortedBy` annotation is an instruction hint for (`SortedSet`) collections to use the specified comparator rather than the natural ordering of the entity
-(as would usually be the case).
-
-For example, this is taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF):
+For example:
 
 [source,java]
 ----
-public class ToDoItem implements Comparable<ToDoItem> {
-
-    ...
-    public static class DependenciesComparator implements Comparator<ToDoItem> {
+public class ToDoItem implements Comparable<ToDoItem> {      // <1>
+    public static class DependenciesComparator               // <2>
+            implements Comparator<ToDoItem> {
         @Override
         public int compare(ToDoItem p, ToDoItem q) {
-            return ORDERING_BY_DESCRIPTION
+            return ORDERING_BY_DESCRIPTION                   // <3>
                     .compound(Ordering.<ToDoItem>natural())
                     .compare(p, q);
         }
     }
-
-    ...
-    @SortedBy(DependenciesComparator.class)
+    @CollectionLayout(sortedBy=DependenciesComparator.class) // <4>
     public SortedSet<ToDoItem> getDependencies() { ... }
-
-    public int compareTo(final ToDoItem other) {
-        return ORDERING_BY_COMPLETE
-                .compound(ORDERING_BY_DUE_BY)
-                .compound(ORDERING_BY_DESCRIPTION)
-                .compare(this, other);
-    }
     ...
 }
 ----
+<1> the class has a natural ordering (implementation not shown)
+<2> declaration of the comparator class
+<3> ordering defined as being by the object's `description` property (not shown), and then by the natural ordering of the class
+<4> specify the comparator to use
 
 When the `dependencies` collection is rendered, the elements are sorted by the `description` property first:
 
-![](images/sortedby-dependencies.png)
+image::{_imagesdir}reference-annotations/CollectionLayout/sortedby-dependencies.png[width="720px",link="{_imagesdir}reference-annotations/CollectionLayout/sortedby-dependencies.png"]
+
+[NOTE]
+====
+Note that this screenshot shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
 
 Without this annotation, the order would have been inverted (because the natural ordering places items not completed before those items that have been completed.
 
@@ -57,4 +51,9 @@ can be used instead, eg:
 
 [source,javascript]
 ----
+"dependencies": {
+    "collectionLayout": {
+        "sortedBy": "com.mycompany.myapp.dom.ToDoItem.DependenciesComparator"
+    }
+}
 ----

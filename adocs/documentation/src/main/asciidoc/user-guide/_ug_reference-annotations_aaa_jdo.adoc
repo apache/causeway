@@ -10,6 +10,8 @@ Apache Isis uses JDO/DataNucleus as its ORM, and infers some of its own metadata
 [WARNING]
 ====
 Isis (currently) builds up metadata by parsing the JDO annotations from source, _not_ by querying the JDO metamodel.  The upshot is that, for the annotations documented here at least, your domain entities must use JDO annotations rather than XML.
+
+Furthermore, note that although JDO (the property-related) annotations to be placed on either the field or on the getter, Isis requires that annotations are placed on the getter.
 ====
 
 The table below lists the JDO annotations currently recognized by Isis.
@@ -21,7 +23,15 @@ The table below lists the JDO annotations currently recognized by Isis.
 |Annotation
 |Purpose
 |Layer
-|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
+|Applies to
+
+
+|xref:_ug_reference-annotations_manpage-Column[`@javax.jdo.annotations.` +
+`Column`]
+|Used to determine whether a property is mandatory or optional.  For `String` and `BigDecimal` properties, used to determine length/precision/scale.
+
+|Domain / persistence
+|Property
 
 
 |xref:_ug_reference-annotations_manpage-Discriminator[`@javax.jdo.annotations.` +
@@ -30,17 +40,34 @@ The table below lists the JDO annotations currently recognized by Isis.
 
 Note that the discriminator overrides the object type that may otherwise be inferred from the xref:_ug_reference-annotations_manpage-PersistenceCapable[`@PersistenceCapable`] annotation.
 |Domain / persistence
-|
+|Class
+
+
+|xref:_ug_reference-annotations_manpage-NotPersistent[`@javax.jdo.annotations.` +
+`NotPersistent`]
+|Used to determine whether to enforce or skip some xref:_ug_extending_programming-model_custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
+
+|Domain / persistence
+|Property
+
 
 
 |xref:_ug_reference-annotations_manpage-PersistenceCapable[`@javax.jdo.annotations.` +
 `PersistenceCapable`]
 |Used to build Isis' own internal identifier for objects. +
 
-If both `schema()` and `table()` are specified (and if xref:_ug_reference-annotations_manpage-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:_ug_restfulobjects-viewer[RestfulObjects viewer] and elsewhere.
+If the `schema()` attribute is specified (and if xref:_ug_reference-annotations_manpage-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:_ug_restfulobjects-viewer[RestfulObjects viewer] and elsewhere.
 
 |Domain / persistence
-|
+|Class
+
+
+|xref:_ug_reference-annotations_manpage-PrimaryKey[`@javax.jdo.annotations.` +
+`PrimaryKey`]
+|Used to ensure Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
+
+|Domain / persistence
+|Property
 
 
 
@@ -56,29 +83,28 @@ Isis also parses the following JDO annotations, but the metadata is currently un
 |Annotation
 |Purpose
 |Layer
-|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
+|Applies to
 
 
 |`@javax.jdo.annotations.` +
 `DataStoreIdentity`
 |Unused
 |Persistence
-|
+|Class
 
 
 |`@javax.jdo.annotations.` +
 `EmbeddedOnly`
 |Unused
 |Persistence
-|
+|Class
 
 
 |`@javax.jdo.annotations.` +
 `Query`
 |Unused
 |Persistence
-|
-
+|Class
 
 
 |===

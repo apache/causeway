@@ -9,3 +9,11 @@ IMPORTANT: TODO - @javax.jdo.annotation.Discriminator
 
 
 
+[IMPORTANT]
+====
+If the object type has not been specified (by either this annotation, or by xref:_ug_reference-annotations_manpage-PersistenceCapable[`@PersistenceCapable`], or by Isis' own xref:_ug_reference-annotations_manpage-ObjectType[`@ObjectType`] annotation), then Isis will use the fully qualified class name of the entity.
+
+However, chances are that the fully qualified class name is liable to change over time, for example if the code is refactored or (more fundamentally) if your company/organization reorganizes/renames itself/is acquired.
+
+We therefore strongly recommend that you specify an object type for all entities, one way or another.  Specifying `@Discriminator` will override `@PersistenceCapable`, which in turn (so long as both `schema()` attribute was specified) overrides `ObjectType`.
+====

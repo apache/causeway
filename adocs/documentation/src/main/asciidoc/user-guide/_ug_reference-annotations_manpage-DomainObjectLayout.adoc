@@ -80,21 +80,16 @@ For example:
 ----
 @DomainObjectLayout(
     cssClass="x-key",
+    cssClassFa="fa-checklist",
     describedAs="Capture a task that you need to do",
-    paged=30)
+    named="ToDo",
+    paged=30,
+    plural="ToDo List")
 )
 public class ToDoItem {
     ...
 }
 ----
-
-
-For example:
-
-[source,java]
-----
-----
-
 
 
 

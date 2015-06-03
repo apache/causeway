@@ -19,9 +19,9 @@ If the object type has not been specified, then Isis will use the fully qualifie
 
 [IMPORTANT]
 ====
-As noted above, if the object type has not been specified, then Isis will use the fully qualified class name of the entity.  This is liable to change over time, for example if the code is refactored or (more fundamentally) if your company/organization reorganizes/or is acquired.
+As noted above, if the object type has not been specified, then Isis will use the fully qualified class name of the entity.  However, this is liable to change over time, for example if the code is refactored or (more fundamentally) if your company/organization reorganizes/renames itself/is acquired.
 
-We therefore strongly recommend that you specify an object type for all entities, either using `objectType()` or (generally better still) using the JDO xref:_ug_reference-annotations_manpage-PersistenceCapable[`@PersistenceCapable`] or xref:_ug_reference-annotations_manpage-Discriminator[`@Discriminator`] annotations.
+We therefore strongly recommend that you specify an object type for all entities, either using `objectType()` or using the JDO xref:_ug_reference-annotations_manpage-PersistenceCapable[`@PersistenceCapable`] (with a `schema()` attribute) or xref:_ug_reference-annotations_manpage-Discriminator[`@Discriminator`] annotations.  Specifying `@Discriminator` will override `@PersistenceCapable`, which in turn overrides `ObjectType`.
 ====
 
 

@@ -6,53 +6,48 @@
 
 
 
-IMPORTANT: WIP ... this section
+The `bookmarking()` attribute indicates that an entity is automatically bookmarked. This attribute is also supported for  xref:_ug_reference-annotations_manpage-Action_bookmarking[domain objects].
 
+(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel:
 
-The `bookmarking()` attribute indicates that an entity is automatically bookmarked.
+image::{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking.png"]
 
-(In the Wicket viewer), a link to a bookmarked object is shown in the bookmarks panel that slides out from the left:
-
-<img src="images/Bookmarkable.png" width="640px"/>
+[NOTE]
+====
+Note that this screenshot shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
 
 For example:
 
 [source,java]
 ----
-@Bookmarkable
+@DomainObject(bookmarking=BookmarkPolicy.AS_ROOT)
 public class ToDoItem ... {
     ...
 }
 ----
 
-indicates that the `ToDoItem` class is bookmarkable, while:
+indicates that the `ToDoItem` class is bookmarkable:
 
-[source,java]
-----
-@Named("ToDos")
-public class ToDoItems {
-
-    @Bookmarkable
-    @ActionSemantics(Of.SAFE)
-    @MemberOrder(sequence = "1")
-    public List<ToDoItem> notYetComplete() {
-        ...
-    }
-
-}
-----
-
-indicates that the "not yet complete" action is bookmarkable.
 
 It is also possible to nest bookmarkable entities. For example, this screenshot is taken from http://github.com/estatio/estatio[Estatio]:
 
-<img src="images/Bookmarkable-nested.png" width="640px"/>
+image::{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking-nested.png[width="720px",link="{_imagesdir}reference-annotations/DomainObjectLayout/bookmarking-nested.png"]
 
-For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark (the default), but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark if its parent `Property` has already been visited. This is accomplished with the following annotations:
+
+[NOTE]
+====
+Note that this screenshot shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+For example, the `Property` entity "[OXF] Oxford Super Mall" is a root bookmark, but the `Unit` child entity "[OXF-001] Unit 1" only appears as a bookmark _but only if_ its parent `Property` has already been bookmarked.
+
+This is accomplished with the following annotations:
 
 [source,java]
 ----
-@Bookmarkable
+@DomainObject(bookmarking=BookmarkPolicy.AS_ROOT)
 public class Property { ... }
 ----
 
@@ -60,10 +55,12 @@ and
 
 [source,java]
 ----
-@Bookmarkable(BookmarkPolicy.AS_CHILD)
+@DomainObject(bookmarking=BookmarkPolicy.AS_CHILD)
 public abstract class Unit { ... }
 ----
 
-The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting 3 deep: `Lease` -&gt; `LeaseItem` -&gt; `LeaseTerm`.
+The nesting can be done to any level; the Estatio screenshot also shows a bookmark nesting `Lease` > `LeaseItem` >  `LeaseTerm` (3 levels deep).
+
+
 
 

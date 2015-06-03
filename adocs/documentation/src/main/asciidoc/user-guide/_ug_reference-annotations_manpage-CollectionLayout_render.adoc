@@ -5,46 +5,19 @@
 :_imagesdir: images/
 
 
+The `render()` attribute specifies that the collection be rendered either "eagerly" (shown open, displaying its contents) or "lazily" (shown closed, hiding its contents). The terminology here is based on the similar concept of lazy loading of collections in the domain/persistence layer boundary (except that the rendering relates to the presentation/domain layer boundary).
 
-
-IMPORTANT: WIP ... this section
-
-
-The `@Render` annotation is a hint for properties and collections to
-indicate that a value property should be rendered lazily (rather than
-eagerly, as usual), or that a reference property or collection should be
-rendered eagerly (rather than lazily, as usual).
-
-Viewers can use this to present the property/collection in an
-appropriate manner:
-
-* an ``Order``'s `lineItems` collection might initially be rendered expanded
-form so that the user could see a list of line items immediately
-when the order is rendered. This is the most common use case.
-
-* a (reference) property of type `Address` might show the details of the
-referenced `Address` in a box
-
-At the same time, an object store might use this to defer lazy loading
-of values that represent blobs or clobs.
 
 For example:
 
 [source,java]
 ----
 public class Order {
-    @Render(Type.EAGERLY)
-    public List<LineItem> getDetails() { ... }
-
+    @CollectionLayout(render=RenderType.EAGERLY)
+    public SortedSet<LineItem> getDetails() { ... }
     ...
 }
 ----
-
-For properties and collections there is some similarity between this
-concept and that of eager-loading as supported by some object stores.
-Indeed, some object stores may choose use their own specific annotations
-(eg a JDO default fetch group) in order to infer this semantic.
-
 
 
 As an alternative to using the annotation, the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`]
@@ -52,5 +25,16 @@ can be used instead, eg:
 
 [source,javascript]
 ----
+"details": {
+    "collectionLayout": {
+        "render": "EAGERLY"
+    }
+}
 ----
+
+
+[NOTE]
+====
+Note that xref:_ug_how-tos_contributed-members[contributed collections] (which, under the covers are just action invocations against a domain service) are always rendered eagerly.
+====
 

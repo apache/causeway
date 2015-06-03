@@ -23,8 +23,8 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:_ug_reference-annotations_manpage-DomainService_nature[`nature()`]
-|
-|the nature of this service: providing actions for menus, contributed actions, or neither (1.8.0)
+|`VIEW`, `VIEW_MENU_ONLY`, `VIEW_CONTRIBUTIONS_ONLY`, `VIEW_REST_ONLY`, `DOMAIN` (`VIEW`)
+|the nature of this service: providing actions for menus, or as contributed actions, or for the xref:_ug_restfulobjects-viewer[RestfulObjects REST API], or neither
 
 
 |xref:_ug_reference-annotations_manpage-DomainService_repositoryFor[`repositoryFor()`]
@@ -34,7 +34,7 @@ The table below summarizes the annotation's attributes.
 
 |`menuOrder()`
 |
-|Deprecated in 1.8.0; use instead `@DomainServiceLayout(menuOrder=...)`
+|Deprecated in 1.8.0; use instead xref:_ug_reference-annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]
 
 |===
 
@@ -44,6 +44,14 @@ For example:
 
 [source,java]
 ----
+@DomainService(
+    nature=NatureOfService.DOMAIN,
+    repositoryFor=Loan.class
+)
+public class LoanRepository {
+    @Programmatic
+    public List<Loan> findLoansFor(Borrower borrower) { ... }
+}
 ----
 
 
