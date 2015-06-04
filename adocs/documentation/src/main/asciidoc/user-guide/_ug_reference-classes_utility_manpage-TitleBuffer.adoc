@@ -5,32 +5,9 @@
 :_imagesdir: images/
 
 
-The `TitleBuffer` utility class is intended to make it easy to construct
-title strings (returned from the `title()` method). For example, it has
-overloaded versions of methods called `append()` and `concat()`.
+The `TitleBuffer` utility class is intended to make it easy to construct title strings (returned from the xref:_ug_reference-methods_reserved_manpage-title[`title()`] method).
 
-== Reason text creation (for disable and validate methods)
+For example, it has overloaded versions of methods called `append()` and `concat()`.
 
-There are two different classes provided to help build reasons returned
-by `disableXxX()` and `validateXxx()` methods:
 
-* the `org.apache.isis.applib.util.ReasonBuffer` helper class
-* the `org.apache.isis.applib.util.Reasons` helper class
-
-For example:
-
-[source,java]
-----
-public class Customer {
-    ...
-    public String validatePlaceOrder(Product p, int quantity) {
-        return Reasons.coalesce(
-            whetherCustomerBlacklisted(this),
-            whetherProductOutOfStock(p)
-        );
-    }
-}
-----
-
-Which you use (if any) is up to you.
 

@@ -7,3 +7,5 @@
 IMPORTANT: TODO
 
 
+Provides an optional unique identifier of a service.
+

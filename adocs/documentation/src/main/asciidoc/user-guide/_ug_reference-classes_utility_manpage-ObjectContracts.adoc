@@ -52,7 +52,7 @@ isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=fa
 
 ====
 
-== Explanation of the issue in more detail
+== The issue in more detail
 
 Consider the entities:
 

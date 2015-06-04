@@ -7,3 +7,6 @@
 IMPORTANT: TODO
 
 
+
+Disable all or some of an object's properties
+

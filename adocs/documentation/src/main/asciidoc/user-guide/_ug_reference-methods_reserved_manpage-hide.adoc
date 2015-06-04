@@ -7,3 +7,6 @@
 IMPORTANT: TODO
 
 
+
+Hide all or some of an object's properties
+

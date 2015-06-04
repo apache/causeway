@@ -4,6 +4,43 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `cssClass()` returns a CSS class for a particular object instance.
+
+The xref:_ug_wicket-viewer[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.  This is done both for rendering the object either in a table or when rendering the object on its own page.
+
+In conjunction with xref:_ug_runtime_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
+
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add a strikethrough for completed todo items.  This is shown on the home page:
+
+image::{_imagesdir}reference-methods/reserved/cssClass/strikethrough.png[width="800px",link="{_imagesdir}reference-methods/reserved/cssClass/strikethrough.png"]
+
+
+The code to accomplish this is straightforward:
+
+[source,java]
+----
+public class ToDoItem ... {
+    public String cssClass() {
+        return !isComplete() ? "todo" : "done";
+    }
+    ...
+}
+----
+
+In the xref:_ug_runtime_application-specific_application-css[application.css], the following styles were then added:
+
+[source,css]
+----
+tr.todo {
+}
+tr.done {
+    text-decoration: line-through;
+    color: #d3d3d3;
+}
+----
+
+
+See also xref:_ug_reference-methods_reserved_manpage-title[`title()`] and xref:_ug_reference-methods_reserved_manpage-iconName[`iconName()`].

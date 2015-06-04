@@ -10,7 +10,6 @@ classes designed to simplify the coding of some common tasks.
 
 include::_ug_reference-classes_utility_manpage-Enums.adoc[leveloffset=+1]
 include::_ug_reference-classes_utility_manpage-ObjectContracts.adoc[leveloffset=+1]
-include::_ug_reference-classes_utility_manpage-ReasonBuffer.adoc[leveloffset=+1]
 include::_ug_reference-classes_utility_manpage-Reasons.adoc[leveloffset=+1]
 include::_ug_reference-classes_utility_manpage-TitleBuffer.adoc[leveloffset=+1]
 

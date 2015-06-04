@@ -5,4 +5,27 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+
+There are two different classes provided to help build reasons returned
+by `disableXxX()` and `validateXxx()` methods:
+
+* the `org.apache.isis.applib.util.ReasonBuffer` helper class
+* the `org.apache.isis.applib.util.Reasons` helper class
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    ...
+    public String validatePlaceOrder(Product p, int quantity) {
+        return Reasons.coalesce(
+            whetherCustomerBlacklisted(this),
+            whetherProductOutOfStock(p)
+        );
+    }
+}
+----
+
+Which you use (if any) is up to you.
+

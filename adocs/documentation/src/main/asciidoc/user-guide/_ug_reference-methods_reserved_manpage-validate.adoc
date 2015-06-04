@@ -7,3 +7,5 @@
 IMPORTANT: TODO
 
 
+
+Validate the object's state prior to persisting.
