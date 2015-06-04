@@ -4,6 +4,16 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `get...()` prefix is simply the normal JavaBean getter prefix that denotes properties or collections.
+
+When Apache Isis builds its metamodel, it first searches for the getter methods, characterizing them as either properties or collections based on the return type.  It then refines the metamodel based on the presence of annotations and supporting methods.
+
+All remaining `public` methods (that do not use one of the Isis prefixes) are interpreted as actions.
+
+Any methods "left over" that _do_ use one of the Isis prefixes, are interpreted to be orphaned.  Isis "fails-fast" and will not boot, instead printing an error message to the log so that the issue can be easily diagnosed.
+
+
+See also xref:_ug_reference-methods_prefixes_manpage-set[`set...()`].
 

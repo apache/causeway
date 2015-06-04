@@ -4,6 +4,29 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `clear...()` supporting method is called -- instead of the setter -- whenever an (optional) property is to be set to `null`.  Its purpose is to allow additional business logic to be performed.
+
+
+For example:
+
+[source,java]
+----
+public class LibraryMember {
+    public Title getFavoriteTitle() { ... }
+    public void setFavoriteTitle(Title title) { ... }
+    public void modifyFavoriteTitle(Title title) { ... }
+    public void clearFavoriteTitle() {
+        if(getTitle() == null) { return; }
+        setFavoriteTitle(null);                         // <1>
+        titleFavoritesService.decrement(title);         // <2>
+    }
+    ...
+}
+----
+<1> update the property
+<2> perform some additional business logic
+
+
+See also xref:_ug_reference-methods_prefixes_manpage-modify[`modify...()`]`

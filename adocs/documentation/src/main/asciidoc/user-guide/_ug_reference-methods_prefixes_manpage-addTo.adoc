@@ -27,6 +27,7 @@ public class LibraryMember {
         reminderService.addReminder(this, book, clock.today().plusDays(21));  // <2>
     }
     public void removeFromBorrowed(Book book) { ... }
+    ...
 }
 ----
 <1> update the collection

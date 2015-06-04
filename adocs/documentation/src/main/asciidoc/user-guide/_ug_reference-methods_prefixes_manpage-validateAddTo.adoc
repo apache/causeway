@@ -15,6 +15,16 @@ Directly mutable collections are not currently supported by the xref:_ug_wicket-
 ====
 
 
+The signature of the supporting method for a collection with element type `E` is:
+
+[source,java]
+----
+public String validateAddToXxx(E element) { ... }
+----
+
+where the returned string is the reason the collection modification invocation is vetoed (or `null` if not vetoed).  Isis' xref:_ug_more-advanced_i18n[i18n support] extends this so that reasons can be internationalized if required.
+
+
 For example:
 
 [source,java]
@@ -26,6 +36,8 @@ public class LibraryMember {
         return book.isReference()? "Reference books cannot be borrowed": null;
     }
     public void validateRemoveFromBorrowed(Book book) { ... }
+    ...
+}
 ----
 
 

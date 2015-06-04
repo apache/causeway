@@ -46,87 +46,10 @@ See also `iconName()` and xref:_ug_reference-methods_reserved_manpage-cssClass[`
 
 
 
-
-The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.  For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
-
-[WARNING]
-====
-We believe there may some scenarios (not yet fully catalogued) where the lifecycle method is not called.  As such we recommend that you don't rely on these methods and/or fully test they are called as required in your apps
-
-As an alternative, consider using Isis' event bus and domain events.
-====
-
-The lifecycle methods are:
-
-.Lifecycle methods (partial support)
-[cols="1,4a", options="header"]
-|===
-
-|Method
-|Description
-
-|xref:_ug_reference-methods_reserved_manpage-created[`created()`]
-|called when an object has just been created using xref:_ug_reference-services-api_manpage-DomainObjectContainer[`newTransientInstance()`]
-
-|xref:_ug_reference-methods_reserved_manpage-loaded[`loaded()`]
-|called when a (persistent) object has just been loaded from the object store.
-
-|xref:_ug_reference-methods_reserved_manpage-persisted[`persisted()`]
-|called when object has just been persisted from the object store.
-
-|xref:_ug_reference-methods_reserved_manpage-persisting[`persisting()`]
-|called when a (not-yet-persistent) object is just about to be persisted from the object store
-
-|xref:_ug_reference-methods_reserved_manpage-removed[`removed()`]
-|called when a (persistent) object has just been persisted from the object store
-
-|xref:_ug_reference-methods_reserved_manpage-removing[`removing()`]
-|called when a (persistent) object is just about to be deleted from the object store
-
-|xref:_ug_reference-methods_reserved_manpage-updated[`updated()`]
-|called when a (persistent) object has just been updated in the object store
-
-|xref:_ug_reference-methods_reserved_manpage-updating[`updating()`]
-|called when a (persistent) object is just about to be updated in the object store
-
-|===
-
-
-
-Some lifecycle methods have been deprecated:
-
-.Deprecated lifecycle methods
-[cols="1,4a", options="header"]
-|===
-
-|Method
-|Notes
-
-|`deleted()`
-|Replaced by xref:_ug_reference-methods_reserved_manpage-removed[`removed()`]
-
-|`deleting()`
-|Replaced by removing()`
-
-|`loading()`
-|callback for when the (persistent) object is just about to be loaded from the object store. +
-[WARNING]
-====
-This method is never called.
-====
-
-|`saved()`
-|Replaced by persisted()`
-
-|`saving()`
-|Replaced by xref:_ug_reference-methods_reserved_manpage-persisting[`persisting()`]
-
-|===
-
-
-
-
 include::_ug_reference-methods_reserved_manpage-cssClass.adoc[leveloffset=+1]
-include::_ug_reference-methods_reserved_manpage-iconName.adoc[leveloffset=+1]
+include::_ug_reference-methods_reserved_manpage-disable.adoc[leveloffset=+1]
 include::_ug_reference-methods_reserved_manpage-getId.adoc[leveloffset=+1]
+include::_ug_reference-methods_reserved_manpage-hide.adoc[leveloffset=+1]
+include::_ug_reference-methods_reserved_manpage-iconName.adoc[leveloffset=+1]
 include::_ug_reference-methods_reserved_manpage-title.adoc[leveloffset=+1]
+include::_ug_reference-methods_reserved_manpage-validate.adoc[leveloffset=+1]

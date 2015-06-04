@@ -6,38 +6,14 @@
 
 
 
-The `choices...()` supporting method is called for both properties and for action parameters to find objects from a drop-down list box.  Unlike xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`], the use case is when the number of objects is comparatively small and can be selected from a drop-down without any additional filtering.
+The `choices...()` supporting method is called for both action parameters and for properties, to find objects from a drop-down list box.  Unlike xref:_ug_reference-methods_prefixes_manpage-autoComplete[`autoComplete...()`], the use case is when the number of objects is comparatively small and can be selected from a drop-down without any additional filtering.
 
-The signature of the supporting method depends on whether it is for a property or for an action parameter.
-
-
-== Properties
-
-For a property of type `T`, the signature is:
-
-[source,java]
-----
-public Collection<T> choicesXxx() { ... }
-----
-
-
-For example:
-
-[source,java]
-----
-public class ShoppingCartItem {
-    public Product getProduct() { ... }
-    public void setProduct(Product product) { ... }
-
-    public Collection<Product> choicesProduct() {
-        ...
-    }
-----
+The signature of the supporting method depends on whether it is for an action parameter or a property.
 
 
 == Parameters
 
-For an action parameter in (0-based position n), and of type `T`, the signature is:
+For an action parameter in (0-based) position _N_, and of type `T`, the signature is:
 
 [source,java]
 ----
@@ -69,6 +45,7 @@ public class ShoppingCartItem {
     public Collection<Integer> choices1UpdateProduct() {
         return Arrays.asList(1,2,3,5,10,25,50,100);
     }
+    ...
 }
 ----
 
@@ -107,6 +84,7 @@ public class UpdateCategoryContributions ... {
             final Category category) {                           // <4>
         return Subcategory.listFor(category);
     }
+    ...
 }
 ----
 <1> `ToDoItem` implements `Categorized`
@@ -133,6 +111,33 @@ public class ShoppingCartItem {
     public Collection<Integer> choices1UpdateProduct(Product product) {
         return productService.quantityChoicesFor(product);                 // <1>
     }
+    ...
 }
 ----
 <1> `productService` is a (fictitous) injected service that knows what the quantity choices should be for any given product
+
+
+== Properties
+
+For a property of type `T`, the signature is:
+
+[source,java]
+----
+public Collection<T> choicesXxx() { ... }
+----
+
+
+For example:
+
+[source,java]
+----
+public class ShoppingCartItem {
+    public Product getProduct() { ... }
+    public void setProduct(Product product) { ... }
+
+    public Collection<Product> choicesProduct() {
+        ...
+    }
+----
+
+

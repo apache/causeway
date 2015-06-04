@@ -4,6 +4,79 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `hide...()` supporting method is called for properties, collections and actions.  It allows the property/collection to be completely hidden from view.
+
+It's comparatively rare for properties or collections to be imperatively hidden from view, but actions are sometimes hidden or shown visible (as opposed to being just xref:_ug_reference-methods_prefixes_manpage-disable[disabled], ie greyed out).
+
+
+== Actions
+
+For an action the signature of the supporting method is either:
+
+[source,java]
+----
+public bool hideXxx(...) { ... }
+----
+
+where the supporting method takes the same parameter types as the action itself, or more simply:
+
+[source,java]
+----
+public bool hideXxx() { ... }
+----
+
+with no parameters at all.  Returning `true` will hide the action, returning `false` leaves it visible.
+
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public boolean isBlacklisted() { ... }
+
+    public Order placeOrder(
+            final Product product,
+            @ParameterLayout(named="Quantity")
+            final int quantity) {
+        ...
+    }
+    public boolean hidePlaceOrder() {
+        return isBlacklisted();
+    }
+    ...
+}
+----
+
+
+
+== Properties and Collections
+
+For both properties and collections the signature of the supporting method is:
+
+[source,java]
+----
+public boolean hideXxx() { ... }
+----
+
+where returning `true` will hide the property/collection, returning `false` leaves it visible.
+
+
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    public boolean isBlacklisted() { ... }
+
+    public BigDecimal getCreditLimit() { ... }
+    public void setCreditLimit(BigDecimal creditLimit) { ... }
+    public boolean hideCreditLimit() {
+        return isBlacklisted();
+    }
+    ...
+}
+----

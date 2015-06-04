@@ -4,6 +4,10 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+
+The `set...()` prefix is simply the normal JavaBean setter prefix that denotes writeable properties or collections.
+
+
+See also xref:_ug_reference-methods_prefixes_manpage-get[`get...()`].
