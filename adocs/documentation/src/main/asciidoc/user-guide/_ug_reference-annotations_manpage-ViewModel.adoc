@@ -7,6 +7,7 @@
 
 
 The `@ViewModel` annotation, applied to a class, is the simplest way to indicate that the class is a view model.
+
 View models are not persisted to the database, instead their state is encoded within their identity (ultimately
 represented in the URL). As such, view models are immutable.
 
@@ -16,20 +17,14 @@ For example:
 ----
 @ViewModel
 public class MyViewModel {
-
-    public MyViewModel() {}
-
+    public MyViewModel() {}   // <1>
     ...
-
 }
 ----
+<1> must have a no-arg constructor for subsequent "recreation" by the framework.
 
-View models must have a no-arg constructor, but there are few other constraints.
 
-* if the view model has dependencies on domain services, then either:
-* instantiate using `DomainObjectContainer#newTransientInstance()` or
-* instantiate directly and then inject explicitly using `DomainObjectContainer#injectServicesInto(.)`
-* if the view model has no dependencies on domain services, then just instantiate directly
+To instantiate a view model, you can either instantiate directly using its constructor, or indirectly using `DomainObjectContainer#newTransientInstance()`.  If you use the former, also programmatically call `DomainObjectContainer#injectServicesInto(...)` to ensure that any dependencies are injected into the service.
 
 
 [TIP]
