@@ -99,6 +99,24 @@ public class ToDoItems {
 
 
 
+
+As an alternative to using the `@ActionLayout` annotation, a dynamic layout using  xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file can be specified; for example:
+
+[source,javascript]
+----
+"notYetComplete": {
+    "actionLayout": {
+        "bookmarking": "AS_ROOT",
+        "cssClass": "x-key",
+        "cssClassFa": "fa-checkbox",
+        "describedAs": "Mark the todo item as not complete after all",
+        "hidden": "NOWHERE"
+    }
+}
+----
+
+
+
 include::_ug_reference-annotations_manpage-ActionLayout_bookmarking.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-ActionLayout_contributedAs.adoc[leveloffset=+1]
 include::_ug_reference-annotations_manpage-ActionLayout_cssClass.adoc[leveloffset=+1]

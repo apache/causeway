@@ -78,12 +78,30 @@ public class ToDoItem {
         namedEscaped=false,
         describedAs="Other todo items that must be completed before this one",
         labelPosition=LabelPosition.LEFT,
-        render=EAGERLY
-        typicalLength=80)
+        render=EAGERLY)
     public SortedSet<ToDoItem> getDependencies() { ... }
     ...
 }
 ----
+
+
+
+As an alternative to using the `@CollectionLayout` annotation, a dynamic layout using  xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file can be specified; for example:
+
+[source,javascript]
+----
+"dependencies": {
+    "collectionLayout": {
+        "cssClass": "x-key",
+        "named": "Todo items that are <i>dependencies</i> of this item.",
+        "namedEscaped": false,
+        "describedAs": "Other todo items that must be completed before this one",
+        "labelPosition": "LEFT",
+        "render": "EAGERLY"
+    }
+}
+----
+
 
 
 

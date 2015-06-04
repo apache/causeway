@@ -25,13 +25,3 @@ public class Customer implements Comparable<Customer> {
 Note that `@Programmatic` does not simply imply `@Hidden`; it actually means that the class member will not be part of the Isis metamodel.
 
 
-
-
-`@Ignore` (deprecated) is equivalent to using `@Programmatic`.
-
-[TIP]
-====
-The `@Programmatic` annotation was introduced because `@Ignore` can easily clash with `@org.junit.Ignore`.
-====
-
-

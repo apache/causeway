@@ -11,7 +11,7 @@ The (somewhat misnamed) `notPersisted()` attribute indicates that the collection
 
 [WARNING]
 ====
-This annotation does _not_ specify that a collection is not persisted in the JDO/DataNucleus objectstore.  See below for details as to how to additional annotate the collection for this.
+This annotation does _not_ specify that a collection is not persisted in the JDO/DataNucleus objectstore.  See below for details as to how to additionally annotate the collection for this.
 ====
 
 
@@ -19,10 +19,10 @@ For example:
 
 [source,java]
 ----
-public class Order {
-    @NotPersisted
-    public Order getPreviousOrder() {...}
-    public void setPreviousOrder(Order previousOrder) {...}
+public class Customer {
+    @Collection(notPersisted=true)
+    public SortedSet<Order> getPreviousOrders() {...}
+    public void setPreviousOrder(SortedSet<Order> previousOrders) {...}
     ...
 }
 ----
@@ -33,14 +33,25 @@ For example:
 
 [source,java]
 ----
-public class Order {
-    @NotPersisted                              // <1>
+public class Customer {
+    @Collection(notPersisted=true)             // <1>
     @javax.jdo.annotations.NotPersistent       // <2>
-    public Order getPreviousOrder() {...}
-    public void setPreviousOrder(Order previousOrder) {...}
+    public SortedSet<Order> getPreviousOrders() {...}
+    public void setPreviousOrder(SortedSet<Order> previousOrders) {...}
     ...
 }
 ----
 <1> ignored by Isis
 <2> ignored by JDO/DataNucleus
 
+
+
+Alternatively, if the collection is derived, then providing only a "getter" will also work:
+
+[source,java]
+----
+public class Customer {
+    public SortedSet<Order> getPreviousOrders() {...}
+    ...
+}
+----

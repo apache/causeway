@@ -106,31 +106,12 @@ As an alternative to using the `@PropertyLayout` annotation, a dynamic layout us
 
 [source,javascript]
 ----
-{
-    "span": 6,
-    "memberGroups": {
-        "Other": {
-            "members": {
-                ...
-                "description": {
-                    "propertyLayout": {
-                        "cssClass": "x-key",
-                        "describedAs": "What needs to be done",
-                        "labelPosition": "LEFT",
-                        "typicalLength": 80
-                    }
-                },
-                "notes": {
-                    "propertyLayout": {
-                        "describedAs": "Additional notes"
-                        "labelPosition": "TOP",
-                        multiLine=8
-                    }
-                },
-                ....
-            }
-        },
-        ...
+"description": {
+    "propertyLayout": {
+        "cssClass": "x-key",
+        "describedAs": "What needs to be done",
+        "labelPosition": "LEFT",
+        "typicalLength": 80
     }
 }
 ----
