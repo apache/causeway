@@ -4,6 +4,30 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `validateAddTo...()` supporting method is called whenever an object is to be added to a collection. Its purpose is to validate the proposed object and possibly veto the change.
+
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:_ug_wicket-viewer[Wicket viewer].  The suggested workaround is to simply define an action.
+====
+
+
+For example:
+
+[source,java]
+----
+public class LibraryMember {
+    public SortedSet<Book> getBorrowed() { ... }
+    public void setBorrowed(SortedSet<Book> borrowed) { ... }
+    public String validateAddToBorrowed(Book book) {
+        return book.isReference()? "Reference books cannot be borrowed": null;
+    }
+    public void validateRemoveFromBorrowed(Book book) { ... }
+----
+
+
+See also xref:_ug_reference-methods_prefixes_manpage-addTo[`addTo...()`] and  xref:_ug_reference-methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`]`
 

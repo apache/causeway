@@ -4,6 +4,82 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `autoComplete...()` supporting method is called for both properties and for action parameters to find objects from a drop-down list box.  The use case is when the number of candidate objects is expected to be large, so the user is required to enter some characters to narrow the search down.
+
+[TIP]
+====
+If the number of candidate objects is comparatively small, then use xref:_ug_reference-methods_prefixes_manpage-choices[`choices...()`] supporting method instead.
+====
+
+The signature of the supporting method depends on whether it is for a property or for an action parameter.
+
+
+== Properties
+
+For a property of type `T`, the signature is:
+
+[source,java]
+----
+public Collection<T> autoCompleteXxx(String search) { ... }
+----
+
+
+For example:
+
+[source,java]
+----
+public class ShoppingCartItem {
+    public Product getProduct() { ... }
+    public void setProduct(Product product) { ... }
+
+    public Collection<Product> autoCompleteProduct(
+        @MinLength(3) String search                     // <1>
+    ) {
+        ...
+    }
+----
+<1> the xref:_ug_reference-annotations_manpage-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+
+
+== Parameters
+
+For an action parameter in (0-based position n), and of type `T`, the signature is:
+
+[source,java]
+----
+public Collection<T> autoCompleteNXxx(String search) { ... }
+----
+
+
+For example:
+
+[source,java]
+----
+public class ShoppingCartItem {
+    @Property(editing=Editing.DISABLED)
+    public Product getProduct() { ... }
+    public void setProduct(Product product) { ... }
+
+    @Property(editing=Editing.DISABLED)
+    public int getQuantity() { ... }
+    public void setQuantity(int quantity) { ... }
+
+    @Action(semantics=SemanticsOf.IDEMPOTENT)
+    public ShoppingCartItem updateProduct(
+        Product product,
+        @ParameterLayout(named="Quantity")
+        final int quantity) {
+        setProduct(product);
+        setQuantity(quantity);
+    }
+    public Collection<Product> autoComplete0UpdateProduct(  // <1>
+        @MinLength(3) String search                         // <2>
+    ) {
+        ...
+    }
+----
+<1> `product` is the 0th argument of the action.
+<2> the xref:_ug_reference-annotations_manpage-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 

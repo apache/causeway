@@ -4,7 +4,9 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+
+The Apache Isis metamodel is built up from declaratively (ie, xref:_ug_reference-annotations[annotations]) and imperatively, from "supporting" methods and other reserved methods.  This chapter documents both.
 
 
 include::_ug_reference-methods_prefixes.adoc[leveloffset=+1]

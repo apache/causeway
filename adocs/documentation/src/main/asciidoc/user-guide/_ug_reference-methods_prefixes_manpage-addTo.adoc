@@ -4,6 +4,33 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `addTo...()` supporting method is called whenever an object is added to a collection. Its purpose is to allow additional business logic to be performed.
+
+
+[NOTE]
+====
+Directly mutable collections are not currently supported by the xref:_ug_wicket-viewer[Wicket viewer].  The suggested workaround is to simply define an action.
+====
+
+
+For example:
+
+[source,java]
+----
+public class LibraryMember {
+    public SortedSet<Book> getBorrowed() { ... }
+    public void setBorrowed(SortedSet<Book> borrowed) { ... }
+    public void addToBorrowed(Book book) {
+        getBorrowed().add(book);                                              // <1>
+        reminderService.addReminder(this, book, clock.today().plusDays(21));  // <2>
+    }
+    public void removeFromBorrowed(Book book) { ... }
+}
+----
+<1> update the collection
+<2> perform some additional business logic
+
+
+See also xref:_ug_reference-methods_prefixes_manpage-removeFrom[`removeFrom...()`]`
