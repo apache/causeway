@@ -11,7 +11,26 @@ Metadata providing UI hints can be specified either statically, using annotation
 
 == `@MemberOrder`
 
-To specify the relative order of domain class properties and classes, the `@MemberOrder` annotation is used.
+The `@MemberOrder` annotation is used to specify the relative order of domain class properties, collections and actions.
+
+The annotation defines two attributes, `name()` and `sequence()`.  Their usage depends on the member type:
+
+* for properties, the `name()` is used to group properties together.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the property is placed in a fallback "General" group, called "General". +
++
+The name of these "member groups" are then referenced by xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`].
+
+* for collections, the `name()` attribute is (currently) unused.  The `sequence()` orders collections relative to one another
+
+* for actions, the `name()` attribute associates an action with either a property or with a collection. +
++
+If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:_ug_reference-annotations_manpage-ActionLayout_position[`@ActionLayout#position()`] attribute. +
++
+On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header. +
++
+If there is no `name()` value, then the action is considered to pertain to the object as a whole, and its button is rendered close to the object's icon and title.
++
+Within any of these, the `sequence()` then determines the relative ordering of the action with respect to other actions that have been similarly associated with properties/collections or left as "free-standing".
+
 
 For example:
 
@@ -64,14 +83,17 @@ public class ToDoItem {
 
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
-If the `name` attribute is omitted, then the action is rendered near the header. Note also that the `@MemberOrder`'s `name` attribute has no meaning for collections.
+
+The value of `sequence()` is a string.  The simplest convention (as shown in the example above) is to use numbers -- 1, 2, 3 -- though it is a better idea to leave gaps in the numbers -- 10, 20, 30 perhaps -- such that a new member may be added without having to edit existing numbers.  A useful alternative is to adopt the 'dewey-decimal' notation -- 1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 -- which allows for an indefinite amount of future insertion.  It also allows subclasses to insert their class members as required.
 
 
 
 
 == `@MemberGroupLayout`
 
-The `@MemberGroupLayout` annotation specifies the relative positioning of property groups as being either in a left column, a middle column or in a right column. It also specifies the relative width.
+The `@MemberGroupLayout` annotation specifies the relative positioning of property groups as being either in a left column, a middle column or in a right column.  The annotation also specifies the relative width of the columns.
+
+The property groups in this case are those that are inferred from the `@MemberOrder#name()` attribute.
 
 For example:
 

@@ -6,4 +6,15 @@
 
 
 
-The `@MemberGroupLayout` annotation specifies how an object's properties and collections ...
+The `@MemberGroupLayout` annotation specifies how an object's properties and collections are grouped together into columns, also specifying the relative positioning of those columns.  It works in conjunction with the xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`] annotation.
+
+
+The `@MemberOrder` annotation is used to specify the relative order of domain object members, that is: properties, collections and actions.  It works in conjunction with the xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`] annotation.
+
+The annotation defines two attributes, `name()` and `sequence()`.  Broadly speaking the `name()` attribute is used to group or associate members together, while the `sequence()` attribute orders members once they have been grouped.
+
+
+[IMPORTANT]
+====
+As this is an important topic, there is a xref:_ug_reference-object-layout[separate chapter] that discussed object layout in full.
+====
