@@ -309,7 +309,7 @@ Domain entities have state: either values (primitives, strings) or references to
 * revisit the title, consider whether to use the xref:_ug_reference-annotations_manpage-Title[`@Title`] annotation
 ** rather than the xref:_ug_reference-methods_reserved_manpage-title[`title()`] `title()` method
 * order the properties using the xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
-** see also the docs on xref:_ug_wicket-viewer_layout_static-object-layout[static layouts]
+** see also the docs on xref:_ug_reference-object-layout_static[static layouts]
 * use the xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
 ** do the same for parameters using xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParameterLayout`]
 
@@ -392,7 +392,7 @@ So:
 
 Up to this point we've been using annotations (`@MemberOrder`, `@MemberGroupLayout`, `@Named`, `@PropertyLayout`, `@ParameterLayout`, `@ActionLayout` and so on) for UI hints. However, the feedback loop is not good: it requires us stopping the app, editing the code, recompiling and running again. So instead, all these UI hints (and more) can be specified dynamically, using a corresponding `.layout.json` file. If edited while the app is running, it will be reloaded automatically (in IntelliJ, use Run&gt;Reload Changed Classes):
 
-* Delete the various hint annotations and instead specify layout hints using a xref:_ug_wicket-viewer_layout_dynamic-object-layout[.layout.json] file.
+* Delete the various hint annotations and instead specify layout hints using a xref:_ug_reference-object-layout_dynamic[.layout.json] file.
 
 
 

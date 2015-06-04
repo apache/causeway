@@ -4,12 +4,18 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
 
 
-See also xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic object layouts].
+
+
+[TIP]
+====
+We generally recommend that you use xref:_ug_reference-object-layout_dynamic[dynamic object layouts].
+====
+
+
 
 `@MemberOrder` is the recommended mechanism for specifying the order in
 which fields and/or actions are presented to the user. (`@ActionOrder`

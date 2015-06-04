@@ -48,7 +48,7 @@ The developer can then review the metadata that has Isis has captured about each
 
 * `downloadLayouts()` allows the developer can download a ZIP file of `Xxx.layout.json` files for each domain type in the Isis metamodel.
 
-This is useful if converting a domain model to use xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts].
+This is useful if converting a domain model to use xref:_ug_reference-object-layout_dynamic[dynamic layouts].
 
 * `downloadLayout()` (contributed action) allows the developer can download the `Xxx.layout.json` for an individual object
 

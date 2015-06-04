@@ -13,7 +13,7 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Annotation
 |Purpose
 |Layer
-|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
+|xref:_ug_reference-object-layout_dynamic[Dynamic layout]?
 
 |xref:_ug_reference-annotations_manpage-Facets[`@Facets`]
 |Install arbitrary facets within the Isis metamodel.

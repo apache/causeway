@@ -94,7 +94,7 @@ div.x-myapp-highlight span.scalarName {
 }
 ----
 
-Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout] JSON file:
+Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:_ug_reference-object-layout_dynamic[dynamic layout] JSON file:
 
 [source,javascript]
 ----

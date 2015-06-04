@@ -6,8 +6,13 @@
 
 
 
-The `@DomainServiceLayout` annotation applies to domain services, collecting together all view layout semantics
-within a single annotation.
+The `@DomainServiceLayout` annotation applies to domain services, collecting together all view layout semantics within a single annotation.
+
+[TIP]
+====
+You will also find some additional material in the xref:_ug_reference-object-layout_application-menu[object layout] chapter.
+====
+
 
 The table below summarizes the annotation's attributes.
 
@@ -56,9 +61,10 @@ public class ToDoItems {
 ----
 
 
+
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for domain services through the dynamic xref:_ug_reference-object-layout_dynamic[`.layout.json`] file (only for properties, collections and actions are supported).
 ====
 
 

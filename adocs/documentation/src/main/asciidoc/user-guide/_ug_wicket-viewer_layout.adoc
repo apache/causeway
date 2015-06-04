@@ -5,28 +5,93 @@
 :_imagesdir: images/
 
 
-In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Isis aims to infer as much information from the domain classes as possible.  Nevertheless, some metadata relating solely to the UI is inevitably required.
 
-This section describes how this is done both for domain objects -- statically or dynamically -- and for the application menu bar (containing domain service' actions).
+The wicket viewer has full support for the various methods of specifying the xref:_ug_reference-object-layout[layout of objects], either statically or dynamically.
 
-include::_ug_wicket-viewer_layout_static-object-layout.adoc[leveloffset=+1]
-
-include::_ug_wicket-viewer_layout_dynamic-object-layout.adoc[leveloffset=+1]
-
-include::_ug_wicket-viewer_layout_application-menu-layout.adoc[leveloffset=+1]
+Dynamic reloading is automatically supported when running in xref:_ug_runtime_configuration-files_deployment-types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.    Conversely, do note that the Wicket viewer will _not_ pick up new metadata if running in production/server mode.
 
 
+[TIP]
+====
+To pick up a change, edit the `.layout.json` file in the IDE and rebuild.  Then click on the title of the object _*twice*_.
 
-== Static vs Dynamic Layouts
+The first click will cause Isis to pick up the new metadata, but too late in the process to adjust the rendering.  The second click will re-render the object with the new metadata.
+====
 
-Using xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic object layout]s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
-Another benefit of dynamic layout is that UI hints can be provided for xref:_ug_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+The screenshots below show some of the effects that can be accomplished, for the open source link:https://github.com/estatio/estatio[Estatio] app.
 
-The main downsides of using dynamic layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid JSON document will result in no metadata for the entire class. Also, dynamic layouts have no notion of inheritance, whereas the dewey-decimal format `@MemberOrder` annotation allows the metadata of the subclass its superclasses to fit together relatively seamlessly.
 
-=== Best of both worlds?
 
-Using the (third-party) link:http://github.com/isisaddons/isis-jrebel-plugin[Isis addons' jrebel] plugin (non-ASF) comes close to getting the best of both words: metadata is specified in a type-safe way using annotations, but can be reloaded automatically.
+First, an `Invoice`.  This places the properties in three equal-sized columns, with collections underneath:
 
-The downsides are licensing cost, and also the fact that metadata for contributed actions in the contributee class cannot be specified.
+image::{_imagesdir}wicket-viewer/layouts/estatio-Invoice.png[width="800px",link="{_imagesdir}wicket-viewer/layouts/estatio-Invoice.png"]
+
+
+
+Next, `Lease`.  This places its properties in two columns (one wide, one narrow), with its collections shown in the right-most column:
+
+image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="800px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]
+
+
+
+Next, `LeaseItem`.  This is similar to `Lease`, with two columns for properties and the third column for collections:
+
+image::{_imagesdir}wicket-viewer/layouts/estatio-LeaseItem.png[width="800px",link="{_imagesdir}wicket-viewer/layouts/estatio-LeaseItem.png"]
+
+
+
+And finally, from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], its `ToDoItem`.  This puts its properties in two columns; the collections (not visible in the screenshot below) are underneath (like Estatio's `Invoice`):
+
+image::{_imagesdir}wicket-viewer/layouts/todoapp-ToDoItem.png[width="800px",link="{_imagesdir}wicket-viewer/layouts/todoapp-ToDoItem.png"]
+
+
+To learn more about how to configure these types of layout, see the xref:_ug_reference-object-layout[object layout] chapter.
+
+
+
+== Screencast
+
+How to layout properties and collections dynamically, in the Wicket viewer.
+
+video::zmrg49WeEPc[youtube,width="530px",height="354px"]
+
+
+
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+
+
+== Required updates to the dom project's pom.xml
+
+If using the `.layout.json` files, these must be compiled and available in the classpath. When using an IDE such as Eclipse+M2E, any `.layout.json` files in `src/main/java` or `src/main/resources` will be part of the classpath automatically. However, unless the `pom.xml` is changed, these will not be part of the compiled WAR.
+
+Therefore, make sure the following is added to the dom project's `pom.xml`:
+
+[source.xml]
+----
+<resources>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+    </resource>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/java</directory>
+        <includes>
+            <include>**</include>
+        </includes>
+        <excludes>
+            <exclude>**/*.java</exclude>
+        </excludes>
+    </resource>
+</resources>
+----
+
+If using an Isis xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
+
+

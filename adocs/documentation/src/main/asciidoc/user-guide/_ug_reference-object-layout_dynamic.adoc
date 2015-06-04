@@ -1,18 +1,12 @@
-[[_ug_wicket-viewer_layout_dynamic-object-layout]]
+[[_ug_reference-object-layout_dynamic]]
 = Dynamic Object Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
-Because Isis implements the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], the domain objects are rendered in the UI based only metadata gleaned from the domain classes themselves. Traditionally this metadata has been specified statically, using annotations such as xref:_ug_reference-annotations_manpage-MemberOrder[`@MemberOrder`] and xref:_ug_reference-annotations_manpage-MemberGroupLayout[`@MemberGroupLayout`]. However, it is also possible to specify the layout data using a JSON file. This brings the advantage that the layout can be refreshed dynamically, without recompiling/redeploying the app.
 
-== Screencast
-
-How to layout properties and collections dynamically, in the Wicket viewer.
-
-video::zmrg49WeEPc[youtube,width="530px",height="354px"]
-
+Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using a `.layout.json` file.  This section describes the dynamic approach, using the file.
 
 
 == JSON layout file
@@ -113,49 +107,7 @@ Note also that the layout file may contain entries for xref:_ug_how-tos_contribu
 
 == Downloading an initial layout file
 
-The fastest way to get started is to use the http://github.com/isisaddons/isis-module-devutils[Isis addons' devutils] module (non-ASF) to download the layout file (derived from any existing static metadata defined by annotations).
-
-
-
-== Picking up new metadata
-
-When running in xref:_ug_runtime_configuration-files_deployment-types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.
-
-[NOTE]
-====
-Conversely, do note that the Wicket viewer will _not_ pick up new metadata if running in production/server mode.
-====
-
-
-
-== Required updates to the dom project's pom.xml
-
-If using the `.layout.json` files, these must be compiled and available in the classpath. When using an IDE such as Eclipse+M2E, any `.layout.json` files in `src/main/java` or `src/main/resources` will be part of the classpath automatically. However, unless the `pom.xml` is changed, these will not be part of the compiled WAR.
-
-Therefore, make sure the following is added to the dom project's `pom.xml`:
-
-[source.xml]
-----
-<resources>
-    <resource>
-        <filtering>false</filtering>
-        <directory>src/main/resources</directory>
-    </resource>
-    <resource>
-        <filtering>false</filtering>
-        <directory>src/main/java</directory>
-        <includes>
-            <include>**</include>
-        </includes>
-        <excludes>
-            <exclude>**/*.java</exclude>
-        </excludes>
-    </resource>
-</resources>
-----
-
-If using an Isis xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
-
+The fastest way to get started is to use the (non-ASF) link:http://github.com/isisaddons/isis-module-devutils[Isis addons' devutils] module to download the layout file (derived from any existing static metadata defined by annotations).
 
 
 

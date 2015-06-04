@@ -82,7 +82,7 @@ public class CategoryPieChart { ... }
 
 [NOTE]
 ====
-Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:_ug_wicket-viewer_layout_dynamic-object-layout[`.layout.json`] file (only for properties, collections and actions are supported).
+Note that there is (currently) no support for specifying UI hints for view models through the dynamic xref:_ug_reference-object-layout_dynamic[`.layout.json`] file (only for properties, collections and actions are supported).
 ====
 
 

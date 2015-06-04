@@ -16,7 +16,7 @@ The table below lists the JEE annotations currently recognized.  Expect to see m
 |Annotation
 |Purpose
 |Layer
-|xref:_ug_wicket-viewer_layout_dynamic-object-layout[Dynamic layout]?
+|xref:_ug_reference-object-layout_dynamic[Dynamic layout]?
 
 |xref:_ug_reference-annotations_manpage-RequestScoped[`@javax.enterprise.` +
 `context.` +

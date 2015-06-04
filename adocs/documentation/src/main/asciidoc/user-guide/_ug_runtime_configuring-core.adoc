@@ -78,7 +78,7 @@ See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to l
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_reference-object-layout_dynamic[dynamic layout]s. +
 
 See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 

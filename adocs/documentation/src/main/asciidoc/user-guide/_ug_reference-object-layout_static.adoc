@@ -1,11 +1,12 @@
-[[_ug_wicket-viewer_layout_static-object-layout]]
+[[_ug_reference-object-layout_static]]
 = Static Object Layout
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
-Because Isis implements the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], the domain objects are rendered in the UI based only metadata gleaned from the domain classes themselves. Traditionally this metadata has been specified statically using annotations.
+Metadata providing UI hints can be specified either statically, using annotations, or dynamically, using a `.layout.json` file.  This section describes the static approach, using annotations.
+
 
 
 == `@MemberOrder`
@@ -17,28 +18,20 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-
     @MemberOrder(sequence="1")
     public String getDescription() { ... }
-
     @MemberOrder(sequence="2")
     public String getCategory() { ... }
-
     @MemberOrder(sequence="3")
     public boolean isComplete() { ... }
-
     @MemberOrder(name="Detail", sequence="1")
     public LocalDate getDueBy() { ... }
-
     @MemberOrder(name="Detail", sequence="2")
     public BigDecimal getCost() { ... }
-
     @MemberOrder(name="Detail", sequence="4")
     public String getNotes() { ... }
-
     @MemberOrder(name="Misc", sequence="99")
     public Long getVersionSequence() { ... }
-
     ...
 }
 ----
@@ -52,33 +45,29 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-
     @MemberOrder(sequence="3")
     public boolean isComplete() { ... }
-
-    @MemberOrder(sequence="1")
-    public SortedSet<ToDoItem> getDependencies() { ... }
-
-    // actions ...
     @MemberOrder(name="complete", sequence="1")
     public ToDoItem completed() { ...}
-
     @MemberOrder(name="complete", sequence="2")
     public ToDoItem notYetCompleted() { ...}
 
-    // more actions ...
+    @MemberOrder(sequence="1")
+    public SortedSet<ToDoItem> getDependencies() { ... }
     @MemberOrder(name="dependencies", sequence="1")
     public ToDoItem add(ToDoItem t) { ...}
-
     @MemberOrder(name="dependencies", sequence="2")
     public ToDoItem remove(ToDoItem t) { ...}
-
+    ...
 }
 ----
 
 will associate the `completed()` and `notYetCompleted()` actions with the `complete` property, and will associate the `add()` and `remove()` actions with the `dependencies` collection.
 
 If the `name` attribute is omitted, then the action is rendered near the header. Note also that the `@MemberOrder`'s `name` attribute has no meaning for collections.
+
+
+
 
 == `@MemberGroupLayout`
 
@@ -132,36 +121,26 @@ Below are sketches for the layout of the https://github.com/apache/isis/blob/f38
 
 The first divides the properties into two equal sized columns (6-6-0) and puts the collections underneath (12):
 
-image::{_imagesdir}wicket-viewer/layouts/6-6-0-12.png[width="720px",link="{_imagesdir}wicket-viewer/layouts/6-6-0-12.png"]
+image::{_imagesdir}reference-layout/6-6-0-12.png[width="720px",link="{_imagesdir}reference-layout/6-6-0-12.png"]
 
 The next divides the collections into three equal sized columns (4-4-4) and again puts the collections underneath (12):
 
-image::{_imagesdir}wicket-viewer/layouts/4-4-4-12.png[width="720px",link="{_imagesdir}wicket-viewer/layouts/4-4-4-12.png"]
+image::{_imagesdir}reference-layout/4-4-4-12.png[width="720px",link="{_imagesdir}reference-layout/4-4-4-12.png"]
 
 The last puts the properties into a single column (4-0) and places the collections into the other larger column (8-0):
 
-image::{_imagesdir}wicket-viewer/layouts/4-0-8-0.png[width="720px",link="{_imagesdir}wicket-viewer/layouts/4-0-8-0.png"]
+image::{_imagesdir}reference-layout/4-0-8-0.png[width="720px",link="{_imagesdir}reference-layout/4-0-8-0.png"]
 
 
 == Other Annotations
 
 As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations:
 
-* xref:_ug_reference-annotations_manpage-DomainServiceLayout[`@DomainServiceLayout`]
-* xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`]
-* xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`]
-* xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`]
-* xref:_ug_reference-annotations_manpage-CollectionLayout[`@CollectionLayout`]
 * xref:_ug_reference-annotations_manpage-ActionLayout[`@ActionLayout`]
+* xref:_ug_reference-annotations_manpage-CollectionLayout[`@CollectionLayout`]
+* xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`]
+* xref:_ug_reference-annotations_manpage-DomainServiceLayout[`@DomainServiceLayout`]
 * xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParameterLayout`]
-
-Prior to 1.8.0 a variety of annotations (now deprecated) are available, including:
-
-* `@Named`
-* `@DescribedAs`
-* `@MultiLine`
-* `@TypicalLength`
-* `@Render`
-* `@CssClass`
-* `@CssClassFa`
+* xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`]
+* xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`]
 
