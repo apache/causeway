@@ -4,17 +4,49 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `@HomePage` annotation allows a _single_ (no-arg, query-only) action on a _single_ domain service to be nominated as the action to invoke for the default home page.  This often returns a view model that acts as some sort of dashboard, presenting key information and makeing the most commonly used actions easy to invoke.
+
+For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses `@HomePage` to return a dashboard of todo items to complete:
+
+image::{_imagesdir}reference-annotations/HomePage/HomePage.png[width="800px",link="{_imagesdir}reference-annotations/HomePage/HomePage.png"]
 
 
-[NOTE]
-====
-Currently only by the xref:_ug_wicket-viewer[Wicket Viewer].
-====
+The corresponding code is:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ToDoAppDashboardService  {
+    @Action(
+            semantics = SemanticsOf.SAFE
+    )
+    @HomePage
+    public ToDoAppDashboard lookup() {
+        return container.injectServicesInto(new ToDoAppDashboard());
+    }
+    @Inject
+    private DomainObjectContainer container;
+}
+----
+
+where `ToDoAppDashboard` is:
+
+[source,java]
+----
+@DomainObject(nature = Nature.VIEW_MODEL)
+public class ToDoAppDashboard {
+    public String title() { return "Dashboard"; }
+
+    public List<ToDoItem> getNotYetComplete() { ... }
+    public List<ToDoItem> getComplete() { ... }
+
+    public Blob exportToWordDoc() { ... }  // <1>
+}
+----
+<1> associated using xref:_ug_wicket-viewer_layout_dynamic-object-layout[dynamic layouts] with the `notYetComplete` collection.
+
+The other two actions shown in the above screenshot -- `exportAsXml` and `downloadLayout` -- are actually contributed to the `ToDoAppDashboard` through various domain services, as is the `downloadLayout` action.
 
 
-The `@HomePage` annotation should be applied to a single (no-arg) action on a domain service, and the results used as the contents for the home page.
-
-Typically this action would return a xref:_ug_more-advanced_view-models[View Model] representing a dashboard from which the user can navigate to commonly used objects and invoked actions. But it could also simply invoke an action that returns an entity (eg representing the currently logged-on user) or a list of objects.
