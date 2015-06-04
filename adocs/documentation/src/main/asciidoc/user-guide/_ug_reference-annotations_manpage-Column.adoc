@@ -9,7 +9,7 @@ The JDO `@javax.jdo.annotation.Column` provides metadata describing how JDO/Data
 
 Apache Isis also parses and interprets this annotation in order to build up aspects of its metamodel.
 
-[WARNING]
+[NOTE]
 ====
 Isis parses the `@Column` annotation from the Java source code; it does not query the JDO metamodel.  This means that it the `@Column` annotation must be used rather than the equivalent `<column>` link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/schema_mapping.html[XML metadata].
 
