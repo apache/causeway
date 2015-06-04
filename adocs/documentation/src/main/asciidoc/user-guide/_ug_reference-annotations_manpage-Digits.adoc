@@ -8,7 +8,28 @@
 
 The `@javax.validation.constraints.Digits` annotation is recognized by Apache Isis as a means to specify the precision for properties and action parameters of type `java.math.BigDecimal`.
 
-For example:
+For example (taken from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]):
 
-IMPORTANT: todo - wip
+[source,java]
+----
+@javax.jdo.annotations.Column(
+    scale=2                                              // <1>
+)
+@javax.validation.constraints.Digits(
+    integer=10,
+    fraction=2                                           // <2>
+)
+public BigDecimal getCost() {
+    return cost;
+}
+public void setCost(final BigDecimal cost) {
+    this.cost = cost!=null
+        ? cost.setScale(2, BigDecimal.ROUND_HALF_EVEN)   // <3>
+        :null;
+}
+----
+<1> the xref:_ug_reference-annotations_manpage-Column[`@Column#scale()`] attribute must be ...
+<2> ... consistent with `@Digits#fraction()`
+<3> the correct idiom when setting a new value is to normalized to the correct scale
+
 
