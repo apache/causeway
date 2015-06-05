@@ -4,6 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `loaded()` lifecycle callback method is called when a (persistent) object has just been loaded from the object store.
 

@@ -4,6 +4,9 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `persisted()` lifecycle callback method is called when object has just been persisted from the object store.
+
+See also xref:_ug_reference-methods_lifecycle_manpage-persisting[`persisting()`].
 

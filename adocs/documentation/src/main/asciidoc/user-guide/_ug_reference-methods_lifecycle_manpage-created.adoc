@@ -4,6 +4,8 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The `created()` lifecycle callback method is called when an object has just been created using xref:_ug_reference-services-api_manpage-DomainObjectContainer[`newTransientInstance()`]
+
 
 

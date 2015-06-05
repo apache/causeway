@@ -9,14 +9,45 @@
 
 The lifecycle callback methods notify a domain entity about its interaction within the persistence lifecycle.  For example, the entity is notified immediately prior to being persisted, or when it is about to be updated.
 
-[WARNING]
-====
-We believe there may some scenarios (not yet fully catalogued) where the lifecycle method is not called.  As such we recommend that you don't rely on these methods and/or fully test they are called as required in your apps
+Note that these callbacks are fired by Isis rather than JDO.  In the future we may deprecate them because they duplicate functionality already available in JDO.
 
-As an alternative, consider using Isis' event bus and domain events.
-====
+You may therefore want to consider using the JDO API directly by adding a link:http://www.datanucleus.org/products/datanucleus/jdo/lifecycle_callbacks.html[lifecycle listener] through the xref:_ug_reference-services-api_manpage-IsisJdoSupport[`IsisJdoSupport`] domain service.
 
-The lifecycle methods are:
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class ObjectChangedListenerService
+        implements javax.jdo.listener.StoreLifecycleListener {   // <1>
+    @Programmatic
+    @PostConstruct
+    public void init() {
+        getPmFactory().addInstanceLifecycleListener(this);
+    }
+    @Programmatic
+    @PreDestroy
+    public void tidyUp() {
+        getPmFactory().removeInstanceLifecycleListener(this);
+    }
+    private PersistenceManagerFactory getPmFactory() {
+        return jdoSupport.getPersistenceManager()
+               .getPersistenceManagerFactory();                 // <2>
+    }
+    @Programmatic
+    public void preStore (InstanceLifecycleEvent event) { ... }
+    @Programmatic
+    public void postStore (InstanceLifecycleEvent event) { ... }
+    @Inject
+    IsisJdoSupport jdoSupport;
+}
+----
+<1> implement whichever callback lifecycle listeners are of interest
+<2> register on the factory so set up for every subsequent session.
+
+
+
+All that said, if you _do_ want to use Isis' own lifecycle methods, then the methods are:
 
 .Lifecycle methods (partial support)
 [cols="1,4a", options="header"]
@@ -38,7 +69,7 @@ The lifecycle methods are:
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
 |xref:_ug_reference-methods_lifecycle_manpage-removed[`removed()`]
-|called when a (persistent) object has just been persisted from the object store
+|called when a (persistent) object has just been deleted from the object store
 
 |xref:_ug_reference-methods_lifecycle_manpage-removing[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
@@ -70,6 +101,7 @@ Some lifecycle methods have been deprecated:
 
 |`loading()`
 |callback for when the (persistent) object is just about to be loaded from the object store. +
+
 [WARNING]
 ====
 This method is never called.

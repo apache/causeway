@@ -4,6 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+The `updating()` lifecycle callback method is called when a (persistent) object is just about to be updated in the object store
 
+See also xref:_ug_reference-methods_lifecycle_manpage-updated[`updated()`].

@@ -14,7 +14,7 @@
 //include::_ug_how-tos.adoc[leveloffset=+1]
 //include::_ug_more-advanced.adoc[leveloffset=+1]
 
-//include::_ug_reference-annotations.adoc[leveloffset=+1]
+include::_ug_reference-annotations.adoc[leveloffset=+1]
 include::_ug_reference-methods.adoc[leveloffset=+1]
 include::_ug_reference-services-api.adoc[leveloffset=+1]
 include::_ug_reference-services-spi.adoc[leveloffset=+1]
