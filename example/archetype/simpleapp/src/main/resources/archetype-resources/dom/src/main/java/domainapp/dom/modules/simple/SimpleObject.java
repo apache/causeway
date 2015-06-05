@@ -148,12 +148,4 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
 
-
-
-    public String validate() {
-        if(getName().contains("Xxx")) {
-            return "name can't contain 'Xxx'";
-        }
-        return null;
-    }
 }
