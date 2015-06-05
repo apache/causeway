@@ -18,12 +18,11 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-import de.agilecoders.wicket.core.util.Attributes;
-
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
@@ -44,6 +43,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
@@ -85,6 +85,9 @@ import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.IFormSubmitterWithPreValidateHook;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
+import de.agilecoders.wicket.core.util.Attributes;
 
 public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider {
 
@@ -420,7 +423,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             }
 
             doPreApply();
-            if (applyFormChangesElse()) return;
+            if (applyFormChangesElse(target)) return;
             final Object redirectIfAny = doPostApply();
 
             if (flushChangesElse(target)) return;
@@ -593,7 +596,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     // to perform object-level validation, we must apply the changes first
     // contrast this with ActionPanel (for validating actionarguments) where
     // we do the validation prior to the execution of the action
-    private boolean applyFormChangesElse() {
+    private boolean applyFormChangesElse(AjaxRequestTarget target) {
         final ObjectAdapter adapter = getEntityModel().getObject();
         final Memento snapshotToRollbackToIfInvalid = new Memento(adapter);
 
@@ -602,7 +605,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if (invalidReasonIfAny != null) {
             error(invalidReasonIfAny);
             snapshotToRollbackToIfInvalid.recreateObject();
-            toEditMode(null);
+            toEditMode(target);
+
+            // abort otherwise the object will have been dirtied and JDO will end up committing,
+            // possibly bumping the version and resulting in a subsequent concurrency exception.
+            IsisContext.getTransactionManager().abortTransaction();
             return true;
         }
         return false;

@@ -37,12 +37,13 @@ import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -104,14 +105,15 @@ public class Memento implements Serializable {
             collData[i++] = createReferenceData(ref);
         }
         final String elementTypeSpecName = adapter.getSpecification().getFullIdentifier();
-        return new CollectionData(adapter.getOid(), elementTypeSpecName, collData);
+        return new CollectionData(clone(adapter.getOid()), elementTypeSpecName, collData);
     }
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
-        transientObjects.add(adapter.getOid());
+        final Oid adapterOid = clone(adapter.getOid());
+        transientObjects.add(adapterOid);
         final ObjectSpecification cls = adapter.getSpecification();
         final List<ObjectAssociation> associations = cls.getAssociations(Contributed.EXCLUDED);
-        final ObjectData data = new ObjectData(adapter.getOid(), cls.getFullIdentifier());
+        final ObjectData data = new ObjectData(adapterOid, cls.getFullIdentifier());
         for (int i = 0; i < associations.size(); i++) {
             if (associations.get(i).isNotPersisted()) {
                 if (associations.get(i).isOneToManyAssociation()) {
@@ -150,10 +152,12 @@ public class Memento implements Serializable {
             return null;
         }
 
-        final Oid refOid = referencedAdapter.getOid();
+        Oid refOid = clone(referencedAdapter.getOid());
+
         if (refOid == null) {
             return createStandaloneData(referencedAdapter);
         }
+
 
         if ((referencedAdapter.getSpecification().isParented() || refOid.isTransient()) && !transientObjects.contains(refOid)) {
             transientObjects.add(refOid);
@@ -162,6 +166,13 @@ public class Memento implements Serializable {
 
         final String specification = referencedAdapter.getSpecification().getFullIdentifier();
         return new Data(refOid, specification);
+    }
+
+    private static <T extends Oid> T clone(final T oid) {
+        if(oid == null) { return null; }
+        final OidMarshaller oidMarshaller = new OidMarshaller();
+        final String oidStr = oid.enString(oidMarshaller);
+        return (T) oidMarshaller.unmarshal(oidStr, oid.getClass());
     }
 
     private Data createStandaloneData(final ObjectAdapter adapter) {
@@ -203,8 +214,17 @@ public class Memento implements Serializable {
         } else {
         	Assert.assertTrue("oid must be a TypedOid representing an object because spec is not a collection and cannot be a value", oid instanceof TypedOid);
         	TypedOid typedOid = (TypedOid) oid;
-        	
-			adapter = getAdapterManager().adapterFor(typedOid);
+
+            // remove adapter if already in the adapter manager maps, because
+            // otherwise would (as a side-effect) update the version to that of the current.
+			adapter = getAdapterManager().getAdapterFor(typedOid);
+            if(adapter != null) {
+                getAdapterManager().removeAdapter(adapter);
+            }
+
+            // recreate an adapter for the original OID (with correct version)
+            adapter = getAdapterManager().adapterFor(typedOid);
+
             updateObject(adapter, data);
         }
 
@@ -295,6 +315,7 @@ public class Memento implements Serializable {
             try {
                 PersistorUtil.startResolvingOrUpdating(objectAdapter);
                 updateFields(objectAdapter, data);
+                objectAdapter.getOid().setVersion(data.getOid().getVersion());
             } finally {
                 PersistorUtil.toEndState(objectAdapter);
             }

@@ -18,6 +18,7 @@
  */
 package domainapp.dom.modules.simple;
 
+import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
@@ -121,6 +122,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     //endregion
 
+    //region > version (derived property)
+    public Long getVersionSequence() {
+        return (Long) JDOHelper.getVersion((org.datanucleus.enhancer.Persistable) this);
+    }
+
     //region > compareTo
 
     @Override
@@ -138,4 +144,13 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     //endregion
 
+
+
+
+    public String validate() {
+        if(getName().contains("Xxx")) {
+            return "name can't contain 'Xxx'";
+        }
+        return null;
+    }
 }

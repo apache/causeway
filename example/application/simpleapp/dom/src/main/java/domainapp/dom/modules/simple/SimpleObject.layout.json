@@ -29,6 +29,11 @@
                                     }
                                 }
                             }
+                        },
+                        "versionSequence": {
+                            "propertyLayout": {
+                                "name": "version"
+                            }
                         }
                     }
                 }
