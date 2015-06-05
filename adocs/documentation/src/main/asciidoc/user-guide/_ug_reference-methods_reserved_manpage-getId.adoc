@@ -4,8 +4,16 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+The `getId()` method applies only to domain services, and allows a unique identifer to be provided for that service.
 
-Provides an optional unique identifier of a service.
+This identifier corresponds in many ways to the xref:_ug_reference-annotations_manpage-DomainObject_objectType[`objectType()`] attribute for domain objects; it is used as an internal identifier but also appears in URLs within the xref:_ug_restfulobjects-viewer[RestfulObjects viewer]'s REST API.
+
+If the identifier is omitted, the services fully qualified class name is used.
+
+[TIP]
+====
+Unlike domain objects, where the use of an object type is strongly encouraged (eg using xref:_ug_reference-annotations_manpage-PersistenceCapable[`@PersistenceCapable`]), it matters much less if an id is specified for domain services.  The principle benefit is shorter URLs in the REST API.
+====
+
 

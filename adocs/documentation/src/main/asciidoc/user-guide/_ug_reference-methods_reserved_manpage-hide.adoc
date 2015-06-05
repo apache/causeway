@@ -4,9 +4,36 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+One use case that Isis supports is that of a domain object with a lifecycle whereby at some stage some number of the object's members should be hidden.  For example, for an object that at some stage is logically immutable, we might want to make all its properties/collections unmodifiable and hide all its actions.
 
-Hide all or some of an object's properties
+While we could write a separate xref:_ug_reference-methods_prefixes_manpage-hide[`hide...()`] method for each and every action, this could become painful.  So instead Isis allows a single `hide...(...)` method to be implemented that is applied to all members.
+
+The signature of the method is:
+
+[source,java]
+----
+public boolean hide(Identifier.Type identifierType) { ... }
+----
+
+where `Identifier.Type` is part of the Isis applib (nested static class of `o.a.i.applib.Identifier`) to distinguish between an interaction with an action, a property or an action.
+
+For example:
+
+[source,java]
+----
+public boolean hide(Identifier.Type identifierType) {
+    return identifierType == Identifier.Type.ACTION && isFrozen();
+}
+----
+
+See also the similar method to xref:_ug_reference-methods_reserved_manpage-disable[`disable()`] object members en-masse.
+
+
+== Alternatives
+
+An alternative design -- and one that could be easily argued is actually more flexible -- is to leverage domain events with vetoing subscribers.
+
+There is further discussion on this approach in xref:_ug_reference-methods_reserved_manpage-disable[here].
 

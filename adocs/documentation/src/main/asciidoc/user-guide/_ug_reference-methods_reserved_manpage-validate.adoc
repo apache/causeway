@@ -4,8 +4,24 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
+The `validate()` method is used to specify that invariants pertaining to an object's state are enforced.
 
-Validate the object's state prior to persisting.
+
+[WARNING]
+====
+(As of 1.8.0) there are known limitations with this functionality.  Invariants are enforced when an object is initially created and when it is edited, however invariants are currently _not_ enforced if an action is invoked.
+====
+
+
+The signature of the method is:
+
+[source,java]
+----
+public String validate() { ... }
+----
+
+where the returned string is the reason that the invocation is vetoed.
+
+Note that Isis' xref:_ug_more-advanced_i18n[i18n support] extends this so that the returned reason can also be internationalized.
