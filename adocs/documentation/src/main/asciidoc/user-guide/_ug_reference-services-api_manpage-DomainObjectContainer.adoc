@@ -4,14 +4,383 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The `DomainObjectContainer` service provides a set of general purpose functionality for domain objects to call.  Principal amongst these are a generic APIs for querying objects and creating and persisting objects.  In addition, the service provides access to security context (the "current user"), allows information and warning messages to be raised, and various other miscellaneous functions.
+
+[NOTE]
+====
+Compared to other services provided by Isis, the `DomainObjectContainer` provides by far the most number of methods, addressing several quite distinct responsibilities.  This is a historical accident: in early versions of Isis the `DomainObjectContainer` was the one and only domain service provided by the framework.
+
+In the future we may deprecate this service and break out its responsibilities into a number of small services.  However, given how important this service was in days past, we are unlikely to delete it as a service even once it has been deprecated.
+====
+
+The sections below discuss the functions provided by the service, broken out into categories.
+
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_object-creation-api]
+== Object Creation API
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    <T> T newTransientInstance(final Class<T> ofType);                              // <1>
+    @Programmatic
+    <T> T newViewModelInstance(final Class<T> ofType, final String memento);        // <2>
+    ...
+}
+----
+<1> Create a new non-persisted domain object.  Any services will be automatically injected into the service
+<2> Create a new view model, with the specified memento (as per xref:_ug_reference-classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:_ug_reference-annotations_manpage-ViewModel[`@ViewModel`] and let Isis manage the memento automatically.
+
+For example:
+
+[source,java]
+----
+Customer cust = container.newTransientInstance(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+container.persist(cust);
+----
+
+As an alternative to using `newTransientInstance(...)`, you could also simply `new()` up the object.  Doing this will not inject any domain services, but they can be injected manually using xref:_ug_reference-services-api_manpage-DomainObjectContainer_services-api[#injectServicesInto(...)`].
+
+[NOTE]
+====
+Calling `new(...)` also this circumvents Isis' xref:_ug_reference-methods_reserved_manpage-created[`created()`] callback, and in addition any default values for properties (either explicitly set by xref:_ug_reference-methods_prefixes_manpage-default[`default...()`] or defaulted implicitly according to Isis' own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
+====
+
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_generic-repository-api]
+== Generic Repository API
+
+The repository API acts as an abstraction over the JDO/DataNucleus objectstore.  You can use it during prototyping to write naive queries (find all rows, then filter using the Guava `Predicate` API, or you can use it to call JDO link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/query.html#named[named queries] using JDOQL.
+
+As an alternative, you could also use link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[JDO typesafe queries] through the xref:_ug_reference-services-api_manpage-IsisJdoSupport[`IsisJdoSupport`] service.
+
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    public <T> List<T> allInstances(Class<T> ofType, long... range);                        // <1>
+    @Programmatic
+    <T> List<T> allMatches(Query<T> query);                                                 // <2>
+    @Programmatic
+    <T> List<T> allMatches(Class<T> ofType, Predicate<? super T> predicate, long... range); // <3>
+    @Programmatic
+    <T> List<T> allMatches(Class<T> ofType, String title, long... range);                   // <4>
+    @Programmatic
+    <T> List<T> allMatches(Class<T> ofType, T pattern, long... range);                      // <5>
+    ...
+}
+----
+<1> all persisted instances of specified type.  Mostly for prototyping, though can be useful to obtain all instances of domain entities if the number is known to be small.  The optional varargs parameters are for paging control; more on this below.
+<2> all persistence instances matching the specified `Query`.  Query itself is an Isis abstraction on top of JDO/DataNucleus' Query API.  *This is the primary API used for querying*
+<3> all persistenced instances of specified type matching `Predicate`.  Only really intended for prototyping because in effect constitutes a client-side WHERE clause
+<4> all persisted instances with the specified string as their title.  Only very occasionally used
+<5> all persisted instances matching object (query-by-example).  Only very occasionally used
+
+There are various implementations of the `Query` API, but these either duplicate functionality of the other overloads of `allMatches(...)` or they are not supported by the JDO/DataNucleus object store.   The only significant implementation of `Query` to be aware of is `QueryDefault`, which identifies a named query and a set of parameter/argument tuples.
+
+For example, in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] the `ToDoItem` is annotated:
+
+[source,java]
+----
+@javax.jdo.annotations.Queries( {
+    @javax.jdo.annotations.Query(
+            name = "findByAtPathAndComplete", language = "JDOQL",               // <1>
+            value = "SELECT "
+                    + "FROM todoapp.dom.module.todoitem.ToDoItem "
+                    + "WHERE atPath.indexOf(:atPath) == 0 "                     // <2>
+                    + "   && complete == :complete"),                           // <3>
+    ...
+})
+public class ToDoItem ... {
+    ...
+}
+----
+<1> name of the query
+<2> defines the `atPath` parameter
+<3> defines the `complete` parameter
+
+This JDO query definitions are used in the `ToDoItemRepositoryImplUsingJdoql` service:
+
+[source,java]
+----
+@DomainService(nature = NatureOfService.DOMAIN)
+public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl {
+    @Programmatic
+    public List<ToDoItem> findByAtPathAndCategory(final String atPath, final Category category) {
+        return container.allMatches(
+                new QueryDefault<>(ToDoItem.class,
+                        "findByAtPathAndCategory",                              // <1>
+                        "atPath", atPath,                                       // <2>
+                        "category", category));                                 // <3>
+    }
+    ...
+    @javax.inject.Inject
+    DomainObjectContainer container;
+}
+----
+<1> corresponds to the "findByAtPathAndCategory" JDO named query
+<2> provide argument for the `atPath` parameter.  The pattern is parameter, argument, parameter, argument, ... and so on.
+<3> provide argument for the `category` parameter.  The pattern is parameter, argument, parameter, argument, ... and so on.
+
+Other JDOQL named queries (not shown) follow the exact same pattern.
+
+With respect to the other query APIs, the varargs parameters are optional, but allow for (client-side and managed) paging.  The first parameter is the `start` (0-based, the second is the `count`.
+
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_object-persistence-api]
+== Object Persistence API
+
+The persistence API is used to persist newly created objects (as per xref:_ug_reference-services-api_manpage-DomainObjectContainer_object-creation-api[`#newTransientInstance(...)`], above and to delete (remove) objects that are persistent.
+
+Note that there is no API for updating existing objects; the framework (or rather, JDO/DataNucleus) performs object dirty tracking and so any objects that are modified in the course of a request will be automatically updated).
+
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    boolean isPersistent(Object domainObject);          // <1>
+    @Programmatic
+    boolean isViewModel(Object domainObject);           // <2>
+
+    @Programmatic
+    void persist(Object domainObject);                  // <3>
+    @Programmatic
+    void persistIfNotAlready(Object domainObject);      // <4>
+
+    @Programmatic
+    void remove(Object persistentDomainObject);         // <5>
+    @Programmatic
+    void removeIfNotAlready(Object domainObject);       // <6>
+
+    @Programmatic
+    boolean flush();                                    // <7>
+    ...
+}
+----
+<1> test whether a particular domain object is persistent or not
+<2> test whether a particular domain object is a view model or not.  Note that this includes any domain objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject#nature=Nature.EXTERNAL_ENTITY)`] or xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject#nature=Nature.INMEMORY_ENTITY`]
+<3> persist a transient object.  Note though that this will throw an exception if the object is already persistent; this can happen if JDO/DataNucleus's link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/orm/cascading.html[persistence-by-reachability] is in effect.  For this reason it is generally better to use:
+<4> persist an object but only if know to not have been persistent.  But if the object is persistent, is a no-op
+<5> remove (ie DELETE) a persistent object.  For similar reasons to the persistence, it is generally better to use:
+<6> remove (ie DELETE) an object only if known to be persistent.  But if the object has already been deleted, then is a no-op.
+<7> flushes all pending changes to the objectstore.  Explained further below.
+
+For example:
+
+[source,java]
+----
+Customer cust = container.newTransientInstance(Customer.class);
+cust.setFirstName("Freddie");
+cust.setLastName("Mercury");
+container.persistIfNotAlready(cust);
+----
+
+You should be aware that by default Isis queues up calls to `#persist()` and `#remove()`.  These are then executed either when the request completes (and the transaction commits), or if the queue is flushed.  This can be done either implicitly by the framework, or as the result of a direct call to `#flush()`.
+
+By default the framework itself will cause `#flush()` to be called whenever a query is executed by way of `#allMatches(Query)`, as documented xref:_ug_reference-services-api_manpage-DomainObjectContainer_generic-repository-api[above].  However, this behaviour can be disabled using the  xref:_ug_runtime_configuring-core[configuration property] `isis.services.container.disableAutoFlush`.
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_messages-api]
+== Messages API
+
+The `DomainObjectContainer` allows domain objects to raise information, warning or error messages.  These messages can either be simple strings, or can be translated.
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    void informUser(String message);                                                            // <1>
+    @Programmatic
+    String informUser(TranslatableString message, Class<?> contextClass, String contextMethod); // <2>
+
+    @Programmatic
+    void warnUser(String message);                                                              // <3>
+    @Programmatic
+    String warnUser(TranslatableString message, Class<?> contextClass, String contextMethod);   // <4>
+
+    @Programmatic
+    void raiseError(String message);                                                            // <5>
+    @Programmatic
+    String raiseError(TranslatableString message, Class<?> contextClass, String contextMethod); // <6>
+    ...
+}
+----
+<1> display as a transient message to the user (not requiring acknowledgement).  In the xref:_ug_wicket-viewer[Wicket viewer] this is implemented as a toast that automatically disappears after a period of time.
+<2> ditto, but with translatable string, for xref:_ug_more-advanced_i18n[i18n support].
+<3> warn the user about a situation with the specified message.  In the xref:_ug_wicket-viewer[Wicket viewer] this is implemented as a toast that must be closed by the end-user.
+<4> ditto, but with translatable string, for i18n support.
+<5> show the user an unexpected application error.  In the xref:_ug_wicket-viewer[Wicket viewer] this is implemented as a toast (with a different colour) that must be closed by the end-user.
+<6> ditto, but with translatable string, for i18n support.
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_security-api]
+== Security API
+
+The security API allows the domain object to obtain the identity of the user interacting with said object.
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    UserMemento getUser();
+    ...
+}
+----
+
+where in turn (the essence of) `UserMemento` is:
+
+[source,java]
+----
+public final class UserMemento {
+    public String getName() { ... }
+    public boolean isCurrentUser(final String userName) { ... }
+
+    public List<RoleMemento> getRoles() { ... }
+    public boolean hasRole(final RoleMemento role) { ... }
+    public boolean hasRole(final String roleName) { ... }
+    ...
+}
+----
+
+and `RoleMemento` is simpler still:
+
+[source,java]
+----
+public final class RoleMemento {
+    public String getName() { ... }
+    public String getDescription() { ... }
+    ...
+}
+----
+
+The roles associated with the `UserMemento` will be based on the configured xref:_ug_security[security] (typically Shiro).
+
+In addition, when using the xref:_ug_wicket-viewer[Wicket viewer] there will be an additional "org.apache.isis.viewer.wicket.roles.USER" role; this is used internally to restrict access to web pages without authenticating.
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_presentation-api]
+== Presentation API
+
+A responsibility of every domain object is to return a title.  This can be done declaratively using the xref:_ug_reference-annotations_manpage-Title[`@Title`] annotation on property/ies, or it can be done imperatively by writing a xref:_ug_reference-methods_reserved_manpage-title[`title()`] method.
+
+It's quite common for titles to be built up of the titles of other objects.  If using building up the title using `@Title` then Isis will automatically use the title of the objects referenced by the annotated properties.  We also need programmatic access to these titles if going the imperative route.  That is the purpose of this small API.
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    String titleOf(Object domainObject);                // <1>
+    ...
+}
+----
+<1> return the title of the object, as rendered in the UI by the Isis viewers.
+
+
+By way of example, here's some code from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] showing the use of the API in an message:
+
+[source,java]
+----
+    public List<ToDoItem> delete() {
+        final String title = container.titleOf(this);   // <1>
+        ...
+        container.removeIfNotAlready(this);
+        container.informUser(
+                TranslatableString.tr(
+                    "Deleted {title}", "title", title), // <2>
+                    this.getClass(), "delete");
+        ...
+    }
+
+----
+<1> the title is obtained first, because we're not alowed to reference object after it's been deleted
+<2> use the title in an i18n `TranslatableString`
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_validation-api]
+== Validation API
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    boolean isValid(Object domainObject);
+    @Programmatic
+    String validate(Object domainObject);
+
+    ...
+}
+----
+
+
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_properties-api]
+== Properties API
+
+The properties API allows domain objects to read the configuration properties aggregated from the various xref:_ug_runtime_configuration-files[configuration files].
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    String getProperty(String name);                        // <1>
+    @Programmatic
+    String getProperty(String name, String defaultValue);   // <2>
+    @Programmatic
+    List<String> getPropertyNames();                        // <3>
+}
+----
+<1> Return the configuration property with the specified name; else return null.
+<2> Return the configuration property with the specified name; if it doesn't exist then return the specified default value.
+<3> Return the names of all the available properties.
+
+
+
+
+
+[_ug_reference-services-api_manpage-DomainObjectContainer_services-api]
+== Services API
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    <T> T injectServicesInto(final T domainObject);     // <1>
+    @Programmatic
+    <T> T lookupService(Class<T> service);              // <2>
+    @Programmatic
+    <T> Iterable<T> lookupServices(Class<T> service);   // <3>
+    ...
+}
+----
+<1> injects services into domain object; used extensively internally by the framework (eg to inject to other services, or to entities, or integration test instances, or fixture scripts).  Service injection is done automatically if objects are created using `#newTransientInstance()`, described xref:_ug_reference-services-api_manpage-DomainObjectContainer_object-creation-api[above]
+<2> returns the first registered service that implements the specified class
+<3> returns an `Iterable` in order to iterate over all registered services that implement the specified class
 
 
 
 
 
 
-== Registering the Services
+
+== Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured:
 

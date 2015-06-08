@@ -85,22 +85,20 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 	    timeUntilNext = 3 - timeSinceLast
 	    if not priming and
 	       timeUntilNext > 0 then
-	        puts "pausing before regenerating (3 seconds not yet elapsed)"
-		sleep timeUntilNext
+	        puts "skipping before regenerating (3 seconds not yet elapsed)"
+	    else
+                cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+
+                unless priming then
+                    puts ""
+                    puts "#{i}: #{cmd}"
+                end
+
+                system cmd
+
+                lastTimeGenerated=Time.now
 	    end
-
-            cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
-
-            unless priming then
-                puts ""
-                puts "#{i}: #{cmd}"
-            end
-
-            system cmd
-
-            lastTimeGenerated=Time.now
         end
-
     else
 
         unless File.directory?(srcBase) then

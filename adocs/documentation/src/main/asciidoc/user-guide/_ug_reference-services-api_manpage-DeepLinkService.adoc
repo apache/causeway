@@ -4,38 +4,36 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-Title: Deep Link Service (1.8.0)
 
 The `DeepLinkService` provides the ability to obtain a `java.net.URI` that links to a representation of any (persisted) domain entity or
 view model.
 
-The framework currently provides a single implementation for accessing the representation provided by the Wicket viewer.
+A typical use case is to generate a clickable link for rendering in an email, PDF, tweet or other communication.
 
-== API
+
+
+== API & Implementation
 
 The API defined by `DeepLinkService` is:
 
 [source,java]
 ----
 public interface DeepLinkService {
-
-    /**
-     * Creates a URI that can be used to obtain a representation of the provided domain object in one of the
-     * Isis viewers.
-     */
-    URI deepLinkFor(Object domainObject);
+    URI deepLinkFor(Object domainObject); // <1>
 }
 ----
+<1> Creates a URI that can be used to obtain a representation of the provided domain object in one of the Isis viewers.
 
-== Implementations
+The xref:_ug_wicket-viewer[Wicket viewer] this provides an implementation for accessing the representation through this viewer.  (For the xref:_ug_restfulobjects-viewer[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:_ug_reference-services-api_manpage-BookmarkService[`BookmarkService`]).
+
+
 
 == Usage within the framework
 
-At the time of writing there is no usage within the core framework, though this service is (planned to be) used by
-some of the http://www.isisaddons.org[Isis addons].
+The xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`] uses this service in order to generate emails as part of xref:_ug_wicket-viewer_features_user-registration[user registration].
+
+
 
 == Implementations
 

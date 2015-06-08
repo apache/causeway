@@ -98,7 +98,7 @@ public Order newOrder(final Customer customer) {
 [NOTE]
 ====
 The particular example that led to this method being added was a 1:m bidirectional relationship,
-analogous to `Customer <-> * Order`.  Persisting the child `Order` object did not cause
+analogous to `Customer 1<-->* Order`.  Persisting the child `Order` object did not cause
 the parent ``Customer``'s collection of orders to be updated.  In fact, JDO does not make any
 such guarantee to do so.  Options are therefore either to maintain the collection in code, or to
 refresh the parent.

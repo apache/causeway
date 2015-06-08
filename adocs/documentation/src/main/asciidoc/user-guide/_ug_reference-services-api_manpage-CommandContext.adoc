@@ -30,6 +30,10 @@ The screencast provides a run-through of the command (profiling) service, auditi
 
 video::tqXUZkPB3EI[youtube,width="640px",height="360px"]
 
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
 
 
 
