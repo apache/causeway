@@ -79,24 +79,26 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 
         unless regenerate == "" then
 
-	    # don't regenerate more often than every 5 seconds
+	    # if regenerated within last 3 seconds, then wait a while
 	    currentTime = Time.now
+	    timeSinceLast = currentTime.to_i - lastTimeGenerated.to_i
+	    timeUntilNext = 3 - timeSinceLast
 	    if not priming and
-	       currentTime.to_i < lastTimeGenerated.to_i + 5 then
-	        puts "skipping regeneration (5 seconds not yet elapsed)"
-	    else
-
-                cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
-
-                unless priming then
-                    puts ""
-                    puts "#{i}: #{cmd}"
-                end
-
-                system cmd
-
-                lastTimeGenerated=Time.now
+	       timeUntilNext > 0 then
+	        puts "pausing before regenerating (3 seconds not yet elapsed)"
+		sleep timeUntilNext
 	    end
+
+            cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+
+            unless priming then
+                puts ""
+                puts "#{i}: #{cmd}"
+            end
+
+            system cmd
+
+            lastTimeGenerated=Time.now
         end
 
     else
@@ -125,6 +127,7 @@ end
 
 i=0
 lastTimeGenerated = Time.now - 10
+
 
 #
 # process all files

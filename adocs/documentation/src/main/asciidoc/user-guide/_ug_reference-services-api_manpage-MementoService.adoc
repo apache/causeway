@@ -20,7 +20,7 @@ However, it can also be used to create a memento of arbitrary objects. Indeed, i
 
 The API defined by `MementoService` is:
 
-[source]
+[source,java]
 ----
 public interface MementoService {
 
@@ -74,7 +74,7 @@ To use in your code, simply define a field for the `MementoService` type and ann
 
 For example:
 
-[source]
+[source,java]
 ----
 import org.apache.isis.applib.services.memento.MementoService;
 
@@ -105,6 +105,7 @@ However, you are of course free to write some other implementation of `MementoSe
 
 
 
+
 == Related Services
 
 The memento service is used by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service and also xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]. These both use a memento to capture a representation of an action invocation.
@@ -112,6 +113,13 @@ The memento service is used by the xref:_ug_reference-services-api_manpage-Comma
 
 
 
-== Register the Service
+== Registering the Service
 
-As of 1.6.0, the `MementoServiceDefault` service is automatically registered and available for injection (it is annotated with `@DomainService`).
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `MementoService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

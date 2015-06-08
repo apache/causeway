@@ -125,6 +125,14 @@ public List<Order> findOrders(...) {
 
 
 
-== Registering the Service
 
-The `IsisJdoSupportImpl` class provides the default implementation and (as of 1.6.0+) is automatically registered using `@DomainService`.  No further configuration is necessary.
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `IsisJdoSupport` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

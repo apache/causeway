@@ -4,54 +4,114 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The `BookmarkService` provides the ability to obtain a serializable `o.a.i.applib.bookmarks.Bookmark` for any (persisted) domain object, and to lookup domain objects given a `Bookmark`.  This can then in turn be converted to and from a string.
+
+For example, a `Customer` object with:
+
+* an object type of "custmgmt.Customer" (as per xref:_ug_reference-annotations_manpage-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
+* an id=123
+
+could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
+
+[NOTE]
+====
+A `Bookmark` is little more than an API equivalent of Isis' internal `Oid` (object identifier).  Nevertheless, the ability to uniquely address _any_ domain object within an Isis system -- to in effect provide a URN -- is immensely useful.
+
+For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
+====
+
+``Bookmark``s are used by several other domain services as a means of storing areference to an arbitrary object (a polymorphic relationship).  For example, the (non-ASF) http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] uses bookmarks to capture the object that is being audited.
+
+[TIP]
+====
+One downside of using ``Bookmark``s is that there is no way for the JDO/DataNucleus objectstore to enforce any kind of referental integrity.  However, the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module describes and supports a design pattern to address this requirement.
+====
 
 
-Title: Bookmark Service
 
-The `BookmarkService` provides the ability to obtain a serializable `org.apache.isis.applib.bookmarks.Bookmark` for any (persisted) domain object, and to lookup domain objects given a `Bookmark`.
 
-This is a good way of storing a reference to an arbitrary object (a polymorphic relationship). The downside is that there is no way for the objectstore (eg JDO objectstore) to enforce any kind of referental integrity.
-
-== API
+== API & Implementation
 
 The API defined by `BookmarkService` is:
 
-[source]
+[source,java]
 ----
 public interface BookmarkService {
-
-    @NotInServiceMenu
+    @Programmatic
     Object lookup(BookmarkHolder bookmarkHolder);
-
     @Programmatic
     Object lookup(Bookmark bookmark);
-
     @Programmatic
-    <T> T lookup(Bookmark bookmark, Class<T> requiredType);
-
+    <T> T lookup(Bookmark bookmark, Class<T> cls);   // <1>
     @Programmatic
     Bookmark bookmarkFor(Object domainObject);
-
     @Programmatic
     Bookmark bookmarkFor(Class<?> cls, String identifier);
 }
 ----
+<1> same as `lookup(Bookmark bookmark)`, but downcasts to the specified type.
 
-If a domain class implements the `org.apache.isis.applib.bookmarks.BookmarkHolder` interface then the `BookmarkService` will appear as a contributed action. Otherwise the service is hidden from view, intended to be injected into domain objects as a supporting domain service.
 
-== Usage within the framework
+The core framework provides a default implementation of this API, namely `o.a.i.core.metamodel.services.bookmarks.BookmarkServiceDefault`
 
-Bookmarks are used by the xref:_ug_reference-services-api_manpage-BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
 
-Bookmarks are also used by the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] and the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`].
+== `BookmarkHolder`
 
-== Implementations
+The `BookmarkHolder` interface is intended to be implemented by domain objects that use a `Bookmark` to reference a (single) domain object; an example might be a class such as the audit entry, mentioned above.  The interface is simply:
 
-The core framework provides a default implementation of this API:
 
-* `org.apache.isis.core.metamodel.services.bookmarks.BookmarkServiceDefault`
+[source,java]
+----
+public interface BookmarkHolder {
+    @Programmatic
+    Bookmark bookmark();
+}
 
-== Register the Service
+----
 
-The `BookmarkServiceDefault` is automatically registered with the framework (it is annotated with `@DomainService`) so there is no need to explicitly register the service.
+There are two services that will contribute to this interface:
+
+* `BookmarkHolderActionContributions` will provide a `lookup(...)` action
+* `BookmarkHolderAssociationContributions` provides an `object` property.
+
+Either of these can be suppressed, if required, using a vetoing subscriber.  For example, to suppress the `object` property (so that only the `lookup(...)` action is ever shown for implementations of `BookmarkHolder`, define:
+
+[source,java]
+----
+@DomainObject
+public class AlwaysHideBookmarkHolderAssociationsObjectProperty {
+    @Subscribe
+    public void on(BookmarkHolderAssociationContributions.ObjectDomainEvent ev) {
+        ev.hide();
+    }
+}
+----
+
+A more sophisticated implementation could look inside the passed `ev` argument and selectively hide or not based on the contributee.
+
+
+
+
+== Usage by other services
+
+Bookmarks are used by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's implementation of  xref:_ug_reference-services-api_manpage-BackgroundCommandService[`BackgroundCommandService`], which uses a bookmark to capture the target object on which an action will be invoked subsequently.
+
+Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module's implementation of xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`], and by the (non-ASF) http://github.com/isisaddons/isis-module-auditing[Isis addons' auditing] module's implementation of xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`].
+
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis' core implementation of `BookmarkService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+
+
+

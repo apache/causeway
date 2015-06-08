@@ -66,7 +66,7 @@ The `ApplicationSettingsService` and the `UserSettingsService` are two similar s
 
 The API defined by `ApplicationSettingsService` is:
 
-[source]
+[source,java]
 ----
 public interface ApplicationSettingsService {
     ApplicationSetting find(@Named("Key") String key);
@@ -75,7 +75,7 @@ public interface ApplicationSettingsService {
 
 where `ApplicationSetting` in turn is defined as:
 
-[source]
+[source,java]
 ----
 public interface ApplicationSetting {
 
@@ -100,7 +100,7 @@ The intention is for implementations to store only the value of each setting as 
 
 The API defined by `UserSettingsService` is:
 
-[source]
+[source,java]
 ----
 public interface UserSettingsService {
     UserSetting find(@Named("User") String user, @Named("Key") String key);
@@ -109,7 +109,7 @@ public interface UserSettingsService {
 
 where `UserSetting` in turn is defined as:
 
-[source]
+[source,java]
 ----
 public interface ApplicationSetting {
 

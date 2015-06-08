@@ -16,7 +16,6 @@ The `EventBusServiceJdo` class provides the default implementation and (as of 1.
 
 
 
-Title: Event Bus Service
 
 The `EventBusService` is a wrapper for a https://code.google.com/p/guava-libraries/[Guava] https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`], allowing arbitrary events to be posted and subscribed to (within the Isis runtime). The primary use case is for decoupling interactions from one module/package/namespace and another.
 
@@ -28,7 +27,10 @@ Only domain services should be registered as subscribers; not domain entities. D
 
 The typical implementation of a domain service subscriber is to identify the impacted entities, load them using a repository query, and then to delegate to the event to them.
 
+
+
 == Publishing
+
 
 === Automatically published events
 
@@ -68,7 +70,7 @@ as of 1.6.0 (but deprecated in 1.8.0), using :
 
 For example, in the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) a custom event is raised when an item is completed:
 
-[source]
+[source,java]
 ----
 public static class CompletedEvent extends AbstractActionDomainEvent {
     private static final long serialVersionUID = 1L;
@@ -93,7 +95,7 @@ Subscribers can therefore subscribe to these subclasses, in effect filtering out
 
 The publishing API defined by `EventBusService` is:
 
-[source]
+[source,java]
 ----
 public abstract class EventBusService {
     public void post(Object event) { ... }
@@ -109,7 +111,7 @@ where
 
 The subscribing API defined by `EventBusService` is:
 
-[source]
+[source,java]
 ----
 public abstract class EventBusService {
     public void post(Object event) { ... }
@@ -125,7 +127,7 @@ The are for domain services to call to register themselves with the event bus. T
 
 As of 1.8.0, the `register` and `unregister` methods should be called in the `@PostConstruct` and `@PreDestroy` lifecycle methods:
 
-[source]
+[source,java]
 ----
 @DomainService
 public class MySubscribingDomainService {
@@ -152,7 +154,7 @@ This works for both application-scoped and request-scoped (`@RequestScoped`) dom
 
 In 1.7.0, the registration should be done when the `EventBusService` is injected into it:
 
-[source]
+[source,java]
 ----
 @DomainService
 public class MySubscribingDomainService {
@@ -173,7 +175,7 @@ The actual callbacks of events is done by annotating a method on the class (that
 
 For example, the subscriber in the todoapp for completed todo items would use the following callback:
 
-[source]
+[source,java]
 ----
 @Programmatic
 @Subscribe
@@ -184,7 +186,7 @@ As a slightly more interesting example, suppose in a library domain that a `Libr
 
 In the `LibraryMember` class, we publish the event:
 
-[source]
+[source,java]
 ----
 public class LibraryMember {
     ...
@@ -198,7 +200,7 @@ public class LibraryMember {
 
 Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it:
 
-[source]
+[source,java]
 ----
 public class BookRepository {
 
@@ -217,9 +219,25 @@ public class BookRepository {
 
 This design allows the `libraryMember` module to be decoupled from the `book` module.
 
-== Implementation and Registration
 
-Isis provides the `org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo` as a default implementation of the `EventBusService` API. The `EventBusServiceJdo` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+
+== Implementation
+
+Isis provides a default implementation of the service, `org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `EventBusService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
 
 == Related Services
 

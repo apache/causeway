@@ -28,7 +28,7 @@ ____
 
 The API for the service is:
 
-[source]
+[source,java]
 ----
 public interface UserProfileService {
 
@@ -58,7 +58,7 @@ demonstrates the use of this service:
 
 The implementation is very straight-forward:
 
-[source]
+[source,java]
 ----
 @DomainService
 public class CustomUserProfileService implements UserProfileService {

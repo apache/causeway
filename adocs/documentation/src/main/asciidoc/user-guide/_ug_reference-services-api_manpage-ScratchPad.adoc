@@ -4,8 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
 
 
 The `Scratchpad` service is a link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped] service to allow objects to exchange information even if they do not directly call each other.
@@ -27,11 +25,9 @@ public class Scratchpad {
 }
 ----
 
-… as you can see, just a wrapper around a `java.util.Map`.
+As you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
-In fact, this is a concrete class:
-
-* `org.apache.isis.applib.services.scratchpad.Scratchpad`
+It is implemented in `isis-applib` itself by `org.apache.isis.applib.services.scratchpad.Scratchpad`.
 
 
 
@@ -64,7 +60,7 @@ public void injectScratchpad(Scratchpad scratchpad) {
 
 A more complex example could use a xref:_ug_more-advanced_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to keep track of the items to be updated:
 
-[source]
+[source,java]
 ----
 public class ToDoItemUpdateBulkUpdate extends AbstractViewModel {
     ...
@@ -106,10 +102,17 @@ If using the Wicket viewer, the `ToDoItemBulkUpdate` view model returned from th
 
 
 
+
 == Registering the Service
 
-The `Scratchpad` class is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+Assuming that the `configuration-and-annotation` services installer is configured:
 
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `Scratchpad` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 

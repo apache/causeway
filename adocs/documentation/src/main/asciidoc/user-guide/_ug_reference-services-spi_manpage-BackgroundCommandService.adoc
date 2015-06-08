@@ -29,7 +29,7 @@ The `BackgroundCommandService` typically isn't called from domain classes, but i
 
 The API of the `BackgroundCommandService` is:
 
-[source]
+[source,java]
 ----
 public interface BackgroundCommandService {
 
@@ -45,7 +45,7 @@ where `ActionInvocationMemento` is a wrapper around a xref:_ug_reference-service
 
 For the record, the API of `ActionInvocationMemento` is:
 
-[source]
+[source,java]
 ----
 public class ActionInvocationMemento {
 
@@ -91,7 +91,7 @@ What that means is that the implementations of `CommandService` and `BackgroundC
 
 The `BackgroundCommandExecution` (in isis-core) is an abstract template class provided by isis-core that defines an abstract hook method to obtain background `Command`s to be executed:
 
-[source]
+[source,java]
 ----
 public abstract class BackgroundCommandExecution
                          extends AbstractIsisSessionTemplate {
@@ -115,14 +115,14 @@ Details are provided on the xref:_ug_reference-services-api_manpage-BackgroundSe
 
 Assuming that the `configuration-and-annotation` services installer is configured:
 
-[source]
+[source,ini]
 ----
 isis.services-installer=configuration-and-annotation
 ----
 
 then the `BackgroundCommandServiceJdo` and `BackgroundCommandJdoRepository` services are automatically registered if the `isis-module-command-jdo` module is on the classpath. The `BackgroundCommandServiceJdoContributions` service (because it influences the user interface) must be explicitly registered:
 
-[source]
+[source,ini]
 ----
 isis.services=...,\
               org.apache.isis.objectstore.jdo.applib.service.background.BackgroundCommandServiceJdoContributions,\

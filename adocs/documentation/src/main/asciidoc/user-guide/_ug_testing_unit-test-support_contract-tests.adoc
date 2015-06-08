@@ -110,10 +110,8 @@ It is quite common for some basic services to be injected in a project-specific 
 [source,java]
 ----
 public abstract class EstatioDomainObject {
+    @javax.inject.Inject
     protected ClockService clockService;
-    public void injectClockService(ClockService clockService) {
-        this.clockService = clockService;
-    }
 }
 ----
 

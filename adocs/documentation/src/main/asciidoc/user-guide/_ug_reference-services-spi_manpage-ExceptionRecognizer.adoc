@@ -41,7 +41,7 @@ file). More than one recognizer can be registered; all we be checked if an excep
 
 The `ExceptionRecognizer2` interface extends the original `ExceptionRecognizer` interface, being defined as:
 
-[source]
+[source,java]
 ----
 public interface ExceptionRecognizer2 extends ExceptionRecognizer {
 
@@ -94,7 +94,7 @@ In most cases you should use the JDO Objectstore's `ExceptionRecognizerComposite
 This service has _not_ been annotated with `@DomainService` and so requires explicit registration in
 `WEB-INF/isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.services=...,\
               org.apache.isis.objectstore.jdo.applib.service.exceprecog.ExceptionRecognizerCompositeForJdoObjectStore,\

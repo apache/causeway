@@ -18,7 +18,7 @@ The framework currently provides a single implementation for accessing the repre
 
 The API defined by `DeepLinkService` is:
 
-[source]
+[source,java]
 ----
 public interface DeepLinkService {
 
@@ -43,6 +43,17 @@ The Wicket viewer core framework provides a default implementation of this API:
 
 * `org.apache.isis.viewer.wicket.viewer.services.DeepLinkServiceWicket`
 
-== Register the Service
 
-The `DeepLinkServiceWicket` is automatically registered with the framework (it is annotated with `@DomainService`) so there is no need to explicitly register the service.
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+and that the xref:_ug_wicket-viewer[Wicket viewer] is being used then an implementation of `DeepLinkService` is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+

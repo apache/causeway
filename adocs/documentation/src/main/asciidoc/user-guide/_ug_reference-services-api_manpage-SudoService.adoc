@@ -17,7 +17,7 @@ users to have acted upon the objects).
 
 The API provided by the service is:
 
-[source]
+[source,java]
 ----
 public interface SudoService {
 
@@ -34,7 +34,7 @@ roles being returned by `DomainObjectContainer#getUser()`.
 For example, in the https://github.com/isisaddons/isis-app-todoapp[todoapp] (non ASF) the `SudoService` is used to
 set up todo item objects:
 
-[source]
+[source,java]
 ----
 protected void execute(final ExecutionContext ec) {
     ...
@@ -48,3 +48,16 @@ protected void execute(final ExecutionContext ec) {
     ...
 }
 ----
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `SudoService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

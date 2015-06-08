@@ -141,6 +141,14 @@ ____
 
 
 
-== Registration
 
-As of 1.6.0 this service is automatically on the classpath and registered (it is annotated with `@DomainService`).  Just ensure that the `o.a.i.core:isis-core-wrapper` Maven module is on your classpath.
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `XmlSnapshotService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

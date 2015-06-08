@@ -50,7 +50,7 @@ As described further down in this article, it is possible to fine-tune the paylo
 
 The `PublishingService` interface is:
 
-[source]
+[source,java]
 ----
 public interface PublishingService {
     public void publish(EventMetadata metadata, EventPayload payload);
@@ -60,7 +60,7 @@ public interface PublishingService {
 
 Typically implementations will use the injected `EventSerializer` to convert the metadata and payload into a form to be published:
 
-[source]
+[source,java]
 ----
 public interface EventSerializer {
     public Object serialize(EventMetadata metadata, EventPayload payload);
@@ -133,7 +133,7 @@ Similarly, the `EventPayloadForObjectChanged` abstract class may be used as the 
 
 For example, the following will eagerly include the `ToDoItem`'s `description` property whenever it is changed:
 
-[source]
+[source,java]
 ----
 @PublishedObject(ToDoItemPayloadFactory.class)
 public class ToDoItem {
@@ -197,7 +197,7 @@ public interface PublishingService {
 
 As can be seen, the above implementation in turn uses a default implementation of `EventSerializer`, which simply concatenates the metadata and payload together into a single string:
 
-[source]
+[source,java]
 ----
 public interface EventSerializer {
     ...

@@ -14,16 +14,7 @@ IMPORTANT: TODO
 
 
 
-== `wrapNoExecute()`
 
-
-== `wrapSkipRules()`
-
-
-
-
-
-Title: Wrapper Factory
 
 The 'wrapper' factory provides the ability to enforce business rules for programmatic interactions between domain objects. For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown. Said another way: interactions are performed "as if" they are through the viewer.
 
@@ -31,7 +22,19 @@ This capability goes beyond enforcing the (imperative) constraints within the `h
 
 This capability is frequently used within xref:_ug_testing_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
 
-=== In a little more detail
+
+== API
+
+=== `wrapNoExecute()`
+
+
+
+=== `wrapSkipRules()`
+
+
+
+
+== In a little more detail
 
 The service works by returning a "wrapper" around a supplied domain object (a CGLIB proxy), and it is this wrapper that ensures hat the hide/disable/validate rules implies by the Isis programming model are enforced. The wrapper can be interacted with as follows:
 
@@ -53,7 +56,7 @@ An exception will be thrown if any other methods are thrown.
 
 The `WrapperFactory` API is defined as follows:
 
-[source]
+[source,java]
 ----
 @Hidden
 public interface WrapperFactory {
@@ -86,7 +89,9 @@ where:
 The API also provides the ability to register `InteractionListener`s with the
 wrapper.
 
-=== Usage
+
+
+== Usage
 
 The caller will typically obtain the target object (eg from some repository)
 and then use the injected `WrapperFactory` to wrap it before interacting
@@ -94,7 +99,7 @@ with it.
 
 For example:
 
-[source]
+[source,java]
 ----
 public class CustomerAgent {
 
@@ -118,7 +123,10 @@ Here the `Order`'s `refund()` action has various business logic. Rather than
 re-implement this logic, the `CustomerAgent` wraps the order in order to interact with it.
 
 
-=== Hints and Tips
+
+
+
+== Hints and Tips
 
 The xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s provide the possibility
 to remove the boilerplate; any `InteractionException` could be automatically
@@ -127,7 +135,7 @@ simply propogate the exception:
 
 For example:
 
-[source]
+[source,java]
 ----
 public class CustomerAgent {
 
@@ -147,7 +155,15 @@ of such an `ExceptionRecognizer`; but it should be simple enough to write one…
 
 ____
 
-=== Automatically Available
 
-As of 1.6.0 this service is automatically on the classpath and registered; there is no need to configure in
-`isis.properties` or update your application's `pom.xml`.
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

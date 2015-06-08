@@ -55,14 +55,14 @@ public class ToDoItem ... {
 
 As an alternative to annotating every object with `@Audited`, alternatively this can be configured as the default. Add the following to `isis.properties`:
 
-[source]
+[source,ini]
 ----
 isis.services.audit.objects=all
 ----
 
 To prevent an object from being audited (even if globally enabled), use the `@Audited` annotation with the `disabled` attribute:
 
-[source]
+[source,java]
 ----
 @Audited(disabled=true)
 public class NotAuditedObject { ... }
@@ -70,7 +70,7 @@ public class NotAuditedObject { ... }
 
 To disable globally, use:
 
-[source]
+[source,ini]
 ----
 isis.services.audit.objects=none
 ----

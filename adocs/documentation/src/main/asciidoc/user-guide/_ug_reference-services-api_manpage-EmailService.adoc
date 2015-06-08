@@ -16,7 +16,7 @@ The email service provides the ability to send emails to one or more recipients.
 
 The API for the service is:
 
-[source]
+[source,java]
 ----
 public interface EmailService {
 
@@ -60,7 +60,7 @@ These configuration properties can be specified either in `isis.properties` or i
 
 If prototyping (that is, running the app using `org.apache.isis.WebServer`), the configuration properties can also be specified as system properties. For example, if you create a test email account on gmail, you can configure the service using:
 
-[source]
+[source,ini]
 ----
 -Disis.service.email.sender.address=xxx@gmail.com -Disis.service.email.sender.password=yyy
 ----
@@ -80,11 +80,21 @@ This implies a couple of additional constraints:
 
 To ensure that your alternative implementation takes the place of the default implementation, register it explicitly in `isis.properties`.
 
-== Register the Service
 
-If using the default implementation of the `EmailService` then there is nothing to do because it is automatically registered (it is annotated with `@DomainService`).
+== Registering the Services
 
-If you have written an alternative implementation, then register your implementation in `isis.properties` under the "isis.services" key.
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
+If you have written an alternative implementation, then register your implementation in `isis.properties` under the "isis.services" key and it will be used instead.
+
+
 
 == Related Services
 

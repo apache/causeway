@@ -7,3 +7,17 @@
 IMPORTANT: TODO
 
 
+
+
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis core' implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

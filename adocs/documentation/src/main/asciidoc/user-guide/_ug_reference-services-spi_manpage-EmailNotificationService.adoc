@@ -17,7 +17,7 @@ The framework provides both an API and a default implementation of this service.
 
 The API for the service is:
 
-[source]
+[source,java]
 ----
 public interface EmailNotificationService extends Serializable {
 

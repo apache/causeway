@@ -36,7 +36,7 @@ The screencast provides a run-through of the command (profiling) service, auditi
 
 The `CommandService` service defines the following very simple API:
 
-[source]
+[source,java]
 ----
 public interface CommandService {
 
