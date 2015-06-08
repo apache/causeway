@@ -124,7 +124,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     //region > version (derived property)
     public Long getVersionSequence() {
-        return (Long) JDOHelper.getVersion((org.datanucleus.enhancer.Persistable) this);
+        return (Long) JDOHelper.getVersion(this);
     }
 
     //region > compareTo
