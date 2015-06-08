@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+
 import com.google.common.base.Function;
 import com.google.common.base.Objects;
 import com.google.common.base.Predicate;
@@ -34,8 +35,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.Bulk;
@@ -74,6 +77,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet.CurrentInvocation;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -84,8 +89,6 @@ import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObj
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext.TransactionState;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -95,6 +98,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -590,18 +594,23 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String memberIdentifier = command.getMemberIdentifier();
             final List<String> parameterNames;
             final List<Class<?>> parameterTypes;
-            if(action instanceof ObjectAction) {
+            final Class<?> returnType;
+            if(action instanceof FacetedMethod) {
                 // should always be the case
-                ObjectAction objectAction = (ObjectAction) action;
-                final List<ObjectActionParameter> parameters = objectAction.getParameters();
-                parameterNames = immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_NAME));
-                parameterTypes = immutableList(Iterables.transform(parameters, ObjectActionParameter.Functions.GET_TYPE));
+
+                final FacetedMethod facetedMethod = (FacetedMethod) action;
+                returnType = facetedMethod.getType();
+
+                final List<FacetedMethodParameter> parameters = facetedMethod.getParameters();
+                parameterNames = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_NAME));
+                parameterTypes = immutableList(Iterables.transform(parameters, FacetedMethodParameter.Functions.GET_TYPE));
             } else {
                 parameterNames = null;
                 parameterTypes = null;
+                returnType = null;
             }
             
-            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes);
+            final EventMetadata metadata = newEventMetadata(EventType.ACTION_INVOCATION, currentUser, timestamp, title, targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
             publishingService.publishAction(payloadFactory, metadata, currentInvocation, objectStringifier());
         } finally {
             // ensures that cannot publish this action more than once
@@ -642,7 +651,7 @@ public class IsisTransaction implements TransactionScopedComponent {
             final String enlistedAdapterClass = CommandUtil.targetClassNameFor(enlistedAdapter);
             final Bookmark enlistedTarget = enlistedAdapterOid.asBookmark();
             
-            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null);
+            final EventMetadata metadata = newEventMetadata(eventTypeFor, currentUser, timestamp, title, enlistedAdapterClass, null, enlistedTarget, null, null, null, null);
         
             publishingService.publishObject(payloadFactory, metadata, enlistedAdapter, changeKind, objectStringifier());
         }
@@ -700,11 +709,12 @@ public class IsisTransaction implements TransactionScopedComponent {
             Bookmark target,
             String memberIdentifier,
             final List<String> parameterNames,
-            final List<Class<?>> parameterTypes) {
+            final List<Class<?>> parameterTypes,
+            final Class<?> returnType) {
         int nextEventSequence = nextEventSequence();
         return new EventMetadata(
                 getTransactionId(), nextEventSequence, eventType, currentUser, timestampEpoch, title, 
-                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes);
+                targetClass, targetAction, target, memberIdentifier, parameterNames, parameterTypes, returnType);
     }
 
     private int nextEventSequence() {

@@ -48,6 +48,7 @@ public class EventMetadata {
     private final String actionIdentifier;
     private final List<String> actionParameterNames;
     private final List<Class<?>> actionParameterTypes;
+    private final Class<?> actionReturnType;
 
     /**
      * @deprecated - no longer called by the framework.
@@ -78,7 +79,7 @@ public class EventMetadata {
             final String targetAction, 
             final Bookmark target, 
             final String actionIdentifier) {
-        this(transactionId, sequence, eventType, user, javaSqlTimestamp, title, targetClass, targetAction, target, actionIdentifier, null, null);
+        this(transactionId, sequence, eventType, user, javaSqlTimestamp, title, targetClass, targetAction, target, actionIdentifier, null, null, null );
     }
     
     public EventMetadata(
@@ -86,14 +87,15 @@ public class EventMetadata {
             final int sequence,
             final EventType eventType,
             final String user,
-            final java.sql.Timestamp javaSqlTimestamp,
+            final Timestamp javaSqlTimestamp,
             final String title,
             final String targetClass,
             final String targetAction,
             final Bookmark target,
             final String actionIdentifier,
             final List<String> actionParameterNames,
-            final List<Class<?>> actionParameterTypes) {
+            final List<Class<?>> actionParameterTypes,
+            final Class<?> actionReturnType) {
         this.transactionId = transactionId;
         this.sequence = sequence;
         this.user = user;
@@ -106,6 +108,7 @@ public class EventMetadata {
         this.actionIdentifier = actionIdentifier;
         this.actionParameterNames = actionParameterNames;
         this.actionParameterTypes = actionParameterTypes;
+        this.actionReturnType = actionReturnType;
     }
 
     /**
@@ -217,6 +220,16 @@ public class EventMetadata {
      */
     public List<Class<?>> getActionParameterTypes() {
         return actionParameterTypes;
+    }
+
+    /**
+     * Return type of the invoked action.
+     *
+     * <p>
+     * Populated only for {@link EventType#ACTION_INVOCATION}s.
+     */
+    public Class<?> getActionReturnType() {
+        return actionReturnType;
     }
 
     // //////////////////////////////////////
