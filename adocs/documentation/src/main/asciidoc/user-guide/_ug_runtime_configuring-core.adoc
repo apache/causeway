@@ -104,6 +104,44 @@ See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata 
 | `true`,`false` (`_false_`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
+
+| `isis.service.` +
+`email.tls.enabled` +
+| `true`,`false` (`_true_`)
+|Whether to enable TLS for the connection.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.sender.hostname` +
+| host (`_smtp.gmail.com_`)
+|The hostname of the external SMTP provider.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.port` +
+| port number (`_587_`)
+|The port number for the SMTP service on the the external SMTP host.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.sender.address` +
+| email address
+|The email address to use for sending out email. This property must be configured in order to use xref:_ug_reference-services-api_manpage-EmailService[`EmailService`].  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.sender.password` +
+| email password
+|The corresponding password for the email address to use for sending out email.  This property must be configured in order to use xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]. +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
 |`isis.services.` +
 `publish.objects`
 | `all`, `none` (`all`)
