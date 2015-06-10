@@ -4,7 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
 The purpose of the `QueryResultsCache` is to improve response times to the user, by providing a short-term (link:../../more-advanced-topics/how-to-09-020-How-to-write-a-typical-domain-service.html[request-scoped]) cache of the value of some (safe or idempotent) method call. This will typically be as the result of running a query, but could be any expensive operation.
@@ -27,85 +26,82 @@ The API defined by `QueryResultsCache` is:
 ----
 @RequestScoped
 public class QueryResultsCache {
-
     public static class Key {
         public Key(Class<?> callingClass, String methodName, Object... keys) {...}
-
         public Class<?> getCallingClass() { ... }
         public String getMethodName() { ... }
         public Object[] getKeys() { ... }
     }
-
     public static class Value<T> {
         public Value(T result) { ... }
-            this.result = result;
-        }
         private T result;
         public T getResult() {
             return result;
         }
     }
-
+    @Programmatic
     public <T> T execute(
         final Callable<T> callable,
         final Class<?> callingClass, final String methodName, final Object... keys) { ... }
-
+    @Programmatic
     public <T> T execute(final Callable<T> callable, final Key cacheKey) { ... }
-
+    @Programmatic
     public <T> Value<T> get(
         final Class<?> callingClass, final String methodName, final Object... keys) { ... }
-
+    @Programmatic
     public <T> Value<T> get(final Key cacheKey) { ... }
-
+    @Programmatic
     public <T> void put(final Key cacheKey, final T result) { ... }
 }
 ----
 
-In fact, this is a concrete class:
+This class (`o.a.i.applib.services.queryresultscache.QueryResultsCache`) is also the implementation.
 
-* `org.apache.isis.applib.services.queryresultscache.QueryResultsCache`
 
 
 
 == Usage
 
-Suppose that there's a `TaxService` that calculates tax on `Taxable` items, with respect to some `TaxType`, and for a given `LocalDate`. To calculate tax it must run a database query and then perform some additional calculations. The original implementation is:
+Suppose that there's a `TaxService` that calculates tax on `Taxable` items, with respect to some `TaxType`, and for a given `LocalDate`. To calculate tax it must run a database query and then perform some additional calculations.
+
+Our original implementation is:
 
 [source,java]
 ----
+@DomainService
 public class TaxService {
-
     public BigDecimal calculateTax(
             final Taxable t, final TaxType tt, final LocalDate d) {
         // query against DB using t, tt, d
-        // further expensive calculatoins
+        // further expensive calculations
     }
 }
 ----
 
-We can imagine that this service might be called in a loop, eg iterating over a bunch of orders, where several of those orders are for the same taxable products, say. In this case the result of the calculation would always be the same for any given product. We can therefore refactor the method to use the query cache as follows:
+Suppose now that this service is called in a loop, for example iterating over a bunch of orders, where several of those orders are for the same taxable products, say. In this case the result of the calculation would always be the same for any given product.
+
+We can therefore refactor the method to use the query cache as follows:
 
 [source,java]
 ----
 public class TaxService {
-
     public BigDecimal calculateTax(
             final Taxable t, final TaxType tt, final LocalDate d) {
         return queryResultsCache.execute(
-            new Callable<BigDecimal>(){
+            new Callable<BigDecimal>(){                         // <1>
                 public BigDecimal call() throws Exception {
                      // query against DB using t, tt, d
-                     // further expensive calculatoins
+                     // further expensive calculations
                 }
             },
-            TaxService.class,
+            TaxService.class,                                   // <2>
             "calculateTax",
             t, tt, d);
         }
 }
 ----
-
-where the callable is the original code, and the other parameters are in essence uniquely identify the method call.
+<1> the `Callable` is the original code
+<2> the remaining parameters in essence uniquely identify the method call.
 
 This refactoring will be worthwhile provided that enough of the orders being processed reference the same taxable products. If however every order is for a different product, then no benefit will be gained from the refactoring.
 

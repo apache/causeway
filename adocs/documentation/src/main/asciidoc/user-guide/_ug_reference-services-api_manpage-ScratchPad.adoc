@@ -19,22 +19,24 @@ The API of `Scratchpad` service is:
 ----
 @RequestScoped
 public class Scratchpad {
+    @Programmatic
     public Object get(Object key) { ... }
+    @Programmatic
     public void put(Object key, Object value) { ... }
+    @Programmatic
     public void clear() { ... }
 }
 ----
 
-As you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
+This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implementation.  And, as you can see, the service is just a request-scoped wrapper around a `java.util.Map`.
 
-It is implemented in `isis-applib` itself by `org.apache.isis.applib.services.scratchpad.Scratchpad`.
 
 
 
 
 == Usage
 
-The most common use-case is for xref:_ug_reference-annotations_manpage-Action_invokeOn[bulk] actions that link:../../more-advanced-topics/how-to-01-065-How-to-add-an-action-to-be-called-on-every-object-in-a-list.html[act upon multiple objects in a list]. The (same) `Scratchpad` service is injected into each of these objects, and they can use pass information.
+The most common use-case is for xref:_ug_reference-annotations_manpage-Action_invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
@@ -51,54 +53,53 @@ public BigDecimal totalCost() {
     }
     return total.setScale(2);
 }
-
-private Scratchpad scratchpad;
-public void injectScratchpad(Scratchpad scratchpad) {
-    this.scratchpad = scratchpad;
-}
+@Inject
+Scratchpad scratchpad;
 ----
 
-A more complex example could use a xref:_ug_more-advanced_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to keep track of the items to be updated:
+A more complex example could use a xref:_ug_more-advanced_view-models[view model] to enable bulk updates to a set of objects. The view model's job is to gather track of the items to be updated:
 
 [source,java]
 ----
 public class ToDoItemUpdateBulkUpdate extends AbstractViewModel {
-    ...
-    private List<ToDoItem> items = ...;
-    public void add(ToDoItem item) {
+    private List<ToDoItem> _items = ...;
+    public ToDoItemBulkUpdate add(ToDoItem item) {
         _items.add(item);
+        return this;
     }
-    ...
+    ...                 // <1>
 }
 ----
+<1> not shown - the implementation of `ViewModel` for converting the list of `_items` into a string.
 
 The bulk action in the objects simply adds the selected item to the view model:
 
 [source,java]
 ----
-@ActionSemantics(Of.SAFE)
-@Bulk(AppliesTo.BULK_ONLY)
+@Action(
+    invokeOn=InvokeOn.COLLECTIONS_ONLY
+    semantics=SemanticsOf.SAFE
+)
 public ToDoItemBulkUpdate bulkUpdate() {
-    ToDoItemBulkUpdate bulkUpdate = lookupBulkUpdateViewModel()
-    bulkUpdate.add(this);
-    return bulkUpdate;
+    return lookupBulkUpdateViewModel().add(this);
 }
 private ToDoItemBulkUpdate lookupBulkUpdateViewModel() {
     ToDoItemBulkUpdate bulkUpdate =
-        (ToDoItemBulkUpdate) scratchpad.get("bulkUpdateViewModel");
+        (ToDoItemBulkUpdate) scratchpad.get("bulkUpdateViewModel");     // <1>
     if(bulkUpdate == null) {
-        bulkUpdate = container.newViewModel<ToDoItemBulkUpdate>(new UUID().toString);
-        scratchpad.put("bulkUpdateViewModel", bulkUpdate);
+        bulkUpdate = container.injectServicesInto(new ToDoItemBulkUpdate());
+        scratchpad.put("bulkUpdateViewModel", bulkUpdate);              // <2>
     }
     return bulkUpdate;
 }
-private Scratchpad scratchpad;
-public void injectScratchpad(Scratchpad scratchpad) {
-    this.scratchpad = scratchpad;
-}
+@Inject
+Scratchpad scratchpad;
 ----
+<1> look for the `ToDoItemBulkUpdate` in the scratchpad...
+<2> ... and add one if there isn't one (ie for the first object returned).
 
-If using the Wicket viewer, the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
+If using the xref:_ug_wicket-viewer[Wicket viewer], the `ToDoItemBulkUpdate` view model returned from the last action invoked will be displayed. Thereafter this view model can be used to perform a bulk update of the "enlisted" items.
+
 
 
 
@@ -113,6 +114,9 @@ isis.services-installer=configuration-and-annotation
 ----
 
 then Isis core' implementation of `Scratchpad` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
+
+
 
 
 

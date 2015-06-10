@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `WrapperFactory` service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.  And the role of this wrapper is to simulate the UI.
+The xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`] service is responsible for wrapping a domain object in a dynamic proxy, of the same type as the object being proxied.  And the role of this wrapper is to simulate the UI.
 
 [NOTE]
 ====

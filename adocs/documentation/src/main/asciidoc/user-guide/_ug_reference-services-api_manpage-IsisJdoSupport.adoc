@@ -11,6 +11,8 @@ The following sections discuss the functionality provided by the service, broken
 
 
 
+
+[[_ug_reference-services-api_manpage-IsisJdoSupport_executing-sql]]
 == Executing SQL
 
 You can use the `IsisJdoSupportService` to perform arbitrary SQL SELECTs or UPDATEs:
@@ -55,7 +57,7 @@ As an alternative, consider using DataNucleus' link:http://www.datanucleus.org/p
 
 
 [[_ug_reference-services-api_manpage-IsisJdoSupport_type-safe-jdoql-queries]]
-== Using type-safe JDOQL Queries
+== Type-safe JDOQL Queries
 
 DataNucleus provides an link:http://www.datanucleus.org/products/accessplatform_4_0/jdo/jdoql_typesafe.html[extension to JDO],  so that JDOQL queries can be built up and executed using a set of type-safe classes.
 
@@ -127,12 +129,12 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 
 
 
-
-
+[[_ug_reference-services-api_manpage-IsisJdoSupport_fixture-support]]
 == Fixture support
 
-The `deleteAll(...)` method is provided pretty much exclusively for tearing down fixture data:
+When writing xref:_ug_testing_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:_ug_reference-services-api_manpage-IsisJdoSupport_executing-sql[above].
 
+Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 
 [source,java]
 ----
@@ -143,7 +145,7 @@ public interface IsisJdoSupport {
 }
 ----
 
-
+For example:
 
 [source,java]
 ----
@@ -170,6 +172,8 @@ is temporarily disabled while this method is performed.
 
 
 
+
+[[_ug_reference-services-api_manpage-IsisJdoSupport_reloading-entities]]
 == Reloading entities
 
 An http://www.datanucleus.org/products/datanucleus/jdo/orm/relationships.html[(intentional) limitation] of JDO/DataNucleus is that persisting a child entity (in a 1:n bidirectional relationship) does not cause the parent's collection to be updated.
@@ -178,17 +182,17 @@ An http://www.datanucleus.org/products/datanucleus/jdo/orm/relationships.html[(i
 ----
 public interface IsisJdoSupport {
     @Programmatic
-    <T> T refresh(T domainObject);                              // <1>
+    <T> T refresh(T domainObject);
     @Programmatic
-    void ensureLoaded(Collection<?> collectionOfDomainObjects); // <2>
+    void ensureLoaded(Collection<?> collectionOfDomainObjects);
     ...
 }
 ----
-<1> force a reload of a domain object (using the JDO `PersistenceManager#refresh(...)` API).
-<2> force the loading of a collection of domain objects (using the JDO `PersistenceManager#retrieveAll(...)` API)
 
 
-The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).
+
+The `refresh(T domainObject)` method can be used to reload the parent object (or indeed any object).  Under the covers it uses the JDO `PersistenceManager#refresh(...)` API.
+
 
 For example:
 
@@ -210,8 +214,8 @@ public class OrderContributions {
     IsisJdoSupport isisJdoSupport;
 }
 ----
-<1> flush to database
-<2> reload parent from database
+<1> flush to database, ensuring that the database row corresponding to the `Order` exists in its `order` table.
+<2> reload the parent (customer) from the database, so that its collection of ``Order``s is accurate.
 
 
 [NOTE]
@@ -221,13 +225,17 @@ analogous to `Customer 1<-->* Order`.  Persisting the child `Order` object did n
 the parent ``Customer``'s collection of orders to be updated.  In fact, JDO does not make any
 such guarantee to do so.  Options are therefore either to maintain the collection in code, or to
 refresh the parent.
-
 ====
 
 
+The `ensureLoaded(...)` method allows a collection of domain objects to be loaded from the database in a single hit.  This can be valuable as a performance optimization to avoid multiple roundtrips to the database.  Under the covers it uses the `PersistenceManager#retrieveAll(...)` API.
 
 
-== Using JDO `PersistenceManager` directly
+
+
+
+[[_ug_reference-services-api_manpage-IsisJdoSupport_jdo-persistencemanager]]
+== JDO `PersistenceManager`
 
 The functionality provided by `IsisJdoSupport` focus only on the most common use cases.  If you require more flexibility than this, eg for dynamically constructed queries, then you can use the service to access the underlying JDO `PersistenceManager` API:
 

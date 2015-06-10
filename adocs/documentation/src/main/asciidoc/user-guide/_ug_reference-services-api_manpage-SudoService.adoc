@@ -4,35 +4,40 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-
-= SudoService (1.9.0-SNAPSHOT)
 
 The `SudoService` allows the current user reported by the `DomainObjectContainer` to be temporarily changed to some
-other user. This is valuable during both integration testing (eg if testing a workflow system whereby objects are
-moved from one user to another) and during fixture scripts (eg setting up objects that would normally require several
-users to have acted upon the objects).
+other user. This is useful both for xref:_ug_testing_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:_ug_testing_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+
+
+== API & Implementation
 
 The API provided by the service is:
 
 [source,java]
 ----
 public interface SudoService {
-
+    @Programmatic
     void sudo(String username, final Runnable runnable);
+    @Programmatic
     <T> T sudo(String username, final Callable<T> callable);
+    @Programmatic
     void sudo(String username, List<String> roles, final Runnable runnable);
+    @Programmatic
     <T> T sudo(String username, List<String> roles, final Callable<T> callable);
 }
 ----
 
-which will run the provided block of code (a `Runnable` or a `Callable`) as if the specified username and optionally
-roles being returned by `DomainObjectContainer#getUser()`.
+which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to `DomainObjectContainer#getUser()` will return the specified user (and roles, if specified)
 
-For example, in the https://github.com/isisaddons/isis-app-todoapp[todoapp] (non ASF) the `SudoService` is used to
-set up todo item objects:
+The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.sudo.SudoServiceDefault`)
+
+
+
+
+== Usage
+
+A good example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] which uses the `SudoService` in a fixture script to set up `ToDoItem` objects:
 
 [source,java]
 ----

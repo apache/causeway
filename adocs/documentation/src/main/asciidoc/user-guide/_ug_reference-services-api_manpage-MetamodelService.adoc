@@ -4,8 +4,28 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
+
+The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Isis' internal metamodel.
+
+Currently this is limited to looking up the object type (as specified in xref:_ug_reference-annotations_manpage-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:_ug_reference-services-api_manpage-BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
+
+
+== API & Implementation
+
+The API defined by the service is:
+
+[source,java]
+----
+public interface MetaModelService {
+    @Programmatic
+    Class<?> fromObjectType(final String objectType);   // <1>
+    @Programmatic
+    String toObjectType(final Class<?> domainType);     // <2>
+}
+----
+<1> reverse lookup of a domain class' object type
+<2> lookup of a domain class' object type
 
 
 
