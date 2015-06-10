@@ -87,6 +87,8 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 	       timeUntilNext > 0 then
 	        puts "skipping before regenerating (3 seconds not yet elapsed)"
 	    else
+		# wait 1 further second for any additional edits
+	    	sleep 1
                 cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
                 unless priming then

@@ -4,37 +4,11 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-## Implementation
-
-IMPORTANT: TODO
-
-## Registration
-
-The `EventBusServiceJdo` class provides the default implementation and (as of 1.6.0+) is automatically registered using `@DomainService`.  No further configuration is necessary.
 
 
+The `EventBusService` allows domain objects to emit events to subscribing domain services using an in-memory event bus.
 
-
-The `EventBusService` is a wrapper for a https://code.google.com/p/guava-libraries/[Guava] https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`], allowing arbitrary events to be posted and subscribed to (within the Isis runtime). The primary use case is for decoupling interactions from one module/package/namespace and another.
-
-The framework also provides an implementation of this service (`EventBusServiceJdo`), and this is automatically registered (it is annotated with `@DomainService`).
-
-Domain events are raised automatically whenever any domain object is interacted with. Domain events can also be raised programmatically if required (though there is rarely any need to do so).
-
-Only domain services should be registered as subscribers; not domain entities. Domain services are guaranteed to be instantiated and resident in memory, whereas the same is not true of domain entities.
-
-The typical implementation of a domain service subscriber is to identify the impacted entities, load them using a repository query, and then to delegate to the event to them.
-
-
-
-== Publishing
-
-
-=== Automatically published events
-
-Domain events are raised automatically whenever an object member (property, collection or action) is interacted with. Specifically:
+The primary user of the service is the framework itself, which automatically emit events for xref:_ug_reference-annotations_manpage-Action_domainEvent[actions], xref:_ug_reference-annotations_manpage-Property_domainEvent[properties] and xref:_ug_reference-annotations_manpage-Collection_domainEvent[collections].  Multiple events are generated:
 
 * when an object member is to be viewed, an event is fired; subscribers can veto (meaning that the member is hidden)
 * when an object member is to be enabled, the same event instance is fired; subscribers can veto (meaning that the member is disabled, ie cannot be edited/invoked)
@@ -42,170 +16,132 @@ Domain events are raised automatically whenever an object member (property, coll
 * when an object member is about to be changed, then the same event instance is fired; subscribers can perform pre-execution operations
 * when an object member has been changed, then the same event instance is fired; subscribers can perform post-execution operations
 
-If a subscriber throws an exception in the first three steps, then the interaction is vetoed. If a subscriber throws an exception in the last two steps, then the transaction is aborted.
+If a subscriber throws an exception in the first three steps, then the interaction is vetoed. If a subscriber throws an exception in the last two steps, then the transaction is aborted.  For more on this topic, see xref:_ug_reference-annotations_manpage-Action_domainEvent[`@Action#domainEvent()`], xref:_ug_reference-annotations_manpage-Property_domainEvent[`@Property#domainEvent()`] and xref:_ug_reference-annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`].
 
-The event class that is raised can be specified using an annotation:
+It is also possible for domain objects to programmatically generate domain events.  However the events are published, the primary use case is to decoupling interactions from one module/package/namespace and another.
 
-*
+Two implementations are available, using either link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`], or alternatively using the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus].  It is also possible to plug in a custom implementation.
 
-as of 1.8.0, using:
 
-** `@Property(domainEvent=...)`
-** `@Collection(domainEvent=...)`
-** `@Action(domainEvent=...)`
-*
 
-as of 1.7.0 (but deprecated in 1.8.0), using :
+[[_ug_reference-services-api_manpage-EventBusService_api-and-implementation]]
+== API & Implementation
 
-** `@PropertyInteraction`
-** `@CollectionInteraction`
-** `@ActionInteraction`
-*
-
-as of 1.6.0 (but deprecated in 1.8.0), using :
-
-** `@PostsPropertyChangedEvent`
-** `@PostsCollectionAddedToEvent`/`@PostsCollectionRemovedFromEvent`
-** `@PostsActionInvokedEvent`
-
-For example, in the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) a custom event is raised when an item is completed:
-
-[source,java]
-----
-public static class CompletedEvent extends AbstractActionDomainEvent {
-    private static final long serialVersionUID = 1L;
-    public CompletedEvent(
-            final ToDoItem source,
-            final Identifier identifier,
-            final Object... arguments) {
-        super("completed", source, identifier, arguments);
-    }
-}
-
- @Action(
-         domainEvent =CompletedEvent.class,
-         ...
- )
- public ToDoItem completed() { ... }
-----
-
-Subscribers can therefore subscribe to these subclasses, in effect filtering out only the events that are of interest.
-
-=== Explicitly publishing events
-
-The publishing API defined by `EventBusService` is:
+The API defined by `EventBusService` is:
 
 [source,java]
 ----
 public abstract class EventBusService {
-    public void post(Object event) { ... }
-    ...
-}
-----
-
-where
-
-* `post(Object)` posts the event onto event bus (it is simply a wrapper that delegates to `EventBus#post(Object)`)
-
-== Subscribing
-
-The subscribing API defined by `EventBusService` is:
-
-[source,java]
-----
-public abstract class EventBusService {
-    public void post(Object event) { ... }
-    ...
-}
-----
-
-where:
-* `register(Object)` registers the object with the event bus (it is simply a wrapper that delegates to `EventBus#register(Object)`)
-* `unregister(Object)` unregisters the object with the event bus (it is simply a wrapper that delegates to `EventBus#unregister(Object)`)
-
-The are for domain services to call to register themselves with the event bus. This should be done in the
-
-As of 1.8.0, the `register` and `unregister` methods should be called in the `@PostConstruct` and `@PreDestroy` lifecycle methods:
-
-[source,java]
-----
-@DomainService
-public class MySubscribingDomainService {
-
-    ...
-
     @Programmatic
+    public void post(Object event) { ... }                          // <1>
+    @Programmatic
+    public void register(final Object domainService) { ... }        // <2>
+    @Programmatic
+    public void unregister(final Object domainService) { ... }      // <3>
+}
+----
+<1> posts the event onto event bus
+<2> allows domain services to register themselves.  This should be done in their xref:_ug_reference-annotations_manpage-PostConstruct[`@PostConstruct`] initialization method (for both singleton and xref:_ug_reference-annotations_manpage-RequestScoped[`@RequestScoped`] domain services.
+<3> exists for symmetry, but need never be called (it is in fact deliberately a no-op).
+
+Isis provides a default implementation of the service, `o.a.i.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+
+
+
+
+
+== Registering Subscribers
+
+The `register()` method should be called in the xref:_ug_reference-annotations_manpage-PostConstruct[`@PostConstruct`] lifecycle method.  It is valid and probably the least confusing to readers to also "unregister" in the xref:_ug_reference-annotations_manpage-PreDestroy[`@PreDestroy`] lifecycle method (though as noted xref:_ug_reference-services-api_manpage-EventBusService_api-and-implementation[above], unregistering is actually a no-op).
+
+For example:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class MySubscribingDomainService {
     @PostConstruct
     public void postConstruct() {
         eventBusService.register(this);
     }
-    @Programmatic
     @PreDestroy
     public void preDestroy() {
         eventBusService.unregister(this);
     }
-
-    @javax.inject.Inject
-    private EventBusService eventBusService;
-}
-----
-
-This works for both application-scoped and request-scoped (`@RequestScoped`) domain services.
-
-In 1.7.0, the registration should be done when the `EventBusService` is injected into it:
-
-[source,java]
-----
-@DomainService
-public class MySubscribingDomainService {
-
     ...
-
-    private EventBusService eventBusService;
-    public void injectEventBusService(final EventBusService eventBusService) {
-        this.eventBusService = eventBusService;
-        eventBusService.register(this);
-    }
+    @javax.inject.Inject
+    EventBusService eventBusService;
 }
 ----
 
-=== Callbacks
+This works for both singleton (application-scoped) and also xref:_ug_reference-annotations_manpage-RequestScoped[`@RequestScoped`] domain services.
 
-The actual callbacks of events is done by annotating a method on the class (that is, the usual Guava programming model).
 
-For example, the subscriber in the todoapp for completed todo items would use the following callback:
+
+
+
+== Annotating Members
+
+As discussed in the introduction, the framework will automatically emit domain events for all of the object members (actions, properties or collections) of an object whenever that object is rendered or (more generally) interacted with.
+
+For example:
 
 [source,java]
 ----
-@Programmatic
-@Subscribe
-public void on(final ToDoItem.CompletedEvent ev) { ... }
+public class Customer {
+    @Action
+    public Customer placeOrder(Product product, @ParameterLayout(named="Quantity") int qty) { ... }
+    ...
+}
 ----
 
-As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library. A letter should be sent out detailing any books that they still have out on loan:
+will propagate an instance of the default `o.a.i.applib.services.eventbus.ActionDomainEvent.Default` class.   If using the Guava event bus this can be subscribed to using:
 
-In the `LibraryMember` class, we publish the event:
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class MySubscribingDomainService
+    @Programmatic
+    @com.google.common.eventbus.Subscribe
+    public void on(ActionDomainEvent ev) { ... }
+    ...
+}
+----
+
+or if using Axonframework, the subscriber uses a different annotation:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class MySubscribingDomainService
+    @Programmatic
+    @org.axonframework.eventhandling.annotation.EventHandle
+    public void on(ActionDomainEvent ev) { ... }
+    ...
+}
+----
+
+More commonly though you will probably want to emit domain events of a specific subtype.  As a slightly more interesting example, suppose in a library domain that a `LibraryMember` wants to leave the library. A letter should be sent out detailing any books that they still have out on loan:
+
+In the `LibraryMember` class, we publish the event by way of an annotation:
 
 [source,java]
 ----
 public class LibraryMember {
-    ...
-    @Action(domainEvent=LibraryMemberLeaveEvent.class)
-    public void leave() {
-        ...
-    }
+    @Action(domainEvent=LibraryMemberLeaveEvent.class)  // <1>
+    public void leave() { ... }
     ...
 }
 ----
+<1> `LibraryMemberLeaveEvent` is a subclass of `o.a.i.applib.eventbus.ActionDomainEvent`.  The topic of subclassing is discussed in more detail xref:_ug_reference-services-api_manpage-EventBusService_event-hierarchy[below].
 
-Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it:
+Meanwhile, in the `BookRepository` domain service, we subscribe to the event and act upon it.  For example:
 
 [source,java]
 ----
 public class BookRepository {
-
-    @com.google.common.eventbus.Subscribe
     @Programmatic
+    @com.google.common.eventbus.Subscribe
     public void onLibraryMemberLeaving(LibraryMemberLeaveEvent e) {
         LibraryMember lm = e.getLibraryMember();
         List<Book> lentBooks = findBooksOnLoanFor(lm);
@@ -221,9 +157,205 @@ This design allows the `libraryMember` module to be decoupled from the `book` mo
 
 
 
-== Implementation
+[[_ug_reference-services-api_manpage-EventBusService_event-hierarchy]]
+== Event hierarchy
 
-Isis provides a default implementation of the service, `org.apache.isis.objectstore.jdo.datanucleus.service.eventbus.EventBusServiceJdo`.
+By creating domain event subtypes we can be more semantically precise and in turn providesmore flexibility for subscribers: they can choose whether to be broadly applicable (by subscribing to a superclass) or to be tightly focussed (by subscribing to a subclass).
+
+We recommend that you define event classes at (up to) four scopes:
+
+* at the top "global" scope is the Isis-defined `o.a.i.applib.event.ActionDomainEvent`
+* for the "module" scope, create a static class to represent the module itself, and creating nested classes within
+* for each "class" scope, create a nested static event class in the domain object's class for all of the domain object's actions
+* for each "action" scope, create a nested static event class for that action, inheriting from the "domain object" class.
+
+To put all that into code; at the module level we can define:
+
+[source,java]
+----
+package com.mycompany.modules.libmem;
+...
+public static class LibMemModule {
+    private LibMemModule() {}
+    public abstract static class ActionDomainEvent<S>
+                extends org.apache.isis.applib.event.ActionDomainEvent<S> {
+        private static final long serialVersionUID = 1L;
+        public ActionDomainEvent(
+            final S source,
+            final Identifier identifier,
+            final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+    ...         // <1>
+}
+----
+<1> similar events for properties and collections should also be defined
+
+For the class-level we can define:
+
+[source,java]
+----
+public static class LibraryMember {
+    public abstract static class ActionDomainEvent extends LibMemModule.ActionDomainEvent<LibraryMember> {
+        private static final long serialVersionUID = 1L;
+        public ActionDomainEvent(
+            final LibraryMember source,
+            final Identifier identifier,
+            final Object... arguments) {
+            super(source, identifier, arguments);
+        }
+    }
+    ...         // <1>
+}
+----
+<1> similar events for properties and collections should also be defined
+
+and finally at the action level we can define:
+
+[source,java]
+----
+public class LibraryMember {
+    ...
+    public static class LeaveEvent extends LibraryMember.ActionDomainEvent {
+        private static final long serialVersionUID = 1L;
+        public PlaceOrderEvent(
+            final Customer source,
+            final Identifier identifier,
+            final Object... arguments) {
+        super(source, identifier, arguments);
+        }
+    }
+    @Action(domainEvent=LeaveEvent.class)
+    public void leave() { ... }
+    ...
+}
+----
+
+The subscriber can subscribe either to the general superclass (as before), or to any of the classes in the hierarchy.
+
+
+
+
+
+== Programmatic posting
+
+To programmatically post an event, simply call `#post()`.
+
+The `LibraryMember` example described above could for example be rewritten into:
+
+[source,java]
+----
+public class LibraryMember {
+    ...
+    public void leave() {
+        ...
+        eventBusService.post(new LibraryMember.LeaveEvent(...));    // <1>
+    }
+    ...
+}
+----
+<1> `LibraryMember.LeaveEvent` could be _any_ class, not just a subclass of `o.a.i.applib.event.ActionDomainEvent`.
+
+In practice we suspect there will be few cases where the programmatic approach is required rather than the declarative approach afforded by xref:_ug_reference-annotations_manpage-Action_domainEvent[`@Action#domainEvent()`] et al.
+
+
+
+== Using `WrapperFactory`
+
+An alternative way to cause events to be posted is through the xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`].  This is useful when you wish to enforce a (lack-of-) trust boundary between the caller and the callee.
+
+For example, suppose that `Customer#placeOrder(...)` emits a `PlaceOrderEvent`, which is subscribed to by a `ReserveStockSubscriber`.  This subscriber in turn calls `StockManagementService#reserveStock(...)`.  Any business rules on `#reserveStock(...)` should be enforced.
+
+In the `ReserveStockSubscriber`, we therefore use the `WrapperFactory`:
+
+[source,java]
+----
+@DomainService(nature=NatureOfService.DOMAIN)
+public class ReserveStockSubscriber {
+    @Programmatic
+    @Subscribe
+    public void on(Customer.PlaceOrderEvent ev) {
+        wrapperFactory.wrap(stockManagementService)
+                      .reserveStock(ev.getProduct(), ev.getQuantity());
+    }
+    ...
+    @Inject
+    StockManagementService stockManagementService;
+    @Inject
+    WrapperFactory wrapperFactory;
+}
+----
+
+
+== Implementation SPI
+
+The implementation of `EventBusService` provided by Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:_ug_reference-services-api_manpage-EventBusService_Configuration[below]).
+
+[NOTE]
+.Guava vs Axon, which to use?
+====
+Guava actually queues up events; they are not guaranteed to be dispatched immediately.  This generally is not problem, but can be for cases where the subscriber may in turn want to post its own events (using xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`]).
+
+The Axon `SimpleEventBus`-based implementation on the other hand is fully synchronous; events are dispatched as soon as they are posted.  This works well in all scenarios (that we have tested).
+====
+
+
+It is also possible to use some other implementation.
+
+[source,java]
+----
+public interface EventBusImplementation {
+    void register(Object domainService);
+    void unregister(Object domainService);
+    void post(Object event);
+}
+----
+
+As is probably obvious, the `EventBusService` just delegates down to these method calls when its own similarly named methods are called.
+
+If you do provide your own implementation of this SPI, be aware that your subscribers will need to use whatever convention is required (eg different annotations) such that the events are correctly routed through to your subscribers.
+
+
+
+[[_ug_reference-services-api_manpage-EventBusService_Configuration]]
+== Configuration
+
+The implementation of `EventBusService` provided by Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
+
+To specify which, add the xref:_ug_runtime_configuring-core[configuration property] `isis.services.eventbus.implementation`:
+
+[source,ini]
+----
+isis.services.eventbus.implementation=guava
+----
+
+or
+
+[source,ini]
+----
+isis.services.eventbus.implementation=axon
+----
+
+If you have written your own implementation of the `EventBusServiceImplementation` SPI, then specify instead its fully-qualified class name:
+
+[source,ini]
+----
+isis.services.eventbus.implementation=com.mycompany.isis.MyEventBusServiceImplementation
+----
+
+
+
+In addition, there is one further configuration property, whether to allow "late registration":
+
+[source,ini]
+----
+isis.services.eventbus.allowLateRegistration=false
+----
+
+Late registration refers to the idea that a domain service can register itself with the `EventBusService` after events have been posted.  Since domain services are set up at boot time, this almost certainly constitutes a bug in the code and so by default late registration is _not_ allowed.  Setting the above property to `true` disables this check.
+
+
 
 
 
@@ -239,8 +371,11 @@ isis.services-installer=configuration-and-annotation
 then Isis core' implementation of `EventBusService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
+
+
+
 == Related Services
 
-The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propogation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
 The xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:_ug_reference-annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`]).

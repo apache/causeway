@@ -82,3 +82,8 @@ public class ToDoItemRepositoryImplUsingJdoql implements ToDoItemRepositoryImpl 
 Other JDOQL named queries (not shown) follow the exact same pattern.
 
 With respect to the other query APIs, the varargs parameters are optional, but allow for (client-side and managed) paging.  The first parameter is the `start` (0-based, the second is the `count`.
+
+[TIP]
+====
+It is also possible to query using DataNucleus' type-safe query API.  For more details, see xref:_ug_reference-services-api_manpage-IsisJdoSupport[`IsisJdoSupport`].
+====

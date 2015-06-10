@@ -142,6 +142,19 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 
+| `isis.services.` +
+`eventbus.implementation` +
+| `guava`, `axon`, FQCN (`_guava_`)
+|which implementation to use as the underlying event bus.
+
+| `isis.services.` +
+`eventbus.allowLateRegistration` +
+| `true`, `false`, (`_false_`)
+|whether a domain service can register after any events have posted. +
+
+Since this almost certainly constitutes a bug in application code, by default this is disallowed.
+
+
 |`isis.services.` +
 `publish.objects`
 | `all`, `none` (`all`)
