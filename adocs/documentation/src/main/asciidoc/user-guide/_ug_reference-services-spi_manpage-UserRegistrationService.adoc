@@ -8,21 +8,15 @@ IMPORTANT: TODO
 
 
 
-Title: User Registration Service (1.8.0)
+[NOTE]
+====
+For further details on the user registration feature (as supported by the Wicket viewer), see xref:_ug_wicket-viewer_features_user-registration[here].
+====
 
-The user registration service API provides the ability for users to sign-up to access an application by providing a valid email address. The Wicket viewer will check whether an implementation of this service (and also the xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls this service in order to create an account for them, and then logs the user on.
 
-The user registration API also includes the ability to reset password, again by sending a verification email to the provided email address.
 
-See xref:_ug_wicket-viewer_features_user-registration[here] for more on the Wicket viewer's support.
+== SPI
 
-Domain objects may also use this service; it will be injected into domain object or other domain services in the usual way. (That said, we expect that such use cases will be comparatively rare; the primary use case is for the Wicket viewer's sign-up page).
-
-The core Isis framework itself defines only an API; there is no default implementation. Rather, the implementation will depend on the security mechanism being used. That said, if you have configured your app to use the http://github.com/isisaddons/isis-module-security[Isis addons security module], then note that the security module does provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the user registration service. You will need to extend that service and provide implementation for the two abstract methods - `#getInitialRole()` and `#getAdditionalInitialRoles()`. This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application. Without any role such user will be able only to see/use the logout link of the application.
-Note: do not forget to register this service in isis.properties!
-An example of such implementation can be seen at isis-module-security's https://github.com/isisaddons/isis-module-security/blob/master/webapp/src/main/java/org/isisaddons/module/security/webapp/AppUserRegistrationService.java[demo application].
-
-== API
 
 The API for the service is:
 
@@ -50,6 +44,46 @@ where:
 * `emailExists()` checks if there is already a user with the specified email address
 * `registerUser(...)` creates the user, with specified password and email address. The username nor email address must be unique (not being used by an existing user)
 * `updatePasswordByEmail()` allows the user to reset their password
+
+
+== Implementation
+
+
+== Usage
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then ...
+
+
+
+
+== Related Services
+
+
+
+The user registration service API provides the ability for users to sign-up to access an application by providing a valid email address. The Wicket viewer will check whether an implementation of this service (and also the xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent (using the aforementioned `EmailNotificationService`) which includes a link back to the running application; this allows the user then to complete their registration process (choose user name, password and so on). When the user has provided the additional details, the Wicket viewer calls this service in order to create an account for them, and then logs the user on.
+
+The user registration API also includes the ability to reset password, again by sending a verification email to the provided email address.
+
+See xref:_ug_wicket-viewer_features_user-registration[here] for more on the Wicket viewer's support.
+
+Domain objects may also use this service; it will be injected into domain object or other domain services in the usual way. (That said, we expect that such use cases will be comparatively rare; the primary use case is for the Wicket viewer's sign-up page).
+
+The core Isis framework itself defines only an API; there is no default implementation. Rather, the implementation will depend on the security mechanism being used. That said, if you have configured your app to use the http://github.com/isisaddons/isis-module-security[Isis addons security module], then note that the security module does provide an abstract implementation (`SecurityModuleAppUserRegistrationServiceAbstract`) of the user registration service. You will need to extend that service and provide implementation for the two abstract methods - `#getInitialRole()` and `#getAdditionalInitialRoles()`. This is needed so that the self-registered users are assigned automatically to your application role(s) and be able to use the application. Without any role such user will be able only to see/use the logout link of the application.
+Note: do not forget to register this service in isis.properties!
+An example of such implementation can be seen at isis-module-security's https://github.com/isisaddons/isis-module-security/blob/master/webapp/src/main/java/org/isisaddons/module/security/webapp/AppUserRegistrationService.java[demo application].
+
+== API
+
 
 == Implementation
 

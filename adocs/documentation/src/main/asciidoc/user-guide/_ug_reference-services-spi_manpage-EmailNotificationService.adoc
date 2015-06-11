@@ -4,53 +4,50 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
-Title: Email Notification Service (1.8.0)
+The `EmailNotificationService` supports the xref:_ug_wicket-viewer_features_user-registration[user registration] (self sign-up) features of the xref:_ug_wicket-viewer[Wicket viewer] whereby a user can sign-up to access an application by providing a valid email address.
 
-The email notification service supports the user registration process whereby a user can sign-up to access an application by providing a valid email address. The Wicket viewer will check whether an implementation of this service (and also the xref:_ug_reference-services-spi_manpage-UserRegistrationService[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent using this service; the email includes a link back to the running application. The user then completes the registration process (choosing a user name, password and so on) and the Wicket viewer creates an account for them (using the aforementioned `UserRegistrationService`).
+The Wicket viewer will check whether an implementation of this service (and also the xref:_ug_reference-services-spi_manpage-UserRegistrationService[`UserRegistrationService`]) is available, and if so will (unless configured not to) expose a sign-up page where the user enters their email address. A verification email is sent using this service; the email includes a link back to the running application. The user then completes the registration process (choosing a user name, password and so on) and the Wicket viewer creates an account for them (using the aforementioned `UserRegistrationService`).
 
-The framework provides both an API and a default implementation of this service. The implementation depends in turn on the xref:_ug_reference-services-api_manpage-EmailService[`EmailService`].
+The role of this service in all of this is to format and send out emails for the initial registration, or for password resets.
 
-== API
+The default implementation of this service uses the xref:_ug_reference-services-api_manpage-EmailService[`EmailService`], which must be configured in order for user registration to be enabled.
 
-The API for the service is:
+
+== SPI
+
+The SPI defined by this service is:
 
 [source,java]
 ----
 public interface EmailNotificationService extends Serializable {
-
-    @PostConstruct
     @Programmatic
-    public void init() ;
-
+    boolean send(EmailRegistrationEvent ev);    // <1>
     @Programmatic
-    boolean send(EmailRegistrationEvent ev);
-
+    boolean send(PasswordResetEvent ev);        // <2>
     @Programmatic
-    boolean send(PasswordResetEvent ev);
-
-    @Programmatic
-    boolean isConfigured();
+    boolean isConfigured();                     // <3>
 }
 ----
+<1> sends an email to verify an email address as part of the initial user registration
+<2> sends an email to reset a password for an already-registered user
+<3> determines whether the implementation was configured and initialized correctly
 
-where:
+If `isConfigured()` returns false then it is _not_ valid to call `send(...)` (and doing so will result in an `IllegalStateException` being thrown.
 
-* `init()` is always called by the framework, and allows the implementation to read configuration properties and initialize itself
-* `send(...)` is the API to send an email either to verify an email (as part of the initial user registration) or to reset a password for an already-registered user
-* `isConfigured()` determines whether the implementation was configured and initialized correctly.
 
-If `isConfigured()` returns false then it is NOT valid to call `send(...)` (and doing so will result in an `IllegalStateException` being thrown.
+== Implementation
 
-== Implementation &amp; Configuration
+The framework provides a default implementation, `o.a.i.core.runtime.services.userreg.EmailNotificationServiceDefault` that constructs the emails to send.
 
-The framework provides a default implementation (`EmailNotificationServiceDefault`) that delegates to the xref:_ug_reference-services-api_manpage-EmailService[`EmailService`] to send an (HTML) message. As such, it requires that the email service has been configured.
+
+
+=== Alternative Implementations
+
+The text of these email templates is hard-coded as resources, in other words baked into the core jar files.  If you need to use different text then you can of course always write and register your own implementation to be used instead of Isis' default.
 
 If you have configured an alternative email service implementation, it should process the message body as HTML.
-
-== Alternative Implementations
 
 If you wish to write an alternative implementation of this service, note that (unlike most Isis domain services) the implementation is also instantiated and injected by Google Guice. This is because `EmailNotificationService` is used as part of the xref:_ug_wicket-viewer_features_user-registration[user registration] functionality and is used by Wicket pages that are accessed outside of the usual Isis runtime.
 
@@ -61,12 +58,23 @@ This implies a couple of additional constraints:
 
 To ensure that your alternative implementation takes the place of the default implementation, register it explicitly in `isis.properties`.
 
-== Register the Service
 
-If using the default implementation of the `EmailService` then there is nothing to do because it is automatically registered (it is annotated with `@DomainService`).
 
-If you have written an alternative implementation, then register your implementation in `isis.properties` under the "isis.services" key.
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then Isis' default implementation of `EmailNotificationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
 
 == Related Services
 
-The default implementation of the email service depends upon the xref:_ug_reference-services-api_manpage-EmailService[`EmailService`].
+As noted elsewhere, the default implementation of this service uses xref:_ug_reference-services-api_manpage-EmailService[`EmailService`].  This service has no specific configuration properties but does require that the `EmailService` has been configured.
+
+Conversely, this service is used by (Isis' default implementation of) xref:_ug_reference-services-spi_manpage-UserRegistrationService[`UserRegistrationService`].
+

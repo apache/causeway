@@ -117,7 +117,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis core' implementation of `QueryResultsCache` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Isis' core implementation of `QueryResultsCache` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 

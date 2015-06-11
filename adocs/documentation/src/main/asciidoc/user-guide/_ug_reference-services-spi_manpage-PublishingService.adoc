@@ -4,59 +4,31 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
-== Isis Addons Implementation
-
-For 1.7.0+, see the http://github.com/isisaddons/isis-module-publishing[Isis addons' Publishing module] (non-ASF).
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
 
 
 
-The Publishing Service enables Isis to publish both changes to domain objects, and also action invocations to third parties. A typical use case is to publish onto a pub/sub bus such as http://servicemix.apache.org/[ServiceMix] or http://activemq.apache.org/[ActiveMQ] to keep other systems up to date.
+== SPI
 
-Publishing requires at minimum two things:
-
-* domain classes annotated with `PublishedAction` or `PublishedObject`
-
-The former causes any invocations of an action to be published, the latter causes any changes to the object to be published. You can annotate with either or both.
-
-* an implementation of the `org.apache.isis.applib.services.publish.PublishingService` interface must be registered as a domain services
-
-This is done in the usual way, registering the service in the `isis.properties` config file
-
-Over and above this, the service does provide considerable flexibility for fine-tuning the serialized form and the contents (payload) of the event.
-
-
-
-
-
-
-
-== Annotating the Domain Model
-
-To indicate that an action should be published, use the `PublishedAction` annotation. For example:
-
-Similarly, to indicate that any changes to an object should be published, use the `PublishedObject` annotation:
-
-Either or both of these annotations can be used.
-
-As described further down in this article, it is possible to fine-tune the payload. However, simply using the above annotations will suffice in many cases.
-
-
-
-
-== API
-
-The `PublishingService` interface is:
+The SPI defined by the service is:
 
 [source,java]
 ----
 public interface PublishingService {
-    public void publish(EventMetadata metadata, EventPayload payload);
-    void setEventSerializer(EventSerializer eventSerializer);
+    public void publish(
+        EventMetadata metadata,                                 // <1>
+        EventPayload payload);                                  // <2>
+    @Deprecated
+    @Programmatic
+    void setEventSerializer(EventSerializer eventSerializer);   // <3>
 }
 ----
+<1> standard metadata about the event, such as the user, the xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
+<2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
+<3> injects in the xref:_ug_reference-services-spi_manpage-EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
+
 
 Typically implementations will use the injected `EventSerializer` to convert the metadata and payload into a form to be published:
 
@@ -67,75 +39,71 @@ public interface EventSerializer {
 }
 ----
 
-The serialized form returned by `EventSerializer` must be in a form that the `PublishingService` implementation is able
-to handle. Strings are a good lowest common denominator, but (if custom implementations of both `EventSerializer` and
-`PublishingService` were in use) then it might also be some other type, for example an
-`org.w3c.dom.Document` or an `org.json.JSONObject` might be returned instead.
+The serialized form returned by `EventSerializer` must be in a form that the `PublishingService` implementation is able to handle. Strings are a good lowest common denominator, but (if custom implementations of both `EventSerializer` and `PublishingService` were in use) then it might also be some other type, for example an `org.w3c.dom.Document` or an `org.json.JSONObject` might be returned instead.
+
+
+
+== Implementation
+
+The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.org.apache.isis.applib.services.publish`) that persists each event as a `PublishedEvent` entity.  This holds the serialized form of the event metadata and payload as translated into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`, namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
+
+The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".  The intention here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.  When ``PublishedEvent``s are persisted initially they always take the value "QUEUED".
 
 
 
 
-=== Fine-tuning the payload
+== Usage
 
-The `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the
-action invocation provides details of the action arguments and result (if any) of that action. However, the payload
-does not (by default) include the new state of these objects. It is therefore the responsibility of the subscriber to
-call back to Isis to determine any information that has not been published.
+To indicate that an action invocation should be published, annotate it with the xref:_ug_reference-annotations_manpage-Action_publishing[`@Action#publishing()`] annotation.
 
-Doing this is comparatively straightforward if using the Restful Object serializer and Restful Objects viewer; the
-JSON provided includes hrefs to the objects.
+To indicate that a changed object should be published is to annotate it with the xref:_ug_reference-annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
 
-In some circumstances, then, it may make more sense to eagerly "push" information about the change to the subscriber
-by including that state within the payload.
 
-To accomplish this, an implementation of a "`PayloadFactory`" must be specified in the annotation. For actions,
-implement `@PublishedAction.PayloadFactory`:
+It is also possible to "fine-tune" the `EventPayload` using the `#publishingFactory()` attribute (for both annotations).  By default the `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the action invocation provides details of the action arguments and result (if any) of that action.  However, the payload does not (by default) include any information about the new state of these objects. It is therefore the responsibility of the subscriber to call back to Isis to determine any information that has not been published.
 
+Although the representations (if using the Restful Object serializer and Restful Objects viewer) does include hrefs for the objects, this nevertheless requires an additional network call to obtain this information).
+
+In some circumstances, then, it may make more sense to eagerly "push" information about the change to the subscriber by including that state within the payload.
+
+To accomplish this, an implementation of a "`PayloadFactory`" must be specified in the annotation.
+
+For actions, we implement the `PublishingPayloadFactoryForAction` (in `o.a.i.applib.annotation`):
 
 [source,java]
 ----
-public @interface PublishedAction {
-    public interface PayloadFactory {
-      @Programmatic
-      public EventPayload payloadFor(
-          Identifier actionIdentifier,
-          Object target, List<Object> arguments, Object result);
-    }
-    Class<? extends PayloadFactory> value()  default PayloadFactory.class;
+public interface PublishingPayloadFactoryForAction {
+    @Programmatic
+    public EventPayload payloadFor(
+            Identifier actionIdentifier,
+            Object target,
+            List<Object> arguments,
+            Object result);
+}
 }
 ----
+The `EventPayloadForActionInvocation` abstract class (in the Isis applib) should be used as the base class for the object instance returned from `payLoadFor(...)`.
 
-The `EventPayloadForActionInvocation` abstract class (in the Isis applib) can optionally be used as the base class for
-the object instance returned from `payLoadFor(...)`.
-
-For objects, the interface to implement is `@PublishedObject.PayloadFactory`:
+For objects, the interface to implement is `PublishingPayloadFactoryForObject`:
 
 [source,java]
 ----
-public @interface PublishedObject {
+public interface PublishingPayloadFactoryForObject {
 
-    public enum ChangeKind {
-        CREATE,
-        UPDATE,
-        DELETE
-    }
-
-    public interface PayloadFactory {
-      @Programmatic
-      public EventPayload payloadFor(Object changedObject, ChangeKind kind);
-    }
-    Class<? extends PayloadFactory> value() default PayloadFactory.class;
+    @Programmatic
+    public EventPayload payloadFor(
+        Object changedObject,
+        PublishingChangeKind publishingChangeKind);     // <1>
 }
 ----
+<1> an enum taking the values `CREATE`, `UPDATE`, `DELETE`
 
-Similarly, the `EventPayloadForObjectChanged` abstract class may be used as the base class for the object returned from
-`payLoadFor(...)`.
+Similarly, the `EventPayloadForObjectChanged` abstract class should be used as the base class for the object returned from `payLoadFor(...)`.
 
-For example, the following will eagerly include the `ToDoItem`'s `description` property whenever it is changed:
+For example, the following will eagerly include a `ToDoItem`'s `description` property whenever it is changed:
 
 [source,java]
 ----
-@PublishedObject(ToDoItemPayloadFactory.class)
+@DomainObject(publishingPayloadFactory=ToDoItemPayloadFactory.class)
 public class ToDoItem {
     ...
 }
@@ -145,21 +113,15 @@ where `ToDoItemPayloadFactory` is defined as:
 
 [source,java]
 ----
-public class ToDoItemChangedPayloadFactory implements PayloadFactory {
+public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryForObject {
     public static class ToDoItemPayload
         extends EventPayloadForObjectChanged<ToDoItem> {
-
-      public ToDoItemPayload(ToDoItem changed) {
-          super(changed);
-      }
-
-      public String getDescription() {
-          return getChanged().getDescription();
-      }
+      public ToDoItemPayload(ToDoItem changed) { super(changed); }
+      public String getDescription() { return getChanged().getDescription(); }
     }
     @Override
-    public EventPayload payloadFor(Object changedObject, ChangeKind kind) {
-      return new ToDoItemPayload((ToDoItem) changedObject);
+    public EventPayload payloadFor(Object changedObject, PublishingChangeKind kind) {
+        return new ToDoItemPayload((ToDoItem) changedObject);
     }
 }
 ----
@@ -167,78 +129,17 @@ public class ToDoItemChangedPayloadFactory implements PayloadFactory {
 
 
 
-== Default Implementations
+== Registering the Services
 
-A simple implementation of `PublishingService` (which must be configured as a domain service) is available; it simply writes to stderr.
-
-The implementation is as follows:
-
-[source,java]
-----
-public interface PublishingService {
-...
-    public static class Stderr implements PublishingService {
-        private EventSerializer eventSerializer = new EventSerializer.Simple();
-        @Programmatic
-        @Override
-        public void publish(EventMetadata metadata, EventPayload payload) {
-            Object serializedEvent = eventSerializer.serialize(metadata, payload);
-            System.err.println(serializedEvent);
-        }
-
-        @Override
-        public void setEventSerializer(EventSerializer eventSerializer) {
-            this.eventSerializer = eventSerializer;
-        }
-    }
-    ...
-}
-----
-
-As can be seen, the above implementation in turn uses a default implementation of `EventSerializer`, which simply concatenates the metadata and payload together into a single string:
-
-[source,java]
-----
-public interface EventSerializer {
-    ...
-    public static class Simple implements EventSerializer {
-        @Programmatic
-        @Override
-        public Object serialize(EventMetadata metadata, EventPayload payload) {
-            return "PUBLISHED: \n    metadata: " +
-                    metadata.getGuid() + ":" +
-                    metadata.getUser() + ":" +
-                    metadata.getTimestamp() + ":" +
-                    payloads:\n" + payload.toString();
-        }
-    }
-    ...
-}
-----
-
-The default `PublishingService` (or indeed any implementation) can be configured to run with a different `EventSerializer` by configuring the serializer implementation in the `isis.properties` file.
-
-
-
-=== Configuration
-
-To configure the above, add the following to `isis.properties`:
+Assuming that the `configuration-and-annotation` services installer is configured:
 
 [source,ini]
 ----
-isis.services=...,\
-              org.apache.isis.applib.services.publish.PublishingService$StdErr,\
-              ...
+isis.services-installer=configuration-and-annotation
 ----
 
+then adding the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module to the classpath will automatically register the `PublishingService` implementation (and also the module's `RestfulObjectsSpecEventSerializer` implementation).
 
-
-
-== Alternative Implementations
-
-An alternative implementation of the `PublishingService` is provided by the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module. This implementation persists the events to a table.
-
-It also provides an implementation of the `EventSerializer` that (using API exposed by the xref:_ug_restfulobjects-viewer[RestfulObjects viewer] serializes the payload using the conventions of the link:http://restfulobjects.org[Restful Objects spec].
 
 
 
@@ -248,12 +149,7 @@ The `PublishingService` is intended for coarse-grained publish/subscribe for sys
 
 The xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-
-
-
-== Third-party integrations
-
-Dan Haywood's https://github.com/danhaywood/camel-isis-pubsubjdo[camel-isis-pubsubjdo] project up on github shows how to poll and process the persisted `PublishedEvent` table using http://camel.apache.org[Apache Camel].
+All three of these services collaborate implicitly by way of the xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
 
 
 
@@ -262,6 +158,6 @@ Dan Haywood's https://github.com/danhaywood/camel-isis-pubsubjdo[camel-isis-pubs
 
 The following class diagram shows how the above components fit together:
 
-![](images/yuml.me-23db58a4.png)
+image::{_imagesdir}reference-services-spi/PublishingService/yuml.me-23db58a4.png[width="800px",link="{_imagesdir}reference-services-spi/PublishingService/yuml.me-23db58a4.png"]
 
-This yuml.me diagram was generated at http://yuml.me/edit/23db58a4[yuml.me] using the following description:
+This yuml.me diagram was generated at http://yuml.me/edit/23db58a4[yuml.me].

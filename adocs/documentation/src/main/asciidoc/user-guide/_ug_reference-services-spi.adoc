@@ -7,32 +7,30 @@
 
 Apache Isis includes an extensive number of domain services for your domain objects to use; these are listed in xref:_ug_reference-services-api[Reference: Domain Services (API)] chapter.
 
-However, other domain services constitute an SPI; if present they are used by Isis itself rather than by your domain objects.  But some of the services interfaces defined in the applib are intended to be used (primarily) not by your domain objects but instead by Isis itself.
+There are other domain services that constitute not an API but an SPI; if present they are used by Isis itself rather than by your domain objects.  A good example of this is the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] service; if an implementation is present then Isis will call that service in order to record audit log entries.  If no implementation is available then Isis will carry on regardless.
 
-A good example of this is the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService3`] service; if an implementation is present then Isis will call that service in order to record audit log entries.  If no implementation is available then Isis will carry on regardless.
+Some domain services can be considered both API and SPI; a good example is the xref:_ug_reference-services-api_manpage-EmailService[`EmailService`] that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the xref:_ug_wicket-viewer_features_user-registration[user registration] functionality supported by the xref:_ug_wicket-viewer[Wicket viewer].   The same is true of the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events for xref:_ug_reference-annotations_manpage-Action_domainEvent[`@Action#domainEvent()`] etc.
 
-Some domain services can be considered both API and SPI; a good example is the `EmailService` that is of direct use for domain objects wishing to send out emails, but is also used by the framework to support the user registration functionality supported by the xref:_ug_wicket-viewer[Wicket viewer].   The same is true of the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`]; this can be used by domain objects to broadcast arbitrary events, but is also used by the framework to automatically emit events eg for `@Action(domainEvent=...)`.  For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only the strictly SPI services.
+For these hybrid services we have categorized the service as an "API" service.  This chapter therefore contains only the strictly SPI services.
 
-
-== Applib SPIs
 
 The table below lists the SPIs that are defined in the Isis applib (`o.a.i.core:isis-core-applib` module).
 
 
-.Domain Services
+.Applib SPI Services
 [cols="2,4a,1,1", options="header"]
 |===
 
 
-|API
+|SPI
 |Description
 |Implementation
 |Notes
 
 
-|<<__code_auditingservice3_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-AuditingService[`o.a.i.applib.` +
 `services.audit` +
-`AuditingService3`>>
+`AuditingService3`]
 |Create an audit record for every changed property of every changed object within a transaction.
 |`AuditingService` +
 ``o.ia.m.audit`` +
@@ -43,9 +41,9 @@ The table below lists the SPIs that are defined in the Isis applib (`o.a.i.core:
 `AuditingService-` +
 `Repository`
 
-|<<__code_backgroundcommandservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`o.a.i.applib.` +
 `services.background` +
-`BackgroundCommandService`>>
+`BackgroundCommandService`]
 |Persisted a memento of an action invocation such that it can be executed asynchronously ("in the background") eg by a scheduler.
 |`BackgroundCommandServiceJdo` +
 ``o.ia.m.command`` +
@@ -57,9 +55,9 @@ The table below lists the SPIs that are defined in the Isis applib (`o.a.i.core:
 `JdoRepository`
 
 
-|<<__code_classdiscoveryservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-ClassDiscoveryService[`o.a.i.applib.` +
 `services.classdiscovery` +
-`ClassDiscoveryService`>>
+`ClassDiscoveryService`]
 |Mechanism to locate (from the classpath) classes with a specific annotation (eg xref:_ug_reference-annotations_manpage-DomainService[`@DomainService`])
 
 Subtypes of a given type (eg xref:_ug_reference-classes_super_manpage-FixtureScript[`FixtureScript`]).
@@ -70,9 +68,9 @@ Subtypes of a given type (eg xref:_ug_reference-classes_super_manpage-FixtureScr
 |requires `org.reflections:reflections` as Maven dependency
 
 
-|<<__code_commandservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-CommandService[`o.a.i.applib.` +
 `services.command.spi` +
-`CommandService`>>
+`CommandService`]
 |Service to act as a factory and repository (create and save) of command instances, ie representations of an action invocation.  Used for command/auditing and background services.
 |`CommandServiceJdo` +
 ``o.ia.m.command`` +
@@ -84,9 +82,9 @@ Subtypes of a given type (eg xref:_ug_reference-classes_super_manpage-FixtureScr
 `JdoRepository`
 
 
-|<<__code_emailnotificationservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-EmailNotificationService[`o.a.i.applib.` +
 `services.userreg` +
-`EmailNotificationService`>>
+`EmailNotificationService`]
 |Notify a user during xref:_ug_reference-services-spi_manpage-UserRegistrationService[self-registration] of users.
 |`EmailNotificationService-` +
 `Default` +
@@ -95,9 +93,9 @@ Subtypes of a given type (eg xref:_ug_reference-classes_super_manpage-FixtureScr
 |depends on: +
 a configured `EmailService`
 
-|<<__code_eventserializer_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-EventSerializer[`o.a.i.applib.` +
 `services.publish` +
-`EventSerializer`>>
+`EventSerializer`]
 |Creates a representation of either an action invocation or a changed object being published through the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
 |`RestfulObjects-` +
 `SpecEventSerializer` +
@@ -106,9 +104,9 @@ a configured `EmailService`
 |
 
 
-|<<__code_exceptionrecognizer_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-ExceptionRecognizer[`o.a.i.applib.` +
 `services.exceprecog` +
-`ExceptionRecognizer`>>
+`ExceptionRecognizer2`]
 |Convert certain exceptions (eg foreign or unique key violation in the database) into a format that can be rendered to the end-user.
 |`ExceptionRecognizer-` +
 `CompositeFor-` +
@@ -118,18 +116,18 @@ a configured `EmailService`
 |Extensible using composite pattern if required
 
 
-|<<__code_localeprovider_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-LocaleProvider[`o.a.i.applib.` +
 `services.i18n` +
-`LocaleProvider`>>
+`LocaleProvider`]
 |Request-scoped service to return the locale of the current user, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`].
 |`LocaleProviderWicket` +
 ``o.a.i.viewer`` +
 ``isis-viewer-wicket-impl``
 |
 
-|<<__code_publishingservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-PublishingService[`o.a.i.applib.` +
 `services.publish` +
-`PublishingService`>>
+`PublishingService`]
 |Publish any action invocations and changed objects, typically for interchange with an external system in a different bounded context.
 |`PublishingService` +
 ``o.ia.m.publishing`` +
@@ -143,9 +141,9 @@ depends on: +
 `EventSerializer`
 
 
-|<<__code_translationservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-TranslationService[`o.a.i.applib.` +
 `services.i18n` +
-`TranslationService`>>
+`TranslationService`]
 |Translate an app's UI, messages and exceptions for the current user (as per the locale provided by xref:_ug_reference-services-spi_manpage-LocaleProvider[`LocalProvider`].
 |`TranslationServicePo` +
 ``o.a.i.core`` +
@@ -155,9 +153,9 @@ depends on: +
 `TranslationsResolver`, `LocaleProvider`
 
 
-|<<__code_translationsresolver_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-TranslationsResolver[`o.a.i.applib.` +
 `services.i18n` +
-`TranslationsResolver`>>
+`TranslationsResolver`]
 |Obtain translations for a particuar phrase and locale, in support of i18n (ie so that the app's UI, messages and exceptions can be translated to the required locale by the xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`]
 |`TranslationsResolverWicket` +
 ``o.a.i.viewer`` +
@@ -165,16 +163,16 @@ depends on: +
 |
 
 
-|<<__code_userprofileservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-UserProfileService[`o.a.i.applib.` +
 `services.userprof` +
-`UserProfileService`>>
+`UserProfileService`]
 |Obtain an alternative (usually enriched/customized) name for the current user, to render in the UI.
 |
-|SPI only
+|
 
-|<<__code_userregistrationservice_code, `o.a.i.applib.` +
+|xref:_ug_reference-services-spi_manpage-UserRegistrationService[`o.a.i.applib.` +
 `services.userreg` +
-`UserRegistrationService`>>
+`UserRegistrationService`]
 |Create a new user account with the configured security mechanism.
 |`SecurityModule-` +
 `AppUserRegistrationService` +
@@ -198,9 +196,7 @@ Where an implementation is available (on the classpath) then it is always regist
 
 
 
-== "Internal" SPIs
-
-These domain service definitions depend on the internals of the framework.
+There are also some "internal" SPI services whose definitions depend on the internals of the framework (rather than the applib).
 
 [WARNING]
 ====
@@ -209,7 +205,7 @@ We do not guarantee that link:http://semver.org[semantic versioning] will be hon
 
 
 
-.Semi-public SPI
+."Internal" SPI Services
 [cols="3,3,2,2a", options="header"]
 |===
 
@@ -220,16 +216,16 @@ Impl'n (g: a:)
 |Notes
 
 
-|<<__code_contentmappingservice_code, `o.a.i.v.ro.` +
+|xref:_ug_reference-services-spi_manpage-ContentMappingService[`o.a.i.v.ro.` +
 `rendering.service.conneg.` +
-`ContentMappingService`>>
+`ContentMappingService`]
 |(Attempt to) map the returned data into the representation required by the client's HTTP `Accept` header.
 |
 |No default implementation.
 
-|<<__code_contentnegotiationservice_code, `o.a.i.v.ro.` +
+|xref:_ug_reference-services-spi_manpage-ContentNegotiationService[`o.a.i.v.ro.` +
 `rendering.service.conneg.` +
-`ContentNegotiationService`>>
+`ContentNegotiationService`]
 |Encodes the algorithm that delegate to any registered xref:_ug_reference-services-spi_manpage-ContentMappingService[`ContentMappingService`]s.
 |`ContentNegotiationService-` +
 `XRoDomainType` +

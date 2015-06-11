@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 public interface ExceptionRecognizer2 extends ExceptionRecognizer {
 
+
     public enum Category {
         /**
          * A violation of some declarative constraint (eg uniqueness or referential integrity) was detected.

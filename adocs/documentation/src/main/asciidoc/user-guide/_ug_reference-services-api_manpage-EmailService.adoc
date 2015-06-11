@@ -87,7 +87,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis core' implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Isis' core implementation of `EmailService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 If you have written an alternative implementation, then register your implementation in `isis.properties` under the "isis.services" key and it will be used instead.
 

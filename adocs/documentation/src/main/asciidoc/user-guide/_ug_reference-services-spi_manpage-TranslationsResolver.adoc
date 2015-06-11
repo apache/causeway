@@ -4,12 +4,47 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+
+The `TranslationsResolver` service is one of the services that work together to implement Isis' support for i18n, being used by Isis' default implementation of xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`].
+
+The role of the service itself is locate and return translations.
+
+
+[NOTE]
+====
+For the "big picture" and further details on Isis' i18n support, see xref:_ug_more-advanced_i18n[here].
+====
+
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface TranslationsResolver {
+    @Programmatic
+    List<String> readLines(final String file);
+}
+----
+
+
+== Implementation
+
+Isis' xref:_ug_wicket-viewer[Wicket viewer] provides an implementation of this service (`TranslationsResolverWicket`) which leverages Apache Wicket APIs.  This searches for translation files in the standard `WEB-INF/` directory.
+
+[NOTE]
+====
+Currently there is no equivalent implementation for the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
+====
 
 
 
 
-== Registering the Services
+
+== Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured:
 
@@ -19,4 +54,14 @@ isis.services-installer=configuration-and-annotation
 ----
 
 and that the xref:_ug_wicket-viewer[Wicket viewer] is being used then an implementation of `TranslationsResolver` is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
+
+
+
+
+== Related Services
+
+
+This service works in conjunction with xref:_ug_reference-services-spi_manpage-LocaleProvider[`LocaleProvider`] and xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`] in order to provide i18n support.
+
 

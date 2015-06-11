@@ -4,15 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-== Isis Addons Implementation
-
-For 1.7.0+, see the http://github.com/isisaddons/isis-module-command[Isis addons' Command module] (non-ASF).
-
-
-Title: CommandService (isis-module-command-jdo)
 
 The `CommandService` service supports the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service such that `Command` objects (that reify the invocation of an action on a domain object into an object) can be persisted.
 
@@ -20,62 +12,58 @@ Persistent `Command`s support several use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 * they act as a parent to any background commands that might be invoked through the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`]
-* if xref:_ug_reference-services-spi_manpage-AuditingService[auditing] is configured, they provide better audit informatio, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
-* if xref:_ug_reference-services-spi_manpage-PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
+* if xref:_ug_reference-services-spi_manpage-AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`transactionId`]
+* if xref:_ug_reference-services-spi_manpage-PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`transactionId`]
 * the associated xref:_ug_reference-annotations_manpage-Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
-[[_ug_reference-services-spi_manpage-CommandService_screencast]]
-== Screencast
 
-The screencast provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+The screencast below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
 
-<iframe width="560" height="315" src="//www.youtube.com/embed/tqXUZkPB3EI" frameborder="0" allowfullscreen></iframe>
 
-== API
+
+video::tqXUZkPB3EI[youtube,width="560px",height="315px"]
+
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+== SPI
 
 The `CommandService` service defines the following very simple API:
 
 [source,java]
 ----
 public interface CommandService {
-
     @Programmatic
     Command create();
-
     @Programmatic
-    void startTransaction(final Command command, final UUID transactionId);
-
+    void startTransaction(Command command, final UUID transactionId);
     @Programmatic
-    void complete(final Command command);
-
+    void complete(Command command);
     @Programmatic
     boolean persistIfPossible(Command command);
-
-    }
+}
 ----
 
 where `Command` is defined as defined by the xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] service.
 
 
-
-
 == Implementation
 
-=== CommandService (for persistent `Command`s)
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
 
-The `CommandService` interface (defined in the Isis applib) is implemented within `isis-module-command-jdo` by:
+* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
 
-* `org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdo`
+* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
 
-There is also a supporting repository to query persisted `Command`s:
 
-* `org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoRepository`
 
-In addition, there is a supporting contributions service that contributes actions for searching for persisted `Command`s for any object:
+== Usage
 
-* `org.apache.isis.objectstore.jdo.applib.service.command.CommandServiceJdoContributions`
-
+The typical way to indicate that an action should be reified into a `Command` is by annotating the action using xref:_ug_reference-annotations_manpage-Action_command[`@Action#command()`].
 
 
 
@@ -89,9 +77,10 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then the services are automatically registered if the `isis-module-command-jdo` Maven module
-is on the classpath (they are annotated with `@DomainService`).
 
+then adding the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module to the classpath will automatically register the `CommandServiceJdo`, `CommandJdoRepository` and `CommandServiceJdoContributions` services.  If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:_ug_more-advanced_assembling_vetoing-visibility[vetoing subscriber].
+
+Note that this module also provides service implementations of the xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`].
 
 
 
@@ -101,3 +90,10 @@ As discussed above, this service supports the xref:_ug_reference-services-api_ma
 persisted. This is closely related to the xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]that allows the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`] to schedule commands for background/asynchronous execution.
 
 The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
+
+The services provided by this module combines very well with the xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+
+You may also want to configure the xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
+
+All three of these services collaborate implicitly by way of the xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+

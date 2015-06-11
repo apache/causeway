@@ -83,6 +83,18 @@ See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to l
 See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
+|`isis.services-installer`
+|`configuration-and-annotation`, `configuration`, `FQCN` (`configuration`)
+|The mechanism to discover and load domain services. +
+
+* `configuration-and-annotation` will search for `@DomainService`-annotated classes and also read from `isis.services` configuration property
+
+* `configuration` will only read from the `isis.services` configuration property. +
+
+* Otherwise an alternative implementation of the `o.a.i.core.runtime.services.ServicesInstaller` internal API can be provided.
+
+
+
 |`isis.services`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated as domain services.  Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to `@DomainServiceLayout#menuOrder()`).

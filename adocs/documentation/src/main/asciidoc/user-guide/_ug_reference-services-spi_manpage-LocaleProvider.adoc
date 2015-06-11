@@ -4,7 +4,45 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+
+The `LocaleProvider` service is one of the services that work together to implement Isis' support for i18n, being used by Isis' default implementation of xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`].
+
+The role of the service itself is simply to return the `Locale` of the current user.
+
+
+[NOTE]
+====
+For the "big picture" and further details on Isis' i18n support, see xref:_ug_more-advanced_i18n[here].
+====
+
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface LocaleProvider {
+    @Programmatic
+    Locale getLocale();
+}
+----
+
+This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:_ug_reference-annotations_manpage-RequestScoped[`@RequestScoped`], however).
+
+
+
+
+== Implementation
+
+Isis' xref:_ug_wicket-viewer[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
+
+[NOTE]
+====
+Currently there is no equivalent implementation for the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].
+====
 
 
 
@@ -19,4 +57,15 @@ isis.services-installer=configuration-and-annotation
 ----
 
 and that the xref:_ug_wicket-viewer[Wicket viewer] is being used then an implementation of `LocaleProvider` is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+
+
+
+
+
+== Related Services
+
+This service works in conjunction with xref:_ug_reference-services-spi_manpage-TranslationService[`TranslationService`] and xref:_ug_reference-services-spi_manpage-TranslationsResolver[`TranslationsResolver`] in order to provide i18n support.
+
+
+
 

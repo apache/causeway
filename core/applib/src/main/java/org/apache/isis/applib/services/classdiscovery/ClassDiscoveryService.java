@@ -34,6 +34,10 @@ import org.apache.isis.applib.annotation.Programmatic;
  */
 public interface ClassDiscoveryService {
 
+    /**
+     * @deprecated  - if an implementation of {@link ClassDiscoveryService2} is available then its equivalent {@link ClassDiscoveryService2#findSubTypesOfClasses(Class, String)} will be used instead.
+     */
+    @Deprecated
     @Programmatic
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type);
 

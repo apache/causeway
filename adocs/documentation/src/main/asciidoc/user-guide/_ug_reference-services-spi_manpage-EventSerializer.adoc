@@ -4,6 +4,69 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The `EmailSerializer` service is a supporting service intended for use by (any implementation of) xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].  Its responsibility is to combine the `EventMetadata` and the `EventPayload` into some serialized form (such as JSON, XML or a string) that can then be published.
+
+See xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] for further discussion.
 
 
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface EventSerializer {
+    Object serialize(                   // <1>
+            EventMetadata metadata,     // <2>
+            EventPayload payload);      // <3>
+}
+----
+<1> returns an object for maximum flexibility, which is then handed off to the `PublishingService`.
+<2> standard metadata about the event, such as the user, the xref:_ug_reference-classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
+<3> for published actions, will generally be an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, will generally be an `EventPayloadForObjectChanged` (or subclass thereof)
+
+It's important to make sure that the publishing service implementation is able to handle the serialized form.  Strings are a good lowest common denominator, but in some cases a type-safe equivalent, such as a w3c DOM `Document` or JSON node might be passed instead.
+
+
+
+
+
+== Implementation
+
+The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.eventserializer.RestfulObjectsSpecEventSerializer`) that represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
+
+For example, this is the JSON generated on an action invocation:
+
+.JSON representation of a published action invocation
+image::{_imagesdir}reference-services-spi/EventSerializer/action-invocation-published-to-stderr.png[width="750px",link="{_imagesdir}reference-services-spi/EventSerializer/action-invocation-published-to-stderr.png"]
+
+while this is the object change JSON:
+
+.JSON representation of a published changed object
+image::{_imagesdir}reference-services-spi/EventSerializer/changed-object-published-to-stderr.png[width="750px",link="{_imagesdir}reference-services-spi/EventSerializer/changed-object-published-to-stderr.png"]
+
+You could if you wish change the representation by registering your own implementation of this API in `isis.properties`:
+
+
+
+
+
+== Registering the Services
+
+Assuming that the `configuration-and-annotation` services installer is configured:
+
+[source,ini]
+----
+isis.services-installer=configuration-and-annotation
+----
+
+then adding the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module to the classpath will automatically register the `RestfulObjectsSpecEventSerializer` implementation (and also the module's `PublishingService` implementation).
+
+
+
+== Related Services
+
+This service is intended (though not mandated) to be used by implementations of xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`].
