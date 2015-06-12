@@ -7,22 +7,10 @@
 
 This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype].
 
-It consists of just three domain classes:
+It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 
 image::{_imagesdir}tutorials/pet-clinic/domain-model.png[link="{_imagesdir}tutorials/pet-clinic/domain-model.png"]
 
-
-[TIP]
-====
-[source,ini]
-.DSL (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
-----
-[Pet|-name:String{bg:green}]<-0..*[Visit|-checkIn:LocalDate;-checkout:LocalDate;-diagnosis:String|{bg:pink}]
-[Owner|-firstName:String;-lastName:String{bg:green}]<0..1-0..*>[Pet]
-[PetSpecies|-name:String{bg:blue}]<species-[Pet]
-----
-
-====
 
 This supports the following use cases:
 
@@ -267,7 +255,7 @@ Therefore delete the BDD feature spec and glue in the `integtest` module:
 
 
 
-== Rename the app, and rename the SimpleObject entity
+== Rename artifacts
 
 [TIP]
 ====
@@ -398,7 +386,7 @@ image::{_imagesdir}tutorials/pet-clinic/040-01-idea-configuration-updated.png[wi
 
 
 
-== Add PetSpecies (as an enum)
+== Add `PetSpecies` enum
 
 [TIP]
 ====
@@ -442,7 +430,7 @@ Update fixtures, unit tests and integration tests.
 
 
 
-== Icon reflects the pet species
+== Icon to reflect pet species
 
 [TIP]
 ====
@@ -480,7 +468,7 @@ with the corresponding view of the `Pet`:
 image::{_imagesdir}tutorials/pet-clinic/050-02-view-pet.png[width="600px",link="{_imagesdir}tutorials/pet-clinic/050-02-view-pet.png"]
 
 
-== Add Pet Owner
+== Add pet's `Owner`
 
 [TIP]
 ====

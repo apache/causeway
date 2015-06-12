@@ -30,7 +30,7 @@ There are many many such ``Facet``s, and are used to do such things get values f
 
 
 
-== Modifying the Programming Model
+== Modifying the Prog. Model
 
 The default implementation of `ProgrammingModel` is https://github.com/apache/isis/blob/master/core/metamodel/src/main/java/org/apache/isis/progmodels/dflt/ProgrammingModelFacetsJava5.java[ProgrammingModelFacetsJava5], which registers a large number of ``FacetFactory``s.
 
@@ -38,7 +38,7 @@ By editing `isis.properties` you can modify the programming conventions either b
 
 Let's see how this is done.
 
-=== Fine-tuning the existing programming model
+=== Including or excluding facets
 
 Suppose that you wanted to completely remove support for the (already deprecated) `@ActionOrder` annotation. This would be done using:
 
@@ -64,9 +64,9 @@ This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mai
 
 
 
-== Specifying a new programming model
+== Replacing the Prog. Model
 
-If you want to make many changes to the programming model, then (rather than include/exclude lots of facet factories) you can specify a completely new programming model.  For this you'll first need an implementation of ``ProgrammingModel``.
+If you want to make many changes to the programming model, then (rather than include/exclude lots of facet factories) you can specify a completely new programming model.  For this you'll first need an implementation of `ProgrammingModel`.
 
 One option is to subclass from `ProgammingModelFacetsJava5`; in your subclass you could remove any ``FacetFactory``s that you wanted to exclude, as well as registering your own implementations.
 

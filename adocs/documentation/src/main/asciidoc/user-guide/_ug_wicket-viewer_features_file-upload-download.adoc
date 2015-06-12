@@ -18,11 +18,6 @@ A class can define a property using either of these types, for example:
 
 The following screenshots are taken from the Isis addons example https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF):
 
-[NOTE]
-====
-TODO: these screenshots need to be updated for the new look-n-feel introduced in 1.8.0
-====
-
 
 
 === View mode, empty
@@ -31,6 +26,10 @@ TODO: these screenshots need to be updated for the new look-n-feel introduced in
 
 image::{_imagesdir}wicket-viewer/file-upload-download/010-attachment-field-940.png[width="800px",link="{_imagesdir}wicket-viewer/file-upload-download/010-attachment-field.png"]
 
+[NOTE]
+====
+Note that these screenshots show an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
 
 
 === Edit mode

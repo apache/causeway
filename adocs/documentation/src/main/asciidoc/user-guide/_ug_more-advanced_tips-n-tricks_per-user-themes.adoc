@@ -4,11 +4,10 @@
 :_basedir: ../
 :_imagesdir: images/
 
-== Question:
+From the Isis mailing list is:
 
-Is it possible to have each of our resellers (using our Isis application) use there own theme/branding with their own logo and colors? Would this also be possible for the login page, possibly depending on the used host name?
+* _Is it possible to have each of our resellers (using our Isis application) use there own theme/branding with their own logo and colors? Would this also be possible for the login page, possibly depending on the used host name?_
 
-== Answer:
 
 Yes, you can do this, by installing a custom implementation of the Wicket Bootstrap's `ActiveThemeProvider`.
 

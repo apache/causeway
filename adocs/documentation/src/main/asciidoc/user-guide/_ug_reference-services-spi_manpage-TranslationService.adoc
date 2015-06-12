@@ -67,7 +67,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.  If the menu items are not required then these can be suppressed either using security or by implementing a xref:_ug_more-advanced_assembling_vetoing-visibility[vetoing subscriber].
+then Isis' core implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.  If the menu items are not required then these can be suppressed either using security or by implementing a xref:_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

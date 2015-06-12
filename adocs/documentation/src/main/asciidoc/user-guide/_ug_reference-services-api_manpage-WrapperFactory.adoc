@@ -7,7 +7,7 @@
 
 
 
-The 'wrapper' factory provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by te callee are honoured.
+The `WrapperFactory` provides the ability to enforce business rules for programmatic interactions between domain objects.  If there is a (lack-of-) trust boundary between the caller and callee -- eg if they reside in different modules -- then the wrapper factory is a useful mechanism to ensure that any business constraints defined by te callee are honoured.
 
 For example, if the calling object attempts to modify an unmodifiable property on the target object, then an exception will be thrown.  Said another way: interactions are performed "as if" they are through the viewer.
 
@@ -19,6 +19,8 @@ For a discussion of the use of the `WrapperFactory` within integration tests (th
 This capability goes beyond enforcing the (imperative) constraints within the `hideXxx()`, `disableXxx()` and `validateXxx()` supporting methods; it also enforces (declarative) constraints such as those represented by annotations, eg `@MaxLength` or `@Regex`.
 
 This capability is frequently used within xref:_ug_testing_integ-test-support[integration tests], but can also be used in production code. (There are analogies that can be drawn here with the way that JEE beans can interact through an EJB local interface).
+
+
 
 
 == API
@@ -139,7 +141,7 @@ public interface WrapperFactory {
 }
 ----
 <1> all ``InteractionListener``s that have been registered.
- <2> registers an `InteractionListener`, to be notified of interactions on all wrappers.  The listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
+<2> registers an `InteractionListener`, to be notified of interactions on all wrappers.  The listener will be notified of interactions even on wrappers created before the listener was installed. (From an implementation perspective this is because the wrappers delegate back to the container to fire the events).
 <3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
 <4> used by the framework itself
 

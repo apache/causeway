@@ -26,8 +26,7 @@ public interface ClassDiscoveryService2  {
     <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type);       // <1>
 }
 ----
-<1> finds all subtypes of specified type within a certain package (or subpackages)
-<2> no longer used
+<1> no longer used
 
 
 

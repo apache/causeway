@@ -5,117 +5,47 @@
 :_imagesdir: images/
 
 
-The Restful Objects viewer implements the http://restfulobjects.org[Restful Object spec], meaning that it:
+The xref:_ug_restfulobjects-viewer[RestfulObjects viewer] implements the http://restfulobjects.org[Restful Object spec], meaning that it defines a well-defined set of endpoint URLs as resources, and generates a well-defined set of (JSON) representations when these resources are accessed.
 
-* defines a well-defined set of endpoint URLs as resources
-* generates a well-defined set of (JSON) representations when these resources are accessed.
+Sometimes though you may want to extend or change the representations generated.  This might be because you want to write a RESTful client that uses a particular library (say a Javascript library or web components) that can only handle representations in a certain form.
 
-There are, however, a number of other "standards" for defining representations, among these:
+Or, you might want to have Isis generate representations according to some other "standard", of which there are many (see note).
 
-* http://stateless.co/hal_specification.html[HAL] (Mike Kelly)
-* http://amundsen.com/media-types/collection/[Collection+JSON] (Mike Amundsen)
-* https://github.com/kevinswiber/siren[Siren] (Kevin Swiber)
-* http://jsonapi.org/[JSON API] (Steve Klabnik)
-* https://github.com/cainus/hyper-json-spec[Hyper+JSON] (Gregg Cainus)
-* https://www.w3.org/TR/json-ld/[JSON-LD] (W3C)
-* http://www.markus-lanthaler.com/hydra/[Hydra] (Markus Lanthaler)
+[NOTE]
+====
+Other "standards" for defining representations that we are aware of include: http://stateless.co/hal_specification.html[HAL] (Mike Kelly), http://amundsen.com/media-types/collection/[Collection+JSON] (Mike Amundsen), https://github.com/kevinswiber/siren[Siren] (Kevin Swiber), http://jsonapi.org/[JSON API] (Steve Klabnik), https://github.com/cainus/hyper-json-spec[Hyper+JSON] (Gregg Cainus), https://www.w3.org/TR/json-ld/[JSON-LD] (W3C) and http://www.markus-lanthaler.com/hydra/[Hydra] (Markus Lanthaler).
 
 A good discussion about the relative merits of several of these different hypermedia formats can be found https://groups.google.com/forum/#!msg/api-craft/NgjzQYVOE4s/EAB2jxtU_TMJ[here].
-
-While Isis' Restful Objects viewer only has "out-of-the-box" support for the representations defined in the Restful Objects spec,
-it is possible to plugin a custom representation generator that can produce any arbitrary representation.
-
-[TIP]
-====
-If all that is required is a very simple representations (of objects), you can instead reconfigure RO viewer to provide a simplified output, as described xref:_ug_restfulobjects-viewer_configuration-properties_simplified-object-representation[here].  Or, it is also possible to simply suppress certain elements, as described  xref:_ug_restfulobjects-viewer_configuration-properties_suppressing-elements[here].
 ====
 
 
-== API
+Whatever your reasons, Isis provides several mechanisms by which you can change the generated representation.  This section lists these, from the simplest (most limited) to the most flexible (more work).
 
-The API to implement is the `RepresentationService` API:
-
-[WARNING]
-====
-This API should be considered beta, as it may change in the future in response to emerging requirements
-====
-
-[source,java]
-----
-import javax.ws.rs.core.Response;
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.*;
-
-public interface RepresentationService {
-
-    @Programmatic
-    Response objectRepresentation(
-            Context rendererContext,
-            ObjectAdapter objectAdapter);
-
-    @Programmatic
-    Response propertyDetails(
-            Context rendererContext,
-            ObjectAndProperty objectAndProperty,
-            MemberReprMode memberReprMode);
-
-    @Programmatic
-    Response collectionDetails(
-            Context rendererContext,
-            ObjectAndCollection objectAndCollection,
-            MemberReprMode memberReprMode);
-
-    @Programmatic
-    Response actionPrompt(
-            Context rendererContext,
-            ObjectAndAction objectAndAction);
-
-    @Programmatic
-    Response actionResult(
-            Context rendererContext,
-            ObjectAndActionInvocation objectAndActionInvocation,
-            ActionResultReprRenderer.SelfLink selfLink);
-
-    public static interface Context extends RendererContext {
-        ObjectAdapterLinkTo getAdapterLinkTo();
-    }
-}
-----
-
-
-== Default Implementation
-
-Restful Objects' out-of-the-box support for Restful Objects spec uses this same API, specifically `RepresentationServiceForRestfulObjects` (in the `org.apache.isis.viewer.restfulobjects.rendering.service` package).
-
-Each of these methods provides:
-
-* a `RendererContext` +
+* Configuration Properties +
 +
-providing access to request-specific context (eg HTTP headers), session-specific context (eg authentication) and global context (eg configuration settings)
-
-* an object representing the information to be rendered +
+If all that is required is a very simple representations (of objects), you can reconfigure the xref:_ug_restfulobjects-viewer[RestfulObjects viewer] to provide a simplified output, as described xref:_ug_restfulobjects-viewer_configuration-properties_simplified-object-representation[here]. +
 +
-eg `ObjectAdapter`, `ObjectAndProperty`, `ObjectAndCollection` etc
+If you simply want to suppress certain elements, as described  xref:_ug_restfulobjects-viewer_configuration-properties_suppressing-elements[here].
 
-* for members, whether the representation is in read/write mode +
+* `RepresentationService` +
 +
-ie `MemberReprMode`
+The xref:_ug_reference-services-spi_manpage-RepresentationService[`RepresentationService`] is an SPI domain service (plugin-point) that allows an arbitrary representation to be generated for any of the resources defined in the RO spec. +
++
+The default implementation does, of course, generate the representations as defined in the RO spec.
+
+* `ContentNegotiationService` +
++
+The xref:_ug_reference-services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] is very similar to `RepresentationService`, in that it allows for a different representation to be generated.  It isn't responsible for generating the default RO representations, however; if can simply return `null` (and leave it to the `RepresentationService` to generate the correct representations. +
++
+The default implementation provides support for the `x-ro-domain-type` parameter for HTTP `Accept` headers, providing the capability sketched out in section 34.1 of the RO spec v1.0.  As such, it delegates to `ContentMappingService`, described below.
+
+* `ContentMappingService` +
++
+The xref:_ug_reference-services-spi_manpage-ContentMappingService[`ContentMappingService`] is used by the default implementation of `ContentNegotationService` to transform a domain object (usually an entity) into some other form (usually a DTO), as specified by the `x-ro-domain-type` parameter.
+
+This diagram shows how these services collaborate:
+
+image::{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png[width="700px",link="{_imagesdir}reference-services-spi/RepresentationService/service-collaborations.png"]
 
 
-== Configuring your Implementation
-
-Implement the service and register in `WEB-INF/isis.properties`, eg:
-
-[source,ini]
-----
-isis.services=...,\
-              com.mycompany.myservice.RepresentationServiceForMyRestApi,
-              ...
-----
-
-This will replace the default implementatoin.
-
-
-
+Taken together these configuration properties and domain services offer a lot of flexibility in terms of the representations that can be generated from the xref:_ug_restfulobjects-viewer[RestfulObjects viewer].  Please be aware though that these using these SPIs means that the representations generated by the viewer are no longer conformant with those of the RO spec.

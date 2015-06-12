@@ -12,7 +12,7 @@ Apache Isis' security mechanism is configurable, specifying an `Authenticator` a
 The xref:_ug_getting-started_simpleapp-archetype[SimpleApp archetype] is pre-configured to use Apache Shiro, so much of what follows is set up already.
 ====
 
-== Specifying Shiro as the security mechanism
+== Telling Isis to use Shiro
 
 To tell Apache Isis to use Shiro, update the `WEB-INF/isis.properties` file:
 

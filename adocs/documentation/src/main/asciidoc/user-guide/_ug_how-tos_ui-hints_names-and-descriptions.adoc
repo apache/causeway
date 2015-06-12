@@ -12,25 +12,30 @@ NOTE: see also xref:_ug_more-advanced_i18n[Internationalization]
 
 == Class (object)
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-annotations_manpage-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:_ug_reference-annotations_manpage-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
+
 
 == Property
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-annotations_manpage-PropertyLayout_named[`@PropertyLayout#named()`], xref:_ug_reference-annotations_manpage-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
+
+
 
 == Collections
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-annotations_manpage-CollectionLayout_named[`@CollectionLayout#named()`], xref:_ug_reference-annotations_manpage-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
+
+
 
 == Actions
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-annotations_manpage-ActionLayout_named[`@ActionLayout#named()`], xref:_ug_reference-annotations_manpage-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
+
 
 == Action Parameters
 
-IMPORTANT: WIP
+IMPORTANT: TODO - xref:_ug_reference-annotations_manpage-ParameterLayout_named[`@ParameterLayout#named()`], xref:_ug_reference-annotations_manpage-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
 
-Use `@ParameterLayout(named=...)` or `@Named(...)`
 
 [TIP]
 ====

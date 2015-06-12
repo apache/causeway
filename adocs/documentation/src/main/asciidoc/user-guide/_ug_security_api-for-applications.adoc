@@ -11,7 +11,7 @@ Generally speaking your domain objects (or more generally your application) shou
 Still, on very rare occasion you may have a need, in which case you can either use Isis' `DomainObjectContainer` API or you can reach further down the stack and use the JEE Servlet API.
 
 
-== Using Isis` `DomainObjectContainer`
+== `DomainObjectContainer` API
 
 The xref:_ug_reference-services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] service exposes the following API:
 
@@ -40,7 +40,9 @@ If using the Wicket viewer, then note there will also be another role which is u
 
 
 
-== Accessing user/roles from the Servlet API
+
+
+== Servlet API
 
 On occasion you may find it necessary to reach below Isis and to the underlying servlet API.  For example, the http://github.com/isisaddons/isis-module-togglz[Isis addons' togglz] module (non-ASF) has a requirement to do this in order to expose its embedded togglz web console.  (
 
@@ -55,7 +57,6 @@ In this situation, you can still obtain some information about the user and its 
 ----
 Principal principal = httpServletRequest.getPrincipal();
 String username = principal.getName();
-
 boolean analyst = httpServletRequest.isUserInRole("analysis_role");
 ----
 

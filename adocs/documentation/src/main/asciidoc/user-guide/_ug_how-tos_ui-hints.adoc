@@ -4,15 +4,12 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+The Isis programming model includes several mechanisms for a domain object to provide UI hints.  These range from their title (so an end-user can distinguish one object from another) through to hints that can impact their CSS styling.
 
 include::_ug_how-tos_ui-hints_object-titles-and-icons.adoc[leveloffset=+1]
-
 include::_ug_how-tos_ui-hints_names-and-descriptions.adoc[leveloffset=+1]
-
 include::_ug_how-tos_ui-hints_layout.adoc[leveloffset=+1]
-
 include::_ug_how-tos_ui-hints_eager-rendering.adoc[leveloffset=+1]
-
 include::_ug_how-tos_ui-hints_action-icons-and-css.adoc[leveloffset=+1]
 

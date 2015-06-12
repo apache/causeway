@@ -92,7 +92,7 @@ To make the configuration maintainable, use "\" to separate the mappings onto se
 
 
 
-== Using a shared role/perms path
+== Externalizing role perms
 
 As an alternative to injecting the `permissionsByRole` property, the role/permission mapping can alternatively be specified by injecting a resource path:
 
@@ -105,11 +105,11 @@ where `myroles.ini` is in `src/main/resources/webapp`, and takes the form:
 
 [source,ini]
 ----
- [roles]
- user_role = *:ToDoItemsJdo:*:*,\
-             *:ToDoItem:*:*
- self-install_role = *:ToDoItemsFixturesService:install:*
- admin_role = *
+[roles]
+user_role = *:ToDoItemsJdo:*:*,\
+            *:ToDoItem:*:*
+self-install_role = *:ToDoItemsFixturesService:install:*
+admin_role = *
 ----
 
 This separation of the role/mapping can be useful if Shiro is configured to support multiple realms (eg an LdapRealm based one and also an TextRealm)
@@ -117,7 +117,7 @@ This separation of the role/mapping can be useful if Shiro is configured to supp
 
 
 
-== Active DS LDAP Mini-tutorial
+== Active DS LDAP tutorial
 
 The screenshots below show how to setup LDAP accounts in ApacheDS using the Apache Directory Studio.
 

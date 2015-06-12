@@ -4,13 +4,66 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+
+IMPORTANT: WIP - generalize to discussion on contributed collections/properties; update to new annotations
+
+Any n-parameter action provided by a service will automatically be contributed to the list of actions for each of its (entity) parameters. From the viewpoint of the entity the action is called a contributed action.
+
+For example, given a service:
+
+[source,java]
+----
+public interface Library {
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+and the entities:
+
+[source,java]
+----
+public class Book implements Loanable { ... }
+----
+
+and
+
+[source,java]
+----
+public class LibraryMember implements Borrower { ... }
+----
+
+then the `borrow(...)` action will be contributed to both `Book` and to `LibraryMember`.
+
+This is an important capability because it helps to decouple the concrete classes from the services.
+
+If necessary, though, this behaviour can be suppressed by annotating the service action with `@org.apache.isis.applib.annotations.NotContributed`.
+
+For example:
+
+[source,java]
+----
+public interface Library {
+    @NotContributed
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+If annotated at the interface level, then the annotation will be inherited by every concrete class. Alternatively the annotation can be applied at the implementation class level and only apply to that particular implementation.
+
+Note that an action annotated as being `@NotContributed` will still appear in the service menu for the service. If an action should neither be contributed nor appear in service menu items, then simply annotate it as `@Hidden`.
+
 
 ## Contributed Action
 
+IMPORTANT: TODO
+
 ## Contributed Property
+
+IMPORTANT: TODO
 
 ## Contributed Collection
 
+IMPORTANT: TODO
 
 

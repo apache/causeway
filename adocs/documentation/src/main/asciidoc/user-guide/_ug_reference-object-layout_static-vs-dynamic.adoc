@@ -22,3 +22,5 @@ Also, dynamic layouts have no notion of inheritance, whereas the dewey-decimal f
 Using the (non-ASF) link:http://github.com/isisaddons/isis-jrebel-plugin[Isis addons' jrebel] plugin comes close to getting the best of both words: metadata is specified in a type-safe way using annotations, but can be reloaded automatically.
 
 The downsides are licensing cost, and also the fact that metadata for contributed actions in the contributee class cannot be specified.
+
+Another open source alternative that you might also like to explore is DCEVM; there's a good write-up on the link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog].

@@ -4,7 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: WIP...
 
 These configuration properties are typically stored in `WEB-INF/persistor_datanucleus.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
 
@@ -18,6 +17,13 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 |Value +
 (_default value_)
 |Description
+
+|`isis.persistor.` +
+`datanucleus.` +
+`classMetadataLoadedListener`
+|`FQCN`
+|The default (`o.a.i.os.jdo.dn.CreateSchemaObjectFromClassMetadata`) creates a DB schema object
+
 
 |`isis.persistor.datanucleus.` +
 `RegisterEntities.packagePrefix`

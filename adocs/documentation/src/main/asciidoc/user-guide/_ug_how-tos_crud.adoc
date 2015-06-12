@@ -6,18 +6,24 @@
 
 IMPORTANT: TODO
 
-## Injecting Services
 
 ## Instantiating and Persisting Objects
 
+IMPORTANT: TODO - using ``DomainObjectContainer``'s support for  xref:_ug_reference-services-api_manpage-DomainObjectContainer_object-creation-api[creation] and xref:_ug_reference-services-api_manpage-DomainObjectContainer_object-persistence-api[persistence]
+
 ## Finding Objects
+
+IMPORTANT: TODO - using xref:_ug_reference-services-api_manpage-DomainObjectContainer_generic-repository-api[`DomainObjectContainer`]
 
 ### Using DataNucleus type-safe queries
 
-as per http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] (non-ASF)
+IMPORTANT: TODO - as described xref:_ug_reference-services-api_manpage-IsisJdoSupport_type-safe-jdoql-queries[here]
+
+
 
 ## Deleting Objects
 
+IMPORTANT: TODO using ``DomainObjectContainer``'s support for  xref:_ug_reference-services-api_manpage-DomainObjectContainer_object-persistence-api[persistence]
 
 
 

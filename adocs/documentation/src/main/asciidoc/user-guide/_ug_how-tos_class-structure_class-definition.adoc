@@ -6,10 +6,10 @@
 
 
 
-IMPORTANT: TODO
+IMPORTANT: WIP
 
 
-Classes are defined both to Isis and (if any entity) also to JDO/DataNucleus.
+Classes are defined both to Isis and (if an entity) also to JDO/DataNucleus.
 
 
 We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then reason about all the classes in that package/namespace as a single unit.

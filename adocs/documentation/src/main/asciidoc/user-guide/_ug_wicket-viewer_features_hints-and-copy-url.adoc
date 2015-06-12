@@ -19,17 +19,16 @@ The copy URL and hinting is automatic.
 
 The following screenshots are taken from the [Estatio](https://github.com/estatio/estatio) application.
 
-[NOTE]
-====
-TODO: these screenshots need to be updated for the new look-n-feel introduced in 1.8.0
-====
-
-
 === Copy URL
 
 This screenshot shows the copy URL button (top right):
 
 image::{_imagesdir}wicket-viewer/copy-link/010-copy-link-button.png[width="800px",link="{_imagesdir}wicket-viewer/copy-link/010-copy-link-button.png"]
+
+[NOTE]
+====
+Note that these screenshots show an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+====
 
 Clicking on this button brings up a dialog with the URL preselected:
 

@@ -79,13 +79,13 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 
         unless regenerate == "" then
 
-	    # if regenerated within last 3 seconds, then wait a while
+	    # if regenerated within last 6 seconds, then wait a while
 	    currentTime = Time.now
 	    timeSinceLast = currentTime.to_i - lastTimeGenerated.to_i
-	    timeUntilNext = 3 - timeSinceLast
+	    timeUntilNext = 6 - timeSinceLast
 	    if not priming and
 	       timeUntilNext > 0 then
-	        puts "skipping before regenerating (3 seconds not yet elapsed)"
+	        puts "skipping before regenerating (6 seconds not yet elapsed)"
 	    else
 		# wait 1 further second for any additional edits
 	    	sleep 1

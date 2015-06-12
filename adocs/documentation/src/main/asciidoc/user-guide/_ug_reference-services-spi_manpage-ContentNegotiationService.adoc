@@ -70,9 +70,17 @@ public interface ContentNegotiationService {
 ----
 <1> representation of a single object, as per section 14.4 of the RO spec, v1.0
 <2> representation of a single property of an object, as per section 16.4 of the RO spec v1.0
-<2> representation of a single collection of an object, as per section 17.5 of the RO spec v1.0
-<2> representation of a single action (prompt) of an object, as per section 18.2 of the RO spec v1.0
-<2> representation of the results of a single action invocation, as per section 19.5 of the RO spec v1.0
+<3> representation of a single collection of an object, as per section 17.5 of the RO spec v1.0
+<4> representation of a single action (prompt) of an object, as per section 18.2 of the RO spec v1.0
+<5> representation of the results of a single action invocation, as per section 19.5 of the RO spec v1.0
+
+These methods provide:
+
+* a `RepresentationService.Context2` which provides access to request-specific context (eg HTTP headers), session-specific context (eg authentication) and global context (eg configuration settings)
+
+* an object representing the information to be rendered +
++
+eg `ObjectAdapter`, `ObjectAndProperty`, `ObjectAndCollection` etc
 
 In all cases, returning `null` will result in the regular RO spec representation being returned.
 
@@ -177,3 +185,5 @@ then Isis' default implementation of `ContentNegotiationService` service is auto
 == Related Services
 
 The default implementation of `ContentNegotiationService` delegates to xref:_ug_reference-services-spi_manpage-ContentMappingService[`ContentMappingService`] (if present) to convert domain entities into a stable form (eg DTO).
+
+The `ContentNegotiationService` is itself called by the (default implementation of) xref:_ug_reference-services-spi_manpage-RepresentationService[`RepresentationService`].

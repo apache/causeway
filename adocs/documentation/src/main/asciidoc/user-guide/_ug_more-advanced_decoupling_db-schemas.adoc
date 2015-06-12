@@ -7,6 +7,8 @@
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to
 their own (database) schemas. As of 1.9.0-SNAPSHOT, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
 
+
+
 [source,java]
 ----
 @javax.jdo.annotations.PersistenceCapable( ...
@@ -53,7 +55,7 @@ If for some reason you don't want to use schemas (though we strongly recommend t
 
 
 
-== Listener to create DB schema objects
+== Listener to create schema
 
 JDO/DataNucleus does not automatically create these schema objects, but it _does_ provide a listener callback API
 on the initialization of each class into the JDO metamodel.
@@ -69,13 +71,10 @@ The guts of its implementation is:
 
 [source,java]
 ----
-package org.apache.isis.objectstore.jdo.datanucleus;
-
 public class CreateSchemaObjectFromClassMetadata
         implements MetaDataListener,
                    PersistenceManagerFactoryAware,
                    DataNucleusPropertiesAware {
-
     @Override
     public void loaded(final AbstractClassMetaData cmd) { ... }
 
@@ -84,7 +83,6 @@ public class CreateSchemaObjectFromClassMetadata
         return String.format(
             "SELECT count(*) FROM INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = '%s'", schemaName);
     }
-
     protected String buildSqlToExec(final AbstractClassMetaData cmd) {
         final String schemaName = schemaNameFor(cmd);
         return String.format("CREATE SCHEMA \"%s\"", schemaName);
@@ -108,19 +106,19 @@ The implementation provided has has been tested for HSQLDB, PostgreSQL and MS SQ
 
 
 
-== Registering an Alternative Implementation
+
+
+== Alternative implementation
 
 An alternative implementation can be registered and used through the following configuration property:
 
 [source,ini]
 ----
-#
-# hook to perform additional initialization when JDO class metadata is loaded
-# default implementation will attempt to run 'create schema' for the specified schema.
-#
 isis.persistor.datanucleus.classMetadataLoadedListener=\
         org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata
 ----
+
+
 Because this pertains to the JDO Objectstore we suggest you put this configuration property in `WEB-INF/persistor_datanucleus.properties`; but putting it in `isis.properties` will also work.
 
 Any implementation must implement `org.datanucleus.metadata.MetaDataListener`.  In many cases simply subclassing from `CreateSchemaObjectFromClassMetadata` and overriding `buildSqlToCheck(...)` and `buildSqlToExec(...)` should suffice.

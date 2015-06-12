@@ -7,13 +7,3 @@
 IMPORTANT: TODO
 
 
-for the `WrapperFactory` (uses link:http://www.javassist.org[Javassist])
-
-using:
-
-[source,ini]
-----
--XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
-----
-
-You can hint the JVM to unload dynamically created classes which ClassLoaders are still around.

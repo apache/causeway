@@ -49,9 +49,7 @@ The net effect is therefore what we would want: that a user with both `admin_rol
 
 
 
-== Shiro Configuration
-
-The Isis permission resolver is specified in `WEB-INF/shiro.ini` file:
+Finally, the Isis permission resolver is specified in `WEB-INF/shiro.ini` file:
 
 [source,ini]
 ----

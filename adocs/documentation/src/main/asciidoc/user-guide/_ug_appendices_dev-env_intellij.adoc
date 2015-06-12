@@ -357,6 +357,8 @@ To fix the issue, try:
 One thing worth knowing; IntelliJ actively scans the filesystem all the time.  It's therefore (almost always) fine to build the app from the Maven command line; IntelliJ will detect the changes and keep in sync.  If you want to force that, use `File > Synchronize`, `ctrl-alt-Y`.
 
 
+
+
 == Advanced
 
 In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
@@ -364,7 +366,8 @@ In this section are a couple of options that will reduce the length of the chang
 
 === Setting up Dynamic Reloading
 
-IMPORTANT: TODO
+IMPORTANT: TODO - see link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog].
+
 
 === Setting up JRebel
 

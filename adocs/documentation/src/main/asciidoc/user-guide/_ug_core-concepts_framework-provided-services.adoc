@@ -4,82 +4,51 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-## API vs SPI
 
 Most framework domain services are API: they exist to provide support functionality to the application's domain objects and services.  In this case an implementation of the service will be available, either by Apache Isis itself or by Isis Addons (non ASF).
 
 Some framework domain services are SPI: they exist primarily so that the application can influence the framework's behaviour.  In these cases there is (usually) no default implementation; it is up to the application to provide an implementation.
 
-## Autoregistration of Domain services
 
-Where a domain service has an implementation, it is (almost always) automatically registered just by virtue of being on the `CLASSPATH`.
+General purpose:
 
-The one exception is <<ExceptionRecognizer>>.
+* xref:_ug_reference-services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
+* xref:_ug_reference-services-api_manpage-ClockService[`ClockService`]
+* xref:_ug_reference-services-api_manpage-IsisSupportJdo[`IsisSupportJdo`]
+* xref:_ug_reference-services-api_manpage-WrapperFactory[`WrapperFactory`]
+* xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`]
+* xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]
 
-It is possible to replacing automatically-registered domain services.
+Commands/Background/Auditing:
 
+* xref:_ug_reference-services-api_manpage-CommandContext[`CommandContext`] (SPI)
+* xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] (SPI)
+* xref:_ug_reference-services-spi_manpage-AuditingService[`AuditingService`] (SPI)
+* xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundService`]
+* xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] (SPI)
+* xref:_ug_reference-services-spi_manpage-PublishingService[`PublishingService`] (SPI)
 
-## Overview of Domain Services
+Information Sharing:
 
-Unless indicated as SPI, each of the following has an implementation in Isis core.
-
-A full list of services (including those with implementations in link:http://www.isisaddons.org[Isis Addons] (non-ASF)) can be found in the xref:_ug_domain-services-spi[Domain Services (SPI)] chapter.
-
-### `DomainObjectContainer`
-
-### `ClockService`
-
-### `IsisSupportJdo`
-
-### `ExceptionRecognizer`
-
-### `WrapperFactory`
-
-### `EventBusService`
-
-### Commands/Background
-
-#### `CommandContext`
-
-#### `BackgroundService`
-
-### Information Sharing
-
-#### `ScratchPad`
-
-#### `ActionInvocationContext`
-
-#### `QueryResultsCache`
-
-### `EmailService`
-
-### UserManagement
-
-#### `UserProfileService` (SPI)
-
-#### `UserRegistrationService` (SPI)
-
-#### `EmailNotificationService`
+* xref:_ug_reference-services-api_manpage-ScratchPad[`ScratchPad`]
+* xref:_ug_reference-services-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
+* xref:_ug_reference-services-api_manpage-QueryResultsCache[`QueryResultsCache`]
 
 
-### Bookmarks and Mementos
+UserManagement:
 
-#### `BookmarkService`
-
-#### `MementoService`
-
-#### `DeepLinkService`
-
-#### `XmlSnapshotService`
+* xref:_ug_reference-services-spi_manpage-UserProfileService[`UserProfileService`] (SPI)
+* xref:_ug_reference-services-spi_manpage-UserRegistrationService[`UserRegistrationService`] (SPI)
+* xref:_ug_reference-services-spi_manpage-EmailNotificationService[`EmailNotificationService`] (SPI)
 
 
+Bookmarks and Mementos:
+
+* xref:_ug_reference-services-api_manpage-BookmarkService[`BookmarkService`]
+* xref:_ug_reference-services-api_manpage-MementoService[`MementoService`]
+* xref:_ug_reference-services-api_manpage-DeepLinkService[`DeepLinkService`]
+* xref:_ug_reference-services-api_manpage-XmlSnapshotService[`XmlSnapshotService`]
 
 
-
-
-
-
-
+A full list of services can be found in the xref:_ug_domain-services-api[Domain Services (API)]  and xref:_ug_domain-services-spi[Domain Services (SPI)] reference chapters.
 

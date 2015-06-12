@@ -6,7 +6,11 @@
 
 IMPORTANT: TODO
 
-## Visibility ("see it")
+
+
+== Visibility ("see it")
+
+IMPORTANT: TODO - xref:_ug_reference-methods_prefixes_manpage-hide[`hide...()`]
 
 ### Hide a Property
 
@@ -18,7 +22,12 @@ IMPORTANT: TODO
 
 ### All Members Hidden
 
-## Usability ("use it")
+
+
+
+== Usability ("use it")
+
+IMPORTANT: TODO - xref:_ug_reference-methods_prefixes_manpage-disable[`disable...()`]
 
 ### Disable a Property
 
@@ -42,7 +51,10 @@ In the Wicket viewer this means disabling the edit button.
 
 
 
-## Validity ("do it")
+== Validity ("do it")
+
+IMPORTANT: TODO - xref:_ug_reference-methods_prefixes_manpage-validate[`validate...()`], xref:_ug_reference-methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], xref:_ug_reference-methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] and xref:_ug_reference-methods_reserved_manpage-validate[`validate()`]
+
 
 ### Validate (change to) a Property
 
@@ -52,7 +64,9 @@ In the Wicket viewer this means disabling the edit button.
 
 ### Validating a Contributed Property, Collection or Action
 
-### Declarative validation using `@MustSatisfy`
+### Declarative validation
+
+IMPORTANT: TODO - using xref:_ug_reference-annotations_manpage-Action_mustSatisfy[`@Action#mustSatisfy()`], xref:_ug_reference-annotations_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`]
 
 
 

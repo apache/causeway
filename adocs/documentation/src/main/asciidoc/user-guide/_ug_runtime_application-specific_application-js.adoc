@@ -4,7 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
 
-in `WEB-INF/scripts/application.js`
+IMPORTANT: TODO - `WEB-INF/scripts/application.js`

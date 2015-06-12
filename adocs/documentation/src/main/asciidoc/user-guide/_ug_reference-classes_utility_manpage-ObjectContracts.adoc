@@ -44,9 +44,6 @@ We therefore recommend that you disable persistence-by-reachability by adding:
 [source,ini]
 .persistor_datanucleus.properties
 ----
-#
-# Require explicit persistence (since entities are Comparable and using ObjectContracts#compareTo).
-#
 isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 

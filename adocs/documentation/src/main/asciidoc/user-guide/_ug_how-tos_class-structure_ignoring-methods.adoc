@@ -6,11 +6,11 @@
 
 
 
-IMPORTANT: TODO
+IMPORTANT: WIP
 
 
 Sometimes you want to define a `public` method on a domain object that is not intended to be rendered in Isis' UI.
 
-To exclude such methods, use the `@Programmatic` annotation.
+To exclude such methods, use the xref:_ug_reference-annotations_manpage-Programmatic[`@Programmatic`] annotation.
 
 

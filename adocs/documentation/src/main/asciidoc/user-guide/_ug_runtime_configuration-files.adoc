@@ -32,54 +32,5 @@ for any other security-related config properties (but there are none currently).
 You can if you wish simply store all properties in the `isis.properties` file; but we think that breaking properties out into sections is preferable.
 
 
-== Specifying other components
-
-The `isis.properties` file has three configuration properties in particular that specify the major components of Isis to use.  They are:
-
-.Core Configuration Properties
-[cols="2a,1,3a", options="header"]
-|===
-|Property
-|Value +
-(_default value_)
-|Implements
-
-|`isis.persistor`
-|`_datanucleus_`
-|`org.apache.isis.core.runtime.installerregistry.installerapi.` `PersistenceMechanismInstaller`
-
-|`isis.authentication`
-|`_shiro_` +
-`bypass`
-|`org.apache.isis.core.runtime.authentication.` `AuthenticationManagerInstaller`
-
-|`isis.authorization`
-|`_shiro_` +
-`bypass`
-|`org.apache.isis.core.runtime.authorization.` `AuthorizationManagerInstaller`
-
-|===
-
-[TIP]
-====
-The values "datanucleus", "shiro" etc are actually aliases for concrete implementations listed in Isis' `installer-registry.properties` file (in `isis-core-runtime.jar`).  It is -- at least in theory -- possible to specify a fully qualified class name to replace any of these components.  In practice only the two security APIs are actually simple enough for this to be viable.
-====
-
-As for the viewers, these are specified indirectly by way of the filters and servlets in the `web.xml` file (discussed xref:_ug_runtime_web-xml[below]).  However, the configuration of which viewers to initialize is declared through a context parameter:
 
 
-[source,xml]
-----
-<context-param>
-    <param-name>isis.viewers</param-name>
-    <param-value>wicket,restfulobjects</param-value>
-</context-param>
-----
-
-The net effect of this configuration is simply to ensure that the `viewer_wicket.properties` and/or the `viewer_restfulobjects.properties` files are read.
-
-
-
-
-
-include::_ug_runtime_configuration-files_deployment-types.adoc[leveloffset=+1]

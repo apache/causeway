@@ -14,10 +14,13 @@ Configuration properties for the viewers can be found in the xref:_ug_wicket-vie
 Also, note that by default the configuration values are part of the built WAR file.  Details on how to override these configuration properties externally for different environments can be found in the <<Deployment>> chapter.
 ====
 
+
+include::_ug_runtime_deployment-types.adoc[leveloffset=+1]
 include::_ug_runtime_configuration-files.adoc[leveloffset=+1]
+include::_ug_runtime_specifying-components.adoc[leveloffset=+1]
 include::_ug_runtime_configuring-core.adoc[leveloffset=+1]
-include::_ug_runtime_web-xml.adoc[leveloffset=+1]
 include::_ug_runtime_configuring-datanucleus.adoc[leveloffset=+1]
+include::_ug_runtime_web-xml.adoc[leveloffset=+1]
 include::_ug_runtime_application-specific.adoc[leveloffset=+1]
 
 

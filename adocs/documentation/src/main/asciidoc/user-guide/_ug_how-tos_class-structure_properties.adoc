@@ -116,7 +116,7 @@ We recommend the former mapping, though, using `@Property(optionality=Optionalit
 
 
 
-== Mapping String (Length)
+== ``String``s (Length)
 
 IMPORTANT: TODO
 
@@ -137,8 +137,7 @@ For example, the `ToDoItem` (in the https://github.com/isisaddons/isis-app-todoa
 
 
 
-
-== Mapping BigDecimals
+== ``BigDecimal``s (Precision)
 
 Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
 

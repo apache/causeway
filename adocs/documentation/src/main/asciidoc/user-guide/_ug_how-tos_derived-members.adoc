@@ -6,13 +6,20 @@
 
 IMPORTANT: TODO
 
-## Derived Property
-
-## Derived Collection
 
 
-.Inlining query-only repository action
-****
+
+== Derived Property
+
+IMPORTANT: TODO
+
+
+
+
+== Derived Collection
+
+IMPORTANT: WIP
+
 While derived properties and derived collections typically "walk the graph" to associated objects, there is nothing to prevent the returned value being the result of invoking a repository (domain service) action.
 
 For example:
@@ -26,9 +33,16 @@ public class Customer {
     }
 }
 ----
-****
 
-## Trigger on property change
 
-## Trigger on collection change
 
+
+== Trigger on property change
+
+IMPORTANT: TODO - xref:_ug_reference-methods_prefixes_manpage-modify[`modify...()`], xref:_ug_reference-methods_prefixes_manpage-clear[`clear...()`]
+
+
+
+== Trigger on collection change
+
+IMPORTANT: TODO - xref:_ug_reference-methods_prefixes_manpage-addTo[`addTo...()`], xref:_ug_reference-methods_prefixes_manpage-removeFrom[`removeFrom...()`]

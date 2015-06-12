@@ -456,7 +456,7 @@ To ensure testability, there should be no dependencies on system time, for examp
 
 
 
-== Decoupling using Contributions
+== Using Contributions
 
 One of Isis' most powerful features is the ability for the UI to combine functionality from domain services into the representation of an entity. The effect is similar to traits or mix-ins in other languages, however the "mixing in" is done at runtime, within the Isis metamodel. In Isis' terminology, we say that the domain service action is contributed to the entity.
 
@@ -499,7 +499,7 @@ Finally, note that the layout of contributed actions/collections/properties can 
 
 
 
-== Decoupling using the Event Bus
+== Using the Event Bus
 
 Another way in which Apache Isis helps you keep your application nicely modularized is through its event bus. Each action invocation, or property modification, can be used to generate a succession of events that allows subscribers to veto the interaction (the see it/use it/do it rules) or, if the action is allowed, to perform work prior to the execution of the action or after the execution of the action.
 
@@ -516,7 +516,7 @@ Using the guidance in the docs for the xref:_ug_reference-services-api_manpage-E
 
 
 
-== Bulk actions (and the `ScratchPad`)
+== Bulk actions
 
 Bulk actions are actions that can be invoked on a collection of actions, that is on collections returned by invoking an action. Actions are specified as being bulk actions using the xref:_ug_reference-annotations_manpage-Action_invokeOn[`@action(invokeOn=OBJECT_AND_COLLECTION)`] annotation.
 
@@ -541,7 +541,7 @@ The similar xref:_ug_reference-services-api_manpage-ScratchPad[`ScratchPad`] (re
 
 
 
-== Performance tuning (optional)
+== Performance tuning
 
 The xref:_ug_reference-services-api_manpage-QueryResultsCache[`QueryResultsCache`] (request-scoped) domain service allows arbitrary objects to be cached for the duration of a request.
 

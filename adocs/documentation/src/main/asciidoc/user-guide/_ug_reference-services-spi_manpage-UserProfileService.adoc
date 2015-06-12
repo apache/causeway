@@ -33,60 +33,12 @@ In the future this API may be expanded; one obvious possibility is to return a p
 
 == Implementation
 
+The (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] has a simple implementation of this service:
 
-== Usage
-
-
-== Registering the Services
-
-Assuming that the `configuration-and-annotation` services installer is configured:
-
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
-
-then ...
+image::{_imagesdir}reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{_imagesdir}reference-services-spi/UserProfileService/todoapp.png"]
 
 
-
-
-== Related Services
-
-
-
-
-
-____
-
+[NOTE]
+====
 Currently this feature is not integrated with Isis' authentication mechanisms; the information provided is purely metadata provided for presentation purposes only.
-
-____
-
-
-
-== Screenshot
-
-The https://github.com/isisaddons/isis-app-todoapp[todoapp] (not ASF) provides a custom implementation that
-demonstrates the use of this service:
-
-<a href="images/user-profile-service.png"><img width="600px" src="images/user-profile-service.png"/></a>
-
-The implementation is very straight-forward:
-
-[source,java]
-----
-@DomainService
-public class CustomUserProfileService implements UserProfileService {
-
-    @Override
-    @Programmatic
-    public String userProfileName() {
-        return "Hi " + getAuthenticationSession().getUserName() + "!";
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
-}
-----
+====

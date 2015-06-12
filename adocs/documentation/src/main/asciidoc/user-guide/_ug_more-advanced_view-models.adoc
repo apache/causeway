@@ -4,14 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-== `@ViewModel`
-
-== `ViewModel` interface
-
-
-== @DomainObject(nature=...)
+IMPORTANT: WIP - xref:_ug_reference-annotations_manpage-ViewModel[`@ViewModel`], xref:_ug_reference-classes_super_manpage-AbstractViewModel[`AbstractViewModel`], xref:_ug_reference-annotations_manpage-DomainObject_nature[`@DomainObject#nature()`]
 
 
 Nature of view models

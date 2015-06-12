@@ -21,48 +21,25 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
 This allows for different implementations of the `CommandService` and `BackgroundCommandService` to persist to wherever.
 
-The diagram below shows the dependencies between these various classes:
+The diagram below (http://yuml.me/edit/363b335f[yuml.me/363b335f]) shows the dependencies between these various classes:
 
 .Inheritance Hierarchy for `BackgroundCommandExecution`
 image::{_imagesdir}headless-access/BackgroundCommandExecution.png[width="400px"]
 
-[TIP]
-====
-[source,ini]
-.DSL (http://yuml.me/edit/363b335f[yuml.me/363b335f])
-----
-[AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
-[BackgroundCommandExecution]^-[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]
-[BackgroundCommandExecutionFromBackgroundCommandServiceJdo]->injected[BackgroundCommandServiceJdoRepository|findBackgroundCommandsNotYetStarted()]
-----
-
-====
 
 
 
 
 
 
-== Background Execution using Isis Addons Command Module (not ASF)
+== Background Execution
 
-The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of <<BackgroundCommandExecution>>, the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
+The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:_ug_reference-services-api_manpage-BackgroundService[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
-This implementation queries for ``Command``s persisted by the link:http://www.isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of <<CommandService>> and <<BackgroundCommandService>> using the `BackgroundCommandServiceJdoRepository`.
+This implementation queries for ``Command``s persisted by the link:http://www.isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of xref:_ug_reference-services-spi_manpage-CommandService[`CommandService`] and xref:_ug_reference-services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
 
-The diagram below shows the inheritance hierarchy for this class:
+The diagram below (link:http://yuml.me/edit/25343da1[yuml.me/25343da1]) shows the inheritance hierarchy for this class:
 
 .Inheritance Hierarchy for `BackgroundCommandExecutionFromBackgroundCommandServiceJdo`
 image::{_imagesdir}headless-access/BackgroundCommandExecutionFromBackgroundCommandServiceJdo.png[width="500px"]
 
-
-[TIP]
-====
-[source,java]
-.DSL (http://yuml.me/edit/25343da1[yuml.me/25343da1]):
-----
-[AbstractIsisSessionTemplate|#doExecute()]^-[BackgroundCommandExecution|#findBackgroundCommandsToExecute()]
-[BackgroundCommandExecution]->injected[BookmarkService|lookup()]
-[BackgroundCommandExecution]->injected[CommandContext|setCommand()]
-----
-
-====

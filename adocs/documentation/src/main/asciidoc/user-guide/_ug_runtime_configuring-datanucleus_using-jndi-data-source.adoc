@@ -8,7 +8,7 @@ Isis' JDO objectstore can be configured either to connect to the database using 
 
 
 
-== Application managed connections
+== Application managed
 
 Using a connection pool managed directly by the application (that is, by Isis' JDO objectstore and ultimately by DataNucleus) requires a single set of configuration properties to be specified.
 
@@ -28,7 +28,9 @@ Those configuration properties that start with the prefix `isis.persistor.datanu
 
 
 
-== Container managed (JNDI) datasource
+
+
+== Container managed (JNDI)
 
 Using a datasource managed by the servlet container requires three separate bits of configuration.
 

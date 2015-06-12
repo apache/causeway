@@ -17,7 +17,7 @@ image::{_imagesdir}wicket-viewer/about-page/about-page.png[width="800px",link="{
 
 [NOTE]
 ====
-TODO: this screenshot need to be updated for the new look-n-feel introduced in 1.8.0
+Note that this screenshot shows an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note that the `Build-Time` attribute has been used as the version number. The Wicket viewer is hard-coded to search for specific attributes and use as the application version. In order, it searches for:

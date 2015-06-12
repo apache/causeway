@@ -10,7 +10,7 @@ This chapter pulls together a number of more advanced techniques that we've disc
 
 
 include::_ug_more-advanced_decoupling.adoc[leveloffset=+1]
-include::_ug_more-advanced_assembling.adoc[leveloffset=+1]
+include::_ug_more-advanced_overriding-jdo-annotations.adoc[leveloffset=+1]
 include::_ug_more-advanced_bulk-actions.adoc[leveloffset=+1]
 include::_ug_more-advanced_view-models.adoc[leveloffset=+1]
 include::_ug_more-advanced_mapping-rdbms-views.adoc[leveloffset=+1]

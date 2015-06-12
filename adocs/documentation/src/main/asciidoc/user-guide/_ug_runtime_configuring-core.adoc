@@ -6,9 +6,11 @@
 
 This section lists the core/runtime configuration properties recognized by Apache Isis.
 
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:_ug_runtime_configuring-datanucleus[Configuring DataNucleus] section elsewhere in this chapter.
+[NOTE]
+====
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:_ug_runtime_configuring-datanucleus[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:_ug_wicket-viewer_configuration-properties[here for Wicket viewer], and xref:_ug_restfulobjects-viewer_configuration-properties[here for the Restful Objects viewer].
+====
 
-Configuration properties for the viewers can be found in the <<Wicket Viewer>> chapter and the <<Restful Objects Viewer>> chapter.
 
 
 .Core Configuration Properties
@@ -23,6 +25,7 @@ Configuration properties for the viewers can be found in the <<Wicket Viewer>> c
 `editing`
 | `true`,`false` (`true`)
 |Whether objects' properties and collections can be edited directly (for objects annotated with xref:_ug_reference-annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:_ug_runtime_configuring-core_isis-objects-editing[below] for further discussion.
+
 
 |`isis.persistor.` +
 `disableConcurrencyChecking`
@@ -64,6 +67,16 @@ See xref:_ug_extending_programming-model_finetuning[finetuning the programming m
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
 See xref:_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
 
+
+|`isis.reflector.` +
+`layoutMetadataReaders`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_reference-object-layout_dynamic[dynamic layout]s. +
+
+See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+
+
+
 |`isis.reflector.validator`
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
@@ -75,29 +88,12 @@ See xref:_ug_extending_programming-model_custom-validator[Custom Validator] to l
 | `true`,`false` (`true`)
 | Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
 
-|`isis.reflector.` +
-`layoutMetadataReaders`
-|`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:_ug_reference-object-layout_dynamic[dynamic layout]s. +
-
-See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
-
-
-|`isis.services-installer`
-|`configuration-and-annotation`, `configuration`, `FQCN` (`configuration`)
-|The mechanism to discover and load domain services. +
-
-* `configuration-and-annotation` will search for `@DomainService`-annotated classes and also read from `isis.services` configuration property
-
-* `configuration` will only read from the `isis.services` configuration property. +
-
-* Otherwise an alternative implementation of the `o.a.i.core.runtime.services.ServicesInstaller` internal API can be provided.
-
-
-
 |`isis.services`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated as domain services.  Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to `@DomainServiceLayout#menuOrder()`).
+|Fully qualified class names of classes to be instantiated as domain services.  +
+
+Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:_ug_reference-annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+
 
 |`isis.services.` +
 `audit.objects`
@@ -120,21 +116,21 @@ See xref:_ug_extending_programming-model_layout-metadata-reader[Layout Metadata 
 | `isis.service.` +
 `email.tls.enabled` +
 | `true`,`false` (`_true_`)
-|Whether to enable TLS for the connection.  +
+|Whether to enable TLS for the email SMTP connection (used by xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider.  +
+|The hostname of the external SMTP provider (used by xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host.  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -142,14 +138,14 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.service.` +
 `email.sender.address` +
 | email address
-|The email address to use for sending out email. This property must be configured in order to use xref:_ug_reference-services-api_manpage-EmailService[`EmailService`].  +
+|The email address to use for sending out email (used by xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email.  This property must be configured in order to use xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]. +
+|The corresponding password for the email address to use for sending out email (used by xref:_ug_reference-services-api_manpage-EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -157,12 +153,12 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.services.` +
 `eventbus.implementation` +
 | `guava`, `axon`, FQCN (`_guava_`)
-|which implementation to use as the underlying event bus.
+|which implementation to use by the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.allowLateRegistration` +
 | `true`, `false`, (`_false_`)
-|whether a domain service can register after any events have posted. +
+|whether a domain service can register with the xref:_ug_reference-services-api_manpage-EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 

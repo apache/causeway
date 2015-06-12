@@ -59,7 +59,11 @@ public interface PublishingService {
             this.eventSerializer = eventSerializer;
         }
     }
-    
+
+    /**
+     * @deprecated  - not every implementation will use an {@link EventSerializer}, so this ought not to have been defined in the interface.
+     */
+    @Deprecated
     void setEventSerializer(EventSerializer eventSerializer);
 }
 

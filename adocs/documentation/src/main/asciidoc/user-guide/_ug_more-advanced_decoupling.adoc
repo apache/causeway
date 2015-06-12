@@ -17,10 +17,10 @@ There is some overlap with OSGi and Java 9's Jigsaw concepts of "module"; in the
 ====
 
 include::_ug_more-advanced_decoupling_db-schemas.adoc[leveloffset=+1]
-
 include::_ug_more-advanced_decoupling_contributions.adoc[leveloffset=+1]
-
+include::_ug_more-advanced_decoupling_vetoing-visibility.adoc[leveloffset=+1]
 include::_ug_more-advanced_decoupling_event-bus.adoc[leveloffset=+1]
+include::_ug_more-advanced_decoupling_pushing-changes.adoc[leveloffset=+1]
 
 
 

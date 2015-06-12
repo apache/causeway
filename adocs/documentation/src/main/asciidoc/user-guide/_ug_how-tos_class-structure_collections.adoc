@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+IMPORTANT: WIP
 
 
 [NOTE]
@@ -14,7 +14,7 @@ While Isis support collections of references, the framework (currently) does not
 
 Or, actually, you can, because that is a valid mapping supported by JDO/DataNucleus .  However, Isis has no default visualization.
 
-One workaround is to mark the collection as `@Programmatic`, as described in xref:_ignoring_methods[Ignoring Methods].  This ensures that the collection is ignored by Isis.
+One workaround is to mark the collection as xref:_ug_reference-annotations_manpage-Progammatic[`@Progammatic`].  This ensures that the collection is ignored by Isis.
 
 Another workaround is to wrap each value in a view model, as explained in this xref:_ug_more-advanced_tips-n-tricks_simulating-collections-of-values[tip].
 ====
@@ -22,6 +22,5 @@ Another workaround is to wrap each value in a view model, as explained in this x
 
 
 
-include::_ug_how-tos_class-structure_collections_managed-1-to-m-bidirectional-relationships.adoc[leveloffset=+1]
 
 

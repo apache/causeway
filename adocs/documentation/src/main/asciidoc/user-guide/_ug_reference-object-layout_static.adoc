@@ -156,13 +156,4 @@ image::{_imagesdir}reference-layout/4-0-8-0.png[width="720px",link="{_imagesdir}
 
 == Other Annotations
 
-As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations:
-
-* xref:_ug_reference-annotations_manpage-ActionLayout[`@ActionLayout`]
-* xref:_ug_reference-annotations_manpage-CollectionLayout[`@CollectionLayout`]
-* xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`]
-* xref:_ug_reference-annotations_manpage-DomainServiceLayout[`@DomainServiceLayout`]
-* xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParameterLayout`]
-* xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`]
-* xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`]
-
+As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations: xref:_ug_reference-annotations_manpage-ActionLayout, [`@ActionLayout`] xref:_ug_reference-annotations_manpage-CollectionLayout[`@CollectionLayout`],  xref:_ug_reference-annotations_manpage-DomainObjectLayout[`@DomainObjectLayout`],  xref:_ug_reference-annotations_manpage-DomainServiceLayout[`@DomainServiceLayout`],  xref:_ug_reference-annotations_manpage-ParameterLayout[`@ParameterLayout`], xref:_ug_reference-annotations_manpage-PropertyLayout[`@PropertyLayout`], and xref:_ug_reference-annotations_manpage-ViewModelLayout[`@ViewModelLayout`]

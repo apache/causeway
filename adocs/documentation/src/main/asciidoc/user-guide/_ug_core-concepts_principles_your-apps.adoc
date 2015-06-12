@@ -9,7 +9,7 @@ IMPORTANT: TODO
 
 == Decoupled
 
-IMPORTANT: TODO ...
+IMPORTANT: TODO
 
 Long-term Cost of ownership
 
@@ -25,14 +25,12 @@ Using:
 
 == Honouring the Single Responsibility Principle
 
-IMPORTANT: TODO
-
-* behaviourally Complete vs Contributions
+IMPORTANT: TODO - behaviourally Complete vs Contributions
 
 
 == Testable
 
-IMPORTANT: TODO
+IMPORTANT: WIP
 
 While Apache Isis can be used (very effectively) for simple CRUD-style applications, it is also intended to be used for complex business domains.  Ensuring that the business logic in such applications is correct means that the framework must (and does) provide robust testing support, both for developer-level unit testing and business-level (end-to-end) integration testing.
 

@@ -4,5 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+
+IMPORTANT: TODO - as used in link:http://github.com/estatio/estatio[Estatio]
 

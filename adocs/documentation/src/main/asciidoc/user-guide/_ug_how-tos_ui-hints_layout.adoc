@@ -4,12 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
 
-
-== Layout using annotations
-
-== Dynamic layouts
-
-== Application menu layout
+See the xref:_ug_reference-object-layout[object layout] chapter.
 

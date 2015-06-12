@@ -23,7 +23,7 @@ image::{_imagesdir}wicket-viewer/bookmarked-pages/panel.png[width="800px",link="
 
 [NOTE]
 ====
-TODO: this screenshot need to be updated for the new look-n-feel introduced in 1.8.0
+Note that these screenshots show an earlier version of the xref:_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note how the list contains both domain objects and an action ("not yet complete").
@@ -31,11 +31,6 @@ Note how the list contains both domain objects and an action ("not yet complete"
 Bookmarks can also form a hierarchy.  The following screenshot, also taken from the https://github.com/estatio/estatio[Estatio] application, shows a variety of different bookmarked objects with a nested structure:
 
 image::{_imagesdir}wicket-viewer/bookmarked-pages/panel-estatio.png[width="800px",link="{_imagesdir}wicket-viewer/bookmarked-pages/panel-estatio.png"]
-
-[NOTE]
-====
-TODO: this screenshot need to be updated for the new look-n-feel introduced in 1.8.0
-====
 
 Some - like `Property`, `Lease` and `Party` - are root nodes. However, `LeaseItem` is bookmarkable as a child of `Lease`, and `LeaseTerm` is bookmarkable only as a child of `LeaseItem`. This parent/child relationship is reflected in the layout.
 

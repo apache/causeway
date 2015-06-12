@@ -96,7 +96,7 @@ Impl'n (g: a:)
 |
 
 
-|_ug_reference-classes_super_manpage-FixtureScripts[`o.a.i.applib.` +
+|xref:_ug_reference-classes_super_manpage-FixtureScripts[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |``o.a.i.core`` +

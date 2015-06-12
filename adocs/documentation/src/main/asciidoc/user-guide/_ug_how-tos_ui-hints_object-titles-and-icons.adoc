@@ -21,7 +21,7 @@ The title is always shown with an icon, so there is generally no need for the ti
 
 === Declarative style
 
-The `@Title` annotation can be used build up the title of an object from its constituent parts.
+The xref:_ug_reference-annotations_manpage-Title[`@Title`] annotation can be used build up the title of an object from its constituent parts.
 
 For example:
 
@@ -75,7 +75,7 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 
 === Imperative style
 
-IMPORTANT: TODO
+IMPORTANT: TODO - see xref:_ug_reference-methods_reserved_manpage-title[`title()`]
 
 
 
@@ -84,7 +84,9 @@ IMPORTANT: TODO
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-methods_reserved_manpage-iconName[`iconName()`], xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+
+
 
 
 == Object CSS Styling
@@ -92,4 +94,4 @@ IMPORTANT: TODO
 
 It is also possible for an object to return a xref:_ug_reference-methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:_ug_wicket-viewer_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-IMPORTANT: TODO
+IMPORTANT: TODO - xref:_ug_reference-methods_reserved_manpage-cssClass[`cssClass()`], xref:_ug_reference-annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:_ug_reference-annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:_ug_reference-annotations_manpage-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:_ug_reference-annotations_manpage-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]
