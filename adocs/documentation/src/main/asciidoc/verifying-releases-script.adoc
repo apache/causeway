@@ -1,0 +1,152 @@
+[[verify-releases-using-a-script]]
+= Verify releases using a script
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+
+pass:[<br/><br/>]
+
+To save some time in verifying an Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
+
+It's _recommended_ that you start this process in an empty directory:
+
+[source,bash]
+----
+mkdir ~/verify-isis-release
+cd ~/verify-isis-release
+----
+
+
+
+
+== Copy the script to your local machine
+
+The script could be enhanced in many ways, feel free to do so! Copy (or link:resources/release-process/verify-isis-release.sh[download]) the `verify-isis-release.sh` script below:
+
+[source,bash]
+----
+#!/bin/bash
+# Instructions:
+# -Create an empty directory
+# -Put a .txt file in it containing a list of all the urls of the zip files
+# -Run this script
+# TODO: enhance this script so it will stop when something is broken
+_download(){
+    for fil in `cat *.txt`
+    do
+       echo 'Downloading '$fil
+       curl  -L -O $fil
+       curl  -L -O $fil.asc
+    done
+}
+_verify(){
+    for zip in *.zip
+    do 
+       echo 'Verifying '$zip 
+       gpg --verify $zip.asc $zip 
+    done
+}
+_unpack(){
+    echo 'Unpacking '
+    unzip -q '*.zip'
+}
+_build(){
+    echo 'Removing Isis from local repo '$module
+    rm -rf ~/.m2/repository/org/apache/isis
+    COUNTER=0
+    for module in ./*/
+    do
+       COUNTER=$[COUNTER+1]
+       if [ $COUNTER -eq 1 ]
+       then
+         cd $module
+         echo 'Building Core '$module
+         mvn clean install -o
+         cd ..
+       else
+         cd $module
+         echo 'Building Module '$module
+         mvn clean install
+         cd ..
+       fi
+    done
+}
+# The work starts here 
+_download
+_verify
+_unpack
+_build
+----
+
+Make sure the script is executable:
+
+[source]
+----
+chmod +x verify-isis-release.sh
+----
+
+
+
+
+== Create an input file
+
+The input file is a plain `.txt` file containing all urls to the packages to be verified. Here's a sample of the release of Isis 1.8.0:
+
+[source]
+----
+https://repository.apache.org/content/repositories/orgapacheisis-063/org/apache/isis/core/isis/1.8.0/isis-1.8.0-source-release.zip
+https://repository.apache.org/content/repositories/orgapacheisis-065/org/apache/isis/archetype/simpleapp-archetype/1.8.0/simpleapp-archetype-1.8.0-source-release.zip
+----
+
+The actual list of packages to be verified will be provided through the mailing list.
+
+
+
+
+== Clean out Isis from your local Maven repo
+
+[source,bash]
+----
+rm -rf ~/.m2/repository/org/apache/isis
+----
+
+
+
+== Execute the script
+
+Execute...
+
+[source,bash]
+----
+./verify-isis-release.sh
+----
+
+â€¦and get yourself a cup of coffee.
+
+
+
+
+== Test the archetype
+
+Assuming that everything builds ok, then test the archetypes (adjust version as necessary):
+
+[source,bash]
+----
+mvn archetype:generate  \
+    -D archetypeGroupId=org.apache.isis.archetype \
+    -D archetypeArtifactId=simpleapp-archetype \
+    -D groupId=com.mycompany \
+    -D artifactId=myapp \
+    -D version=1.0-SNAPSHOT \
+    -B \
+    -o \
+    -D archetypeVersion=1.8.0   # adjust version as necessary
+
+cd myapp
+mvn clean install -o
+mvn -P self-host antrun:run
+----
+
+If it runs up ok, then it's time to link:verifying-releases.html[vote]!

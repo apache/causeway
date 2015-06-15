@@ -31,7 +31,7 @@
     <meta http-equiv="expires" content="-1" />
 
 
-    <-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
+    <!-- TODO: need to (re)instate CDN in the future (not using for now just so can develop off-line -->
     <link href="<%= (attr :_basedir) %>css/foundation/5.5.1/foundation.css" rel="stylesheet" />
     <script src="<%= (attr :_basedir) %>js/foundation/5.5.1/vendor/modernizr.js"></script>
     <link href="<%= (attr :_basedir) %>css/asciidoctor/colony.css" rel="stylesheet">
@@ -236,10 +236,10 @@
         }
 
         h2 {
-          margin-top: 100px;
+          margin-top: 80px;
         }
         h3 {
-          margin-top: 50px;
+          margin-top: 40px;
         }
         h4,h5 {
           margin-top: 30px;
@@ -319,6 +319,12 @@
     </style>
 
     <style>
+        #doc-content a.guide {
+            color: white;
+        }
+    </style>
+
+    <style>
         .tocify {
             margin-top: 80px;
         }
@@ -330,11 +336,12 @@
 </head>
 <body>
 
-<div class="github-fork-ribbon-wrapper right" style="position: fixed;">
+<<div class="github-fork-ribbon-wrapper right" style="position: fixed;">
     <div class="github-fork-ribbon">
         <a href="https://github.com/apache/isis/fork">Fork me on GitHub</a>
     </div>
 </div>
+
 
 <div class="row">
 
@@ -368,62 +375,10 @@
                 <!-- Left Nav Section -->
                 <ul class="left">
 
-                    <li class="has-dropdown">
-                      <a href="#" >Demos</b></a>
-                      <ul class="dropdown">
-                        <li><a href="<%= (attr :sitebasedir) %>/intro/elevator-pitch/isis-in-pictures.html">Screenshots</a></li>
-                        <li><a href="<%= (attr :sitebasedir) %>/intro/tutorials/screencasts.html">Screencasts&nbsp;<img src="<%= (attr :sitebasedir) %>/images/tv_show-25.png"></a></li>
-                        <li><a href="<%= (attr :sitebasedir) %>/intro/powered-by/powered-by.html">Powered by</a></li>
-                        <li><a href="http://isisdemo.mmyco.co.uk/" target="_blank">Online Demo</a></li>
-                      </ul>
-                    </li>
-
-                    <li><a href="<%= (attr :sitebasedir) %>/documentation">Documentation</a></li>
-
-                    <li class="has-dropdown">
-                      <a href="#">Downloads</a>
-                      <ul class="dropdown">
-                        <li><a href="<%= (attr :sitebasedir) %>/intro/getting-started/simpleapp-archetype.html">Isis (Maven archetype)</a></li>
-                        <li><a href="<%= (attr :sitebasedir) %>/download.html">Isis (downloads)</a></li>
-                        <li><a href="http://www.isisaddons.org" target="_blank">Isis Add-ons (not ASF)</a></li>
-                      </ul>
-                    </li>
-
-                    <li class="has-dropdown">
-                      <a href="#">Help</a>
-                      <ul class="dropdown">
-                        <li><a href="<%= (attr :sitebasedir) %>/support.html">Mailing Lists</a></li>
-                        <li><a href="http://isis.markmail.org/search/?q=" target="_blank">Mailing List Archives</a></li>
-                        <li><a href="https://issues.apache.org/jira/browse/ISIS" target="_blank">JIRA</a></li>
-                        <li><a href="http://github.com/apache/isis" target="_blank">Github mirror</a></li>
-                        <li><a href="http://stackoverflow.com/questions/tagged/isis" target="_blank">Stack Overflow</a></li>
-                        <li><a href="<%= (attr :sitebasedir) %>/contributors/contributing.html">How to contribute</a></li>
-                      </ul>
-                    </li>
-
-                    <li class="has-dropdown">
-                      <a href="#" >@ASF</a>
-                      <ul class="dropdown">
-                        <li>
-                          <a href="http://www.apache.org/" target="_blank">Apache Homepage <i class="icon-share-alt"></i></a>
-                        </li>
-                        <li>
-                          <a href="http://www.apache.org/licenses/" target="_blank">Licenses <i class="icon-share-alt"></i></a>
-                        </li>
-                        <li>
-                          <a href="http://www.apache.org/security/" target="_blank">Security <i class="icon-share-alt"></i></a>
-                        </li>
-                        <li>
-                          <a href="http://www.apache.org/foundation/sponsorship.html" target="_blank">Sponsorship <i class="icon-share-alt"></i></a>
-                        </li>
-                        <li>
-                          <a href="http://www.apache.org/foundation/thanks.html">Thanks <i class="icon-share-alt"></i></a>
-                        </li>
-                        <li>
-                          <a href="{{base}}more-thanks.html">More thanks <i class="icon-share-alt"></i></a>
-                        </li>
-                      </ul>
-                    </li>
+                    <li><a href="<%= (attr :sitebasedir) %>/documentation.html">Documentation</a></li>
+                    <li><a href="<%= (attr :sitebasedir) %>/downloads.html">Downloads</a></li>
+                    <li><a href="<%= (attr :sitebasedir) %>/help.html">Help</a></li>
+                    <li><a href="<%= (attr :sitebasedir) %>/asf.html">@ASF</a></li>
 
                 </ul>
 
@@ -433,7 +388,9 @@
 </div>
 
 <div class="row">
-    <div class="large-9 medium-9 columns">
+
+    <div id="doc-content-left" class="large-9 medium-9 columns">
+
 
         <div id="doc-content">
           <%= document.content %>
@@ -450,7 +407,7 @@
 
     </div>
 
-    <div class="large-3 medium-3 xcolumns">
+    <div id="doc-content-right" class="large-3 medium-3 xcolumns">
         <div id="toc" class="<%= attr 'toc-class', 'toc2' %>">
             <div class="fallback-toc">
                 <%= converter.convert_with_options @document, 'outline', :toclevels => 4 %>
@@ -598,10 +555,24 @@
 
 </script>
 
+<script type="text/javascript">
+
+$(document).ready(function(){
+    if("Documentation" === "<%= document.name %>") {
+        console.log( "processing 'Documentation'" );
+
+        $("#doc-content-left").removeClass("large-9").removeClass("medium-9").addClass("large-12").addClass("medium-12");
+        $("#doc-content-right").removeClass("large-3").removeClass("medium-3").hide();
+    }
+
+});
+
+</script>
+
+
 <script>
 
 $( document ).ready(function() {
-    console.log( "ready!" );
 
     (function() {
       $(function() {

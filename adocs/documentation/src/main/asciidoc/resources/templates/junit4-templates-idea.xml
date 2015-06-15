@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templateSet group="junit4-templates">
+  <template name="juafter" value="@org.junit.After&#10;public void tearDown() throws Exception {&#10;    $END$&#10;}" description="" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="juassertThat" value="org.junit.Assert.assertThat($object$, $matcher$);" description="" toReformat="true" toShortenFQNames="true">
+    <variable name="object" expression="&quot;object&quot;" defaultValue="" alwaysStopAt="true" />
+    <variable name="matcher" expression="&quot;matcher&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="jubefore" value="@org.junit.Before&#10;public void setUp() throws Exception {&#10;    $END$&#10;}" description="" toReformat="true" toShortenFQNames="true">
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+  <template name="jutest" value="@org.junit.Test&#10;public void $xxx$() throws Exception {&#10;    $END$&#10;}" description="" toReformat="true" toShortenFQNames="true">
+    <variable name="xxx" expression="&quot;xxx&quot;" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="HTML" value="false" />
+      <option name="XML" value="false" />
+      <option name="JAVA_CODE" value="true" />
+      <option name="JAVA_COMMENT" value="false" />
+      <option name="JAVA_STRING" value="false" />
+      <option name="COMPLETION" value="false" />
+      <option name="JAVA_SCRIPT" value="false" />
+      <option name="OTHER" value="false" />
+    </context>
+  </template>
+</templateSet>
+

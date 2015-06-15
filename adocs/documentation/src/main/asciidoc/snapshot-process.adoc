@@ -1,0 +1,96 @@
+[[snapshot-release-process]]
+= Snapshot Release Process
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+
+pass:[<br/><br/>]
+
+Apache Isis consists of a number of separately releasable modules; see the main link:release-process.html[release process] documentation for full details. All the non-core components depend on the `core`, and use the `core`'s parent `pom.xml` as their parent pom.
+
+[NOTE]
+====
+Unless otherwise stated, you should assume that the steps described here are performed in the base directory of the module being released.
+====
+
+
+== Prerequisites
+
+Before you start, make sure you've defined the snapshots repo in your local `~/.m2/settings.xml` file:
+
+[source,xml]
+----
+<settings>
+  <servers>
+    <!-- To publish a snapshot of some part of Maven -->
+    <server>
+      <id>apache.snapshots.https</id>
+      <username>xxxxxxx</username>
+      <password>yyyyyyy</password>
+    </server>
+    ...
+  </servers>
+  ...
+</settings>
+----
+
+where `xxxxxxx` and `yyyyyyy` are your Apache LDAP username and password. For more information, see these http://www.apache.org/dev/publishing-maven-artifacts.html#dev-env[ASF docs].
+
+{note
+It is also possible to configure to use `.ssh` secure keys, and thereby avoid hardcoding your Apache LDAP password into your `.m2/settings.xml` file. A description of how to do this can be found, for example, http://bval.apache.org/release-setup.html[here].
+}
+
+
+
+== Sanity Check
+
+Before deploying the snapshot, perform a quick sanity check.
+
+First, delete all Isis artifacts from your local Maven repo:
+
+[source,bash]
+----
+rm -rf ~/.m2/repository/org/apache/isis
+----
+
+Next, check that the releasable module builds independently. The build process depends on whether the artifact is of Isis core or of one of its components:
+
+* For Isis core, build using the `-o` offline flag: +
++
+[source,bash]
+----
+mvn clean install -o
+----
++
+Confirm that the versions of the Isis artifacts now cached in your local repository are correct.
+
+* For an Isis component, build without the offline flag; Maven should pull down the component's dependencies from the Maven central repo: +
++
+[source,bash]
+----
+mvn clean install
+----
++
+Confirm that the versions of the Isis artifacts now cached in your local repository are correct (both those pulled down from Maven central repo, as well as those of the component built locally).
+
+
+
+== Deploy All Modules
+
+Deploy all modules using:
+
+[source,bsah]
+----
+mvn -D deploy=snapshot deploy
+----
+
+This will deploy all the modules that make up a release.
+
+To confirm that they are present, browse to Apache's https://repository.apache.org[Nexus repository manager] and search for "isis".
+
+[TIP]
+====
+Depending on the module being released, the deploy process could take a long time. Go grab a bite of lunch.
+====

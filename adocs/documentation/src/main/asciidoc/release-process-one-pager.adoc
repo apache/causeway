@@ -1,0 +1,240 @@
+[[release-process-1-pager]]
+= Release Process (1 pager)
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+
+pass:[<br/><br/>]
+
+See also the link:release-process.html[full release process] and the link:release-checklist.html[release checklist].
+
+
+
+== Switch to correct directory, parameterize the release
+
+[WARNING]
+====
+Make sure you are in the correct directory (eg `core`, or `example/archetype/zzz`)
+====
+
+
+if you are releasing `core`:
+
+[source]
+----
+cd core
+
+export ISISTMP=/c/tmp              # or whatever
+export ISISART=isis
+export ISISDEV=1.9.0-SNAPSHOT
+export ISISREL=1.8.0
+export ISISRC=RC1
+
+export ISISCOR="Y"
+env | grep ISIS | sort
+----
+
+See link:recreating-an-archetype.html[here] for details on recreating and releasing an archetype. 
+
+
+== Get code
+
+Pull down latest, create branch (eg `prepare/isis-1.8.0`):
+
+[source]
+----
+git checkout master
+git pull --ff-only
+git checkout -b $ISISART-$ISISREL
+----
+
+
+== Update parent pom
+
+Check:
+
+* parent is `org.apache:apache` (non-SNAPSHOT version)
+
+
+== Check for SNAPSHOT dependencies
+
+Search for any non-`SNAPSHOT` usages (including tck project, if any):
+
+[source]
+----
+grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | sort`
+----
+
+or (more thoroughly):
+
+[source]
+----
+vi `/bin/find . -name pom.xml | grep -v target | sort`
+----
+
+== Sanity check
+
+[WARNING]
+====
+Make sure you are in the correct directory (eg `core`, or `example/archetype/zzz`)
+====
+
+
+Clean all local mvn artifacts and rebuild with `-o` flag:
+
+[source]
+----
+cd core
+
+rm -rf ~/.m2/repository/org/apache/isis
+mvn clean install -o
+----
+
+== Check versions
+
+[TIP]
+====
+Actually, you may want to defer this and do after cutting the release (ie beginning of a new dev cycle)
+====
+
+==== Update plugin versions
+
+
+[source]
+----
+mvn versions:display-plugin-updates > /tmp/foo
+grep "\->" /tmp/foo | /bin/sort -u
+----
+
+==== Newer dependencies:
+
+[source]
+----
+mvn versions:display-dependency-updates > /tmp/foo
+grep "\->" /tmp/foo | /bin/sort -u
+----
+
+== Update license information
+
+==== Missing license headers in files:
+
+[source]
+----
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
+----
+
+==== Missing/spurious `supplemental-models.xml`
+
+[source]
+----
+mvn license:download-licenses
+if [ "$ISISCOR" == "Y" ]; then
+    groovy ../scripts/checkmissinglicenses.groovy
+else
+    groovy ../../../scripts/checkmissinglicenses.groovy
+fi
+----
+
+== Commit changes
+
+Commit any changes from the preceding steps:
+
+[source]
+----
+git commit -am "ISIS-nnnn: updates to pom.xml etc for release"
+----
+
+== Release
+
+[WARNING]
+====
+Make sure you are in the correct directory (eg `core`, or `example/archetype/zzz`)
+====
+
+==== Prepare:
+
+
+first the dry run:
+
+[source]
+----
+mvn release:prepare -P apache-release \
+                    -DdryRun=true \
+                    -DreleaseVersion=$ISISREL \
+                    -DdevelopmentVersion=$ISISDEV \
+                    -Dtag=$ISISART-$ISISREL-$ISISRC
+----
+
+then "for real": 
+
+[source]
+----
+mvn release:prepare -P apache-release -DskipTests=true -Dresume=false \
+                    -DreleaseVersion=$ISISREL \
+                    -DdevelopmentVersion=$ISISDEV \
+                    -Dtag=$ISISART-$ISISREL-$ISISRC
+----
+
+==== Confirm:
+
+[source]
+----
+rm -rf $ISISTMP/$ISISART-$ISISREL
+mkdir $ISISTMP/$ISISART-$ISISREL
+
+if [ "$ISISCOR" == "Y" ]; then
+    ZIPDIR="$M2_REPO/repository/org/apache/isis/core/$ISISART/$ISISREL"
+else
+    ZIPDIR="$M2_REPO/repository/org/apache/isis/$ISISCPT/$ISISART/$ISISREL"
+fi
+echo "cp \"$ZIPDIR/$ISISART-$ISISREL-source-release.zip\" $ISISTMP/$ISISART-$ISISREL/."
+cp "$ZIPDIR/$ISISART-$ISISREL-source-release.zip" $ISISTMP/$ISISART-$ISISREL/.
+
+pushd $ISISTMP/$ISISART-$ISISREL
+unzip $ISISART-$ISISREL-source-release.zip
+
+cd $ISISART-$ISISREL
+mvn clean install
+
+cat DEPENDENCIES
+
+popd
+----
+
+==== Perform:
+
+[source]
+----
+mvn release:perform -P apache-release \
+    -DworkingDirectory=$ISISTMP/$ISISART-$ISISREL/checkout
+----
+
+[NOTE]
+====
+The `workingDirectory` property is to avoid 260 char path issue if building on Windows.
+====
+
+
+== Nexus staging
+
+Log onto http://repository.apache.org[repository.apache.org] and close the staging repo.
+
+== Git branches/tags
+
+Push branch:
+
+[source]
+----
+git push -u origin $ISISART-$ISISREL
+----
+
+Then push tag:
+
+[source]
+----
+git push origin refs/tags/$ISISART-$ISISREL-$ISISRC:refs/tags/$ISISART-$ISISREL-$ISISRC
+git fetch
+----

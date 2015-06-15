@@ -1,0 +1,72 @@
+[[editor-templates]]
+= Editor Templates
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+pass:[<br/><br/><br/>]
+
+
+We provide IDE templates (for IntelliJ and Eclipse) for writing Isis domain objects, and also for unit tests (JUnit and JMock).
+
+== Download
+
+The following table lists the templates to download
+
+[cols="1a,1a,1a,1a", options="header"]
+|===
+
+|Template
+|Prefix
+|IntelliJ
+|Eclipse
+
+
+|Isis Domain Objects
+|is
+|link:./resources/templates/isis-templates-idea.xml[Download]
+|link:./resources/templates/isis-templates.xml[Download]
+
+
+|JUnit tests
+|ju
+|link:./resources/templates/junit-templates-idea.xml[Download]
+|link:./resources/templates/junit-templates.xml[Download]
+
+
+|JMock tests
+|<tt>jm
+|link:./resources/templates/jmock-templates-idea.xml[Download]
+|link:./resources/templates/jmock-templates.xml[Download]
+
+|===
+
+
+The most commonly used Isis domain objects templates are also listed on the link:./cheat-sheet.html[Isis cheat sheet].
+
+
+
+== Installation
+
+=== IntelliJ
+
+To install in IntelliJ, copy to the relevant `config/templates` directory, eg:
+
+* Windows `<User home>\.IntelliJIdea14\config\templates`
+* Linux `~/.IntelliJIdea14/config/templates`
+* Mac OS `~/Library/Preferences/IntelliJIdea14/templates`
+
+
+=== Eclipse
+
+To install in Eclipse, go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
+
+
+
+
+
+== Usage
+
+Enter the prefix (`is`, `ju`, `jm`) and the IDE will list all available templates in that category.  
+

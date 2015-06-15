@@ -1,0 +1,117 @@
+[[downloads]]
+= Downloads
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+
+pass:[<br/><br/><br/>]
+
+Apache Isis&trade; software is a framework for rapidly developing domain-driven apps in Java. Write your business logic in entities, domain services and repositories, and the framework dynamically generates a representation of that domain model as a webapp or RESTful API. Use for prototyping or production.
+
+
+
+
+== Getting Started
+
+If you just want to get going quickly, we suggest using our Maven archetype.  For more information, see link:./simpleapp-archetype.html[here].
+
+
+
+== Formal Releases
+
+If you want to build Isis from formally released source tarballs, you can download from here:
+
+Core:
+
+* https://www.apache.org/dyn/closer.cgi/isis/isis-core/isis-1.8.0-source-release.zip[isis-1.8.0] (http://www.apache.org/dist/isis/isis-core/isis-1.8.0-source-release.zip.asc[asc], http://www.apache.org/dist/isis/isis-core/isis-1.8.0-source-release.zip.md5[md5])
+
+
+Archetypes:
+
+* https://www.apache.org/dyn/closer.cgi/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.8.0-source-release.zip[simpleapp-archetype-1.8.0] (http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.8.0-source-release.zip.asc[asc], http://www.apache.org/dist/isis/archetype/simpleapp-archetype/simpleapp-archetype-1.8.0-source-release.zip.md5[md5])
+
+
+
+== Verifying Releases
+
+It is essential that you verify the integrity of any downloaded files using the PGP or MD5 signatures. For more information on signing artifacts and why we do it, check out the http://www.apache.org/dev/release-signing.html[Release Signing FAQ].
+
+The PGP signatures can be verified using PGP or GPG. First download the http://www.apache.org/dist/isis/KEYS[KEYS] as well as the asc signature file for the artifact. Make sure you get these files from the http://www.apache.org/dist/isis/[main distribution directory], rather than from a mirror.
+
+Then verify the signatures using a command such as:
+
+[source,bash]
+----
+pgpk -a KEYS
+pgpv isis-1.8.0-source-release.zip.asc
+----
+
+or
+
+[source,bash]
+----
+pgp -ka KEYS
+pgp isis-1.8.0-source-release.zip.asc
+----
+
+
+or
+
+[source,bash]
+----
+gpg –import KEYS
+gpg –verify isis-1.8.0-source-release.zip.asc
+----
+
+
+
+Alternatively, you can verify the MD5 signature on the files. A Unix/Linux program called `md5` or `md5sum` is included in most distributions. It is also available as part of http://www.gnu.org/software/textutils/textutils.html[GNU Textutils].   Windows users can get binary md5 programs from these (and likely other) places:
+
+* http://www.md5summer.org/[http://www.md5summer.org/]
+* http://www.fourmilab.ch/md5/[http://www.fourmilab.ch/md5/]
+* http://www.pc-tools.net/win32/md5sums/[http://www.pc-tools.net/win32/md5sums/]
+
+
+
+
+== Source Code
+
+You can also download the Isis source code using:
+
+[source,bash]
+----
+git clone git://git.apache.org/isis.git
+----
+
+or
+
+[source,bash]
+----
+git clone http://git.apache.org/isis.git
+----
+
+
+The code is also mirrored on http://github.com/apache/isis[github], where you can browse it or fork it. And if you're interested in contributing back to Isis, see link:contributors/contributing.html[here].
+
+
+
+=== Committers
+
+Committers should use the read/write repo:
+
+[source,bash]
+----
+https://git-wip-us.apache.org/repos/asf/isis.git
+----
+
+
+You can browse the repo https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=summary[here].
+
+
+
+
+== Isis add-ons
+
+There are also a number of (open source, but not ASF) supporting modules and extensions for you to use; see link:http://www.isisaddons.org/[Isis Add-ons].

@@ -1,0 +1,48 @@
+[[help]]
+= Help
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+
+pass:[<br/><br/><br/>]
+
+
+== Help:
+
+* link:support.html[Mailing Lists]
+* link:http://isis.markmail.org/search/?q=[Mailing List Archives]
+* link:https://issues.apache.org/jira/browse/ISIS[JIRA]
+* link:http://github.com/apache/isis[Github mirror]
+* link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
+* link:contributing.html[How to contribute]
+
+
+
+== Commonly-used Resources
+
+*  Browse link:http://github.com/apache/isis[Github mirror]
+*  link:https://issues.apache.org/jira/browse/ISIS[JIRA]
+*  link:http://stackoverflow.com/questions/tagged/isis[Stackoverflow (tagged=isis)] and link:http://stackoverflow.com/feeds/tag/isis[Stackoverflow (RSS feed)]
+
+
+== Other Resources
+
+*  link:download.html[Source code repo] (on Apache)
+*  link:https://cwiki.apache.org/confluence/display/ISIS/Index[Confluence Wiki] (register then request perms via mailing list)
+*  link:doap_isis.rdf[DOAP RDF file] (as per [Apache requirements](http://projects.apache.org/doap.html))
+*  link:https://builds.apache.org/job/isis-core-ubuntu/[CI Builds]
+*  link:https://fisheye6.atlassian.com/changelog/isis-git[Fisheye]
+*  link:https://analysis.apache.org/dashboard/index/org.apache.isis.core:isis[Sonar (@Apache)] (core module only)
+*  link:http://nemo.sonarsource.org/dashboard/index/org.apache.isis:isis-all[Sonar (3rd party)] (all modules)
+
+== Example apps (open-source)
+
+*  link:https://github.com/estatio/estatio[Estatio]
+
+== Committers' Blogs
+
+*  link:http://danhaywood.com/[Dan Haywood]
+*  link:http://www.objectconnexions.co.uk/[Rob Matthews]
+*  link:http://www.kmz.co.za/blog/[Kevin Meyer]

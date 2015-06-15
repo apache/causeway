@@ -79,13 +79,13 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 
         unless regenerate == "" then
 
-	    # if regenerated within last 6 seconds, then wait a while
+	    # if regenerated within last 3 seconds, then wait a while
 	    currentTime = Time.now
 	    timeSinceLast = currentTime.to_i - lastTimeGenerated.to_i
-	    timeUntilNext = 6 - timeSinceLast
+	    timeUntilNext = 3 - timeSinceLast
 	    if not priming and
 	       timeUntilNext > 0 then
-	        puts "skipping before regenerating (6 seconds not yet elapsed)"
+	        puts "skipping before regenerating (3 seconds not yet elapsed)"
 	    else
 		# wait 1 further second for any additional edits
 	    	sleep 1
@@ -134,7 +134,7 @@ lastTimeGenerated = Time.now - 10
 #
 if processAll then
 
-    files = Dir.glob("src/main/asciidoc/**/*")
+    files = Dir.glob("src/main/asciidoc/**")
 
     puts ""
     puts ""
@@ -164,7 +164,7 @@ puts ""
 #
 # then continue monitoring all directories
 #
-directories = Dir.glob("src/main/asciidoc/**/*/")
+directories = Dir.glob("src/main/asciidoc/**/")
 fileListener = Listen.to(directories) do |modified, added, removed|
     unless modified.length==0
         modified.each { |file|

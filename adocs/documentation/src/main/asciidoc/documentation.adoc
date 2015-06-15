@@ -1,0 +1,127 @@
+[[documentation]]
+= Documentation
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ./
+:_imagesdir: images/
+:toc: right
+
+pass:[<br/><br/><br/>]
+
+
+pass:[<div class="extended-quote-first"><p>]Perfection is finally attained not when there is no longer anything to add but when there is no longer anything to take away.
+pass:[</p></div>]
+
+pass:[<div class="extended-quote-attribution"><p>]-- Antoine de Saint-Exupery
+pass:[</p></div>]
+
+pass:[<br/>]
+
+
+[cols="1a,1a,1a",frame="none"]
+|===
+
+| *What is Isis?*
+
+* *link:./isis-in-pictures[What's Isis?] ... in pictures*
+* link:./powered-by.html[Powered by Isis]
+* link:./how-isis-works.html[How Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
+* link:./common-use-cases.html[Common Use Cases]
+* link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
+
+
+| *Archetypes and Apps:*
+
+  * *link:./simpleapp-archetype.html[SimpleApp Archetype]*
+  * http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
+
+
+
+
+|*Development Environment:*
+
+ * link:./user-guide/ug.html#_ug_appendices_dev-env_intellij[Setting up IntelliJ]
+ * link:./user-guide/ug.html#_ug_appendices_dev-env_eclipse[Setting up Eclipse]
+
+
+
+|===
+
+
+[cols="1a,1a,1a"]
+|===
+
+|*User Guide:*
+
+yada yada
+
+pass:[<a class="button guide" href="./user-guide/ug.html" role="button">User Guide »</a>]
+
+|*Reference Guide:*
+
+yada yada
+
+pass:[<a class="button guide" href="./ref-guide/rg.html" role="button">Reference Guide »</a>]
+
+
+|*Resources:*
+
+* *link:./cheat-sheet.html[Cheat Sheet]*
+
+* link:./icons.html[Icons]
+* *link:./editor-templates.html[IDE templates]* (IntelliJ and Eclipse)
+
+
+|===
+
+
+
+
+[cols="1a,1a,1a",frame="none"]
+|===
+
+|*Further resorces:*
+
+* *link:./screencasts.html[Screencasts]* image:{_imagesdir}tv_show-25.png[width="25px",link="./screencasts.html]
+* link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
+* link:./books.html[Books]
+* link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
+//* link:./downloadable-presentations.html[Downloadable Presentations]
+
+*Releases:*
+
+* link:release-notes.html[Release Notes]
+
+
+
+|*Contributors:*
+
+* link:./contributing.html[Contributing]
+* link:./building-isis.html[Building Isis]
+* link:./git-policy.html[Git Policy]
+* link:./git-cookbook.html[Git Cookbook]
+* link:./versioning-policy.html[Versioning Policy]
+
+
+|*Committers*:
+
+* link:./applying-patches.html[Applying Patches]
+* link:./recreating-an-archetype.html[Recreating an archetype]
+* link:./snapshot-process.html[Snapshot process]
+* link:./release-process.html[Release process] (link:./release-process-one-pager.html[one-pager])
+* link:./release-branch-and-tag-names.html[Release branch and tag names]
+* link:./verifying-releases.html[Verifying releases]
+* link:./key-generation.html[Key generation]
+
+
+*PMC*:
+
+* link:./pmc-notes.html[Notes]
+
+
+|====
+
+
+
+
+
+

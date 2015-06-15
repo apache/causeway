@@ -1,12 +1,16 @@
-[[_ug_isis-in-pictures]]
+[isis-in-pictures]]
 = Isis in Pictures
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
+pass:[<br/><br/><br/>]
 
-In this chapter we want to show you what a modern Isis application looks like.  The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
+
+On this page we want to show you what a modern Isis application looks like.
+
+The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
 
 The todoapp also integrates with a number of other http://www.isisaddons.org[Isis Addons] modules.  Because we expect that most apps will end up using one or more of these addons, we've chosen to include screenshots of those too.
 
