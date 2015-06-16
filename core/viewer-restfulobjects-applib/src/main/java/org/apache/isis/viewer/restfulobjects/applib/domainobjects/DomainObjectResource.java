@@ -55,6 +55,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
@@ -87,6 +88,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}/properties/{propertyId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
@@ -125,6 +127,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}/collections/{collectionId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
@@ -168,6 +171,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
@@ -193,6 +197,7 @@ public interface DomainObjectResource {
 
     @GET
     @Path("/{domainType}/{instanceId}/actions/{actionId}/invoke")
+    @Consumes({ MediaType.WILDCARD })
     @Produces({
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
