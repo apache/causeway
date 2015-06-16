@@ -54,10 +54,6 @@ import org.apache.isis.applib.util.ObjectContracts;
                 value = "SELECT "
                         + "FROM domainapp.dom.modules.simple.SimpleObject "),
         @javax.jdo.annotations.Query(
-                name = "sum", language = "JDOQL",
-                value = "SELECT sum(value)"
-                        + "FROM domainapp.dom.modules.simple.SimpleObject "),
-        @javax.jdo.annotations.Query(
                 name = "findByName", language = "JDOQL",
                 value = "SELECT "
                         + "FROM domainapp.dom.modules.simple.SimpleObject "
