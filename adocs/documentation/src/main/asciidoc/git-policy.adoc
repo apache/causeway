@@ -84,8 +84,6 @@ This way of working gives us the full history on the branch as to what the thoug
 
 == Commit message
 
-==== Commit message format
-
 The minimum we expect in a commit messages is:
 
 [source,bash]

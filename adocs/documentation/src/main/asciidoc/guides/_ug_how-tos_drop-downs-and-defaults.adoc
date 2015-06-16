@@ -1,0 +1,65 @@
+[[_ug_how-tos_drop-downs-and-defaults]]
+= Drop Downs and Defaults
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+IMPORTANT: TODO
+
+
+== For Properties
+
+IMPORTANT: WIP
+
+### Choices for Property
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+
+### Auto-complete for property
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+
+### Default for property
+
+IMPORTANT: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+
+
+
+
+== For Action Parameters
+
+IMPORTANT: WIP
+
+### Choices for action parameter
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+
+### Dependent choices for action params
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+
+### Auto-complete for action param
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+
+### Default for action param
+
+IMPORTANT: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+
+
+
+
+
+== For both Properties and Action Parameters
+
+IMPORTANT: WIP
+
+
+### Drop-down for limited number of instances
+
+IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObject_bounded[`@DomainObject#bounded()`]
+
+
+### Auto-complete (repository-based)
+
+xref:rg.adoc#_rg_annotations_manpage-DomainObject_autoComplete[`@DomainObject#autoComplete()`]

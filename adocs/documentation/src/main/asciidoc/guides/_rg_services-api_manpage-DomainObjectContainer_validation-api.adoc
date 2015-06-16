@@ -1,0 +1,26 @@
+[[_rg_services-api_manpage-DomainObjectContainer_validation-api]]
+= Validation API
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The validation API allows a domain object to programmatically validate itself or any other domain object.  Specifically, this means the validating the current state of all properties, as well as any object-level validation defined by xref:rg.adoc#_rg_methods_reserved_manpage-validate[`validate()`].
+
+The API provided is:
+
+[source,java]
+----
+public interface DomainObjectContainer {
+    @Programmatic
+    boolean isValid(Object domainObject);
+    @Programmatic
+    String validate(Object domainObject);
+    ...
+}
+----
+
+If an object is changed by editing its properties, then (using the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] at least) Isis will check that the state of the object is valid.  There is currently however no equivalent guarantee for actions.
+
+The intent of this API was (originally at least) to provide a fallback whereby actions could at least be able to perform this validation programmatically (eg in their own xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`] or xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] methods.  However, this feature should be considered experimental; your mileage may vary.

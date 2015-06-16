@@ -1,0 +1,164 @@
+[[_ug_how-tos_domain-services]]
+= Domain Services
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+It's worth extending the <<_hexagonal_architecture, Hexagonal Architecture> to show where domain services -- and in particular the domain services provided by link:http://www.isisaddons.org[Isis Addons] (non-ASF) -- fit in:
+
+.The hexagonal architecture with Isis addons
+image::{_imagesdir}how-tos/domain-services/hexagonal-architecture-addons.png[width="700px"]
+
+Here, we can see that the addons provide services both to the Isis framework (for example security, command and auditing) and also - by way of dependency injection - to the domain objects (eg tags, excel, settings). Of course, you can also write your own domain services as well, for example to interface with some external CMS system, say.
+
+The Apache Isis framework also provides numerous in-built domain services.  These are catalogued in the reference guide, see xref:rg.adoc#_rg_services-api[here] and xref:rg.adoc#_rg_services-spi[here].
+
+
+
+
+
+== Scoped services
+
+By default all domain services are considered to be singletons, and thread-safe.
+
+Sometimes though a service's lifetime is applicable only to a single request; in other words it is request-scoped.
+
+The CDI annotation xref:rg.adoc#_rg_annotations_manpage-RequestScoped[`@javax.enterprise.context.RequestScoped`] is used to indicate this fact:
+
+[source,java]
+----
+@javax.enterprise.context.RequestScoped
+public class MyService extends AbstractService {
+    ...
+}
+----
+
+The framework provides a number of request-scoped services, include a scratchpad service, query results caching, and support for co-ordinating bulk actions.  See xref:rg.adoc#_rg_services-api[here] and xref:rg.adoc#_rg_services-spi[here] for further details.
+
+
+
+
+== Registering domain services
+
+
+IMPORTANT: TODO - discuss @DomainService if `isis.services-installer=annotation-and-configuration`; how to override these defaults by explicit registration
+
+Domain services (which includes repositories and factories) can be registered in the `isis.properties` configuration file, under `isis.services` key (a comma-separated list):
+
+For example:
+
+[source,ini]
+----
+isis.services = com.mycompany.myapp.employee.Employees\,
+                com.mycompany.myapp.claim.Claims\,
+                ...
+----
+
+This will then result in the framework instantiating a single instance of each of the services listed.
+
+If all services reside under a common package, then the `isis.services.prefix` can specify this prefix:
+
+[source,ini]
+----
+isis.services.prefix = com.mycompany.myapp
+isis.services = employee.Employees,\
+                claim.Claims,\
+                ...
+----
+
+This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
+
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rg.adoc#_rg_services-api[here] and _rg_services-spi[here] for further details.
+
+
+
+
+
+== Contributions
+
+IMPORTANT: WIP - just xref xref:ug.adoc#_ug_how-tos_contributed-members[contributed members] section.
+
+
+
+
+
+
+== Menu items
+
+IMPORTANT: WIP - update to new annotations, including @DomainService(nature=...)
+
+
+By default every action of a service (by which we also mean repositories and factories) will be rendered in the viewer, eg as a menu item for that service menu. This behaviour can be suppressed by annotating the action using `@org.apache.isis.applib.annotations.NotInServiceMenu`.
+
+For example:
+
+[source,java]
+----
+public interface Library {
+    @NotInServiceMenu
+    public Loan borrow(Loanable l, Borrower b);
+}
+----
+
+Note that an action annotated as being `@NotInServiceMenu` will still be contributed. If an action should neither be contributed nor appear in service menu items, then simply annotate it as `@Hidden`.
+
+Alternatively, this can be performed using a supporting method:
+
+[source,java]
+----
+public class LibraryImpl implements Library {
+    public Loan borrow(Loanable l, Borrower b) { ... }
+    public boolean notInServiceMenuBorrow() { ... }
+}
+----
+
+
+
+
+== Menus
+
+IMPORTANT: WIP - update to new annotations, including @DomainService(nature=...)
+
+If none of the service menu items should appear, then the service itself should be annotated as `@Hidden`.
+
+For example:
+
+[source,java]
+----
+@Hidden
+public interface EmailService {
+    public void sendEmail(String to, String from, String subject, String body);
+    public void forwardEmail(String to, String from, String subject, String body);
+}
+----
+
+
+
+
+== Initialization
+
+Services can optionally declare lifecycle callbacks to initialize them (when the app is deployed) and to shut them down (when the app is undeployed).
+
+An Isis session _is_ available when initialization occurs (so services can interact with the object store, for example).
+
+
+The framework will call any `public` method annotated with xref:rg.adoc#_rg_annotations_manpage-PostConstruct[`@PostConstruct`] with either no arguments of an argument of type `Map<String,String>`
+
+or
+
+In the latter case, the framework passes in the configuration (`isis.properties` and any other component-specific configuration files).
+
+
+Shutdown is similar; the framework will call any method annotated with xref:rg.adoc#_rg_annotations_manpage-PreDestroy[`@PreDestroy`].
+
+
+
+
+== The getId() method
+
+Optionally, a service may provide a xref:rg.adoc#_rg_methods_reserved_manpage-getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
+
+

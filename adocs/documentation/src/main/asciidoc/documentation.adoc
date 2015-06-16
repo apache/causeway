@@ -22,7 +22,7 @@ pass:[<br/>]
 
 | *What is Isis?*
 
-* *link:./isis-in-pictures[What's Isis?] ... in pictures*
+* *link:./isis-in-pictures[What is Apache Isis?] ... in pictures*
 * link:./powered-by.html[Powered by Isis]
 * link:./how-isis-works.html[How Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
 * link:./common-use-cases.html[Common Use Cases]
@@ -39,8 +39,9 @@ pass:[<br/>]
 
 |*Development Environment:*
 
- * link:./user-guide/ug.html#_ug_appendices_dev-env_intellij[Setting up IntelliJ]
- * link:./user-guide/ug.html#_ug_appendices_dev-env_eclipse[Setting up Eclipse]
+* link:./guides/dg.html#_dg_intellij[Setting up IntelliJ]
+* link:./guides/dg.html#_dg_eclipse[Setting up Eclipse]
+* *link:./editor-templates.html[IDE templates]* (IntelliJ and Eclipse)
 
 
 
@@ -52,23 +53,24 @@ pass:[<br/>]
 
 |*User Guide:*
 
-yada yada
+Core concepts, how tos, more advanced techniques, Wicket viewer, Restful Objects viewer, security, configuration, deployment, testing, extending
 
-pass:[<a class="button guide" href="./user-guide/ug.html" role="button">User Guide »</a>]
+pass:[<a class="button guide" href="./guides/ug.html" role="button">User Guide »</a>]
 
 |*Reference Guide:*
 
-yada yada
+Annotations, reserved methods, method prefixes domain services (API and SPI), utility classes, object layout
 
-pass:[<a class="button guide" href="./ref-guide/rg.html" role="button">Reference Guide »</a>]
+pass:[<a class="button guide" href="./guides/rg.html" role="button">Reference Guide »</a>]
 
 
 |*Resources:*
 
-* *link:./cheat-sheet.html[Cheat Sheet]*
+To save you time
 
-* link:./icons.html[Icons]
 * *link:./editor-templates.html[IDE templates]* (IntelliJ and Eclipse)
+* *link:./cheat-sheet.html[Cheat Sheet]*
+* link:./icons.html[Icons]
 
 
 |===
@@ -79,10 +81,13 @@ pass:[<a class="button guide" href="./ref-guide/rg.html" role="button">Reference
 [cols="1a,1a,1a",frame="none"]
 |===
 
-|*Further resorces:*
+|*Further resources:*
 
-* *link:./screencasts.html[Screencasts]* image:{_imagesdir}tv_show-25.png[width="25px",link="./screencasts.html]
+For digging deeper
+
+* link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px",link="./screencasts.html]
 * link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
+
 * link:./books.html[Books]
 * link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
 //* link:./downloadable-presentations.html[Downloadable Presentations]

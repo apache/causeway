@@ -119,9 +119,11 @@
 
                         <!-- The gem-maven-plugin appends the scope (e.g., provided) to the gemPath defined in the plugin configuration -->
                         <gemPath>${project.build.directory}/gems-provided</gemPath>
+			<!--
                         <requires>
                             <require>asciidoctor-diagram</require>
                         </requires>
+			-->
 
                         <sourceHighlighter>coderay</sourceHighlighter>
                         <backend>html5</backend>

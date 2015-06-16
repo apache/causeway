@@ -1,0 +1,563 @@
+[[_release-notes_migration-notes]]
+= Migration Notes
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+== Upgrading to DataNucleus 4 (in 1.9.0-SNAPSHOT)
+
+Isis 1.9.0 updates to DataNucleus 4.0.0, which requires some changes (simplifications) to the Maven configuration.
+
+If you starting a new app then you can start from the <<SimpleApp archetype>>; its Maven configuration has been updated.
+
+If you have an existing Isis app that you want to upgrade, then you'll need to make some changes.
+
+
+
+=== In the parent `pom.xml`
+
+under the `<project>/<properties>`, remove:
+
+[source,xml]
+----
+<!-- must be consistent with the versions defined by the JDO Objectstore -->
+<datanucleus-accessplatform-jdo-rdbms.version>3.3.6</datanucleus-accessplatform-jdo-rdbms.version>
+<datanucleus-maven-plugin.version>3.3.2</datanucleus-maven-plugin.version>
+----
+
+
+=== In `dom/pom.xml`,
+
+under `<build>/<plugins>`, remove:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.datanucleus</groupId>
+    <artifactId>datanucleus-maven-plugin</artifactId>
+    <version>${datanucleus-maven-plugin.version}</version>
+    <configuration>
+        <fork>false</fork>
+        <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
+        <verbose>true</verbose>
+        <props>${basedir}/datanucleus.properties</props>
+    </configuration>
+    <executions>
+        <execution>
+            <phase>compile</phase>
+            <goals>
+                <goal>enhance</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+and (if you have it) under `<build>/<pluginManagement>/<plugins>`, remove:
+
+[source,xml]
+----
+<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+<plugin>
+    <groupId>org.eclipse.m2e</groupId>
+    <artifactId>lifecycle-mapping</artifactId>
+    <version>1.0.0</version>
+    <configuration>
+        <lifecycleMappingMetadata>
+            <pluginExecutions>
+                <pluginExecution>
+                    <pluginExecutionFilter>
+                        <groupId>
+                            org.datanucleus
+                        </groupId>
+                        <artifactId>
+                            datanucleus-maven-plugin
+                        </artifactId>
+                        <versionRange>
+                            [3.2.0-release,)
+                        </versionRange>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </pluginExecutionFilter>
+                    <action>
+                        <ignore></ignore>
+                    </action>
+                </pluginExecution>
+            </pluginExecutions>
+        </lifecycleMappingMetadata>
+    </configuration>
+</plugin>
+----
+
+
+and instead in `<profiles>` add:
+
+
+[source,xml]
+----
+<profile>
+    <id>enhance</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+    </properties>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.datanucleus</groupId>
+                                        <artifactId>datanucleus-maven-plugin</artifactId>
+                                        <versionRange>[${datanucleus-maven-plugin.version},)</versionRange>
+                                        <goals>
+                                            <goal>enhance</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore></ignore>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.datanucleus</groupId>
+                <artifactId>datanucleus-maven-plugin</artifactId>
+                <version>${datanucleus-maven-plugin.version}</version>
+                <configuration>
+                    <fork>false</fork>
+                    <log4jConfiguration>${basedir}/log4j.properties</log4jConfiguration>
+                    <verbose>true</verbose>
+                    <props>${basedir}/datanucleus.properties</props>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-jodatime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-api-jdo</artifactId>
+        </dependency>
+    </dependencies>
+</profile>
+----
+
+If you don't use Eclipse then you can omit the `org.eclipse.m2e` plugin in `<pluginManagement>`.
+
+
+
+
+=== In the webapp's `persistor_datanucleus.properties`
+
+in `src/main/webapp/WEB-INF/`,
+
+change:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.autoCreateSchema=true
+isis.persistor.datanucleus.impl.datanucleus.validateTables=true
+isis.persistor.datanucleus.impl.datanucleus.validateConstraints=true
+----
+
+to:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.schema.autoCreateAll=true
+isis.persistor.datanucleus.impl.datanucleus.schema.validateTables=true
+isis.persistor.datanucleus.impl.datanucleus.schema.validateConstraints=true
+----
+
+and change:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.identifier.case=PreserveCase
+----
+
+to:
+
+[source,ini]
+----
+isis.persistor.datanucleus.impl.datanucleus.identifier.case=MixedCase
+----
+
+
+[WARNING]
+====
+Be careful to ensure that your classes are only enhanced by the DataNucleus 4 enhancer, and _not_ by the DataNucleus 3 enhancer.  Or even, be careful that they are not doubly enhanced.  One of our committers had this situation and it led to all sorts of bizarre issues.  The solution, it turned out, was actually just to do a full `mvn clean`.
+
+If you are struggling and suspect you may have misconfigured the enhancer plugin, then you can decompile the bytecode (eg in IntelliJ) and take a look:
+
+* A class enhanced with DataNucleus 3 would implement `javax.jdo.spi.PersistenceCapable` interface
+* A class enhanced with DataNucleus 4 will implement `org.datanucleus.enhancer.Persistable`.
+====
+
+
+
+
+== Upgrading to Java 8 (1.9.0-SNAPSHOT and later)
+
+Apache Isis 1.9.0-SNAPSHOT is the first version to support Java 8.  You can continue to use Java 7, but if you want to move to Java 8 then there are several small changes to be made.
+
+=== In the parent `pom.xml`
+
+under `<build>/<pluginManagement>/<plugins>`, add (or update) maven-enforcer-plugin:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.1</version>
+    <configuration>
+        <source>1.8</source>
+        <target>1.8</target>
+        <compilerArgument>-parameters</compilerArgument>
+    </configuration>
+    <executions>
+        <execution>
+            <id>source</id>
+            <phase>compile</phase>
+        </execution>
+        <execution>
+            <id>test</id>
+            <phase>test-compile</phase>
+        </execution>
+    </executions>
+</plugin>
+----
+
+[TIP]
+====
+The `-parameters` argument causes the Java compiler to capture the names of method parameters in the `.class` files.  Isis can be configured to use this, thereby avoiding the requirement to annotate every parameter with `@ParameterLayout(named=...)` or `@Named()`.  The necessary configuration is provided in an http://github.com/isisaddons/isis-metamodel-paraname8[Isis addons' paraname8]  metamodel extension (non-ASF).
+====
+
+We also recommend that you add the `maven-enforcer-plugin` (if not used already).  Again, this resides under `<build>/<pluginManagement>/<plugins>`:
+
+[source,xml]
+----
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-enforcer-plugin</artifactId>
+    <version>1.3.1</version>
+    <configuration>
+        <rules>
+            <requireMavenVersion>
+                <version>[3.2.1,)</version>
+            </requireMavenVersion>
+            <requireJavaVersion>
+                <version>[1.8.0,)</version>
+            </requireJavaVersion>
+            <requirePluginVersions>
+                <message>All plugin versions must be defined!</message>
+                <banLatest>true</banLatest>
+                <banRelease>true</banRelease>
+            </requirePluginVersions>
+            <DependencyConvergence />
+        </rules>
+    </configuration>
+    <executions>
+        <execution>
+            <id>validate-enforce</id>
+            <phase>validate</phase>
+            <goals>
+                <goal>enforce</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+----
+
+
+== Migrating from v1.7.0 to 1.8.0
+
+Existing projects written against v1.7.0 should run against v1.8.0 without any changes.  In particular (unlike 1.6.0 and
+ 1.7.0) there should be no need to update `pom.xml` files of existing projects.  If you *do* encounter any difficulties
+then let us know via the [users mailing list](../../support.html), so we can support you and document issues here.
+
+That said, many of the existing annotations have been deprecated in 1.8.0, replaced with a simplified and rationalized
+ set of annotations; see [here](../../reference/recognized-annotations/about.html).  To help you migrate your application
+ over to the new annotations, there is a new configuration property that can be set in `isis.properties`:
+
+    isis.reflector.validator.allowDeprecated=false
+
+If this flag is present and set to false, then metamodel validation errors will be thrown on startup if any deprecated
+annotations are encountered.  These can be viewed either in the console or by browsing to the app (an error page will
+be displayed).
+
+
+
+
+
+== Migrating from v1.6.0 to 1.7.0
+
+In v1.7.0 we've continued the work started in v1.6.0 in modularizing the framework. The most important change to note is that all Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to [http://www.isisaddons.org](Isis Addons).
+
+In addition, we've retired some obsolete (and unused) functionality, specifically the `ProfileStore` component.
+
+To move up amounts to changing POM files and, where required, updating package names for any referenced modules.
+
+=== Reorganized 'modules'
+
+The following modules are no longer released as part of Isis core and have moved to Isis Addons (or in one case, back into Isis core).
+
+Minor changes are required to `pom.xml` files and (in some cases) to `isis.properties` config file.
+
+In one or two exceptional cases it may be necessary to fix up import statements if there are reference to changed package/class names in code (most likely any dependency on the `devutils` module or `settings` module).
+
+==== Audit module
+
+In `pom.xml`, replace:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-audit-jdo</artifactId>
+</dependency>
+----
+
+with:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.isisaddons.module.audit</groupId>
+    <artifactId>isis-module-audit-dom</artifactId>
+</dependency>
+----
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+==== Command module
+
+In `pom.xml`, replace:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-command-jdo</artifactId>
+</dependency>
+----
+
+with:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.isisaddons.module.command</groupId>
+    <artifactId>isis-module-command-dom</artifactId>
+</dependency>
+----
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+==== DevUtils module
+
+In `pom.xml`, replace:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-devutils-applib</artifactId>
+</dependency>
+----
+
+with:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.isisaddons.module.devutils</groupId>
+    <artifactId>isis-module-devutils-dom</artifactId>
+</dependency>
+----
+
+Remove any references to:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-devutils</artifactId>
+</dependency>
+----
+
+or to:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-devutils-impl</artifactId>
+</dependency>
+----
+
+These modules are no longer required (the `org.apache.isis.module:isis-module-devutils-applib`
+and `org.apache.isis.module:isis-module-devutils-impl` submodules have been combined
+into the new `org.isisaddons.module.devutils:isis-module-devutils-dom` module).
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+==== Publishing module
+
+In `pom.xml`, replace:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-publishing-jdo</artifactId>
+</dependency>
+----
+
+with:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.isisaddons.module.publishing</groupId>
+    <artifactId>isis-module-publishing-dom</artifactId>
+</dependency>
+----
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+==== Publishing Event Serializer RO module
+
+Remove any references to:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-publishingeventserializer-ro</artifactId>
+</dependency>
+----
+
+This module has been merged with `org.isisaddons.module.publishing:isis-module-publishing-dom`, above.
+
+==== Settings module
+
+In `pom.xml`, replace:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-settings-applib</artifactId>
+</dependency>
+----
+
+with:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.isisaddons.module.settings</groupId>
+    <artifactId>isis-module-settings-dom</artifactId>
+</dependency>
+----
+
+Remove any references to:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-settings</artifactId>
+</dependency>
+----
+
+or to:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-settings-impl</artifactId>
+</dependency>
+----
+
+These modules are no longer required (the `org.apache.isis.module:isis-module-settings-applib`
+and `org.apache.isis.module:isis-module-settings-impl` submodules have been combined
+into the new `org.isisaddons.module.settings:isis-module-settings-dom` module).
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+==== Background module
+
+In `pom.xml`, remove:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.module</groupId>
+    <artifactId>isis-module-background</artifactId>
+</dependency>
+----
+
+The service classes have been moved into existing `org.apache.isis.core:isis-core-runtime` Maven module (that is, already be referenced in the `pom.xml`).
+
+If necessary, also update any services registered in `isis.properties` (package/class names may have changed slightly).
+
+=== Retired `ProfileStore` component
+
+As per <a href='https://issues.apache.org/jira/browse/ISIS-802'>ISIS-802</a>, the ProfileStore component has been removed. This functionality was not surfaced or available in the Wicket or Restful Objects viewers, so there is no meaningful loss of functionality. However, Maven `pom.xml` files will require updating:
+
+Specifically, remove any dependencies on `org.apache.isis:isis-core-profilestore`:
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.apache.isis.core</groupId>
+    <artifactId>isis-core-profilestore</artifactId>
+</dependency>
+----
+
+A number of corresponding classes/interfaces have also been removed from the Isis applib:
+
+* `org.apache.isis.applib.fixtures.userprofile.UserProfileService`
+* `org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware`
+* `org.apache.isis.applib.fixtures.UserProfileFixture`
+* `org.apache.isis.applib.profiles.Profile`
+* `org.apache.isis.applib.profiles.Perspective`
+
+It is highly unlikely that any existing production code references these classes.

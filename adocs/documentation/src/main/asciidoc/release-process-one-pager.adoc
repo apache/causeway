@@ -99,7 +99,7 @@ mvn clean install -o
 Actually, you may want to defer this and do after cutting the release (ie beginning of a new dev cycle)
 ====
 
-==== Update plugin versions
+=== Update plugin versions
 
 
 [source]
@@ -108,7 +108,7 @@ mvn versions:display-plugin-updates > /tmp/foo
 grep "\->" /tmp/foo | /bin/sort -u
 ----
 
-==== Newer dependencies:
+=== Newer dependencies:
 
 [source]
 ----
@@ -118,7 +118,7 @@ grep "\->" /tmp/foo | /bin/sort -u
 
 == Update license information
 
-==== Missing license headers in files:
+=== Missing license headers in files:
 
 [source]
 ----
@@ -126,7 +126,7 @@ mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
 ----
 
-==== Missing/spurious `supplemental-models.xml`
+=== Missing/spurious `supplemental-models.xml`
 
 [source]
 ----
@@ -154,7 +154,7 @@ git commit -am "ISIS-nnnn: updates to pom.xml etc for release"
 Make sure you are in the correct directory (eg `core`, or `example/archetype/zzz`)
 ====
 
-==== Prepare:
+=== Prepare:
 
 
 first the dry run:
@@ -178,7 +178,7 @@ mvn release:prepare -P apache-release -DskipTests=true -Dresume=false \
                     -Dtag=$ISISART-$ISISREL-$ISISRC
 ----
 
-==== Confirm:
+=== Confirm:
 
 [source]
 ----
@@ -204,7 +204,7 @@ cat DEPENDENCIES
 popd
 ----
 
-==== Perform:
+=== Perform:
 
 [source]
 ----

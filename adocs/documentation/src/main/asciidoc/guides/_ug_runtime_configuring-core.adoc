@@ -1,0 +1,239 @@
+[[_ug_runtime_configuring-core]]
+= Configuring Core
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+This section lists the core/runtime configuration properties recognized by Apache Isis.
+
+[NOTE]
+====
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:ug.adoc#_ug_runtime_configuring-datanucleus[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ug.adoc#_ug_wicket-viewer_configuration-properties[here for Wicket viewer], and xref:ug.adoc#_ug_restfulobjects-viewer_configuration-properties[here for the Restful Objects viewer].
+====
+
+
+
+.Core Configuration Properties
+[cols="2a,1,3a", options="header"]
+|===
+|Property
+|Value +
+(default value)
+|Description
+
+|`isis.object.` +
+`editing`
+| `true`,`false` (`true`)
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:ug.adoc#_ug_runtime_configuring-core_isis-objects-editing[below] for further discussion.
+
+
+|`isis.persistor.` +
+`disableConcurrencyChecking`
+| `true`,`false` (`false`)
+| Disables concurrency checking globally.  +
+
+Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
+
+|`isis.reflector.facet.` +
+`cssClass.patterns`
+|regex:css1,regex2:css2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
+
+See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+
+|`isis.reflector.facet.` +
+`cssClassFa.patterns`
+|regex:fa-icon,regex2:fa-icon2,...
+|Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
+
+See xref:_user-guide_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+
+|`isis.reflector.facets`
+|`FQCN`
+|Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
+
+See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+
+|`isis.reflector.facets.` +
+`exclude`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
+
+See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+
+|`isis.reflector.facets.` +
+`include`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
+See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+
+
+|`isis.reflector.` +
+`layoutMetadataReaders`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:rg.adoc#_rg_object-layout_dynamic[dynamic layout]s. +
+
+See xref:ug.adoc#_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+
+
+
+|`isis.reflector.validator`
+|`FQCN`
+|Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
+
+See xref:ug.adoc#_ug_extending_programming-model_custom-validator[Custom Validator] to learn more.
+
+|`isis.reflector.validator.` +
+`allowDeprecated`
+| `true`,`false` (`true`)
+| Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
+
+|`isis.services`
+|`FQCN`,`FQCN2`,...
+|Fully qualified class names of classes to be instantiated as domain services.  +
+
+Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+
+
+|`isis.services.` +
+`audit.objects`
+| `all`, `none` (`all`)
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+
+|`isis.services.` +
+`command.actions`
+| `all`, `ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically reified into commands (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+
+`ignoreQueryOnly` is an alias for `ignoreSafe`.
+
+|`isis.services.` +
+`container.disableAutoFlush`
+| `true`,`false` (`_false_`)
+|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
+
+| `isis.service.` +
+`email.tls.enabled` +
+| `true`,`false` (`_true_`)
+|Whether to enable TLS for the email SMTP connection (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.sender.hostname` +
+| host (`_smtp.gmail.com_`)
+|The hostname of the external SMTP provider (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.port` +
+| port number (`_587_`)
+|The port number for the SMTP service on the the external SMTP host (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.service.` +
+`email.sender.address` +
+| email address
+|The email address to use for sending out email (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  *Mandatory*.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+| `isis.service.` +
+`email.sender.password` +
+| email password
+|The corresponding password for the email address to use for sending out email (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  *Mandatory*.  +
+
+NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
+
+
+| `isis.services.` +
+`eventbus.implementation` +
+| `guava`, `axon`, FQCN (`_guava_`)
+|which implementation to use by the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] as the underlying event bus.
+
+| `isis.services.` +
+`eventbus.allowLateRegistration` +
+| `true`, `false`, (`_false_`)
+|whether a domain service can register with the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] after any events have posted. +
+
+Since this almost certainly constitutes a bug in application code, by default this is disallowed.
+
+
+|`isis.services.` +
+`publish.objects`
+| `all`, `none` (`all`)
+|Whether changed objects should be automatically published (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+
+|`isis.services.` +
+`publish.actions`
+| `all`, `ignoreSafe`, `none` (`all`)
+|Whether actions should be automatically published (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+
+|`isis.services.` +
+`translation.po.mode`
+| `read`,`write`
+|Whether to force the `TranslationService` into either read or write mode. +
+
+See xref:ug.adoc#_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
+
+|`isis.viewers.` +
+`paged.parented`
+|positive integer (12)
+|Default page size for parented collections (as owned by an object, eg `Customer#getOrders()`)
+
+|`isis.viewers.` +
+`paged.standalone`
+|positive integer (25)
+|Default page size for standalone collections (as returned from an action invocation)
+
+
+|`isis.viewers.` +
+`propertyLayout.labelPosition`
+|`TOP`, `LEFT` +
+(`LEFT`)
+|Default for label position for all properties if not explicitly specified using xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+
+|===
+
+
+
+
+[[_ug_runtime_configuring-core_isis-objects-editing]]
+== `objects.editing`
+
+This configuration property in effect allows editing to be disabled globally for an application:
+
+[source,ini]
+----
+isis.objects.editing=false
+----
+
+We recommend enabling this feature; it will help drive out the underlying business operations (processes and procedures) that require objects to change; these can then be captured as business actions.
+
+
+
+[[_ug_runtime_configuring-core_isis-viewers-propertyLayout-labelPosition]]
+== `propertyLayout.labelPosition`
+
+If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
+frustrating to have to annotate every property.
+
+Instead, a default can be specified in `isis.properties`:
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=TOP
+----
+
+or
+
+[source,ini]
+----
+isis.viewers.propertyLayout.labelPosition=LEFT
+----
+
+If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.

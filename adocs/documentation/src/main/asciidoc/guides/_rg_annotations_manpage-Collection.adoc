@@ -1,0 +1,106 @@
+[[_rg_annotations_manpage-Collection]]
+= `@Collection`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `@Collection` annotation applies to collections collecting together all domain semantics within a single annotation.
+
+The table below summarizes the annotation's attributes.
+
+.`@Collection` attributes
+[cols="2,2,4a", options="header"]
+|===
+
+| Attribute
+| Values (default)
+| Description
+
+
+|xref:rg.adoc#_rg_annotations_manpage-Collection_domainEvent[`domainEvent()`]
+|subtype of `CollectionDomainEvent` +
+(`CollectionDomainEvent.Default`)
+|the event type to be posted to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] to broadcast the collection's business rule checking (hide, disable, validate) and its modification (before and after).
+
+
+|xref:rg.adoc#_rg_annotations_manpage-Collection_editing[`editing()`]
+|`ENABLED`, `DISABLED`, `AS_CONFIGURED` +
+(`AS_CONFIGURED`)
+|whether a collection can be added to or removed from within the UI
+
+
+|`editingDisabledReason()`
+|String value
+|if `editing()` is `DISABLED`, provides a reason as to why.
+
+
+|xref:rg.adoc#_rg_annotations_manpage-Collection_hidden[`hidden()`]
+|`EVERYWHERE`, `OBJECT_FORMS`, `NOWHERE` +
+(`NOWHERE`)
+|indicates where (in the UI) the collection should be hidden from the user.
+
+
+|xref:rg.adoc#_rg_annotations_manpage-Collection_notPersisted[`notPersisted()`]
+|`true`, `false` +
+(`false`)
+|whether to exclude from snapshots. +
+
+[WARNING]
+====
+Collection must also be annotated with `@javax.jdo.annotations.NotPersistent` in order to not be persisted.
+====
+
+
+
+|xref:rg.adoc#_rg_annotations_manpage-Collection_typeOf[`typeOf()`]
+|
+|hints as to the run-time type of the objects within that collection (as a fallback)
+
+|===
+
+
+For example:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class DependenciesChangedEvent
+            extends CollectionDomainEvent<ToDoItem, ToDoItem> {
+        private static final long serialVersionUID = 1L;
+        public DependenciesChangedEvent(
+                ToDoItem source,
+                Identifier identifier,
+                Of of,
+                ToDoItem value) {
+            super(source, identifier, of, value);
+        }
+    }
+    @Collection(
+        domainEvent=DependenciesChangedEvent.class,
+        editing = Editing.ENABLED,
+        hidden = Where.NOWHERE,                       // <1>
+        notPersisted = false,                         // <2>
+        typeOf = ToDoItem.class                       // <3>
+    )
+    public SortedSet<ToDoItem> getDependencies() { ... }
+    ...
+}
+----
+<1> default value, so could be omitted
+<2> default value, so could be omitted
+<3> default value, so could be omitted
+
+
+
+
+
+include::_rg_annotations_manpage-Collection_domainEvent.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-Collection_editing.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-Collection_hidden.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-Collection_notPersisted.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-Collection_typeOf.adoc[leveloffset=+1]
+
+
+
+

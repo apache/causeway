@@ -134,7 +134,7 @@ lastTimeGenerated = Time.now - 10
 #
 if processAll then
 
-    files = Dir.glob("src/main/asciidoc/**")
+    files = Dir.glob("src/main/asciidoc/**/*")
 
     puts ""
     puts ""
@@ -164,7 +164,11 @@ puts ""
 #
 # then continue monitoring all directories
 #
-directories = Dir.glob("src/main/asciidoc/**/")
+adocFiles = Dir.glob("src/main/asciidoc/**/*.adoc")
+directories = adocFiles.each{ |f| File.new(f) }.uniq{ |f| File.dirname(f) }.map{ |f| File.dirname(f) }
+
+puts "listening to: #{directories}"
+
 fileListener = Listen.to(directories) do |modified, added, removed|
     unless modified.length==0
         modified.each { |file|
