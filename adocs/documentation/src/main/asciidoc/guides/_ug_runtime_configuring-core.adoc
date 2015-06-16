@@ -163,6 +163,23 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 
 
+| `isis.services.` +
+`exceprecog.logRecognizedExceptions` +
+| `true`, `false`, (`_false_`)
+|whether recognized exceptions should also be logged. +
+
+Generally a recognized exception is one that is expected (for example a uniqueness constraint violated in the database) and which does not represent an error condition.  This property logs the exception anyway, useful for debugging.
+
+
+| `isis.services.` +
+`ExceptionRecognizerComposite-` +
+`ForJdoObjectStore.disable` +
+| `true`, `false`, (`_false_`)
+|whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
+
+This implementation provides a default set of recognizers to convert RDBMS constraints into user-friendly messages.  In the (probably remote) chance that this functionality isn't required, they can be disabled through this flag.
+
+
 |`isis.services.` +
 `publish.objects`
 | `all`, `none` (`all`)

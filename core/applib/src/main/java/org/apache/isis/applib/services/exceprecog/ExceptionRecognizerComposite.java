@@ -76,7 +76,6 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      */
     @Programmatic
     public final String recognize(final Throwable ex) {
-        injectServicesIfNecessary();
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
             final String message = ers.recognize(ex);
             if(message != null) {
@@ -100,7 +99,6 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
      */
     @Programmatic
     public final Recognition recognize2(final Throwable ex) {
-        injectServicesIfNecessary();
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
             if(ers instanceof ExceptionRecognizer2) {
                 final ExceptionRecognizer2 recognizer2 = (ExceptionRecognizer2) ers;
@@ -114,33 +112,52 @@ public class ExceptionRecognizerComposite implements ExceptionRecognizer2 {
         return Recognition.of(Category.OTHER, recognize(ex));
     }
 
-    private void injectServicesIfNecessary() {
-        if(!injected) {
-            for (final ExceptionRecognizer ers : exceptionRecognizers) {
-                if (container != null)
-                    container.injectServicesInto(ers);
-            }
-            injected = true;
-        }
-    }
-
-    private boolean injected;
-
     // //////////////////////////////////////
 
+    /**
+     * For recognizers already {@link #add(ExceptionRecognizer) add}ed, simply {@link #injectServices()} and {@link #initRecognizers(Map) initializes}.
+     *
+     * <p>
+     *     Typical usage:
+     * </p>
+     * <pre>
+     *    public void init(Map&lt;String,String> properties) {
+     *        add(new ExceptionRecognizerForThisException());
+     *        add(new ExceptionRecognizerForThatException());
+     *        add(new ExceptionRecognizerForTheOtherException());
+     *        super.init(properties);
+     *    }
+     * </pre>
+     *
+     */
     @PostConstruct
     @Override
     @Programmatic
-    public final void init(final Map<String, String> properties) {
+    public void init(final Map<String, String> properties) {
+        injectServices();
+        initRecognizers(properties);
+    }
+
+    protected void injectServices() {
+        if(container != null) {
+            for (final ExceptionRecognizer ers : exceptionRecognizers) {
+                container.injectServicesInto(ers);
+            }
+        }
+    }
+
+    protected void initRecognizers(final Map<String, String> properties) {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
             ers.init(properties);
         }
     }
 
+
+
     @PreDestroy
     @Override
     @Programmatic
-    public final void shutdown() {
+    public void shutdown() {
         for (final ExceptionRecognizer ers : exceptionRecognizers) {
             ers.shutdown();
         }

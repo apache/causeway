@@ -117,7 +117,9 @@ isis.services=...,\
 
 [NOTE]
 ====
-Prior to 1.9.0, the `ExceptionRecognizerCompositeForJdoObjectStore` also required manual registration:
-
+Prior to 1.9.0, the `ExceptionRecognizerCompositeForJdoObjectStore` also required manual registration.
 ====
+
+
+If the JDO exception recognizers are not required (rather unlikely), then they can be disabled en-masse using the xref:_ug_runtime_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`.
 
