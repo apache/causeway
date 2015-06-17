@@ -67,7 +67,6 @@ import org.apache.shiro.util.StringUtils;
  *
  * ldapRealm.searchUserBase = ou=users,o=mojo
  * ldapRealm.userObjectClass=inetOrgPerson
- * ldapRealm.userObjectClass=organizationnalPerson
  * ldapRealm.groupExtractedAttribute=street,country
  * ldapRealm.userExtractedAttribute=street,country
  * ldapRealm.permissionByGroupAttribute=attribute:Folder.{street}:Read,attribute:Portfolio.{country}
