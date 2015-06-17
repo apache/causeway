@@ -145,42 +145,8 @@
                         </attributes>
                     </configuration>
                 </plugin>
-
-                <!-- SCM Publish plugin to publish documentation and site -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-scm-publish-plugin</artifactId>
-                    <version>1.1</version>
-                    <configuration>
-                        <content>${project.reporting.outputDirectory}</content>
-                        <pubScmUrl>scm:svn:${svn.scmPubUrl}</pubScmUrl>
-                        <tryUpdate>true</tryUpdate>
-                        <skipDeletedFiles>true</skipDeletedFiles>
-                        <checkoutDirectory>${svn.scmPubCheckoutDirectory}</checkoutDirectory>
-                        <serverId>isis-site</serverId>
-                    </configuration>
-                </plugin>
-
             </plugins>
         </pluginManagement>
-
-        <plugins>
-            <!-- we need to tweak the maven-release-plugin for GIT -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.1</version>
-                <configuration>
-                    <pushChanges>false</pushChanges>
-                    <localCheckout>true</localCheckout>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-
-                    <releaseProfiles>distribution</releaseProfiles>
-                    <preparationGoals>clean install</preparationGoals>
-                </configuration>
-            </plugin>
-
-        </plugins>
     </build>
 
     <dependencies>
@@ -198,25 +164,5 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>preview</id>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-scm-publish-plugin</artifactId>
-                            <version>1.1</version>
-                            <configuration>
-                                <pubScmUrl>scm:svn:${svn.scmPubUrlPreview}</pubScmUrl>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

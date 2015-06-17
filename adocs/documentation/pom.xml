@@ -36,8 +36,9 @@
     <url>http://isis.apache.org/documentation</url>
 
     <properties>
-        <svn.scmPubUrl>https://svn.apache.org/repos/asf/isis/site/trunk/content/docs/</svn.scmPubUrl>
-        <svn.scmPubUrlPreview>https://svn.apache.org/repos/asf/isis/site/trunk/content/preview/docs/</svn.scmPubUrlPreview>
+        <build.dir>${project.basedir}/target/site</build.dir>
+        <isis-site.dir>${project.basedir}/../../../isis-site/content</isis-site.dir>
+        <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
     <build>
@@ -48,7 +49,7 @@
                 <executions>
                     <execution>
                         <id>output-html</id>
-                        <phase>site</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>process-asciidoc</goal>
                         </goals>
@@ -64,14 +65,71 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-scm-publish-plugin</artifactId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
                 <executions>
                     <execution>
-                        <id>scm-publish</id>
-                        <phase>site-deploy</phase>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <target>
+                                <echo message=""/>
+                                <echo message=""/>
+
+                                <echo message=""/>
+                                <echo message="deleting everything in ${isis-site.dir}"/>
+                                <echo message=""/>
+                                <delete includeemptydirs="true">
+                                    <fileset dir="${isis-site.dir}" includes="**/*"/>
+                                </delete>
+
+                                <echo message=""/>
+                                <echo message=""/>
+                                <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                <echo message=""/>
+                                <copy todir="${isis-site.dir}">
+                                    <fileset dir="${build.dir}"/>
+                                </copy>
+
+                                <echo message=""/>
+                                <echo message=""/>
+                                <echo message="git add all content"/>
+                                <echo message=""/>
+                                <exec executable="git" dir="${isis-site.dir}">
+                                    <arg value="add"/>
+                                    <arg value="--all"/>
+                                    <arg value="."/>
+                                </exec>
+                                <echo message=""/>
+
+
+                                <echo message=""/>
+                                <echo message=""/>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>publish-scm</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <echo message=""/>
+                                <echo message=""/>
+                                <echo message="git commit -m '${message}' "/>
+                                <echo message=""/>
+                                <exec executable="git" dir="${isis-site.dir}">
+                                    <arg value="commit"/>
+                                    <arg value="-m"/>
+                                    <arg value="${message}"/>
+                                </exec>
+                                <echo message=""/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>

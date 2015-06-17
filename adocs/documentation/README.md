@@ -27,16 +27,24 @@ License
 Apache Isis is licensed under ALv2.
 See the LICENSE file for the full license text.
 
-One time configuration
------------------
 
-Put the following information in your ~/.m2/settings.xml file
+One-time setup
+--------------
 
-    <server>
-      <id>isis-site</id>
-      <username><YOUR_USERNAME></username>
-      <password><YOUR_PASSWORD></password>
-    </server>
+The generated site is published by copying into the `content/` directory of the (new) [isis-site git repo](https://git-wip-us.apache.org/repos/asf/isis-site.git).  You therefore need to check this out.
+
+The scripts assume that the two git repos (for [isis](https://git-wip-us.apache.org/repos/asf/isis.git) itself and for isis-site) are checked out into the same parent directory, eg:
+
+    /APACHE/
+        isis/                       # checkout of isis.git
+            adocs/
+                documentation/  
+                    README.md       # this file you are reading right now
+                    ...
+        isis-site/                  # checkout of isis-site.git
+            content/                # the published website
+            
+If this isn't the case, then it is possible to override the relative directory by passing in a system property to the mvn goal; see below.
 
 
 Naming Conventions
@@ -70,9 +78,9 @@ And similarly any resources should be in the `resources` subdirectory:
 Build and Review (using Maven)
 -----------------------
 
-To build the documentation locally prior to release, use:
+To (re)build the documentation locally prior to release, use:
 
-    mvn site
+    mvn clean compile
 
 The site will be generated at `target/site/index.html`.
 
@@ -121,22 +129,33 @@ So, for example
     
 will process all files before starting monitoring, start the web browser on port 9000, and will also automatically open up your default web browser at that port.
 
+> The generated files are self-contained HTML files, so in many cases you can also preview just by loading from the `file://` system.
 
 
 Publish procedure
 -----------------
 
-To publish the documentation to the [ASF staging server](http://isis.staging.apache.org/docs), run:
+> This section assuming you have checked out the `isis.git` and `isis-site.git` repos as discussed in "One-time setup", above.  If the `isis-site.git` repo is checked out to some other directory, then override the default using `-Disis-site.dir=...`
 
-    mvn clean site-deploy
+First, BE AWARE that ASF's publishing script work from the 'asf-site' branch, NOT from the 'master' branch.  Therefore, in the `isis.git` repo site:
+ 
+    git checkout asf-site
 
-Then log in to <https://cms.apache.org/isis/publish> and click on the `Submit` button.
+Back in the main `isis-git.repo`... to copy the generated documents to the `isis-site.git` repo , run: 
 
+    mvn clean package
 
-Preview procedure
------------------
-Note that it is also possible to push to a ["preview" area](http://isis.staging.apache.org/preview/docs) on the staging server;
-in general you can skip this unless you want to double-check your edits first:
+To copy and also commit the generated documents to the `isis-site.git` repo , run:
+ 
+    mvn clean install
 
-    mvn clean site-deploy -Ppreview
+To specify a commit message, use:
+ 
+    mvn clean install -Dmessage="ISIS-nnnn: a custom commit message"
+
+Pushing the commits (in the `isis-site.git` directory, of course) will publishing the changes:
+ 
+    git push
+
+Double check at [isis.apache.org](http://isis.apache.org).
 

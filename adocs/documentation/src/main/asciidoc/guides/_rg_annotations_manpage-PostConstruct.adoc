@@ -13,11 +13,10 @@ The signature of the method is:
 
 [source,java]
 ----
-@PostConstruct
-@Programmatic                          <1>
-public void postConstruct() { ... }    <2>
+@PostConstruct                          <1>
+public void postConstruct() { ... }     <2>
 ----
-<1> The method should be annotated using xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] so that it is not interpreted as an action.
+<1> (As of 1.9.0) it is not necessary to annotate the method with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`]; it will be automatically excluded from the Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
 
 In the form shown above the method can either accept no arguments.  Alternatively, the method can accept a parameter of type `Map<String,String>`:
