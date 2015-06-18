@@ -50,7 +50,6 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <modules>
-                <module>adocs/documentation</module>
                 <module>core</module>
                 <module>tck</module>
 
