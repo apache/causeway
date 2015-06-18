@@ -1520,8 +1520,3 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 
 * link:https://issues.apache.org/jira/browse/ISIS-246[ISIS-246] - DataNucleus
 
-
-
-
-
-include::_release-notes_migration-notes.adoc[leveloffset=+1]

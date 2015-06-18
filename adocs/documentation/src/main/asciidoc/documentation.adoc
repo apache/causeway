@@ -95,6 +95,7 @@ For digging deeper
 *Releases:*
 
 * link:release-notes.html[Release Notes]
+* link:migration-notes.html[Migration Notes]
 
 
 

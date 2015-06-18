@@ -79,29 +79,27 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 
         unless regenerate == "" then
 
-	    # if regenerated within last 3 seconds, then wait a while
-	    currentTime = Time.now
-	    timeSinceLast = currentTime.to_i - lastTimeGenerated.to_i
-	    timeUntilNext = 3 - timeSinceLast
-	    if not priming and
-	       timeUntilNext > 0 then
-	        puts "skipping before regenerating (3 seconds not yet elapsed)"
-	    else
-		# wait 1 further second for any additional edits
-	    	sleep 1
-                cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+            # if regenerated within last 3 seconds, then wait a while
+            currentTime = Time.now
+            timeSinceLast = currentTime.to_i - lastTimeGenerated.to_i
+            timeUntilNext = 3 - timeSinceLast
+            if not priming and
+               timeUntilNext > 0 then
+                puts "skipping before regenerating (3 seconds not yet elapsed)"
+            else
+                    cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
-                unless priming then
-                    puts ""
-                    puts "#{i}: #{cmd}"
+                    unless priming then
+                        puts ""
+                        puts "#{i}: #{cmd}"
+                        # wait 1 further second for any additional edits
+                        sleep 1
+                    end
+                    system cmd
+                    lastTimeGenerated=Time.now
                 end
-
-                system cmd
-
-                lastTimeGenerated=Time.now
-	    end
-        end
-    else
+            end
+        else
 
         unless File.directory?(srcBase) then
 
@@ -188,7 +186,12 @@ fileListener = Listen.to(directories) do |modified, added, removed|
 end
 fileListener.start
 
-httpServer = HTTPServer.new(:Port => port,  :DocumentRoot => 'target/site')
+httpServer = HTTPServer.new(
+    :Port => port,
+    :DocumentRoot => 'target/site',
+    #Logger: WEBrick::Log.new("/dev/null"),
+    AccessLog: [],
+    )
 trap("INT"){
     httpServer.shutdown
     fileListener.stop

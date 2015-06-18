@@ -6,6 +6,7 @@
 :toc: right
 
 
+
 pass:[<br/><br/>]
 
 If a patch is received on a JIRA ticket, then it should be reviewed and applied. The commands are slightly different for diff files vs patch files.
