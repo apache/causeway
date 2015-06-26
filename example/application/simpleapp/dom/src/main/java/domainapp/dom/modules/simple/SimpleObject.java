@@ -126,6 +126,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     public Long getVersionSequence() {
         return (Long) JDOHelper.getVersion(this);
     }
+    //endregion
 
     //region > compareTo
 
