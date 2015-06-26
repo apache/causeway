@@ -107,14 +107,31 @@ Each entry can be optionally prefixed by "n:" specifying the relative order on t
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
+
+|`isis.services.` +
+`container.disableAutoFlush`
+| `true`,`false` (`_false_`)
+|Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
+
 |`isis.services.` +
 `container.disableAutoFlush`
 | `true`,`false` (`_false_`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 
+
+|`ContentNegotiation-` +
+`ServiceXRoDomainType` +
+.prettyPrint
+| `true`,`false` (depends)
+|If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
++
+If no configuration property is available, then the defaults is determined by the xref:_ug_runtime_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+
+
+
 | `isis.service.` +
-`email.tls.enabled` +
+`email.tls.enabled`
 | `true`,`false` (`_true_`)
 |Whether to enable TLS for the email SMTP connection (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  +
 

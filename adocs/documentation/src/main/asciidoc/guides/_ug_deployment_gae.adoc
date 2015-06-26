@@ -4,11 +4,11 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
-
-The Google App Engine (GAE) provides a JDO API, meaning that you can deploy Isis onto GAE using the JDO objectstore.
+The link:https://cloud.google.com/appengine/docs[Google App Engine] (GAE) provides a JDO API, meaning that you can deploy Isis onto GAE using the JDO objectstore.
 
 However, GAE is not an RDBMS, and so there are some limitations that it imposes. This page gathers together various hints, tips and workarounds.
+
+
 
 
 == Primary Keys and Owned/Unowned Relationships
@@ -22,6 +22,8 @@ Any collection that holds this entity type (eg `ToDoItem#dependencies` holding a
 If on the other hand you want the object to be owned (through a 1:m relationship somewhere) by some other root, then use a String:
 
 Note: if you store a relationship with a String key it means that the parent object _owns_ the child, any attempt to change the relationship raise and exception.
+
+
 
 
 
@@ -41,7 +43,7 @@ On further investigation, it seems that the GAE implementation performs a type c
 [source,java]
 ----
 if (!supportedTypes.contains(value.getClass())) {
-     throw new IllegalArgumentException(prefix + value.getClass().getName() + " is not a supported property type.");
+    throw new IllegalArgumentException(prefix + value.getClass().getName() + " is not a supported property type.");
 }
 ----
 

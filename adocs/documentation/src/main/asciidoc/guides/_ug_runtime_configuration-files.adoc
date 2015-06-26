@@ -19,7 +19,9 @@ In addition, the following other properties are searched for and if present also
 
 * `persistor_datanucleus.properties` - assuming the JDO/DataNucleus objectstore is in use
 
-* `persistor.properties` - for any other objectstore configuration.  This typically is used to hold `JDBC` ``URL``s
+* `persistor.properties` - for any other objectstore configuration.  +
++
+This typically is used to hold `JDBC` ``URL``s, which is arguably a slight violation of the file (because there's nothing in Isis to say that persistors have to use `JDBC`.  However, it is generally convenient to put these `JDBC` settings into a single location.  If you want, they could reside inin any of `persistor_datanucleus.properties`, `persistor.properties` or (even) `isis.properties`
 
 * `authentication_shiro.properties`, `authorization_shiro.properties`
 +
@@ -30,6 +32,8 @@ assuming the Shiro Security is in use (but there are no security-related config 
 for any other security-related config properties (but there are none currently).
 
 You can if you wish simply store all properties in the `isis.properties` file; but we think that breaking properties out into sections is preferable.
+
+
 
 
 

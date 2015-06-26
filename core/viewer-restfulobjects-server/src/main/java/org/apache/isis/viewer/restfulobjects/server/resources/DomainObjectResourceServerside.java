@@ -46,6 +46,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
 @Path("/objects")
@@ -112,6 +113,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId) {
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
 
@@ -132,6 +134,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response object(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, final InputStream object) {
 
         init(RepresentationType.DOMAIN_OBJECT, Where.OBJECT_FORMS);
@@ -179,6 +182,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_PROPERTY, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response propertyDetails(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("propertyId") final String propertyId) {
         init(RepresentationType.OBJECT_PROPERTY, Where.OBJECT_FORMS);
 
@@ -274,13 +278,13 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_COLLECTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response accessCollection(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("collectionId") final String collectionId) {
         init(RepresentationType.OBJECT_COLLECTION, Where.PARENTED_TABLES);
 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
-        final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        return helper.collectionDetails(collectionId, MemberReprMode.READ);
+        return getDomainResourceHelper(objectAdapter).collectionDetails(collectionId, MemberReprMode.READ);
     }
 
     @Override
@@ -398,6 +402,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_OBJECT_ACTION, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_OBJECT_ACTION, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response actionPrompt(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId) {
         init(RepresentationType.OBJECT_ACTION, Where.OBJECT_FORMS);
 
@@ -434,6 +439,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response invokeActionQueryOnly(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -459,6 +465,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response invokeActionIdempotent(
             final @PathParam("domainType") String domainType,
             final @PathParam("instanceId") String instanceId,
@@ -483,6 +490,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_RESULT, RestfulMediaType.APPLICATION_JSON_ERROR,
             MediaType.APPLICATION_XML, RestfulMediaType.APPLICATION_XML_ACTION_RESULT, RestfulMediaType.APPLICATION_XML_ERROR
     })
+    @PrettyPrinting
     public Response invokeAction(@PathParam("domainType") String domainType, @PathParam("instanceId") final String instanceId, @PathParam("actionId") final String actionId, final InputStream body) {
         init(RepresentationType.ACTION_RESULT, Where.STANDALONE_TABLES, body);
 
