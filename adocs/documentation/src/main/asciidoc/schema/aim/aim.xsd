@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://isis.apache.org/schema/aim"
+           elementFormDefault="qualified"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns="http://isis.apache.org/schema/aim"
+           xmlns:common="http://isis.apache.org/schema/common">
+
+    <xs:import namespace="http://isis.apache.org/schema/common" schemaLocation="http://isis.apache.org/schema/common/common-1.0.xsd"/>
+
+    <xs:element name="actionInvocationMementoDto">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="metadata">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="transactionId" type="xs:string"/>
+                            <xs:element name="sequence" type="xs:int"/>
+                            <xs:element name="timestamp" type="xs:dateTime"/>
+                            <xs:element name="target" type="common:oidDto"/>
+                            <xs:element name="targetClass" type="xs:string"/>
+                            <xs:element name="targetAction" type="xs:string"/>
+                            <xs:element name="actionIdentifier" type="xs:string"/>
+                            <xs:element name="user" type="xs:string"/>
+                            <xs:element name="title" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="payload">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="parameters">
+                                <xs:complexType>
+                                    <xs:sequence maxOccurs="unbounded">
+                                        <xs:element name="param" type="paramDto"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="num" use="required" type="xs:int"/>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="return" type="common:valueDto" minOccurs="0" maxOccurs="1"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="paramDto">
+        <xs:sequence>
+            <xs:element name="value" type="common:valueDto"/>
+        </xs:sequence>
+        <xs:attribute name="parameterName" use="required" type="xs:string"/>
+        <xs:attribute name="parameterType" use="required" type="common:valueType"/>
+        <xs:attribute name="null" use="optional" type="xs:boolean"/>
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,15 @@
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               jaxb:version="2.0">
+    <jaxb:bindings schemaLocation="aim-1.0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="org.apache.isis.schema.aim.v1"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+    <!-- since aim-1.0.xsd does an xs:import of common-1.0.xsd, we need to specify common's package bindings -->
+    <jaxb:bindings schemaLocation="http://isis.apache.org/schema/common/common-1.0.xsd">
+        <jaxb:schemaBindings>
+            <jaxb:package name="org.apache.isis.schema.common.v1"/>
+        </jaxb:schemaBindings>
+    </jaxb:bindings>
+</jaxb:bindings>

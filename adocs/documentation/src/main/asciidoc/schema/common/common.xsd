@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema targetNamespace="http://isis.apache.org/schema/common"
+           elementFormDefault="qualified"
+           xmlns="http://isis.apache.org/schema/common"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <xs:complexType name="valueDto">
+        <xs:choice minOccurs="0" maxOccurs="1">
+            <xs:element name="string" type="xs:string"/>
+            <xs:element name="byte" type="xs:byte"/>
+            <xs:element name="short" type="xs:short"/>
+            <xs:element name="int" type="xs:int"/>
+            <xs:element name="long" type="xs:long"/>
+            <xs:element name="float" type="xs:float"/>
+            <xs:element name="double" type="xs:double"/>
+            <xs:element name="boolean" type="xs:boolean"/>
+            <xs:element name="char" type="xs:string"/>
+            <xs:element name="bigDecimal" type="xs:decimal"/>
+            <xs:element name="bigInteger" type="xs:integer"/>
+            <xs:element name="dateTime" type="xs:dateTime"/>
+            <xs:element name="localDate" type="xs:date"/>
+            <xs:element name="localDateTime" type="xs:dateTime"/>
+            <xs:element name="localTime" type="xs:time"/>
+            <xs:element name="reference" type="oidDto"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="oidDto">
+        <xs:sequence>
+            <xs:element name="objectType" type="xs:string"/>
+            <xs:element name="objectIdentifier" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="objectState" type="bookmarkObjectState" default="persistent"/>
+    </xs:complexType>
+
+    <xs:simpleType name="bookmarkObjectState">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="persistent"/>
+            <xs:enumeration value="transient"/>
+            <xs:enumeration value="viewModel"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+    <xs:simpleType name="valueType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="string"/>
+            <xs:enumeration value="byte"/>
+            <xs:enumeration value="short"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="long"/>
+            <xs:enumeration value="float"/>
+            <xs:enumeration value="double"/>
+            <xs:enumeration value="boolean"/>
+            <xs:enumeration value="char"/>
+            <xs:enumeration value="bigInteger"/>
+            <xs:enumeration value="bigDecimal"/>
+            <xs:enumeration value="javaUtilDate"/>
+            <xs:enumeration value="javaSqlDate"/>
+            <xs:enumeration value="javaSqlTime"/>
+            <xs:enumeration value="javaSqlTimestamp"/>
+            <xs:enumeration value="jodaDateTime"/>
+            <xs:enumeration value="jodaLocalDate"/>
+            <xs:enumeration value="jodaLocalTime"/>
+            <xs:enumeration value="jodaLocalDateTime"/>
+            <xs:enumeration value="isisApplibBlob"/>
+            <xs:enumeration value="isisApplibClob"/>
+            <xs:enumeration value="reference"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+
+</xs:schema>

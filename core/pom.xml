@@ -1088,6 +1088,22 @@ ${license.additional-notes}
                 <scope>test</scope>
             </dependency>
 
+            <!-- schema -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-schema</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <type>jar</type>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>isis-core-schema</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+
             <!-- log4j -->
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
@@ -2228,6 +2244,7 @@ ${license.additional-notes}
 
     <modules>
         <module>applib</module>
+        <module>schema</module>
         <module>log4j</module>
         <module>metamodel</module>
         <module>runtime</module>
