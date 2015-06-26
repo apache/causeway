@@ -35,6 +35,8 @@ import org.apache.isis.core.runtime.services.eventbus.adapter.EventBusImplementa
  */
 public abstract class EventBusServiceDefault extends EventBusService {
 
+    public static final String KEY_ALLOW_LATE_REGISTRATION = "isis.services.eventbus.allowLateRegistration";
+    public static final String KEY_EVENT_BUS_IMPLEMENTATION = "isis.services.eventbus.implementation";
 
     //region > register
     /**
@@ -73,28 +75,44 @@ public abstract class EventBusServiceDefault extends EventBusService {
     @Programmatic
     @PostConstruct
     public void init(final Map<String, String> properties) {
+        this.allowLateRegistration = getElseFalse(properties, KEY_ALLOW_LATE_REGISTRATION);
+        this.implementation = getNormalized(properties.get(KEY_EVENT_BUS_IMPLEMENTATION));
+    }
 
-        final String allowLateRegistrationStr = properties.get("isis.services.eventbus.allowLateRegistration");
-        this.allowLateRegistration = !Strings.isNullOrEmpty(allowLateRegistrationStr) && Boolean.parseBoolean(allowLateRegistrationStr);
-
-        final String implementation = properties.get("isis.services.eventbus.implementation");
-        if(Strings.isNullOrEmpty(implementation) || "guava".equalsIgnoreCase(implementation)) {
-            this.implementation = "guava";
-        } else if("axon".equalsIgnoreCase(implementation)) {
-            this.implementation = "axon";
+    private static String getNormalized(final String implementation) {
+        if(Strings.isNullOrEmpty(implementation)) {
+            return "guava";
         } else {
-            this.implementation = implementation;
+            final String implementationTrimmed = implementation.trim();
+            if("guava".equalsIgnoreCase(implementationTrimmed)) {
+                return "guava";
+            } else if("axon".equalsIgnoreCase(implementationTrimmed)) {
+                return "axon";
+            } else {
+                return implementationTrimmed;
+            }
         }
+    }
+
+    private static boolean getElseFalse(final Map<String, String> properties, final String key) {
+        final String value = properties.get(key);
+        return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
     //endregion
 
     private boolean allowLateRegistration;
+    boolean isAllowLateRegistration() {
+        return allowLateRegistration;
+    }
 
     /**
      * Either &lt;guava&gt; or &lt;axon&gt;, or else the fully qualified class name of an
      * implementation of {@link org.apache.isis.applib.services.eventbus.EventBusImplementation}.
      */
     private String implementation;
+    String getImplementation() {
+        return implementation;
+    }
 
     @Override
     protected org.apache.isis.applib.services.eventbus.EventBusImplementation newEventBus() {
