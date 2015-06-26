@@ -4,11 +4,11 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 ## A MetaModel with Explicit and Inferred Semantics
 
-IMPORTANT: TODO
+NOTE: TODO
 
 * use of annotations
 ** reuse JEE annotations where possible
@@ -17,7 +17,7 @@ IMPORTANT: TODO
 
 ## Domain Objects and Domain Services
 
-IMPORTANT: TODO
+NOTE: TODO
 
 * domain model
 ** domain objects
@@ -32,12 +32,12 @@ Anything else can be (should be) ignored by annotating with `@Programmatic`.
 
 ## Properties, Collections and Actions
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 ## Domain Entities vs View Models
 
-IMPORTANT: TODO
+NOTE: TODO
 
 `@DomainObject(nature=...)`
 
@@ -54,7 +54,7 @@ For convenience you can inherit from AbstractService or one of its subclasses, b
 
 ### Domain Services vs View Services
 
-IMPORTANT: TODO
+NOTE: TODO
 
 `@DomainService(nature=...)`
 
@@ -70,20 +70,20 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 
 ## Value Objects (Primitives)
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 ## Contributions
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 
 ## Event Bus
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 

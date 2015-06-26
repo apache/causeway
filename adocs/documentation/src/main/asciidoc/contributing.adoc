@@ -35,7 +35,7 @@ That is:
 . you work on your changes locally; when done, you push them to your github fork
 . to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below). In any case, before you decide to start hacking with Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the http://isis.apache.org/support.html[mailing lists].
 . Use github to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
-. An Isis committer will review your change, and apply it if suitable.
+. An Apache Isis committer will review your change, and apply it if suitable.
 
 
 
@@ -95,7 +95,7 @@ For more info on tracking branches http://git-scm.com/book/en/Git-Branching-Remo
 
 == Commit messages
 
-Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Isis committer. You should take time to write a meaningful commit message that helps explain what the patch refers to; if you don't then there's a chance that your patch may be rejected and not applied. No-one likes hard work to go to waste!
+Although with git your commits are always performed on your local repo, those commit messages become public when the patch is applied by an Apache Isis committer. You should take time to write a meaningful commit message that helps explain what the patch refers to; if you don't then there's a chance that your patch may be rejected and not applied. No-one likes hard work to go to waste!
 
 We therefore recommend that your commit messages are as follows [1]:
 

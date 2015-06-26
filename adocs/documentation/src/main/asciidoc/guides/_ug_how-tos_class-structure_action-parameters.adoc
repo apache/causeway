@@ -5,22 +5,22 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 == ``String``s (Length)
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == ``BigDecimal``s (Precision)
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == Optional
 
-IMPORTANT: TODO
+NOTE: TODO
 
 

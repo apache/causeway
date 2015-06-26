@@ -4,14 +4,14 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 
 == Derived Property
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
@@ -39,10 +39,10 @@ public class Customer {
 
 == Trigger on property change
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-modify[`modify...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-clear[`clear...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-modify[`modify...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-clear[`clear...()`]
 
 
 
 == Trigger on collection change
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-addTo[`addTo...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-addTo[`addTo...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`]

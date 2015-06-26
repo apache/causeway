@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
@@ -12,29 +12,29 @@ NOTE: see also xref:ug.adoc#_ug_more-advanced_i18n[Internationalization]
 
 == Class (object)
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
 
 
 == Property
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_named[`@PropertyLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_named[`@PropertyLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
 
 
 
 == Collections
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_named[`@CollectionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_named[`@CollectionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
 
 
 
 == Actions
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-ActionLayout_named[`@ActionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ActionLayout_named[`@ActionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
 
 
 == Action Parameters
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_named[`@ParameterLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_named[`@ParameterLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
 
 
 [TIP]

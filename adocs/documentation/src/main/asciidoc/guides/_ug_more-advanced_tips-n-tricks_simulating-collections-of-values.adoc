@@ -13,7 +13,7 @@ However, it is possible to simulate a bag of numbers using view models.
 
 == View Model
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 

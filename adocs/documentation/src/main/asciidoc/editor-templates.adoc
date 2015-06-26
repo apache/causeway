@@ -8,7 +8,7 @@
 pass:[<br/><br/><br/>]
 
 
-We provide IDE templates (for IntelliJ and Eclipse) for writing Isis domain objects, and also for unit tests (JUnit and JMock).
+We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis domain objects, and also for unit tests (JUnit and JMock).
 
 == Download
 
@@ -43,7 +43,7 @@ The following table lists the templates to download
 |===
 
 
-The most commonly used Isis domain objects templates are also listed on the link:./cheat-sheet.html[Isis cheat sheet].
+The most commonly used Apache Isis domain objects templates are also listed on the link:./cheat-sheet.html[Isis cheat sheet].
 
 
 

@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO ... Trygve Reenskaug
+NOTE: TODO ... Trygve Reenskaug
 

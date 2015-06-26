@@ -6,4 +6,4 @@
 
 
 
-IMPORTANT: TODO - `WEB-INF/scripts/application.js`
+NOTE: TODO - `WEB-INF/scripts/application.js`

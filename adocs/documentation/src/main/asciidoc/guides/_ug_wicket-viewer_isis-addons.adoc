@@ -17,17 +17,17 @@ This short section gives an overview of their capabilities.  For full informatio
 
 == Excel download
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == Fullcalendar2
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == Gmap3
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == Wicked charts
 
-IMPORTANT: TODO
+NOTE: TODO
 

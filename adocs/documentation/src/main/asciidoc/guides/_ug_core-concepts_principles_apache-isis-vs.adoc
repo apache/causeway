@@ -14,16 +14,16 @@ include::_ug_core-concepts_principles_apache-isis-vs_mvc-server-side-frameworks.
 
 == vs CQRS
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == vs Event Sourcing
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == vs Angular
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
@@ -33,4 +33,4 @@ include::_ug_core-concepts_principles_apache-isis-vs_metawidget.adoc[leveloffset
 
 == vs OpenXava
 
-IMPORTANT: TODO
+NOTE: TODO

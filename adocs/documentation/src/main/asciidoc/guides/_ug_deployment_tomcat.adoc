@@ -5,17 +5,16 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
-
+NOTE: TODO
 
 == Externalized Configuration
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == JVM Args
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 for the `WrapperFactory` (uses link:http://www.javassist.org[Javassist])

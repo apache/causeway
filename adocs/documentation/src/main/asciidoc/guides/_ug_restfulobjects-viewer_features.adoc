@@ -10,7 +10,7 @@ The REST API opens up an Isis domain model to a huge variety of applications, fr
 
 == Restful Objects Specification
 
-IMPORTANT: TODO - a brief summary here
+NOTE: TODO - a brief summary here
 
 The Restful Objects spec can be downloaded link:http://restfulobjects.org[here].
 

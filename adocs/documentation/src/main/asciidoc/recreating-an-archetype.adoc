@@ -39,7 +39,7 @@ nb: `$ISISPAR` is the version of the Isis core that will act as the archetype's 
 
 == Check the example app
 
-Make sure you are in the correct directory, and update the parent `pom.xml` to reference the _released_ version of Isis core:
+Make sure you are in the correct directory, and update the parent `pom.xml` to reference the _released_ version of Apache Isis core:
 
 [source,xml]
 ----
@@ -151,7 +151,7 @@ groovy ../../../scripts/updateGeneratedArchetypeSources.groovy -n $ISISCPN -v $I
 where:
 
 * `$ISISCPN` is the component name set earlier (`simpleapp`)
-* `$ISISPAR` is the version of isis core that is to be the parent of the generated archetype,
+* `$ISISPAR` is the version of Apache isis core that is to be the parent of the generated archetype,
 ** this will usually be the same as `$ISISREL` unless a patch/interim release of the archetype.
 
 

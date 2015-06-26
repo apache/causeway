@@ -4,5 +4,5 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO - `WEB-INF/css/application.css`
+NOTE: TODO - `WEB-INF/css/application.css`
 

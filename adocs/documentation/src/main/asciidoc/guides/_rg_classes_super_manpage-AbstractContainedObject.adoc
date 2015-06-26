@@ -4,6 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 

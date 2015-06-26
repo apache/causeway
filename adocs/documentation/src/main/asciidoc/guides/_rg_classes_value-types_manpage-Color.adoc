@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+NOTE: TODO
 

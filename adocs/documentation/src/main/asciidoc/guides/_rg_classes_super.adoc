@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 The table below summarizes all the convenience superclasses defined by Apache Isis.

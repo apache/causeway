@@ -17,9 +17,9 @@ Apache Isis has two public mailing lists.
 |===
 
 |Mailing list
-|Email</th>
-|ASF Archives</th>
-|Markmail Archives</th>
+|Email
+|ASF Archives
+|Markmail Archives
 |Subscribe
 
 

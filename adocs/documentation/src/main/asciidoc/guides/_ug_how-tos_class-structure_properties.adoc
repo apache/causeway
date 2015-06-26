@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
@@ -118,7 +118,7 @@ We recommend the former mapping, though, using `@Property(optionality=Optionalit
 
 == ``String``s (Length)
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 

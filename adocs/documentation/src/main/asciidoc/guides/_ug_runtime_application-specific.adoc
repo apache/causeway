@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 include::_ug_runtime_application-specific_application-css.adoc[leveloffset=+1]

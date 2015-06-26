@@ -5,8 +5,6 @@
 :_imagesdir: images/
 
 
-
-
 In implementing the http://en.wikipedia.org/wiki/Naked_objects[naked objects pattern], Apache Isis aims to infer as much information from the domain classes as possible.  Nevertheless, some metadata relating solely to the UI is inevitably required.
 
 

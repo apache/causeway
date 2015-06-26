@@ -17,7 +17,7 @@ To move up amounts to changing POM files and, where required, updating package n
 
 == Reorganized 'modules'
 
-The following modules are no longer released as part of Isis core and have moved to Isis Addons (or in one case, back into Isis core).
+The following modules are no longer released as part of Isis core and have moved to Isis Addons (or in one case, back into Apache Isis core).
 
 Minor changes are required to `pom.xml` files and (in some cases) to `isis.properties` config file.
 

@@ -44,7 +44,7 @@ The framework provides a number of request-scoped services, include a scratchpad
 == Registering domain services
 
 
-IMPORTANT: TODO - discuss @DomainService if `isis.services-installer=annotation-and-configuration`; how to override these defaults by explicit registration
+NOTE: TODO - discuss @DomainService if `isis.services-installer=annotation-and-configuration`; how to override these defaults by explicit registration
 
 Domain services (which includes repositories and factories) can be registered in the `isis.properties` configuration file, under `isis.services` key (a comma-separated list):
 

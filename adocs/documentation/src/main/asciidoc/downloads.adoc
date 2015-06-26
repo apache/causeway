@@ -21,7 +21,7 @@ If you just want to get going quickly, we suggest using our Maven archetype.  Fo
 
 == Formal Releases
 
-If you want to build Isis from formally released source tarballs, you can download from here:
+If you want to build Apache Isis from formally released source tarballs, you can download from here:
 
 Core:
 

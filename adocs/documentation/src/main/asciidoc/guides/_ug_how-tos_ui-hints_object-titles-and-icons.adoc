@@ -75,7 +75,7 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 
 === Imperative style
 
-IMPORTANT: TODO - see xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`]
+NOTE: TODO - see xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`]
 
 
 
@@ -84,7 +84,7 @@ IMPORTANT: TODO - see xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`]
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
 
 
 
@@ -94,4 +94,4 @@ IMPORTANT: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()
 
 It is also possible for an object to return a xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:ug.adoc#_ug_wicket-viewer_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

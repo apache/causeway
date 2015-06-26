@@ -6,7 +6,12 @@
 
 
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`]
 
 
 
+Can be set to:
+
+* `SERVER` - broadly corresponds to Wicket's `PRODUCTION` mode
+* `PROTOTYPING` - the default; broadly corresponds to Wicket's `DEVELOPMENT` mode
+* `OTHER`

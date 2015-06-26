@@ -24,15 +24,20 @@ pass:[<br/>]
 
 * *link:./isis-in-pictures[What is Apache Isis?] ... in pictures*
 * link:./powered-by.html[Powered by Isis]
-* link:./how-isis-works.html[How Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
+* link:./how-isis-works.html[How Apache Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
 * link:./common-use-cases.html[Common Use Cases]
 * link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
 
 
 | *Archetypes and Apps:*
 
-  * *link:./simpleapp-archetype.html[SimpleApp Archetype]*
-  * http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
+* *link:./simpleapp-archetype.html[SimpleApp Archetype]*
+* http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink App] (not ASF)
+
+| *Isis Add-ons*
+
+* http://isisaddons.org[Isis addons] (not ASF)
 
 
 
@@ -55,13 +60,13 @@ pass:[<br/>]
 
 Core concepts, how tos, more advanced techniques, Wicket viewer, Restful Objects viewer, security, configuration, deployment, testing, extending
 
-pass:[<a class="button guide" href="./guides/ug.html" role="button">User Guide »</a>]
+pass:[<a class="button guide" href="./guides/ug.html" role="button" target="_blank">User Guide »</a>]
 
 |*Reference Guide:*
 
 Annotations, reserved methods, method prefixes domain services (API and SPI), utility classes, object layout
 
-pass:[<a class="button guide" href="./guides/rg.html" role="button">Reference Guide »</a>]
+pass:[<a class="button guide" href="./guides/rg.html" role="button" target="_blank">Reference Guide »</a>]
 
 
 |*Resources:*

@@ -4,5 +4,5 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO - as supported by (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module.
+NOTE: TODO - as supported by (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module.
 

@@ -366,9 +366,9 @@ In this section are a couple of options that will reduce the length of the chang
 
 === Setting up Dynamic Reloading
 
-IMPORTANT: TODO - see link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog].
+NOTE: TODO - see link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog].
 
 
 === Setting up JRebel
 
-IMPORTANT: TODO
+NOTE: TODO

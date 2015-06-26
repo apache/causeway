@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 include::_rg_classes_super.adoc[leveloffset=+1]

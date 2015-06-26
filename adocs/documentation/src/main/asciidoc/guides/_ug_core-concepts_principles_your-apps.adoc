@@ -5,11 +5,11 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == Decoupled
 
-IMPORTANT: TODO
+NOTE: TODO
 
 Long-term Cost of ownership
 
@@ -25,7 +25,7 @@ Using:
 
 == Honouring the Single Responsibility Principle
 
-IMPORTANT: TODO - behaviourally Complete vs Contributions
+NOTE: TODO - behaviourally Complete vs Contributions
 
 
 == Testable

@@ -5,11 +5,11 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO
+NOTE: TODO
 
 == Mandatory and Optional
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 include::_ug_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships.adoc[leveloffset=+1]

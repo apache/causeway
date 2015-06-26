@@ -6,7 +6,7 @@
 
 
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == Init Params
@@ -18,18 +18,18 @@ IMPORTANT: TODO
 
 == Filters
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 
 == Servlets
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 
 == Running RO Viewer only
 
-IMPORTANT: TODO
+NOTE: TODO

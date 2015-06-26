@@ -56,14 +56,14 @@ Note that an action annotated as being `@NotContributed` will still appear in th
 
 ## Contributed Action
 
-IMPORTANT: TODO
+NOTE: TODO
 
 ## Contributed Property
 
-IMPORTANT: TODO
+NOTE: TODO
 
 ## Contributed Collection
 
-IMPORTANT: TODO
+NOTE: TODO
 
 

@@ -4,13 +4,13 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 
 == Visibility ("see it")
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-hide[`hide...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-hide[`hide...()`]
 
 ### Hide a Property
 
@@ -27,7 +27,7 @@ IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-hide[`hide...()`]
 
 == Usability ("use it")
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`]
 
 ### Disable a Property
 
@@ -53,7 +53,7 @@ In the Wicket viewer this means disabling the edit button.
 
 == Validity ("do it")
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] and xref:rg.adoc#_rg_methods_reserved_manpage-validate[`validate()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] and xref:rg.adoc#_rg_methods_reserved_manpage-validate[`validate()`]
 
 
 ### Validate (change to) a Property
@@ -66,7 +66,7 @@ IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate..
 
 ### Declarative validation
 
-IMPORTANT: TODO - using xref:rg.adoc#_rg_annotations_manpage-Action_mustSatisfy[`@Action#mustSatisfy()`], xref:rg.adoc#_rg_annotations_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`]
+NOTE: TODO - using xref:rg.adoc#_rg_annotations_manpage-Action_mustSatisfy[`@Action#mustSatisfy()`], xref:rg.adoc#_rg_annotations_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`]
 
 
 

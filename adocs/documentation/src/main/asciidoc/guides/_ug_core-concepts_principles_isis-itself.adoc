@@ -9,12 +9,12 @@ This section discusses some of the principles and values we apply to the develop
 
 == Full-stack but Extensible
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == Focuses on its USP
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 add-ons

@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: TODO
+NOTE: TODO
 
 
 == For Properties
@@ -13,15 +13,15 @@ IMPORTANT: WIP
 
 ### Choices for Property
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Auto-complete for property
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
 
 ### Default for property
 
-IMPORTANT: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
 
 
 
@@ -32,19 +32,19 @@ IMPORTANT: WIP
 
 ### Choices for action parameter
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Dependent choices for action params
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Auto-complete for action param
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
 
 ### Default for action param
 
-IMPORTANT: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
 
 
 
@@ -57,7 +57,7 @@ IMPORTANT: WIP
 
 ### Drop-down for limited number of instances
 
-IMPORTANT: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObject_bounded[`@DomainObject#bounded()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObject_bounded[`@DomainObject#bounded()`]
 
 
 ### Auto-complete (repository-based)
