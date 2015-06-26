@@ -47,8 +47,7 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
     @Programmatic
     @PostConstruct
     public void init(Map<String,String> properties) {
-        final String disableProp = properties.get(KEY_DISABLE);
-        final boolean disabled = !Strings.isNullOrEmpty(disableProp) && Boolean.parseBoolean(disableProp);
+        final boolean disabled = getElseFalse(properties, KEY_DISABLE);
         if(disabled) {
             return;
         }
@@ -56,6 +55,11 @@ public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionReco
         addChildren();
 
         super.init(properties);
+    }
+
+    private static boolean getElseFalse(final Map<String, String> properties, final String key) {
+        final String value = properties.get(key);
+        return !Strings.isNullOrEmpty(value) && Boolean.parseBoolean(value);
     }
 
     protected void addChildren() {
