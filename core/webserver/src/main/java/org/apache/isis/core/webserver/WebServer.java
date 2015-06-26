@@ -24,6 +24,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.Formatter;
+
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.webapp.WebAppContext;
+
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.runner.Constants;
@@ -33,9 +38,6 @@ import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebSer
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
 import org.apache.isis.core.webserver.internal.OptionHandlerResourceBase;
 import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
 
 public class WebServer {
 
@@ -132,7 +134,7 @@ public class WebServer {
     }
 
     private String baseFor(final Server jettyServer) {
-        final Connector connector = jettyServer.getConnectors()[0];
+        final ServerConnector connector = (ServerConnector) jettyServer.getConnectors()[0];
         final String scheme = "http";
         final String host = ArrayExtensions.coalesce(connector.getHost(), "localhost");
         final int port = connector.getPort();

@@ -130,7 +130,7 @@
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
         <resteasy-jaxrs.version>3.0.11.Final</resteasy-jaxrs.version>
 
-        <jetty.version>8.1.16.v20140903</jetty.version>
+        <jetty.version>9.2.11.v20150529</jetty.version>
 
         <wicket.version>6.17.0</wicket.version>
         <wicketstuff.version>6.17.0</wicketstuff.version>
@@ -1745,7 +1745,7 @@ ${license.additional-notes}
             <!-- Web development -->
             <dependency>
                 <groupId>org.eclipse.jetty.aggregate</groupId>
-                <artifactId>jetty-all-server</artifactId>
+                <artifactId>jetty-all</artifactId>
                 <version>${jetty.version}</version>
                 <exclusions>
                     <exclusion>
