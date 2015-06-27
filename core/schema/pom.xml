@@ -41,6 +41,13 @@
 
     <url>http://isis.apache.org/${relativeUrl}</url>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+        </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
             <id>xsd-to-java</id>
@@ -55,17 +62,6 @@
                             <groupId>org.jvnet.jaxb2.maven2</groupId>
                             <artifactId>maven-jaxb2-plugin</artifactId>
                             <version>0.12.3</version>
-<!--
-                            <executions>
-                                <execution>
-                                    <id>xjc-generate</id>
-                                    <phase>generate-sources</phase>
-                                    <goals>
-                                        <goal>generate</goal>
-                                    </goals>
-                                </execution>
-                            </executions>
--->
                             <configuration>
                                 <removeOldOutput>true</removeOldOutput>
                                 <episode>true</episode>
