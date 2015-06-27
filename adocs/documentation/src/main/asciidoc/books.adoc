@@ -61,4 +61,4 @@ Dan Haywood
 
 The http://restfulobjects.org[Restful Objects specification] defines a set of RESTful resources, and corresponding JSON representations, for accessing and manipulating a domain object model.
 
-This is a comprehensive specification, running to over 200 pages in length. It is implemented by Isis' link:../../components/viewers/restfulobjects/about.html[Restful Objects] viewer, and is also implemented by another (non-Apache) open source project, http://nakedobjects.codeplex.com[Naked Objects MVC].
+This is a comprehensive specification, running to over 200 pages in length. It is implemented by Apache Isis' link:../../components/viewers/restfulobjects/about.html[Restful Objects] viewer, and is also implemented by another (non-Apache) open source project, http://nakedobjects.codeplex.com[Naked Objects MVC].

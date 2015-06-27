@@ -9,7 +9,7 @@
 pass:[<br/><br/>]
 
 
-This "one-pager" cheat sheet summarises the main programming conventions to follow when writing an Isis application.
+This "one-pager" cheat sheet summarises the main programming conventions to follow when writing an Apache Isis application.
 
 pass:[<br/>]
 

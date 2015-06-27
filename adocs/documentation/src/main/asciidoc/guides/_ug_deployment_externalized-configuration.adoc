@@ -21,7 +21,7 @@ There are in fact three frameworks involved here, all of which need to be pointe
 
 which as already discussed reads `isis.properties` and optional component-specific config files.
 
-* http://shiro.apache.org[Apache Shiro] (if using the Isis' link:../components/security/shiro/about.html[Shiro integration] for authentication and/or authorization
+* http://shiro.apache.org[Apache Shiro] (if using the Apache Isis' link:../components/security/shiro/about.html[Shiro integration] for authentication and/or authorization
 
 which reads the `shiro.ini` file (and may read other files referenced from that file)
 
@@ -67,7 +67,7 @@ For more detail, see the Tomcat documentation on http://tomcat.apache.org/tomcat
 
 [NOTE]
 ====
-Note that running the app using Isis' `org.apache.isis.WebServer` bootstrapper currently does not externalized Isis configuration.
+Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstrapper currently does not externalized Apache Isis configuration.
 ====
 
 
@@ -76,13 +76,13 @@ Note that running the app using Isis' `org.apache.isis.WebServer` bootstrapper c
 
 
 [[_ug_deployment_externalized-configuration_Shiro]]
-== Externalizing Shiro's Config
+== Shiro Config
 
-If using Isis' xref:_ug_security_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
+If using Apache Isis' xref:_ug_security_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
 
-Similar to Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
+Similar to Apache Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
 
-You can therefore override the default location using the same technique as described above for Isis' `isis.config.dir` context parameter. For example:
+You can therefore override the default location using the same technique as described above for Apache Isis' `isis.config.dir` context parameter. For example:
 
 [source,xml]
 ----
@@ -93,7 +93,7 @@ You can therefore override the default location using the same technique as desc
 
 [TIP]
 ====
-Note that Shiro is more flexible than Isis; it will read its configuration from any URL, not just a directory on the local filesystem.
+Note that Shiro is more flexible than Apache Isis; it will read its configuration from any URL, not just a directory on the local filesystem.
 ====
 
 
@@ -102,7 +102,7 @@ Note that Shiro is more flexible than Isis; it will read its configuration from 
 [[_ug_deployment_externalized-configuration_Log4j]]
 == Log4j Config
 
-By default Isis configures log4j to read the `logging.properties` file in the `WEB-INF` directory. This can be overridden by setting the `log4j.properties` system property to the URL of the log4j properties file.
+By default Apache Isis configures log4j to read the `logging.properties` file in the `WEB-INF` directory. This can be overridden by setting the `log4j.properties` system property to the URL of the log4j properties file.
 
 For example, if deploying to Tomcat7, this amounts to adding the following to the `CATALINA_OPTS` flags:
 
@@ -121,11 +121,11 @@ Further details an be found in the link:https://logging.apache.org/log4j/1.2/man
 
 
 
-== Externalizing Spring's Config
+== Spring Config
 
-Although Isis does not use Spring, it's possible that your app may use other components that do use Spring.  For example, the (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module uses ActiveMQ and Camel to support publishing; both of these leverage Spring.
+Although Apache Isis does not use Spring, it's possible that your app may use other components that do use Spring.  For example, the (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module uses ActiveMQ and Camel to support publishing; both of these leverage Spring.
 
-There are several ways to externalized Spring config, but the mechanism described here is similar in nature to those that we use for externalizing Isis' and Shiro's configuration.  In your `web.xml`, you will probably load the Spring application context using code such as:
+There are several ways to externalized Spring config, but the mechanism described here is similar in nature to those that we use for externalizing Apache Isis' and Shiro's configuration.  In your `web.xml`, you will probably load the Spring application context using code such as:
 
 [source,xml]
 ----

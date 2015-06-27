@@ -144,7 +144,7 @@ Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately rel
 === New Feature
 
 
-* link:https://issues.apache.org/jira/browse/ISIS-284[ISIS-284] - Maven plugin to validate domain object model w.r.t. Isis programming conventions
+* link:https://issues.apache.org/jira/browse/ISIS-284[ISIS-284] - Maven plugin to validate domain object model w.r.t. Apache Isis programming conventions
 * link:https://issues.apache.org/jira/browse/ISIS-537[ISIS-537] - Convert Wicket viewer to use Bootstrap, so that it can be themed.
 * link:https://issues.apache.org/jira/browse/ISIS-690[ISIS-690] - &#39;Show all&#39; button for tables.
 * link:https://issues.apache.org/jira/browse/ISIS-702[ISIS-702] - Provide new annotation/facet as a hint for the layout of the label for a property.
@@ -245,7 +245,7 @@ Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately rel
 
 === Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-928[ISIS-928] - Isis 1.8.0 release tasks
+* link:https://issues.apache.org/jira/browse/ISIS-928[ISIS-928] - Apache Isis 1.8.0 release tasks
 * link:https://issues.apache.org/jira/browse/ISIS-959[ISIS-959] - Update Jackson dependency from 1.9.11 to 2.4.3
                 
 
@@ -301,7 +301,7 @@ Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately rel
 * link:https://issues.apache.org/jira/browse/ISIS-852[ISIS-852] - Derived property cannot be written properly
 * link:https://issues.apache.org/jira/browse/ISIS-871[ISIS-871] - ActionInvocationFacetForInteractionAbstract passes Null to &quot;ObjectSpecification.isViewModelCloneable&quot;
 * link:https://issues.apache.org/jira/browse/ISIS-879[ISIS-879] - ObjectMemberAbstract#isAlwaysHidden() does not honour where=Where.EVERYWHERE.
-* link:https://issues.apache.org/jira/browse/ISIS-899[ISIS-899] - Can&#39;t return a view model in Isis 1.6.0 over RO viewer.
+* link:https://issues.apache.org/jira/browse/ISIS-899[ISIS-899] - Can&#39;t return a view model in Apache Isis 1.6.0 over RO viewer.
 * link:https://issues.apache.org/jira/browse/ISIS-905[ISIS-905] - arg action.
 * link:https://issues.apache.org/jira/browse/ISIS-912[ISIS-912] - fixture flag is broken).
 * link:https://issues.apache.org/jira/browse/ISIS-919[ISIS-919] - scoped) service when logging in DEBUG mode.

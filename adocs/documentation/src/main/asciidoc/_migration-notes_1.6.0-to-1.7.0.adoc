@@ -6,7 +6,7 @@
 
 
 
-In v1.7.0 we've continued the work started in v1.6.0 in modularizing the framework. The most important change to note is that all Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to [http://www.isisaddons.org](Isis Addons).
+In v1.7.0 we've continued the work started in v1.6.0 in modularizing the framework. The most important change to note is that all Apache Isis core modules (with the Maven `groupId` of `org.apache.isis.module` have now MOVED to [http://www.isisaddons.org](Isis Addons).
 
 In addition, we've retired some obsolete (and unused) functionality, specifically the `ProfileStore` component.
 
@@ -17,7 +17,7 @@ To move up amounts to changing POM files and, where required, updating package n
 
 == Reorganized 'modules'
 
-The following modules are no longer released as part of Isis core and have moved to Isis Addons (or in one case, back into Apache Isis core).
+The following modules are no longer released as part of Apache Isis core and have moved to Isis Addons (or in one case, back into Apache Isis core).
 
 Minor changes are required to `pom.xml` files and (in some cases) to `isis.properties` config file.
 
@@ -259,7 +259,7 @@ Specifically, remove any dependencies on `org.apache.isis:isis-core-profilestore
 </dependency>
 ----
 
-A number of corresponding classes/interfaces have also been removed from the Isis applib:
+A number of corresponding classes/interfaces have also been removed from the Apache Isis applib:
 
 * `org.apache.isis.applib.fixtures.userprofile.UserProfileService`
 * `org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware`

@@ -8,7 +8,7 @@
 
 pass:[<br/><br/>]
 
-Isis archetypes are reverse engineered from example applications. Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
+Apache Isis archetypes are reverse engineered from example applications. Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
 
 
 
@@ -33,7 +33,7 @@ export ISISCPN=$(echo $ISISART | cut -d- -f1)
 env | grep ISIS | sort
 ----
 
-nb: `$ISISPAR` is the version of the Isis core that will act as the archetype's parent. Usually this is the same as `$ISISREL`.
+nb: `$ISISPAR` is the version of the Apache Isis core that will act as the archetype's parent. Usually this is the same as `$ISISREL`.
 
 
 
@@ -86,7 +86,7 @@ mvn jetty:run
 
 Browse to http://localhost:8080/simpleapp-webapp/[http://localhost:8080/simpleapp-webapp/].
 
-Check the about page and confirm built against non-SNAPSHOT versions of the Isis jars.
+Check the about page and confirm built against non-SNAPSHOT versions of the Apache Isis jars.
 
 
 

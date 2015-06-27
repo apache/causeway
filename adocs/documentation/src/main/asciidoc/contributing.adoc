@@ -8,7 +8,7 @@
 
 pass:[<br/><br/><br/>]
 
-This page explains how you can contribute to Apache Isis. You'll probably also want link:development-environment.html[set up your development environment] and learn link:building-isis.html[how to build Isis].
+This page explains how you can contribute to Apache Isis. You'll probably also want link:development-environment.html[set up your development environment] and learn link:building-isis.html[how to build Apache Isis].
 
 Thanks for considering to help out, your contributions are appreciated!
 
@@ -17,9 +17,9 @@ Thanks for considering to help out, your contributions are appreciated!
 
 == Recommended Workflow (github)
 
-Isis' source code is hosted in an Apache git repo (https://git-wip-us.apache.org/repos/asf/isis.git[https], http://git-wip-us.apache.org/repos/asf/isis.git[http]), with a clone on github (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`.
+Apache Isis' source code is hosted in an Apache git repo (https://git-wip-us.apache.org/repos/asf/isis.git[https], http://git-wip-us.apache.org/repos/asf/isis.git[http]), with a clone on github (https://github.com/apache/isis.git[https], or ssh: `git@github.com:apache/isis.git`.
 
-As you might imagine, only committers are permitted to push changes to the central git repo. As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] repo in github, and then use your fork as a way of publishing your patches for the Isis committers to apply.
+As you might imagine, only committers are permitted to push changes to the central git repo. As a contributor, we recommend that you fork the https://github.com/apache/isis.git[apache/isis] repo in github, and then use your fork as a way of publishing your patches for the Apache Isis committers to apply.
 
 The diagram below illustrates the process:
 
@@ -33,7 +33,7 @@ That is:
 . you set the https://github.com/apache/isis.git[github.com/apache/isis] as your upstream branch; this will allow you to keep your local clone up-to-date with new commits
 * note the asymmetry here: the `upstream` repo (the Apache github repo) is *not* the same as the `origin` repo (your fork).
 . you work on your changes locally; when done, you push them to your github fork
-. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below). In any case, before you decide to start hacking with Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the http://isis.apache.org/support.html[mailing lists].
+. to contribute back a change, raise a https://issues.apache.org/jira/browse/ISIS[JIRA] ticket, and ensure your commit message is in the form: `ISIS-nnnn: ...` so that changes can be tracked (more discussion on this point below). In any case, before you decide to start hacking with Apache Isis, it's always worth creating a ticket in JIRA and then have a discussion about it on the http://isis.apache.org/support.html[mailing lists].
 . Use github to raise a https://help.github.com/articles/using-pull-requests/[pull request] for your feature
 . An Apache Isis committer will review your change, and apply it if suitable.
 
@@ -49,7 +49,7 @@ image::{_imagesdir}contributing/git-workflow-2.png[width="600px",link="{_imagesd
 
 In this case your `upstream` repo is the same as your `origin` repo, which might seem more straightforward. On the other hand, if you go this route then you'll need create patches locally and attach them to the JIRA ticket. 
 
-For the Isis committers it really doesn't matter which route you take, so go with whatever's most comfortable.
+For the Apache Isis committers it really doesn't matter which route you take, so go with whatever's most comfortable.
 
 
 
@@ -124,7 +124,7 @@ Once your git repo is setup, the next thing you'll most likely want to do is to 
 
 == Creating the patch file
 
-If you are working without a github fork of Isis, then you can create the patches from your own local git repository.
+If you are working without a github fork of Apache Isis, then you can create the patches from your own local git repository.
 
 As per http://stackoverflow.com/questions/6658313/generate-a-git-patch-for-a-specific-commit[this stackoverflow question], create the patch using `git format-patch`:
 
@@ -225,7 +225,7 @@ The process to raise the pull request, broadly speaking:
 * Open a web browser to your github fork of isis
 * Select your topic branch (pushed in the previous step) so that the pull request references the topic branch.
 * Click the `Pull Request` button.
-* Check that the Isis mailing list email came through.
+* Check that the Apache Isis mailing list email came through.
 
 
 

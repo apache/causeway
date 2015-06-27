@@ -1,5 +1,5 @@
 [[building-isis]]
-= Building Isis
+= Building Apache Isis
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ./
 :_imagesdir: images/
@@ -11,7 +11,7 @@ pass:[<br/><br/>]
 
 == Git
 
-The Isis source code lives in a git repo.
+The Apache Isis source code lives in a git repo.
 
 
 === Installation
@@ -34,9 +34,9 @@ If using Mac, you might also want to check out Atlassian's http://www.atlassian.
 
 
 
-==== Cloning the Isis repo
+==== Cloning the Apache Isis repo
 
-First, clone the Isis repo.
+First, clone the Apache Isis repo.
 
 If you are a *committer*, then clone from the Apache read/write repo:
 
@@ -152,7 +152,7 @@ Previously we suggested `128m` for the `MaxPermSize`, but that would no longer s
 ====
 
 
-== Building all of Isis
+== Building all of Apache Isis
 
 To build the source code from the command line, simply go to the root directory and type:
 
@@ -162,7 +162,7 @@ mvn clean install
 ----
 
 
-The first time you do this, you'll find it takes a while since Maven needs to download all of the Isis prerequisites.
+The first time you do this, you'll find it takes a while since Maven needs to download all of the Apache Isis prerequisites.
 
 Thereafter you can speed up the build by adding the `-o` (offline flag):
 

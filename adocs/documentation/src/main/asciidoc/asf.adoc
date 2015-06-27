@@ -18,7 +18,7 @@ Apache Software Foundation:
 * link:http://www.apache.org/foundation/thanks.html[Thanks]
 
 
-Thanks to companies that have in one way or another supported Isis' development:
+Thanks to companies that have in one way or another supported Apache Isis' development:
 
 * link:./more-thanks.html[More thanks]
 

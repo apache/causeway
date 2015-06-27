@@ -9,7 +9,7 @@
 pass:[<br/><br/><br/>]
 
 
-On this page we want to show you what a modern Isis application looks like.
+On this page we want to show you what a modern Apache Isis application looks like.
 
 The screenshots below are taken from the Isis Addons' http://github.com/isisaddons/isis-app-todoapp[todoapp example] (non ASF), which you are free to fork and use as you will. The corresponding domain classes from which this UI was built can be found https://github.com/isisaddons/isis-app-todoapp/tree/0669d6e2acc5bcad1d9978a4514a17bcf7beab1f/dom/src/main/java/todoapp/dom/module/todoitem[here].
 
@@ -17,7 +17,7 @@ The todoapp also integrates with a number of other http://www.isisaddons.org[Isi
 
 [NOTE]
 ====
-Please note that the Isis Addons are not part of ASF, but they _are_ all licensed under Apache License 2.0 and are maintained by the Isis committers.
+Please note that the Isis Addons are not part of ASF, but they _are_ all licensed under Apache License 2.0 and are maintained by the Apache Isis committers.
 ====
 
 
@@ -28,7 +28,7 @@ Let's start with the basics...
 
 === Sign-in
 
-Apache Isis integrates with http://shiro.apache.org[Apache Shiro]. The core framework supports file-based realms, while the Isis Addons http://github.com/isisaddons/isis-module-security[security module] (non ASF) provides a well-features subdomain of users, roles and permissions against features derived from the Isis metamodel. The example todoapp integrates with the security module.
+Apache Isis integrates with http://shiro.apache.org[Apache Shiro]. The core framework supports file-based realms, while the Isis Addons http://github.com/isisaddons/isis-module-security[security module] (non ASF) provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel. The example todoapp integrates with the security module.
 
 
 image::{_imagesdir}/isis-in-pictures/010-login.png[width="600px",link="{_imagesdir}/isis-in-pictures/010-login.png"]
@@ -46,7 +46,7 @@ image::{_imagesdir}/isis-in-pictures/020-install-fixtures.png[width="600px",link
 
 === Dashboard and View Models
 
-Most of the time the end-user interacts with representations of persistent domain entities, but Isis also supports view models which can aggregate data from multiple sources. The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
+Most of the time the end-user interacts with representations of persistent domain entities, but Apache Isis also supports view models which can aggregate data from multiple sources. The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
 
 image::{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png[width="600px",link="{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png"]
 
@@ -207,7 +207,7 @@ image::{_imagesdir}/isis-in-pictures/180-app-user-entity.png[width="600px",link=
 
 
 
-If not all of these properties are required, then they can be hidden either using security or though Isis' internal event bus (described below). Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
+If not all of these properties are required, then they can be hidden either using security or though Apache Isis' internal event bus (described below). Conversely, additional properties can be "grafted onto" the user using the contributed properties/collections discussed previously.
 
 
 === Themes
@@ -221,7 +221,7 @@ image::{_imagesdir}/isis-in-pictures/190-switch-theme.png[width="600px",link="{_
 
 == REST API
 
-In addition to Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification. The screenshot below shows accessing this REST API using a Chrome plugin:
+In addition to Apache Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification. The screenshot below shows accessing this REST API using a Chrome plugin:
 
 image::{_imagesdir}/isis-in-pictures/200-rest-api.png[width="600px",link="{_imagesdir}/isis-in-pictures/200-rest-api.png"]
 
@@ -258,9 +258,9 @@ image::{_imagesdir}/isis-in-pictures/230-testing-wrapper-factory.png[width="550p
 
 == Internal Event Bus
 
-Contributions, discussed earlier, are an important tool in ensuring that the packages within your Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
+Contributions, discussed earlier, are an important tool in ensuring that the packages within your Apache Isis application are decoupled; by extracting out actions the order of dependency between packages can effectively be reversed.
 
-Another important tool to ensure your codebase remains maintainable is Isis' internal event bus. It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
+Another important tool to ensure your codebase remains maintainable is Apache Isis' internal event bus. It is probably best explained by example; the code below says that the "complete" action should emit a `ToDoItem.Completed` event:
 
 image::{_imagesdir}/isis-in-pictures/240-domain-events.png[width="400px",link="{_imagesdir}/isis-in-pictures/240-domain-events.png"]
 

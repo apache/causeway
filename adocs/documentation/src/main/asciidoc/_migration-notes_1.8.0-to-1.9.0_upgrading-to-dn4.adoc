@@ -6,11 +6,11 @@
 
 
 
-Isis 1.9.0 updates to DataNucleus 4.0.0, which requires some changes (simplifications) to the Maven configuration.
+Apache Isis 1.9.0 updates to DataNucleus 4.0.0, which requires some changes (simplifications) to the Maven configuration.
 
 If you starting a new app then you can start from the <<SimpleApp archetype>>; its Maven configuration has been updated.
 
-If you have an existing Isis app that you want to upgrade, then you'll need to make some changes.
+If you have an existing Apache Isis app that you want to upgrade, then you'll need to make some changes.
 
 
 
