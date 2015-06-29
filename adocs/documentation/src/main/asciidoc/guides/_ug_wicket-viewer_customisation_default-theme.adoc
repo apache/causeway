@@ -6,7 +6,7 @@
 
 
 
-The Isis Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
+The Apache Isis Wicket viewer uses http://getbootstrap.com/[Bootstrap] styles and components (courtesy of the https://github.com/l0rdn1kk0n/wicket-bootstrap[Wicket Bootstrap] integration).
 
 Unless specified otherwise, the viewer uses the default bootstrap theme. However, this can be changed by overriding `init()` in the application's subclass of `IsisWicketApplication`. For example, to set the http://bootswatch.com/flatly/[bootswatch.com flatly] theme
  as the default, use:

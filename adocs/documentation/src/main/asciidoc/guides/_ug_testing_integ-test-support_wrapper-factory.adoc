@@ -22,7 +22,7 @@ The mechanics are as follows:
 
 . the test calls the methods on the wrapper rather than the domain object itself
 
-. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Isis metamodel
+. the wrapper performs a reverse lookup from the method invoked (a regular `java.lang.reflect.Method` instance) into the Apache Isis metamodel
 
 . (like a viewer), the wrapper then performs the "see it/use it/do it" checks, checking that the member is visible, that it is enabled and (if there are arguments) that the arguments are valid
 
@@ -157,6 +157,6 @@ The wrapper will also fire domain events for properties (if annotated with `@Pro
 
 [NOTE]
 ====
-It isn't possible to use the `WrapperFactory` in a unit test, because there needs to be a running instance of Isis that holds the metamodel.
+It isn't possible to use the `WrapperFactory` in a unit test, because there needs to be a running instance of Apache Isis that holds the metamodel.
 ====
 

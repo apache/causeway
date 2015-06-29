@@ -9,14 +9,14 @@
 
 There are some key framework classes that make up the spec support; these are discussed below.
 
-NOTE: some of these are also used by Isis' xref:ug.adoc#_ug_testing_integ-test-support[Integration Test support].
+NOTE: some of these are also used by Apache Isis' xref:ug.adoc#_ug_testing_integ-test-support[Integration Test support].
 
 
 
 
 == `IsisSystemForTest`
 
-The `IsisSystemForTest` class allows a complete running instance of Isis to be bootstrapped (with the JDO objectstore); this is then held on a a `ThreadLocal` from one test to another.
+The `IsisSystemForTest` class allows a complete running instance of Apache Isis to be bootstrapped (with the JDO objectstore); this is then held on a a `ThreadLocal` from one test to another.
 
 Typically bootstrapping code is used to lazily instantiate the `IsisSystemForTest` once and once only. The mechanism for doing this is line-for-line identical in both BDD step defs and integration tests.
 
@@ -36,7 +36,7 @@ The `ScenarioExecution` also provids access to the configured domain services (u
 
 [NOTE]
 ====
-This could probably be refactored; Cucumber JVM provides automatic dependency injection into setp definitions, but Isis does not currently leverage or exploit this capability.
+This could probably be refactored; Cucumber JVM provides automatic dependency injection into setp definitions, but Apache Isis does not currently leverage or exploit this capability.
 ====
 
 Like the `IsisSystemForTest` class, the `ScenarioExecution` class binds an instance of itself onto a `ThreadLocal`. It can then be accessed in BDD step definitions using `ScenarioExecution.current()` static method.

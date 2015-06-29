@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-One use case that Isis supports is that of a domain object with a lifecycle whereby at some stage it should become immutable: all its properties/collections should be disabled, and/or its actions become not invokable.
+One use case that Apache Isis supports is that of a domain object with a lifecycle whereby at some stage it should become immutable: all its properties/collections should be disabled, and/or its actions become not invokable.
 
 It would be painful to have to write a separate xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] method for each and every member, so instead Isis allows a single `disable...(...)` method to be implemented that is applied to all members.
 
@@ -18,7 +18,7 @@ public String disable(Identifier.Type identifierType) { ... }
 
 where `Identifier.Type` is part of the Isis applib (nested static class of `o.a.i.applib.Identifier`) to distinguish between an interaction with an action, a property or an action.
 
-Note that Isis' xref:ug.adoc#_ug_more-advanced_i18n[i18n support] extends this so that the returned reason can also be internationalized.
+Note that Apache Isis' xref:ug.adoc#_ug_more-advanced_i18n[i18n support] extends this so that the returned reason can also be internationalized.
 
 For example:
 

@@ -11,9 +11,9 @@ NOTE: TODO
 
 [NOTE]
 ====
-While Isis support actions whose parameters' types are scalar (values such as `String`, `int`, or references such as `Customer`), the framework (currently) does not support parameter types that are collections or maps.
+While Apache Isis support actions whose parameters' types are scalar (values such as `String`, `int`, or references such as `Customer`), the framework (currently) does not support parameter types that are collections or maps.
 
-The workaround is to mark the collection as `@Programmatic`, as described in xref:ug.adoc#_ug_how-tos_class-structure_ignoring-methods[Ignoring Methods].  This ensures that the collection is ignored by Isis.
+The workaround is to mark the collection as `@Programmatic`, as described in xref:ug.adoc#_ug_how-tos_class-structure_ignoring-methods[Ignoring Methods].  This ensures that the collection is ignored by Apache Isis.
 ====
 
 

@@ -40,9 +40,9 @@ Moreover, when maintaining a bidirectional 1-n relationship that is automaticall
 
 [WARNING]
 ====
-If you don't do this then you may (as of Isis 1.4.1) hit an NullPointerException. This may be a bug in DataNucleus, we are not completely sure, but the above idiom seems to fix the issue.
+If you don't do this then you may (as of Apache Isis 1.4.1) hit an NullPointerException. This may be a bug in DataNucleus, we are not completely sure, but the above idiom seems to fix the issue.
 
-For more information, see http://isis.markmail.org/thread/ipu2lzqqikqdglox[this thread] on the Isis users mailing list, including this http://markmail.org/message/hblptpw675mlw723[message] with the above recommendation.
+For more information, see http://isis.markmail.org/thread/ipu2lzqqikqdglox[this thread] on the Apache Isis users mailing list, including this http://markmail.org/message/hblptpw675mlw723[message] with the above recommendation.
 ====
 
 

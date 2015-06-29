@@ -7,7 +7,7 @@
 
 The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.
 
-There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Isis domain application.
+There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
 
 
 
@@ -38,7 +38,7 @@ where:
 The archetype generation process will then run; it only takes a few seconds.
 
 
-We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Isis, but the usual caveats apply: some features still in development may be unstable.
+We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Apache Isis, but the usual caveats apply: some features still in development may be unstable.
 
 The process is almost identical to that for stable releases, however the `archetype:generate` goal is called with slightly different arguments:
 
@@ -63,7 +63,7 @@ where as before:
 
 but also:
 
-- `archetypeVersion` is the SNAPSHOT version of Isis.
+- `archetypeVersion` is the SNAPSHOT version of Apache Isis.
 - `archetypeRepository` specifies the location of our snapshot repo (hosted on link:http://www.cloudbees.com[CloudBees]), and
 
 The archetype generation process will then run; it only takes a few seconds.
@@ -278,7 +278,7 @@ To log in, use `sven/pass`.
 
 Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main [documentation](../../documentation.html) page first).
 
-If you use Eclipse or IntelliJ IDEA, do also install the [Eclipse templates](../resources/editor-templates.html); these will help you follow the Isis naming conventions.
+If you use Eclipse or IntelliJ IDEA, do also install the [Eclipse templates](../resources/editor-templates.html); these will help you follow the Apache Isis naming conventions.
 
 
 
@@ -286,7 +286,7 @@ If you use Eclipse or IntelliJ IDEA, do also install the [Eclipse templates](../
 
 == App Structure
 
-As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
+As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Apache Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
 
 <table class="table table-striped table-bordered table-condensed">
 <tr><th>Module</th><th>Description</th></tr>

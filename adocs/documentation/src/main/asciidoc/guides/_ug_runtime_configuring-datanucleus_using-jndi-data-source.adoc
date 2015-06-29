@@ -10,7 +10,7 @@ Isis' JDO objectstore can be configured either to connect to the database using 
 
 == Application managed
 
-Using a connection pool managed directly by the application (that is, by Isis' JDO objectstore and ultimately by DataNucleus) requires a single set of configuration properties to be specified.
+Using a connection pool managed directly by the application (that is, by Apache Isis' JDO objectstore and ultimately by DataNucleus) requires a single set of configuration properties to be specified.
 
 In the `WEB-INF\persistor_datanucleus.properties` file, specify the connection driver, url, username and password.
 

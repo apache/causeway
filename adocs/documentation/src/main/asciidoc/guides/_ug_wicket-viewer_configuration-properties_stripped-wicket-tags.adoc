@@ -6,7 +6,7 @@
 
 
 
-By default the Isis Wicket viewer will always strip wicket tags. However, when running in prototype mode, this behaviour can be overridden using a configuration property:
+By default the Apache Isis Wicket viewer will always strip wicket tags. However, when running in prototype mode, this behaviour can be overridden using a configuration property:
 
 [source,ini]
 ----
@@ -15,7 +15,7 @@ isis.viewer.wicket.stripWicketTags=false
 
 [NOTE]
 ====
-In 1.7.0 and earlier, the behaviour is different; the Isis Wicket viewer will preserve wicket tags when running in Isis' prototype/development mode, but will still strip wicket tags in Isis' server/deployment mode.
+In 1.7.0 and earlier, the behaviour is different; the Apache Isis Wicket viewer will preserve wicket tags when running in Apache Isis' prototype/development mode, but will still strip wicket tags in Apache Isis' server/deployment mode.
 
 We changed the behaviour in 1.8.0 because we found that Internet Explorer can be sensitive to the presence of Wicket tags.
 ====

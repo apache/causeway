@@ -9,7 +9,7 @@ As Apache Isis has evolved and grown, we found ourselves adding more and more an
 
 Accordingly, (in v1.8.0) we decided to unify the semantics into the main (core) annotations listed xref:rg.adoc#_rg_annotations_aaa_main[above].
 
-The annotations listed in the table below are still supported by Apache Isis, but will be retired in Isis v2.0.
+The annotations listed in the table below are still supported by Apache Isis, but will be retired in Apache Isis v2.0.
 
 
 .Deprecated Annotations

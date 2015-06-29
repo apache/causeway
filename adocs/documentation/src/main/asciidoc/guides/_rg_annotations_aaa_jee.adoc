@@ -7,7 +7,7 @@
 
 While Apache Isis does, as of today, define a good number of its own annotations, the policy is to reuse standard Java/JEE annotations wherever they exist or are added to the Java platform.
 
-The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Isis.
+The table below lists the JEE annotations currently recognized.  Expect to see more added in future releases of Apache Isis.
 
 
 .Java EE Annotations

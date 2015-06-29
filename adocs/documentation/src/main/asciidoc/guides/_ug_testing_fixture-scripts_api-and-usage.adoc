@@ -46,7 +46,7 @@ public class DomainAppFixturesService extends FixtureScripts {     // <3>
 <2> ... under the "Prototyping" menu
 <3> inherit from `org.apache.isis.applib.fixturescripts.FixtureScripts`
 <4> search for all fixture scripts under the "domainapp" package; in your code this would probably be "com.mycompany.myapp" or similar
-<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in <<Organizing Fixture scripts>>.
+<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
 <6> (optional) specify a default fixture script to run, in this case `RecreateSimpleObjects` fixture script (see below)
 <7> make all fixture scripts found available as a drop-down (by increasing the visibility of this method to `public`)
 
@@ -96,6 +96,9 @@ You are free, of course, to add additional "convenience" actions into it if you 
 ----
 
 Let's now look at the `FixtureScript` class, where there's a bit more going on.
+
+
+
 
 == `FixtureScript`
 
@@ -252,6 +255,8 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 
 
+
+[[_ug_testing_fixture-scripts_api-and-usage_organizing]]
 == Organizing Fixture scripts
 
 There are lots of ways to organize fixture scripts, but we've used them as either:

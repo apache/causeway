@@ -91,6 +91,6 @@ or
 isis.viewers.propertyLayout.labelPosition=LEFT
 ----
 
-If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+If these are not present then Apache Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
 ====
 

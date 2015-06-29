@@ -21,7 +21,7 @@ Some annotations act as UI hints, for example:
 * if an action has a tooltip, it can be annotated using `@ActionLayout(describedAs=...)`
 * if a domain object is bookmarkable, it can be annotated using `@DomainObjectLayout(bookmarking=BookmarkPolicy.AS_ROOT`).
 
-This chapter documents all the annotations currently supported by Isis.  It also identifies a number of annotations that are now deprecated, and indicates their replacement.
+This chapter documents all the annotations currently supported by Apache Isis.  It also identifies a number of annotations that are now deprecated, and indicates their replacement.
 
 
 include::_rg_annotations_aaa.adoc[leveloffset=+1]

@@ -52,7 +52,7 @@ Isis defines eight page types (see the `org.apache.isis.viewer.wicket.model.mode
 |===
 
 
-The `PageClassList` interface declares which class (subclass of `org.apache.wicket.Page` is used to render for each of these types.  For example, Isis' `WicketSignInPage` renders the signin page.
+The `PageClassList` interface declares which class (subclass of `org.apache.wicket.Page` is used to render for each of these types.  For example, Apache Isis' `WicketSignInPage` renders the signin page.
 
 To specify a different page class, create a custom subclass of `PageClassList`:
 
@@ -67,7 +67,7 @@ public class MyPageClassList extends PageClassListDefault {
 ----
 
 
-You then need to register your custom `PageClassList`.  This is done by adjusting the Guice bindings (part of Isis' bootstrapping) in your custom subclass of `IsisWicketApplication`:
+You then need to register your custom `PageClassList`.  This is done by adjusting the Guice bindings (part of Apache Isis' bootstrapping) in your custom subclass of `IsisWicketApplication`:
 
 [source,java]
 ----

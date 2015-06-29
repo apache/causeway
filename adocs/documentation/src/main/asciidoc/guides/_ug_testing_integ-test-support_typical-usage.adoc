@@ -33,7 +33,7 @@ public class ToDoItem ... {
 }
 ----
 
-We typically put the bootstrapping of Isis into a superclass (`AbstractToDoIntegTest` below), then subclass as required.
+We typically put the bootstrapping of Apache Isis into a superclass (`AbstractToDoIntegTest` below), then subclass as required.
 
 For this test (of the "completed()" action) we need an instance of a `ToDoItem` that is not yet complete.  Here's the setup:
 

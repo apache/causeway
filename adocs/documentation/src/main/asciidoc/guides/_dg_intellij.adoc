@@ -76,7 +76,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/020-j
 
 We therefore need to specify the JDK.
 
-NOTE: at the time of writing Isis supports only Java 7; Java 8 is scheduled for support in Isis v1.9.0
+NOTE: at the time of writing Apache Isis supports only Java 7; Java 8 is scheduled for support in Apache Isis v1.9.0
 
 
 .IntelliJ Create New Java Project - Select the JDK
@@ -96,7 +96,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/020-create-new-project/060-c
 
 === Import Settings
 
-Next we need to configure IntelliJ with ASF/Apache Isis' standard templates and coding conventions.  These are bundled as the `settings.jar` JAR file link:resources/appendices/dev-env/intellij/isis-settings.jar[download from the Isis website]).
+Next we need to configure IntelliJ with ASF/Apache Isis' standard templates and coding conventions.  These are bundled as the `settings.jar` JAR file link:resources/appendices/dev-env/intellij/isis-settings.jar[download from the Apache Isis website]).
 
 Import using: `File > Import Settings`, and specify the directory that you have downloaded the file to:
 
@@ -165,7 +165,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-pl
 
 Let's load in some actual code!  We do this by importing the Maven modules.
 
-First up, open up the Maven tool window (`View > Tool Windows > Maven Projects`).  You can then use the 'plus' button to add Maven modules.  In the screenshot you can see we've loaded in Isis core; the modules are listed in the _Maven Projects_ window and corresponding (IntelliJ) modules are shown in the _Projects_ window:
+First up, open up the Maven tool window (`View > Tool Windows > Maven Projects`).  You can then use the 'plus' button to add Maven modules.  In the screenshot you can see we've loaded in Apache Isis core; the modules are listed in the _Maven Projects_ window and corresponding (IntelliJ) modules are shown in the _Projects_ window:
 
 .IntelliJ Maven Module Management - Importing Maven modules
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/010-maven-modules-view.png[width="730px"]
@@ -180,11 +180,11 @@ You should then see the new Maven module loaded in the _Projects_ window and als
 .IntelliJ Maven Module Management -
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/030-other-module-added.png[width="730px"]
 
-If any dependencies are already loaded in the project, then IntelliJ will automatically update the CLASSPATH to resolve to locally held modules (rather from `.m2/repository` folder).  So, for example (assuming that the `<version>` is correct, of course), the Isis todoapp will have local dependencies on the Isis core.
+If any dependencies are already loaded in the project, then IntelliJ will automatically update the CLASSPATH to resolve to locally held modules (rather from `.m2/repository` folder).  So, for example (assuming that the `<version>` is correct, of course), the Isis todoapp will have local dependencies on the Apache Isis core.
 
 You can press F4 (or use `File > Project Structure`) to see the resolved classpath for any of the modules loaded into the project.
 
-If you want to focus on one set of code (eg the Isis todoapp but not Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove from the the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
+If you want to focus on one set of code (eg the Isis todoapp but not Apache Isis core) then you _could_ remove the module; but better is to ignore those modules.  This will remove from the the _Projects_ window but keep them available in the _Maven Projects_ window for when you next want to work on them:
 
 .IntelliJ Maven Module Management - Ignoring Modules
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/040-ignoring-modules.png[width="730px"]
@@ -194,7 +194,7 @@ Confirm that it's ok to ignore these modules:
 .IntelliJ Maven Module Management - Ignoring Modules (ctd)
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/050-ignoring-modules-2.png[width="300px"]
 
-All being well you should see that the _Projects_ window now only contains the code you are working on.  Its classpath dependencies will be adjusted (eg to resolve to Isis core from `.m2/repository`):
+All being well you should see that the _Projects_ window now only contains the code you are working on.  Its classpath dependencies will be adjusted (eg to resolve to Apache Isis core from `.m2/repository`):
 
 .IntelliJ Maven Module Management - Updated Projects Window
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/060-ignored-modules.png[width="730px"]

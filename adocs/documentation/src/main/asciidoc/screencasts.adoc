@@ -21,7 +21,7 @@ We've prepared some screencasts to help you quickly see what Apache Isis has to 
 
 _How Apache Isis builds a webapp from the underlying domain object model_
 
-_This screencast is for Isis v1.1.0 (ie very out of date)_
+_This screencast is for Apache Isis v1.1.0 (ie very out of date)_
 
 |video::ludOLyi6VyY[youtube,width="420px",height="315px"]
 
@@ -109,7 +109,7 @@ Learn more at the (non-ASF) Isis addons' http://github.com/isisaddons/isis-modul
 
 
 
-|Bulk updates in Isis (v1.5.0) +
+|Bulk updates in Apache Isis (v1.5.0) +
 
 _Using the (non-ASF) http://github.com/isisaddons/isis-module-excel[Isis addons' excel] module and view models to perform bulk updates)._
     

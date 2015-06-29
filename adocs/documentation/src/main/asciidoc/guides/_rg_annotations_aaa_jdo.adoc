@@ -11,10 +11,10 @@ Apache Isis uses JDO/DataNucleus as its ORM, and infers some of its own metadata
 ====
 Isis (currently) builds up metadata by parsing the JDO annotations from source, _not_ by querying the JDO metamodel.  The upshot is that, for the annotations documented here at least, your domain entities must use JDO annotations rather than XML.
 
-Furthermore, note that although JDO (the property-related) annotations to be placed on either the field or on the getter, Isis requires that annotations are placed on the getter.
+Furthermore, note that although JDO (the property-related) annotations to be placed on either the field or on the getter, Apache Isis requires that annotations are placed on the getter.
 ====
 
-The table below lists the JDO annotations currently recognized by Isis.
+The table below lists the JDO annotations currently recognized by Apache Isis.
 
 
 .JDO Annotations
@@ -54,7 +54,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 |xref:rg.adoc#_rg_annotations_manpage-PersistenceCapable[`@javax.jdo.annotations.` +
 `PersistenceCapable`]
-|Used to build Isis' own internal identifier for objects. +
+|Used to build Apache Isis' own internal identifier for objects. +
 
 If the `schema()` attribute is specified (and if xref:rg.adoc#_rg_annotations_manpage-Discriminator[`@Discriminator`] _hasn't_ been specified), is also used to derive the object type, as used in `Bookmark`s, URLs for xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] and elsewhere.
 
@@ -64,7 +64,7 @@ If the `schema()` attribute is specified (and if xref:rg.adoc#_rg_annotations_ma
 
 |xref:rg.adoc#_rg_annotations_manpage-PrimaryKey[`@javax.jdo.annotations.` +
 `PrimaryKey`]
-|Used to ensure Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
+|Used to ensure Apache Isis does not overwrite application-defined primary keys, and to ensure is read-only in the UI.
 
 |Domain / persistence
 |Property
@@ -77,7 +77,7 @@ If the `schema()` attribute is specified (and if xref:rg.adoc#_rg_annotations_ma
 
 Isis also parses the following JDO annotations, but the metadata is currently unused.
 
-.JDO Annotations (unused within Isis)
+.JDO Annotations (unused within Apache Isis)
 [cols="2,4a,1,1", options="header"]
 |===
 |Annotation

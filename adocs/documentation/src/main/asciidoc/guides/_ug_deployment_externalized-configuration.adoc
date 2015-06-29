@@ -6,7 +6,7 @@
 
 
 
-As described xref:_ug_runtime_configuration-files[here], by default Apache Isis itself bootstraps from the `isis.properties` configuration file.  It will also read configuration from the (optional) component/implementation-specific configuration files (such as
+As described xref:ug.adoc#_ug_runtime_configuration-files[here], by default Apache Isis itself bootstraps from the `isis.properties` configuration file.  It will also read configuration from the (optional) component/implementation-specific configuration files (such as
 `persistor_datanucleus.properties` or `viewer_wicket.properties`), and also (optional) component-specific configuration
 files (such as `persistor.properties` or `viewer.properties`).
 
@@ -78,7 +78,7 @@ Note that running the app using Apache Isis' `org.apache.isis.WebServer` bootstr
 [[_ug_deployment_externalized-configuration_Shiro]]
 == Shiro Config
 
-If using Apache Isis' xref:_ug_security_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
+If using Apache Isis' xref:ug.adoc#_ug_security_configuring-isis-to-use-shiro[Shiro integration] for authentication and/or authorization, note that it reads from the `shiro.ini` configuration file. By default this also resides in `WEB-INF`.
 
 Similar to Apache Isis, Shiro lets this configuration directory be altered, by specifying the `shiroConfigLocations` context parameter.
 

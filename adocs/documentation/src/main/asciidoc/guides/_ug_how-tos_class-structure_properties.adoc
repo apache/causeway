@@ -23,7 +23,7 @@ The annotations for mapping value types tend to be different for properties vs a
 
 JDO/DataNucleus' default is that a property is assumed to be mandatory if it is a primitive type (eg `int`, `boolean`), but optional if a reference type (eg `String`, `BigDecimal` etc).  To override optionality in JDO/DataNucleus the `@Column(allowsNull="...")` annotations is used.
 
-Apache Isis on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.  These defaults can also be overridden using Isis' own annotations, specifically `@Property(optionality=...)`.
+Apache Isis on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.  These defaults can also be overridden using Apache Isis' own annotations, specifically `@Property(optionality=...)`.
 
 These different defaults can lead to incompatibilities between the two frameworks.  To counteract that, Apache Isis also recognizes and honours JDO's `@Column(allowsNull=...)`.
 
@@ -75,7 +75,7 @@ whereby a single table holds the properties of the subtype, and also holds the p
 
 In the first "rollup" case, we can have a situation where - logically speaking - the property is mandatory in the subtype - but it must be mapped as nullable in the database because it is n/a for any other subtypes that are rolled up.
 
-In this situation we must tell JDO that the column is optional, but to Isis we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
+In this situation we must tell JDO that the column is optional, but to Apache Isis we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
 
 For example:
 
@@ -93,10 +93,10 @@ public class SomeSubtype extends SomeSuperType {
 
 [TIP]
 ====
-The `@Property(optionality=...)` annotation is equivalent to the older but still supported `@Optional` annotation and `@Mandatory` annotations. Its benefit is that it lumps together all Isis' property metadata in a single annotation.  Its downside is that it is rather verbose if the only semantic that needs to be specified -- as is often the case -- is optionality.
+The `@Property(optionality=...)` annotation is equivalent to the older but still supported `@Optional` annotation and `@Mandatory` annotations. Its benefit is that it lumps together all Apache Isis' property metadata in a single annotation.  Its downside is that it is rather verbose if the only semantic that needs to be specified -- as is often the case -- is optionality.
 ====
 
-An alternative way to achieve this is to leave the JDO annotation on the field (where it is invisible to Isis), and rely on Isis' default, eg:
+An alternative way to achieve this is to leave the JDO annotation on the field (where it is invisible to Apache Isis), and rely on Isis' default, eg:
 
 [source,java]
 ----
@@ -104,7 +104,7 @@ An alternative way to achieve this is to leave the JDO annotation on the field (
 public class SomeSubtype extends SomeSuperType {
     @javax.jdo.annotations.Column(allowNulls="true")
     private LocalDate date;
-    // mandatory in Isis by default
+    // mandatory in Apache Isis by default
     public LocalDate getDate() { }
     public void setDate(LocalDate d) { }
 }
@@ -215,7 +215,7 @@ public void setAttachment(final Blob attachment) {
 }
 ----
 
-The three `@javax.jdo.annotations.Column` annotations are required because the mapping classes that Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns. (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
+The three `@javax.jdo.annotations.Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns. (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
 
 If the `Blob` is mandatory, then use:
 

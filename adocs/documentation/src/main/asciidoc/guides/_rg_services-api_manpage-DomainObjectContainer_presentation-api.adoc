@@ -9,7 +9,7 @@
 
 A responsibility of every domain object is to return a title.  This can be done declaratively using the xref:rg.adoc#_rg_annotations_manpage-Title[`@Title`] annotation on property/ies, or it can be done imperatively by writing a xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] method.
 
-It's quite common for titles to be built up of the titles of other objects.  If using building up the title using `@Title` then Isis will automatically use the title of the objects referenced by the annotated properties.  We also need programmatic access to these titles if going the imperative route.
+It's quite common for titles to be built up of the titles of other objects.  If using building up the title using `@Title` then Apache Isis will automatically use the title of the objects referenced by the annotated properties.  We also need programmatic access to these titles if going the imperative route.
 
 Similarly, it often makes sense if xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_messages-api[raising messages] to use the title of an object in a message rather (than a some other property of the object), because this is how end-users will be used to identifying the object.
 
@@ -23,7 +23,7 @@ public interface DomainObjectContainer {
     ...
 }
 ----
-<1> return the title of the object, as rendered in the UI by the Isis viewers.
+<1> return the title of the object, as rendered in the UI by the Apache Isis viewers.
 
 
 By way of example, here's some code from the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] showing the use of the API in an message:

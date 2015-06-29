@@ -11,5 +11,5 @@ The `@Facets` annotation allows `FacetFactory` implementations and so can be use
 
 [NOTE]
 ====
-`FacetFactory` is an important internal API that is used by Isis to
+`FacetFactory` is an important internal API that is used by Apache Isis to
 ====

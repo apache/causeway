@@ -182,7 +182,7 @@ Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately rel
 * link:https://issues.apache.org/jira/browse/ISIS-755[ISIS-755] - Allow external system data to be integrated and managed with an Apache Isis domain object 
 * link:https://issues.apache.org/jira/browse/ISIS-779[ISIS-779] - Refactor EventBusService as a @RequestScoped service, and have it own the guava EventBus as a field.
 * link:https://issues.apache.org/jira/browse/ISIS-903[ISIS-903] - side locale.
-* link:https://issues.apache.org/jira/browse/ISIS-931[ISIS-931] - Make Isis faster to start.
+* link:https://issues.apache.org/jira/browse/ISIS-931[ISIS-931] - Make Apache Isis faster to start.
 * link:https://issues.apache.org/jira/browse/ISIS-934[ISIS-934] - printed if running in prototype mode.
 * link:https://issues.apache.org/jira/browse/ISIS-935[ISIS-935] - RO viewer should return a 404 exception if object not found.
 * link:https://issues.apache.org/jira/browse/ISIS-936[ISIS-936] - memory) into core (metamodel and runtime)
@@ -312,7 +312,7 @@ Isis 1.8.0 incorporates the Wicket viewer, which was previously a separately rel
 
 Moved to (non-ASF) link:http://isisaddons.org[Isis Addons]
 
-* link:https://issues.apache.org/jira/browse/ISIS-851[ISIS-851] - Remove modules from Isis core (available instead through isisaddons).
+* link:https://issues.apache.org/jira/browse/ISIS-851[ISIS-851] - Remove modules from Apache Isis core (available instead through isisaddons).
 * link:https://issues.apache.org/jira/browse/ISIS-887[ISIS-887] - xxx modules, as now in isisaddons.
 
 
@@ -409,7 +409,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-796[ISIS-796] - lifecycle callback &quot;updating()&quot; is not firing
 * link:https://issues.apache.org/jira/browse/ISIS-797[ISIS-797] - &#39;Restful objects&#39; decodes json request body while this is not 
 * link:https://issues.apache.org/jira/browse/ISIS-801[ISIS-801] - Action method taking domain object paramater gets triggered automatically whenever instances of that object type is accessed
-* link:https://issues.apache.org/jira/browse/ISIS-812[ISIS-812] - Isis 1.5 blob mapping broken for PostgreSQL (when set to null)
+* link:https://issues.apache.org/jira/browse/ISIS-812[ISIS-812] - Apache Isis 1.5 blob mapping broken for PostgreSQL (when set to null)
 * link:https://issues.apache.org/jira/browse/ISIS-818[ISIS-818] - wrapSkipRules does not execute action due to being hidden
 * link:https://issues.apache.org/jira/browse/ISIS-821[ISIS-821] - Precision gets lost when double values are use in BigDecimal attributes
 * link:https://issues.apache.org/jira/browse/ISIS-824[ISIS-824] - Generic repository is broken
@@ -502,7 +502,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 ==== Task
 
 * link:https://issues.apache.org/jira/browse/ISIS-751[ISIS-751] - Update NOTICE copyright dates
-* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Isis 1.5.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Apache Isis 1.5.0 release
 
                 
 
@@ -529,7 +529,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
             
                                 
 ==== Task
-* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Isis 1.5.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Apache Isis 1.5.0 release
                 
                 
 
@@ -537,7 +537,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Isis 1.5.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Apache Isis 1.5.0 release
 
 
 
@@ -552,7 +552,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 ==== Task
 
 * link:https://issues.apache.org/jira/browse/ISIS-751[ISIS-751] - Update NOTICE copyright dates
-* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Isis 1.5.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Apache Isis 1.5.0 release
 
                 
                  
@@ -562,7 +562,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 
 * link:https://issues.apache.org/jira/browse/ISIS-750[ISIS-750] - For consistency with CommandJdo, allow the serializedForm to be stored as a clob (rather than as a zipped byte array)
 * link:https://issues.apache.org/jira/browse/ISIS-754[ISIS-754] - BDD tests speed improvement with DN options, through a new IsisConfigurationForTests
-* link:https://issues.apache.org/jira/browse/ISIS-788[ISIS-788] - Delete the Isis Blob/Clob Converter classes for JDO, since redundant.
+* link:https://issues.apache.org/jira/browse/ISIS-788[ISIS-788] - Delete the Apache Isis Blob/Clob Converter classes for JDO, since redundant.
 
 
 ==== Bug
@@ -575,7 +575,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 ==== Task
 
 * link:https://issues.apache.org/jira/browse/ISIS-751[ISIS-751] - Update NOTICE copyright dates
-* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Isis 1.5.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-792[ISIS-792] - up tasks for Apache Isis 1.5.0 release
 
                                 
                 
@@ -637,7 +637,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-662[ISIS-662] - Provide a &quot;contributions&quot; service to add a PublishedEvents contributed collection for the Interaction entity.
 * link:https://issues.apache.org/jira/browse/ISIS-663[ISIS-663] - Provide a &quot;contributions&quot; service for AuditEntry, so that audit entries are shown as a contributed collection to the Interaction entity.
 * link:https://issues.apache.org/jira/browse/ISIS-664[ISIS-664] - Provide an abstract class for running &quot;sudo&quot; scheduler jobs
-* link:https://issues.apache.org/jira/browse/ISIS-673[ISIS-673] - AbstractIsisSessionTemplate as a way to run arbitrary &#39;runnable&#39; in an Isis session
+* link:https://issues.apache.org/jira/browse/ISIS-673[ISIS-673] - AbstractIsisSessionTemplate as a way to run arbitrary &#39;runnable&#39; in an Apache Isis session
 * link:https://issues.apache.org/jira/browse/ISIS-685[ISIS-685] - Add new @Command(async=true|false) flag, so that Command is automatically scheduled to run in the background
 * link:https://issues.apache.org/jira/browse/ISIS-696[ISIS-696] - Extra overload for BookmarkService for lookup with downcast (making more consistent with API of MementoService).
 * link:https://issues.apache.org/jira/browse/ISIS-697[ISIS-697] - Extend DeveloperUtilitiesService to be able to refresh services (for contributed actions)
@@ -694,7 +694,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
     
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Isis 1.4.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
 
                 
 
@@ -740,7 +740,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
     
 ==== Bug
 * link:https://issues.apache.org/jira/browse/ISIS-429[ISIS-429] - coded dependency to WicketSignInPage in PageAbstract...
-* link:https://issues.apache.org/jira/browse/ISIS-617[ISIS-617] - Wicket viewer throws NPE when rendering Isis DateTime in a collection
+* link:https://issues.apache.org/jira/browse/ISIS-617[ISIS-617] - Wicket viewer throws NPE when rendering Apache Isis DateTime in a collection
 * link:https://issues.apache.org/jira/browse/ISIS-620[ISIS-620] - When editing an entity twice a concurrency exception is thrown
 * link:https://issues.apache.org/jira/browse/ISIS-621[ISIS-621] - Improve the Wicket viewer&#39;s parsing of numbers 
 * link:https://issues.apache.org/jira/browse/ISIS-629[ISIS-629] - Selecting a different option from a dropdown resets other fields
@@ -756,7 +756,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                 
                             
 ==== Task
-* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Isis 1.4.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
                 
                 
                 
@@ -764,7 +764,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Isis 1.4.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
 
                 
 
@@ -779,7 +779,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                                             
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Isis 1.4.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
 
 
                  
@@ -823,7 +823,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 ==== Bug
 
 * link:https://issues.apache.org/jira/browse/ISIS-632[ISIS-632] - PublishingService&#39;s PublishedEvent id has an incorrect max length
-* link:https://issues.apache.org/jira/browse/ISIS-644[ISIS-644] - Update FrameworkSynchronizer to avoid the &quot;Object not yet known to Isis&quot; exception
+* link:https://issues.apache.org/jira/browse/ISIS-644[ISIS-644] - Update FrameworkSynchronizer to avoid the &quot;Object not yet known to Apache Isis&quot; exception
 
     
 ==== Dependency upgrade
@@ -834,7 +834,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                             
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Isis 1.4.0 release
+* link:https://issues.apache.org/jira/browse/ISIS-695[ISIS-695] - up tasks for Apache Isis 1.4.0 release
 
                 
 
@@ -862,7 +862,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                             
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-581[ISIS-581] - Release tasks for Isis wicket viewer v1.3.1
+* link:https://issues.apache.org/jira/browse/ISIS-581[ISIS-581] - Release tasks for Apache Isis wicket viewer v1.3.1
                      
                      
                 
@@ -958,7 +958,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                         
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-437[ISIS-437] - up tasks for Isis 1.3.0 and associated components.
+* link:https://issues.apache.org/jira/browse/ISIS-437[ISIS-437] - up tasks for Apache Isis 1.3.0 and associated components.
 
                     
 
@@ -1001,11 +1001,11 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-520[ISIS-520] - type cmd line arg.
 * link:https://issues.apache.org/jira/browse/ISIS-521[ISIS-521] - Xxx.layout.json is not read for abstract classes (as used for parented collections)
 * link:https://issues.apache.org/jira/browse/ISIS-523[ISIS-523] - If max length of title in collections is 0, then suppress the title label also.
-* link:https://issues.apache.org/jira/browse/ISIS-525[ISIS-525] - Wicket tags should be stripped by default, overridable with an Isis property.
+* link:https://issues.apache.org/jira/browse/ISIS-525[ISIS-525] - Wicket tags should be stripped by default, overridable with an Apache Isis property.
 * link:https://issues.apache.org/jira/browse/ISIS-527[ISIS-527] - focus on first field when edit an object or on action parameter.
 * link:https://issues.apache.org/jira/browse/ISIS-530[ISIS-530] - ui
 * link:https://issues.apache.org/jira/browse/ISIS-538[ISIS-538] - Improve performance of rendering lists (in Wicket viewer)
-* link:https://issues.apache.org/jira/browse/ISIS-547[ISIS-547] - Provide better error logging from the Wicket applicaiton init() method if Isis fails to boot.
+* link:https://issues.apache.org/jira/browse/ISIS-547[ISIS-547] - Provide better error logging from the Wicket applicaiton init() method if Apache Isis fails to boot.
 * link:https://issues.apache.org/jira/browse/ISIS-558[ISIS-558] - When bulk action is invoked, the action that generated the collection should be resubmitted (so that a full refresh takes place).
 
     
@@ -1062,7 +1062,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                               
 ==== Improvement
 
-<li>Updated to run against Isis Core 1.3.0
+<li>Updated to run against Apache Isis Core 1.3.0
 * link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
 * link:https://issues.apache.org/jira/browse/ISIS-509[ISIS-509] - Tidy up and rationalize Util classes in core (and all dependents)
 
@@ -1078,7 +1078,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-427[ISIS-427] - specific), with JDO implementation.
 * link:https://issues.apache.org/jira/browse/ISIS-450[ISIS-450] - session interaction between entities.
 * link:https://issues.apache.org/jira/browse/ISIS-459[ISIS-459] - Enhance IsisJdoSupport service to support integration testing (execute arbitrary SQL, delete all instances of an entity)
-* link:https://issues.apache.org/jira/browse/ISIS-488[ISIS-488] - Derive Isis&#39; MandatoryFacet from JDO @Column(allowNulls=) annotation, and provide @Mandatory annotation as override
+* link:https://issues.apache.org/jira/browse/ISIS-488[ISIS-488] - Derive Apache Isis&#39; MandatoryFacet from JDO @Column(allowNulls=) annotation, and provide @Mandatory annotation as override
 * link:https://issues.apache.org/jira/browse/ISIS-553[ISIS-553] - Provide view model support, as sketched out in the Restful Objects spec
 
                     
@@ -1112,7 +1112,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
     
 ==== Task
 
-* link:https://issues.apache.org/jira/browse/ISIS-437[ISIS-437] - up tasks for Isis 1.3.0 and associated components.
+* link:https://issues.apache.org/jira/browse/ISIS-437[ISIS-437] - up tasks for Apache Isis 1.3.0 and associated components.
 
                     
                     
@@ -1135,7 +1135,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-360[ISIS-360] - About page on wicket viewer should show version, build number and other details.
 * link:https://issues.apache.org/jira/browse/ISIS-367[ISIS-367] - Refactor to support JTA transactions
 * link:https://issues.apache.org/jira/browse/ISIS-377[ISIS-377] - Publishing Service implementation that writes to a queue (using JDO).
-* link:https://issues.apache.org/jira/browse/ISIS-378[ISIS-378] - a service for prototyping that allows access into the internals of the Isis runtime
+* link:https://issues.apache.org/jira/browse/ISIS-378[ISIS-378] - a service for prototyping that allows access into the internals of the Apache Isis runtime
 * link:https://issues.apache.org/jira/browse/ISIS-380[ISIS-380] - Enhance BookmarkService API to allow objects to be looked up directly (rather than by dint of a BookmarkHolder)
 * link:https://issues.apache.org/jira/browse/ISIS-407[ISIS-407] - Annotation to automatically adjust end dates of ranges so that they are shown as inclusive vs exclusive.
 * link:https://issues.apache.org/jira/browse/ISIS-409[ISIS-409] - Move the &#39;wrapper&#39; progmodel component into core, reworked as an optional service
@@ -1174,7 +1174,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                 
 ==== New Feature
 
-* link:https://issues.apache.org/jira/browse/ISIS-328[ISIS-328] - Wicket viewer should shutdown Isis core on completion
+* link:https://issues.apache.org/jira/browse/ISIS-328[ISIS-328] - Wicket viewer should shutdown Apache Isis core on completion
 * link:https://issues.apache.org/jira/browse/ISIS-344[ISIS-344] - Automatically exclude &quot;parent references&quot; from parented collections.
 * link:https://issues.apache.org/jira/browse/ISIS-351[ISIS-351] - fatal, for rendering to the user.
 * link:https://issues.apache.org/jira/browse/ISIS-360[ISIS-360] - About page on wicket viewer should show version, build number and other details.
@@ -1347,7 +1347,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                                
 ==== New Feature
 
-* link:https://issues.apache.org/jira/browse/ISIS-370[ISIS-370] - Provide a service to allow all @PersistenceCapable entities to be eagerly registered with Isis (and therefore with DataNucleus)
+* link:https://issues.apache.org/jira/browse/ISIS-370[ISIS-370] - Provide a service to allow all @PersistenceCapable entities to be eagerly registered with Apache Isis (and therefore with DataNucleus)
 * link:https://issues.apache.org/jira/browse/ISIS-377[ISIS-377] - Publishing Service implementation that writes to a queue (using JDO).
 * link:https://issues.apache.org/jira/browse/ISIS-379[ISIS-379] - Move AuditingService out of the ToDo app demo and into JDO objectstore as a service impl.
 
@@ -1417,7 +1417,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
            
 ==== Improvement
 
-* link:https://issues.apache.org/jira/browse/ISIS-89[ISIS-89] - Finish off updating documentation post the first (pre 1.0) release of Isis.
+* link:https://issues.apache.org/jira/browse/ISIS-89[ISIS-89] - Finish off updating documentation post the first (pre 1.0) release of Apache Isis.
 * link:https://issues.apache.org/jira/browse/ISIS-131[ISIS-131] - Archive off (and no longer support) the default runtime&#39;s client/server remoting
 * link:https://issues.apache.org/jira/browse/ISIS-188[ISIS-188] - 1.0.0 release.
 * link:https://issues.apache.org/jira/browse/ISIS-192[ISIS-192] - based authorization
@@ -1438,7 +1438,7 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
 * link:https://issues.apache.org/jira/browse/ISIS-261[ISIS-261] - Remove obsolete code (Enumeration interface, AnnotationBasedFacetFactory)
 * link:https://issues.apache.org/jira/browse/ISIS-262[ISIS-262] - Real composite for ResourceSourceStream
 * link:https://issues.apache.org/jira/browse/ISIS-267[ISIS-267] - Handle &quot;recreating&quot; object adapters which are already resolved
-* link:https://issues.apache.org/jira/browse/ISIS-274[ISIS-274] - Simplify the bootstrapping of Isis so that there are fewer configuration properties to set in isis.properties
+* link:https://issues.apache.org/jira/browse/ISIS-274[ISIS-274] - Simplify the bootstrapping of Apache Isis so that there are fewer configuration properties to set in isis.properties
 * link:https://issues.apache.org/jira/browse/ISIS-280[ISIS-280] - More consistent support for @Prototype and @Exploration, by utilizing the existing HidingInteractionAdvisor API
 * link:https://issues.apache.org/jira/browse/ISIS-281[ISIS-281] - Provide support for integration testing using a JUnit rule.
 * link:https://issues.apache.org/jira/browse/ISIS-283[ISIS-283] - Provide the ability to use fixtures as domain objects, eg within demo apps

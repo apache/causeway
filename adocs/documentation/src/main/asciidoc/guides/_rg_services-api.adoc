@@ -5,16 +5,16 @@
 :_imagesdir: images/
 
 
-Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Isis will inject the service into your object.  These services' API are all defined in Isis' applib (`o.a.i.core:isis-core-applib` module); this minimizes the coupling between your code and Isis.  It also allows you to easily mock out these services in your unit tests.
+Apache Isis includes an extensive number of domain services for your domain objects to use; simply define the service as an annotated field and Apache Isis will inject the service into your object.  These services' API are all defined in Apache Isis' applib (`o.a.i.core:isis-core-applib` module); this minimizes the coupling between your code and Apache Isis.  It also allows you to easily mock out these services in your unit tests.
 
 [NOTE]
 ====
-In addition there are a number of domain services that constitute an SPI; if present they are used by Isis itself rather than by your domain objects.  A good example of this is the xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService3`] service.  The SPI services are covered in the xref:rg.adoc#_rg_services-spi[Domain Services (SPI) chapter].
+In addition there are a number of domain services that constitute an SPI; if present they are used by Apache Isis itself rather than by your domain objects.  A good example of this is the xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService3`] service.  The SPI services are covered in the xref:rg.adoc#_rg_services-spi[Domain Services (SPI) chapter].
 ====
 
 
 
-The table below summarizes all the APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
+The table below summarizes all the APIs defined by Apache Isis.  It also lists their corresponding implementation, either a default implementation provided by Apache Isis itself, or provided by one of the in (non-ASF) link:http://www.isisaddons.org[Isis Addons] modules.
 
 .Domain Services
 [cols="3,3a,3a,3a", options="header"]
@@ -117,7 +117,7 @@ xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] for persi
 |xref:rg.adoc#_rg_services-api_manpage-EventBusService[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
-|Programmatically post events to the internal event bus.  Also used by Isis itself to broadcast domain events:
+|Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
 
 * xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[`Action#domainEvent()`]
 * xref:rg.adoc#_rg_annotations_manpage-Property_domainEvent[`Property#domainEvent()`]
@@ -161,7 +161,7 @@ xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] for persi
 |xref:rg.adoc#_rg_services-api_manpage-MetaModelService[`o.a.i.applib.` +
 `services.metamodel` +
 `MetaModelService`]
-|Access to certain information from the Isis metamodel.
+|Access to certain information from the Apache Isis metamodel.
 |`MetaModelServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-metamodel``

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This chapter provides instructions on how to go about actually developing Isis domain applications.
+This chapter provides instructions on how to go about actually developing Apache Isis domain applications.
 
 
 include::_ug_how-tos_class-structure.adoc[leveloffset=+1]

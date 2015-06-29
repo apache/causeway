@@ -32,7 +32,7 @@ git commit -m "ISIS-nnn: yada yada"
 
 The `git add` command adds the changes to the file(s) to the git index (aka staging area).  If you were to make subsequent changes to the file these would not be committed.
  
-The `git commit` takes all the staged changes and commits them locally.  Note that these changes are not shared public with Isis' central git repo.
+The `git commit` takes all the staged changes and commits them locally.  Note that these changes are not shared public with Apache Isis' central git repo.
 
 You can combine these two commands using `-am` flag to git commit:
 
@@ -88,7 +88,7 @@ git commit -m "ISIS-nnn: yada yada"
 
 == Common Workflows
 
-The link:./contributing.html[contributing] page describes the workflow for non-committers.  The link:./git-policy.html[Git policy] page describes a workflow for Isis **committers**.  
+The link:./contributing.html[contributing] page describes the workflow for non-committers.  The link:./git-policy.html[Git policy] page describes a workflow for Apache Isis **committers**.
 
 
 

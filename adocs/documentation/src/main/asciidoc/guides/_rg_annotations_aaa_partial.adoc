@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-These annotations have only incomplete/partial support, primarily relating to the management of value types.  We recommend that you do not use them for now.  Future versions of Isis may either formally deprecate/retire them, or we may go the other way and properly support them.  This will depend in part on the interactions between the Isis runtime, its two viewer implementations, and DataNucleus persistence.
+These annotations have only incomplete/partial support, primarily relating to the management of value types.  We recommend that you do not use them for now.  Future versions of Apache Isis may either formally deprecate/retire them, or we may go the other way and properly support them.  This will depend in part on the interactions between the Apache Isis runtime, its two viewer implementations, and DataNucleus persistence.
 
 
 .Annotations with incomplete/partial support

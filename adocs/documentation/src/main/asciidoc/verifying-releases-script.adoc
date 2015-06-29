@@ -8,7 +8,7 @@
 
 pass:[<br/><br/>]
 
-To save some time in verifying an Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
+To save some time in verifying an Apache Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
 
 It's _recommended_ that you start this process in an empty directory:
 
@@ -53,7 +53,7 @@ _unpack(){
     unzip -q '*.zip'
 }
 _build(){
-    echo 'Removing Isis from local repo '$module
+    echo 'Removing Apache Isis from local repo '$module
     rm -rf ~/.m2/repository/org/apache/isis
     COUNTER=0
     for module in ./*/
@@ -92,7 +92,7 @@ chmod +x verify-isis-release.sh
 
 == Create an input file
 
-The input file is a plain `.txt` file containing all urls to the packages to be verified. Here's a sample of the release of Isis 1.8.0:
+The input file is a plain `.txt` file containing all urls to the packages to be verified. Here's a sample of the release of Apache Isis 1.8.0:
 
 [source]
 ----
@@ -105,7 +105,7 @@ The actual list of packages to be verified will be provided through the mailing 
 
 
 
-== Clean out Isis from your local Maven repo
+== Clean out Apache Isis from your local Maven repo
 
 [source,bash]
 ----

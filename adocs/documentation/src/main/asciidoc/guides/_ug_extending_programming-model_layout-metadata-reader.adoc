@@ -9,13 +9,13 @@ The metadata for domain objects is obtained both xref:rg.adoc#_rg_object-layout_
 
 The default implementation for reading dynamic layout metadata is `org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson`, which is responsible for reading from the `Xxx.layout.json` files on the classpath (for each domain entity `Xxx`).
 
-You can also implement your own metadata readers and plug them into Isis.  These could read from a different file format, or they could, even, read data dynamically from a URL or database.  (Indeed, one could imagine an implementation whereby users could share layouts, all stored in some central repository).
+You can also implement your own metadata readers and plug them into Apache Isis.  These could read from a different file format, or they could, even, read data dynamically from a URL or database.  (Indeed, one could imagine an implementation whereby users could share layouts, all stored in some central repository).
 
 
 
 == API and Implementation
 
-Any reader must implement Isis' internal `LayoutMetadataReader` interface:
+Any reader must implement Apache Isis' internal `LayoutMetadataReader` interface:
 
 [source,java]
 ----
@@ -40,5 +40,5 @@ isis.reflector.layoutMetadataReaders=\
            com.mycompany.myapp.MyMetaModelValidator,\
            org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson   # <1>
 ----
-<1> the property replaces any existing metadata readers; if you want to preserve the ability to read from `Xxx.layout.json` then also register Isis' built-in implementation.
+<1> the property replaces any existing metadata readers; if you want to preserve the ability to read from `Xxx.layout.json` then also register Apache Isis' built-in implementation.
 

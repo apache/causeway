@@ -47,7 +47,7 @@ In fact, the `MementoServiceDefault` implementation does provide a mechanism to 
 However, you are of course free to write some other implementation of `MementoService`, perhaps based on `MementoServiceDefault` code if you wish.
 ====
 
-The types of objects that are supported by the `MementoService` are implementation-specific, but would typically include all the usual value types as well as Isis' `Bookmark` class (to represent references to arbitrary entities). Nulls can also be set.
+The types of objects that are supported by the `MementoService` are implementation-specific, but would typically include all the usual value types as well as Apache Isis' `Bookmark` class (to represent references to arbitrary entities). Nulls can also be set.
 
 In the case of the default implementation provided by the core framework, the types supported are:
 
@@ -128,4 +128,4 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `MementoService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `MementoService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

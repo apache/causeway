@@ -22,6 +22,6 @@ public class Customer implements Comparable<Customer> {
 ----
 
 
-Note that `@Programmatic` does not simply imply `@Hidden`; it actually means that the class member will not be part of the Isis metamodel.
+Note that `@Programmatic` does not simply imply `@Hidden`; it actually means that the class member will not be part of the Apache Isis metamodel.
 
 

@@ -6,14 +6,14 @@
 
 
 
-The `TranslationsResolver` service is one of the services that work together to implement Isis' support for i18n, being used by Isis' default implementation of xref:rg.adoc#_rg_services-spi_manpage-TranslationService[`TranslationService`].
+The `TranslationsResolver` service is one of the services that work together to implement Apache Isis' support for i18n, being used by Isis' default implementation of xref:rg.adoc#_rg_services-spi_manpage-TranslationService[`TranslationService`].
 
 The role of the service itself is locate and return translations.
 
 
 [NOTE]
 ====
-For the "big picture" and further details on Isis' i18n support, see xref:ug.adoc#_ug_more-advanced_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:ug.adoc#_ug_more-advanced_i18n[here].
 ====
 
 

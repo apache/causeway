@@ -14,7 +14,7 @@ Another use case is to support "third party" REST clients over which you have no
 
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.  There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Isis xref:ug.adoc#_ug_more-advanced_view-models[view model].  This is then surfaced over the RO viewer.  +
+* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:ug.adoc#_ug_more-advanced_view-models[view model].  This is then surfaced over the RO viewer.  +
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
 
@@ -26,7 +26,7 @@ If the underlying tables change (as the result of a change in their correspondin
 +
 The `ContentNegotiationService` is responsible for inspecting the HTTP `Accept` header, and use this to select the correct representation to render.  +
 +
-The Isis framework provides a default implementation of `ContentNegotiationService` which inspects the "x-ro-domaintype" component of the HTTP `Accept` header.  If present, this implementation will delegate to the companion xref:rg.adoc#_rg_services-spi_manpage-ContentMappingService[`ContentMappingService`] service, if configured.  +
+The Apache Isis framework provides a default implementation of `ContentNegotiationService` which inspects the "x-ro-domaintype" component of the HTTP `Accept` header.  If present, this implementation will delegate to the companion xref:rg.adoc#_rg_services-spi_manpage-ContentMappingService[`ContentMappingService`] service, if configured.  +
 +
 A typical implementation of `ContentMappingService` will convert the domain object into some sort of DTO (data transfer object) as specified by the "x-ro-domaintype".  If this DTO is annotated with JAXB or Jackson mappings, then the RO viewer (courtesy of the underlying link:http://resteasy.jboss.org/[RestEasy] framework) can serialize these directly  +
 +
@@ -178,7 +178,7 @@ The default `ContentNegotiationServiceXRoDomainType` implementation provides a x
 isis.services.ContentNegotiationServiceXRoDomainType.prettyPrint=true
 ----
 
-If the property is not set, then the default depends on the xref:_ug_runtime_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
+If the property is not set, then the default depends on the xref:ug.adoc#_ug_runtime_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
 
 
 

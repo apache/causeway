@@ -74,7 +74,7 @@ Note that the method name can be anything; it doesn't need to be related to the 
 
 == Constructor injection
 
-Simply to note that constructor injection is _not_ supported by Isis (and is unlikely to be, because the JDO specification for entities requires a no-arg constructor).
+Simply to note that constructor injection is _not_ supported by Apache Isis (and is unlikely to be, because the JDO specification for entities requires a no-arg constructor).
 
 
 

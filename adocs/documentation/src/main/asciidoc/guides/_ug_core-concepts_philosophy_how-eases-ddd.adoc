@@ -21,7 +21,7 @@ pass:[</p></div>]
 
 The word to pick up on here is *conscious*.  It takes a conscious effort by the entire team to develop the ubiquitous language. Everyone in the team must challenge the use of new or unfamiliar terms, must clarify concepts when used in a new context, and in general must be on the lookout for sloppy thinking. This takes willingness on the part of all involved, not to mention some practice.
 
-With Apache Isis, though, the  ubiquitous language evolves with scarcely any effort at all. For the business experts, the Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion. Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes. There's no technology to get distracted by; there is literally nothing else for the developers to work on.
+With Apache Isis, though, the  ubiquitous language evolves with scarcely any effort at all. For the business experts, the Apache Isis viewers show the domain concepts they identify and the relationships between those concepts in a straightforward fashion. Meanwhile, the developers can devote themselves to encoding those domain concepts directly as domain classes. There's no technology to get distracted by; there is literally nothing else for the developers to work on.
 
 
 == DDD must be grounded
@@ -57,7 +57,7 @@ The second issue is more subtle. It takes real skill to ensure the correct separ
 
 Because of Apache Isis' generic  __OOUI__s, there's no need to write the other layers of the architecture.  Of course, this reduces the development cost. But more than that, there will be no leakage of concerns outside the domain model. All the validation logic *must* be in the domain model because there is nowhere else to put it.
 
-Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework. That means it is very possible to take your domain model prototyped in Naked Objects and then deploy it on some other  _J(2)EE_ architecture, with a custom _UI_ if you want.  Isis guarantees that your domain model is complete.
+Moreover, although Apache Isis does provide a complete runtime framework, there is no direct coupling of your domain model to the framework. That means it is very possible to take your domain model prototyped in Naked Objects and then deploy it on some other  _J(2)EE_ architecture, with a custom _UI_ if you want.  Apache Isis guarantees that your domain model is complete.
 
 
 

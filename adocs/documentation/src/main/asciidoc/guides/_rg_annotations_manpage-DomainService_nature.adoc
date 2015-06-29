@@ -65,7 +65,7 @@ public class LoanRepository {                                  // <1>
 }
 ----
 <1> `Repository` as a suffix for a domain-layer service
-<2> methods on `DOMAIN` services are often xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Isis' metamodel
+<2> methods on `DOMAIN` services are often xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`]; they will never be exposed in the UI, so there's little point in including them in Apache Isis' metamodel
 
 
 

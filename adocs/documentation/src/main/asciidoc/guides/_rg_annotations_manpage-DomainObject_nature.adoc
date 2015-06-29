@@ -26,7 +26,7 @@ Specifically, the nature must be one of:
 
 * `JDO_ENTITY` +
 +
-indicates that the domain object is an entity whose persistence is managed internally by Isis, using the JDO/DataNucleus objectstore.
+indicates that the domain object is an entity whose persistence is managed internally by Apache Isis, using the JDO/DataNucleus objectstore.
 
 * `EXTERNAL_ENTITY` +
 +
@@ -51,9 +51,9 @@ Those natures that indicate the domain object is an entity (of some sort or anot
 
 [NOTE]
 ====
-Under the covers Isis' support for `VIEW_MODEL`, `EXTERNAL_ENTITY` and `INMEMORY_ENTITY` domain objects is identical; the state of the object is encoded into its internal OID (represented ultimately as its URL), and is recreated directly from that URL.
+Under the covers Apache Isis' support for `VIEW_MODEL`, `EXTERNAL_ENTITY` and `INMEMORY_ENTITY` domain objects is identical; the state of the object is encoded into its internal OID (represented ultimately as its URL), and is recreated directly from that URL.
 
-Because this particular implementation was originally added to Isis in support of view models, the term was also used for the logically different external entities and inmemory entities.
+Because this particular implementation was originally added to Apache Isis in support of view models, the term was also used for the logically different external entities and inmemory entities.
 
 The benefit of `nature()` is that it allows the developer to properly characterize the layer (domain vs application) that an entity lives, thus avoiding confusion as "view model" (the implementation technique) and "view model" (the application layer concept).
 ====

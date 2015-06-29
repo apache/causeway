@@ -11,7 +11,7 @@ The lifecycle callback methods notify a domain entity about its interaction with
 
 [WARNING]
 ====
-Note that these callbacks are fired by Isis rather than JDO.  In the future we may deprecate them because they duplicate functionality already available in JDO.
+Note that these callbacks are fired by Apache Isis rather than JDO.  In the future we may deprecate them because they duplicate functionality already available in JDO.
 
 You may therefore want to consider using the JDO API directly; see xref:rg.adoc#_rg_methods_lifecycle_jdo-api[here] for further discussion.
 ====

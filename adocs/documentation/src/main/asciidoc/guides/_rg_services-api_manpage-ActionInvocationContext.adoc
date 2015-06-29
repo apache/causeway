@@ -35,7 +35,7 @@ public static class ActionInvocationContext {
 
 == Usage
 
-For actions that are void or that return null, Isis will return to the list once executed. But for bulk actions that are non-void, Isis will render the returned object/value from the last object invoked (and simply discards the object/value of all actions except the last).
+For actions that are void or that return null, Apache Isis will return to the list once executed. But for bulk actions that are non-void, Apache Isis will render the returned object/value from the last object invoked (and simply discards the object/value of all actions except the last).
 
 One idiom is for the domain objects to also use the xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] service to share information, for example to aggregate values. The `ActionInvocationContext#isLast()` method can then be used to determine if all the information has been gathered, and then do something with it (eg derive variance across a range of values, render a graph etc).
 

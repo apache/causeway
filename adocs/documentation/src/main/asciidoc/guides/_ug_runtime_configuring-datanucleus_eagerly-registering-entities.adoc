@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-Both Apache Isis and DataNucleus have their own metamodels of the domain entities. Isis builds its metamodel by walking the graph of types from the services registered using `@DomainService` or explicitly registered in `isis.properties`. The JDO objectstore then takes these types and registers them with DataNucleus.
+Both Apache Isis and DataNucleus have their own metamodels of the domain entities. Apache Isis builds its metamodel by walking the graph of types from the services registered using `@DomainService` or explicitly registered in `isis.properties`. The JDO objectstore then takes these types and registers them with DataNucleus.
 
 In some cases, though, not every entity type is discoverable from the API of the service actions. This is especially the case if you have lots of subtypes (where the action method specifies only the supertype). In such cases the Isis and JDO metamodels is built lazily, when an instance of that (sub)type is first encountered.
 

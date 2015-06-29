@@ -16,7 +16,7 @@ could correspond to a `Bookmark` with a string representation of `custmgmt.Custo
 
 [NOTE]
 ====
-A `Bookmark` is little more than an API equivalent of Isis' internal `Oid` (object identifier).  Nevertheless, the ability to uniquely address _any_ domain object within an Isis system -- to in effect provide a URN -- is immensely useful.
+A `Bookmark` is little more than an API equivalent of Apache Isis' internal `Oid` (object identifier).  Nevertheless, the ability to uniquely address _any_ domain object within an Apache Isis system -- to in effect provide a URN -- is immensely useful.
 
 For example, a `Bookmark` could be converted into a barcode, and then this used for automated scanning of correspondence from a customer.
 ====
@@ -111,7 +111,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `BookmarkService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `BookmarkService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 

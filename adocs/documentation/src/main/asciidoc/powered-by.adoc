@@ -10,11 +10,11 @@
 pass:[<br/><br/>]
 
 
-Here are some freely accessible (and sometimes open source) applications that are powered by Isis.
+Here are some freely accessible (and sometimes open source) applications that are powered by Apache Isis.
 
 [TIP]
 ====
-If you have written an app in Isis that you'd like to share, please mention it on the link:./support.html[mailing list].
+If you have written an app in Apache Isis that you'd like to share, please mention it on the link:./support.html[mailing list].
 ====
 
 
@@ -31,7 +31,7 @@ image::{_imagesdir}powered-by/estatio-1.png[width="900px",link="{_imagesdir}powe
 
 
 
-Much of Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.
+Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.
 
 Estatio is being deployed by [Eurocommercial Properties](http://www.eurocommercialproperties.com/), who sponsored the development of the framework in order to make Estatio a reality.  Our heart-felt thanks to them for their investment.  
 
@@ -82,8 +82,8 @@ The author, Christian Steinebach, wrote this demo part-time over the course of a
 
 He went on:
 
-* Because this is a demo, there is a lot of room for improvement, but it does show how a relatively simple domain model can be brought 'alive' using Isis.
+* Because this is a demo, there is a lot of room for improvement, but it does show how a relatively simple domain model can be brought 'alive' using Apache Isis.
 
-The source code is available link:https://www.assembla.com/code/transportplanner/git/nodes[here] (note: it was written against a snapshot version of Isis).
+The source code is available link:https://www.assembla.com/code/transportplanner/git/nodes[here] (note: it was written against a snapshot version of Apache Isis).
 
 

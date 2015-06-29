@@ -41,7 +41,7 @@ If using DataNucleus against an RDBMS (as you probably are) then we strongly rec
 
 * second, `SortedSet` is preferable to `Set` because then the order is well-defined and predictable (to an end user, to the programmer). +
 +
-The <<ObjectContracts>> utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
+The xref:rg.adoc#_rg_classes_utility_manpage-ObjectContracts[`ObjectContracts`]  utility class substantially simplifies the task of implementing `Comparable` in your domain classes.
 
 * third, if the relationship is bidirectional then JDO/Objectstore will automatically maintain the relationship.
 
@@ -121,7 +121,7 @@ This contract test automatically checks that the `injectXxx(...)` method, to all
 
 [NOTE]
 ====
-This contract test is semi-obsolete; most of the time you will want to use `@javax.inject.Inject` on fields rather than the `injectXxx()` method.  The feature dates from a time before Isis supported the `@Inject` annotation.
+This contract test is semi-obsolete; most of the time you will want to use `@javax.inject.Inject` on fields rather than the `injectXxx()` method.  The feature dates from a time before Apache Isis supported the `@Inject` annotation.
 ====
 
 

@@ -50,7 +50,7 @@ to list committers
 list_committee.pl isis
 ----
 
-to list the PMC committee members (in Isis, every committer should be on the PMC committee)
+to list the PMC committee members (in Apache Isis, every committer should be on the PMC committee)
 
 To change membership of either the committers or the PMC, use:
 

@@ -197,7 +197,7 @@ Apache Isis applications are organized into several Maven modules. Within your I
 
 == Testing
 
-Testing is of course massively important, and Isis makes both unit testing and (end-to-end) integration testing easy. Building the app from the Maven command line ("mvn clean install") will run all tests, but you should also run the tests from within the IDE.
+Testing is of course massively important, and Apache Isis makes both unit testing and (end-to-end) integration testing easy. Building the app from the Maven command line ("mvn clean install") will run all tests, but you should also run the tests from within the IDE.
 
 * `myapp-dom` unit tests
 * run
@@ -321,8 +321,8 @@ where:
 <2> `@DatastoreIdentity` specify a surrogate `Id` column to be used as the primary key
 <3> `@Version` provides support for optimistic locking
 <4> `@Unique` enforces a uniqueness constraint so that no two `Pet`s can have the same name (unrealistic, but can refactor later)
-<5> `@ObjectType` is used by Isis for its own internal "OID" identifier; this also appears in the URL in Isis' Wicket viewer and REST API
-<6> `@Bookmarkable` indicates that the object can be automatically bookmarked in Isis' Wicket viewer
+<5> `@ObjectType` is used by Apache Isis for its own internal "OID" identifier; this also appears in the URL in Apache Isis' Wicket viewer and REST API
+<6> `@Bookmarkable` indicates that the object can be automatically bookmarked in Apache Isis' Wicket viewer
 
 [NOTE]
 ====

@@ -21,7 +21,7 @@ To support this the framework requires three services to be registered and confi
 * the xref:rg.adoc#_rg_services-spi_manpage-EmailNotificationService[email notification service], which provides an API for to send the verification emails
 * the xref:rg.adoc#_rg_services-api_manpage-EmailService[email service], that is used by the email notification service to actually send the email.
 
-The Isis core framework provides a default implementation of both the email notification service and the email service. If your application uses the https://github.com/isisaddons/isis-module-security[Isis addons security module] (not ASF) then an implementation is provided by that module; just add to the classpath. Otherwise you will need to provide your own implementation.
+The Apache Isis core framework provides a default implementation of both the email notification service and the email service. If your application uses the https://github.com/isisaddons/isis-module-security[Isis addons security module] (not ASF) then an implementation is provided by that module; just add to the classpath. Otherwise you will need to provide your own implementation.
 
 [NOTE]
 ====

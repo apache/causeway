@@ -6,7 +6,7 @@
 
 
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system.  Here the only events published are those that action invocations and of changed objects.  A typical use case is to publish onto a pub/sub bus such as link:http://activemq.apache.org/[ActiveMQ] with link:http://camel.apache.org[Camel] to keep other systems up to date.
 
 
 
@@ -59,7 +59,7 @@ To indicate that an action invocation should be published, annotate it with the 
 To indicate that a changed object should be published is to annotate it with the xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`] annotation.
 
 
-It is also possible to "fine-tune" the `EventPayload` using the `#publishingFactory()` attribute (for both annotations).  By default the `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the action invocation provides details of the action arguments and result (if any) of that action.  However, the payload does not (by default) include any information about the new state of these objects. It is therefore the responsibility of the subscriber to call back to Isis to determine any information that has not been published.
+It is also possible to "fine-tune" the `EventPayload` using the `#publishingFactory()` attribute (for both annotations).  By default the `EventPayload` that is serialized identifies the object(s) being interacted with or changed, and in the case of the action invocation provides details of the action arguments and result (if any) of that action.  However, the payload does not (by default) include any information about the new state of these objects. It is therefore the responsibility of the subscriber to call back to Apache Isis to determine any information that has not been published.
 
 Although the representations (if using the Restful Object serializer and Restful Objects viewer) does include hrefs for the objects, this nevertheless requires an additional network call to obtain this information).
 
@@ -145,9 +145,9 @@ then adding the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Is
 
 == Related Services
 
-The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`].
+The `PublishingService` is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`].
 
-The xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+The xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
 All three of these services collaborate implicitly by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
 

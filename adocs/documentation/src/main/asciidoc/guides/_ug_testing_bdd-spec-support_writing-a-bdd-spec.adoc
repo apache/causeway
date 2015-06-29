@@ -45,11 +45,11 @@ The `@SimpleObjectsFixture` is a custom tag we've specified to indicate the prer
 ====
 Although BDD specs are most commonly used for end-to-end tests (ie at the same scope as an integration test), the two concerns (expressability of a test to a business person vs granularity of the test) should not be conflated. There are a couple of http://silkandspinach.net/2013/01/18/a-testing-strategy/[good] blog http://claysnow.co.uk/the-testing-iceberg/[posts] discussing http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[this]. The basic idea is to avoid the overhead of a heavy-duty integration test if possible.
 
-Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).  When running under unit-level scope, the Isis system is _not_ instantiated.  Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
+Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).  When running under unit-level scope, the Apache Isis system is _not_ instantiated.  Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
 
-To support unit testing scope Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.  Use of this utility class is optional.
+To support unit testing scope Apache Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.  Use of this utility class is optional.
 
-Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].  For those who do require faster-executing test suite, it's worthwhile knowing that Isis can support this.
+Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].  For those who do require faster-executing test suite, it's worthwhile knowing that Apache Isis can support this.
 
 ====
 
@@ -74,7 +74,7 @@ public class RunSpecs {
 
 The JSON formatter allows integration with enhanced reports, for example as provided by http://www.masterthought.net/section/cucumber-reporting[Masterthought.net] (screenshots at end of page). (Commented out) configuration for this is provided in the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].
 
-The bootstrapping of Isis can be moved into a `BootstrappingGlue` step definition:
+The bootstrapping of Apache Isis can be moved into a `BootstrappingGlue` step definition:
 
 [source,java]
 ----

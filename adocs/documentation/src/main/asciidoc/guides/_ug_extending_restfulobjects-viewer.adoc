@@ -9,7 +9,7 @@ The xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] implements the
 
 Sometimes though you may want to extend or change the representations generated.  This might be because you want to write a RESTful client that uses a particular library (say a Javascript library or web components) that can only handle representations in a certain form.
 
-Or, you might want to have Isis generate representations according to some other "standard", of which there are many (see note).
+Or, you might want to have Apache Isis generate representations according to some other "standard", of which there are many (see note).
 
 [NOTE]
 ====
@@ -19,7 +19,7 @@ A good discussion about the relative merits of several of these different hyperm
 ====
 
 
-Whatever your reasons, Isis provides several mechanisms by which you can change the generated representation.  This section lists these, from the simplest (most limited) to the most flexible (more work).
+Whatever your reasons, Apache Isis provides several mechanisms by which you can change the generated representation.  This section lists these, from the simplest (most limited) to the most flexible (more work).
 
 * Configuration Properties +
 +

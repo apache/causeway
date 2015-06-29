@@ -13,7 +13,7 @@ These configuration properties are typically stored in `WEB-INF/viewer_restfulob
 ====
 These configuration settings should be considered beta, and may change in the future in response to emerging requirements.
 
-Also, be aware enabling these settings makes the representations with respect to the http://restfulobjects.org[Restful Object spec].  (Based on experience in Isis, in the future the spec may be updated to allow such extensions).
+Also, be aware enabling these settings makes the representations with respect to the http://restfulobjects.org[Restful Object spec].  (Based on experience in Apache Isis, in the future the spec may be updated to allow such extensions).
 ====
 
 

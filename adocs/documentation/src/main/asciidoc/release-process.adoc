@@ -190,9 +190,9 @@ For example, if releasing `core` version `1.9.0`, the POM should read:
 <version>1.9.0</version>
 ----
 
-=== Update parent (Isis Core)
+=== Update parent (Apache Isis Core)
 
-If releasing Isis Core, check (via link:http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache%22%20a%3A%22apache%22[search.maven.org]) whether there is a newer version of the Apache parent `org.apache:apache`.
+If releasing Apache Isis Core, check (via link:http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22org.apache%22%20a%3A%22apache%22[search.maven.org]) whether there is a newer version of the Apache parent `org.apache:apache`.
 
 
 If there is, update the `&lt;version&gt;` in the `&lt;parent&gt;` element in the parent POM to match the newer version:
@@ -232,14 +232,14 @@ vi `/bin/find . -name pom.xml | grep -v target | sort`
 
 [TIP]
 ====
-Obviously, don't update Isis' `SNAPSHOT` references; these get updated by the `mvn release:prepare` command we run later.
+Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by the `mvn release:prepare` command we run later.
 ====
 
 
 
 === Update plugin versions
 
-The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Isis. Since this goes off to the internet, it may take a minute or two to run:
+The `maven-versions-plugin` should be used to determine if there are newer versions of any of the plugins used to build Apache Isis. Since this goes off to the internet, it may take a minute or two to run:
 
 [source,bash]
 ----
@@ -423,7 +423,7 @@ Next, delete all Isis artifacts from your local Maven repo:
 rm -rf ~/.m2/repository/org/apache/isis
 ----
 
-Next, build the component, though without the offline flag. Maven should pull down the component's dependencies from the Maven central repo, including the non-spshot of Isis core:
+Next, build the component, though without the offline flag. Maven should pull down the component's dependencies from the Maven central repo, including the non-spshot of Apache Isis core:
 
 [source,bash]
 ----
@@ -486,13 +486,13 @@ $ mvn release:prepare -P apache-release -D dryRun=true
 [INFO] Reactor Build Order:
 [INFO]
 [INFO] Apache Isis Core
-[INFO] Isis Core AppLib
-[INFO] Isis Core Unit Test Support
-[INFO] Isis Core MetaModel
-[INFO] Isis Core Runtime
-[INFO] Isis Core WebServer
+[INFO] Apache Isis Core AppLib
+[INFO] Apache Isis Core Unit Test Support
+[INFO] Apache Isis Core MetaModel
+[INFO] Apache Isis Core Runtime
+[INFO] Apache Isis Core WebServer
        ...
-[INFO] Isis Core Integration Testing Support
+[INFO] Apache Isis Core Integration Testing Support
 [INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] Building Apache Isis Core 1.9.0
@@ -727,7 +727,7 @@ Note that the email also references the procedure for other committers to link:v
 
 Once the vote has completed, post the results to the isis-dev mailing list.
 
-For example, use the following subject for a vote on Isis Core:
+For example, use the following subject for a vote on Apache Isis Core:
 
 [source,bash]
 ----
@@ -850,7 +850,7 @@ This moves the release artifacts into an Apache releases repository; from there 
 
 As described in the http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist]. Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location. The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`. Only the most recent release of each supported release line should be contained here, old versions should be deleted.
 
-Each project is responsible for the structure of its directory. The directory structure of Isis reflects the directory structure in our git source code repo:
+Each project is responsible for the structure of its directory. The directory structure of Apache Isis reflects the directory structure in our git source code repo:
 
 [source]
 ----
@@ -900,13 +900,13 @@ If any of the tickets closed are tasks/subtasks, then please edit the contents o
 
 === Mark the JIRA versions as released
 
-In JIRA, go to the administration section for the Isis project and update the versions as released.
+In JIRA, go to the administration section for the Apache Isis project and update the versions as released.
 
 === Update ISIS website
 
-Update the Isis CMS website:
+Update the Apache Isis CMS website:
 
-* Using the JIRA-generated release notes as a guide, update the relevant page of the Isis site. +
+* Using the JIRA-generated release notes as a guide, update the relevant page of the Apache Isis site. +
 +
 Use this regex to convert links.  From:
 +
@@ -940,7 +940,7 @@ to:
 
 Typically this be will a new page in the core section or for one of the components. Make a note of the URL of this new page (for use in the mailing list announcement).
 
-For example, a new release of Isis Core would require:
+For example, a new release of Apache Isis Core would require:
 
 * Do a search for `x.y.0-SNAPSHOT` and replace with `x.y.0`
 
@@ -957,7 +957,7 @@ In addition:
 
 For more information on DOAP files, see these http://projects.apache.org/doap.html[Apache policy docs].
 
-* The `STATUS` file (in root of Isis' source) should be updated with details of the new release.
+* The `STATUS` file (in root of Apache Isis' source) should be updated with details of the new release.
 
 
 
@@ -976,14 +976,14 @@ And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Isis teamEnum is pleased to announce the release of:
+The Apache Isis team is pleased to announce the release of:
 * Apache Isis Core version 1.9.0
 * SimpleApp Archetype 1.9.0
 
 New features in this release include:
 - ...
 
-Full release notes are available on the Isis website at [1].
+Full release notes are available on the Apache Isis website at [1].
 
 Note that:
 * ...
@@ -993,7 +993,7 @@ or download the release and build it from source [3].
 
 Enjoy!
 
---The Isis teamEnum
+--The Apache Isis team
 
 [1] http://isis.apache.org/core/release-notes/isis-1.9.0.html
 [2] http://search.maven.org

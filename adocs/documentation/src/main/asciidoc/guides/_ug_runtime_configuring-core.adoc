@@ -32,7 +32,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 | `true`,`false` (`false`)
 | Disables concurrency checking globally.  +
 
-Only intended for "emergency use" as a workaround while pending fix/patch to Isis itself.  (Note that there is no "datanucleus" in the property).
+Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
 
 |`isis.reflector.facet.` +
 `cssClass.patterns`
@@ -126,7 +126,7 @@ Each entry can be optionally prefixed by "n:" specifying the relative order on t
 | `true`,`false` (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
 +
-If no configuration property is available, then the defaults is determined by the xref:_ug_runtime_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+If no configuration property is available, then the defaults is determined by the xref:ug.adoc#_ug_runtime_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
 
 
 
@@ -270,4 +270,4 @@ or
 isis.viewers.propertyLayout.labelPosition=LEFT
 ----
 
-If these are not present then Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.
+If these are not present then Apache Isis will render according to internal defaults. At the time of writing, this means labels are to the left for all datatypes except multiline strings.

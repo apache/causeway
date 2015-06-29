@@ -6,12 +6,12 @@
 
 
 
-The `TranslationService` is the cornerstone of Isis' i18n support.  Its role is to be able to provide translated versions of the various elements within the Isis metamodel (service and object classes, properties, collections, actions, action parameters) and also to translate business rule (disable/valid) messages, and exceptions.  These translations provide for both singular and plural forms.
+The `TranslationService` is the cornerstone of Apache Isis' i18n support.  Its role is to be able to provide translated versions of the various elements within the Apache Isis metamodel (service and object classes, properties, collections, actions, action parameters) and also to translate business rule (disable/valid) messages, and exceptions.  These translations provide for both singular and plural forms.
 
 
 [NOTE]
 ====
-For the "big picture" and further details on Isis' i18n support, see xref:ug.adoc#_ug_more-advanced_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:ug.adoc#_ug_more-advanced_i18n[here].
 ====
 
 
@@ -49,7 +49,7 @@ If in write mode, then the implementation is saving translation keys, and will a
 
 == Implementation
 
-The Isis framework provides a default implementation (`TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.  It relies on the `LocaleProvider` service (to return the `Locale` of the current user) and also the `TranslationsResolver` service (to read existing translations).
+The Apache Isis framework provides a default implementation (`TranslationServicePo`) that uses the GNU `.pot` and `.po` files for translations.  It relies on the `LocaleProvider` service (to return the `Locale` of the current user) and also the `TranslationsResolver` service (to read existing translations).
 
 The framework also provides a supporting `TranslationServicePoMenu` provides menu items under the "Prototyping" secondary menu for controlling this service and downloading `.pot` files for translation.
 
@@ -67,7 +67,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.  If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+then Apache Isis' core implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.  If the menu items are not required then these can be suppressed either using security or by implementing a xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

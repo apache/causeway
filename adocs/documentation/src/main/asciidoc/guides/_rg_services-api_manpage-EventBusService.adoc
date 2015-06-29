@@ -164,7 +164,7 @@ By creating domain event subtypes we can be more semantically precise and in tur
 
 We recommend that you define event classes at (up to) four scopes:
 
-* at the top "global" scope is the Isis-defined `o.a.i.applib.event.ActionDomainEvent`
+* at the top "global" scope is the Apache Isis-defined `o.a.i.applib.event.ActionDomainEvent`
 * for the "module" scope, create a static class to represent the module itself, and creating nested classes within
 * for each "class" scope, create a nested static event class in the domain object's class for all of the domain object's actions
 * for each "action" scope, create a nested static event class for that action, inheriting from the "domain object" class.
@@ -290,7 +290,7 @@ public class ReserveStockSubscriber {
 
 == Implementation SPI
 
-The implementation of `EventBusService` provided by Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:rg.adoc#_rg_services-api_manpage-EventBusService_Configuration[below]).
+The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.  Which is used is specified through configuration property (described xref:rg.adoc#_rg_services-api_manpage-EventBusService_Configuration[below]).
 
 [NOTE]
 .Guava vs Axon, which to use?
@@ -321,7 +321,7 @@ If you do provide your own implementation of this SPI, be aware that your subscr
 [[_rg_services-api_manpage-EventBusService_Configuration]]
 == Configuration
 
-The implementation of `EventBusService` provided by Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
+The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
 
 To specify which, add the xref:ug.adoc#_ug_runtime_configuring-core[configuration property] `isis.services.eventbus.implementation`:
 
@@ -368,7 +368,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `EventBusService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `EventBusService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 
@@ -376,6 +376,6 @@ then Isis' core implementation of `EventBusService` service is automatically reg
 
 == Related Services
 
-The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
+The `EventBusService` is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-The xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`]).
+The xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`] meanwhile is intended for coarse-grained publish/subscribe for system-to-system interactions, from Apache Isis to some other system. Here the only events published are those that action invocations (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action#publishing()`]) and of changed objects (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject#publishing()`]).

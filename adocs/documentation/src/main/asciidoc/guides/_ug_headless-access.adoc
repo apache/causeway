@@ -10,13 +10,13 @@ There are several main use-cases:
 
 * enabling background execution, eg of a thread managed by Quartz scheduler and running within the webapp
 
-* integration from other systems, eg for a subscriber on a pub/sub mechanism such as Camel, pushing changes through an Isis domain model.
+* integration from other systems, eg for a subscriber on a pub/sub mechanism such as Camel, pushing changes through an Apache Isis domain model.
 
 * leveraging an Isis application within a batch process
 
-Note that the calling thread runs in the same process space as the Isis domain object model (must be physically linked to the JAR files containing the domain classes).  For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] is usually the way to go.
+Note that the calling thread runs in the same process space as the Apache Isis domain object model (must be physically linked to the JAR files containing the domain classes).  For use cases where the calling thread runs in some other process space (eg migrating data from a legacy system), then the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] is usually the way to go.
 
-The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the <<WrapperFactory>> service could be used to enforce such business rules if required.
+The API described in this chapter is reasonably low-level, allowing code to interact very directly with the Apache Isis metamodel and runtime.  Such callers should be considered trusted: they do not (by default) honour any business rules eg implicit in the Isis annotations or hide/disable/validate methods.  However the xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`] service could be used to enforce such business rules if required.
 
 
 

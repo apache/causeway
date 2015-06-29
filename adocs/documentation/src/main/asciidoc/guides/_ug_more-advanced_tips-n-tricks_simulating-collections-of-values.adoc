@@ -19,5 +19,5 @@ NOTE: TODO
 
 == Persistence Concerns
 
-IMPORTANT: WIP -  easiest to simply store using DataNucleus' support for collections, marked as xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] so that it is ignored by Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
+IMPORTANT: WIP -  easiest to simply store using DataNucleus' support for collections, marked as xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
 

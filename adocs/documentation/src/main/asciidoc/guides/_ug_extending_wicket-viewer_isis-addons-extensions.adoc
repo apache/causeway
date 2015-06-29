@@ -10,7 +10,7 @@ NOTE: TODO
 
 [WARNING]
 ====
-Note that Isis addons, while maintained by Isis committers, are not part of the ASF.
+Note that Isis addons, while maintained by Apache Isis committers, are not part of the ASF.
 ====
 
 

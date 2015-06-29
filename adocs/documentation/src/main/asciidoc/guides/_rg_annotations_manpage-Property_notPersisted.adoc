@@ -42,7 +42,7 @@ public class Order {
     ...
 }
 ----
-<1> ignored by Isis
+<1> ignored by Apache Isis
 <2> ignored by JDO/DataNucleus
 
 

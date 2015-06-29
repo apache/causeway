@@ -13,7 +13,7 @@ However, such date/time related functionality can quickly complicate automated t
 
 Even disregarding testing, there may be a requirement to ensure that date/times are obtained from an NNTP server (rather than the system PC). While instantiating a `java.util.Date` to current the current time is painless enough, we would not want complex technical logic for querying an NNTP server spread around domain logic code.
 
-Therefore it's common to provide a domain service whose responsibility is to provide the current time.  This service can be injected into any domain object (and can be mocked out for unit testing). Isis provides such a facade through the `ClockService`.
+Therefore it's common to provide a domain service whose responsibility is to provide the current time.  This service can be injected into any domain object (and can be mocked out for unit testing). Apache Isis provides such a facade through the `ClockService`.
 
 
 
@@ -60,7 +60,7 @@ The `FixtureClock` will behave as the system clock, unless its is explicitly set
 
 Suppose you want (as discussed in the introduction to this service) to use a clock that delegates to NNTP.  For most domain services this would amount to implementing the appropriate service and registering in `isis.properties` so that it is used in preference to any implementations provided by default by the framework.
 
-In the case of the `ClockService`, though, this approach (unfortunately) will not work, because parts of Isis (still) delegate to the `Clock` singleton rather than using the `ClockService` domain service.
+In the case of the `ClockService`, though, this approach (unfortunately) will not work, because parts of Apache Isis (still) delegate to the `Clock` singleton rather than using the `ClockService` domain service.
 
 The workaround, therefore, is to implement your functionality as a subclass of `Clock`.  You can write a domain service that will ensure that your implementation is used ahead of any implementations provided by the framework.
 
@@ -99,6 +99,6 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `ClockService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `ClockService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
 If you want to use a different implementation of `Clock`, eg delegating to NNTP, then do _not_ register directly, but instead subclass from `o.a.i.applib.clock.Clock` singleton (as described in the section above).

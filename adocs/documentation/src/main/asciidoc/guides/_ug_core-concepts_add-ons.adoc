@@ -9,7 +9,7 @@ The link:http://www.isisaddons.org[Isis Addons] website provides a number of reu
 
 [WARNING]
 ====
-Note that Isis addons, while maintained by Isis committers, are not part of the ASF.
+Note that Isis addons, while maintained by Apache Isis committers, are not part of the ASF.
 ====
 
 
@@ -18,7 +18,7 @@ The modules themselves fall into four broad groups:
 
 * modules that provide an implementations of API defined by Apache Isis +
 +
-where Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditing], http://github.com/isisaddons/isis-module-publishing[publishing], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
+where Apache Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditing], http://github.com/isisaddons/isis-module-publishing[publishing], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
 
 * modules that provide standalone domain services with their own API and implementation +
 +

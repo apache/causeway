@@ -9,9 +9,9 @@ Isis' own configuration properties are simple key-value pairs, typically held in
 
 [NOTE]
 ====
-Configuration properties for the viewers can be found in the xref:ug.adoc#_ug_wicket-viewer[Wicket Viewer] chapter and the <<Restful Objects Viewer>> chapter.  Likewise[details of configuring security (Apache Shiro) can be found in the xref:ug.adoc#_ug_security[Security] chapter.
+Configuration properties for the viewers can be found in the xref:ug.adoc#_ug_wicket-viewer[Wicket Viewer] chapter and the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] chapter.  Likewise[details of configuring security (Apache Shiro) can be found in the xref:ug.adoc#_ug_security[Security] chapter.
 
-Also, note that by default the configuration values are part of the built WAR file.  Details on how to override these configuration properties externally for different environments can be found in the <<Deployment>> chapter.
+Also, note that by default the configuration values are part of the built WAR file.  Details on how to override these configuration properties externally for different environments can be found in the xref:ug.adoc#_ug_deployment[Deployment] chapter.
 ====
 
 

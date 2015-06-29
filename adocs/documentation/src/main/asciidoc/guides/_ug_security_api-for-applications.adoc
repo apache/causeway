@@ -8,7 +8,7 @@
 
 Generally speaking your domain objects (or more generally your application) should be agnostic of the user/roles that are interacting with them; applying security permissions is the responsibility of the framework.
 
-Still, on very rare occasion you may have a need, in which case you can either use Isis' `DomainObjectContainer` API or you can reach further down the stack and use the JEE Servlet API.
+Still, on very rare occasion you may have a need, in which case you can either use Apache Isis' `DomainObjectContainer` API or you can reach further down the stack and use the JEE Servlet API.
 
 
 == `DomainObjectContainer` API

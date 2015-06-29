@@ -50,7 +50,7 @@ securityManager.realms = $ldapRealm
 ----
 <1> user accounts are searched using a dedicated service account
 <2> SASL (CRAM-MD5) authentication is used for this authentication
-<3> Isis' implementation of the LDAP realm.
+<3> Apache Isis' implementation of the LDAP realm.
 <4> groups are searched under `ou=groups,o=mojo` (where `mojo` is the company name)
 <5> each group has an LDAP objectClass of `groupOfUniqueNames`
 <6> each group has a vector attribute of `uniqueMember`
@@ -131,7 +131,7 @@ Create the `ou=groups,o=mojo` hierarchy:
 
 image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-mojo-root-dse.png[ActiveDS LDAP Users]
 
-Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Isis connecting to LDAP using these credentials:
+Configure SASL authentication. This means that the checking of user/password is done implicitly by virtue of Apache Isis connecting to LDAP using these credentials:
 
 image::{_imagesdir}/configuration/configuring-shiro/ldap/activeds-ldap-sasl-authentication.png[ActiveDS LDAP Users]
 

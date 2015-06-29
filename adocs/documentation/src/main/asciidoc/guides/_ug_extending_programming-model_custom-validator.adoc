@@ -27,7 +27,7 @@ There are several ways to go about implementing a validator.
 
 === `MetaModelValidator`
 
-Any custom validator must implement Isis' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
+Any custom validator must implement Apache Isis' internal `MetaModelValidator` interface, so the simplest option is just to implement `MetaModelValidator` directly:
 
 
 [source,java]
@@ -38,7 +38,7 @@ public interface MetaModelValidator
         ValidationFailures validationFailures);  // <2>
 }
 ----
-<1> the `SpecificationLoader` is the internal API providing access to the Isis metamodel.
+<1> the `SpecificationLoader` is the internal API providing access to the Apache Isis metamodel.
 <2> add any metamodel violations to the `ValidationFailures` parameter (the link:http://c2.com/cgi/wiki?CollectingParameter[collecting parameter] pattern)
 
 
@@ -89,7 +89,7 @@ public final class MetaModelValidatorVisiting ... {
 }
 ----
 
-A `SummarizingVisitor` will be called once after every element in the metamodel has been visited.  This is great for performing checks on the metamodel as a whole.  For example, Isis uses this to check that there is at least one `@Persistable` domain entity defined.
+A `SummarizingVisitor` will be called once after every element in the metamodel has been visited.  This is great for performing checks on the metamodel as a whole.  For example, Apache Isis uses this to check that there is at least one `@Persistable` domain entity defined.
 
 
 

@@ -8,7 +8,7 @@
 
 The `named()` attribute explicitly specifies the action parameter's name. This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-ActionLayout_named[actions], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_named[collections], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_named[properties], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_named[domain objects], xref:rg.adoc#_rg_annotations_manpage-ViewModelLayout_named[view models] and xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_named[domain services].
 
-Unlike most other aspects of the Isis metamodel, the name of method parameters cannot (prior to Java 8, at least) be inferred from the Java source code.  Without other information, Isis uses the object's type (`int`, `String` etc) as the name instead.  This can be sufficient for application-specific reference types (eg `ToDoItem`) but is generally not sufficient for primitives and other value types.
+Unlike most other aspects of the Apache Isis metamodel, the name of method parameters cannot (prior to Java 8, at least) be inferred from the Java source code.  Without other information, Apache Isis uses the object's type (`int`, `String` etc) as the name instead.  This can be sufficient for application-specific reference types (eg `ToDoItem`) but is generally not sufficient for primitives and other value types.
 
 The `named()` attribute (or the xref:rg.adoc#_rg_annotations_aaa_deprecated[deprecated `@Named`] annotation) is therefore often required to specify the parameter name.
 

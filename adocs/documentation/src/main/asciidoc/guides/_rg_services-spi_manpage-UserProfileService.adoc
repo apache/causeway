@@ -40,5 +40,5 @@ image::{_imagesdir}reference-services-spi/UserProfileService/todoapp.png[width="
 
 [NOTE]
 ====
-Currently this feature is not integrated with Isis' authentication mechanisms; the information provided is purely metadata provided for presentation purposes only.
+Currently this feature is not integrated with Apache Isis' authentication mechanisms; the information provided is purely metadata provided for presentation purposes only.
 ====

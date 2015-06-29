@@ -32,7 +32,7 @@ The format of the `.pot` and `.po` files is identical; the only difference is th
 
 [IMPORTANT]
 ====
-Although Isis' implementation is modelled after GNU's API, it does _not_ use any GNU software.  This is for two reasons: (a) to simplify the toolchain/developer experience, and (b) because GNU software is usually GPL, which would be incompatible with the Apache license).
+Although Apache Isis' implementation is modelled after GNU's API, it does _not_ use any GNU software.  This is for two reasons: (a) to simplify the toolchain/developer experience, and (b) because GNU software is usually GPL, which would be incompatible with the Apache license).
 ====
 
 This design tackles all the issues of ``ResourceBundle``s:
@@ -43,14 +43,14 @@ This design tackles all the issues of ``ResourceBundle``s:
 +
 In fact, there are also online communities/platforms of translators to assist with translating files. One such is https://crowdin.com/[crowdin] (nb: this link does not imply endorsement).
 
-In Isis' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.  In fact, it isn't even necessary for there to be any `.po` files; `.po` translations can be added piecemeal as the need arises.
+In Apache Isis' implementation, if the translation is missing from the `.po` file then the original message text from the `.pot` file will be returned.  In fact, it isn't even necessary for there to be any `.po` files; `.po` translations can be added piecemeal as the need arises.
 
 
 
 
 == `TranslationService`
 
-The cornerstone of Isis' support for i18n is the `TranslationService` service. This is defined in the applib with the following API:
+The cornerstone of Apache Isis' support for i18n is the `TranslationService` service. This is defined in the applib with the following API:
 
 [source,java]
 ----
@@ -101,14 +101,14 @@ When running in write mode the original text is returned to the caller untransla
 
 == Imperative messages
 
-The `TranslationService` is used internally by Isis when building up the metamodel; the name and description of every class, property, collection, action and action parameter is automatically translated.  Thus the simple act of bootstrapping Isis will cause most of the messages requiring translation (that is: those for the Isis metamodel) to be captured by the `TranslationService`.
+The `TranslationService` is used internally by Apache Isis when building up the metamodel; the name and description of every class, property, collection, action and action parameter is automatically translated.  Thus the simple act of bootstrapping Apache Isis will cause most of the messages requiring translation (that is: those for the Apache Isis metamodel) to be captured by the `TranslationService`.
 
 However, for an application to be fully internationalized, any validation messages (from either `disableXxx()` or `validateXxx()` supporting methods) and also possibly an object's title (from the `title()` method) will also require translation. Moreover, these messages must be captured in the `.pot` file such that they can be translated.
 
 
 === `TranslatableString`
 
-The first part of the puzzle is tackled by an extension to Isis' programming model.  Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
+The first part of the puzzle is tackled by an extension to Apache Isis' programming model.  Whereas previously the `disableXxx()` / `validateXxx()` / `title()` methods could only return a `java.lang.String`, they may now optionally return a `TranslatableString` (defined in Isis applib) instead.
 
 Here's a (silly) example from the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype]:
 
@@ -247,7 +247,7 @@ public void failsValidation() throws Exception {
 
 Running this test will result in the framework calling the `validateUpdateName(...)` method, and thus to record that a translation is required in the `.pot` file.
 
-When the integration tests are complete (that is, when Isis is shutdown), the `TranslationServicePo` will write out all captured translations to its log (more on this below). This will include all the translations captured from the Isis metamodel, along with all translations as exercised by the integration tests.
+When the integration tests are complete (that is, when Apache Isis is shutdown), the `TranslationServicePo` will write out all captured translations to its log (more on this below). This will include all the translations captured from the Apache Isis metamodel, along with all translations as exercised by the integration tests.
 
 To ensure your app is fully internationalized app, you must therefore:
 
@@ -256,9 +256,9 @@ To ensure your app is fully internationalized app, you must therefore:
 
 [NOTE]
 ====
-We make no apologies for this requirement: one of the reasons that we decided to implement Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
+We make no apologies for this requirement: one of the reasons that we decided to implement Apache Isis' i18n support in this way is because it encourages/requires the app to be properly tested.
 
-Behind the scenes Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.  These are simply passed through to the registered xref:rg.adoc#_rg_services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
+Behind the scenes Apache Isis uses a JUnit rule (`ExceptionRecognizerTranslate`) to intercept any exceptions that are thrown.  These are simply passed through to the registered xref:rg.adoc#_rg_services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s so that any messages are recorded as requiring translation.
 ====
 
 
@@ -314,7 +314,7 @@ The basename for translation files is always `translations`; this cannot be alte
 
 === Externalized translation files
 
-Normally Isis configuration files are read from the `WEB-INF` file. However, Isis can be configured to read config files from an xref:ug.adoc#_ug_deployment_externalized-configuration[external directory]; this is also supported for translations.
+Normally Apache Isis configuration files are read from the `WEB-INF` file. However, Apache Isis can be configured to read config files from an xref:ug.adoc#_ug_deployment_externalized-configuration[external directory]; this is also supported for translations.
 
 Thus, if in `web.xml` the external configuration directory has been set:
 

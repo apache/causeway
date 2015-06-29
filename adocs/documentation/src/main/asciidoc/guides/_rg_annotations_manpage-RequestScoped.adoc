@@ -9,7 +9,7 @@
 
 The `@javax.enterprise.context.RequestScoped` link:https://jcp.org/en/jsr/detail?id=299[JSR-299] CDI annotation is used to specify that a xref:rg.adoc#_rg_annotations_manpage-DomainService[domain service] should be request-scoped rather than a singleton.
 
-Although Isis does not (currently) leverage CDI, the semantics are the same as request-scoped service; a new instance is created for each HTTP request, reserved for the exclusive use of all objects interacted with during that request.
+Although Apache Isis does not (currently) leverage CDI, the semantics are the same as request-scoped service; a new instance is created for each HTTP request, reserved for the exclusive use of all objects interacted with during that request.
 
 One of the built-in domain services that uses this annotation is xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`], intended to allow the arbitrary sharing of data between objects.  Here is the full source code of this service is:
 
@@ -42,9 +42,9 @@ public class Scratchpad {
 <4> Clear any user data.
 
 
-The vast majority of domain services in Isis tend to be singletons (which requires no special annotation); but as you can see setting up request-scoped services is very straightforward.
+The vast majority of domain services in Apache Isis tend to be singletons (which requires no special annotation); but as you can see setting up request-scoped services is very straightforward.
 
 [NOTE]
 ====
-Behind the covers Isis creates a (singleton) wrapper for the domain service; the individual request-scoped instances are held in a thread-local of this wrapper.  One consequence of this implementation is that request-scoped methods should not be marked as `final`.
+Behind the covers Apache Isis creates a (singleton) wrapper for the domain service; the individual request-scoped instances are held in a thread-local of this wrapper.  One consequence of this implementation is that request-scoped methods should not be marked as `final`.
 ====

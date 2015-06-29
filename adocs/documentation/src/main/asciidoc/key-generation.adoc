@@ -504,7 +504,7 @@ Finally, commit your changes.
 
 === Save to `KEYS`
 
-The armored representation of the public key should be saved to Isis' `KEYS` file, http://www.apache.org/dist/isis/KEYS[http://www.apache.org/dist/isis/KEYS] (that is, in the ASF distribution directory for Isis).
+The armored representation of the public key should be saved to Apache Isis' `KEYS` file, http://www.apache.org/dist/isis/KEYS[http://www.apache.org/dist/isis/KEYS] (that is, in the ASF distribution directory for Apache Isis).
 
 First, in a new directory, checkout this file:
 

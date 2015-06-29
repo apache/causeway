@@ -19,7 +19,7 @@ public interface DomainObjectContainer {
 }
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service
-<2> create a new view model, with the specified memento (as per xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`] and let Isis manage the memento automatically.
+<2> create a new view model, with the specified memento (as per xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
 
 For example:
 
@@ -35,6 +35,6 @@ As an alternative to using `newTransientInstance(...)`, you could also simply `n
 
 [NOTE]
 ====
-Calling `new(...)` also this circumvents Isis' xref:rg.adoc#_rg_methods_reserved_manpage-created[`created()`] callback, and in addition any default values for properties (either explicitly set by xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`] or defaulted implicitly according to Isis' own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
+Calling `new(...)` also this circumvents Apache Isis' xref:rg.adoc#_rg_methods_reserved_manpage-created[`created()`] callback, and in addition any default values for properties (either explicitly set by xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`] or defaulted implicitly according to Apache Isis' own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
 ====
 

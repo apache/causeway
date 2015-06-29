@@ -10,7 +10,7 @@ The xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype] ha
 
 [TIP]
 ====
-In addition, the http://github.com/isisaddons/isis-app-neoapp[Isis addons' neoapp] (non-ASF) is configured to run with an embedded Neo4J server running alongside the Isis webapp.
+In addition, the http://github.com/isisaddons/isis-app-neoapp[Isis addons' neoapp] (non-ASF) is configured to run with an embedded Neo4J server running alongside the Apache Isis webapp.
 ====
 
 The steps below describe the configuration steps required to update an existing app.

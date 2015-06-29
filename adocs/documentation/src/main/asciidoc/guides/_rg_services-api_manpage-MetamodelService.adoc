@@ -6,7 +6,7 @@
 
 
 
-The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Isis' internal metamodel.
+The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Apache Isis' internal metamodel.
 
 Currently this is limited to looking up the object type (as specified in xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
 
@@ -39,4 +39,4 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `MetamodelService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `MetamodelService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

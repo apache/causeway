@@ -6,7 +6,7 @@
 :toc: right
 
 
-We highly recommend that you develop your Isis application using an IDE. Isis is built with Maven, and all modern IDEs can import Maven projects.
+We highly recommend that you develop your Isis application using an IDE. Apache Isis is built with Maven, and all modern IDEs can import Maven projects.
 
 If you are an http://www.eclipse.org[Eclipse] user, then we recommend you download the "Eclipse JEE package" configuration.
 

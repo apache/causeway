@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-When running an Isis webapp, configuration properties are read from configuration files held in the `WEB-INF` directory.
+When running an Apache Isis webapp, configuration properties are read from configuration files held in the `WEB-INF` directory.
 
 The `WEBINF/isis.properties` file is always read and must exist.
 
@@ -21,7 +21,7 @@ In addition, the following other properties are searched for and if present also
 
 * `persistor.properties` - for any other objectstore configuration.  +
 +
-This typically is used to hold `JDBC` ``URL``s, which is arguably a slight violation of the file (because there's nothing in Isis to say that persistors have to use `JDBC`.  However, it is generally convenient to put these `JDBC` settings into a single location.  If you want, they could reside inin any of `persistor_datanucleus.properties`, `persistor.properties` or (even) `isis.properties`
+This typically is used to hold `JDBC` ``URL``s, which is arguably a slight violation of the file (because there's nothing in Apache Isis to say that persistors have to use `JDBC`.  However, it is generally convenient to put these `JDBC` settings into a single location.  If you want, they could reside inin any of `persistor_datanucleus.properties`, `persistor.properties` or (even) `isis.properties`
 
 * `authentication_shiro.properties`, `authorization_shiro.properties`
 +

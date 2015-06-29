@@ -1,5 +1,5 @@
 [[_ug_security_usage-by-isis-viewers]]
-= Usage by Isis' Viewers
+= Usage by Apache Isis' Viewers
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
@@ -42,14 +42,14 @@ The sign-in page to render is pluggable; see xref:ug.adoc#_ug_extending_wicket-v
 
 In the sign-in page the viewer calls to the Isis Authenticator API, and obtains back a user/role.  It also adds in its special reserved role (per the annotation above) and then continues on to whichever page the user was attempting to access (usually the home page).
 
-And that's really all there is to it.  When the viewer renders a domain object it queries the Isis metamodel, and suppresses from the view any object members (properties, actions etc) that are invisible.  These may be invisible because the user has no (read ) permission, or they may be invisible because of domain object logic (eg a `hideXxx()` method).  The viewer neither knows nor cares.
+And that's really all there is to it.  When the viewer renders a domain object it queries the Apache Isis metamodel, and suppresses from the view any object members (properties, actions etc) that are invisible.  These may be invisible because the user has no (read ) permission, or they may be invisible because of domain object logic (eg a `hideXxx()` method).  The viewer neither knows nor cares.
 
 Similarly, for those object members that _are_ visible, the viewer also checks if they are enabled or disabled.  Again, an object member will be disabled if the user does not have (write) permission, or it could be disabled because of domain object logic (eg a `disableXxx()` method).
 
 
 === User-registration
 
-As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Isis framework using a mechanism similar to <<_headless_access>> in order to actually do their stuff.
+As well as providing a sign-in screen, the Wicket viewer also provides the ability for xref:_user_registration[users to self-register].  By and large this operates outside of Apache Isis' security mechanisms; indeed the various pages (sign-up, sign-up verification, password reset) are all rendered _without_ there being any current user session.  These pages all "reach inside" Apache Isis framework using a mechanism similar to xref:ug.adoc#_ug_headless-access[Headless access] in order to actually do their stuff.
 
 [TIP]
 ====
@@ -58,7 +58,7 @@ The sign-in verification page to render is pluggable; see xref:ug.adoc#_ug_exten
 
 User registration is only available if the xref:_user_registration_service[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
-Because Shiro realms are pluggable, the Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
+Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
 
 If you are using an LDAP realm and want to enable user-self registration then you'll need to write your own implementation of this service.
 
@@ -88,7 +88,7 @@ public interface AuthenticationSessionStrategy {
 <1> returns a valid `AuthenticationSession` for the specified request, response
 <2> binds (associates the provided `AuthenticationSession`) to the request and response
 
-Here `AuthenticationSession` is Isis' internal API that represents a signed-on user.
+Here `AuthenticationSession` is Apache Isis' internal API that represents a signed-on user.
 
 The framework provides a number of simple strategies:
 
@@ -190,7 +190,7 @@ public class CustomRestfulObjectsApplication extends RestfulObjectsApplication {
 
 So far this is just standard javax.rs stuff.
 
-Next, we need to ensure that a client can hit your new resource *with* the Isis runtime in place, but without there being an Isis session.  For that....
+Next, we need to ensure that a client can hit your new resource *with* the Apache Isis runtime in place, but without there being an Apache Isis session.  For that....
 
 * create a subclass of the `AuthenticationSessionStrategy` that automatically returns a dummy session if the resource being accessed is "/restful/signup", say.  +
 +

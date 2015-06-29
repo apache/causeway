@@ -10,7 +10,7 @@ Apache Isis automatically injects domain services into other domain services and
 
 [NOTE]
 ====
-One omission: Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:rg.adoc#_rg_annotations_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`] and xref:rg.adoc#_rg_annotations_manpage-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
+One omission: Apache Isis (currently) does not inject services into `o.a.i.applib.spec.Specification` instances (as used by xref:rg.adoc#_rg_annotations_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`] and xref:rg.adoc#_rg_annotations_manpage-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`] annotations.
 ====
 
 Isis supports several syntaxes for injecting domain services.  The simplest uses the `@javax.inject.Inject` annotation on the field, as defined in link:https://jcp.org/en/jsr/detail?id=330[JSR-330].
@@ -104,7 +104,7 @@ container.persist(cust);
 
 [NOTE]
 ====
-There is one subtle difference between using `DomainObjectContainer#newTransientInstance(...)` and `DomainObjectContainer#injectServicesInto(...)`, in that with the former Isis will automatically initialize all fields to their default values.
+There is one subtle difference between using `DomainObjectContainer#newTransientInstance(...)` and `DomainObjectContainer#injectServicesInto(...)`, in that with the former Apache Isis will automatically initialize all fields to their default values.
 
 This isn't a particular useful feature (and indeed can sometimes be rather confusing) so you may well wish to standardize on using `injectServicesInto(...)` throughout.
 ====

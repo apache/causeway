@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `AbstractIsisSessionTemplate` class (whose name is inspired by the Spring framework's naming convention for similar classes that query http://docs.spring.io/spring/docs/2.5.x/reference/jdbc.html#jdbc-JdbcTemplate[JDBC], http://docs.spring.io/spring/docs/2.5.x/reference/jms.html#jms-jmstemplate[JMS], http://docs.spring.io/spring/docs/2.5.x/reference/orm.html#orm-jpa-template[JPA] etc.) provides the mechanism to open up a 'session' within the Isis framework, in order to resolve and interact with entities.
+The `AbstractIsisSessionTemplate` class (whose name is inspired by the Spring framework's naming convention for similar classes that query http://docs.spring.io/spring/docs/2.5.x/reference/jdbc.html#jdbc-JdbcTemplate[JDBC], http://docs.spring.io/spring/docs/2.5.x/reference/jms.html#jms-jmstemplate[JMS], http://docs.spring.io/spring/docs/2.5.x/reference/orm.html#orm-jpa-template[JPA] etc.) provides the mechanism to open up a 'session' within the Apache Isis framework, in order to resolve and interact with entities.
 
 The class itself is intended to be subclassed:
 
@@ -28,7 +28,7 @@ public abstract class AbstractIsisSessionTemplate {
 <2> `doExecute(...)`, the mandatory hook method for subclasses to implement.
 The passed object represents passes a context from the caller (eg the scheduler, cron job, JMS etc) that instantiated and executed the class.
 
-The `protected` methods expose key internal APIs within Isis, for the subclass to use as necessary.
+The `protected` methods expose key internal APIs within Apache Isis, for the subclass to use as necessary.
 
 
 [TIP]

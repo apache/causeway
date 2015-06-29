@@ -62,7 +62,7 @@ on the initialization of each class into the JDO metamodel.
 
 [TIP]
 ====
-Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Isis up to v1.8.0) there was no support for schemas.  As of Isis 1.9.0-SNAPSHOT and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
+Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Apache Isis up to v1.8.0) there was no support for schemas.  As of Apache Isis 1.9.0-SNAPSHOT and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
 ====
 
 Therefore Apache Isis attaches a listener, `CreateSchemaObjectFromClassMetadata`, that checks for the schema's existence, and creates the schema if required.
@@ -146,6 +146,6 @@ This latter interface provides access to the properties passed through to JDO/Da
 
 [IMPORTANT]
 ====
-If you do extend Isis' `CreateSchemaObjectFromClassMetadata` class for some other database, please https://issues.apache.org/jira/browse/ISIS[contribute back] your improvements.
+If you do extend Apache Isis' `CreateSchemaObjectFromClassMetadata` class for some other database, please https://issues.apache.org/jira/browse/ISIS[contribute back] your improvements.
 ====
 

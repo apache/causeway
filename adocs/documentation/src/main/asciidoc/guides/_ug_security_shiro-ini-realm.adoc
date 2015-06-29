@@ -13,7 +13,7 @@ The diagram below shows the Isis and components involved:
 
 image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-ini-realm.png[width="600px"]
 
-The realm is responsible for validating the user credentials, and then creates a Shiro link:http://shiro.apache.org/static/latest/apidocs/org/apache/shiro/subject/Subject.html[`Subject`] which represents the user (for the current request).  Isis `Authenticator` component then interacts with the `Subject` in order to check permissions.
+The realm is responsible for validating the user credentials, and then creates a Shiro link:http://shiro.apache.org/static/latest/apidocs/org/apache/shiro/subject/Subject.html[`Subject`] which represents the user (for the current request).  Apache Isis `Authenticator` component then interacts with the `Subject` in order to check permissions.
 
 
 
@@ -105,7 +105,7 @@ com.mycompany.myapp                          # ditto
 
 [TIP]
 ====
-The format of the permissions string is configurable in Shiro, and Isis uses this to provide an extended wildcard format, described xref:ug.adoc#_ug_security_shiro-isis-enhanced-wildcard-permission[here].
+The format of the permissions string is configurable in Shiro, and Apache Isis uses this to provide an extended wildcard format, described xref:ug.adoc#_ug_security_shiro-isis-enhanced-wildcard-permission[here].
 ====
 
 

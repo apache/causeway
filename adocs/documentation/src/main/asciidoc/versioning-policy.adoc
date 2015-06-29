@@ -11,7 +11,7 @@ pass:[<br/><br/>]
 
 ## Semantic Versioning
 
-Starting from v1.0.0, Isis has adopted link:http://semver.org[semantic versioning] for its versioning policy.
+Starting from v1.0.0, Apache Isis has adopted link:http://semver.org[semantic versioning] for its versioning policy.
 
 Version numbers are in the form `x.y.z`:
 
@@ -32,4 +32,4 @@ Version ranges may not be used.  If necessary, end-users can use `<dependencyMan
 
 That said, this can introduce instability and so generally we recommend that end-users configure the `maven-enforcer-plugin` and its link:http://maven.apache.org/enforcer/enforcer-rules/dependencyConvergence.html[DependencyConvergence] rule.  This will help avoid "jar hell" (components having conflicting dependencies of core).
 
-If there is a conflict, we would ask that end-users engage with Isis committers to have an updated version of the component(s) pushed out.
+If there is a conflict, we would ask that end-users engage with Apache Isis committers to have an updated version of the component(s) pushed out.

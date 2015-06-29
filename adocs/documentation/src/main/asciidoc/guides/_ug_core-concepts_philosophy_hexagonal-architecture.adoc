@@ -22,7 +22,7 @@ What Cockburn is emphasizing is that there's usually more than one way *into* an
 
 Associated with each port can be an *_adapter_* (in fact, Cockburn's alternative name for this architecture is *_ports and adapters_*). An adapter is a device (piece of software) that talks in the protocol (or  _API_) of the port. Each port could have several adapters.
 
-Apache Isis maps very nicely onto the  *hexagonal architecture*.  Isis' viewers act as user-side adapters and use the Isis metamodel API as a port into the domain objects.   For the data side, we are mostly concerned with persisting domain objects to some sort of object store.  Here Apache Isis delegates most of the heavy lifting to ORM implementing the JDO API.  Most of the time this will be DataNucleus configured to persist to an RDBMS, but DataNucleus can also support other object stores, for example Neo4J.  Alternatively Isis can be configured to persist using some other JDO implementation, for example Google App Engine.
+Apache Isis maps very nicely onto the  *hexagonal architecture*.  Apache Isis' viewers act as user-side adapters and use the Apache Isis metamodel API as a port into the domain objects.   For the data side, we are mostly concerned with persisting domain objects to some sort of object store.  Here Apache Isis delegates most of the heavy lifting to ORM implementing the JDO API.  Most of the time this will be DataNucleus configured to persist to an RDBMS, but DataNucleus can also support other object stores, for example Neo4J.  Alternatively Apache Isis can be configured to persist using some other JDO implementation, for example Google App Engine.
 
 
 

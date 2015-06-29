@@ -20,10 +20,10 @@ pass:[<br/>]
 [cols="1a,1a,1a",frame="none"]
 |===
 
-| *What is Isis?*
+| *What is Apache Isis?*
 
 * *link:./isis-in-pictures[What is Apache Isis?] ... in pictures*
-* link:./powered-by.html[Powered by Isis]
+* link:./powered-by.html[Powered by Apache Isis]
 * link:./how-isis-works.html[How Apache Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
 * link:./common-use-cases.html[Common Use Cases]
 * link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
@@ -107,7 +107,7 @@ For digging deeper
 |*Contributors:*
 
 * link:./contributing.html[Contributing]
-* link:./building-isis.html[Building Isis]
+* link:./building-isis.html[Building Apache Isis]
 * link:./git-policy.html[Git Policy]
 * link:./git-cookbook.html[Git Cookbook]
 * link:./versioning-policy.html[Versioning Policy]

@@ -24,9 +24,9 @@ Note that the binaries are _not_ an ASF release, they merely exist on the Maven 
 
 == Prerequisites
 
-To verify the source ZIP files, you will need to have imported the public keys used for signing Isis releases. These can be downloaded from the root of the Isis source tree.
+To verify the source ZIP files, you will need to have imported the public keys used for signing Apache Isis releases. These can be downloaded from the root of the Apache Isis source tree.
 
-Since the Isis source is mirrored on github.com, you can just use:
+Since the Apache Isis source is mirrored on github.com, you can just use:
 
 [source,bash]
 ----
@@ -68,14 +68,14 @@ rm -rf ~/.m2/repository/org/apache/isis
 ----
 
 
-To build Isis core, first download any dependencies:
+To build Apache Isis core, first download any dependencies:
 
 [source]
 ----
 mvn dependency:go-offline
 ----
 
-Check that no Isis artifacts have yet been downloaded, ie there is no `~/.m2/org/repository/org/apache/isis` directory. If there are, it could indicate that the release being verified incorrectly references previous versions of Isis core.
+Check that no Isis artifacts have yet been downloaded, ie there is no `~/.m2/org/repository/org/apache/isis` directory. If there are, it could indicate that the release being verified incorrectly references previous versions of Apache Isis core.
 
 Assuming all is ok, build using the `-o` offline flag:
 

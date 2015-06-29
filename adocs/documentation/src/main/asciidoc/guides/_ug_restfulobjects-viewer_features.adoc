@@ -6,7 +6,7 @@
 
 
 
-The REST API opens up an Isis domain model to a huge variety of applications, from bespoke single-page apps, through integration scenarious, through providing an API for bulk-upload/migration from an existing system.
+The REST API opens up an Apache Isis domain model to a huge variety of applications, from bespoke single-page apps, through integration scenarious, through providing an API for bulk-upload/migration from an existing system.
 
 == Restful Objects Specification
 

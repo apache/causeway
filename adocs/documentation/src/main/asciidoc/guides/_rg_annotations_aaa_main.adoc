@@ -15,7 +15,7 @@ Most UI semantics can also be specified using xref:rg.adoc#_rg_object-layout_dyn
 ====
 
 
-The table below summarizes these most commonly used annotations in Isis.
+The table below summarizes these most commonly used annotations in Apache Isis.
 
 
 .Core annotations for domain objects, services and members (as of 1.8.0)

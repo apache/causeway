@@ -10,7 +10,7 @@
 pass:[<br/><br/>]
 
 
-The following presentation, available in multiple formats, provides some background on Isis:
+The following presentation, available in multiple formats, provides some background on Apache Isis:
 
 * Introduction to Apache Isis (link:resources/downloadable-presentations/IntroducingApacheIsis.pptx[pptx], link:resources/downloadable-presentations/IntroducingApacheIsis.ppt[ppt], link:resources/downloadable-presentations/IntroducingApacheIsis.odp[odp], link:resources/downloadable-presentations/IntroducingApacheIsis-slides.pdf[pdf slides], link:resources/downloadable-presentations/IntroducingApacheIsis-notes.pdf[pdf notes])
 

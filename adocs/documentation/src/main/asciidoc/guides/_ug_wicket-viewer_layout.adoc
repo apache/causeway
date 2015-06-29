@@ -15,7 +15,7 @@ Dynamic reloading is automatically supported when running in xref:ug.adoc#_ug_ru
 ====
 To pick up a change, edit the `.layout.json` file in the IDE and rebuild.  Then click on the title of the object _*twice*_.
 
-The first click will cause Isis to pick up the new metadata, but too late in the process to adjust the rendering.  The second click will re-render the object with the new metadata.
+The first click will cause Apache Isis to pick up the new metadata, but too late in the process to adjust the rendering.  The second click will re-render the object with the new metadata.
 ====
 
 
@@ -92,6 +92,6 @@ Therefore, make sure the following is added to the dom project's `pom.xml`:
 </resources>
 ----
 
-If using an Isis xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
+If using an Apache Isis xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype], then the POM is already correctly configured.
 
 

@@ -47,7 +47,7 @@ NOTE: TODO
 
 Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities. However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
 
-Domain services are instantiated once and once only by the framework, and are used to centralize any domain logic that does not logically belong in a domain entity or value. Isis will automatically inject services into every domain entity that requests them, and into each other.
+Domain services are instantiated once and once only by the framework, and are used to centralize any domain logic that does not logically belong in a domain entity or value. Apache Isis will automatically inject services into every domain entity that requests them, and into each other.
 
 For convenience you can inherit from AbstractService or one of its subclasses, but this is not mandatory.
 

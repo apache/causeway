@@ -63,7 +63,7 @@ public interface WrapperFactory {
 
 
 
-The service works by returning a "wrapper" around a supplied domain object (a link:http://www.javassist.org[javassist] proxy), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Isis programming model are enforced. The wrapper can be interacted with as follows:
+The service works by returning a "wrapper" around a supplied domain object (a link:http://www.javassist.org[javassist] proxy), and it is this wrapper that ensures that the hide/disable/validate rules implies by the Apache Isis programming model are enforced. The wrapper can be interacted with as follows:
 
 * a `get...()` method for properties or collections
 * a `set...()` method for properties
@@ -116,7 +116,7 @@ public class CustomerAgent {
 ====
 It ought to be possible to implement an xref:rg.adoc#_rg_services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`]s that would allow the above boilerplate to be removed.  This recognizer service would recognize the `InteractionException` and convert to a suitable message.
 
-At the time of writing Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
+At the time of writing Apache Isis does not provide an out-of-the-box implementation of such an `ExceptionRecognizer`; but it should be simple enough to write one…
 ====
 
 
@@ -145,7 +145,7 @@ public interface WrapperFactory {
 <3> remove an `InteractionListener`, to no longer be notified of interactions on wrappers.
 <4> used by the framework itself
 
-The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.  No such feature has yet been implemented however.  Also, the capabilities have by and large been superceded by Isis' support for domain events.  We may therefore deprecate this API in the future.
+The original intent of this API was to enable test transcripts to be captured (in a BDD-like fashion) from integration tests.  No such feature has yet been implemented however.  Also, the capabilities have by and large been superceded by Apache Isis' support for domain events.  We may therefore deprecate this API in the future.
 
 
 
@@ -159,4 +159,4 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

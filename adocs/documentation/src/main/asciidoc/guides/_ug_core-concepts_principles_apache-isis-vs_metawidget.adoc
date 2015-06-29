@@ -11,6 +11,6 @@ However, there is a difference in philosophy in that MW is not a full-stack fram
 
 In contrast, Apache Isis is full-stack and does generate a complete UI; we then allow you to customize or extend this UI (as per the various link:http://www.isisaddons.org[Isis Addons] (non-ASF), and we also provide a full REST API through the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer]
 
-Also, it's worth noting that MetaWidget does have an elegant pipeline architecture, with APIs to allow even its metamodel to be replaced.  It would be feasible and probably quite straightforward to use Isis' own metamodel as an implementation of the MetaWidget API.  This would allow MetaWidget to be able to render an Isis domain application.
+Also, it's worth noting that MetaWidget does have an elegant pipeline architecture, with APIs to allow even its metamodel to be replaced.  It would be feasible and probably quite straightforward to use Apache Isis' own metamodel as an implementation of the MetaWidget API.  This would allow MetaWidget to be able to render an Apache Isis domain application.
 
 

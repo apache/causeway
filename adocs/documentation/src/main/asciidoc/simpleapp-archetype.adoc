@@ -9,7 +9,7 @@
 
 pass:[<br/><br/>]
 
-The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.  There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Isis domain application.
+The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.  There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
 
 
 
@@ -46,7 +46,7 @@ The archetype generation process will then run; it only takes a few seconds.
 
 === Snapshot release
 
-We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Isis, but the usual caveats apply: some features still in development may be unstable.
+We also maintain the archetype for the most current `-SNAPSHOT`; an app generated with this archetype will contain the latest features of Apache Isis, but the usual caveats apply: some features still in development may be unstable.
 
 The process is almost identical to that for stable releases, however the `archetype:generate` goal is called with slightly different arguments:
 
@@ -71,7 +71,7 @@ where as before:
 
 but also:
 
-- `archetypeVersion` is the SNAPSHOT version of Isis.
+- `archetypeVersion` is the SNAPSHOT version of Apache Isis.
 - `archetypeRepository` specifies the location of our snapshot repo (hosted on [CloudBees](http://www.cloudbees.com)), and
 
 The archetype generation process will then run; it only takes a few seconds.
@@ -100,7 +100,7 @@ The `simpleapp` archetype generates a single WAR file, configured to run both th
 
 Once you've built the app, you can run the WAR in a variety of ways. 
 
-The recommended approach when getting started is to run the self-hosting version of the WAR, allowing Isis to run as a standalone app; for example:
+The recommended approach when getting started is to run the self-hosting version of the WAR, allowing Apache Isis to run as a standalone app; for example:
 
 [source,bash]
 ----
@@ -177,7 +177,7 @@ If you use IntelliJ or Eclipse, you'll also want to set up your IDE; this is als
 
 == App Structure
 
-As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
+As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Apache Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
 
 
 .Table caption

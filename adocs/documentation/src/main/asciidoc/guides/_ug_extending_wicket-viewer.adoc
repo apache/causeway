@@ -13,7 +13,7 @@ The Wicket viewer allows you to customize the GUI in several (progressively more
 * by xref:ug.adoc#_ug_extending_wicket-viewer_replacing-page-elements[replacing elements of the page] using the `ComponentFactory` interface
 * by implementing xref:ug.adoc#_ug_extending_wicket-viewer_custom-pages[replacement page implementations] for the standard page types
 
-The first two of these options are discussed in the <<Wicket Viewer>> chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
+The first two of these options are discussed in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] chapter.  This chapter describes the remaining "heavier-weight/more powerful" options.
 
 
 include::_ug_extending_wicket-viewer_custom-bootstrap-theme.adoc[leveloffset=+1]

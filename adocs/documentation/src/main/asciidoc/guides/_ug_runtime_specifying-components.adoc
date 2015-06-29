@@ -6,7 +6,7 @@
 
 
 
-The `isis.properties` file has four configuration properties in particular that specify the major components of Isis to use.
+The `isis.properties` file has four configuration properties in particular that specify the major components of Apache Isis to use.
 
 They are:
 
@@ -52,7 +52,7 @@ The mechanism to discover and load domain services:
 
 [TIP]
 ====
-The values "datanucleus", "shiro" etc are actually aliases for concrete implementations listed in Isis' `installer-registry.properties` file (in `isis-core-runtime.jar`).
+The values "datanucleus", "shiro" etc are actually aliases for concrete implementations listed in Apache Isis' `installer-registry.properties` file (in `isis-core-runtime.jar`).
 ====
 
 It is -- at least in theory -- possible to specify a fully qualified class name to replace any of these components.  This is probably feasible for the two security APIs and the `services-installer` API; but replacing the persistor (JDO/DataNucleus) is much trickier because we rely on the JDO/DN for certain functionality (such as object dirtying and lazy loading) that is not defined within this API.

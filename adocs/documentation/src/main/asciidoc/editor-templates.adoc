@@ -23,7 +23,7 @@ The following table lists the templates to download
 |Eclipse
 
 
-|Isis Domain Objects
+|Apache Isis Domain Objects
 |is
 |link:./resources/templates/isis-templates-idea.xml[Download]
 |link:./resources/templates/isis-templates.xml[Download]
@@ -43,7 +43,7 @@ The following table lists the templates to download
 |===
 
 
-The most commonly used Apache Isis domain objects templates are also listed on the link:./cheat-sheet.html[Isis cheat sheet].
+The most commonly used Apache Isis domain objects templates are also listed on the link:./cheat-sheet.html[Apache Isis cheat sheet].
 
 
 

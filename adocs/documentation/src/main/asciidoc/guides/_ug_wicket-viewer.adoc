@@ -6,7 +6,7 @@
 
 This chapter describes end-user features, configuration and customization of the Wicket viewer.
 
-Note that extending the Wicket viewer is described in the <<Extending>> chapter.
+Note that extending the Wicket viewer is described in the xref:ug.adoc#_ug_extending[Extending] chapter.
 
 
 include::_ug_wicket-viewer_features.adoc[leveloffset=+1]

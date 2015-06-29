@@ -9,7 +9,7 @@ The `DomainObjectContainer` service provides a set of general purpose functional
 
 [NOTE]
 ====
-Compared to other services provided by Isis, the `DomainObjectContainer` provides by far the most number of methods, addressing several quite distinct responsibilities.  This is a historical accident: in early versions of Isis the `DomainObjectContainer` was the one and only domain service provided by the framework.
+Compared to other services provided by Apache Isis, the `DomainObjectContainer` provides by far the most number of methods, addressing several quite distinct responsibilities.  This is a historical accident: in early versions of Apache Isis the `DomainObjectContainer` was the one and only domain service provided by the framework.
 
 In the future we may deprecate this service and break out its responsibilities into a number of small services.  However, given how important this service was in days past, we are unlikely to delete it as a service even once it has been deprecated.
 ====
@@ -40,4 +40,4 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

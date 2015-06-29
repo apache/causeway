@@ -163,9 +163,9 @@ public class TearDownAll extends FixtureScriptAbstract {
 
 [NOTE]
 ====
-It can occasionally be the case that Isis' internal adapter for the domain object is
+It can occasionally be the case that Apache Isis' internal adapter for the domain object is
 still in memory.  JDO/DataNucleus seems to bump up the version of the object prior to its deletion,
-which under normal circumstances would cause Isis to throw a concurrency exception.  Therefore
+which under normal circumstances would cause Apache Isis to throw a concurrency exception.  Therefore
 to prevent this from happening (ie to _force_ the deletion of all instances), concurrency checking
 is temporarily disabled while this method is performed.
 ====
@@ -273,4 +273,4 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `IsisJdoSupport` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `IsisJdoSupport` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

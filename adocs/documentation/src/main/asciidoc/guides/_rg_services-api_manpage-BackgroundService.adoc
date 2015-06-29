@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `BackgroundService`, and the companion xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] SPI service (used by Isis itself), enable action invocations to be persisted such that they may be invoked in the background.
+The `BackgroundService`, and the companion xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] SPI service (used by Apache Isis itself), enable action invocations to be persisted such that they may be invoked in the background.
 
 The `BackgroundService` is responsible for capturing a memento representing the action invocation in a typesafe way, and persisting it rather than executing it directly.
 
@@ -50,7 +50,7 @@ public void submitCustomerInvoices() {
 
 This will create a bunch of background commands executing the `submitInvoice()` action for each of the customers returned from the customer repository.
 
-The action method invoked must be part of the Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] or `@Ignore`. However, it may be annotated with xref:rg.adoc#_rg_annotations_manpage-Action_hidden[`@Action#hidden()`] or xref:rg.adoc#_rg_annotations_manpage-ActionLayout_hidden[`@ActionLayout#hidden()`] and it will still be invoked.
+The action method invoked must be part of the Apache Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] or `@Ignore`. However, it may be annotated with xref:rg.adoc#_rg_annotations_manpage-Action_hidden[`@Action#hidden()`] or xref:rg.adoc#_rg_annotations_manpage-ActionLayout_hidden[`@ActionLayout#hidden()`] and it will still be invoked.
 
 In fact, when invoked by the background service, no business rules (hidden, disabled, validation) are enforced; the action method must take responsibility for performing appropriate validation and error checking.
 
@@ -100,7 +100,7 @@ Assuming that the `configuration-and-annotation` services installer is configure
 isis.services-installer=configuration-and-annotation
 ----
 
-then Isis' core implementation of `BackgroundService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
+then Apache Isis' core implementation of `BackgroundService` is automatically registered (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 
