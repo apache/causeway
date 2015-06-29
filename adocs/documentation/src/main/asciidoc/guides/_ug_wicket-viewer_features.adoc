@@ -12,7 +12,7 @@ include::_ug_wicket-viewer_features_recent-pages.adoc[leveloffset=+1]
 include::_ug_wicket-viewer_features_bookmarked-pages.adoc[leveloffset=+1]
 include::_ug_wicket-viewer_features_hints-and-copy-url.adoc[leveloffset=+1]
 include::_ug_wicket-viewer_features_titles-in-tables.adoc[leveloffset=+1]
-include::_ug_wicket-viewer_features_file-upload-download.adoc[leveloffset=+1]
+include::_ug_wicket-viewer_features_blob-attachments.adoc[leveloffset=+1]
 include::_ug_wicket-viewer_features_user-registration.adoc[leveloffset=+1]
 
 

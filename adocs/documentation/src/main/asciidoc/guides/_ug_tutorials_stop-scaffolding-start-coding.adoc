@@ -532,9 +532,9 @@ Thus:
 * return null if invoked on a collection; the Wicket viewer will go back to the original collection
 ** (if return non-null, then Wicket viewer will navigate to the object of the last invocation� generally not what is required)
 
-The similar xref:rg.adoc#_rg_services-api_manpage-ScratchPad[`ScratchPad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
+The similar xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] (request-scoped) domain service is a good way to share information between bulk action invocations:
 
-* Inject the `ScratchPad` domain service
+* Inject the `Scratchpad` domain service
 * for each action, store state (eg a running total)
 * in the last invoked bulk action, perform some aggregate processing (eg calculate the average) and return
 

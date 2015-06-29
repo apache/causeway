@@ -14,7 +14,7 @@ General purpose:
 
 * xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
 * xref:rg.adoc#_rg_services-api_manpage-ClockService[`ClockService`]
-* xref:rg.adoc#_rg_services-api_manpage-IsisSupportJdo[`IsisSupportJdo`]
+* xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport[`IsisJdoSupport`]
 * xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`]
 * xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`]
 * xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]
@@ -30,7 +30,7 @@ Commands/Background/Auditing:
 
 Information Sharing:
 
-* xref:rg.adoc#_rg_services-api_manpage-ScratchPad[`ScratchPad`]
+* xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`]
 * xref:rg.adoc#_rg_services-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
 * xref:rg.adoc#_rg_services-api_manpage-QueryResultsCache[`QueryResultsCache`]
 
