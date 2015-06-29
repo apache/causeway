@@ -52,6 +52,7 @@
 
         <build.dir>${project.basedir}/target/site</build.dir>
         <isis-site.dir>${project.basedir}/../../../isis-site/content</isis-site.dir>
+        <redirects.dir>${project.basedir}/../redirects/content</redirects.dir>
         <message>updating content (built from adocs/documentation in isis.git repo)</message>
     </properties>
 
@@ -185,6 +186,14 @@
                                 <echo message=""/>
                                 <copy todir="${isis-site.dir}">
                                     <fileset dir="${build.dir}"/>
+                                </copy>
+
+                                <echo message=""/>
+                                <echo message=""/>
+                                <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
+                                <echo message=""/>
+                                <copy todir="${isis-site.dir}">
+                                    <fileset dir="${redirects.dir}"/>
                                 </copy>
 
                                 <echo message=""/>
