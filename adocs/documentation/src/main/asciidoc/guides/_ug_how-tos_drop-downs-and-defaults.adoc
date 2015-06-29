@@ -62,4 +62,4 @@ NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObject_bounded[`@DomainO
 
 ### Auto-complete (repository-based)
 
-xref:rg.adoc#_rg_annotations_manpage-DomainObject_autoComplete[`@DomainObject#autoComplete()`]
+xref:rg.adoc#_rg_annotations_manpage-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`]

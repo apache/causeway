@@ -12,7 +12,7 @@ The related `editingDisabledReason()` attribute specifies the a hard-coded reaso
 
 [WARNING]
 ====
-The xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.
+The xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
 
 The workaround is to create add/remove actions and use xref:rg.adoc#_rg_annotations_manpage-MemberOrder[UI hints] to render them close to the collection.
 ====
@@ -21,7 +21,7 @@ Whether a collection is enabled or disabled depends upon these factors:
 
 * whether the domain object has been configured as immutable through the xref:rg.adoc#_rg_annotations_manpage-DomainObject_editing[`@DomainObject#editing()`] attribute
 
-* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:ug.adoc#_ug_runtime_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's collections (and properties) are _not_ editable
+* else (that is, if the domain object's editability is specified as being `AS_CONFIGURED`), then the value of the xref:ug.adoc#_ug_runtime_configuring-core[configuration property] `isis.objects.editing`.  If set to `false`, then the object's collections (and properties) are *not* editable
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.
 

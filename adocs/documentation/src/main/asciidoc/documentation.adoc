@@ -35,7 +35,7 @@ pass:[<br/>]
 * http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
 * http://github.com/isisaddons/isis-app-kitchensink[Kitchensink App] (not ASF)
 
-| *Isis Add-ons*
+*Isis Add-ons*
 
 * http://isisaddons.org[Isis addons] (not ASF)
 

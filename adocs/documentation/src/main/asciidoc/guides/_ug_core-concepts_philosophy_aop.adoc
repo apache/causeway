@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; and many tend to think of xref:ug.adoc#_ug_core-concepts_philosophy_domain-driven-design,DDD>> as an updated treatise on good object modelling[in the same vein as Rebecca Wirf Brock's link:http://en.wikipedia.org/wiki/Responsibility-driven_design[Responsibility Driven Design], say.  Meanwhile the xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name); and Richard Pawson lists Alan Kay as a key influence.
+Although not a book about object modelling, Evans' "Domain Driven Design" does use object orientation as its primary modelling tool; while xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[naked objects pattern] very much comes from an OO background (it even has 'object' in its name); Richard Pawson lists Alan Kay as a key influence.
 
 It's certainly true that to develop an Apache Isis application you will need to have good object oriented modelling skills.  But given that all the mainstream languages for developing business systems are object oriented (Java, C#, Ruby), that's not such a stretch.
 

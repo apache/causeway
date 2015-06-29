@@ -15,19 +15,15 @@ By default these are read from the `WEB-INF` directory. Having this configuratio
 okay in a development environment, but when the app needs to be deployed to a test or production environment, this
 configuration should be read from an external location.
 
-There are in fact three frameworks involved here, all of which need to be pointed to this external location:
+There are in fact several frameworks involved here, all of which need to be pointed to this external location:
 
-* Apache Isis itself
+* Apache Isis itself, which (as already discussed) reads `isis.properties` and optional component-specific config files.
 
-which as already discussed reads `isis.properties` and optional component-specific config files.
+* link:http://shiro.apache.org[Apache Shiro],  which reads the `shiro.ini` file (and may read other files referenced from that file)
 
-* http://shiro.apache.org[Apache Shiro] (if using the Apache Isis' link:../components/security/shiro/about.html[Shiro integration] for authentication and/or authorization
+* http://logging.apache.org/log4j/1.2[Apache log4j 1.2], for logging, which reads `logging.properties` file
 
-which reads the `shiro.ini` file (and may read other files referenced from that file)
-
-* http://logging.apache.org/log4j/1.2[Apache log4j 1.2], for logging
-
-which reads `logging.properties` file
+* although not used by Apache Isis, there's a good chance you may be using the Spring framework (eg if using http://activemq.apache.org[Apache Active MQ] or http://camel.apache.org[Apache Camel].
 
 Each of these frameworks has its own way of externalizing its configuration.
 
@@ -240,4 +236,4 @@ take a look at link:http://stackoverflow.com/a/10041835/56880[this SO answer] on
 
 == See also
 
-See link:./_ug_deployment_jvm-flags[JVM args] for other JVM args and system properties that you might want to consider setting.
+See link:ug.adoc#_ug_deployment_jvm-flags[JVM args] for other JVM args and system properties that you might want to consider setting.

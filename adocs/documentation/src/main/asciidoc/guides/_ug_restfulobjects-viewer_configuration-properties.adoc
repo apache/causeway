@@ -58,7 +58,7 @@ Also, be aware enabling these settings makes the representations with respect to
 |`isis.viewer.restfulobjects.` +
 `objectPropertyValuesOnly`
 | `true`,`false` (`_false_`)
-| See xref:ug.adoc#_ug_restfulobjects-viewer_configuration-properties_simplified-object[discussion], below.
+| See xref:ug.adoc#_ug_restfulobjects-viewer_configuration-properties_simplified-object-representation[discussion], below.
 
 |===
 

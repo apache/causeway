@@ -8,7 +8,7 @@
 
 The wicket viewer has full support for the various methods of specifying the xref:rg.adoc#_rg_object-layout[layout of objects], either statically or dynamically.
 
-Dynamic reloading is automatically supported when running in xref:ug.adoc#_ug_runtime_deployment-types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.    Conversely, do note that the Wicket viewer will _not_ pick up new metadata if running in production/server mode.
+Dynamic reloading is automatically supported when running in xref:ug.adoc#_ug_runtime_deployment-types[prototype (development) mode], the Wicket viewer automatically rebuilds the metamodel for each class as it is rendered.    Conversely, do note that the Wicket viewer will *not* pick up new metadata if running in production/server mode.
 
 
 [TIP]

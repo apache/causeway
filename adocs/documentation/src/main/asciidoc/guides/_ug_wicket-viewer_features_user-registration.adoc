@@ -68,7 +68,7 @@ image::{_imagesdir}wicket-viewer/user-registration/sign-up-after-registration.pn
 
 There are two prerequisites:
 
-* register an implementation of the xref:_user_registration_service[user registration service] (eg by using the https://github.com/isisaddons/isis-module-security[Isis addons security module])
+* register an implementation of the xref:rg.adoc#_rg_services-spi_manpage-UserRegistrationService[user registration service] (eg by using the https://github.com/isisaddons/isis-module-security[Isis addons security module])
 
 * configure the xref:rg.adoc#_rg_services-api_manpage-EmailService[email service]
 

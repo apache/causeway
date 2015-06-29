@@ -135,6 +135,6 @@ public class Department {
 <1> maintain a count of the number of male ...
 <2> ... and female employees (getters and setters omitted)
 <3> the xref:rg.adoc#_rg_methods_prefixes_manpage-addTo[`addTo...()`] method increments the derived properties
-<4> the xref:rg.adoc#_rg_methods_prefixes_manpage-removeTo[`removeTo...()`] method similarly decrements the derived properties
+<4> the xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`] method similarly decrements the derived properties
 
 

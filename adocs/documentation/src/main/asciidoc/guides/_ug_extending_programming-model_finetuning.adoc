@@ -68,7 +68,7 @@ This http://isis.markmail.org/thread/472c3mrvcgnripst[thread] from the users mai
 
 If you want to make many changes to the programming model, then (rather than include/exclude lots of facet factories) you can specify a completely new programming model.  For this you'll first need an implementation of `ProgrammingModel`.
 
-One option is to subclass from `ProgammingModelFacetsJava5`; in your subclass you could remove any ``FacetFactory``s that you wanted to exclude, as well as registering your own implementations.
+One option is to subclass from `ProgrammingModelFacetsJava5`; in your subclass you could remove any ``FacetFactory``s that you wanted to exclude, as well as registering your own implementations.
 
 To tell Apache Isis to use your new programming model, use:
 

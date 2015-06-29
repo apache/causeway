@@ -56,7 +56,7 @@ As well as providing a sign-in screen, the Wicket viewer also provides the abili
 The sign-in verification page to render is pluggable; see xref:ug.adoc#_ug_extending_wicket-viewer_custom-pages[extensions chapter] for details.
 ====
 
-User registration is only available if the xref:_user_registration_service[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
+User registration is only available if the xref:rg.adoc#_rg_services-spi_manpage-UserRegistrationService[`UserRegistrationService`] is configured; this is used by the framework to actually create new instances of the user as accessed by the corresponding (Shiro) realm.
 
 Because Shiro realms are pluggable, the Apache Isis framework does not provide default implementations of this service.  However, if you are using the http://github.com/isisaddons/isis-module-security[Isis addons' security] module (non-ASF), then this module _does_ provide an implementation (that, as you might expect, creates new "user" domain entities).
 
@@ -66,7 +66,7 @@ If you are using an LDAP realm and want to enable user-self registration then yo
 
 == Restful Objects Viewer
 
-Unlike the Wicket viewer, the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] does _not_ provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter defined in `web.xml`.  The authentication strategy is responsible for ensuring that a session is available for the REST resource.
+Unlike the Wicket viewer, the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] does *not* provide any sort of login page; rather it provides a pluggable authentication strategy, delegated to by the `IsisSessionFilter` filter defined in `web.xml`.  The authentication strategy is responsible for ensuring that a session is available for the REST resource.
 
 The API of `AuthenticationSessionStrategy` is simply:
 

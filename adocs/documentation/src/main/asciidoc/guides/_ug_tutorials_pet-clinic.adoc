@@ -54,7 +54,7 @@ This tutorial was developed against Apache Isis 1.8.0-SNAPSHOT.  Since then 1.8.
 ====
 
 
-As per the http://isis.apache.org/intro/getting-started/simpleapp-archetype.html[Isis website], run the simpleapp archetype to build an empty Isis application:
+Run the simpleapp archetype to build an empty Isis application:
 
 
 [source,bash]
@@ -154,7 +154,7 @@ Go back to the splash screen, and quit the app. Note that the database runs in-m
 
 == Dev environment
 
-Set up xref:dg.adoc[an IDE] and import the project to be able to run and debug the app.
+Set up link:dg.adoc[an IDE] and import the project to be able to run and debug the app.
 
 Then set up a launch configuration so that you can run the app from within the IDE. To save having to run the fixtures
 every time, specify the following system properties:

@@ -49,7 +49,7 @@ For example, in writing up the above example we found that writing `schema=&quot
 
 * Forcing the schema to "PUBLIC" (as in the above example) works, but it isn't ideal because the name "PUBLIC" is not vendor-neutral (it works for HSQLDB, but MS SQL Server uses "dbo" as its default).
 
-* As of 1.9.0-SNAPSHOT Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_using_modules[using modules].
+* As of 1.9.0-SNAPSHOT Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ug_more-advanced_decoupling_db-schemas[using modules].
 ====
 
 
