@@ -16,7 +16,21 @@
  */
 package org.apache.isis.core.unittestsupport.jaxb;
 
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
 import com.google.common.base.Objects;
+import com.google.common.io.Resources;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -36,17 +50,69 @@ public class JaxbMatchers {
         return new TypeSafeMatcher<T>() {
             @Override
             protected boolean matchesSafely(final T item) {
-                final String expectedXml = JaxbUtil.toXml(expected);
-                final String itemXml = JaxbUtil.toXml(item);
+                final String expectedXml = JaxbUtil2.toXml(expected);
+                final String itemXml = JaxbUtil2.toXml(item);
                 return Objects.equal(expectedXml, itemXml);
             }
 
             @Override
             public void describeTo(final org.hamcrest.Description description) {
-                final String expectedXml = JaxbUtil.toXml(expected);
+                final String expectedXml = JaxbUtil2.toXml(expected);
                 description.appendText("is equivalent to ").appendValue(expectedXml);
             }
         };
     }
 
+}
+class JaxbUtil2 {
+
+    private JaxbUtil2(){}
+
+    public static <T> T fromXml(
+            final Reader reader,
+            final Class<T> dtoClass) {
+        Unmarshaller un = null;
+        try {
+            un = getJaxbContext(dtoClass).createUnmarshaller();
+            return (T) un.unmarshal(reader);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T fromXml(
+            final Class<?> contextClass,
+            final String resourceName,
+            final Charset charset,
+            final Class<T> dtoClass) throws IOException {
+        final URL url = Resources.getResource(contextClass, resourceName);
+        final String s = Resources.toString(url, charset);
+        return fromXml(new StringReader(s), dtoClass);
+    }
+
+    public static <T> String toXml(final T dto) {
+        final CharArrayWriter caw = new CharArrayWriter();
+        toXml(dto, caw);
+        return caw.toString();
+    }
+
+    public static <T> void toXml(final T dto, final Writer writer) {
+        Marshaller m = null;
+        try {
+            final Class<?> aClass = dto.getClass();
+            m = getJaxbContext(aClass).createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            m.marshal(dto, writer);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static JAXBContext getJaxbContext(Class<?> dtoClass) {
+        try {
+            return JAXBContext.newInstance(dtoClass);
+        } catch (JAXBException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

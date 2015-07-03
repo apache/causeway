@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.unittestsupport.jaxb;
+package org.apache.isis.applib.util;
 
 import java.io.CharArrayWriter;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import javax.xml.bind.Unmarshaller;
 import com.google.common.io.Resources;
 
 /**
- * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended for
+ * Helper methods for converting {@link javax.xml.bind.annotation.XmlRootElement}-annotated class to-and-from XML.  Intended primarily for
  * test use only (the {@link JAXBContext} is not cached).
  *
  * <p>
