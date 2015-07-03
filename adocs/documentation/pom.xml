@@ -182,18 +182,18 @@
 
                                 <echo message=""/>
                                 <echo message=""/>
-                                <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
-                                <echo message=""/>
-                                <copy todir="${isis-site.dir}">
-                                    <fileset dir="${build.dir}"/>
-                                </copy>
-
-                                <echo message=""/>
-                                <echo message=""/>
                                 <echo message="copying from ${redirects.dir} to ${isis-site.dir}"/>
                                 <echo message=""/>
                                 <copy todir="${isis-site.dir}">
                                     <fileset dir="${redirects.dir}"/>
+                                </copy>
+
+                                <echo message=""/>
+                                <echo message=""/>
+                                <echo message="copying from ${build.dir} to ${isis-site.dir}"/>
+                                <echo message=""/>
+                                <copy todir="${isis-site.dir}" overwrite="true" force="true">
+                                    <fileset dir="${build.dir}"/>
                                 </copy>
 
                                 <echo message=""/>
