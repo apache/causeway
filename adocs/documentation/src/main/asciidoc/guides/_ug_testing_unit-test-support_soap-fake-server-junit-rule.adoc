@@ -1,0 +1,110 @@
+[[_ug_testing_unit-test-support_soap-fake-server-junit-rule]]
+= SOAP Fake Servers
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+No man is an island, and neither are most applications.  Chances are that at some point you may need to integrate your Apache Isis application to other external systems, possibly using old-style SOAP web services.  The SOAP client in this case could be a domain service within your app, or it might be externalized, eg invoked through a scheduler or using link:http://camel.apache.org[Apache Camel].
+
+While you will want to (of course) perform manual system testing/UAT with a test instance of that external system, it's also useful to be able to perform unit testing of your SOAP client component.
+
+The `SoapEndpointPublishingRule` is a simple JUnit rule that allows you to run a fake SOAP endpoint within an unit test.
+
+[TIP]
+====
+The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides a full example of how to integrate and test an Apache Isis application with a (faked out) external system.
+====
+
+
+== `SoapEndpointPublishingRule`
+
+The idea behing this rule is that you write a fake server that implements the same WSDL contract as the "real" external system does, but which also exposes additional API to specify responses (or throw exceptions) from SOAP calls.  It also typically records the requests and allows these to be queried.
+
+In its setup your unit test instantiates the fake server, and gets the rule to host that fake server on an SOAP endpoint.  It also instantiates the SOAP client, pointing it at the endpoint address (that is, a URL) that the fake server is runnig on.
+
+In the test methods your unit test sets up expectations on your fake server, and then exercises the SOAP client.  The SOAP client calls the fake server, which then responds accordingly.  The test can then assert that all expected interactions have occurred.
+
+So that tests don't take too long to run, the rule puts the server onto a thread-local.  Therefore the unit tests should clear up any state on the fake server.
+
+The easiest way to use the rule is to subclass it for your particular fake server, eg:
+
+[source,java]
+----
+public class ExternalSystemFakeServerRule
+        extends SoapEndpointPublishingRule<ExternalSystemFakeServer> {  <1>
+    public ExternalSystemFakeServerRule() {
+        this(54345);                                                    <2>
+    }
+    public ExternalSystemFakeServerRule(final int port) {
+        super(
+            buildAddress(port),                                         <3>
+            () -> new ExternalSystemFakeServer());                      <4>
+    }
+    protected static String buildAddress(final int port) {
+        return String.format("http://localhost:%d/any/old/string/will/work", port);
+    }
+}
+----
+<1> generic type specifies the class that implements the endpoint
+<2> hardcoded port (or could choose one at random from within a range)
+<3> build an address based on the port
+<4> provide a `Supplier` that will instantiate the fake server
+
+
+Your unit test should then look something like:
+
+[source,java]
+----
+public class ExternalSystemFakeServerRuleTest {
+    @Rule
+    public ExternalSystemFakeServerRule serverRule = new ExternalSystemFakeServerRule();
+    private ExternalSystemFakeServer externalSystemFakeServer;
+    private DemoObject externalSystemContract;                                      // <1>
+    @Before
+    public void setUp() throws Exception {
+        final DemoObjectService externalSystemService =                             // <2>
+                new DemoObjectService(ExternalSystemWsdl.getWsdl());                // <3>
+        externalSystemContract = externalSystemService.getDemoObjectOverSOAP();
+        BindingProvider provider = (BindingProvider) externalSystemContract;
+        provider.getRequestContext().put(
+                BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                serverRule.getEndpointAddress()
+        );
+        externalSystemFakeServer = serverRule.getPublishedEndpoint();               // <4>
+    }
+    @Test
+    public void happy_case() throws Exception {
+        // given
+        final Update update = new Update();                                         // <5>
+        ...
+
+        // expect
+        final UpdateResponse response = new UpdateResponse();                       // <6>
+        ...
+        externalSystemFakeServer.control().setResponse(updateResponse);
+
+        // when
+        PostResponse response = externalSystemContract.post(update);                // <7>
+
+        // then
+        final List<Update> updates =                                                // <8>
+            externalSystemFakeServer.control().getUpdates();
+        ...
+    }
+    ...
+}
+----
+<1> the SOAP contract as defined in WSDL and generated by wsdl2java
+<2> also generated by wsdl2java
+<3> `getWsdl()` is a utility method to return a URL for the WSDL (eg from the classpath)
+<4> get hold of the fake server running at the end point
+<5> create a request (generated from the WSDL and wsdl2java)
+<6> instruct fake server how to respond
+<7> invoke the service
+<8> check service was correctly invoked etc.
+
+== XML Marshalling Support
+
+Apache Isis' unit testing support also provides helper `JaxbUtil` and `JaxbMatchers` classes.  These are useful if you have exampler XML-serialized representations of the SOAP requests and response payloads and want to use these within your tests.
