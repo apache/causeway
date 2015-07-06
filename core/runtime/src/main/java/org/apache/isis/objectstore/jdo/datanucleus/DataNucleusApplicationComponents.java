@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -31,8 +30,6 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.NucleusContext;
-import org.datanucleus.NucleusContextHelper;
-import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
 import org.datanucleus.StoreNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -40,6 +37,7 @@ import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
 import org.datanucleus.store.StoreManager;
 import org.datanucleus.store.schema.SchemaAwareStoreManager;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
@@ -111,7 +109,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private void initialize() {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
-        
+
+        // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
+        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
+        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
         datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
         persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
 
