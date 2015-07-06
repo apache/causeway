@@ -110,10 +110,17 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private void initialize() {
         final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
 
+        final String url = datanucleusProps.get("javax.jdo.option.ConnectionURL");
+        if(url != null && url.startsWith("neo4j")) {
+            // eagerly load
+            datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
+            datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
+            datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
+        } else {
+            // need to lazily load to ensure that any DB containing schema is created via our MetadataListener.
+        }
+
         // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
-        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
-        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
-        datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
         persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
 
         final boolean createSchema = (Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ) ||

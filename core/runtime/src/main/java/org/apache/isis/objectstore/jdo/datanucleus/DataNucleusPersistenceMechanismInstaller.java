@@ -28,9 +28,9 @@ import com.google.common.collect.Sets;
 import org.datanucleus.PropertyNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -147,7 +147,7 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
         putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, "true");
         putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, "true");
         putIfNotPresent(props, PropertyNames.PROPERTY_CACHE_L2_TYPE, "none");
-        
+
         putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, "true");
 
         String connectionFactoryName = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
