@@ -15,6 +15,7 @@ Apache Isis 1.9.0 has not yet been released; it is still 1.9.0-SNAPSHOT.
 include::_migration-notes_1.8.0-to-1.9.0_upgrading-to-dn4.adoc[leveloffset=+1]
 include::_migration-notes_1.8.0-to-1.9.0_upgrading-to-java8.adoc[leveloffset=+1]
 include::_migration-notes_1.8.0-to-1.9.0_exception-recognizer.adoc[leveloffset=+1]
+include::_migration-notes_1.8.0-to-1.9.0_war-packaging.adoc[leveloffset=+1]
 
 
 
