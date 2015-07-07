@@ -29,9 +29,8 @@ import javax.jdo.PersistenceManagerFactory;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Maps;
 
-import org.datanucleus.NucleusContext;
+import org.datanucleus.PersistenceNucleusContext;
 import org.datanucleus.PropertyNames;
-import org.datanucleus.StoreNucleusContext;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.MetaDataListener;
 import org.datanucleus.metadata.MetaDataManager;
@@ -108,48 +107,85 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     private void initialize() {
-        final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
+        createSchemaIfRequired();
 
-        final String url = datanucleusProps.get("javax.jdo.option.ConnectionURL");
-        if(url != null && url.startsWith("neo4j")) {
-            // eagerly load
+        namedQueryByName = catalogNamedQueries(persistableClassNameSet);
+    }
+
+    private static boolean isSchemaAwareStoreManager(Map<String,String> datanucleusProps) {
+
+        // we create a throw-away instance of PMF so that we can probe whether DN has
+        // been configured with a schema-aware store manager or not.
+        final JDOPersistenceManagerFactory probePmf =
+                (JDOPersistenceManagerFactory)JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+        try {
+            final PersistenceNucleusContext nucleusContext = probePmf.getNucleusContext();
+            final StoreManager storeManager = nucleusContext.getStoreManager();
+            return storeManager instanceof SchemaAwareStoreManager;
+        } finally {
+            probePmf.close();
+        }
+    }
+
+    // REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
+    private void createSchemaIfRequired() {
+
+        if(isSchemaAwareStoreManager(datanucleusProps)) {
+
+            // we *don't* use DN's eager loading (autoStart), because doing so means that it attempts to
+            // create the table before the schema (for any entities annotated @PersistenceCapable(schema=...)
+
+            // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
+            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
+            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
+            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES,
+            //                      Joiner.on(',').join(persistableClassNameSet));
+
+            persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
+
+
+            //
+            // instead, we manually create the schema ourselves
+            // (if the configured StoreMgr supports it, and if requested in isis.properties)
+            //
+            JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
+            final PersistenceNucleusContext nucleusContext = jdopmf.getNucleusContext();
+            final SchemaAwareStoreManager storeManager = (SchemaAwareStoreManager)nucleusContext.getStoreManager();
+
+            final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
+
+            // rather than reinvent too much of the wheel, we reuse the same properties that DN would check
+            // for if it were doing the auto-creation itself (read from isis.properties)
+            final boolean createSchema =
+                    isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ||
+                            isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
+            if (!createSchema) {
+                return;
+            }
+
+            final SchemaAwareStoreManager schemaAwareStoreManager = (SchemaAwareStoreManager) storeManager;
+            registerMetadataListener(metaDataManager);
+            schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
+
+        } else {
+
+            // we *DO* use DN's eager loading (autoStart), because it seems that DN requires this (for neo4j at least)
+            // otherwise NPEs occur later.
+
+            final String persistableClassNames = Joiner.on(',').join(persistableClassNameSet);
+
+            // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
             datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
             datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
             datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES, persistableClassNames);
-        } else {
-            // need to lazily load to ensure that any DB containing schema is created via our MetadataListener.
+
+            persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
         }
-
-        // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
-        persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
-
-        final boolean createSchema = (Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ) ||
-                Boolean.parseBoolean( datanucleusProps.get(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL) ));
-        if(createSchema) {
-            createSchema();
-        }
-
-        namedQueryByName = catalogNamedQueries(persistableClassNameSet);
 
     }
-    
 
-    private void createSchema() {
-    	//REF: http://www.datanucleus.org/products/datanucleus/jdo/schema.html
-    	
-        final JDOPersistenceManagerFactory jdopmf = (JDOPersistenceManagerFactory)persistenceManagerFactory;
-        final NucleusContext nucleusContext = jdopmf.getNucleusContext();
-        
-        if (nucleusContext instanceof StoreNucleusContext) {
-        	
-            final StoreManager storeManager = ((StoreNucleusContext)nucleusContext).getStoreManager();
-            final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
-            
-            registerMetadataListener(metaDataManager);
-            if (storeManager instanceof SchemaAwareStoreManager) {
-                ((SchemaAwareStoreManager)storeManager).createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
-            }
-        }
+    private boolean isSet(final Map<String, String> props, final String key) {
+        return Boolean.parseBoolean( props.get(key) );
     }
 
     private void registerMetadataListener(final MetaDataManager metaDataManager) {
@@ -161,6 +197,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         if(listener instanceof DataNucleusPropertiesAware) {
             ((DataNucleusPropertiesAware) listener).setDataNucleusProperties(datanucleusProps);
         }
+
+
+        // and install the listener for any classes that are lazily loaded subsequently
+        // (shouldn't be any, this is mostly backwards compatibility with previous design).
         metaDataManager.registerListener(listener);
     }
 
