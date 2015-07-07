@@ -93,6 +93,10 @@
                             <Build-Label>${project.version}</Build-Label>
                         </manifestEntries>
                     </archive>
+                    <packagingExcludes>WEB-INF/lib/isis-core-webserver*.jar,
+                        WEB-INF/lib/javax.servlet-api-*.jar,
+                        WEB-INF/lib/javax.websocket-api-*.jar,
+                        WEB-INF/lib/jetty-all-*.jar</packagingExcludes>
                 </configuration>
             </plugin>
 

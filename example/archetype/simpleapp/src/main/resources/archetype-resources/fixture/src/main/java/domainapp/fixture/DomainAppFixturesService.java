@@ -47,7 +47,7 @@ import domainapp.fixture.scenarios.RecreateSimpleObjects;
 public class DomainAppFixturesService extends FixtureScripts {
 
     public DomainAppFixturesService() {
-        super("domainapp", MultipleExecutionStrategy.EXECUTE);
+        super(DomainAppFixturesService.class.getPackage().getName(), MultipleExecutionStrategy.EXECUTE);
     }
 
     @Override
