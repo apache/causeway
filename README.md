@@ -5,7 +5,8 @@ Apache Isis
 
 Get started using the [Maven archetype](http://isis.apache.org/intro/getting-started/simple-archetype.html).
 
-For help and support, join the [mailing lists](http://isis.apache.org/support.html).  
+For help and support, join the [mailing lists](http://isis.apache.org/support.html).  To contribute to our documentation, see our [Asciidoctor source](https://github.com/apache/isis/tree/master/adocs/documentation).
+
 
 ## Core Features
 
