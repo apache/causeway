@@ -146,9 +146,11 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/040-auto-
 You might also want to set up some additional plugins, using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
 
 Recommended are:
+
 * link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
 +
-Provides better visualization of dependency trees (similar to Eclipse)
+More on this below.
+
 * link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[AsciiDoctor] plugin
 +
 Useful if you are doing any authoring of documents.
@@ -156,8 +158,27 @@ Useful if you are doing any authoring of documents.
 Some others you might like to explore are:
 
 .IntelliJ Plugins
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="400px"]
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px"]
 
+==== Maven Helper Plugin
+
+This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
+
+If you open a `pom.xml` file, you'll see an additional "Dependencies" tab:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png"]
+
+Clicking on this gives a graphical tree representation of the dependencies, similar to that obtained by `mvn dependency:tree`, but filterable.
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png"]
+
+The plugin also provides the ability to easily run a Maven goal on a project:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png"]
+
+This menu can also be bound to a keystroke so that it is available as a pop-up:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
 
 
 
@@ -171,6 +192,7 @@ First up, open up the Maven tool window (`View > Tool Windows > Maven Projects`)
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/010-maven-modules-view.png[width="730px"]
 
 We can then import another module (from some other directory).  For example, here we are importing the Isis Addons' todoapp example:
+
 
 .IntelliJ Maven Module Management - Importing another Module
 image::{_imagesdir}appendices/dev-env/intellij-idea/100-maven-module-mgmt/020-adding-another-module.png[width="400px"]
