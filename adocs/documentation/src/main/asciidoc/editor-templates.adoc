@@ -31,14 +31,14 @@ The following table lists the templates to download
 
 |JUnit tests
 |ju
-|link:./resources/templates/junit-templates-idea.xml[Download]
-|link:./resources/templates/junit-templates.xml[Download]
+|link:./resources/templates/junit4-templates-idea.xml[Download]
+|link:./resources/templates/junit4-templates.xml[Download]
 
 
 |JMock tests
-|<tt>jm
-|link:./resources/templates/jmock-templates-idea.xml[Download]
-|link:./resources/templates/jmock-templates.xml[Download]
+|jm
+|link:./resources/templates/jmock2-templates-idea.xml[Download]
+|link:./resources/templates/jmock2-templates.xml[Download]
 
 |===
 
@@ -61,8 +61,6 @@ To install in IntelliJ, copy to the relevant `config/templates` directory, eg:
 === Eclipse
 
 To install in Eclipse, go to `Windows > Preferences > Java > Editor > Templates` and choose `Import`.
-
-
 
 
 
