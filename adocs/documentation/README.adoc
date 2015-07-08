@@ -1,5 +1,6 @@
-title: Apache Isis
+= Apache Isis
 
+ifndef::env-github[]
 Notice: Licensed to the Apache Software Foundation (ASF) under one
  or more contributor license agreements. See the NOTICE file
  distributed with this work for additional information
@@ -16,7 +17,7 @@ Notice: Licensed to the Apache Software Foundation (ASF) under one
  KIND, either express or implied. See the License for the
  specific language governing permissions and limitations
  under the License.
-
+endif::env-github[]
 
 This directory contains the source documentation that constitutes both the Apache Isis website (including the user guide and reference guide)  It is written using http://www.methods.co.nz/asciidoc/[Asciidoc].
 
@@ -84,15 +85,15 @@ The ruby script, `monitor.rb` emulates the `mvn site` command, regenerating any 
 To setup:
 
 * download and install ruby 2.0.0, from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]
-* download devkit for the Ruby 2.0 installation, also from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the [https://github.com/oneclick/rubyinstaller/wiki/Development-Kit](installation instructions) on their wiki
+* download devkit for the Ruby 2.0 installation, also from link:rubyinstaller.org/downloads[http://rubyinstaller.org/downloads/]. Then follow the link:https://github.com/oneclick/rubyinstaller/wiki/Development-Kit[installation instructions] on their wiki
 
 
 [NOTE]
 ====
-Note the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
+We use Ruby 2.0 rather than 2.1 because the wdm gem (required to monitor the filesystem if running on Windows) is not currently compatible with Ruby 2.1.
 ====
 
-install:
+To install:
 
 [source,bash]
 ----
@@ -100,14 +101,14 @@ gem install bundler
 bundle install
 ----
 
-to run, typically just use:
+To run, we typically just use:
 
 [source,bash]
 ----
 ruby monitor.rb
 ----
 
-This will start monitoring all files under `src/main/asciidoc`, and start up a web server on port 4000 so you can review results.
+This will start monitoring all files under `src/main/asciidoc`, and start up a web server on port 4000 so you can review results.  If any `.adoc` changes, then the appropriate HTML will be regenerated.  And, if any new assets (CSS, images etc) are added, they will be copied across.
 
 It often makes sense to combine this with `mvn`:
 
