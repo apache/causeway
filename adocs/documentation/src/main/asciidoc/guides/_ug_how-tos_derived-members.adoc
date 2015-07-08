@@ -18,7 +18,7 @@ NOTE: TODO
 
 == Derived Collection
 
-IMPORTANT: WIP
+NOTE: TODO
 
 While derived properties and derived collections typically "walk the graph" to associated objects, there is nothing to prevent the returned value being the result of invoking a repository (domain service) action.
 

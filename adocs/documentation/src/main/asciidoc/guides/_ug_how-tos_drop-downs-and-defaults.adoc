@@ -9,7 +9,7 @@ NOTE: TODO
 
 == For Properties
 
-IMPORTANT: WIP
+NOTE: TODO
 
 ### Choices for Property
 
@@ -28,7 +28,7 @@ NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
 
 == For Action Parameters
 
-IMPORTANT: WIP
+NOTE: TODO
 
 ### Choices for action parameter
 
@@ -52,7 +52,7 @@ NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
 
 == For both Properties and Action Parameters
 
-IMPORTANT: WIP
+NOTE: TODO
 
 
 ### Drop-down for limited number of instances

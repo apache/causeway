@@ -6,7 +6,7 @@
 
 
 
-IMPORTANT: WIP
+NOTE: TODO
 
 
 Sometimes you want to define a `public` method on a domain object that is not intended to be rendered in Apache Isis' UI.

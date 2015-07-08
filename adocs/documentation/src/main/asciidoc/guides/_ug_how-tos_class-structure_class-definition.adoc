@@ -6,7 +6,7 @@
 
 
 
-IMPORTANT: WIP
+NOTE: TODO
 
 
 Classes are defined both to Isis and (if an entity) also to JDO/DataNucleus.

@@ -13,7 +13,7 @@ NOTE: TODO
 
 == Value vs Reference Types
 
-IMPORTANT: WIP
+NOTE: TODO
 
 The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in the xref:ug.adoc#_ug_how-tos_class-structure_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
 

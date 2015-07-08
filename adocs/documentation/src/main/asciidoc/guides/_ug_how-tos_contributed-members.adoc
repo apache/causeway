@@ -6,7 +6,7 @@
 
 
 
-IMPORTANT: WIP - generalize to discussion on contributed collections/properties; update to new annotations
+NOTE: TODO - generalize to discussion on contributed collections/properties; update to new annotations
 
 Any n-parameter action provided by a service will automatically be contributed to the list of actions for each of its (entity) parameters. From the viewpoint of the entity the action is called a contributed action.
 

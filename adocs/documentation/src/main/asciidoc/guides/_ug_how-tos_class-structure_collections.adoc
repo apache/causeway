@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-IMPORTANT: WIP
+NOTE: TODO
 
 
 [NOTE]

@@ -6,7 +6,7 @@
 
 
 
-IMPORTANT: WIP
+NOTE: TODO
 
 
 In many cases the value types of properties and of action parameters align. For example, a `Customer` entity might have a `surname` property, and there might also be corresponding `changeSurname`.  Ideally we want the surname property and surname action parameter to use the same value type.

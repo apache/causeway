@@ -20,8 +20,6 @@ $CELLULOID_TEST=false
 # parse cmd line args
 #
 opts = Slop.parse do |o|
-  o.bool '-a', '--all', 'process all files'
-  o.bool '-x', '--nomonitor', 'do not monitor, just process all files then exit'
   o.int '-p', '--port', 'port (default: 4000)', default: 4000
   o.bool '-b', '--browser', 'launch browser'
   o.bool '-h', '--help', 'help'
@@ -32,7 +30,6 @@ if opts.help? then
     exit
 end
 
-processAll = opts.all? || opts.nomonitor?
 port = opts[:port]
 
 
@@ -127,30 +124,6 @@ i=0
 lastTimeGenerated = Time.now - 10
 
 
-#
-# process all files
-#
-if processAll then
-
-    files = Dir.glob("src/main/asciidoc/**/*")
-
-    puts ""
-    puts ""
-    puts ""
-    puts "processing all files..."
-    puts ""
-
-    files.each { |file|
-        absFile = File.absolute_path file
-        i,lastTimeGenerated = process absFile, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, true
-    }
-end
-
-
-
-if opts.nomonitor? then
-    exit
-end
 
 puts ""
 puts ""

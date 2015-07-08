@@ -19,6 +19,7 @@ For example:
 
 [source,java]
 ----
+@RequestScoped                                                  // <1>
 @DomainService(nature=NatureOfService.DOMAIN)
 public class ObjectChangedListenerService
         implements javax.jdo.listener.StoreLifecycleListener {   // <1>
@@ -32,9 +33,8 @@ public class ObjectChangedListenerService
     public void tidyUp() {
         getPmFactory().removeInstanceLifecycleListener(this);
     }
-    private PersistenceManagerFactory getPmFactory() {
-        return jdoSupport.getPersistenceManager()
-               .getPersistenceManagerFactory();                 // <2>
+    private PersistenceManager getPersistenceManager() {
+        return jdoSupport.getPersistenceManager();              // <3>
     }
     @Programmatic
     public void preStore (InstanceLifecycleEvent event) { ... }
@@ -44,7 +44,10 @@ public class ObjectChangedListenerService
     IsisJdoSupport jdoSupport;
 }
 ----
-<1> implement whichever callback lifecycle listeners are of interest
-<2> register on the factory so set up for every subsequent session.
+<1> must be `@RequestScoped` because we register on the `PersistenceManager`, which is different for each request.
+<2> implement whichever callback lifecycle listeners are of interest
+<3> use the injected xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport[`IsisJdoSupport`] service to obtain the `PersistenceManager`.
+
+Note that it isn't possible to register on the `PersistenceManagerFactory` because listeners cannot be attached once a persistence session has been created (which it will have been when the service's `@PostConstruct` method is called).
 
 

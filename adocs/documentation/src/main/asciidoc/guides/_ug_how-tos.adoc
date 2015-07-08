@@ -7,7 +7,6 @@
 
 This chapter provides instructions on how to go about actually developing Apache Isis domain applications.
 
-
 include::_ug_how-tos_class-structure.adoc[leveloffset=+1]
 include::_ug_how-tos_ui-hints.adoc[leveloffset=+1]
 include::_ug_how-tos_domain-services.adoc[leveloffset=+1]
@@ -17,4 +16,5 @@ include::_ug_how-tos_contributed-members.adoc[leveloffset=+1]
 include::_ug_how-tos_business-rules.adoc[leveloffset=+1]
 include::_ug_how-tos_derived-members.adoc[leveloffset=+1]
 include::_ug_how-tos_drop-downs-and-defaults.adoc[leveloffset=+1]
+include::_ug_how-tos_persisted-title.adoc[leveloffset=+1]
 

@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-IMPORTANT: WIP - xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`], xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[`AbstractViewModel`], xref:rg.adoc#_rg_annotations_manpage-DomainObject_nature[`@DomainObject#nature()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`], xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[`AbstractViewModel`], xref:rg.adoc#_rg_annotations_manpage-DomainObject_nature[`@DomainObject#nature()`]
 
 
 Nature of view models

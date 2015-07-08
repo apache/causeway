@@ -79,7 +79,7 @@ Examples of framework-provided services (as defined in the applib) include clock
 
 == Contributions
 
-IMPORTANT: WIP - just xref xref:ug.adoc#_ug_how-tos_contributed-members[contributed members] section.
+NOTE: TODO - just xref xref:ug.adoc#_ug_how-tos_contributed-members[contributed members] section.
 
 
 
@@ -88,7 +88,7 @@ IMPORTANT: WIP - just xref xref:ug.adoc#_ug_how-tos_contributed-members[contribu
 
 == Menu items
 
-IMPORTANT: WIP - update to new annotations, including @DomainService(nature=...)
+NOTE: TODO - update to new annotations, including @DomainService(nature=...)
 
 
 By default every action of a service (by which we also mean repositories and factories) will be rendered in the viewer, eg as a menu item for that service menu. This behaviour can be suppressed by annotating the action using `@org.apache.isis.applib.annotations.NotInServiceMenu`.
@@ -120,7 +120,7 @@ public class LibraryImpl implements Library {
 
 == Menus
 
-IMPORTANT: WIP - update to new annotations, including @DomainService(nature=...)
+NOTE: TODO - update to new annotations, including @DomainService(nature=...)
 
 If none of the service menu items should appear, then the service itself should be annotated as `@Hidden`.
 

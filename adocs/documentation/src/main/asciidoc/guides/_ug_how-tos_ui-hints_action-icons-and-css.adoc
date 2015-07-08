@@ -11,7 +11,7 @@ These UI hint can be applied either to individual actions, or can be applied en-
 
 == Per action
 
-IMPORTANT: WIP - xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
+NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
 
 
 Alternatively, you can specify these hints dynamically in the xref:rg.adoc#_rg_object-layout[`Xxx.layout.json`] for the entity.
