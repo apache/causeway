@@ -59,9 +59,7 @@ public class IsisSessionFilter implements Filter {
     public static final String AUTHENTICATION_SESSION_STRATEGY_KEY = "authenticationSessionStrategy";
 
     /**
-     * Default value for
-     * {@link AuthenticationSessionLookupStrategyConstants#AUTHENTICATION_SESSION_STRATEGY_KEY}
-     * if not specified.
+     * Default value for {@link #AUTHENTICATION_SESSION_STRATEGY_KEY} if not specified.
      */
     public static final String AUTHENTICATION_SESSION_STRATEGY_DEFAULT = AuthenticationSessionStrategyDefault.class.getName();
 
@@ -115,11 +113,7 @@ public class IsisSessionFilter implements Filter {
      * accomplishes the same thing).
      * 
      * <p>
-     * The value is expected as a comma separated list, for example:
-     * 
-     * <pre>
-     * htmlviewer
-     * </pre>
+     * The value is expected as a comma separated list.
      */
     public static final String IGNORE_EXTENSIONS_KEY = "ignoreExtensions";
 
@@ -130,6 +124,11 @@ public class IsisSessionFilter implements Filter {
         }
 
     };
+
+    /**
+     * Somewhat hacky, add this to the query
+     */
+    public static final String QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
         httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
@@ -193,17 +192,10 @@ public class IsisSessionFilter implements Filter {
         public abstract void handle(IsisSessionFilter filter, HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws IOException, ServletException;
     }
 
-    /**
-     * Used as a flag on {@link HttpServletRequest} so that if there are two
-     * {@link IsisSessionFilter}s in a request pipeline, then the second can
-     * determine what processing has already been done (and is usually then just
-     * a no-op).
-     */
-    private static final String SESSION_STATE_KEY = IsisSessionFilter.SessionState.class.getName();
 
     private AuthenticationSessionStrategy authSessionStrategy;
     private List<String> restrictedPaths;
-    private WhenNoSession whenNoSession;
+    private WhenNoSession whenNotAuthenticated;
     private String redirectToOnException;
     private Collection<Pattern> ignoreExtensions;
 
@@ -237,18 +229,22 @@ public class IsisSessionFilter implements Filter {
         final String logonPage = config.getInitParameter(LOGON_PAGE_KEY);
         if (logonPage != null) {
             if (whenNoSessionStr != null) {
-                throw new IllegalStateException("The init-param '" + LOGON_PAGE_KEY + "' is only provided for backwards compatibility; remove if the init-param '" + WHEN_NO_SESSION_KEY + "' has been specified");
+                throw new IllegalStateException(String.format(
+                        "The init-param '%s' is only provided for backwards compatibility; "
+                        + "remove if the init-param '%s' has been specified", LOGON_PAGE_KEY, WHEN_NO_SESSION_KEY));
+            } else {
+                // default whenNotAuthenticated and allow access through to the logonPage
+                whenNotAuthenticated = WhenNoSession.RESTRICTED;
+                this.restrictedPaths = Lists.newArrayList(logonPage);
+                return;
             }
-            whenNoSession = WhenNoSession.RESTRICTED;
-            this.restrictedPaths = Lists.newArrayList(logonPage);
-            return;
         }
 
-        whenNoSession = WhenNoSession.lookup(whenNoSessionStr);
-        if (whenNoSession == WhenNoSession.RESTRICTED) {
+        whenNotAuthenticated = WhenNoSession.lookup(whenNoSessionStr);
+        if (whenNotAuthenticated == WhenNoSession.RESTRICTED) {
             final String restrictedPathsStr = config.getInitParameter(RESTRICTED_KEY);
             if (restrictedPathsStr == null) {
-                throw new IllegalStateException("Require an init-param of '" + RESTRICTED_KEY + "' key to be set.");
+                throw new IllegalStateException(String.format("Require an init-param of '%s' key to be set.", RESTRICTED_KEY));
             }
             this.restrictedPaths = Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
         }
@@ -281,137 +277,80 @@ public class IsisSessionFilter implements Filter {
     // doFilter
     // /////////////////////////////////////////////////////////////////
 
-    public enum SessionState {
-
-        UNDEFINED {
-            @Override
-            public void handle(final IsisSessionFilter filter, final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-
-                final HttpServletRequest httpRequest = (HttpServletRequest) request;
-                final HttpServletResponse httpResponse = (HttpServletResponse) response;
-
-                if (requestIsIgnoreExtension(filter, httpRequest)) {
-                    try {
-                        chain.doFilter(request, response);
-                        return;
-                    } finally {
-                        closeSession();
-                    }
-                }
-
-                if (ResourceCachingFilter.isCachedResource(httpRequest)) {
-                    try {
-                        chain.doFilter(request, response);
-                        return;
-                    } finally {
-                        closeSession();
-                    }
-                }
-
-                // authenticate
-                final AuthenticationSession validSession = filter.authSessionStrategy.lookupValid(request, response);
-                if (validSession != null) {
-                    filter.authSessionStrategy.bind(request, response, validSession);
-
-                    openSession(validSession);
-                    SESSION_IN_PROGRESS.setOn(request);
-
-                    try {
-                        chain.doFilter(request, response);
-                    } finally {
-                        UNDEFINED.setOn(request);
-                        closeSession();
-                    }
-                    return;
-                }
-
-                try {
-                    NO_SESSION_SINCE_NOT_AUTHENTICATED.setOn(request);
-                    filter.whenNoSession.handle(filter, httpRequest, httpResponse, chain);
-                } catch (final RuntimeException ex) {
-                    // in case the destination servlet cannot cope, but we've
-                    // been told
-                    // to redirect elsewhere
-                    if (filter.redirectToOnException != null) {
-                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
-                        return;
-                    }
-                    throw ex;
-                } catch (final IOException ex) {
-                    if (filter.redirectToOnException != null) {
-                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
-                        return;
-                    }
-                    throw ex;
-                } catch (final ServletException ex) {
-                    // in case the destination servlet cannot cope, but we've
-                    // been told
-                    // to redirect elsewhere
-                    if (filter.redirectToOnException != null) {
-                        redirect(httpRequest, httpResponse, filter.redirectToOnException);
-                        return;
-                    }
-                    throw ex;
-                } finally {
-                    UNDEFINED.setOn(request);
-                    // nothing to do
-                }
-
-            }
-
-            private boolean requestIsIgnoreExtension(final IsisSessionFilter filter, final HttpServletRequest httpRequest) {
-                final String servletPath = httpRequest.getServletPath();
-                for (final Pattern extension : filter.ignoreExtensions) {
-                    if (extension.matcher(servletPath).matches()) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        },
-        NO_SESSION_SINCE_REDIRECTING_TO_LOGON_PAGE, NO_SESSION_SINCE_NOT_AUTHENTICATED, SESSION_IN_PROGRESS;
-
-        static SessionState lookup(final ServletRequest request) {
-            final Object state = request.getAttribute(SESSION_STATE_KEY);
-            return state != null ? (SessionState) state : SessionState.UNDEFINED;
-        }
-
-        boolean isValid(final AuthenticationSession authSession) {
-            return authSession != null && getAuthenticationManager().isSessionValid(authSession);
-        }
-
-        void setOn(final ServletRequest request) {
-            request.setAttribute(SESSION_STATE_KEY, this);
-        }
-
-        public void handle(final IsisSessionFilter filter, final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
-            chain.doFilter(request, response);
-        }
-
-        AuthenticationManager getAuthenticationManager() {
-            return IsisContext.getAuthenticationManager();
-        }
-
-        IsisSession openSession(final AuthenticationSession authSession) {
-            return IsisContext.openSession(authSession);
-        }
-
-        void closeSession() {
-            IsisContext.closeSession();
-        }
-
-    }
-
     @Override
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
 
-        final SessionState sessionState = SessionState.lookup(request);
-        sessionState.handle(this, request, response, chain);
+        final HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+        try {
+            final String queryString = httpServletRequest.getQueryString();
+            if (queryString != null && queryString.contains(QUERY_STRING_FORCE_LOGOUT)) {
+
+                authSessionStrategy.invalidate(httpServletRequest, httpServletResponse);
+                return;
+            }
+
+            if (requestIsIgnoreExtension(this, httpServletRequest) ||
+                ResourceCachingFilter.isCachedResource(httpServletRequest)) {
+                chain.doFilter(request, response);
+                return;
+            }
+
+            // authenticate
+            final AuthenticationSession authSession =
+                    authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
+            if (authSession != null) {
+                authSessionStrategy.bind(httpServletRequest, httpServletResponse, authSession);
+
+                openSession(authSession); // is closed in the finally block
+                chain.doFilter(request, response);
+                return;
+            }
+
+            try {
+                whenNotAuthenticated.handle(this, httpServletRequest, httpServletResponse, chain);
+            } catch (final RuntimeException | IOException | ServletException ex) {
+                // in case the destination servlet cannot cope, but we've
+                // been told to redirect elsewhere
+                if (redirectToOnException != null) {
+                    redirect(httpServletRequest, httpServletResponse, redirectToOnException);
+                    return;
+                }
+                throw ex;
+            }
+
+        } finally {
+            closeSession();
+        }
+
     }
 
-    
+    private boolean requestIsIgnoreExtension(final IsisSessionFilter filter, final HttpServletRequest httpRequest) {
+        final String servletPath = httpRequest.getServletPath();
+        for (final Pattern extension : filter.ignoreExtensions) {
+            if (extension.matcher(servletPath).matches()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
+
+    private AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
+    }
+
+    private IsisSession openSession(final AuthenticationSession authSession) {
+        return IsisContext.openSession(authSession);
+    }
+
+    private void closeSession() {
+        IsisContext.closeSession();
+    }
+
 
 }

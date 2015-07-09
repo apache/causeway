@@ -21,9 +21,8 @@ package org.apache.isis.viewer.restfulobjects.server.authentication;
 import java.util.Collections;
 import java.util.List;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.common.base.Splitter;
@@ -43,11 +42,12 @@ import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
  */
 public class AuthenticationSessionStrategyHeader extends AuthenticationSessionStrategyAbstract {
 
-    @Override
-    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+    public static final String HEADER_ISIS_USER = "isis.user";
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        final String user = httpServletRequest.getHeader("isis.user");
+    @Override
+    public AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
+
+        final String user = httpServletRequest.getHeader(HEADER_ISIS_USER);
         final List<String> roles = rolesFrom(httpServletRequest);
 
         if (Strings.isNullOrEmpty(user)) {

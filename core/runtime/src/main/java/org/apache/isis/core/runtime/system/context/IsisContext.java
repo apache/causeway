@@ -95,7 +95,10 @@ public abstract class IsisContext implements DebuggableWithTitle {
     protected static enum SessionClosePolicy {
         /**
          * Sessions must be explicitly closed.
+         *
+         * @deprecated - in 1.9.0-SNAPSHOT it has been reported that on occasion the session is not explicitly closed.  This must mean that there's a leakage somewhere.  Using auto close instead will make the system overall more able to "repair itself" when this type of error (presumably a bug in our session management code) occurs
          */
+        @Deprecated
         EXPLICIT_CLOSE,
         /**
          * Sessions will be automatically closed.
@@ -211,8 +214,9 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * threads have finished with a session can it really be closed.
      */
     public void closeSessionInstance() {
-        if (getSessionInstance() != null) {
-            getSessionInstance().close();
+        final IsisSession isisSession = getSessionInstance();
+        if (isisSession != null) {
+            isisSession.close();
             doClose();
         }
     }
@@ -445,7 +449,11 @@ public abstract class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
 
     public static boolean inTransaction() {
-        return inSession() && getCurrentTransaction() != null && !getCurrentTransaction().getState().isComplete();
+        if (inSession())
+            if (getCurrentTransaction() != null)
+                if (!getCurrentTransaction().getState().isComplete())
+                    return true;
+        return false;
     }
 
     /**

@@ -21,9 +21,8 @@ package org.apache.isis.viewer.restfulobjects.server.authentication;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
@@ -40,22 +39,20 @@ import org.apache.isis.core.webapp.auth.AuthenticationSessionStrategyAbstract;
  */
 public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessionStrategyAbstract {
 
+    public static final String HEADER_AUTHORIZATION = "Authorization";
+    public static final String BASIC_AUTH_PREFIX = "Basic ";
+
     private static Pattern USER_AND_PASSWORD_REGEX = Pattern.compile("^(.+):(.+)$");
 
     @Override
-    public AuthenticationSession lookupValid(final ServletRequest servletRequest, final ServletResponse servletResponse) {
+    public AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
 
-        final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        final String authStr = httpServletRequest.getHeader("Authorization");
-
-        // value should be in the form:
-        // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
-        if (authStr == null || !authStr.startsWith("Basic ")) {
+        final String digest = getBasicAuthDigest(httpServletRequest);
+        if (digest == null) {
             return null;
         }
-        final String digest = authStr.substring(6);
 
-        final String userAndPassword = new String(new Base64().decode(digest.getBytes()));
+        final String userAndPassword = unencoded(digest);
         final Matcher matcher = USER_AND_PASSWORD_REGEX.matcher(userAndPassword);
         if (!matcher.matches()) {
             return null;
@@ -64,9 +61,27 @@ public class AuthenticationSessionStrategyBasicAuth extends AuthenticationSessio
         final String user = matcher.group(1);
         final String password = matcher.group(2);
 
-        final AuthenticationSession authSession = getAuthenticationManager().authenticate(new AuthenticationRequestPassword(user, password));
+        final AuthenticationRequestPassword request = new AuthenticationRequestPassword(user, password);
+        final AuthenticationSession authSession =
+                getAuthenticationManager().authenticate(request);
         return authSession;
     }
+
+    // value should be in the form:
+    // Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
+    String getBasicAuthDigest(final HttpServletRequest httpServletRequest) {
+        final String authStr = httpServletRequest.getHeader(HEADER_AUTHORIZATION);
+        return authStr != null &&
+                authStr.startsWith(BASIC_AUTH_PREFIX)
+                ? authStr.substring(BASIC_AUTH_PREFIX.length())
+                : null;
+    }
+
+
+    protected String unencoded(final String encodedDigest) {
+        return new String(new Base64().decode(encodedDigest.getBytes()));
+    }
+
 
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)

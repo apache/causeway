@@ -74,11 +74,6 @@ public interface IsisSession extends SessionScopedComponent {
 
     /**
      * The {@link PersistenceSession} within this {@link IsisSession}.
-     * 
-     * <p>
-     * Would have been created by the {@link #getSessionFactory() owning
-     * factory}'s
-     * 
      */
     PersistenceSession getPersistenceSession();
 

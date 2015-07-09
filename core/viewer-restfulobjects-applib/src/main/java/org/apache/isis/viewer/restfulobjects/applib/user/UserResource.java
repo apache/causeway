@@ -18,12 +18,18 @@
  */
 package org.apache.isis.viewer.restfulobjects.applib.user;
 
-import javax.ws.rs.*;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 import org.jboss.resteasy.annotations.ClientResponseType;
+
+import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
 
 @Path("/user")
 public interface UserResource {
@@ -41,5 +47,14 @@ public interface UserResource {
 
     @POST
     public Response postUserNotAllowed();
+
+    /**
+     * Not part of the Restful Objects spec.
+     */
+    @GET
+    @Path("/logout")
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    @ClientResponseType(entityType = String.class)
+    public Response logout();
 
 }

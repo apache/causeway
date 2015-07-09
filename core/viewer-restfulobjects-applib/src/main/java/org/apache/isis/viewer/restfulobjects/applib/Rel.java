@@ -58,7 +58,8 @@ public enum Rel {
     
 
     // implementation specific
-    CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by");
+    CONTRIBUTED_BY(RelDefinition.IMPL, "contributed-by"),
+    LOGOUT(RelDefinition.IMPL, "logout");
 
     private final RelDefinition relDef;
     private final String relSuffix;

@@ -42,6 +42,7 @@ public class IsisContextThreadLocal extends IsisContext {
         return new IsisContextThreadLocal(sessionFactory);
     }
 
+    // TODO: could convert this to a regular ThreadLocal, I think; except for the closeAllSessionsInstance() method...; is that method really needed?
     private final Map<Thread, IsisSession> sessionsByThread = new IdentityHashMap<>();
 
     
@@ -50,7 +51,7 @@ public class IsisContextThreadLocal extends IsisContext {
     // //////////////////////////////////////////////
 
     protected IsisContextThreadLocal(final IsisSessionFactory sessionFactory) {
-        this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.EXPLICIT_CLOSE, sessionFactory);
+        this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.AUTO_CLOSE, sessionFactory);
     }
 
     protected IsisContextThreadLocal(final ContextReplacePolicy contextReplacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
@@ -184,8 +185,7 @@ public class IsisContextThreadLocal extends IsisContext {
     @Override
     public IsisSession getSessionInstance() {
         final Thread thread = Thread.currentThread();
-        final IsisSession session = sessionsByThread.get(thread);
-        return session;
+        return sessionsByThread.get(thread);
     }
 
 }

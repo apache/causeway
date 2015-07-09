@@ -47,6 +47,7 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
         if (includesSelf) {
             addLinkToSelf();
             addLinkToUp();
+            addLinkToLogout();
         }
         getExtensions();
         return representation;
@@ -73,6 +74,12 @@ public class UserReprRenderer extends ReprRendererAbstract<UserReprRenderer, Aut
             final HomePageReprRenderer renderer = new HomePageReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
             link.mapPut("value", renderer.render());
         }
+        getLinks().arrayAdd(link);
+    }
+
+    private void addLinkToLogout() {
+        final JsonRepresentation link = LinkBuilder.newBuilder(rendererContext, Rel.LOGOUT.getName(), RepresentationType.HOME_PAGE, "user/logout").build();
+
         getLinks().arrayAdd(link);
     }
 

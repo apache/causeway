@@ -40,8 +40,16 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
         try {
             chain.doFilter(request, response);
         } finally {
-            getTransactionManager().endTransaction();
+            final boolean inTransaction = inTransaction();
+            if(inTransaction) {
+                // user/logout will have invalidated the current transaction and also persistence session.
+                getTransactionManager().endTransaction();
+            }
         }
+    }
+
+    protected boolean inTransaction() {
+        return IsisContext.inTransaction();
     }
 
     protected IsisTransactionManager getTransactionManager() {

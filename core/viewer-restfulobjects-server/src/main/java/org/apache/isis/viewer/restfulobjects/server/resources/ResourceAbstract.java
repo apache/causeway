@@ -20,9 +20,14 @@ package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.io.InputStream;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Providers;
 
 import org.apache.isis.applib.annotation.Where;
@@ -35,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -153,6 +159,10 @@ public abstract class ResourceAbstract {
 
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
+    }
+
+    protected AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
     }
 
     protected SpecificationLoaderSpi getSpecificationLoader() {

@@ -18,11 +18,15 @@
  */
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.webapp.IsisSessionFilter;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.RestfulMediaType;
@@ -60,6 +64,30 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     public Response postUserNotAllowed() {
         throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Posting to the user resource is not allowed.");
+    }
+
+    /**
+     * Not part of the Restful Objects spec.
+     */
+    @Override
+    @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
+    public Response logout() {
+        init(RepresentationType.HOME_PAGE, Where.NOWHERE);
+
+        final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
+        renderer.includesSelf();
+
+        // we do the logout (removes this session from those valid)
+        getAuthenticationManager().closeSession(getResourceContext().getAuthenticationSession());
+
+        // we also redirect to home page with special query string; this allows the session filter
+        // to clear out any cookies/headers (eg if BASIC auth in use).
+        try {
+            final URI location = new URI("?" + IsisSessionFilter.QUERY_STRING_FORCE_LOGOUT);
+            return Response.temporaryRedirect(location).build();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -238,28 +238,31 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     @Override
     public void close() {
+
         if (getState() == State.CLOSED) {
             // nothing to do
             return;
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("closing " + this);
-        }
-        
         try {
-            objectStore.close();
-        } catch(final RuntimeException ex) {
-            // ignore
+            try {
+                objectStore.close();
+            } catch(final Throwable ex) {
+                // ignore
+                LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");
+            }
+
+            try {
+                adapterManager.close();
+            } catch(final Throwable ex) {
+                // ignore
+                LOG.error("adapterManager#close() failed while closing the session; continuing to avoid memory leakage");
+            }
+
+        } finally {
+            setState(State.CLOSED);
         }
 
-        try {
-            adapterManager.close();
-        } catch(final RuntimeException ex) {
-            // ignore
-        }
-
-        setState(State.CLOSED);
     }
 
 

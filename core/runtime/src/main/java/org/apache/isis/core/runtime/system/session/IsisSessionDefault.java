@@ -102,8 +102,16 @@ public class IsisSessionDefault implements IsisSession {
      */
     @Override
     public void close() {
-        takeSnapshot();
-        getPersistenceSession().close();
+        try {
+            takeSnapshot();
+        } catch(Throwable ex) {
+            LOG.error("Failed to takeSnapshot while closing the session; continuing to avoid memory leakage");
+        }
+
+        final PersistenceSession persistenceSession = getPersistenceSession();
+        if(persistenceSession != null) {
+            persistenceSession.close();
+        }
     }
 
     // //////////////////////////////////////////////////////

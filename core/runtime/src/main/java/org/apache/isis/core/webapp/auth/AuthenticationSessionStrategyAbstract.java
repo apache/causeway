@@ -20,13 +20,15 @@ package org.apache.isis.core.webapp.auth;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 public abstract class AuthenticationSessionStrategyAbstract implements AuthenticationSessionStrategy {
+
+    public static final int STATUS_UNAUTHORIZED = 401;
 
     protected HttpSession getHttpSession(final ServletRequest servletRequest) {
         final HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
@@ -39,8 +41,14 @@ public abstract class AuthenticationSessionStrategyAbstract implements Authentic
     }
 
     @Override
-    public void bind(final ServletRequest servletRequest, final ServletResponse servletResponse, final AuthenticationSession authSession) {
+    public void bind(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final AuthenticationSession authSession) {
         // no-op
+    }
+
+    @Override
+    public void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse) {
+        bind(httpServletRequest, httpServletResponse, null);
+        httpServletResponse.setStatus(STATUS_UNAUTHORIZED);
     }
 
 }

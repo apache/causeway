@@ -35,7 +35,7 @@ public interface RendererContext {
     public String urlFor(final String url);
 
     public AuthenticationSession getAuthenticationSession();
-    
+
     public IsisConfiguration getConfiguration();
     
     public PersistenceSession getPersistenceSession();

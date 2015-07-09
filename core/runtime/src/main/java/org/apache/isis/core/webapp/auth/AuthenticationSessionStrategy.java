@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.webapp.auth;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -37,7 +37,9 @@ public interface AuthenticationSessionStrategy {
      * {@link AuthenticationManager#isSessionValid(AuthenticationSession)
      * still-valid} {@link AuthenticationSession}.
      */
-    AuthenticationSession lookupValid(ServletRequest servletRequest, ServletResponse servletResponse);
+    AuthenticationSession lookupValid(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse);
 
-    void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession);
+    void bind(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse, final AuthenticationSession authSession);
+
+    void invalidate(final HttpServletRequest httpServletRequest, final HttpServletResponse httpServletResponse);
 }
