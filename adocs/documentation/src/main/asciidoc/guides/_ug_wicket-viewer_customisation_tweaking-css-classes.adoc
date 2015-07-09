@@ -26,23 +26,21 @@ For example, the `ToDoItem` object of the Isis addons example https://github.com
 [source,html]
 ----
 <div>
-    <div class="property ToDoItem-notes">
-        <div class="multiLineStringPanel scalarNameAndValueComponentType">
-            <label for="id83" title="">
-                <span class="scalarName">Notes</span>
-                <span class="scalarValue">
-                    <textarea
-                        name="middleColumn:memberGroup:1:properties:4:property:scalarIfRegular:scalarValue"
-                        disabled="disabled"
-                        id="id83" rows="5" maxlength="400" size="125"
-                        title="">
-                    </textarea>
-                    <span>
-                    </span>
-                </span>
-            </label>
-       </div>
+  <div class="property ToDoItem-notes">
+    <div class="multiLineStringPanel scalarNameAndValueComponentType">
+      <label for="id83" title="">
+        <span class="scalarName">Notes</span>
+        <span class="scalarValue">
+           <textarea
+              name="middleColumn:memberGroup:1:properties:4:property:scalarIfRegular:scalarValue"
+              disabled="disabled"
+              id="id83" rows="5" maxlength="400" size="125"
+              title="">
+           </textarea>
+         <span>
+      </label>
     </div>
+  </div>
 </div>
 ----
 
