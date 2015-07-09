@@ -77,7 +77,7 @@ can be used instead, eg:
 ====
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather frustrating to have to annotate every property.
 
-Instead, a default can be specified using a xref:ug.adoc#_ug_runtime_configuring-core[configuration property] in `isis.properties`:
+Instead, a default can be specified using a xref:rg.adoc#_rg_runtime_configuring-core[configuration property] in `isis.properties`:
 
 [source,ini]
 ----

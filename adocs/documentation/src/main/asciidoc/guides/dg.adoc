@@ -5,11 +5,14 @@
 :_imagesdir: images/
 
 
-pass:[<br/><br/>]
+== Developers' Guide
 
-This guide describes how to build an Isis applications either from the command line (as per your link:http://en.wikipedia.org/wiki/Continuous_integration[continuous integration] server or within an IDE.
+This developers' guide describes how to set up your development environment to develop your Apache Isis applications either within the xref:dg.adoc#_dg_intellij[IntelliJ] IDE, or within the xref:dg.adoc#_dg_eclipse[Eclipse] IDE, or from the xref:dg.adoc#_dg_cmd-line[command line].
 
-include::_dg_cmd-line.adoc[leveloffset=+1]
+The developer' guide is _not_ intended as a reference manual; for that see the link:rg.html#[Reference Guide].  This guide also does _not_ describe how to actually build an Apache Isis application; for that see the link:ug.html#[Users' Guide].
+
+
 include::_dg_intellij.adoc[leveloffset=+1]
 include::_dg_eclipse.adoc[leveloffset=+1]
+include::_dg_cmd-line.adoc[leveloffset=+1]
 

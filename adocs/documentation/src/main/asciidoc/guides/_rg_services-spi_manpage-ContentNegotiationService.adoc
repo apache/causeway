@@ -171,14 +171,14 @@ image::{_imagesdir}reference-services-spi/ContentNegotiationService/accept-json.
 [_rg_services-spi_manpage-ContentNegotiationService_Configuration]]
 == Configuration
 
-The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:ug.adoc#_ug_runtime_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
+The default `ContentNegotiationServiceXRoDomainType` implementation provides a xref:rg.adoc#_rg_runtime_configuring-core[configuration property] which controls whether a mapped domain object is pretty-printed (formatted, indented) or not:
 
 [source,ini]
 ----
 isis.services.ContentNegotiationServiceXRoDomainType.prettyPrint=true
 ----
 
-If the property is not set, then the default depends on the xref:ug.adoc#_ug_runtime_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
+If the property is not set, then the default depends on the xref:rg.adoc#_rg_runtime_deployment-types[deployment type]; production mode will disable pretty printing, while prototyping mode will enable it.
 
 
 

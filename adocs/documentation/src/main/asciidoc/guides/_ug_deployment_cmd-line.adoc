@@ -7,19 +7,119 @@
 NOTE: TODO
 
 
-## `WebServer` class
+== `WebServer` class
 
-`org.apache.isis.WebServer`
+The `org.apache.isis.WebServer` utility class provides a `main(String[])` method so that an Apache Isis application can be run from within the IDE or command line, without the need to package the app as a WAR file and deploying to a servlet container.  Internally the class it uses jetty to programmatically bootstrap the app.
 
-For example:
-* `--fixture`
-* `--services`
+The utility class also supports a number of command line arguments:
 
-etc...
+.Command line args for `org.apache.isis.Webserver`
+[cols="1,1,1,2", options="header"]
+|===
+| Flag 
+| Long format
+| Values (default)
+| Description
+
+|-t
+|--type
+|`server_prototype`,`server` +
+(`server`)
+|Deployment type
+
+|-f
+|--fixture
+|
+|
+
+|-u
+|--user
+|
+|
+
+|-p
+|--password
+|
+|
+
+|-D
+|
+|
+|Additional property, in form `-Dxxx=yyy`
+
+|-h
+|--help
+|
+|
+
+
+|===
 
 
 
-## `Dummy` class
+The utility class also supports a number of other flags, but their usage is extremely rare (and some may be removed in the future):
+
+.Command line args for `org.apache.isis.Webserver`
+[cols="1,1,1,2", options="header"]
+|===
+| Flag
+| Long format
+| Values (default)
+| Description
+
+
+|-l
+|--reflector
+|FQCN
+|Implementing `ObjectReflectorInstaller`
+
+|-r
+|--persistor
+|FQCN
+|implementing `PersistenceMechanismInstaller`
+
+|-c
+|--config
+|
+|
+
+|-s
+|--nosplash
+|
+|
+
+|
+|--diagnostics
+|
+|
+
+|
+|--version
+|
+|
+
+
+|
+|--debug
+|
+|
+
+|
+|--verbose
+|
+|
+
+|
+|--quiet
+|
+|
+
+
+|===
+
+
+
+== `Dummy` class
 
 `org.apache.isis.Dummy`
 

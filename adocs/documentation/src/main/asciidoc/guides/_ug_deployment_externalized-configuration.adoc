@@ -6,7 +6,7 @@
 
 
 
-As described xref:ug.adoc#_ug_runtime_configuration-files[here], by default Apache Isis itself bootstraps from the `isis.properties` configuration file.  It will also read configuration from the (optional) component/implementation-specific configuration files (such as
+As described xref:rg.adoc#_rg_runtime_configuration-files[here], by default Apache Isis itself bootstraps from the `isis.properties` configuration file.  It will also read configuration from the (optional) component/implementation-specific configuration files (such as
 `persistor_datanucleus.properties` or `viewer_wicket.properties`), and also (optional) component-specific configuration
 files (such as `persistor.properties` or `viewer.properties`).
 

@@ -45,7 +45,7 @@ To use this service the following properties must be configured:
 * `isis.service.email.sender.address`
 * `isis.service.email.sender.password`
 
-and these properties may optionally be configured (each has a default to use gmail, documented xref:ug.adoc#_ug_runtime_configuring-core[here]):
+and these properties may optionally be configured (each has a default to use gmail, documented xref:rg.adoc#_rg_runtime_configuring-core[here]):
 
 * `isis.service.email.sender.hostname`
 * `isis.service.email.port`

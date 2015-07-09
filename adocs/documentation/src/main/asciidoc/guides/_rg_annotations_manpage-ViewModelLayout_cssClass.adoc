@@ -6,7 +6,7 @@
 
 
 
-The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:ug.adoc#_ug_runtime_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
+The `cssClass()` attribute can be used to render additional CSS classes in the HTML (a wrapping `<div>`) that represents the view model.   xref:rg.adoc#_rg_runtime_application-specific_application-css[Application-specific CSS] can then be used to target and adjust the UI representation of that particular element.
 
 This attribute can also be applied to xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClass[domain objects], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[actions] xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_cssClass[properties],  xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_cssClass[collections] and xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_cssClass[parameters].
 

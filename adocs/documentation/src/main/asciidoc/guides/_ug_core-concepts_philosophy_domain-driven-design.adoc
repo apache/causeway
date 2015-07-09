@@ -4,8 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-This section describes some of the core ideas and architectural patterns upon which Apache Isis builds.
-
 There's no doubt that we developers love the challenge of understanding and deploying complex technologies. But understanding the nuances and subtleties of the business domain itself is just as great a challenge, perhaps more so. If we devoted our efforts to understanding and addressing those subtleties, we could build better, cleaner, and more maintainable software that did a better job for our stakeholders. And there's no doubt that our stakeholders would thank us for it.
 
 A couple of years back Eric Evans wrote his book link:http://www.amazon.co.uk/Domain-driven-Design-Tackling-Complexity-Software/dp/0321125215[Domain-Driven Design], which is well on its way to becoming a seminal work. In fact, most if not all of the ideas in Evans' book have been expressed before, but what he did was pull those ideas together to show how predominantly object-oriented techniques can be used to develop rich, deep, insightful, and ultimately useful business applications.

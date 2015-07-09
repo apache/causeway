@@ -23,7 +23,7 @@ Apache Isis has two public mailing lists.
 |Subscribe
 
 
-|Users</t>
+|Users
 |link:mailto:users@isis.apache.org[users@isis.apache.org]
 |link:http://mail-archives.apache.org/mod_mbox/isis-users/[TLP only]
 |link:http://markmail.org/search/isis-users+list:org.apache.incubator.isis-users[TLP + incubating]

@@ -78,4 +78,4 @@ The most common use case is to allow users to sign-up through Apache Isis' Wicke
 * xref:rg.adoc#_rg_services-spi_manpage-EmailNotificationService[`EmailNotificationService`]
 * `UserRegistrationService` (this service)
 
-The `EmailService` in particular requires additional xref:ug.adoc#_ug_runtime_configuring-core[configuration properties] to specify the external SMTP service.
+The `EmailService` in particular requires additional xref:rg.adoc#_rg_runtime_configuring-core[configuration properties] to specify the external SMTP service.

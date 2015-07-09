@@ -29,6 +29,6 @@ public class OrderAnalysis {
 ----
 
 
-It is also possible to specify a global default for the page size of standalone collections, using the xref:ug.adoc#_ug_runtime_configuring-core[configuration property] `isis.viewer.paged.standalone`.
+It is also possible to specify a global default for the page size of standalone collections, using the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.viewer.paged.standalone`.
 
 

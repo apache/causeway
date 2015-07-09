@@ -31,4 +31,4 @@ You can hint the JVM to unload dynamically created classes which ClassLoaders ar
 
 == Using a JNDI Datasource
 
-See the guidance in the xref:ug.adoc#_ug_runtime_configuring-datanucleus_using-jndi-data-source[configuring datanucleus] section.
+See the guidance in the xref:rg.adoc#_rg_runtime_configuring-datanucleus_using-jndi-data-source[configuring datanucleus] section.

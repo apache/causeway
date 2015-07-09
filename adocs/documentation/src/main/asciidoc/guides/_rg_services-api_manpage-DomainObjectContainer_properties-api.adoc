@@ -9,7 +9,7 @@
 
 = Properties API
 
-The properties API allows domain objects to read the configuration properties aggregated from the various xref:ug.adoc#_ug_runtime_configuration-files[configuration files].
+The properties API allows domain objects to read the configuration properties aggregated from the various xref:rg.adoc#_rg_runtime_configuration-files[configuration files].
 
 [source,java]
 ----

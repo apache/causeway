@@ -27,7 +27,7 @@ In the form shown above the method can either accept no arguments.  Alternativel
 @Programmatic
 public void postConstruct(Map<String,String> properties) { ... }
 ----
-Isis uses argument to pass in the configuration properties read from all xref:ug.adoc#_ug_runtime_configuration-files[configuration files]:
+Isis uses argument to pass in the configuration properties read from all xref:rg.adoc#_rg_runtime_configuration-files[configuration files]:
 
 [TIP]
 ====

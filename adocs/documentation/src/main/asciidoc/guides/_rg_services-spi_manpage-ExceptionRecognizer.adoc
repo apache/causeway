@@ -121,5 +121,5 @@ Prior to 1.9.0, the `ExceptionRecognizerCompositeForJdoObjectStore` also require
 ====
 
 
-If the JDO exception recognizers are not required (rather unlikely), then they can be disabled en-masse using the xref:ug.adoc#_ug_runtime_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`.
+If the JDO exception recognizers are not required (rather unlikely), then they can be disabled en-masse using the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`.
 
