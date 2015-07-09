@@ -154,11 +154,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
             final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
 
-            // rather than reinvent too much of the wheel, we reuse the same properties that DN would check
+            // rather than reinvent too much of the wheel, we reuse the same property that DN would check
             // for if it were doing the auto-creation itself (read from isis.properties)
-            final boolean createSchema =
-                    isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA) ||
-                            isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
+            final boolean createSchema = isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
             if (!createSchema) {
                 return;
             }

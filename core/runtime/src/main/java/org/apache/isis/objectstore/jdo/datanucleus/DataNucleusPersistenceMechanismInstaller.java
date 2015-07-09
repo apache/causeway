@@ -26,6 +26,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import org.datanucleus.PropertyNames;
+import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,15 +141,17 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
             final Map<String, String> props) {
         
         // new feature in DN 3.2.3; enables dependency injection into entities
-        putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, "org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis");
+        putIfNotPresent(props, PropertyNames.PROPERTY_OBJECT_PROVIDER_CLASS_NAME, JDOStateManagerForIsis.class.getName());
         
-        putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory");
+        putIfNotPresent(props, "javax.jdo.PersistenceManagerFactoryClass", JDOPersistenceManagerFactory.class.getName());
 
-        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, "true");
-        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, "true");
+        // previously we defaulted this property to "true", but that could cause the target database to be modified
+        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, Boolean.FALSE.toString());
+
+        putIfNotPresent(props, PropertyNames.PROPERTY_SCHEMA_VALIDATE_ALL, Boolean.TRUE.toString());
         putIfNotPresent(props, PropertyNames.PROPERTY_CACHE_L2_TYPE, "none");
 
-        putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, "true");
+        putIfNotPresent(props, PropertyNames.PROPERTY_PERSISTENCE_UNIT_LOAD_CLASSES, Boolean.TRUE.toString());
 
         String connectionFactoryName = props.get(PropertyNames.PROPERTY_CONNECTION_FACTORY_NAME);
         if(connectionFactoryName != null) {
