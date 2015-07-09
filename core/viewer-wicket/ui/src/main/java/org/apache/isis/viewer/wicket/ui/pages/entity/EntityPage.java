@@ -29,6 +29,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
+
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -143,6 +145,11 @@ public class EntityPage extends PageAbstract {
         final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, objectAdapter, Where.NOWHERE));
 
         if(visibleAssociation.isEmpty()) {
+            final List<ObjectAssociation> anyAssociations = specification.getAssociations(Contributed.INCLUDED);
+            if(anyAssociations.isEmpty()) {
+                throw new NonRecoverableException(String.format(
+                        "No properties are defined for this entity type (%s); this is probably a programming error", specification.getFullIdentifier()));
+            }
             throw new ObjectMember.AuthorizationException();
         }
 
