@@ -201,7 +201,7 @@ For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-
 @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
     @javax.jdo.annotations.Column(name = "attachment_name"),
     @javax.jdo.annotations.Column(name = "attachment_mimetype"),
-    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "BLOB")
+    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "LONGVARBINARY")
 })
 private Blob attachment;
 @Property(
@@ -224,7 +224,8 @@ If the `Blob` is mandatory, then use:
 @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
     @javax.jdo.annotations.Column(name = "attachment_name", allowsNull="false"),
     @javax.jdo.annotations.Column(name = "attachment_mimetype", allowsNull="false"),
-    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "BLOB",
+    @javax.jdo.annotations.Column(name = "attachment_bytes",
+                                  jdbcType="BLOB", sqlType = "LONGVARBINARY",
                                   allowsNull="false")
 })
 private Blob attachment;
@@ -239,16 +240,23 @@ this.attachment = attachment;
 }
 ----
 
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARBINARY" does not work, try instead "BLOB".  There can be differences in behaviour between JDBC drivers.
+====
+
+
 === Mapping Clobs
 
-Mapping `Clob`s works in a very similar way, but the `@Column#sqlType` attribute will be `CLOB`:
+Mapping `Clob`s works in a very similar way, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
 
 [source,java]
 ----
 @javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
     @javax.jdo.annotations.Column(name = "attachment_name"),
     @javax.jdo.annotations.Column(name = "attachment_mimetype"),
-    @javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "CLOB")
+    @javax.jdo.annotations.Column(name = "attachment_chars",
+                                  jdbcType="CLOB", sqlType = "LONGVARCHAR")
 })
 private Clob doc;
 @Property(
@@ -262,18 +270,26 @@ public void setDoc(final Clob doc) {
 }
 ----
 
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".  There can be differences in behaviour between JDBC drivers.
+====
 
 === Mapping to VARBINARY or VARCHAR
 
-Instead of mapping to a `Blob` or `Clob` datatype, you might also specify map to a `VARBINARY` or `VARCHAR`. In this case you will need to specify a length. For example:
+Instead of mapping to a sqlType of `LONGVARBINARY` (or perhaps `BLOB`), you might instead decide to map to a `VARBINARY`.  The difference is whether the binary data is held "on-row" or as a pointer "off-row"; with a `VARBINARY` the data is held on-row and so you will need to specify a length.
+
+For example:
 
 
 [source,java]
 ----
-@javax.jdo.annotations.Column(name = "attachment_bytes", sqlType = "VARBINARY", length=2048)
+@javax.jdo.annotations.Column(name = "attachment_bytes", jdbcTypr="BLOB", sqlType = "VARBINARY", length=2048)
 ----
 
-or
+
+The same argument applies to `LONGVARCHAR` (or `CLOB`); you could instead map to a regular `VARCHAR`:
+
 
 [source,java]
 ----

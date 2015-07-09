@@ -100,4 +100,10 @@ public final class Clob implements NamedWithMimeType, Serializable {
             }
         });
     }
+
+    @Override
+    public String toString() {
+        return getName() + " [" + getMimeType().getBaseType() + "]: " + getChars().length() + " chars";
+    }
+
 }
