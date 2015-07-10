@@ -920,7 +920,7 @@
                     <configuration>
                         <rules>
                             <requireMavenVersion>
-                                <version>[3.0.5,)</version>
+                                <version>[3.0.4,)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
                                 <version>[1.8.0,)</version>
@@ -1951,7 +1951,6 @@ ${license.additional-notes}
         </site>
     </distributionManagement>
     -->
-
     <profiles>
         <profile>
             <id>m2e</id>
