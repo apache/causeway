@@ -12,6 +12,7 @@ This chapter provides guidance for Apache Isis' own committers.
 // for some reason this doesn't seem to include:: correctly; that said, it's incomplete anyway
 //include::_cg_committers_applying-patches.adoc[leveloffset=+1]
 
+include::_cg_committers_merging-a-pull-request.adoc[leveloffset=+1]
 include::_cg_committers_recreating-an-archetype.adoc[leveloffset=+1]
 include::_cg_committers_cutting-a-release.adoc[leveloffset=+1]
 include::_cg_committers_cutting-a-release-one-pager.adoc[leveloffset=+1]

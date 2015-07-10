@@ -1,0 +1,76 @@
+[[_cg_committers_merging-a-pull-request]]
+= Merging a Pull Request
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+The process for merging in github pull requests (so that they can be tested locally before committing) has been scripted in the `github-pr.sh` script.
+
+The script will merge the fork into a temporary branch, and then run a build.  Once you are happy, you can commit.
+
+The overall process is as follows:
+
+* locate/raise JIRA ticket, eg ISIS-1162
+* checkout branch from which PR was forked (usually just 'master')
+* merge PR into temporary branch using the `github-pr.sh` script
+* test the change locally (run the app, rebuild, manual regression tests etc)
+* merge temporary branch into mainline, and commit
+
+
+For example:
+
+[source,bash]
+----
+github-pr.sh isis 1162 31
+----
+
+where
+* `isis` is the JIRA project and repo
+* `1162` is the JIRA ticket number
+* `31`   is the gthub PR issue number
+
+
+== Prerequisites
+
+The script uses 'jq' to parse JSON.  To install:
+
+* on Linux: +
++
+[source,bash]
+----
+aptitude install jq
+----
+
+* on MacOS: +
++
+[source,bash]
+----
+brew install jq
+----
+
+* on Windows: +
++
+Download exe from http://stedolan.github.io/jq/download/[website]
+
+
+== Example transcript
+
+[source,bash]
+----
+
+...
+Checkout out local branch - master ...
+Switched to branch 'master'
+Your branch is ahead of 'estatio/master' by 2 commits.
+  (use "git push" to publish your local commits)
+
+If build successful and happy to merge, execute:
+
+git merge --ff-only ISIS-1162_pr-31 && git push origin master && git branch -d ISIS-1162_pr-31
+----
+
+
+
+
