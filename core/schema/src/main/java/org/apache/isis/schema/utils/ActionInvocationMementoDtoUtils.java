@@ -50,12 +50,12 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.schema.aim.v1_0.ActionInvocationMementoDto;
-import org.apache.isis.schema.aim.v1_0.ParamDto;
-import org.apache.isis.schema.common.v1_0.BookmarkObjectState;
-import org.apache.isis.schema.common.v1_0.OidDto;
-import org.apache.isis.schema.common.v1_0.ValueDto;
-import org.apache.isis.schema.common.v1_0.ValueType;
+import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
+import org.apache.isis.schema.aim.v1.ParamDto;
+import org.apache.isis.schema.common.v1.BookmarkObjectState;
+import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v1.ValueDto;
+import org.apache.isis.schema.common.v1.ValueType;
 import org.apache.isis.schema.utils.jaxbadapters.JavaSqlTimestampXmlGregorianCalendarAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.JodaDateTimeXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalDateTimeXMLGregorianCalendarAdapter;

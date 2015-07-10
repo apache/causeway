@@ -13,9 +13,9 @@ import org.joda.time.LocalTime;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
-import org.apache.isis.schema.aim.v1_0.ActionInvocationMementoDto;
-import org.apache.isis.schema.common.v1_0.OidDto;
-import org.apache.isis.schema.common.v1_0.ValueType;
+import org.apache.isis.schema.aim.v1.ActionInvocationMementoDto;
+import org.apache.isis.schema.common.v1.OidDto;
+import org.apache.isis.schema.common.v1.ValueType;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
