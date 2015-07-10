@@ -4,24 +4,31 @@
 set -o nounset
 set -o errexit
 
+
 #
-# Merges Pull Requests into 'https://github.com/apache/isis' 
+# Merges github PRs into local git clone of ASF project 
+# ('https://github.com/apache/xxx') 
 #
-# Uses 'jq' to parse JSON
+# Process:
+# - locate/raise JIRA ticket, eg ISIS-1162
+# - checkout branch from which PR was forked (usually just 'master')
+# - merge PR into temporary branch using this script
+# - check build
+# - merge temporary branch into mainline, and commit
+#
+#
+# Usage: github-pr.sh isis 1162 31
+#
+#        where 
+#               - isis is the JIRA project and repo
+#               - 1162 is the JIRA ticket number
+#               - 31   is the gthub PR issue number
+#
+# uses 'jq' to parse JSON
 # - on Linux: aptitude install jq
 # - on Mac: brew install jq 
 # - on Windows: download exe from http://stedolan.github.io/jq/download/
 #
-# process:
-# - locate/raise JIRA ticket, eg ISIS-1162
-# - checkout branch from which PR was forked (usually just 'master')
-# - merge PR using this script
-#
-# Usage: github-pr.sh ISIS-1162 31
-#
-# where 1162 is the JIRA ticket number, and 31 is the gthub PR issue number
-#
-
 
 function die {
 	local prefix="[$(date +%Y/%m/%d\ %H:%M:%S)]: "
@@ -33,12 +40,17 @@ function die {
 #
 # validate script args
 #
-if [ $# -ne 2 ]; then
-    die "usage: github-pr.sh ISIS-nnn pp"
+if [ $# -ne 3 ]; then
+    die "usage: github-pr.sh proj nnn pp"
 fi
 
-jira_number=$1
-pr_number=$2
+project=$1
+jira_suffix=$2
+pr_number=$3
+project_lower=$(echo $project | tr '[:upper:]' '[:lower:]')
+project_upper=$(echo $project | tr '[:lower:]' '[:upper:]')
+
+jira_number="$project_upper-$jira_suffix"
 
 echo ""
 
@@ -65,7 +77,7 @@ echo "Found JIRA ticket"
 #
 # validate github PR
 #
-github_url="https://api.github.com/repos/apache/isis/pulls/$pr_number"
+github_url="https://api.github.com/repos/apache/$project_lower/pulls/$pr_number"
 github_json=$(curl -s $github_url)
 if [ $? -ne 0 ]; then
     die "Failed to query github for PR; url: $github_url"
@@ -84,7 +96,7 @@ repo_full_name=$(echo $github_json | jq --raw-output '.head .repo .full_name')
 repo_clone_url=$(echo $github_json | jq --raw-output '.head .repo .clone_url')
 branch_name_fork=$(echo $github_json | jq --raw-output '.head .ref')
 
-branch_name_temp="$jira_number-pr-$pr_number"
+branch_name_temp="${jira_number}_pr-$pr_number"
 
 echo "branch_name_local: $branch_name_local"
 echo "username         : $username"
@@ -107,7 +119,7 @@ echo "Creating the branch $branch_name_temp"
 git checkout -b $branch_name_temp $branch_name_local
 
 echo "Pulling the changes from $repo_clone_url $branch_name_fork"
-git pull --rebase $repo_clone_url $branch_name_fork
+git pull $repo_clone_url $branch_name_fork
 
 echo ""
 echo "Merged the PR; hit enter to build"
@@ -118,13 +130,15 @@ echo
 
 mvn clean install -o
 
-echo "Checking out the main branch - $branch_name_local ..."
+echo
+echo
+echo "Checkout out local branch - $branch_name_local ..."
 git checkout $branch_name_local
 
 
-echo
+
 echo
 echo "If build successful and happy to merge, execute:"
 echo
-echo "git merge $branch_name_temp && git push origin $branch_name_local && git branch -d $branch_name_temp"
+echo "git merge --ff-only $branch_name_temp && git push origin $branch_name_local && git branch -d $branch_name_temp"
 echo
