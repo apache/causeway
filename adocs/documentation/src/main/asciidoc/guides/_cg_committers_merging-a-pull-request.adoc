@@ -16,6 +16,7 @@ The overall process is as follows:
 * checkout branch from which PR was forked (usually just 'master')
 * merge PR into temporary branch using the `github-pr.sh` script
 * test the change locally (run the app, rebuild, manual regression tests etc)
+* if required, tidy up/refactor code as required
 * merge temporary branch into mainline, and commit
 
 
@@ -91,13 +92,9 @@ The build now commences.  Once done, the script continues:
 
 [source,bash]
 ----
-Checkout out local branch 'master' ...
-Switched to branch 'master'
-...
-
 If build successful and happy to merge, execute:
 
-git merge --ff-only ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
+git checkout master && git merge --no-ff ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
 ----
 
 
