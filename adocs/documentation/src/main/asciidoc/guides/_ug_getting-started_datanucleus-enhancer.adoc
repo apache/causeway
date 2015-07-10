@@ -103,5 +103,5 @@ Again, the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archet
 ====
 If running on Windows, then there's a good chance you'll hit the http://msdn.microsoft.com/en-us/library/aa365247%28VS.85%29.aspx#maxpath[maximum path length limit].   In this case the `persistence.xml` file is mandatory rather than optional.
 
-This file is also required if you are using developing in Eclipse and relying on the DataNucleus plugin for Eclipse rather than the DataNucleus plugin for Maven.  More information can be found link:dg.adoc#_dg_eclipse[here].
+This file is also required if you are using developing in Eclipse and relying on the DataNucleus plugin for Eclipse rather than the DataNucleus plugin for Maven.  More information can be found xref:cg.adoc#_cg_ide_eclipse[here].
 ====

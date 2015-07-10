@@ -19,12 +19,11 @@ Notice: Licensed to the Apache Software Foundation (ASF) under one
  under the License.
 endif::env-github[]
 
-This directory contains the source documentation that constitutes both the Apache Isis website (including the user guide and reference guide)  It is written using http://www.methods.co.nz/asciidoc/[Asciidoc].
+This directory contains the source documentation that constitutes both the Apache Isis' documentation (meaning the website and the users' guide, the reference guide and contributors' guide)   It is written using http://www.methods.co.nz/asciidoc/[Asciidoc], specifically the link:asciidoctor.org/[Asciidoctor] implementation.
 
-The website is created by running build tools (documented below) which create the HTML version of the site and guides.  This HTML is then copied to a different git repository (link:https://git-wip-us.apache.org/repos/asf?p=isis-site.git[isis-site]) which is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
+The website is created by running build tools (documented below) which create the HTML version of the site and guides.  You can therefore easily check the documentation before raising a pull request
 
-If you want to contribute documentation - either just to fix a typo, or to write a how-to, or to write a longer article - then fork this repo, write the `.adoc` source file, and raise a pull request.
-
+So, if you want to contribute documentation - either just to fix a typo, or to write a how-to or longer article - then fork the repo, write or modify the the `.adoc` source file, and raise a pull request.
 
 
 == Naming Conventions
@@ -141,71 +140,5 @@ usage: monitor.rb [options]
 
 == Publish procedure
 
-Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].
+Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  See the link:http://isis.apache.org/guides/cg.html#_cg_asciidoc[committers' guide] (including a longer version of this page) for details.
 
-=== One-time setup
-
-The generated site is published by copying into the `content/` directory of the https://git-wip-us.apache.org/repos/asf/isis-site.git[isis-site git repo]. You therefore need to check this out this repo.
-
-The procedure assumes that two git repos (for https://git-wip-us.apache.org/repos/asf/isis.git[isis] itself and for isis-site) are checked out into the same parent directory, eg:
-
-[source]
-----
-/APACHE/
-    isis/                       # checkout of isis.git
-        adocs/
-            documentation/
-                README.adoc     # this file you are reading right now
-                ...
-    isis-site/                  # checkout of isis-site.git
-        content/                # the published website
-----
-
-If this isn't the case, then it is possible to override the relative directory by passing in a system property to the mvn goal; see below.
-
-You also need to know that ASF's publishing script work from the 'asf-site' branch, NOT from the 'master' branch. Therefore, in the `isis.git` repo site:
-
-[source]
-----
-git checkout asf-site
-----
-
-=== Publishing
-
-Back in the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo , run:
-
-[source]
-----
-mvn clean package
-----
-
-This deletes the entire content of `contents`, and replaces with the content under `target/site`.  It also fixes up line endings, standardizing on unix-style LFs.
-
-[TIP]
-====
-If you have checked out the `isis-site.git` repo into some other directory (relative to `isis.site.git), then this can be overridden by specifying `-Disis-site.dir=...` when calling `mvn`.
-====
-
-
-To copy and to also commit the generated documents to the `isis-site.git` repo , run:
-
-[source]
-----
-mvn clean install
-----
-
-This will use a standard commit message (in the `isis-site.git` repo).  If you want to specify a custom message, use:
-
-[source]
-----
-mvn clean install -Dmessage="ISIS-nnnn: a custom commit message"
-----
-
-Pushing the commits (in the `isis-site.git` directory, of course) will publishing the changes:
-
-[source]
-----
-git push
-----
-
-Double check at http://isis.apache.org[isis.apache.org].

@@ -87,7 +87,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer].  The archetype also configures the [JDO Objectstore](../../components/objectstores/jdo/about.html) to use an in-memory HSQLDB connection.
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
 
@@ -123,7 +123,7 @@ cd webapp
 mvn jetty:run
 ----
 
-If you use `mvn jetty:run`, then the context path changes; check the console output (eg link:[http://localhost:8080/myapp-webapp] [http://localhost:8080/myapp-webapp]).
+If you use `mvn jetty:run`, then the context path changes; check the console output (eg link:http://localhost:8080/myapp-webapp [http://localhost:8080/myapp-webapp]).
 
 
 You can also provide a system property to change the port:
@@ -143,7 +143,7 @@ You can also take the built WAR file and deploy it into a standalone servlet con
 
 === From within the IDE
 
-Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the link:dg.adoc[Developers' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ug.adoc#_ug_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
+Most of the time, though, you'll probably want to run the app from within your IDE.  The mechanics of doing this will vary by IDE; see the xref:cg.adoc#_cg_ide[Contributors' Guide] for details of setting up Eclipse or IntelliJ IDEA.  Basically, though, it amounts to running `org.apache.isis.WebServer`, and ensuring that the xref:ug.adoc#_ug_getting-started_datanucleus-enhancer[DataNucleus enhancer] has properly processed all domain entities.
 
 Here's what the setup looks like in IntelliJ IDEA:
 
@@ -252,22 +252,6 @@ which when invoked (with an HTTP GET) will return a representation of the domain
 image::{_imagesdir}getting-started/using-simple-app/250-list-all-results.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/250-list-all-results.png"]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 To log in, use `sven/pass`.
 
 
@@ -276,9 +260,9 @@ To log in, use `sven/pass`.
 
 == Modifying the App
 
-Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main [documentation](../../documentation.html) page first).
+Once you are familiar with the generated app, you'll want to start modifying it.  There is plenty of guidance on this site; check out the 'programming model how-tos' section on the main link:../documentation.html[documentation] page first).
 
-If you use Eclipse or IntelliJ IDEA, do also install the [Eclipse templates](../resources/editor-templates.html); these will help you follow the Apache Isis naming conventions.
+If you use Eclipse or IntelliJ IDEA, do also install the xref:cg.adoc#_cg_ide-templates[IDE templates]; these will help you follow the Apache Isis naming conventions.
 
 
 
@@ -288,13 +272,30 @@ If you use Eclipse or IntelliJ IDEA, do also install the [Eclipse templates](../
 
 As noted above, the generated app is a very simple application consisting of a single domain object that can be easily renamed and extended. The intention is not to showcase all of Apache Isis' capabilities; rather it is to allow you to very easily modify the generated application (eg rename `SimpleObject` to `Customer`) without having to waste time deleting lots of generated code.
 
-<table class="table table-striped table-bordered table-condensed">
-<tr><th>Module</th><th>Description</th></tr>
-<tr><td>myapp</td><td>The parent (aggregator) module</td></tr>
-<tr><td>myapp-dom</td><td>The domain object model, consisting of <tt>SimpleObject</tt> and <tt>SimpleObjects</tt> (repository) domain service.</td></tr>
-<tr><td>myapp-fixture</td><td>Domain object fixtures used for initializing the system when being demo'ed or for unit testing.</td></tr>
-<tr><td>myapp-integtests</td><td>End-to-end <a href="../../core/integtestsupport.html">integration tests</a>, that exercise from the UI through to the database</td></tr>
-<tr><td>myapp-webapp</td><td>Run as a webapp (from <tt>web.xml</tt>) using either the Wicket viewer or the Restful Objects viewer</td></tr>
-</table>
 
-If you run into issues, please don't hesitate to ask for help on the [users mailing list](../../support.html).
+
+[cols="1,3", options="header"]
+|===
+| Module
+| Description
+
+|`myapp`
+|The parent (aggregator) module
+
+|`myapp-dom`
+|The domain object model, consisting of `SimpleObject` and `SimpleObjects` (repository) domain service.
+
+|`myapp-fixture`
+|Domain object fixtures used for initializing the system when being demo'ed or for unit testing.
+
+|`myapp-integtests`
+|End-to-end xref:ug.adoc#_ug_testing_integ-test-support[integration tests] that exercise from the UI through to the database
+
+|`myapp-webapp`
+|Run as a webapp (from `web.xml`) hosting the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and/or the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]
+
+|===
+
+
+
+If you run into issues, please don't hesitate to ask for help on the link:http://isis.apache.org/help.html[users mailing list].

@@ -1,18 +1,15 @@
-[[contributing]]
+[[_cg_contributing]]
 = Contributing
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/><br/>]
 
-This page explains how you can contribute to Apache Isis. You'll probably also want link:development-environment.html[set up your development environment] and learn link:building-isis.html[how to build Apache Isis].
+This page explains how you can contribute to Apache Isis. You'll probably also want xref:cg.adoc#_cg_ide[set up your IDE] and learn xref:cg.adoc#_cg_building-isis[how to build Apache Isis].
 
 Thanks for considering to help out, your contributions are appreciated!
-
-
 
 
 == Recommended Workflow (github)
@@ -47,7 +44,7 @@ As an alternative, you may decide to clone directly from https://github.com/apac
 
 image::{_imagesdir}contributing/git-workflow-2.png[width="600px",link="{_imagesdir}contributing/git-workflow-2.png"]
 
-In this case your `upstream` repo is the same as your `origin` repo, which might seem more straightforward. On the other hand, if you go this route then you'll need create patches locally and attach them to the JIRA ticket. 
+In this case your `upstream` repo is the same as your `origin` repo, which might seem more straightforward. On the other hand, if you go this route then you'll need create patches locally and attach them to the JIRA ticket.
 
 For the Apache Isis committers it really doesn't matter which route you take, so go with whatever's most comfortable.
 
@@ -175,7 +172,7 @@ The command line prompt should also indicate you are on a branch, isolated from 
 
 === Make File Changes and Commit
 
-Next, make changes to your files using the usual commands (see also our link:git-cookbook.html[git cookbook] page):
+Next, make changes to your files using the usual commands (see also our xref:cg.adoc#_cg_git-cookbook[git cookbook] section):
 
 * `git add`
 * `git mv`
@@ -192,7 +189,7 @@ Continue this way until happy with the change. Remember to run all your tests on
 
 === Rebasing with `master`
 
-Before you can share your change, you should rebase (in other words replay) your changes on top of the `master` branch. 
+Before you can share your change, you should rebase (in other words replay) your changes on top of the `master` branch.
 
 The first thing to do is to pull down any changes made in upstream remote's `master` since you started your topic branch:
 

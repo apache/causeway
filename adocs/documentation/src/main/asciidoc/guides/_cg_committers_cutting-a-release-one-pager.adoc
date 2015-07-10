@@ -1,14 +1,14 @@
-[[release-process-1-pager]]
-= Release Process (1 pager)
+[[_cg_committers_cutting-a-release-one-pager]]
+= Cutting a release (1 pager)
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
 
-See also the link:release-process.html[full release process] and the link:release-checklist.html[release checklist].
+
+See also the xref:cg.adoc#_cg_release-process[full release process] and the xref:cg.adoc#_cg_committers_release-checklist[release checklist].
 
 
 
@@ -36,7 +36,7 @@ export ISISCOR="Y"
 env | grep ISIS | sort
 ----
 
-See link:recreating-an-archetype.html[here] for details on recreating and releasing an archetype. 
+See xref:cg.adoc#_cg_committers_recreating-an-archetype[here] for details on recreating and releasing an archetype.
 
 
 == Get code

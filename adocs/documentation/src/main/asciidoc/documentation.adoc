@@ -26,28 +26,24 @@ pass:[<br/>]
 * link:./powered-by.html[Powered by Apache Isis]
 * link:./how-isis-works.html[How Apache Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
 * link:./common-use-cases.html[Common Use Cases]
+
+
+|*Learning More*
+
 * link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
+* link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px",link="./screencasts.html]
+* link:./guides/tg.html[Tutorials]
 
 
-| *Archetypes and Apps:*
 
-* *link:./simpleapp-archetype.html[SimpleApp Archetype]*
-* http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink App] (not ASF)
+|*Resources:*
+
+* *link:./cheat-sheet.html[Cheat Sheet]*
+* link:./icons.html[Icons]
 
 *Isis Add-ons*
 
 * http://isisaddons.org[Isis addons] (not ASF)
-
-
-
-
-|*Development Environment:*
-
-* link:./guides/dg.html#_dg_intellij[Setting up IntelliJ]
-* link:./guides/dg.html#_dg_eclipse[Setting up Eclipse]
-* *link:./editor-templates.html[IDE templates]* (IntelliJ and Eclipse)
-
 
 
 |===
@@ -56,26 +52,49 @@ pass:[<br/>]
 [cols="1a,1a,1a"]
 |===
 
-|*User Guide:*
+|*Users' Guide:*
 
-Core concepts, how tos, more advanced techniques, Wicket viewer, Restful Objects viewer, security, configuration, deployment, testing, extending
+Core concepts, how tos and more advanced techniques, using and customizing the Wicket viewer & the Restful Objects viewer, security, testing
 
-pass:[<a class="button guide" href="./guides/ug.html" role="button" target="_blank">User Guide »</a>]
+pass:[<a class="button guide" href="./guides/ug.html" role="button" target="_blank">Users' Guide »</a>]
+
+including:
+
+* *link:./guides/ug.html#_ug_getting-started_simpleapp-archetype[Getting Started]* (SimpleApp Archetype)
+* link:./guides/ug.html#_ug_how-tos[How-tos]
+* link:./guides/ug.html#_ug_wicket-viewer[Customizing the Wicket Viewer]
+* link:./guides/ug.html#_ug_testing[Testing]
+* link:./guides/ug.html#_ug_extending[Extending]
+
 
 |*Reference Guide:*
 
-Annotations, reserved methods, method prefixes domain services (API and SPI), utility classes, object layout
+Programming model (annotations, methods), domain services (API and SPI), utility classes, UI layout, runtime configuration properties
 
 pass:[<a class="button guide" href="./guides/rg.html" role="button" target="_blank">Reference Guide »</a>]
 
+including:
 
-|*Resources:*
+* link:./guides/rg.html#_rg_annotations[Annotations]
+* *link:./guides/rg.html#_rg_methods[Methods]*
+* *link:./guides/rg.html#_rg_services-api[Domain Services API]*
+* link:./guides/rg.html#_rg_services-spi[Domain Services SPI]
+* link:./guides/rg.html#_rg_runtime[Configuration Properties]
 
-To save you time
 
-* *link:./editor-templates.html[IDE templates]* (IntelliJ and Eclipse)
-* *link:./cheat-sheet.html[Cheat Sheet]*
-* link:./icons.html[Icons]
+|*Contributors' Guide*
+
+IDE setup, build the framework, writing docs, how to contribute patches (pull requests); for committers: publishing docs, applying patches, release process.
+
+pass:[<a class="button guide" href="./guides/cg.html" role="button" target="_blank">Contributors' Guide »</a>]
+
+including:
+
+* Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
+* link:./guides/cg.html#_cg_ide-templates[*IDE templates*] (IntelliJ and Eclipse)
+* link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
+* link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release] (and link:./guides/cg.html#_cg_committers_cutting-a-release-one-pager[*one-pager*])
+
 
 
 |===
@@ -86,47 +105,31 @@ To save you time
 [cols="1a,1a,1a",frame="none"]
 |===
 
-|*Further resources:*
+|*Example Apps:*
 
-For digging deeper
+* http://github.com/estatio/estatio[Estatio] (not ASF)
+* http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink App] (not ASF)
 
-* link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px",link="./screencasts.html]
+
+
+
+|*Going Deeper:*
+
 * link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
-
 * link:./books.html[Books]
 * link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
 //* link:./downloadable-presentations.html[Downloadable Presentations]
 
-*Releases:*
+
+
+|*Releases:*
 
 * link:release-notes.html[Release Notes]
 * link:migration-notes.html[Migration Notes]
 
 
 
-|*Contributors:*
-
-* link:./contributing.html[Contributing]
-* link:./building-isis.html[Building Apache Isis]
-* link:./git-policy.html[Git Policy]
-* link:./git-cookbook.html[Git Cookbook]
-* link:./versioning-policy.html[Versioning Policy]
-
-
-|*Committers*:
-
-* link:./applying-patches.html[Applying Patches]
-* link:./recreating-an-archetype.html[Recreating an archetype]
-* link:./snapshot-process.html[Snapshot process]
-* link:./release-process.html[Release process] (link:./release-process-one-pager.html[one-pager])
-* link:./release-branch-and-tag-names.html[Release branch and tag names]
-* link:./verifying-releases.html[Verifying releases]
-* link:./key-generation.html[Key generation]
-
-
-*PMC*:
-
-* link:./pmc-notes.html[Notes]
 
 
 |====

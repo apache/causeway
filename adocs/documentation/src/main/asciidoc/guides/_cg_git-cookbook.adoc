@@ -1,21 +1,18 @@
-[[git-cookbook]]
-= Git Cookbook
+[[_cg_git-cookbook]]
+= Appendix: Git Cookbook
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
 
 
+This section describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
 
-
-This page describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
-
-* link:./building-isis.html[building Apache Isis]
-* link:./git-policy.html[Git policy]
-* link:./contributing.html[Contributing]
+* xref:cg.adoc#_cg_building-isis[building Apache Isis]
+* xref:cg.adoc#_cg_git-policy[Git policy]
+* xref:cg.adoc#_cg_contributing[Contributing]
 
 
 
@@ -88,7 +85,7 @@ git commit -m "ISIS-nnn: yada yada"
 
 == Common Workflows
 
-The link:./contributing.html[contributing] page describes the workflow for non-committers.  The link:./git-policy.html[Git policy] page describes a workflow for Apache Isis **committers**.
+The xref:cg.adoc#_cg_contributing[contributing] page describes the workflow for non-committers.  The xref:cg.adoc#_cg_git-policy[Git policy] page describes a workflow for Apache Isis **committers**.
 
 
 

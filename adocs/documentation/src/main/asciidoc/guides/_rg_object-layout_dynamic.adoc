@@ -105,7 +105,7 @@ Note also that the layout file may contain entries for xref:ug.adoc#_ug_how-tos_
 
 
 
-== Downloading an initial layout file
+== Downloading an initial layout
 
 The fastest way to get started is to use the (non-ASF) link:http://github.com/isisaddons/isis-module-devutils[Isis addons' devutils] module to download the layout file (derived from any existing static metadata defined by annotations).
 

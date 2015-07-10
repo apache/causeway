@@ -87,7 +87,7 @@ public class Parties ... { ... }
 Note that only the `menuOrder` of the _first_ domain service is significant in placing the menus along the menu bar;
 thereafter the purpose of the `menuOrder` is to order the menu services sections on the menu itself.
 
-== Ordering of a service's actions within a menu
+== Ordering menu actions
 
 For a given service, the actions within a section on a menu is determined by the `@MemberOrder` annotation. Thus, for
 the `Units` domain service, its actions are annotated:

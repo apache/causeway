@@ -1,20 +1,20 @@
-[[formal-release-process]]
-= Formal Release Process
+[[_cg_committers_cutting-a-release]]
+= Cutting a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
+
 
 This page details the process for formally releasing Isis modules.
 
-If you've done this before and just want the bare essentials, see this link:release-process-one-pager.html[one-pager]
+If you've done this before and just want the bare essentials, see this xref:cg.adoc#_cg_committers_cutting-a-release-one-pager[one-pager]
 (that also parameterizes some of the steps listed here 'long-hand'. There is also an experimental
-link:resources/release.sh[script] for automating the latter part of the process.
+link:http://isis.apache.org/resources/release.sh[script] for automating the latter part of the process.
 
-See also the link:release-checklist.html[release checklist] for keeping track of where you are while releasing (possibly multiple) components.
+See also the xref:cg.adoc#_cg_committers_release-checklist[release checklist] for keeping track of where you are while releasing Apache Isis component(s).
 
 
 
@@ -62,7 +62,7 @@ Before any of this can happen, there are a number of prerequisites, in terms of 
 
 ==== Public/private key
 
-The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on link:key-generation.html[key generation] for more details.
+The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on xref:cg.adoc#_cg_committers_key-generation[key generation] for more details.
 
 In order to prepare the release, you'll (need to) have a `~/.gnupg` directory with the relevant files (`gpg.conf`, `pubring.gpg`, `secring.gpg` etc), and have `gpg` on your operating system PATH.
 
@@ -135,7 +135,7 @@ git checkout master
 git pull --ff-only
 ----
 
-Then, determine/confirm the version number of the module being released. This should be in line with our link:versioning-policy.html[semantic versioning policy].
+Then, determine/confirm the version number of the module being released. This should be in line with our xref:cg.adoc#_cg_committers_versioning-policy[semantic versioning policy].
 
 Next, create a release branch in your local Git repo, using the version number determined and as per link:release-branch-and-tag-names.html[these standards]. For example, to prepare release candidate #1 for a release 1.9.0 of `core`, use:
 
@@ -644,7 +644,7 @@ Use `gpg --keyserver hkp://pgp.mit.edu --recv-keys nnnnnnnn` to confirm that the
 
 [NOTE]
 ====
-Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See link:key-generation.html[Key Generation] for more details.
+Unfortunately, Nexus does not seem to allow subkeys to be used for signing. See xref:cg.adoc#_cg_committers_key-generation[Key Generation] for more details.
 ====
 
 
@@ -706,7 +706,7 @@ For each zip there is a corresponding signature file (append .asc to the zip's u
 
 In the source code repo the code has been tagged as isis-1.8.0-RC1 and simpleapp-archetype-1.8.0-RC1.
 
-For instructions on how to verify the release (build from binaries and/or use in Maven directly), see http://isis.apache.org/contributors/verifying-releases.html
+For instructions on how to verify the release (build from binaries and/or use in Maven directly), see xref:cg.adoc#_cg_committers_verifying-releases[here]
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 
@@ -721,7 +721,7 @@ Remember to update:
 * the release candidate number (`RC1` or whatever)
 * the repository id, as provided by Nexus earlier (`orgapacheisis-10xx` or whatever)
 
-Note that the email also references the procedure for other committers to link:verifying-releases.html[verify the release].
+Note that the email also references the procedure for other committers to xref:cg.adoc#_cg_committers_verifying-releases[verify the release].
 
 == After the vote
 

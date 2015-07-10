@@ -19,10 +19,10 @@ For example:
 
 [source,java]
 ----
-@RequestScoped                                                  // <1>
+@RequestScoped                                                   // <1>
 @DomainService(nature=NatureOfService.DOMAIN)
 public class ObjectChangedListenerService
-        implements javax.jdo.listener.StoreLifecycleListener {   // <1>
+        implements javax.jdo.listener.StoreLifecycleListener {   // <2>
     @Programmatic
     @PostConstruct
     public void init() {
@@ -34,7 +34,7 @@ public class ObjectChangedListenerService
         getPmFactory().removeInstanceLifecycleListener(this);
     }
     private PersistenceManager getPersistenceManager() {
-        return jdoSupport.getPersistenceManager();              // <3>
+        return jdoSupport.getPersistenceManager();               // <3>
     }
     @Programmatic
     public void preStore (InstanceLifecycleEvent event) { ... }

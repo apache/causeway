@@ -1,18 +1,16 @@
-[[pmc-note]]
-= PMC Notes
+[[_cg_committers_pmc-notes]]
+= Project Management Committee (PMC)
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
+Every ASF project has a Project Management Committee, or PMC.  This committee is ultimately responsible for the long-term management of the framework.  More information about PMCs can be found link:http://www.apache.org/dev/pmc.html[here]
 
+In Apache Isis, every committer is a member of the PMC.
 
-[NOTE]
-====
-These are some general jottings on occasionally performed tasks by the PMC.  ASF documents can be found http://www.apache.org/dev/pmc.html[here]
-====
+This page contains some general notes on maintenance activities required by PMC members.
 
 
 
@@ -22,7 +20,7 @@ Must be accessed via ssh.
 
 eg:
 
-[source]
+[source,bash]
 ----
 ssh danhaywood@people.apache.org
 ----

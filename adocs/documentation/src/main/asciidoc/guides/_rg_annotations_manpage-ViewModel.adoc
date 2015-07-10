@@ -33,7 +33,7 @@ Note that there is a `DomainObjectContainer#newViewModelInstance(.)`; this is fo
 ====
 
 
-The view model's memento will be derived from the value of the view model object's properties. Any xref:rg.adoc#_rg_annotations_manpage-Property_notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any http://isis.apache.org/reference/recognized-annotations/Programmatic.html[@Programmatic] properties. Properties that are merely http://isis.apache.org/reference/recognized-annotations/Hidden-deprecated.html[@Hidden] are included in the memento.
+The view model's memento will be derived from the value of the view model object's properties. Any xref:rg.adoc#_rg_annotations_manpage-Property_notPersisted[`@Property#notPersisted()`] properties will be excluded from the memento, as will any xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] properties. Properties that are merely xref:rg.adoc#_rg_annotations_manpage-Property_hidden[hidden] _are_ included in the memento.
 
 Only properties supported by the configured xref:rg.adoc#_rg_services-api_manpage-MementoService[`MementoService`] can be used. The default implementation supports all the value types and persisted entities.
 

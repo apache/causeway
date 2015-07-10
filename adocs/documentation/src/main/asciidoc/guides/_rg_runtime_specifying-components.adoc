@@ -57,7 +57,7 @@ The values "datanucleus", "shiro" etc are actually aliases for concrete implemen
 
 It is -- at least in theory -- possible to specify a fully qualified class name to replace any of these components.  This is probably feasible for the two security APIs and the `services-installer` API; but replacing the persistor (JDO/DataNucleus) is much trickier because we rely on the JDO/DN for certain functionality (such as object dirtying and lazy loading) that is not defined within this API.
 
-As for the viewers, these are specified indirectly by way of the filters and servlets in the `web.xml` file (discussed xref:rg.adoc#_rg_runtime_web-xml[below]).  However, the configuration of which viewers to initialize is declared through a context parameter:
+As for the viewers, these are specified indirectly by way of the filters and servlets in the xref:rg.adoc#_rg_web-xml[`web.xml`] file.  However, the configuration of which viewers to initialize is declared through a context parameter:
 
 
 [source,xml]

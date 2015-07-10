@@ -1,0 +1,36 @@
+[[cg]]
+= Contributors Guide
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+:numbered:
+
+
+[[_cg]]
+== Contributors' Guide
+
+This contributors' guide has three related audiences:
+
+* programmers who want to just use Apache Isis to build applications, and want help setting up their development environment or to build their code from the command line (eg to execute within a continuous integration server such as Jenkins)
+
+* programmers who want to contribute back patches (bug fixes, new features) either to the codebase or the framework's documentation
+
+* committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
+
+The developer' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.
+
+
+include::_cg_ide.adoc[leveloffset=+1]
+include::_cg_ide-templates.adoc[leveloffset=+1]
+include::_cg_cmd-line.adoc[leveloffset=+1]
+include::_cg_isis-maven-plugin.adoc[leveloffset=+1]
+
+include::_cg_building-isis.adoc[leveloffset=+1]
+include::_cg_contributing.adoc[leveloffset=+1]
+include::_cg_policies.adoc[leveloffset=+1]
+
+include::_cg_asciidoc.adoc[leveloffset=+1]
+
+include::_cg_committers.adoc[leveloffset=+1]
+
+include::_cg_git-cookbook.adoc[leveloffset=+1]

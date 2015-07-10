@@ -1,12 +1,12 @@
-[[verify-releases-using-a-script]]
-= Verify releases using a script
+[[_cg_committers_verify-releases-using-a-script]]
+= Verify using a script
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
+
 
 To save some time in verifying an Apache Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
 
@@ -149,4 +149,4 @@ mvn clean install -o
 mvn -P self-host antrun:run
 ----
 
-If it runs up ok, then it's time to link:verifying-releases.html[vote]!
+If it runs up ok, then it's time to xref:cg.adoc#_cg_committers_verifying-releases[vote]!

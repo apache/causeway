@@ -1,13 +1,12 @@
 [[simpleapp-archetype]]
 = SimpleApp Archetype
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
 
-pass:[<br/><br/>]
 
 The quickest way to get started with Apache Isis is to run the simple archetype.  This will generate a very simple one-class domain model, called `SimpleObject`, with a single property `name`.  There is also a corresponding `SimpleObjectRepository` domain service.  From this you can easily rename these initial classes, and extend to build up your own Apache Isis domain application.
 
@@ -170,9 +169,9 @@ The app itself is configured to run using shiro security, as configured in the `
 
 == Modifying the App
 
-Once you are familiar with the generated app, you'll want to start modifying it.  Check out our the link:.guides/ug.html[User Guide], which has how-tos and a complete reference guide (as well as some background concepts and discussion of more advanced techniques).   
+Once you are familiar with the generated app, you'll want to start modifying it.  Check out our the link:.guides/ug.html[Users' Guide], which has how-tos and a complete reference guide (as well as some background concepts and discussion of more advanced techniques).
 
-If you use IntelliJ or Eclipse, you'll also want to set up your IDE; this is also described in the link:dg.adoc[Developers' Guide].
+If you use IntelliJ or Eclipse, you'll also want to set up your IDE; this is also described in the link:cg.adoc#_cg_ide[Contributors' Guide].
 
 
 == App Structure

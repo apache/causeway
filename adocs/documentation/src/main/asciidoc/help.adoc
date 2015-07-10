@@ -16,7 +16,7 @@ pass:[<br/><br/><br/>]
 * link:https://issues.apache.org/jira/browse/ISIS[JIRA]
 * link:http://github.com/apache/isis[Github mirror]
 * link:http://stackoverflow.com/questions/tagged/isis[Stack Overflow] (tagged=isis)
-* link:contributing.html[How to contribute]
+* link:guides/cg.html#_cg_contributing[How to contribute]
 
 
 

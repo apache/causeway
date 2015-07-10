@@ -1,22 +1,23 @@
-[[verifying-releases-using-creadur-tools]]
-= Verifying Releases using Creadur Tools
+[[_cg_committers_verifying-releases-using-creadur-tools]]
+= Verifying using Creadur
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
-:_basedir: ./
+:_basedir: ../
 :_imagesdir: images/
 :toc: right
 
 
-pass:[<br/><br/>]
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards. The main release auditing tool, http://creadur.apache.org/rat[Apache RAT], is used in the preparation of the release (as documented link:release-process.html[here]). Creadur's remaining tools are to support the verification process.
 
 At the time of writing, these additional tools are quite young and haven't been formally released; so to use them will take a little bit of work. In the future we expect these tools to mature and ease the effort required to verify releases.
 
+
+
 == Using the Tentacles tool
 
 At the time of writing the Tentacles tool hasn't been released, so you'll need to build from source:
 
-[source]
+[source,bash]
 ----
 mkdir /tmp/verify
 cd /tmp/verify
@@ -27,7 +28,7 @@ mvn clean install
 
 You can pull down a release, using a command such as:
 
-[source]
+[source,bash]
 ----
 cd /tmp/verify
 java -jar creadur-tentacles/target/apache-tentacles-0.1-SNAPSHOT.jar https://repository.apache.org/content/repositories/orgapacheisis-NNN/
