@@ -18,7 +18,13 @@
  */
 package org.apache.isis.security.shiro;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import javax.naming.AuthenticationException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
@@ -30,9 +36,7 @@ import javax.naming.ldap.LdapContext;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
-import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
-import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
+
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.config.Ini;
@@ -42,13 +46,17 @@ import org.apache.shiro.realm.ldap.LdapUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.StringUtils;
 
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapper;
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromIni;
+import org.apache.isis.security.shiro.permrolemapper.PermissionToRoleMapperFromString;
+
 /**
  * Implementation of {@link org.apache.shiro.realm.ldap.JndiLdapRealm} that also
  * returns each user's groups.
- * 
+ * <p/>
  * <p>
  * Sample config for <tt>shiro.ini</tt>:
- * 
+ * <p/>
  * <pre>
  * contextFactory = org.apache.isis.security.shiro.IsisLdapContextFactory
  * contextFactory.url = ldap://localhost:10389
@@ -56,10 +64,10 @@ import org.apache.shiro.util.StringUtils;
  * contextFactory.systemAuthenticationMechanism = simple
  * contextFactory.systemUsername = uid=admin,ou=system
  * contextFactory.systemPassword = secret
- * 
+ *
  * ldapRealm = org.apache.isis.security.shiro.IsisLdapRealm
  * ldapRealm.contextFactory = $contextFactory
- * 
+ *
  * ldapRealm.searchBase = ou=groups,o=mojo
  * ldapRealm.groupObjectClass = groupOfUniqueNames
  * ldapRealm.uniqueMemberAttribute = uniqueMember
@@ -79,21 +87,21 @@ import org.apache.shiro.util.StringUtils;
  *    HKG_USERS: user_role,\
  *    GLOBAL_ADMIN: admin_role,\
  *    DEMOS: self-install_role
- * 
+ *
  * securityManager.realms = $ldapRealm
  * </pre>
- * 
+ * <p/>
  * <p>
  * The permissions for each role can be specified using the
  * {@link #setResourcePath(String)} to an 'ini' file with a [roles] section, eg:
- * 
+ * <p/>
  * <pre>
  * ldapRealm.resourcePath=classpath:webapp/myroles.ini
  * </pre>
- *
+ * <p/>
  * <p>
  * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
- * 
+ * <p/>
  * <pre>
  * [roles]
  * user_role = *:ToDoItemsJdo:*:*,\
@@ -101,15 +109,15 @@ import org.apache.shiro.util.StringUtils;
  * self-install_role = *:ToDoItemsFixturesService:install:*
  * admin_role = *
  * </pre>
- * 
+ * <p/>
  * <p>
  * This 'ini' file can then be referenced by other realms (if multiple realm are configured
- * with the Shiro security manager). 
- * 
+ * with the Shiro security manager).
+ * <p/>
  * <p>
  * Alternatively, permissions can be set directly using {@link #setPermissionsByRole(String)},
  * where the string is the same information, formatted thus:
- * 
+ * <p/>
  * <pre>
  * ldapRealm.permissionsByRole=\
  *    user_role = *:ToDoItemsJdo:*:*,\
@@ -117,14 +125,14 @@ import org.apache.shiro.util.StringUtils;
  *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
  *    admin_role = *
  * </pre>
- *
+ * <p/>
  * <p>
  * Alternatively, permissions can be extracted from the base itself with the parameter searchUserBase,
  * the attribute list as userExtractedAttribute and the permission url as permissionByUserAttribute.
  * The idea is to extract attribute from the user or the group of the user and map directly to permission rule in
  * replacing the string {attribute} by the extracted attribute (can me multiple).
  * See the sample for group and user attribute and mapping.
- *
+ * <p/>
  * </p>
  */
 public class IsisLdapRealm extends JndiLdapRealm {
@@ -174,37 +182,30 @@ public class IsisLdapRealm extends JndiLdapRealm {
      */
     private String userObjectClass;
 
+    private final Map<String, String> rolesByGroup = Maps.newLinkedHashMap();
 
-
-    private final Map<String,String> rolesByGroup = Maps.newLinkedHashMap();
-    
     private PermissionToRoleMapper permissionToRoleMapper;
-
-
 
     /**
      * cn attribute
      */
-    private String cnAttribute="cn";
+    private String cnAttribute = "cn";
 
     public IsisLdapRealm() {
         setGroupObjectClass("groupOfUniqueNames");
         setUniqueMemberAttribute("uniqueMember");
         setUniqueMemberAttributeValueTemplate("uid={0}");
     }
-    
+
     /**
      * Get groups from LDAP.
-     * 
-     * @param principals
-     *            the principals of the Subject whose AuthenticationInfo should
-     *            be queried from the LDAP server.
-     * @param ldapContextFactory
-     *            factory used to retrieve LDAP connections.
+     *
+     * @param principals         the principals of the Subject whose AuthenticationInfo should
+     *                           be queried from the LDAP server.
+     * @param ldapContextFactory factory used to retrieve LDAP connections.
      * @return an {@link AuthorizationInfo} instance containing information
-     *         retrieved from the LDAP server.
-     * @throws NamingException
-     *             if any LDAP errors occur during the search.
+     * retrieved from the LDAP server.
+     * @throws NamingException if any LDAP errors occur during the search.
      */
     @Override
     protected AuthorizationInfo queryForAuthorizationInfo(final PrincipalCollection principals, final LdapContextFactory ldapContextFactory) throws NamingException {
@@ -230,7 +231,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
                 "objectClass=" + groupObjectClass, SUBTREE_SCOPE);
         while (searchResultEnum.hasMore()) {
             final SearchResult group = searchResultEnum.next();
-            if(memberOf(group,groups)) {
+            if (memberOf(group, groups)) {
                 addPermIfFound(group, permissions, groupExtractedAttribute, permissionByGroupAttribute);
             }
         }
@@ -255,8 +256,9 @@ public class IsisLdapRealm extends JndiLdapRealm {
         return groups.contains(groupName);
     }
 
-    private Collection<String> getPermissionForUser( String username,
-                                                     LdapContext ldapContextFactory) throws NamingException {
+    private Collection<String> getPermissionForUser(
+            String username,
+            LdapContext ldapContextFactory) throws NamingException {
 
         try {
             return permUser(username, ldapContextFactory);
@@ -277,8 +279,9 @@ public class IsisLdapRealm extends JndiLdapRealm {
         return permissions;
     }
 
-    private void addPermIfFound( SearchResult group, Set<String> permissions,
-                                 Set<String> extractedAttributeP, Set<String> permissionByAttributeP)
+    private void addPermIfFound(
+            SearchResult group, Set<String> permissions,
+            Set<String> extractedAttributeP, Set<String> permissionByAttributeP)
             throws NamingException {
         final NamingEnumeration<? extends Attribute> attributeEnum = group.getAttributes().getAll();
         Map<String, Set<String>> keyValues = Maps.newHashMap();
@@ -321,7 +324,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
 
     private Set<String> rolesFor(final String userName, final LdapContext ldapCtx) throws NamingException {
         final Set<String> roleNames = Sets.newLinkedHashSet();
-        final NamingEnumeration<SearchResult> searchResultEnum = ldapCtx.search(searchBase, "objectClass="+groupObjectClass, SUBTREE_SCOPE);
+        final NamingEnumeration<SearchResult> searchResultEnum = ldapCtx.search(searchBase, "objectClass=" + groupObjectClass, SUBTREE_SCOPE);
         while (searchResultEnum.hasMore()) {
             final SearchResult group = searchResultEnum.next();
             addRoleIfMember(userName, group, roleNames);
@@ -343,7 +346,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
                     Attribute attribute = group.getAttributes().get("cn");
                     String groupName = attribute.get().toString();
                     String roleName = roleNameFor(groupName);
-                    if(roleName != null) {
+                    if (roleName != null) {
                         roleNames.add(roleName);
                     }
                     break;
@@ -356,12 +359,11 @@ public class IsisLdapRealm extends JndiLdapRealm {
         return !rolesByGroup.isEmpty() ? rolesByGroup.get(groupName) : groupName;
     }
 
-
     private Set<String> permsFor(Set<String> roleNames) {
         Set<String> perms = Sets.newLinkedHashSet(); // preserve order
-        for(String role: roleNames) {
+        for (String role : roleNames) {
             List<String> permsForRole = getPermissionsByRole().get(role);
-            if(permsForRole != null) {
+            if (permsForRole != null) {
                 perms.addAll(permsForRole);
             }
         }
@@ -379,8 +381,7 @@ public class IsisLdapRealm extends JndiLdapRealm {
     public void setUniqueMemberAttribute(String uniqueMemberAttribute) {
         this.uniqueMemberAttribute = uniqueMemberAttribute;
     }
-    
-    
+
     public void setUniqueMemberAttributeValueTemplate(String template) {
         if (!StringUtils.hasText(template)) {
             String msg = "User DN template cannot be null or empty.";
@@ -407,21 +408,21 @@ public class IsisLdapRealm extends JndiLdapRealm {
      * Retrieves permissions by role set using either
      * {@link #setPermissionsByRole(String)} or {@link #setResourcePath(String)}.
      */
-    private Map<String,List<String>> getPermissionsByRole() {
-        if(permissionToRoleMapper == null) {
+    private Map<String, List<String>> getPermissionsByRole() {
+        if (permissionToRoleMapper == null) {
             throw new IllegalStateException("Permissions by role not yet set.");
-        } 
+        }
         return permissionToRoleMapper.getPermissionsByRole();
     }
-    
+
     /**
      * <pre>
      * ldapRealm.resourcePath=classpath:webapp/myroles.ini
      * </pre>
-     *
-     * <p>
+     * <p/>
+     * <p/>
      * where <tt>myroles.ini</tt> is in <tt>src/main/resources/webapp</tt>, and takes the form:
-     * 
+     * <p/>
      * <pre>
      * [roles]
      * user_role = *:ToDoItemsJdo:*:*,\
@@ -429,24 +430,24 @@ public class IsisLdapRealm extends JndiLdapRealm {
      * self-install_role = *:ToDoItemsFixturesService:install:*
      * admin_role = *
      * </pre>
-     * 
-     * <p>
+     * <p/>
+     * <p/>
      * This 'ini' file can then be referenced by other realms (if multiple realm are configured
-     * with the Shiro security manager). 
-     * 
+     * with the Shiro security manager).
+     *
      * @see #setResourcePath(String)
      */
     public void setResourcePath(String resourcePath) {
-        if(permissionToRoleMapper != null) {
+        if (permissionToRoleMapper != null) {
             throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
-        } 
+        }
         final Ini ini = Ini.fromResourcePath(resourcePath);
         this.permissionToRoleMapper = new PermissionToRoleMapperFromIni(ini);
     }
 
     /**
      * Specify permissions for each role using a formatted string.
-     *
+     * <p/>
      * <pre>
      * ldapRealm.permissionsByRole=\
      *    user_role = *:ToDoItemsJdo:*:*,\
@@ -454,17 +455,16 @@ public class IsisLdapRealm extends JndiLdapRealm {
      *    self-install_role = *:ToDoItemsFixturesService:install:* ; \
      *    admin_role = *
      * </pre>
-     * 
+     *
      * @see #setResourcePath(String)
      */
     @Deprecated
     public void setPermissionsByRole(String permissionsByRoleStr) {
-        if(permissionToRoleMapper != null) {
+        if (permissionToRoleMapper != null) {
             throw new IllegalStateException("Permissions already set, " + permissionToRoleMapper.getClass().getName());
-        } 
+        }
         this.permissionToRoleMapper = new PermissionToRoleMapperFromString(permissionsByRoleStr);
     }
-
 
     public void setPermissionByUserAttribute(String permissionByUserAttr) {
         String[] list = permissionByUserAttr.split(",");

@@ -97,6 +97,6 @@ If build successful and happy to merge, execute:
 git checkout master && git merge --no-ff ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
 ----
 
-
+When the merged branch is pushed, github will automatically close the original pull request.
 
 
