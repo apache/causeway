@@ -132,7 +132,7 @@ mvn clean install -o
 
 echo
 echo
-echo "Checkout out local branch - $branch_name_local ..."
+echo "Checking out local branch '$branch_name_local' ..."
 git checkout $branch_name_local
 
 
@@ -140,5 +140,5 @@ git checkout $branch_name_local
 echo
 echo "If build successful and happy to merge, execute:"
 echo
-echo "git merge --ff-only $branch_name_temp && git push origin $branch_name_local && git branch -d $branch_name_temp"
+echo "git merge --ff-only $branch_name_temp && git branch -d $branch_name_temp"
 echo

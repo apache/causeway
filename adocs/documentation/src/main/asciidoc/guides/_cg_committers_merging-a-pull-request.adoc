@@ -59,16 +59,45 @@ Download exe from http://stedolan.github.io/jq/download/[website]
 
 [source,bash]
 ----
+$ sh github-pr.sh isis 1162 31
 
-...
-Checkout out local branch - master ...
+Found JIRA ticket
+Found github PR
+branch_name_local: master
+username         : sebadiaz
+repo_full_name   : sebadiaz/isis
+repo_clone_url   : https://github.com/sebadiaz/isis.git
+branch_name_fork : master
+
+merging into: ISIS-1162_pr-31
+
+Deleting branch 'ISIS-1162_pr-31'
+Deleted branch ISIS-1162_pr-31 (was bd2e3c2).
+Creating the branch ISIS-1162_pr-31
+Switched to a new branch 'ISIS-1162_pr-31'
+Pulling the changes from https://github.com/sebadiaz/isis.git master
+From https://github.com/sebadiaz/isis
+ * branch            master     -> FETCH_HEAD
+Auto-merging core/pom.xml
+Merge made by the 'recursive' strategy.
+ core/pom.xml                                       |   3 +-
+ .../apache/isis/security/shiro/IsisLdapRealm.java  | 198 +++++++++++++++++++--
+ 2 files changed, 186 insertions(+), 15 deletions(-)
+
+Merged the PR; hit enter to build
+----
+
+The build now commences.  Once done, the script continues:
+
+[source,bash]
+----
+Checkout out local branch 'master' ...
 Switched to branch 'master'
-Your branch is ahead of 'estatio/master' by 2 commits.
-  (use "git push" to publish your local commits)
+...
 
 If build successful and happy to merge, execute:
 
-git merge --ff-only ISIS-1162_pr-31 && git push origin master && git branch -d ISIS-1162_pr-31
+git merge --ff-only ISIS-1162_pr-31 && git branch -d ISIS-1162_pr-31
 ----
 
 
