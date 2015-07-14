@@ -49,6 +49,9 @@ public class ActionInvocationFacetWithQueryResultsCache extends ActionInvocation
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters) {
 
+        final CommandContext commandContext = getCommandContext();
+        final Command command = commandContext != null ? commandContext.getCommand() : null;
+
         final ObjectAdapter result = getQueryResultsCache().execute(new Callable<ObjectAdapter>() {
 
             @SuppressWarnings("deprecation")
@@ -56,7 +59,7 @@ public class ActionInvocationFacetWithQueryResultsCache extends ActionInvocation
             public ObjectAdapter call() throws Exception {
                 return ActionInvocationFacetWithQueryResultsCache.this.underlyingFacet.invoke(targetAdapter, argumentAdapters);
             }
-        }, ActionInvocationFacetWithQueryResultsCache.class, "invoke", targetAdapter, targetAdapter);
+        }, command.getTarget().getClass(), command.getMemberIdentifier(), command.getArguments());
 
         return result;
     }
