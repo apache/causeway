@@ -365,11 +365,11 @@ To recreate the `simpleapp` archetype:
 ----
 cd example/application/simpleapp
 
-export ISISTMP=/c/tmp                   # 1
+export ISISTMP=/c/tmp                   # <1>
 export ISISART=simpleapp-archetype
 export ISISDEV=1.10.0-SNAPSHOT
 export ISISREL=1.9.0
-export ISISPAR=$ISISREL                 # 2
+export ISISPAR=$ISISREL                 # <2>
 export ISISRC=RC1
 
 export ISISCPT=$(echo $ISISART | cut -d- -f2)
@@ -802,29 +802,23 @@ svn commit -m "publishing isis source releases to dist.apache.org"
 
 == Update JIRA
 
-=== Close All JIRA tickets for the release
+=== Generate Release Notes
+
+From the root directory, generate the release notes for the current release, in Asciidoc format; eg:
+
+[source,bash]
+----
+sh scripts/jira-release-notes.sh ISIS 1.9.0 > /tmp/1
+----
+
+
+=== Close tickets
 
 Close all JIRA tickets for the release, or moved to future releases if not yet addressed. Any tickets that were partially implemented should be closed, and new tickets created for the functionality on the ticket not yet implemented.
 
-=== Generate Release Notes
-
-[TIP]
-====
-This is now scripted; need to add notes here...
-====
 
 
-
-Use JIRA to http://confluence.atlassian.com/display/JIRA/Creating+Release+Notes[generate release notes]:
-
-image::{_imagesdir}release-process/jira-create-release-notes.png[width="400px",link="{_imagesdir}release-process/jira-create-release-notes.png"]
-<img src="resources/jira-create-release-notes.png" width="400px"></img>
-
-If any of the tickets closed are tasks/subtasks, then please edit the contents of the file to associate them back together again.
-
-
-
-=== Mark the JIRA versions as released
+=== Mark the version as released
 
 In JIRA, go to the administration section for the Apache Isis project and update the versions as released.
 
@@ -836,7 +830,7 @@ In JIRA, go to the administration section for the Apache Isis project and update
 
 Update the Apache Isis (asciidoc) website:
 
-* Paste in the JIRA-generated release notes.
+* Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.  Also add a summary line for the release.
 
 * Search for any `-SNAPSHOT` suffices, and remove
 
@@ -848,6 +842,8 @@ For more information on DOAP files, see these http://projects.apache.org/doap.ht
 
 * Update the https://git-wip-us.apache.org/repos/asf/isis/repo?p=isis.git;a=blob_plain;f=STATUS;hb=HEAD[STATUS] file (in root of Apache Isis' source) should be updated with details of the new release.
 
+
+Don't forget to commit the `.adoc` changes and publish to the isis-site repo.
 
 
 
