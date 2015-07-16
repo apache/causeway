@@ -1,5 +1,5 @@
 [[_cg_committers_verifying-releases]]
-= Verifying Releases
+= Verifying a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
 :_imagesdir: images/
@@ -36,7 +36,7 @@ gpg --import /tmp/KEYS
 
 
 
-== Verifying the source release artifacts
+== Verifying source artifacts
 
 
 [NOTE]
@@ -55,7 +55,7 @@ gpg --verify isis-x.y.z.zip.asc isis-x.y.z.zip
 
 
 
-== Building the source release artifacts
+== Building source artifacts
 
 Assuming the ZIP file verifies, it should be unpacked, and then the artifact built from source.
 
@@ -89,7 +89,7 @@ Confirm that the versions of the Isis artifacts now cached in your local reposit
 
 
 
-== Verifying the binary release artifacts (using the Maven staging repository)
+== Verifying binary artifacts
 
 If you wish, you can verify the binary releases by configuring your local Maven install to point to the Maven Maven staging repository (or repositories) and then using them, eg to run the link:../intro/getting-started/simpleapp-archetype.html[simpleapp archetype] and running the resultant app.
 

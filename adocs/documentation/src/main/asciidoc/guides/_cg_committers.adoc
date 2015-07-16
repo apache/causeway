@@ -13,16 +13,15 @@ This chapter provides guidance for Apache Isis' own committers.
 //include::_cg_committers_applying-patches.adoc[leveloffset=+1]
 
 include::_cg_committers_merging-a-pull-request.adoc[leveloffset=+1]
-include::_cg_committers_recreating-an-archetype.adoc[leveloffset=+1]
-include::_cg_committers_cutting-a-release.adoc[leveloffset=+1]
-include::_cg_committers_cutting-a-release-one-pager.adoc[leveloffset=+1]
-include::_cg_committers_release-checklist.adoc[leveloffset=+1]
+include::_cg_committers_release-process.adoc[leveloffset=+1]
 include::_cg_committers_verifying-releases.adoc[leveloffset=+1]
 include::_cg_committers_verifying-releases-using-a-script.adoc[leveloffset=+1]
 include::_cg_committers_verifying-releases-using-creadur-tools.adoc[leveloffset=+1]
 include::_cg_committers_release-process-for-snapshots.adoc[leveloffset=+1]
 
 include::_cg_committers_key-generation.adoc[leveloffset=+1]
+
+include::_cg_committers_release-process-prereqs.adoc[leveloffset=+1]
 
 include::_cg_committers_pmc-notes.adoc[leveloffset=+1]
 

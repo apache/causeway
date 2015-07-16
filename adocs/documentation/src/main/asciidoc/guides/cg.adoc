@@ -20,16 +20,16 @@ This contributors' guide has three related audiences:
 The developer' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.
 
 
-include::_cg_ide.adoc[leveloffset=+1]
-include::_cg_ide-templates.adoc[leveloffset=+1]
-include::_cg_cmd-line.adoc[leveloffset=+1]
-include::_cg_isis-maven-plugin.adoc[leveloffset=+1]
+//include::_cg_ide.adoc[leveloffset=+1]
+//include::_cg_ide-templates.adoc[leveloffset=+1]
+//include::_cg_cmd-line.adoc[leveloffset=+1]
+//include::_cg_isis-maven-plugin.adoc[leveloffset=+1]
 
-include::_cg_building-isis.adoc[leveloffset=+1]
-include::_cg_contributing.adoc[leveloffset=+1]
-include::_cg_policies.adoc[leveloffset=+1]
+//include::_cg_building-isis.adoc[leveloffset=+1]
+//include::_cg_contributing.adoc[leveloffset=+1]
+//include::_cg_policies.adoc[leveloffset=+1]
 
-include::_cg_asciidoc.adoc[leveloffset=+1]
+//include::_cg_asciidoc.adoc[leveloffset=+1]
 
 include::_cg_committers.adoc[leveloffset=+1]
 
