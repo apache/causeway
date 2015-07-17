@@ -83,12 +83,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
 
-        final JsonRepresentation propertiesList = objectRepr.getArrayEnsured("members[objectMemberType=property]");
-        if (propertiesList == null) {
-            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find properties list (no members[objectMemberType=property]); got %s", objectRepr);
+        final JsonRepresentation membersMap = objectRepr.getMap("members");
+        if (membersMap == null) {
+            throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST, "Could not find members map; got %s", objectRepr);
         }
 
-        if (!updateHelper.copyOverProperties(propertiesList)) {
+        if (!updateHelper.copyOverProperties(membersMap, ObjectAdapterUpdateHelper.Intent.PERSISTING_NEW)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
         }
 
@@ -148,7 +148,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final ObjectAdapterUpdateHelper updateHelper = new ObjectAdapterUpdateHelper(getResourceContext(), objectAdapter);
 
-        if (!updateHelper.copyOverProperties(argRepr)) {
+        if (!updateHelper.copyOverProperties(argRepr, ObjectAdapterUpdateHelper.Intent.UPDATE_EXISTING)) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value");
         }
 

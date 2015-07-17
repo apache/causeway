@@ -160,12 +160,17 @@ _How to customize the Wicket viewer, integrating the (non-ASF) http://github.com
 
 |Using Chrome Tools +
 
-_Interacting with the REST API using Chrome Plugins_
-
+_Using Chrome plugins to invoke an action through the REST API_
 
 |video::_-TOvVYWCHc[youtube,width="420px",height="236px"]
 
-  
+
+|Creating objects using the REST API
+
+_Posting to the "Objects of Type" resource"_
+
+|video::VmvhACyA2ZI[youtube,width="420px",height="236px"]
+
 
 
 |===

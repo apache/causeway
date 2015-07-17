@@ -46,8 +46,17 @@ public class ObjectAdapterUpdateHelper {
     }
 
 
-    public boolean copyOverProperties(
-            final JsonRepresentation propertiesList) {
+    enum Intent {
+        UPDATE_EXISTING,
+        PERSISTING_NEW;
+        private boolean shouldValidate() {
+            return this == UPDATE_EXISTING;
+        }
+    }
+
+    boolean copyOverProperties(
+            final JsonRepresentation propertiesMap,
+            final Intent intent) {
 
         final ObjectSpecification objectSpec = objectAdapter.getSpecification();
         final List<ObjectAssociation> properties = objectSpec.getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES);
@@ -58,7 +67,7 @@ public class ObjectAdapterUpdateHelper {
             final OneToOneAssociation property = (OneToOneAssociation) association;
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
-            final JsonRepresentation propertyRepr = propertiesList.getRepresentation(id);
+            final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
             final Consent visibility = property.isVisible(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
             final Consent usability = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
 
@@ -69,10 +78,11 @@ public class ObjectAdapterUpdateHelper {
             if(!valueProvided) {
 
                 // no value provided
-
-                if(invisible || disabled) {
-                    // that's ok, indeed expected
-                    continue;
+                if(intent.shouldValidate()) {
+                    if(invisible || disabled) {
+                        // that's ok, indeed expected
+                        continue;
+                    }
                 }
                 if (!property.isMandatory()) {
                     // optional, so also not a problem
@@ -80,30 +90,34 @@ public class ObjectAdapterUpdateHelper {
                 }
 
                 // otherwise, is an error.
-                final String invalidReason = propertiesList.getString("x-ro-invalidReason");
+                final String invalidReason = propertiesMap.getString("x-ro-invalidReason");
                 if(invalidReason != null) {
-                    propertiesList.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getName());
+                    propertiesMap.mapPut("x-ro-invalidReason", invalidReason + "; " + property.getName());
                 } else {
-                    propertiesList.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getName());
+                    propertiesMap.mapPut("x-ro-invalidReason", "Mandatory field(s) missing: " + property.getName());
                 }
                 allOk = false;
                 continue;
 
             } else {
 
-                // value has been provided
-                if (invisible) {
-                    // silently ignore; don't want to acknowledge the existence of this property to the caller
-                    continue;
-                }
-                if (disabled) {
-                    // not allowed to update
-                    propertyRepr.mapPut("invalidReason", usability.getReason());
-                    allOk = false;
-                    continue;
+                if(intent.shouldValidate()) {
+                    // value has been provided
+                    if (invisible) {
+                        // silently ignore; don't want to acknowledge the
+                        // existence of this property to the caller
+                        continue;
+                    }
+                    if (disabled) {
+                        // not allowed to update
+                        propertyRepr.mapPut("invalidReason", usability.getReason());
+                        allOk = false;
+                        continue;
+                    }
                 }
 
-                // ok, we have a value, and the property is not invisible, and is not disabled
+                // ok, we have a value, and
+                // (if validating) then the property is not invisible, and is not disabled
                 final ObjectAdapter valueAdapter;
                 try {
                     valueAdapter = new JsonParserHelper(resourceContext, propertySpec).objectAdapterFor(propertyRepr);
