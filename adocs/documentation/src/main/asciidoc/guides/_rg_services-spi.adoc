@@ -125,6 +125,14 @@ a configured `EmailService`
 ``isis-viewer-wicket-impl``
 |
 
+|xref:rg.adoc#_rg_services-spi_manpage-FixtureScriptsSpecificationProvider[`o.a.i.applib.` +
+`services.fixturespec` +
+`FixtureScripts-` +
+`SpecificationProvider`]
+|Provides settings for xref:rg.adoc#_rg_services-api_manpage-FixtureScriptsDefault[`FixtureScriptsDefault`] fallback domain service for executing fixture scripts.
+|
+|
+
 |xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`o.a.i.applib.` +
 `services.publish` +
 `PublishingService`]
@@ -261,6 +269,7 @@ include::_rg_services-spi_manpage-ContentNegotiationService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-EmailNotificationService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-EventSerializer.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-ExceptionRecognizer.adoc[leveloffset=+1]
+include::_rg_services-spi_manpage-FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-LocaleProvider.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-PublishingService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-RepresentationService.adoc[leveloffset=+1]

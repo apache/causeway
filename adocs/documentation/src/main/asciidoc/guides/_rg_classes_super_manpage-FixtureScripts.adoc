@@ -4,6 +4,6 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
+NOTE: TODO - see also user guide's xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage[fixture scripts' API and usage], xref:rg.adoc#_rg_services-api_manpage-FixtureScriptsDefault[`FixtureScriptsDefault`] (fallback implementation) and xref:rg.adoc#_rg_services-spi_manpage-FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`].
 
 

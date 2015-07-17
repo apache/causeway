@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.services;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -52,17 +53,14 @@ public abstract class ServicesInstallerAbstract extends InstallerAbstract implem
         }
     }
 
+    public void addServices(final List<Object> services) {
+        addService(services);
+    }
+
     @Override
     public List<Object> getServices(final DeploymentType deploymentType) {
         return services;
     }
 
-    public void addServices(final List<Object> services) {
-        addService(services);
-    }
-
-    public void removeService(final Object service) {
-        services.remove(service);
-    }
 
 }

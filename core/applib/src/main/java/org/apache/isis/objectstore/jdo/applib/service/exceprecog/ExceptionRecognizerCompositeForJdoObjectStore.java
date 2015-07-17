@@ -34,12 +34,16 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
  * Convenience implementation of the {@link ExceptionRecognizer} domain service that
  * recognizes a number of common and non-fatal exceptions (such as unique constraint
  * violations).
- * 
+ *
  * <p>
- * If using the JDO Object store, either register in <tt>isis.properties</tt>, or
- * compose your own, out of the underlying more fine-grained {@link ExceptionRecognizer} implementations. 
+ *     Unlike most other domain services, the framework will consult <i>all</i>
+ *     registered implementations of this service (chain of responsibility pattern) (rather than
+ *     the first one found).
+ * </p>
  */
-@DomainService(nature = NatureOfService.DOMAIN)
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
 public class ExceptionRecognizerCompositeForJdoObjectStore extends ExceptionRecognizerComposite {
 
     public static final String KEY_DISABLE = "isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable";

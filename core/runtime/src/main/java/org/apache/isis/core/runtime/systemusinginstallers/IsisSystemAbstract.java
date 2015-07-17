@@ -25,6 +25,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.applib.fixturescripts.FixtureScripts;
+import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -176,6 +178,9 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
         final List<Object> services = obtainServices();
+        if(!contains(services, FixtureScripts.class)) {
+            services.add(new FixtureScriptsDefault());
+        }
 
         // bind metamodel to the (runtime) framework
         final RuntimeContextFromSession runtimeContext = obtainRuntimeContextFromSession();
@@ -190,6 +195,16 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
                 reflector,
                 services);
     }
+
+    static boolean contains(final List<Object> services, final Class<?> serviceClass) {
+        for (Object service : services) {
+            if(serviceClass.isAssignableFrom(service.getClass())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     protected RuntimeContextFromSession obtainRuntimeContextFromSession() {
         return new RuntimeContextFromSession();

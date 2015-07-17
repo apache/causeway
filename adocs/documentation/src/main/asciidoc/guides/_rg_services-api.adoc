@@ -128,6 +128,18 @@ xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] for persi
 |
 
 
+|xref:rg.adoc#_rg_services-api_manpage-FixtureScriptsDefault[`o.a.i.applib.` +
+`services.` +
+`fixturespec` +
+`FixtureScriptsDefault`]
+|Fallback implementation of xref:rg.adoc#_rg_classes_utility_manpage-FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
+|`FixtureScriptsDefault` +
+``o.a.i.core`` +
+``isis-core-applib``
+|Interacts with xref:rg.adoc#_rg_services-spi_manpage-FixtureScriptsSpecificationProvider[`FixtureScripts-
+SpecificationProvider`].
+
+
 |xref:rg.adoc#_rg_services-api_manpage-GuiceBeanProvider[`o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`]
@@ -269,6 +281,7 @@ include::_rg_services-api_manpage-DeepLinkService.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-DomainObjectContainer.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-EmailService.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-EventBusService.adoc[leveloffset=+1]
+include::_rg_services-api_manpage-FixtureScriptsDefault.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-GuiceBeanProvider.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-IsisJdoSupport.adoc[leveloffset=+1]
 include::_rg_services-api_manpage-MementoService.adoc[leveloffset=+1]
