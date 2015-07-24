@@ -318,7 +318,6 @@
 }
 
 .dropdown-menu > li > a.menuLink.btn-warning:hover {
-    background-color: inherit;
     background-image: inherit;
 }
 
