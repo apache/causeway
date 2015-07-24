@@ -17,19 +17,29 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actionmenu.serviceactions;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.model.Model;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -40,17 +50,8 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLi
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.Page;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.model.Model;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import static org.hamcrest.CoreMatchers.is;
 
 class CssMenuItem implements Serializable {
 
@@ -102,8 +103,8 @@ class CssMenuItem implements Serializable {
             return this;
         }
 
-        public Builder separator(boolean separator) {
-            cssMenuItem.setSeparator(separator);
+        public Builder requiresSeparator(boolean separator) {
+            cssMenuItem.setRequiresSeparator(separator);
             return this;
         }
 
@@ -148,7 +149,7 @@ class CssMenuItem implements Serializable {
     private String disabledReason;
     private boolean blobOrClob = false; // unless set otherwise
     private boolean prototype = false; // unless set otherwise
-    private boolean separator = false; // unless set otherwise
+    private boolean requiresSeparator = false; // unless set otherwise
 
     static final String ID_MENU_LABEL = "menuLabel";
 
@@ -180,17 +181,24 @@ class CssMenuItem implements Serializable {
         return prototype;
     }
 
-    public void setSeparator(boolean separator) {
+    private boolean separator;
+
+    public boolean isSeparator() {
+        return separator;
+    }
+    public void setSeparator(final boolean separator) {
         this.separator = separator;
+    }
+
+    public void setRequiresSeparator(boolean requiresSeparator) {
+        this.requiresSeparator = requiresSeparator;
     }
 
     /**
      * Requires a separator before it
-     *
-     * @return
      */
-    public boolean isSeparator() {
-        return separator;
+    public boolean requiresSeparator() {
+        return requiresSeparator;
     }
 
     private CssMenuItem(final String name) {
@@ -215,6 +223,11 @@ class CssMenuItem implements Serializable {
 
     public List<CssMenuItem> getSubMenuItems() {
         return Collections.unmodifiableList(subMenuItems);
+    }
+
+    public void replaceSubMenuItems(List<CssMenuItem> menuItems) {
+        subMenuItems.clear();
+        subMenuItems.addAll(menuItems);
     }
 
     public boolean hasSubMenuItems() {
@@ -329,7 +342,7 @@ class CssMenuItem implements Serializable {
                 .enabled(reasonDisabledIfAny)
                 .returnsBlobOrClob(ObjectAction.Utils.returnsBlobOrClob(objectAction))
                 .prototyping(ObjectAction.Utils.isExplorationOrPrototype(objectAction))
-                .separator(separator)
+                .requiresSeparator(separator)
                 .withActionIdentifier(ObjectAction.Utils.actionIdentifierFor(objectAction))
                 .withCssClass(ObjectAction.Utils.cssClassFor(objectAction, adapter))
                 .withCssClassFa(ObjectAction.Utils.cssClassFaFor(objectAction))

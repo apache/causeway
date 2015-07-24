@@ -28,6 +28,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,13 +49,124 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ServiceActionsModel;
+import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel.ActionLinkFactory;
+import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.components.TooltipBehavior;
 
 public final class ServiceActionUtil {
 
     private ServiceActionUtil(){}
 
     private final static ActionLinkFactory linkAndLabelFactory = new ServiceActionLinkFactory();
+
+    static void addLeafItem(final CssMenuItem menuItem, final ListItem<CssMenuItem> listItem, final MarkupContainer parent) {
+        Fragment leafItem;
+        if (!menuItem.isSeparator()) {
+            leafItem = new Fragment("content", "leafItem", parent);
+
+            AbstractLink subMenuItemLink = menuItem.getLink();
+
+            Label menuItemLabel = new Label("menuLinkLabel", menuItem.getName());
+            subMenuItemLink.addOrReplace(menuItemLabel);
+
+            if (!menuItem.isEnabled()) {
+                listItem.add(new CssClassAppender("disabled"));
+                subMenuItemLink.setEnabled(false);
+                TooltipBehavior tooltipBehavior = new TooltipBehavior(Model.of(menuItem.getDisabledReason()));
+                listItem.add(tooltipBehavior);
+            }
+            if (menuItem.isPrototyping()) {
+                subMenuItemLink.add(new CssClassAppender("prototype"));
+            }
+            leafItem.add(subMenuItemLink);
+
+            String cssClassFa = menuItem.getCssClassFa();
+            if (Strings.isNullOrEmpty(cssClassFa)) {
+                subMenuItemLink.add(new CssClassAppender("menuLinkSpacer"));
+            } else {
+                menuItemLabel.add(new CssClassFaBehavior(cssClassFa, menuItem.getCssClassFaPosition()));
+            }
+
+            String cssClass = menuItem.getCssClass();
+            if (!Strings.isNullOrEmpty(cssClass)) {
+                subMenuItemLink.add(new CssClassAppender(cssClass));
+            }
+        } else {
+            leafItem = new Fragment("content", "empty", parent);
+            listItem.add(new CssClassAppender("divider"));
+        }
+        listItem.add(leafItem);
+    }
+
+
+    enum SeparatorStrategy {
+        WITH_SEPARATORS {
+            List<CssMenuItem> applySeparatorStrategy(final CssMenuItem subMenuItem) {
+                return withSeparators(subMenuItem);
+            }
+
+        },
+        WITHOUT_SEPARATORS {
+            List<CssMenuItem> applySeparatorStrategy(final CssMenuItem subMenuItem) {
+                final List<CssMenuItem> subMenuItems = subMenuItem.getSubMenuItems();
+                return subMenuItems;
+            }
+        };
+
+        abstract List<CssMenuItem> applySeparatorStrategy(final CssMenuItem subMenuItem);
+    }
+
+    static List<CssMenuItem> withSeparators(CssMenuItem subMenuItem) {
+        final List<CssMenuItem> subMenuItems = subMenuItem.getSubMenuItems();
+        final List<CssMenuItem> cssMenuItemsWithSeparators = withSeparators(subMenuItems);
+        subMenuItem.replaceSubMenuItems(cssMenuItemsWithSeparators);
+        return cssMenuItemsWithSeparators;
+    }
+
+    static List<CssMenuItem> withSeparators(List<CssMenuItem> subMenuItems) {
+        final List<CssMenuItem> itemsWithSeparators = Lists.newArrayList();
+        for (CssMenuItem menuItem : subMenuItems) {
+            if(menuItem.requiresSeparator()) {
+                if(!itemsWithSeparators.isEmpty()) {
+                    // bit nasty... we add a new separator item
+                    final CssMenuItem separatorItem = CssMenuItem.newMenuItem(menuItem.getName() + "-separator")
+                            .prototyping(menuItem.isPrototyping())
+                            .build();
+                    separatorItem.setSeparator(true);
+                    itemsWithSeparators.add(separatorItem);
+                }
+                menuItem.setRequiresSeparator(false);
+            }
+            itemsWithSeparators.add(menuItem);
+        }
+        return itemsWithSeparators;
+    }
+
+    static void addFolderItem(final CssMenuItem subMenuItem, final ListItem<CssMenuItem> listItem, final MarkupContainer parent, final SeparatorStrategy separatorStrategy) {
+        listItem.add(new CssClassAppender("dropdown-submenu"));
+
+        Fragment folderItem = new Fragment("content", "folderItem", parent);
+        listItem.add(folderItem);
+
+        folderItem.add(new Label("folderName", subMenuItem.getName()));
+        final List<CssMenuItem> menuItems = separatorStrategy.applySeparatorStrategy(subMenuItem);
+        ListView<CssMenuItem> subMenuItemsView = new ListView<CssMenuItem>("subMenuItems",
+                menuItems) {
+            @Override
+            protected void populateItem(ListItem<CssMenuItem> listItem) {
+                CssMenuItem subMenuItem = listItem.getModelObject();
+
+                if (subMenuItem.hasSubMenuItems()) {
+                    addFolderItem(subMenuItem, listItem, parent, SeparatorStrategy.WITHOUT_SEPARATORS);
+                } else {
+                    addLeafItem(subMenuItem, listItem, parent);
+                }
+            }
+        };
+        folderItem.add(subMenuItemsView);
+    }
 
     static class LogicalServiceAction {
         private final String serviceName;
