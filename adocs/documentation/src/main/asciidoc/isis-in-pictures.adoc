@@ -15,12 +15,6 @@ The screenshots below are taken from the Isis Addons' http://github.com/isisaddo
 
 The todoapp also integrates with a number of other http://www.isisaddons.org[Isis Addons] modules.  Because we expect that most apps will end up using one or more of these addons, we've chosen to include screenshots of those too.
 
-[NOTE]
-====
-Please note that the Isis Addons are not part of ASF, but they _are_ all licensed under Apache License 2.0 and are maintained by the Apache Isis committers.
-====
-
-
 
 == Basics
 
@@ -119,8 +113,7 @@ The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wick
 image::{_imagesdir}/isis-in-pictures/070-pluggable-views.png[width="600px",link="{_imagesdir}/isis-in-pictures/070-pluggable-views.png"]
 
 
-
-The Isis Addons' https://github.com/isisaddons/isis-wicket-gmap3[gmap3 component] (non ASF) will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
+The (non-ASF) link:http://isisaddons.org[Isis Addons] library provides a number of such extensions.  For example, the https://github.com/isisaddons/isis-wicket-gmap3[gmap3 component] will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
 image::{_imagesdir}/isis-in-pictures/080-gmap3-view.png[width="600px",link="{_imagesdir}/isis-in-pictures/080-gmap3-view.png"]
 
@@ -146,6 +139,13 @@ The screenshot above also shows an "export to Word" action. This is _not_ a view
 
 image::{_imagesdir}/isis-in-pictures/110-docx.png[width="600px",link="{_imagesdir}/isis-in-pictures/110-docx.png"]
 
+
+
+
+[NOTE]
+====
+Please note that the Isis Addons are not part of ASF, but they _are_ all licensed under Apache License 2.0 and are maintained by the Apache Isis committers.
+====
 
 
 

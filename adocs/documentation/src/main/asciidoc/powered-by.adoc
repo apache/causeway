@@ -24,7 +24,7 @@ If you have written an app in Apache Isis that you'd like to share, please menti
 
 == Estatio
 
-Estatio is an open source estate management application, available on [github](https://github.com/estatio/estatio).
+Estatio is an open source estate management application, available on link:https://github.com/estatio/estatio[github].
 
 
 image::{_imagesdir}powered-by/estatio-1.png[width="900px",link="{_imagesdir}powered-by/estatio-1.png"]
@@ -33,7 +33,7 @@ image::{_imagesdir}powered-by/estatio-1.png[width="900px",link="{_imagesdir}powe
 
 Much of Apache Isis' recent development has been driven out by the requirements of this application, so you can see for yourself how many of the features in Isis are used in real life.
 
-Estatio is being deployed by [Eurocommercial Properties](http://www.eurocommercialproperties.com/), who sponsored the development of the framework in order to make Estatio a reality.  Our heart-felt thanks to them for their investment.  
+Estatio is being deployed by link:http://www.eurocommercialproperties.com/[Eurocommercial Properties], who sponsored the development of the framework in order to make Estatio a reality.  Our heart-felt thanks to them for their investment.
 
 
 
