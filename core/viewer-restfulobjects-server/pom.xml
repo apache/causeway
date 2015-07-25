@@ -28,7 +28,7 @@
 
     <artifactId>isis-core-viewer-restfulobjects-server</artifactId>
 
-	<name>Isis Core RestfulObjects Viewer Server</name>
+	<name>Isis RestfulObjects Viewer Server</name>
 
 	<properties>
 		<siteBaseDir>..</siteBaseDir>

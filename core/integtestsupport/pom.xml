@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-integtestsupport</artifactId>
-	<name>Isis Core Integration Testing Support</name>
+	<name>Isis Integration Testing Support</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

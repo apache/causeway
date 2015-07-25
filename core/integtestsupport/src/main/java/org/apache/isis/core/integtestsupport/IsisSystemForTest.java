@@ -21,13 +21,16 @@ package org.apache.isis.core.integtestsupport;
 
 import java.util.Arrays;
 import java.util.List;
+
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
@@ -43,7 +46,6 @@ import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
@@ -60,6 +62,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 
 /**
  * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
@@ -170,7 +173,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
         
         private IsisConfigurationDefault configuration;
-        private PersistenceMechanismInstaller persistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
+        private PersistenceMechanismInstaller persistenceMechanismInstaller = new DataNucleusPersistenceMechanismInstaller();
         private MetaModelValidator metaModelValidator;
         private ProgrammingModel programmingModel;
 

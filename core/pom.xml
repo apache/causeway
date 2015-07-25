@@ -33,7 +33,7 @@
     
     <packaging>pom</packaging>
 
-    <name>Apache Isis Core</name>
+    <name>Apache Isis</name>
 
     <description>
         Core framework, providing metamodel, runtime and core APIs.

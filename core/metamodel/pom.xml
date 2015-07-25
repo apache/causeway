@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>isis-core-metamodel</artifactId>
-    <name>Isis Core MetaModel</name>
+    <name>Isis MetaModel</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>

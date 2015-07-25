@@ -34,6 +34,9 @@ import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookupAware;
 import org.apache.isis.progmodels.dflt.JavaReflectorInstallerNoDecorators;
 
+/**
+ * in default runtime only for dynamic lookup of facet decorators
+ */
 public class JavaReflectorInstaller extends JavaReflectorInstallerNoDecorators implements InstallerLookupAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(JavaReflectorInstaller.class);

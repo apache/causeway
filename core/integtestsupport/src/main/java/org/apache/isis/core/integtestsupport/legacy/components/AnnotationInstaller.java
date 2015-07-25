@@ -21,12 +21,12 @@ package org.apache.isis.core.integtestsupport.legacy.components;
 import org.apache.isis.core.integtestsupport.legacy.Authenticator;
 import org.apache.isis.core.integtestsupport.legacy.Authorizor;
 import org.apache.isis.core.integtestsupport.legacy.Persistor;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.security.authentication.BypassAuthenticationManagerInstaller;
 import org.apache.isis.core.security.authorization.BypassAuthorizationManagerInstaller;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 
 public class AnnotationInstaller {
 
@@ -79,7 +79,7 @@ public class AnnotationInstaller {
         final Persistor annotation = javaClass.getAnnotation(Persistor.class);
         return annotation != null
                 ? addPersistorRepresentedBy(annotation)
-                : new InMemoryPersistenceMechanismInstaller();
+                : new DataNucleusPersistenceMechanismInstaller();
 
     }
 

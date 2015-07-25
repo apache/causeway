@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-runtime</artifactId>
-	<name>Isis Core Runtime</name>
+	<name>Isis Runtime</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isis-core-specsupport</artifactId>
-    <name>Isis Core Spec Support</name>
+    <name>Isis Spec Support</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>

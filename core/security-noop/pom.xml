@@ -27,7 +27,7 @@
 	</parent>
 
 	<artifactId>isis-core-security</artifactId>
-	<name>Isis Core (Bypass) Security</name>
+	<name>Isis Security Bypass</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

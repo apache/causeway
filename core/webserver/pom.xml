@@ -27,7 +27,7 @@
     </parent>
 
 	<artifactId>isis-core-webserver</artifactId>
-	<name>Isis Core WebServer</name>
+	<name>Isis WebServer</name>
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>

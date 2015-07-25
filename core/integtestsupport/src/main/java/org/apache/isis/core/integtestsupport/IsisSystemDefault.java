@@ -22,8 +22,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -35,7 +37,6 @@ import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.core.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
@@ -51,6 +52,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
@@ -196,9 +198,9 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     protected PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType) throws IsisSystemException {
         PersistenceMechanismInstaller installer = obtainPersistenceMechanismInstaller(getConfiguration());
         if(installer == null) {
-            final InMemoryPersistenceMechanismInstaller inMemoryPersistenceMechanismInstaller = new InMemoryPersistenceMechanismInstaller();
-            inMemoryPersistenceMechanismInstaller.setConfiguration(getConfiguration());
-            installer = inMemoryPersistenceMechanismInstaller;
+            final DataNucleusPersistenceMechanismInstaller persistenceMechanismInstaller = new DataNucleusPersistenceMechanismInstaller();
+            persistenceMechanismInstaller.setConfiguration(getConfiguration());
+            installer = persistenceMechanismInstaller;
         }
         return installer.createPersistenceSessionFactory(deploymentType);
     }
@@ -208,7 +210,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Optional hook; if returns <tt>null</tt> then the {@link #obtainPersistenceSessionFactory(DeploymentType)} is used.
      */
     protected PersistenceMechanismInstaller obtainPersistenceMechanismInstaller(IsisConfiguration configuration) throws IsisSystemException {
-        InMemoryPersistenceMechanismInstaller installer = new InMemoryPersistenceMechanismInstaller();
+        DataNucleusPersistenceMechanismInstaller installer = new DataNucleusPersistenceMechanismInstaller();
         installer.setConfiguration(getConfiguration());
         return installer;
     }

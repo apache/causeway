@@ -19,7 +19,7 @@
     </parent>
 
     <artifactId>isis-core-log4j</artifactId>
-    <name>Isis Core Log4j Impls</name>
+    <name>Isis Log4j Impls</name>
 
     <properties>
         <siteBaseDir>..</siteBaseDir>
