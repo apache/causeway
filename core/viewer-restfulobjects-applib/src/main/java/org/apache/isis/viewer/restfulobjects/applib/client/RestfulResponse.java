@@ -19,6 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.applib.client;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Map;
 
@@ -30,14 +32,15 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.util.JsonMapper;
 import org.apache.isis.viewer.restfulobjects.applib.util.Parser;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.google.common.collect.Maps;
 
 public class RestfulResponse<T> {
 
@@ -321,7 +324,17 @@ public class RestfulResponse<T> {
 
     public T getEntity() throws JsonParseException, JsonMappingException, IOException {
         if(entity == null) {
-            entity = JsonMapper.instance().read(response, returnType);
+            // previously this was good enough, but no longer it seems
+            //entity = JsonMapper.instance().read(response, returnType);
+
+            // instead, we do it manually
+            final JsonNode jsonNode = JsonMapper.instance().read(response, JsonNode.class);
+            try {
+                final Constructor<T> constructor = returnType.getConstructor(JsonNode.class);
+                entity = constructor.newInstance(jsonNode);
+            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+                throw new RuntimeException(e);
+            }
         }
         return entity;
     }
