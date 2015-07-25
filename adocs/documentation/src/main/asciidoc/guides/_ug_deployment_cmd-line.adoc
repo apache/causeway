@@ -73,11 +73,6 @@ The utility class also supports a number of other flags, but their usage is extr
 |FQCN
 |Implementing `ObjectReflectorInstaller`
 
-|-r
-|--persistor
-|FQCN
-|implementing `PersistenceMechanismInstaller`
-
 |-c
 |--config
 |
@@ -97,7 +92,6 @@ The utility class also supports a number of other flags, but their usage is extr
 |--version
 |
 |
-
 
 |
 |--debug
@@ -124,7 +118,7 @@ The utility class also supports a number of other flags, but their usage is extr
 `org.apache.isis.Dummy`
 
 
-etc...
+This dummy class provides a single empty `main(String[])` method.  It was introduced as a convenience for developers using Eclipse in combination with the DataNucleus plugin; if used as a launch target then it allow the entities to be enhanced withouth the running an app.
 
 
 

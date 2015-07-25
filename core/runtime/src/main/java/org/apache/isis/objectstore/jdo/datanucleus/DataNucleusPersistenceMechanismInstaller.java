@@ -20,6 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,14 +32,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstallerAbstract;
+import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
@@ -74,7 +78,7 @@ import org.apache.isis.objectstore.jdo.service.RegisterEntities;
  * </table>
  *
  */
-public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechanismInstallerAbstract {
+public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract implements PersistenceMechanismInstaller {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
 
@@ -87,9 +91,15 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     private static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 
     public DataNucleusPersistenceMechanismInstaller() {
-        super(NAME);
+        super(PersistenceMechanismInstaller.TYPE, NAME);
     }
 
+    //region > createPersistenceSessionFactory
+    @Override
+    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
+        return new PersistenceSessionFactory(deploymentType, getConfiguration(), this);
+    }
+    //endregion
 
     //region > createObjectStore
 
@@ -235,4 +245,10 @@ public class DataNucleusPersistenceMechanismInstaller extends PersistenceMechani
     }
 
     //endregion
+
+    @Override
+    public List<Class<?>> getTypes() {
+        return listOf(PersistenceSessionFactory.class);
+    }
+
 }
