@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.datanucleus;
 
 import org.datanucleus.ExecutionContext;
 import org.datanucleus.cache.CachedPC;
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.state.ObjectProvider;
 import org.datanucleus.state.ReferentialStateManagerImpl;

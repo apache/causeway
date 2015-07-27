@@ -31,7 +31,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;

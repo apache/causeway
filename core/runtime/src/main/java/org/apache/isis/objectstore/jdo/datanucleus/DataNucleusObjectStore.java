@@ -32,7 +32,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.datanucleus.api.jdo.NucleusJDOHelper;
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

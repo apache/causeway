@@ -38,7 +38,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
         implements PersistenceQueryProcessor<T> {

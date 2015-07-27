@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import javax.jdo.PersistenceManager;
 
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

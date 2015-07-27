@@ -151,7 +151,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
             schemaName = schemaName.toLowerCase(Locale.ROOT);
         }
         if(url.contains("hsqldb")) {
-            schemaName = schemaName.toUpperCase(Locale.ROOT);
+            // schemaName = schemaName.toUpperCase(Locale.ROOT);
         }
         if(url.contains("sqlserver")) {
             // unchanged

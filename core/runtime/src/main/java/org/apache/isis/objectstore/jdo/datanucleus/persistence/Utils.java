@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.datanucleus.enhancer.Persistable;
+import org.datanucleus.enhancement.Persistable;
 
 public class Utils {
 

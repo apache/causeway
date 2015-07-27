@@ -132,17 +132,31 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
         if(isSchemaAwareStoreManager(datanucleusProps)) {
 
+            // rather than reinvent too much of the wheel, we reuse the same property that DN would check
+            // for if it were doing the auto-creation itself (read from isis.properties)
+            final boolean createSchema = isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
+
+            datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL, "false"); // turn off, cos want to do the schema object ourselves...
+            datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_SCHEMA, "false");
+            datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_TABLES, "true"); // but have DN do everything else...
+            datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_COLUMNS, "true");
+            datanucleusProps.put(PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_CONSTRAINTS, "true");
+
             // we *don't* use DN's eager loading (autoStart), because doing so means that it attempts to
             // create the table before the schema (for any entities annotated @PersistenceCapable(schema=...)
 
             // ref: http://www.datanucleus.org/products/datanucleus/jdo/autostart.html
-            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
-            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
-            // datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES,
-            //                      Joiner.on(',').join(persistableClassNameSet));
+            //datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MECHANISM, "Classes");
+            //datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_MODE, "Checked");
+            //datanucleusProps.put(PropertyNames.PROPERTY_AUTOSTART_CLASSNAMES,
+            //                     Joiner.on(',').join(persistableClassNameSet));
 
             persistenceManagerFactory = JDOHelper.getPersistenceManagerFactory(datanucleusProps);
 
+
+            if (!createSchema) {
+                return;
+            }
 
             //
             // instead, we manually create the schema ourselves
@@ -154,15 +168,11 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
             final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
 
-            // rather than reinvent too much of the wheel, we reuse the same property that DN would check
-            // for if it were doing the auto-creation itself (read from isis.properties)
-            final boolean createSchema = isSet(this.datanucleusProps, PropertyNames.PROPERTY_SCHEMA_AUTOCREATE_ALL);
-            if (!createSchema) {
-                return;
-            }
 
             final SchemaAwareStoreManager schemaAwareStoreManager = (SchemaAwareStoreManager) storeManager;
             registerMetadataListener(metaDataManager);
+
+
             schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
 
         } else {
@@ -188,6 +198,10 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private void registerMetadataListener(final MetaDataManager metaDataManager) {
         final MetaDataListener listener = createMetaDataListener();
+        if(listener == null) {
+            return;
+        }
+
         if(listener instanceof PersistenceManagerFactoryAware) {
             ((PersistenceManagerFactoryAware) listener).setPersistenceManagerFactory(persistenceManagerFactory);
         }
@@ -206,7 +220,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         final String classMetadataListenerClassName = jdoObjectstoreConfig.getString(
                 DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_KEY,
                 DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);
-        return InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class);
+        return classMetadataListenerClassName != null
+                ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
+                : null;
     }
 
 
