@@ -143,48 +143,9 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/040-auto-
 
 
 
-=== Plugins
-
-You might also want to set up some additional plugins, using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
-
-Recommended are:
-
-* link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
-+
-More on this below.
-
-* link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[AsciiDoctor] plugin
-+
-Useful if you are doing any authoring of documents.
-
-Some others you might like to explore are:
-
-.IntelliJ Plugins
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px"]
-
-==== Maven Helper Plugin
-
-This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
-
-If you open a `pom.xml` file, you'll see an additional "Dependencies" tab:
-
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png"]
-
-Clicking on this gives a graphical tree representation of the dependencies, similar to that obtained by `mvn dependency:tree`, but filterable.
-
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png"]
-
-The plugin also provides the ability to easily run a Maven goal on a project:
-
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png"]
-
-This menu can also be bound to a keystroke so that it is available as a pop-up:
-
-image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
 
 
-
-== Importing and Managing Maven Modules
+== Importing Maven Modules
 
 Let's load in some actual code!  We do this by importing the Maven modules.
 
@@ -282,7 +243,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/050-runn
 
 == Hints and Tips
 
-=== Keyboard Shortcuts Cheat Sheets
+=== Keyboard Cheat Sheets
 
 You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
 * for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf[Windows]
@@ -294,7 +255,7 @@ Probably the most important shortcut on them is for `Find Action`:
 
 This will let you search for any action just by typing its name.
 
-### Switching between Tool Windows and Editors
+### Switch between Tools & Editors
 
 The Tool Windows are the views around the editor (to left, bottom and right).  It's possible to move these around to your preferred locations.
 
@@ -363,6 +324,46 @@ Loads of good stuff on the `Refactor` menu; most used are:
 * Change signature
 
 If you can't remember all those shortcuts, just use `ctrl-shift-alt-T` (might want to rebind that to something else!) and get a context-sensitive list of refactorings available for the currently selected object
+
+
+=== Plugins
+
+You might want to set up some additional plugins.  You can do this using `File > Settings > Plugins` (or equivalently `File > Other Settings > Configure Plugins`).
+
+Recommended are:
+
+* link:https://plugins.jetbrains.com/plugin/7179?pr=idea[Maven Helper] plugin
++
+More on this below.
+
+* link:https://github.com/asciidoctor/asciidoctor-intellij-plugin[AsciiDoctor] plugin
++
+Useful if you are doing any authoring of documents.
+
+Some others you might like to explore are:
+
+.IntelliJ Plugins
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/020-some-plugins-confirmation.png[width="600px"]
+
+==== Maven Helper Plugin
+
+This plugin provides a couple of great features.  One is better visualization of dependency trees (similar to Eclipse).
+
+If you open a `pom.xml` file, you'll see an additional "Dependencies" tab:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/010-dependency-tab.png"]
+
+Clicking on this gives a graphical tree representation of the dependencies, similar to that obtained by `mvn dependency:tree`, but filterable.
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/020-dependency-as-tree.png"]
+
+The plugin also provides the ability to easily run a Maven goal on a project:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/030-maven-run-goal.png"]
+
+This menu can also be bound to a keystroke so that it is available as a pop-up:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/050-some-plugins/maven-helper/040-maven-quick-run.png"]
 
 
 === Troubleshooting
