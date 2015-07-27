@@ -10,13 +10,16 @@
 
 This page contains a couple of tutorials for you to follow.
 
-* the "petclinic" tutorial takes you step-by-step through building a simple application of just three classes.  There are example solutions in the github repo in case you get lost.
+* the xref:tg.adoc#_tg_tutorials_pet-clinic["petclinic"] tutorial takes you step-by-step through building a simple application of just three classes.  There are example solutions in the github repo in case you get lost.
 
-* the "stop scaffolding, start coding" tutorial is taken from a conference workshop.  It has less hand-holding, but lists out the steps for you to follow.  It's a good cookbook to follow when you're readng to take things further.
+* an xref:tg.adoc#_tg_tutorials_pet-clinic-extended[extended version] of the "petclinic" tutorial, (with the text hosted on github repo).
+
+* the xref:tg.adoc#_tg_tutorials_stop-scaffolding-start-coding["stop scaffolding, start coding"] tutorial is taken from a conference workshop.  It has less hand-holding, but lists out the steps for you to follow.  It's a good cookbook to follow when you're readng to take things further.
 
 Have fun!
 
 
 
 include::_tg_pet-clinic.adoc[leveloffset=+1]
+include::_tg_pet-clinic-extended.adoc[leveloffset=+1]
 include::_tg_stop-scaffolding-start-coding.adoc[leveloffset=+1]
