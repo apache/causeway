@@ -26,6 +26,7 @@ public final class InvokeKeys {
     
     private final static EnumMap<ActionSemantics.Of, String> map = new EnumMap<ActionSemantics.Of, String>(ActionSemantics.Of.class);
     static {
+        map.put(ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE, "invokeQueryOnly");
         map.put(ActionSemantics.Of.SAFE, "invokeQueryOnly");
         map.put(ActionSemantics.Of.IDEMPOTENT, "invokeIdempotent");
         map.put(ActionSemantics.Of.NON_IDEMPOTENT, "invoke");

@@ -23,6 +23,10 @@ import org.apache.isis.applib.util.Enums;
 public enum SemanticsOf {
 
     /**
+     * Safe, with no side effects, and caching the returned value when invoked multiple times in the same request.
+     */
+    SAFE_AND_REQUEST_CACHEABLE,
+    /**
      * Safe, with no side-effects.
      *
      * <p>
@@ -53,19 +57,35 @@ public enum SemanticsOf {
     }
 
     /**
-     * {@link #SAFE} is idempotent in nature, as well as, obviously, {@link #IDEMPOTENT}.
+     * Any of {@link #SAFE}, {@link #SAFE_AND_REQUEST_CACHEABLE} or (obviously) {@link #IDEMPOTENT}.
      */
     public boolean isIdempotentInNature() {
-        return this == SAFE || this == IDEMPOTENT;
+        return isSafeInNature() || this == IDEMPOTENT;
     }
 
+    /**
+     * Either of {@link #SAFE} or {@link #SAFE_AND_REQUEST_CACHEABLE}.
+     */
+    public boolean isSafeInNature() {
+        return isSafeAndRequestCacheable() || this == SAFE;
+    }
+
+    /**
+     * @deprecated - use {@link #isSafeInNature()} instead (avoid any ambiguity).
+     */
+    @Deprecated
     public boolean isSafe() {
-        return this == SAFE;
+        return isSafeInNature();
+    }
+
+    public boolean isSafeAndRequestCacheable() {
+        return this == SAFE_AND_REQUEST_CACHEABLE;
     }
 
     @Deprecated
     public static ActionSemantics.Of from(final SemanticsOf semantics) {
         if(semantics == null) return null;
+        if(semantics == SAFE_AND_REQUEST_CACHEABLE) return ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE;
         if(semantics == SAFE) return ActionSemantics.Of.SAFE;
         if(semantics == IDEMPOTENT) return ActionSemantics.Of.IDEMPOTENT;
         if(semantics == NON_IDEMPOTENT) return ActionSemantics.Of.NON_IDEMPOTENT;
@@ -76,6 +96,7 @@ public enum SemanticsOf {
     @Deprecated
     public static SemanticsOf from(final ActionSemantics.Of semantics) {
         if(semantics == null) return null;
+        if(semantics == ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE) return SAFE_AND_REQUEST_CACHEABLE;
         if(semantics == ActionSemantics.Of.SAFE) return SAFE;
         if(semantics == ActionSemantics.Of.IDEMPOTENT) return IDEMPOTENT;
         if(semantics == ActionSemantics.Of.NON_IDEMPOTENT) return NON_IDEMPOTENT;

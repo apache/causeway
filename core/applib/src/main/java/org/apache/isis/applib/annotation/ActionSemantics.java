@@ -40,10 +40,15 @@ public @interface ActionSemantics {
     @Deprecated
     public enum Of {
         /**
+         * @deprecated - see {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE}
+         */
+        @Deprecated
+        SAFE_AND_REQUEST_CACHEABLE,
+        /**
          * @deprecated - see {@link SemanticsOf#SAFE}
          */
         @Deprecated
-        SAFE, 
+        SAFE,
         /**
          * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
          */
@@ -73,7 +78,7 @@ public @interface ActionSemantics {
         }
 
         /**
-         * {@link #SAFE} is idempotent in nature, as well as, obviously, {@link #IDEMPOTENT}.
+         * Any of {@link #SAFE}, {@link #SAFE_AND_REQUEST_CACHEABLE} or (obviously) {@link #IDEMPOTENT}.
          *
          * @deprecated - see {@link SemanticsOf#isIdempotentInNature()}
          */
@@ -83,11 +88,29 @@ public @interface ActionSemantics {
         }
 
         /**
-         * @deprecated - see {@link SemanticsOf#isSafe()}.
+         * Either of {@link #SAFE} or {@link #SAFE_AND_REQUEST_CACHEABLE}.
+         *
+         * @deprecated - see {@link SemanticsOf#isSafeInNature()}.
+         */
+        @Deprecated
+        public boolean isSafeInNature() {
+            return SemanticsOf.from(this).isSafeInNature();
+        }
+
+        /**
+         * @deprecated - see {@link #isSafeInNature()} (avoid any ambiguity)
          */
         @Deprecated
         public boolean isSafe() {
-            return SemanticsOf.from(this).isSafe();
+            return isSafeInNature();
+        }
+
+        /**
+         * @deprecated - see {@link SemanticsOf#isSafeInNature()}.
+         */
+        @Deprecated
+        public boolean isSafeAndRequestCacheable() {
+            return SemanticsOf.from(this).isSafeAndRequestCacheable();
         }
     }
 

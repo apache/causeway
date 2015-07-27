@@ -865,7 +865,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         // are all safe?
         for (ActionDomainEvent<?> event : events) {
-            if(!event.getActionSemantics().isSafe()) {
+            if(!event.getActionSemantics().isSafeInNature()) {
                 // found at least one non-safe action, so all bets are off.
                 return;
             }

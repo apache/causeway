@@ -88,7 +88,7 @@ public @interface Action {
 
 
     /**
-     * The action semantics, either {@link SemanticsOf#SAFE safe} (query-only),
+     * The action semantics, either {@link SemanticsOf#SAFE_AND_REQUEST_CACHEABLE cached}, {@link SemanticsOf#SAFE safe} (query-only),
      * {@link SemanticsOf#IDEMPOTENT idempotent} or
      * {@link SemanticsOf#NON_IDEMPOTENT non-idempotent}.
      */

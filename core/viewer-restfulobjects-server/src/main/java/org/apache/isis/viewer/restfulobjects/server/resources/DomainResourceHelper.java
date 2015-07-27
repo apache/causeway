@@ -248,7 +248,7 @@ public class DomainResourceHelper {
      * of the result of that action.
      *
      * <p>
-     *     The action must have {@link org.apache.isis.applib.annotation.ActionSemantics.Of#SAFE safe} semantics
+     *     The action must have {@link ActionSemantics.Of#isSafeInNature()} safe/request-cacheable}  semantics
      *     otherwise an error response is thrown.
      * </p>
      */
@@ -259,8 +259,8 @@ public class DomainResourceHelper {
         final ObjectAction action = accessHelper.getObjectActionThatIsVisibleForIntent(actionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ActionSemantics.Of actionSemantics = action.getSemantics();
-        if (actionSemantics != ActionSemantics.Of.SAFE) {
-            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' is not query only", action.getId());
+        if (! actionSemantics.isSafeInNature()) {
+            throw RestfulObjectsApplicationException.createWithMessage(RestfulResponse.HttpStatusCode.METHOD_NOT_ALLOWED, "Method not allowed; action '%s' does not have safe semantics", action.getId());
         }
 
         return invokeActionUsingAdapters(action, arguments, ActionResultReprRenderer.SelfLink.INCLUDED);

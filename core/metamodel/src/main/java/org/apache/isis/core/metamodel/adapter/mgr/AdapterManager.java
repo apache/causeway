@@ -81,7 +81,7 @@ public interface AdapterManager extends Injectable {
         }
         
         public static ConcurrencyChecking concurrencyCheckingFor(ActionSemantics.Of actionSemantics) {
-            return actionSemantics == ActionSemantics.Of.SAFE
+            return actionSemantics.isSafeInNature()
                     ? ConcurrencyChecking.NO_CHECK
                     : ConcurrencyChecking.CHECK;
         }

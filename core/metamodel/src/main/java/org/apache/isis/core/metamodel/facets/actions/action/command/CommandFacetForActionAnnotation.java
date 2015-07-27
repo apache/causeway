@@ -19,7 +19,6 @@
 package org.apache.isis.core.metamodel.facets.actions.action.command;
 
 import org.apache.isis.applib.annotation.Action;
-import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Command.ExecuteIn;
 import org.apache.isis.applib.annotation.Command.Persistence;
 import org.apache.isis.applib.annotation.CommandExecuteIn;
@@ -56,7 +55,7 @@ public class CommandFacetForActionAnnotation extends CommandFacetAbstract {
                         if(actionSemanticsFacet == null) {
                             throw new IllegalStateException("Require ActionSemanticsFacet in order to process");
                         }
-                        if(actionSemanticsFacet.value() == ActionSemantics.Of.SAFE) {
+                        if(actionSemanticsFacet.value().isSafeInNature()) {
                             return  null;
                         }
                         // else fall through

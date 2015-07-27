@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable;
 
 import java.util.List;
-import org.apache.isis.applib.annotation.ActionSemantics.Of;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Bookmarkable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -90,7 +90,7 @@ public class BookmarkPolicyFacetViaBookmarkableAnnotationFactory extends FacetFa
                         continue;
                     }
                     final ActionSemanticsFacet semanticsFacet = objectAction.getFacet(ActionSemanticsFacet.class);
-                    if(semanticsFacet == null || semanticsFacet.isNoop() || semanticsFacet.value() != Of.SAFE) {
+                    if(semanticsFacet == null || semanticsFacet.isNoop() || !semanticsFacet.value().isSafeInNature()) {
                       validationFailures.add(
                           "%s: action is bookmarkable but action semantics are not explicitly indicated as being safe.  " +
                           "Either add @Action(semantics=SemanticsOf.SAFE), or remove @ActionLayout(bookmarking=...).",

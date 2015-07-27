@@ -23,6 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Strings;
 
@@ -44,6 +45,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -56,6 +58,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
+import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -232,6 +235,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
         try {
+
+
             final Object[] executionParameters = new Object[arguments.length];
             for (int i = 0; i < arguments.length; i++) {
                 executionParameters[i] = unwrap(arguments[i]);
@@ -257,8 +262,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
                     actionInvocationContext.setDomainObjects(Collections.singletonList(targetPojo));
                 }
-
-
             }
 
             if(command != null && command.getExecutor() == Command.Executor.USER && owningAction != null) {
@@ -314,8 +317,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
             // deal with background commands
             if( command != null &&
-                    command.getExecutor() == Command.Executor.USER &&
-                    command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
+                command.getExecutor() == Command.Executor.USER &&
+                command.getExecuteIn() == org.apache.isis.applib.annotation.Command.ExecuteIn.BACKGROUND) {
 
                 // persist command so can be this command can be in the 'background'
                 final CommandService commandService = getServicesInjector().lookupService(CommandService.class);
@@ -333,12 +336,25 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
 
             // otherwise, go ahead and execute action in the 'foreground'
-
             if(command != null) {
                 command.setStartedAt(Clock.getTimeAsJavaSqlTimestamp());
             }
 
-            Object result = method.invoke(targetPojo, executionParameters);
+            final ActionSemanticsFacet semanticsFacet = getFacetHolder().getFacet(ActionSemanticsFacet.class);
+            final boolean cacheable = semanticsFacet != null && semanticsFacet.value().isSafeAndRequestCacheable();
+
+            Object result;
+            if(cacheable) {
+                final QueryResultsCache queryResultsCache = getServicesInjector().lookupService(QueryResultsCache.class);
+                result = queryResultsCache.execute(new Callable<Object>() {
+                    @Override
+                    public Object call() throws Exception {
+                        return method.invoke(targetPojo, executionParameters);
+                    }
+                }, targetPojo.getClass(), method.getName(), executionParameters);
+            } else {
+                result = method.invoke(targetPojo, executionParameters);
+            }
 
             if (LOG.isDebugEnabled()) {
                 LOG.debug(" action result " + result);

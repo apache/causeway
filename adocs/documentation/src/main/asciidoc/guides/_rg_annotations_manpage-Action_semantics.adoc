@@ -6,21 +6,52 @@
 
 
 
-The `semantics()` attribute describes whether the invocation is safe (as no side-effects), is idempotent (may have side-effects but always has the same post-conditions), or is neither safe nor idempotent. If the annotation is missing then the framework assumes non-idempotent.
+The `semantics()` attribute describes whether the invocation modifies state of the system, and if so whether it does so idempotently.  If the action invocation does _not_ modify the state of the system, in other words is safe, then it also can beused to specify whether the results of the action can be cached automatically for the remainder of the request.
 
-[TIP]
-====
-The attribute was originally introduced for the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] in order that action invocations could be made available using either HTTP GET, PUT or POST (respectively).
+The attribute was originally introduced for the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] in order that action invocations could be using the appropriate `HTTP` verb (`GET`, `PUT` and `POST`).
 
-Since then its use has been extended into the core runtime.  For example, it is now aso used for the in-built concurrency checking; the invocation of a safe action does not perform a concurrency check, whereas non-safe actions do perform a concurrency check.
-====
+The table below summarizes the semantics:
+
+Action semantics
+[cols="2,1,2,1", options="header"]
+|===
+| Semantic
+| Changes state
+| Effect of multiple calls
+| HTTP verb +
+(Restful Objects)
+
+| SAFE_AND_REQUEST_CACHEABLE
+| No
+| Will always return the same result each time invoked (within a given request scope)
+| GET
+
+| SAFE
+| No
+| Might result in different results each invocation
+| GET
+
+| IDEMPOTENT
+| Yes
+| Will make no further changes if called multiple times (eg sets a property or adds to a `Set`)
+| PUT
+
+| NON_IDEMPOTENT
+| Yes
+| Might change the state of the system each time called (eg increments a counter or adds to a `List`)
+| POST
+
+|===
+
+
+The actions' semantics are also used by the core runtime as part of the in-built concurrency checkng; invocation of a safe action (which includes request-cacheable) does _not_ perform a concurrency check, whereas non-safe actions _do_ perform a concurrency check.
 
 For example:
 
 [source,java]
 ----
 public class Customer {
-    @Action(semantics=SemanticsOf.SAFE)
+    @Action(semantics=SemanticsOf.SAFE_AND_REQUEST_CACHEABLE)
     public CreditRating checkCredit() { ... }
 
     @Action(semantics=SemanticsOf.IDEMPOTENT)
@@ -32,5 +63,26 @@ public class Customer {
 }
 ----
 
+Actions that are safe and request-cacheable automatically use the xref:rg.adoc#_rg_services-api_manpage-QueryResultsCache[`QueryResultsCache`] service to cache the result of the method.  Note though that the results of this caching will only be apparent if the action is invoked from another method using the xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`] service.
+
+Continuing the example above, imagine code that loops over a set of ``Order``s where each `Order` has an associated `Customer`.  We want to check the credit rating of each `Customer` (a potentially expensive operation) but we don't want to do it more than once per `Customer`.  Invoking through the `WrapperFactory` will allow us to accomplish this by exploiting the semantics of `checkCredit()` action:
+
+[source,java]
+----
+public void dispatchToCreditWorthyCustomers(final List<Order> orders) {
+    for(Order order: orders) {
+        Customer customer = order.getCustomer();
+        CreditRating creditRating = wrapperFactory.wrapSkipRules(customer).checkCredit();  // <1>
+        if(creditRating.isWorthy()) {
+            order.dispatch();
+        }
+    }
+}
+@Inject
+WrapperFactory wrapperFactory;
+----
+<1> wrap the customer to dispatch.
+
+In the above example we've used `wrapSkipRules(...)` but if we wanted to enforce any business rules associated with the `checkCredit()` method, we would have used `wrap(...)`.
 
 
