@@ -20,29 +20,44 @@
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
+import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class MustSatisfySpecificationValidatingInteractionTest {
 
     @Rule
-    public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationAlwaysSatisfied;
     private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationNeverSatisfied;
-    private FacetHolder mockHolder;
 
+    private IdentifiedHolder identifiedHolder;
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private TranslationService mockTranslationService;
+
+    @Mock
     private PropertyModifyContext mockContext;
 
     private ObjectAdapter mockProposedObjectAdapter;
@@ -51,20 +66,26 @@ public class MustSatisfySpecificationValidatingInteractionTest {
     private SpecificationAlwaysSatisfied specificationAlwaysSatisfied;
     private SpecificationNeverSatisfied specificationNeverSatisfied;
 
+    public static class Customer {}
+
     @Before
     public void setUp() throws Exception {
-        mockHolder = mockery.mock(IdentifiedHolder.class);
+        identifiedHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "lastName"));
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
 
-        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
-        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
+        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), identifiedHolder, mockServicesInjector);
+        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), identifiedHolder, mockServicesInjector);
 
-        mockContext = mockery.mock(PropertyModifyContext.class);
-        mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");
-        mockProposedObject = mockery.mock(Object.class, "proposedObject");
+        mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
+        mockProposedObject = context.mock(Object.class, "proposedObject");
 
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
@@ -77,7 +98,7 @@ public class MustSatisfySpecificationValidatingInteractionTest {
 
     @After
     public void tearDown() throws Exception {
-        mockHolder = null;
+        identifiedHolder = null;
         facetForSpecificationAlwaysSatisfied = null;
         facetForSpecificationNeverSatisfied = null;
         mockContext = null;

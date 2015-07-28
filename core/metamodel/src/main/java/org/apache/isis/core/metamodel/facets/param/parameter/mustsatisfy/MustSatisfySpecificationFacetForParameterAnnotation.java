@@ -26,10 +26,14 @@ import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.MustSatisfySpecificationFacetAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSatisfySpecificationFacetAbstract {
 
-    public static Facet create(final Parameter parameter, final FacetHolder holder) {
+    public static Facet create(
+            final Parameter parameter,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
 
         if (parameter == null) {
             return null;
@@ -43,12 +47,15 @@ public class MustSatisfySpecificationFacetForParameterAnnotation extends MustSat
                 specifications.add(specification);
             }
         }
-        return specifications.size() > 0 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder) : null;
+        return specifications.size() > 0 ? new MustSatisfySpecificationFacetForParameterAnnotation(specifications, holder, servicesInjector) : null;
     }
 
 
-    private MustSatisfySpecificationFacetForParameterAnnotation(final List<Specification> specifications, final FacetHolder holder) {
-        super(specifications, holder);
+    private MustSatisfySpecificationFacetForParameterAnnotation(
+            final List<Specification> specifications,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
+        super(specifications, holder, servicesInjector);
     }
 
 }

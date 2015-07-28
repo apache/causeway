@@ -290,12 +290,12 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
         // check for deprecated @MustSatisfy first
         final MustSatisfy annotation = Annotations.getAnnotation(method, MustSatisfy.class);
-        Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder), processMethodContext);
+        Facet facet = mustSatisfyValidator.flagIfPresent(MustSatisfySpecificationFacetForMustSatisfyAnnotationOnProperty.create(annotation, holder, servicesInjector), processMethodContext);
 
         // else search for @Property(mustSatisfy=...)
         final Property property = Annotations.getAnnotation(method, Property.class);
         if(facet == null) {
-            facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder);
+            facet = MustSatisfySpecificationFacetForPropertyAnnotation.create(property, holder, servicesInjector);
         }
 
         FacetUtil.addFacet(facet);

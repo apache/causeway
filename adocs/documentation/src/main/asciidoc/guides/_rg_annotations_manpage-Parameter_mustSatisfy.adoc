@@ -48,3 +48,18 @@ public class CustomerRepository {
 ----
 <1> the `AbstractSpecification` class conveniently handles type-safety and dealing with null values.  The applib also provides `SpecificationAnd` and `SpecificationOr` to allow specifications to be combined "algebraically".
 
+
+It is also possible to provide translatable reasons.  Rather than implement `Specification`, instead implement `Specification2` which defines the API:
+
+[source,java]
+----
+public interface Specification2 extends Specification {
+    public TranslatableString satisfiesTranslatable(Object obj); // <1>
+}
+----
+<1> Return `null` if specification satisfied, otherwise the reason as a translatable string
+
+With `Specification2` there is no need to implement the inherited `satifies(Object)`; that method will never be called.
+
+
+

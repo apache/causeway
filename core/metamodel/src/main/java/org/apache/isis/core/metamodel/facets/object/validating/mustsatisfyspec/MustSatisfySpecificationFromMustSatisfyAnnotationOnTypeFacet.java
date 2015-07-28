@@ -22,15 +22,18 @@ package org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec;
 import java.util.List;
 
 import org.apache.isis.applib.events.ValidityEvent;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.applib.util.ReasonBuffer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec.SpecificationEvaluator;
 import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
  * @deprecated
@@ -44,9 +47,20 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
 
     private final List<Specification> specifications;
 
-    public MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(final List<Specification> specifications, final FacetHolder holder) {
+    private final SpecificationEvaluator specificationEvaluator;
+
+    public MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(
+            final List<Specification> specifications,
+            final FacetHolder holder,
+            final ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.specifications = specifications;
+
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        // sadness: same as in TranslationFactory
+        final String translationContext = ((IdentifiedHolder) holder).getIdentifier().toClassAndNameIdentityString();
+
+        specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
     }
 
     @Override
@@ -57,11 +71,9 @@ public class MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet extend
         final ProposedHolder proposedHolder = (ProposedHolder) validityContext;
         final ObjectAdapter targetNO = proposedHolder.getProposed();
         final Object targetObject = targetNO.getObject();
-        final ReasonBuffer buf = new ReasonBuffer();
-        for (final Specification specification : specifications) {
-            buf.append(specification.satisfies(targetObject));
-        }
-        return buf.getReason();
+        return specificationEvaluator.evaluation()
+                .evaluate(specifications, targetObject)
+                .getReason();
     }
 
 }

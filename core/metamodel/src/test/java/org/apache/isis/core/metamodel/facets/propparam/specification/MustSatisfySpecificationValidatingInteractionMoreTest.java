@@ -20,48 +20,71 @@
 package org.apache.isis.core.metamodel.facets.propparam.specification;
 
 import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.object.validating.mustsatisfyspec.MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet;
+import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class MustSatisfySpecificationValidatingInteractionMoreTest {
 
     @Rule
-    public JUnitRuleMockery2 mockery = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet facetForSpecificationFirstLetterUpperCase;
-    private FacetHolder mockHolder;
 
+    @Mock
+    private IdentifiedHolder identifiedHolder;
+
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private TranslationService mockTranslationService;
+
+    @Mock
     private PropertyModifyContext mockContext;
 
     private ObjectAdapter mockProposedObjectAdapter;
 
     private SpecificationRequiresFirstLetterToBeUpperCase requiresFirstLetterToBeUpperCase;
 
+    public static class Customer {}
     @Before
     public void setUp() throws Exception {
-        mockHolder = mockery.mock(IdentifiedHolder.class);
+
+        identifiedHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "lastName"));
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
 
-        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
+        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFromMustSatisfyAnnotationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), identifiedHolder, mockServicesInjector);
 
-        mockContext = mockery.mock(PropertyModifyContext.class);
-        mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");
+        mockProposedObjectAdapter = context.mock(ObjectAdapter.class, "proposed");
     }
 
     @After
     public void tearDown() throws Exception {
-        mockHolder = null;
+        identifiedHolder = null;
         requiresFirstLetterToBeUpperCase = null;
         mockContext = null;
     }
@@ -78,7 +101,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
      */
     @Test
     public void validatesUsingSpecificationIfProposedOkay() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));
@@ -94,7 +117,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
 
     @Test
     public void invalidatesUsingSpecificationIfProposedNotOkay() {
-        mockery.checking(new Expectations() {
+        context.checking(new Expectations() {
             {
                 one(mockContext).getProposed();
                 will(returnValue(mockProposedObjectAdapter));

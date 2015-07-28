@@ -45,10 +45,12 @@ import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSat
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetForParameterAnnotation;
 import org.apache.isis.core.metamodel.facets.param.parameter.regex.RegExFacetFromRegExAnnotationOnParameter;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 
-public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware {
+public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implements MetaModelValidatorRefiner, IsisConfigurationAware, ServicesInjectorAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation maxLengthValidator = new MetaModelValidatorForDeprecatedAnnotation(MaxLength.class);
     private final MetaModelValidatorForDeprecatedAnnotation mustSatisfyValidator = new MetaModelValidatorForDeprecatedAnnotation(MustSatisfy.class);
@@ -115,7 +117,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         for (final Annotation parameterAnnotation : parameterAnnotations) {
             if (parameterAnnotation instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotation;
-                final Facet facet = MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder());
+                final Facet facet = MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter.create(annotation, processParameterContext.getFacetHolder(), servicesInjector);
                 FacetUtil.addFacet(mustSatisfyValidator.flagIfPresent(facet, processParameterContext));
                 return;
             }
@@ -125,7 +127,7 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
             if (parameterAnnotation instanceof Parameter) {
                 final Parameter parameter = (Parameter) parameterAnnotation;
                 FacetUtil.addFacet(
-                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder));
+                        MustSatisfySpecificationFacetForParameterAnnotation.create(parameter, holder, servicesInjector));
                 return;
             }
         }
@@ -211,4 +213,11 @@ public class ParameterAnnotationFacetFactory extends FacetFactoryAbstract implem
         optionalValidator.setConfiguration(configuration);
     }
 
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }

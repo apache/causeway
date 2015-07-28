@@ -26,11 +26,13 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.param.parameter.mustsatisfy.MustSatisfySpecificationFacetForMustSatisfyAnnotationOnParameter;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithMustSatisfyAnnotations;
 import org.apache.isis.core.metamodel.facets.propparam.specification.DomainObjectWithoutMustSatisfyAnnotations;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
@@ -43,6 +45,13 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
     @Mock
     private FacetedMethodParameter mockFacetedMethodParameter;
 
+    @Mock
+    private ServicesInjector mockServicesInjector;
+
+    @Mock
+    private TranslationService mockTranslationService;
+
+
     private Class<DomainObjectWithoutMustSatisfyAnnotations> domainObjectClassWithoutAnnotation;
     private Class<DomainObjectWithMustSatisfyAnnotations> domainObjectClassWithAnnotation;
     private Method changeLastNameMethodWithout;
@@ -54,6 +63,13 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
 
     @Before
     public void setUp() throws Exception {
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+
+
         domainObjectClassWithoutAnnotation = DomainObjectWithoutMustSatisfyAnnotations.class;
         domainObjectClassWithAnnotation = DomainObjectWithMustSatisfyAnnotations.class;
         changeLastNameMethodWithout = domainObjectClassWithoutAnnotation.getMethod("changeLastName", String.class);
@@ -67,6 +83,7 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
         });
 
         facetFactory = new ParameterAnnotationFacetFactory();
+        facetFactory.setServicesInjector(mockServicesInjector);
     }
 
     @Test

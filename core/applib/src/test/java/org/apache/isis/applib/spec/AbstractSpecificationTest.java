@@ -29,7 +29,7 @@ import org.junit.Test;
 import org.apache.isis.applib.spec.AbstractSpecification.Nullability;
 import org.apache.isis.applib.spec.AbstractSpecification.TypeChecking;
 
-public class SpecificationAbstractTest {
+public class AbstractSpecificationTest {
 
     private static class SomeDomainObject {
     }

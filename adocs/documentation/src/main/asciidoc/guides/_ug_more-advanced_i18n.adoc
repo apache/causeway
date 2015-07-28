@@ -7,7 +7,7 @@
 
 Apache Isis' support for i18n allows every element of the domain model (the class names, property names, action names, parameter names and so forth) to be translated.
 
-It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages messages resulting from any business rule violations (eg `disableXxx()` or `validateXxx()`, and so on.
+It also supports translations of messages raised imperatively, by which we mean as the result of a call to `title()` to obtain an object's title, or messages resulting from any business rule violations (eg xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] or xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`], and so on.
 
 Isis does not translate the values of your domain objects, though.  So, if you have a domain concept such as `Country` whose name is intended to be localized according to the current user, you will need to model
 
