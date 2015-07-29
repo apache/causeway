@@ -28,6 +28,44 @@ The implementation "simply" returns a set of properties where the property key i
 
 See the implementation of the built-in `LayoutMetadataReaderFromJson` for more detail.
 
+Returning either `null` or throwing an exception indicates that the reader was unable to load any metadata for the specified class.
+
+
+=== Extended API
+
+Optionally the reader can implement the extended `LayoutMetadaReader2` API:
+
+[source,java]
+----
+public interface LayoutMetadataReader2 extends LayoutMetadataReader {
+    public static class Support {
+        public static Support entitiesOnly() {
+            return new Support(false,false,false,false,false,false,false);
+        }
+        ...
+        public boolean interfaces() { ... } // <1>
+        public boolean anonymous() { ... }  // <2>
+        public boolean synthetic() { ... }  // <3>
+        public boolean array() { ... }      // <4>
+        public boolean enums() { ... }      // <5>
+        public boolean applibValueTypes() { // <6>
+        public boolean services() { ... }   // <7>
+    }
+    Support support();
+}
+----
+<1> whether this implementation can provide metadata for interface types.
+<2> whether this implementation can provide metadata for anonymous classes.
+<3> whether this implementation can provide metadata for synthetic types.
+<4> whether this implementation can provide metadata for arrays.
+<5> whether this implementation can provide metadata for enums.
+<6> whether this implementation can provide metadata for applib value types.
+<7> whether this implementation can provide metadata for domain services.
+
+The `support()` method returns a struct class that describes the types of classes are supported by this implementation.
+
+The `LayoutMetadataReaderFromJson` implements this extended API.
+
 
 
 == Configuration
