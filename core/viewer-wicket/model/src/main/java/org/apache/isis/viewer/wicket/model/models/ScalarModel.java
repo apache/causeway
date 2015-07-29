@@ -232,6 +232,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
+            public void init(final ScalarModel scalarModel) {
+                reset(scalarModel);
+            }
+
+            @Override
             public void reset(ScalarModel scalarModel) {
                 final OneToOneAssociation property = scalarModel.propertyMemento.getProperty();
                 final ObjectAdapter associatedAdapter = property.get(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
@@ -387,6 +392,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
+            public void init(final ScalarModel scalarModel) {
+                // no-op
+            }
+
+            @Override
             public void reset(ScalarModel scalarModel) {
                 final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter();
                 final ObjectAdapter defaultAdapter = actionParameter.getDefault(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
@@ -442,6 +452,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
         public abstract int getTypicalLength(ScalarModel scalarModel);
         
+        public abstract void init(ScalarModel scalarModel);
         public abstract void reset(ScalarModel scalarModel);
 
 
@@ -472,7 +483,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         this.parentObjectAdapterMemento = parentObjectAdapterMemento;
         this.parameterMemento = apm;
 
-        reset();
+        init();
         setMode(Mode.EDIT);
     }
 
@@ -486,15 +497,19 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         this.parentObjectAdapterMemento = parentObjectAdapterMemento;
         this.propertyMemento = pm;
 
-        reset();
+        init();
         setObject(parentObjectAdapterMemento);
         setMode(Mode.VIEW);
     }
 
+    private void init() {
+        kind.init(this);
+    }
+    
     public void reset() {
         kind.reset(this);
     }
-    
+
     public ObjectAdapterMemento getParentObjectAdapterMemento() {
         return parentObjectAdapterMemento;
     }
