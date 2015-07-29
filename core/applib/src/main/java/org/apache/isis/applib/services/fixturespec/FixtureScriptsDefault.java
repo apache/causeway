@@ -60,7 +60,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 @DomainServiceLayout(
         named="Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
-        menuOrder = "500"
+        menuOrder = "500.10"
 )
 public class FixtureScriptsDefault extends FixtureScripts {
 
@@ -87,6 +87,10 @@ public class FixtureScriptsDefault extends FixtureScripts {
 
 
     //region > runFixtureScript (using choices as the drop-down policy)
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @MemberOrder(sequence="10")
     @Override
     public List<FixtureResult> runFixtureScript(
             final FixtureScript fixtureScript,
@@ -137,9 +141,13 @@ public class FixtureScriptsDefault extends FixtureScripts {
     //endregion
 
     //region > runFixtureScript (using autoComplete as drop-down policy)
+    @Action(
+            restrictTo = RestrictTo.PROTOTYPING
+    )
     @ActionLayout(
             named = "Run Fixture Script"
     )
+    @MemberOrder(sequence="10")
     public List<FixtureResult> runFixtureScriptWithAutoComplete(
             final FixtureScript fixtureScript,
             @ParameterLayout(

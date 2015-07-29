@@ -179,7 +179,8 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
 
         final List<Object> services = obtainServices();
         if(!contains(services, FixtureScripts.class)) {
-            services.add(new FixtureScriptsDefault());
+            // add to beginning so that appears at top of prototyping menu.
+            services.add(0, new FixtureScriptsDefault());
         }
 
         // bind metamodel to the (runtime) framework
