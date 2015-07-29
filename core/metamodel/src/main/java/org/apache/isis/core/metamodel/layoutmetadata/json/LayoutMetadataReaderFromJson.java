@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
@@ -32,6 +33,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Render;
 import org.apache.isis.applib.annotation.Render.Type;
@@ -49,8 +54,8 @@ import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.layoutmetadata.ActionLayoutFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.ActionRepr;
@@ -62,7 +67,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.DisabledFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.HiddenFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadata;
-import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader2;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberGroupRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MemberRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.MultiLineFacetRepr;
@@ -79,15 +84,21 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
+public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
 
-        public Properties asProperties(final Class<?> domainClass) {
-        final LayoutMetadata metadata;
-        try {
-            metadata = readMetadata(domainClass);
-        } catch (final Exception e) {
-            throw new ReaderException("Failed to locate/parse " + domainClass.getName() + ".layout.json file (" + e.getMessage() + ")", e);
+    private static final Logger LOG = LoggerFactory.getLogger(LayoutMetadataReaderFromJson.class);
+
+    @Override
+    public Support support() {
+        return Support.entitiesOnly();
+    }
+
+    public Properties asProperties(final Class<?> domainClass) {
+        final LayoutMetadata metadata = readMetadata(domainClass);
+        if(metadata == null) {
+            return null;
         }
+
         if(metadata.getColumns() == null || metadata.getColumns().size() != 4) {
             throw new ReaderException("JSON metadata must have precisely 4 columns (prop/prop/prop/coll)");
         }
@@ -380,19 +391,42 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader {
         }
     }
 
-    public LayoutMetadata asLayoutMetadata(final Class<?> domainClass) throws ReaderException {
-        try {
-            return readMetadata(domainClass);
-        } catch (IOException | RuntimeException e) {
-            throw new ReaderException(e);
-        }
+    public LayoutMetadata asLayoutMetadata(final Class<?> domainClass)  {
+        return readMetadata(domainClass);
     }
 
     // //////////////////////////////////////
 
-    private LayoutMetadata readMetadata(final Class<?> domainClass) throws IOException {
-        final String content = ClassExtensions.resourceContent(domainClass, ".layout.json");
-        return readMetadata(content);
+    private final Set<Class<?>> blacklisted = Sets.newConcurrentHashSet();
+
+    private LayoutMetadata readMetadata(final Class<?> domainClass) {
+        final String content;
+
+        if(blacklisted.contains(domainClass)) {
+            return null;
+        }
+        try {
+            content = ClassExtensions.resourceContent(domainClass, ".layout.json");
+        } catch (IOException | IllegalArgumentException ex) {
+
+            blacklisted.add(domainClass);
+            final String message = "Failed to locate " + domainClass.getName() + ".layout.json file (" + ex.getMessage() + ")";
+
+            LOG.debug(message);
+            return null;
+        }
+
+        try {
+            return readMetadata(content);
+        } catch(Exception ex) {
+
+            // note that we don't blacklist if the file exists but couldn't be parsed;
+            // the developer might fix so we will want to retry.
+            final String message = "Failed to parse " + domainClass.getName() + ".layout.json file (" + ex.getMessage() + ")";
+            LOG.warn(message);
+
+            return null;
+        }
     }
 
     LayoutMetadata readMetadata(final String content) {

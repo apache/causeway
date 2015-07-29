@@ -51,4 +51,6 @@ public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injecta
      * @param replacementService
      */
     <T> void replaceService(T originalService, T replacementService);
+
+    boolean isRegisteredService(Class<?> cls);
 }

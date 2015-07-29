@@ -67,7 +67,9 @@ public interface SpecificationLoader extends Injectable, InjectorMethodEvaluator
 
 
     List<Class<?>> getServiceClasses();
-    
+
+    boolean isServiceClass(Class<?> cls);
+
     /**
      * Whether this class has been loaded.
      */

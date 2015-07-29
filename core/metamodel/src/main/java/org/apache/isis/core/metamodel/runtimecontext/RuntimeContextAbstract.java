@@ -140,6 +140,11 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             }
 
             @Override
+            public boolean isServiceClass(Class<?> cls) {
+                return specificationLoader.isServiceClass(cls);
+            }
+
+            @Override
             public void invalidateCache(Class<?> domainClass) {
                 specificationLoader.invalidateCache(domainClass);
             }

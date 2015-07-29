@@ -25,12 +25,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+
 import com.google.common.collect.Lists;
-import com.google.gson.JsonSyntaxException;
+import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
@@ -47,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
+import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader2;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -128,6 +133,7 @@ public class FacetedMethodsBuilder {
     private final SpecificationLoaderSpi specificationLoader;
 
     private final List<LayoutMetadataReader> layoutMetadataReaders;
+    private final Map<LayoutMetadataReader, LayoutMetadataReader2.Support> supportByReader;
 
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -149,6 +155,16 @@ public class FacetedMethodsBuilder {
         this.specificationLoader = facetedMethodsBuilderContext.specificationLoader;
 
         this.layoutMetadataReaders = facetedMethodsBuilderContext.layoutMetadataReaders;
+
+        this.supportByReader = Maps.newHashMap();
+        for (LayoutMetadataReader reader : layoutMetadataReaders) {
+
+            if(reader instanceof LayoutMetadataReader2) {
+                final LayoutMetadataReader2 reader2 = (LayoutMetadataReader2) reader;
+                final LayoutMetadataReader2.Support support = reader2.support();
+                supportByReader.put(reader, support);
+            }
+        }
     }
 
     @Override
@@ -206,20 +222,63 @@ public class FacetedMethodsBuilder {
     private Properties readMetadataProperties(final Class<?> domainClass) {
         for (final LayoutMetadataReader reader : layoutMetadataReaders) {
             try {
+                // ignore JDK, Joda and Guava classes
+                if(isPrimitiveOrJdkOrJodaOrGuava(domainClass)) {
+                    continue;
+                }
+
+                // skip class if the reader doesn't support it
+                final LayoutMetadataReader2.Support support = supportByReader.get(reader);
+                if(support != null) {
+
+                    if (!support.interfaces() && domainClass.isInterface()) {
+                        continue;
+                    }
+
+                    if (!support.anonymous() && domainClass.isAnonymousClass()) {
+                        continue;
+                    }
+
+                    if (!support.synthetic() && domainClass.isSynthetic()) {
+                        continue;
+                    }
+
+                    if (!support.array() && domainClass.isArray()) {
+                        continue;
+                    }
+
+                    if (!support.enums() && domainClass.isEnum()) {
+                        continue;
+                    }
+
+                    if (!support.applibValueTypes() && domainClass.getName().startsWith("org.apache.isis.applib.value")) {
+                        continue;
+                    }
+
+                    if(!support.services() &&
+                       getSpecificationLoader().isServiceClass(domainClass)) {
+                        continue;
+                    }
+
+                }
+
                 Properties properties = reader.asProperties(domainClass);
                 if(properties != null) {
                     return properties;
                 }
-            } catch(final ReaderException ex) {
-                final String message = reader.toString() +": unable to load layout metadata for " + domainClass.getName() + " (" + ex.getMessage() + ")";
-                if(ex.getCause() instanceof JsonSyntaxException) {
-                    LOG.warn(message);
-                } else {
-                    LOG.debug(message);
-                }
+            } catch(final ReaderException ignore) {
+                // ignore... it is now the responsibility of the reader to LOG any exceptions
             }
         }
         return null;
+    }
+
+    private static boolean isPrimitiveOrJdkOrJodaOrGuava(final Class<?> cls) {
+        if(cls.isPrimitive()) {
+            return true;
+        }
+        final String className = cls.getName();
+        return className.startsWith("java.") || className.startsWith("javax.") || className.startsWith("org.joda") || className.startsWith("com.google.common");
     }
 
     // ////////////////////////////////////////////////////////////////////////////

@@ -26,13 +26,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.commons.util.ToString;
@@ -53,10 +57,12 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private final List<Object> services = Lists.newArrayList();
 
     /**
-     * If no key, not yet searched for type; otherwise the {@link List} indicates
-     * whether a service was found.
+     * If no key, not yet searched for type; otherwise the corresponding value is a {@link List} of all
+     * services that are assignable to the type.  It's possible that this is an empty list.
      */
-    private final Map<Class<?>, List<Object>> servicesByType = Maps.newHashMap();
+    private final Map<Class<?>, List<Object>> servicesAssignableToType = Maps.newHashMap();
+
+    private final Map<Class<?>, Object> serviceByConcreteType = Maps.newHashMap();
 
     public ServicesInjectorDefault() {
         this(null);
@@ -110,12 +116,25 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
         }
 
         services.add(replacementService);
-        // invalidate cache
-        servicesByType.clear();
+
+        // invalidate
+        servicesAssignableToType.clear();
+        serviceByConcreteType.clear();
 
         autowireServicesAndContainer();
     }
 
+    @Override
+    public boolean isRegisteredService(final Class<?> cls) {
+        // lazily construct cache
+        if(serviceByConcreteType.isEmpty()) {
+            for (Object service : services) {
+                final Class<?> concreteType = service.getClass();
+                serviceByConcreteType.put(concreteType, service);
+            }
+        }
+        return serviceByConcreteType.containsKey(cls);
+    }
 
     @Override
     public List<Object> getRegisteredServices() {
@@ -308,18 +327,18 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     @Override
     public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
-        return (List<T>) servicesByType.get(serviceClass);
+        return (List<T>) servicesAssignableToType.get(serviceClass);
     };
 
     private void locateAndCache(final Class<?> serviceClass) {
-        if(servicesByType.containsKey(serviceClass)) {
+        if(servicesAssignableToType.containsKey(serviceClass)) {
            return; 
         }
 
         final List<Object> matchingServices = Lists.newArrayList();
         addAssignableTo(serviceClass, services, matchingServices);
 
-        servicesByType.put(serviceClass, matchingServices);
+        servicesAssignableToType.put(serviceClass, matchingServices);
     }
 
     private static void addAssignableTo(final Class<?> type, final List<Object> candidates, final List<Object> filteredServicesAndContainer) {

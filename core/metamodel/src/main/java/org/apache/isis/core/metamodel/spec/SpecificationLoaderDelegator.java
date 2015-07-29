@@ -84,6 +84,10 @@ public class SpecificationLoaderDelegator extends SpecificationLoaderAbstract {
     public List<Class<?>> getServiceClasses() {
         return specificationLoaderDelegate.getServiceClasses();
     }
+    @Override
+    public boolean isServiceClass(Class<?> cls) {
+        return specificationLoaderDelegate.isServiceClass(cls);
+    }
 
     @Override
     public void invalidateCache(Class<?> domainClass) {

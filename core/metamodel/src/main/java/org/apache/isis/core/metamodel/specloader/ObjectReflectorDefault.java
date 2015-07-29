@@ -634,6 +634,10 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return Collections.unmodifiableList(Lists.newArrayList(serviceClasses));
     }
 
+    public boolean isServiceClass(Class<?> cls) {
+        return this.servicesInjector.isRegisteredService(cls);
+    }
+
     @Override
     public void setServiceInjector(final ServicesInjectorSpi services) {
         servicesInjector = services;

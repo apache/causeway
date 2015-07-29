@@ -136,6 +136,11 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     }
 
     @Override
+    public boolean isServiceClass(final Class<?> cls) {
+        throw new NotYetImplementedException();
+    }
+
+    @Override
     public void invalidateCacheFor(Object domainObject) {
     }
     @Override
