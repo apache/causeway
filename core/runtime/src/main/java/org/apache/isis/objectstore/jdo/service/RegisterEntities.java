@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
@@ -32,16 +30,14 @@ import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.ScanUtils;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
-@Hidden
 public class RegisterEntities {
 
     @SuppressWarnings("unused")
@@ -49,54 +45,35 @@ public class RegisterEntities {
     
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
-    // //////////////////////////////////////
-
     private String packagePrefixes;
 
-    @PostConstruct
-    public void init(Map<String,String> configuration) {
+    public RegisterEntities(final Map<String, String> configuration) {
         packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
         if(Strings.isNullOrEmpty(packagePrefixes)) {
             throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
         }
         
-        registerAllPersistenceCapables();
+        discoverAllPersistenceCapables();
     }
 
-    @PreDestroy
-    public void shutdown() {
-    }
-
-    private void registerAllPersistenceCapables() {
+    private void discoverAllPersistenceCapables() {
 
         final List<String> packagePrefixList = Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim()));
         for (final String packagePrefix : packagePrefixList) {
 
-            final Set<Class<?>> entityTypes = ScanUtils.scanForAnnotation(packagePrefixList, PersistenceCapable.class);
-            if(noEntitiesIn(entityTypes)) {
+            final Iterable<String> entityTypes = ScanUtils.scanForNamesOfClassesWithAnnotation(packagePrefixList, PersistenceCapable.class);
+            if(notEmpty(entityTypes)) {
                 throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
             }
-            for (Class<?> entityType : entityTypes) {
-                if(ignore(entityType)) {
-                    // ignore (probably a testing class)
-                    continue;
-                }
-                getSpecificationLoader().loadSpecification(entityType);
-            }
+            this.entityTypes = Sets.newLinkedHashSet(entityTypes);
         }
     }
 
-    private static boolean ignore(final Class<?> entityType) {
-        try {
-            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass()) {
-                return true;
-            }
-            final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-            final boolean hasPersistenceCapable = persistenceCapable != null;
-            return !hasPersistenceCapable; // don't ignore if has @PersistenceCapable
-        } catch (NoClassDefFoundError ex) {
-            return true;
-        }
+    private Set<String> entityTypes;
+
+    @Programmatic
+    public Set<String> getEntityTypes() {
+        return entityTypes;
     }
 
     private static Function<String,String> trim() {
@@ -111,26 +88,17 @@ public class RegisterEntities {
     /**
      * legacy from using <tt>org.reflections.Reflections</tt> that seems to return a set with 1 null element if none can be found.
      */
-    private static boolean noEntitiesIn(Set<Class<?>> entityTypes) {
-        return Iterables.filter(entityTypes, nullClass()).iterator().hasNext();
+    private static <T> boolean notEmpty(Iterable<T> set) {
+        return Iterables.filter(set, isNull()).iterator().hasNext();
     }
 
-    private static Predicate<Class<?>> nullClass() {
-        return new Predicate<Class<?>>() {
-
+    private static <T> Predicate<T> isNull() {
+        return new Predicate<T>() {
             @Override
-            public boolean apply(Class<?> input) {
+            public boolean apply(T input) {
                 return input == null;
             }
         };
     }
 
-    // //////////////////////////////////////
-
-    SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-
-    
 }

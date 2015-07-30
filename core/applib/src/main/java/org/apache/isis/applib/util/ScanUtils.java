@@ -20,9 +20,8 @@ package org.apache.isis.applib.util;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Set;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMatchProcessor;
@@ -32,8 +31,9 @@ public class ScanUtils {
 
     private ScanUtils(){}
 
-    public static <T extends Annotation> Set<Class<?>> scanForAnnotation(final List<String> packagePrefixList, final Class<T> annotationClass) {
-        final Set<Class<?>> classes = Sets.newLinkedHashSet();
+    public static <T extends Annotation> Iterable<Class<?>> scanForClassesWithAnnotation(
+            final List<String> packagePrefixList, final Class<T> annotationClass) {
+        final List<Class<?>> classes = Lists.newArrayList();
         new FastClasspathScanner(packagePrefixList.toArray(new String[]{}))
                 .matchClassesWithAnnotation(annotationClass,
                         new ClassAnnotationMatchProcessor() {
@@ -45,10 +45,17 @@ public class ScanUtils {
                 .scan();
         return classes;
     }
-    public static <T> Set<Class<? extends T>> scanForSubclassesOf(final List<String> packagePrefixList, final Class<T> annotationClass) {
-        final Set<Class<? extends T>> classes = Sets.newLinkedHashSet();
+
+    public static <T extends Annotation> Iterable<String> scanForNamesOfClassesWithAnnotation(
+            final List<String> packagePrefixList, final Class<T> annotationClass) {
+        final FastClasspathScanner scanner = scanner(packagePrefixList);
+        return scanner.getNamesOfClassesWithAnnotation(annotationClass);
+    }
+
+    public static <T> Iterable<Class<? extends T>> scanForSubclassesOf(final List<String> packagePrefixList, final Class<T> superClass) {
+        final List<Class<? extends T>> classes = Lists.newArrayList();
         new FastClasspathScanner(packagePrefixList.toArray(new String[]{}))
-                .matchSubclassesOf(annotationClass,
+                .matchSubclassesOf(superClass,
                         new SubclassMatchProcessor<T>() {
                             @Override
                             public void processMatch(final Class<? extends T> matchingClass) {
@@ -58,4 +65,15 @@ public class ScanUtils {
                 .scan();
         return classes;
     }
+
+    public static <T> Iterable<String> scanForNamesOfSubclassesOf(final List<String> packagePrefixList, final Class<T> superClass) {
+        final FastClasspathScanner scanner = scanner(packagePrefixList);
+        return scanner.getNamesOfSubclassesOf(superClass);
+    }
+
+    public static FastClasspathScanner scanner(final List<String> packagePrefixList) {
+        return new FastClasspathScanner(packagePrefixList.toArray(new String[] {})).scan();
+    }
+
+
 }

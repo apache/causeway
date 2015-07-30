@@ -50,8 +50,10 @@ public class ClassDiscoveryServiceUsingFastClasspathScanner
     @Programmatic
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
-        final Set<Class<? extends T>> classes = Sets.newLinkedHashSet();
-        return ScanUtils.scanForSubclassesOf(Collections.singletonList(packagePrefix), type);
+        return Sets.newLinkedHashSet(
+                ScanUtils.scanForSubclassesOf(
+                        Collections.singletonList(packagePrefix),
+                        type));
     }
 
 }
