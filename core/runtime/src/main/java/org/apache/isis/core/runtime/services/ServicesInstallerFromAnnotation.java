@@ -26,7 +26,6 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 
-import javax.annotation.Nullable;
 import javax.annotation.PreDestroy;
 
 import com.google.common.base.Function;
@@ -37,17 +36,13 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 
-import org.reflections.Reflections;
-import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
-import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
@@ -217,50 +212,16 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         initIfRequired();
 
         final List<String> packagePrefixList = asList(packagePrefixes);
-
-        final List<Class<?>> domainServiceClassesR = Lists.newArrayList(findClassesUsingReflections(packagePrefixList));
-        final List<Class<?>> domainServiceClassesFCS = Lists.newArrayList(findClassesUsingFastClasspathScanner(packagePrefixList));
-
-        final List<Class<?>> domainServiceClasses = Lists.newArrayList(domainServiceClassesFCS);
-
-        final List<String> sortedR_orig = sortedClassNames(domainServiceClassesR);
-        final List<String> sortedR = sortedClassNames(domainServiceClassesR);
-        final List<String> sortedFCS_orig = sortedClassNames(domainServiceClassesFCS);
-        final List<String> sortedFCS = sortedClassNames(domainServiceClassesFCS);
-
-        sortedR.removeAll(sortedFCS_orig);
-        sortedFCS.removeAll(sortedR_orig);
-
-        System.out.println("in R, not in FCS:");
-        for (String s : sortedR) {
-            System.out.println("  " + s);
-        }
-
-        System.out.println("in FCS, not in R:");
-        for (String s : sortedFCS) {
-            System.out.println("  " + s);
-        }
-
-
+        final Iterable<Class<?>> domainServiceClasses = findClassesUsingFastClasspathScanner(packagePrefixList);
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
-            final String name = nameOf(cls);
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
-    }
-
-    public List<String> sortedClassNames(final List<Class<?>> classes) {
-        final Iterable<String> transform = Iterables.transform(classes, new Function<Class<?>, String>() {
-            @Nullable @Override public String apply(@Nullable final Class<?> input) {
-                return input.getName();
-            }
-        });
-        return Ordering.natural().sortedCopy(transform);
     }
 
     protected Iterable<Class<?>> findClassesUsingFastClasspathScanner(final List<String> packagePrefixList) {
@@ -276,23 +237,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
                 })
                 .scan();
         return classes;
-    }
-
-    protected Iterable<Class<?>> findClassesUsingFastClasspathScanner2(final List<String> packagePrefixList) {
-        final Set<Class<?>> classes = Sets.newLinkedHashSet();
-        final FastClasspathScanner scan = new FastClasspathScanner(packagePrefixList.toArray(new String[] {}))
-                .scan();
-        final List<String> namesOfClassesWithAnnotation = scan.getNamesOfClassesWithAnnotation(DomainService.class);
-
-        return classes;
-    }
-
-    protected Iterable<Class<?>> findClassesUsingReflections(final List<String> packagePrefixList) {
-        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
-        final Reflections reflections = new Reflections(packagePrefixList);
-
-        final Set<Class<?>> classes = reflections.getTypesAnnotatedWith(DomainService.class);
-        return Iterables.filter(classes, instantiatable());
     }
 
     private static String orderOf(final Class<?> cls) {
@@ -325,6 +269,5 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     public List<Class<?>> getTypes() {
         return listOf(List.class); // ie List<Object.class>, of services
     }
-
 
 }

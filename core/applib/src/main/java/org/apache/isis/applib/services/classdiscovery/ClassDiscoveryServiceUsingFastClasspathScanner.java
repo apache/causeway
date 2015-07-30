@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.classdiscovery;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -26,9 +27,7 @@ import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.matchprocessor.SubclassMatchProcessor;
+import org.apache.isis.applib.util.ScanUtils;
 
 /**
  * This utility service supports the dynamic discovery of classes from the classpath.  One service that uses this
@@ -42,7 +41,6 @@ public class ClassDiscoveryServiceUsingFastClasspathScanner
             extends AbstractService
             implements ClassDiscoveryService2 {
 
-
     @Programmatic
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type) {
@@ -53,16 +51,7 @@ public class ClassDiscoveryServiceUsingFastClasspathScanner
     @Override
     public <T> Set<Class<? extends T>> findSubTypesOfClasses(Class<T> type, String packagePrefix) {
         final Set<Class<? extends T>> classes = Sets.newLinkedHashSet();
-        new FastClasspathScanner(packagePrefix)
-                .matchSubclassesOf(type, new SubclassMatchProcessor<T>() {
-                    @Override
-                    public void processMatch(final Class<? extends T> aClass) {
-                        classes.add(aClass);
-                    }
-                })
-                .scan();
-        return classes;
+        return ScanUtils.scanForSubclassesOf(Collections.singletonList(packagePrefix), type);
     }
-
 
 }

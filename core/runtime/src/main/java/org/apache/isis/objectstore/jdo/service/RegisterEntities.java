@@ -18,20 +18,26 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.jdo.annotations.PersistenceCapable;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import org.reflections.Reflections;
+import com.google.common.collect.Lists;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.util.ScanUtils;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -63,12 +69,10 @@ public class RegisterEntities {
 
     private void registerAllPersistenceCapables() {
 
-        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
-            Reflections reflections = new Reflections(packagePrefix);
-            
-            Set<Class<?>> entityTypes = 
-                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-            
+        final List<String> packagePrefixList = Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim()));
+        for (final String packagePrefix : packagePrefixList) {
+
+            final Set<Class<?>> entityTypes = ScanUtils.scanForAnnotation(packagePrefixList, PersistenceCapable.class);
             if(noEntitiesIn(entityTypes)) {
                 throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
             }
@@ -105,7 +109,7 @@ public class RegisterEntities {
     }
 
     /**
-     * {@link Reflections} seems to return a set with 1 null element if none can be found.
+     * legacy from using <tt>org.reflections.Reflections</tt> that seems to return a set with 1 null element if none can be found.
      */
     private static boolean noEntitiesIn(Set<Class<?>> entityTypes) {
         return Iterables.filter(entityTypes, nullClass()).iterator().hasNext();
