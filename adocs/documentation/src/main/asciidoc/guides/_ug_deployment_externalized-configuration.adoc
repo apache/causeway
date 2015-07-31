@@ -56,8 +56,14 @@ For example, if using Tomcat 7.0, you would typically copy the empty `$TOMCAT_HO
 ----
 <Parameter name="isis.config.dir"
            value="/usr/local/tomcat/myapp/conf/"
-           override="true"/>
+           override="false"/>
 ----
+
+[IMPORTANT]
+====
+Note that the `override` key should be set to "false"; not "true"; it indicates whether this parameter is overridable by the application's own `web.xml`. In most cases, you probably want to disallow that.
+====
+
 
 For more detail, see the Tomcat documentation on http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Defining_a_context[defining a context] and on http://tomcat.apache.org/tomcat-7.0-doc/config/context.html#Context_Parameters[context parameters].
 
