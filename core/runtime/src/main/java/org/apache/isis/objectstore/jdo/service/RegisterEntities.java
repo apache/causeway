@@ -43,7 +43,9 @@ public class RegisterEntities {
     public RegisterEntities(final Map<String, String> configuration) {
         String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
         if(Strings.isNullOrEmpty(packagePrefixes)) {
-            throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
+            throw new IllegalArgumentException(String.format(
+                    "Could not locate '%s' key in property files - aborting",
+                    PACKAGE_PREFIX_KEY));
         }
 
         domPackages = parseDomPackages(packagePrefixes);
@@ -74,7 +76,11 @@ public class RegisterEntities {
         for (final String packagePrefix : domPackages) {
             final Iterable<String> entityTypes1 = ScanUtils.scanForNamesOfClassesWithAnnotation(domPackages, PersistenceCapable.class);
             if(Iterables.isEmpty(entityTypes1)) {
-                throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
+                throw new IllegalArgumentException(String.format(
+                        "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
+                        "Check value of '%s' key in isis.properties etc.\n",
+                        packagePrefix,
+                        PACKAGE_PREFIX_KEY));
             }
             Iterables.addAll(entityTypes, entityTypes1);
         }

@@ -33,3 +33,11 @@ isis.persistor.datanucleus.RegisterEntities.packagePrefix=\
                 org.isisaddons.module.audit.dom,\
                 org.isisaddons.module.publishing.dom
 ----
+
+[TIP]
+====
+Alternatively, could have just specified `org.isisaddons.module` instead of enumerating every addon.  This would be a bit slower, but more maintainable.
+====
+
+
+If you fail to do this then DataNucleus will build up its metamodel lazily, rather than validate all classes up-front.  This can call issues: we've seen malformed SQL being submitted when DN wasn't aware of subclasses of a superclass, and we've also seen deadlocks when running against HSQLDB as it attempts to perform a DDL statement intermixed with DML statements.
