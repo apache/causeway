@@ -116,7 +116,7 @@
         <javassist.version>3.19.0-GA</javassist.version>
         <reflections.version>0.9.9</reflections.version>
 
-        <fast-classpath-scanner.version>1.4.2-SNAPSHOT</fast-classpath-scanner.version>
+        <fast-classpath-scanner.version>1.6.0</fast-classpath-scanner.version>
 
         <commons-logging.version>1.1.2</commons-logging.version>
         <commons-cli.version>1.2</commons-cli.version>

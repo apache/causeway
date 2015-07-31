@@ -12,7 +12,7 @@ Apache Isis 1.9.0 is the first version to support Java 8.  You can continue to u
 
 == In the parent `pom.xml`
 
-under `<build>/<pluginManagement>/<plugins>`, add (or update) maven-enforcer-plugin:
+under `build/pluginManagement/plugins`, add (or update) `maven-compiler-plugin`:
 
 [source,xml]
 ----

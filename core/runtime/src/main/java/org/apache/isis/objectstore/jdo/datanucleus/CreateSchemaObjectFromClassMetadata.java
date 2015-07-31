@@ -19,29 +19,43 @@
 package org.apache.isis.objectstore.jdo.datanucleus;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
+import javax.jdo.datastore.JDOConnection;
+
 import com.google.common.base.Strings;
+
 import org.datanucleus.metadata.AbstractClassMetaData;
 import org.datanucleus.metadata.MetaDataListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Implementation note: the methods in this class are <tt>protected</tt> to allow for easy subclassing.
+ */
 public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, PersistenceManagerFactoryAware, DataNucleusPropertiesAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
 
-    // unused
-    protected PersistenceManagerFactory persistenceManagerFactory;
-    protected Map<String, String> properties;
+    //region > persistenceManagerFactory, properties
+    private PersistenceManagerFactory persistenceManagerFactory;
+    protected PersistenceManagerFactory getPersistenceManagerFactory() {
+        return persistenceManagerFactory;
+    }
 
-    protected String driverName;
-    protected String url;
+    private Map<String, String> properties;
+    protected Map<String, String> getProperties() {
+        return properties;
+    }
+    //endregion
+
+    //region > loaded (API)
 
     @Override
     public void loaded(final AbstractClassMetaData cmd) {
@@ -51,39 +65,36 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
             return;
         }
 
-        driverName = properties.get("javax.jdo.option.ConnectionDriverName");
-        url = properties.get("javax.jdo.option.ConnectionURL");
-        final String userName = properties.get("javax.jdo.option.ConnectionUserName");
-        final String password = properties.get("javax.jdo.option.ConnectionPassword");
-
+        JDOConnection dataStoreConnection = null;
         Connection connection = null;
         Statement statement = null;
+
+
+        final PersistenceManager persistenceManager =
+                persistenceManagerFactory.getPersistenceManager();
+        dataStoreConnection = persistenceManager.getDataStoreConnection();
         try {
-            connection = DriverManager.getConnection(url, userName, password);
+            final Object connectionObj = dataStoreConnection.getNativeConnection();
+            connection = (java.sql.Connection) connectionObj;
+
             statement = connection.createStatement();
             if(skip(cmd, statement)) {
                 return;
             }
             exec(cmd, statement);
+
         } catch (SQLException e) {
             LOG.warn("Unable to create schema", e);
+
         } finally {
             closeSafely(statement);
-            closeSafely(connection);
+            dataStoreConnection.close();
         }
-    }
 
-    protected void closeSafely(final AutoCloseable connection) {
-        if(connection != null) {
-            try {
-                connection.close();
-            } catch (Exception e) {
-                // ignore
-            }
-        }
     }
+    //endregion
 
-    //region > skip
+    //region > skip, exec, schemaNameFor
 
     /**
      * Whether to skip creating this schema.
@@ -105,9 +116,6 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
         final String schemaName = schemaNameFor(cmd);
         return String.format("SELECT count(*) FROM INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = '%s'", schemaName);
     }
-    //endregion
-
-    //region > exec
 
     /**
      * Create the schema
@@ -121,7 +129,6 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
         final String schemaName = schemaNameFor(cmd);
         return String.format("CREATE SCHEMA \"%s\"", schemaName);
     }
-    //endregion
 
     /**
      * Determine the name of the schema.
@@ -138,6 +145,8 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
         // db vendors without requiring lots of complex configuration of DataNucleus
         //
 
+        String url = getProperties().get("javax.jdo.option.ConnectionURL");
+
         if(url.contains("postgres")) {
             schemaName = schemaName.toLowerCase(Locale.ROOT);
         }
@@ -149,10 +158,21 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
         }
         return schemaName;
     }
+    //endregion
 
+    //region > helpers: closeSafely
+    protected void closeSafely(final AutoCloseable connection) {
+        if(connection != null) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+    }
+    //endregion
 
-    // //////////////////////////////////////
-
+    //region > injected dependencies
     public void setPersistenceManagerFactory(final PersistenceManagerFactory persistenceManagerFactory) {
         this.persistenceManagerFactory = persistenceManagerFactory;
     }
@@ -161,4 +181,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
     public void setDataNucleusProperties(final Map<String, String> properties) {
         this.properties = properties;
     }
+    //endregion
+
+
 }
