@@ -17,10 +17,6 @@ If you've not performed a release before, then note that there are some configur
 
 These release notes using bash command line tools.  They should work on Linux and MacOS; for Windows, use mSysGit.
 
-See also:
-
-* the xref:cg.adoc#_cg_committers_release-process-one-pager[one pager] which lists the essential steps
-* the xref:cg.adoc#_cg_committers_release-checklist[release checklist] for keeping track of where you are while releasing Apache Isis component(s).
 
 
 

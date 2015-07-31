@@ -34,3 +34,12 @@ In addition to the http://www.apache.org/foundation/thanks.html[support given to
 
 
 
+Also to:
+
+- link:https://github.com/mojavelinux[Dan Allen] for his fantastic work on link:https://github.com/asciidoctor/asciidoctor[Asciidoctor]
+
+- link:https://github.com/lukehutch[Luke Hutch] for his link:https://github.com/lukehutch/fast-classpath-scanner[fast-classpath-scanner], in particular for merging in our PR for Java 7 support and releasing so quickly
+
+- link:https://github.com/krasa/MavenHelper[Vojtech Krasa] for his super https://github.com/krasa/MavenHelper[MavenHelper] plugin to IntelliJ
+
+and to many others who contribute their free time and passion to open source.
