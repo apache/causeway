@@ -89,8 +89,9 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
 
     //region > createPersistenceSessionFactory
     @Override
-    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactory(deploymentType, getConfiguration(), this);
+    public PersistenceSessionFactory createPersistenceSessionFactory(
+            final DeploymentType deploymentType, final List<Object> services) {
+        return new PersistenceSessionFactory(deploymentType, services, getConfiguration(), this);
     }
     //endregion
 
@@ -108,7 +109,8 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     
     private DataNucleusApplicationComponents applicationComponents = null;
 
-    private DataNucleusApplicationComponents createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
+    private DataNucleusApplicationComponents createDataNucleusApplicationComponentsIfRequired(
+            final IsisConfiguration configuration) {
 
         if (applicationComponents == null || applicationComponents.isStale()) {
 
@@ -118,19 +120,14 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration);
+            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+            final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);
         }
 
         return applicationComponents;
     }
-
-    private static Set<String> catalogClassesToBePersisted(
-            final IsisConfiguration configuration) {
-        return new RegisterEntities(configuration.asMap()).getEntityTypes();
-    }
-
 
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {

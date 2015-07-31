@@ -152,4 +152,9 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
         return false;
     }
 
+    @Override
+    public void validateAndAssert() {
+
+    }
+
 }

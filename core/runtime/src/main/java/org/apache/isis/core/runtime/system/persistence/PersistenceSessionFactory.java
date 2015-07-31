@@ -21,8 +21,10 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -42,7 +44,10 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Implementation that just delegates to a supplied
@@ -56,23 +61,23 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
     private final IsisConfiguration configuration;
     private final ObjectStoreFactory objectStoreFactory;
 
-    /**
-     * @see #setServices(List)
-     */
-    private List<Object> serviceList;
-
     private Boolean fixturesInstalled;
 
-    private final ServicesInjectorSpi servicesInjector = new ServicesInjectorDefault();
+    private final ServicesInjectorSpi servicesInjector;
     private RuntimeContext runtimeContext;
 
     public PersistenceSessionFactory(
             final DeploymentType deploymentType,
+            final List<Object> serviceList,
             final IsisConfiguration isisConfiguration,
             final ObjectStoreFactory objectStoreFactory) {
+
+        ensureThatState(serviceList, is(notNullValue()));
+
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
         this.objectStoreFactory = objectStoreFactory;
+        servicesInjector = new ServicesInjectorDefault(serviceList);
     }
 
     public DeploymentType getDeploymentType() {
@@ -92,19 +97,12 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
         ServicesInjectorSpi servicesInjector = getServicesInjector();
 
         final ObjectStore objectStore = objectStoreFactory.createObjectStore(getConfiguration());
-
         ensureThatArg(objectStore, is(not(nullValue())));
 
-        final PersistenceSession persistenceSession = new PersistenceSession(this, servicesInjector, objectStore, getConfiguration());
-
-
-        return persistenceSession;
+        return new PersistenceSession(this, objectStore, getConfiguration());
     }
 
     public final void init() {
-
-        // check prereq dependencies injected
-        ensureThatState(serviceList, is(notNullValue()));
 
         // a bit of a workaround, but required if anything in the metamodel (for
         // example, a
@@ -124,13 +122,12 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
         runtimeContext.injectInto(servicesInjector);
         
         // wire up components
-
         getSpecificationLoader().injectInto(runtimeContext);
-        for (Object service : serviceList) {
+
+        for (Object service : servicesInjector.getRegisteredServices()) {
             runtimeContext.injectInto(service);
         }
 
-        servicesInjector.setServices(serviceList);
         servicesInjector.init();
     }
 
@@ -210,10 +207,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
     // //////////////////////////////////////////////////////
     // Dependencies (injected via setters)
     // //////////////////////////////////////////////////////
-
-    public void setServices(final List<Object> serviceList) {
-        this.serviceList = serviceList;
-    }
 
     // //////////////////////////////////////////////////////
     // Dependencies (from context)

@@ -117,14 +117,15 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
         reflector = new ObjectReflectorDefault(configuration, programmingModel, facetDecorators, metaModelValidator, layoutMetadataReaders);
 
-        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault();
-        servicesInjector.setServices(services);
+        final ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(services);
         reflector.setServiceInjector(servicesInjector);
         
         runtimeContext.injectInto(reflector);
         reflector.injectInto(runtimeContext);
 
-        validationFailures = reflector.initAndValidate();
+        reflector.initialize();
+
+        validationFailures = reflector.validate();
         runtimeContext.init();
 
         for (final Object service : services) {

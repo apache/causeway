@@ -18,6 +18,7 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,55 +26,63 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.util.ScanUtils;
 
 public class RegisterEntities {
 
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
-    
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
-    private String packagePrefixes;
+    //region > init
 
     public RegisterEntities(final Map<String, String> configuration) {
-        packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
+        String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
         if(Strings.isNullOrEmpty(packagePrefixes)) {
             throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
         }
-        
-        discoverAllPersistenceCapables();
+
+        domPackages = parseDomPackages(packagePrefixes);
+        this.entityTypes = scanForEntityTypesIn(this.domPackages);
     }
 
-    private void discoverAllPersistenceCapables() {
+    //endregion
 
-        final List<String> packagePrefixList = Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim()));
-        for (final String packagePrefix : packagePrefixList) {
+    //region > domPackages
+    private List<String> domPackages;
 
-            final Iterable<String> entityTypes = ScanUtils.scanForNamesOfClassesWithAnnotation(packagePrefixList, PersistenceCapable.class);
-            if(notEmpty(entityTypes)) {
-                throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
-            }
-            this.entityTypes = Sets.newLinkedHashSet(entityTypes);
-        }
+    public List<String> getDomPackages() {
+        return domPackages;
     }
+    //endregion
 
+    //region > entityTypes
     private Set<String> entityTypes;
 
-    @Programmatic
     public Set<String> getEntityTypes() {
         return entityTypes;
+    }
+    //endregion
+
+    //region > helpers
+    private static Set<String> scanForEntityTypesIn(final List<String> domPackages) {
+        Set<String> entityTypes = Sets.newLinkedHashSet();
+        for (final String packagePrefix : domPackages) {
+            final Iterable<String> entityTypes1 = ScanUtils.scanForNamesOfClassesWithAnnotation(domPackages, PersistenceCapable.class);
+            if(Iterables.isEmpty(entityTypes1)) {
+                throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
+            }
+            Iterables.addAll(entityTypes, entityTypes1);
+        }
+        return entityTypes;
+    }
+
+    private static List<String> parseDomPackages(String packagePrefixes) {
+        return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
     }
 
     private static Function<String,String> trim() {
@@ -84,21 +93,6 @@ public class RegisterEntities {
             }
         };
     }
-
-    /**
-     * legacy from using <tt>org.reflections.Reflections</tt> that seems to return a set with 1 null element if none can be found.
-     */
-    private static <T> boolean notEmpty(Iterable<T> set) {
-        return Iterables.filter(set, isNull()).iterator().hasNext();
-    }
-
-    private static <T> Predicate<T> isNull() {
-        return new Predicate<T>() {
-            @Override
-            public boolean apply(T input) {
-                return input == null;
-            }
-        };
-    }
+    //endregion
 
 }

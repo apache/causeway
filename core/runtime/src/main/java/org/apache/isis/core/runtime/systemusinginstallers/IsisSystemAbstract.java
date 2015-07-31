@@ -22,8 +22,10 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
@@ -34,13 +36,13 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -49,6 +51,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactoryDefault;
 
@@ -152,14 +155,15 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
 
     @Override
     public IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
-        final PersistenceSessionFactory persistenceSessionFactory = obtainPersistenceSessionFactory(deploymentType);
+        final List<Object> services = obtainServices();
+        final PersistenceSessionFactory persistenceSessionFactory = obtainPersistenceSessionFactory(deploymentType, services);
         return createSessionFactory(deploymentType, persistenceSessionFactory);
     }
 
     /**
      * Overloaded version designed to be called by subclasses that need to
      * explicitly specify different persistence mechanisms.
-     * 
+     *
      * <p>
      * This is <i>not</i> a hook method, rather it is designed to be called
      * <i>from</i> the {@link #doCreateSessionFactory(DeploymentType) hook
@@ -167,59 +171,33 @@ public abstract class IsisSystemAbstract extends IsisSystemFixturesHookAbstract 
      */
     protected final IsisSessionFactory createSessionFactory(
             final DeploymentType deploymentType,
-            final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
+    final PersistenceSessionFactory persistenceSessionFactory) throws IsisSystemException {
 
         final IsisConfiguration configuration = getConfiguration();
         final AuthenticationManager authenticationManager = obtainAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager = obtainAuthorizationManager(deploymentType);
         final OidMarshaller oidMarshaller = obtainOidMarshaller();
-        
-        final Collection<MetaModelRefiner> metaModelRefiners = refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
+
+        final Collection<MetaModelRefiner> metaModelRefiners =
+                refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
         final SpecificationLoaderSpi reflector = obtainSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
-        final List<Object> services = obtainServices();
-        if(!contains(services, FixtureScripts.class)) {
-            // add to beginning so that appears at top of prototyping menu.
-            services.add(0, new FixtureScriptsDefault());
-        }
+        ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
+        servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
+        servicesInjector.validateServices();
 
         // bind metamodel to the (runtime) framework
         final RuntimeContextFromSession runtimeContext = obtainRuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
-        return newIsisSessionFactory(
-                deploymentType,
-                persistenceSessionFactory,
-                configuration,
+        return new IsisSessionFactoryDefault(
+                deploymentType, configuration, reflector,
                 authenticationManager, authorizationManager,
-                oidMarshaller,
-                reflector,
-                services);
+                persistenceSessionFactory, oidMarshaller);
     }
-
-    static boolean contains(final List<Object> services, final Class<?> serviceClass) {
-        for (Object service : services) {
-            if(serviceClass.isAssignableFrom(service.getClass())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     protected RuntimeContextFromSession obtainRuntimeContextFromSession() {
         return new RuntimeContextFromSession();
-    }
-
-    protected IsisSessionFactoryDefault newIsisSessionFactory(
-            final DeploymentType deploymentType,
-            final PersistenceSessionFactory persistenceSessionFactory,
-            final IsisConfiguration configuration,
-            final AuthenticationManager authenticationManager, final AuthorizationManager authorizationManager,
-            final OidMarshaller oidMarshaller,
-            final SpecificationLoaderSpi reflector,
-            final List<Object> services) {
-        return new IsisSessionFactoryDefault(deploymentType, configuration, reflector, authenticationManager, authorizationManager, persistenceSessionFactory, services, oidMarshaller);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {

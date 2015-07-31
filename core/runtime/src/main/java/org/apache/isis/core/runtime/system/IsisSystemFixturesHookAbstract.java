@@ -123,6 +123,10 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
             initContext(sessionFactory);
             sessionFactory.init();
 
+            // validate here after all entities have been registered in the persistence session factory
+            final SpecificationLoaderSpi specificationLoader = sessionFactory.getSpecificationLoader();
+            specificationLoader.validateAndAssert();
+
             serviceInitializer = initializeServices();
 
             installFixturesIfRequired();
@@ -260,6 +264,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
      */
     protected abstract IsisSessionFactory doCreateSessionFactory(final DeploymentType deploymentType) throws IsisSystemException;
 
+
     // ///////////////////////////////////////////
     // Configuration
     // ///////////////////////////////////////////
@@ -302,7 +307,7 @@ public abstract class IsisSystemFixturesHookAbstract implements IsisSystem {
     // PersistenceSessionFactory
     // ///////////////////////////////////////////
 
-    protected abstract PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType) throws IsisSystemException;
+    protected abstract PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType, final List<Object> services) throws IsisSystemException;
 
     // ///////////////////////////////////////////
     // Fixtures (hooks)

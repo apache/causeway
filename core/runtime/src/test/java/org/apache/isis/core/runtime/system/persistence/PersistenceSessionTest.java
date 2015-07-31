@@ -147,19 +147,18 @@ public class PersistenceSessionTest {
 
         runtimeContext.injectInto(container);
 
-        servicesInjector = new ServicesInjectorDefault(new InjectorMethodEvaluatorDefault());
+        servicesInjector = new ServicesInjectorDefault(
+                Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
         adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(mockConfiguration));
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, servicesInjector, mockObjectStore, mockConfiguration) {
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockObjectStore, mockConfiguration) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
             }
             
         };
-        
-        servicesInjector.setServices(Collections.<Object>singletonList(container));
         
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();

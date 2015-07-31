@@ -72,7 +72,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final List<Object> serviceList;
     private final OidMarshaller oidMarshaller;
 
     public IsisSessionFactoryDefault(
@@ -82,7 +81,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
             final PersistenceSessionFactory persistenceSessionFactory,
-            final List<Object> serviceList,
             final OidMarshaller oidMarshaller) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
@@ -91,7 +89,6 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         ensureThatArg(authenticationManager, is(not(nullValue())));
         ensureThatArg(authorizationManager, is(not(nullValue())));
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())));
-        ensureThatArg(serviceList, is(not(nullValue())));
 
         this.deploymentType = deploymentType;
         this.configuration = configuration;
@@ -99,80 +96,9 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
         this.persistenceSessionFactory = persistenceSessionFactory;
-        this.serviceList = serviceList;
         this.oidMarshaller = oidMarshaller;
-        
-        validateServices(serviceList);
     }
 
-    /**
-     * Validate domain service Ids are unique, and that the {@link PostConstruct} method, if present, must either 
-     * take no arguments or take a {@link Map} object), and that the {@link PreDestroy} method, if present, must take 
-     * no arguments.
-     * 
-     * <p>
-     * TODO: there seems to be some duplication/overlap with {@link ServiceInitializer}.
-     */
-    private void validateServices(List<Object> serviceList) {
-        for (Object service : serviceList) {
-            final Method[] methods = service.getClass().getMethods();
-            for (Method method : methods) {
-                validatePostConstructMethods(service, method);
-                validatePreDestroyMethods(service, method);
-            }
-        }
-        
-        ListMultimap<String, Object> servicesById = ArrayListMultimap.create();
-        for (Object service : serviceList) {
-            String id = ServiceUtil.id(service);
-            servicesById.put(id, service);
-        }
-        for (Entry<String, Collection<Object>> servicesForId : servicesById.asMap().entrySet()) {
-            String serviceId = servicesForId.getKey();
-            Collection<Object> services = servicesForId.getValue();
-            if(services.size() > 1) {
-                throw new IllegalStateException("Service ids must be unique; serviceId '" + serviceId + "' is declared by domain services " + classNamesFor(services)); 
-            }
-        }
-    }
-
-    private static String classNamesFor(Collection<Object> services) {
-        StringBuilder buf = new StringBuilder();
-        for (Object service : services) {
-            if(buf.length() > 0) {
-                buf.append(", ");
-            }
-            buf.append(service.getClass().getName());
-        }
-        return buf.toString();
-    }
-
-    private void validatePostConstructMethods(Object service, Method method) {
-        final PostConstruct postConstruct = method.getAnnotation(PostConstruct.class);
-        if(postConstruct == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        if(numParams == 1 && method.getParameterTypes()[0].isAssignableFrom(Map.class)) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PostConstruct method " + method.getName() + "; such methods must take either no argument or 1 argument of type Map<String,String>"); 
-    }
-
-    private void validatePreDestroyMethods(Object service, Method method) {
-        final PreDestroy preDestroy = method.getAnnotation(PreDestroy.class);
-        if(preDestroy == null) {
-            return;
-        }
-        final int numParams = method.getParameterTypes().length;
-        if(numParams == 0) {
-            return;
-        }
-        throw new IllegalStateException("Domain service " + service.getClass().getName() + " has @PreDestroy method " + method.getName() + "; such methods must take no arguments"); 
-    }
 
 
     // ///////////////////////////////////////////
@@ -186,14 +112,12 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
     @Override
     public void init() {
         final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
-        servicesInjector.setServices(serviceList);
         specificationLoaderSpi.setServiceInjector(servicesInjector);
 
         specificationLoaderSpi.init();
 
         // must come after init of spec loader.
         specificationLoaderSpi.injectInto(persistenceSessionFactory);
-        persistenceSessionFactory.setServices(serviceList);
 
         authenticationManager.init();
         authorizationManager.init();
@@ -263,7 +187,7 @@ public class IsisSessionFactoryDefault implements IsisSessionFactory {
 
     @Override
     public List<Object> getServices() {
-        return serviceList;
+        return getPersistenceSessionFactory().getServicesInjector().getRegisteredServices();
     }
     
     @Override

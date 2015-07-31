@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
+import java.util.Collections;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -56,7 +58,7 @@ public class ObjectStoreTransactionManager_StartTransactionTest {
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault()) {
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault(Collections.emptyList())) {
             @Override
             protected AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;

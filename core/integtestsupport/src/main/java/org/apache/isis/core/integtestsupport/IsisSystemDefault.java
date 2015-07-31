@@ -195,14 +195,14 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * The in-memory object store (unless overridden by {@link #obtainPersistenceMechanismInstaller(IsisConfiguration)}).
      */
     @Override
-    protected PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType) throws IsisSystemException {
+    protected PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType, final List<Object> services) throws IsisSystemException {
         PersistenceMechanismInstaller installer = obtainPersistenceMechanismInstaller(getConfiguration());
         if(installer == null) {
             final DataNucleusPersistenceMechanismInstaller persistenceMechanismInstaller = new DataNucleusPersistenceMechanismInstaller();
             persistenceMechanismInstaller.setConfiguration(getConfiguration());
             installer = persistenceMechanismInstaller;
         }
-        return installer.createPersistenceSessionFactory(deploymentType);
+        return installer.createPersistenceSessionFactory(deploymentType, services);
     }
 
 
