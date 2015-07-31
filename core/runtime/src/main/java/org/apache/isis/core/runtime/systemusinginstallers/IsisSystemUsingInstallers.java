@@ -216,7 +216,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     }
 
     @Override
-    protected PersistenceSessionFactory obtainPersistenceSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
+    protected PersistenceSessionFactory obtainPersistenceSessionFactory(final DeploymentType deploymentType, final List<Object> services) throws IsisSystemException {
 
         // look for a object store persistor
         if (persistenceMechanismInstaller == null) {
@@ -225,6 +225,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         }
 
         ensureThatState(persistenceMechanismInstaller, is(not(nullValue())), "persistor installer has not been injected and could not be looked up");
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType);
+        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, services);
     }
 }

@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.spec;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
@@ -37,4 +36,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
     void invalidateCache(Class<?> domainClass);
     
     boolean isInitialized();
+
+    void validateAndAssert();
 }

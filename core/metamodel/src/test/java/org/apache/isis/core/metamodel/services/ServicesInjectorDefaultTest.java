@@ -68,7 +68,9 @@ public class ServicesInjectorDefaultTest {
 
     @Before
     public void setUp() throws Exception {
-        injector = new ServicesInjectorDefault(new InjectorMethodEvaluatorDefault());
+        final Object[] services = { mockContainer, mockService1, mockService2 };
+
+        injector = new ServicesInjectorDefault(Arrays.asList(services), new InjectorMethodEvaluatorDefault());
     }
 
     @After
@@ -77,8 +79,6 @@ public class ServicesInjectorDefaultTest {
 
     @Test
     public void shouldInjectContainer() {
-        final Object[] services = { mockContainer, mockService1, mockService2 };
-        injector.setServices(Arrays.asList(services));
 
         context.checking(new Expectations() {
             {

@@ -73,7 +73,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final ObjectAdapterFactory objectAdapterFactory;
-    private final ServicesInjectorSpi servicesInjector;
     private final OidGenerator oidGenerator;
     private final AdapterManagerDefault adapterManager;
 
@@ -87,8 +86,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private boolean dirtiableSupport = true;
 
-
-
     private static enum State {
         NOT_INITIALIZED, OPEN, CLOSED
     }
@@ -101,19 +98,14 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
-            final ServicesInjectorSpi servicesInjector,
             final ObjectStore objectStore,
             final IsisConfiguration configuration) {
 
+
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
-        ensureThatArg(servicesInjector, is(not(nullValue())), "services injector required");
         ensureThatArg(objectStore, is(not(nullValue())), "object store required");
 
-        // owning, application scope
         this.persistenceSessionFactory = persistenceSessionFactory;
-
-        // session scope
-        this.servicesInjector = servicesInjector;
 
         this.objectAdapterFactory = new PojoAdapterFactory();
         this.oidGenerator = new OidGenerator(new IdentifierGeneratorUnified(configuration));
@@ -122,7 +114,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.objectStore = objectStore;
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
-        this.transactionManager = new IsisTransactionManager(this, objectStore, servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, objectStore, persistenceSessionFactory.getServicesInjector());
 
         setState(State.NOT_INITIALIZED);
 
@@ -164,9 +156,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         ensureThatState(transactionManager, is(not(nullValue())), "TransactionManager missing");
 
         // inject any required dependencies into object factory
+        final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
         servicesInjector.injectInto(objectFactory);
-
-        // wire dependencies into adapterManager
         servicesInjector.injectInto(adapterManager);
 
         adapterManager.open();
@@ -188,9 +179,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     
     private void initServices() {
-
-        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
-        
+        final List<Object> registeredServices =
+                persistenceSessionFactory.getServicesInjector().getRegisteredServices();
         createServiceAdapters(registeredServices);
     }
 
@@ -224,7 +214,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * @return - the service, or <tt>null</tt> if no service registered of specified type.
      */
     public <T> T getServiceOrNull(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
+        return persistenceSessionFactory.getServicesInjector().lookupService(serviceType);
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -516,7 +506,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
-        final List<Object> services = servicesInjector.getRegisteredServices();
+        final List<Object> services = persistenceSessionFactory.getServicesInjector().getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
         for (final Object servicePojo : services) {
             serviceAdapters.add(getService(servicePojo));
@@ -913,7 +903,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendTitle(getClass().getName());
-        debug.appendln("container", servicesInjector);
         debug.appendln();
 
         adapterManager.debugData(debug);
@@ -926,7 +915,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         debug.appendln();
 
         debug.appendTitle("Services");
-        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
+        for (final Object servicePojo : persistenceSessionFactory.getServicesInjector().getRegisteredServices()) {
             final String id = ServiceUtil.id(servicePojo);
             final Class<? extends Object> serviceClass = servicePojo.getClass();
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
@@ -1030,7 +1019,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * The configured {@link ServicesInjectorSpi}.
      */
     public ServicesInjectorSpi getServicesInjector() {
-        return servicesInjector;
+        return persistenceSessionFactory.getServicesInjector();
     }
 
     /**

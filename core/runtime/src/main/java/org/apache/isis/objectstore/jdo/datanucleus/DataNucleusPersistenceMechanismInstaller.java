@@ -18,13 +18,9 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.Sets;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -35,7 +31,6 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -48,9 +43,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.Auditab
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
@@ -96,8 +89,9 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
 
     //region > createPersistenceSessionFactory
     @Override
-    public PersistenceSessionFactory createPersistenceSessionFactory(final DeploymentType deploymentType) {
-        return new PersistenceSessionFactory(deploymentType, getConfiguration(), this);
+    public PersistenceSessionFactory createPersistenceSessionFactory(
+            final DeploymentType deploymentType, final List<Object> services) {
+        return new PersistenceSessionFactory(deploymentType, services, getConfiguration(), this);
     }
     //endregion
 
@@ -115,7 +109,8 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     
     private DataNucleusApplicationComponents applicationComponents = null;
 
-    private DataNucleusApplicationComponents createDataNucleusApplicationComponentsIfRequired(IsisConfiguration configuration) {
+    private DataNucleusApplicationComponents createDataNucleusApplicationComponentsIfRequired(
+            final IsisConfiguration configuration) {
 
         if (applicationComponents == null || applicationComponents.isStale()) {
 
@@ -125,27 +120,14 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
             final Map<String, String> datanucleusProps = dataNucleusConfig.asMap();
             addDataNucleusPropertiesIfRequired(datanucleusProps);
 
-            final Set<String> classesToBePersisted = catalogClassesToBePersisted(configuration, getSpecificationLoader().allSpecifications());
+            final RegisterEntities registerEntities = new RegisterEntities(configuration.asMap());
+            final Set<String> classesToBePersisted = registerEntities.getEntityTypes();
 
             applicationComponents = new DataNucleusApplicationComponents(jdoObjectstoreConfig, datanucleusProps, classesToBePersisted);
         }
 
         return applicationComponents;
     }
-
-    private static Set<String> catalogClassesToBePersisted(final IsisConfiguration configuration, Collection<ObjectSpecification> objectSpecs) {
-        final RegisterEntities registerEntities = new RegisterEntities();
-        registerEntities.init(configuration.asMap());
-        
-        Set<String> classNames = Sets.newTreeSet();
-        for (final ObjectSpecification spec : objectSpecs) {
-            if(spec.containsFacet(JdoPersistenceCapableFacet.class) || spec.containsFacet(JdoEmbeddedOnlyFacet.class)) {
-                classNames.add(spec.getFullIdentifier());
-            }
-        }
-        return Collections.unmodifiableSet(classNames);
-    }
-
 
     private static void addDataNucleusPropertiesIfRequired(
             final Map<String, String> props) {

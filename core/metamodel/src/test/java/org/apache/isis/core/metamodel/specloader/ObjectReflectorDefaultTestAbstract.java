@@ -88,7 +88,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()));
         reflector.setRuntimeContext(runtimeContext);
-        reflector.setServiceInjector(new ServicesInjectorDefault().withServices(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
+        reflector.setServiceInjector(new ServicesInjectorDefault(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
         reflector.init();
         
         specification = loadSpecification(reflector);

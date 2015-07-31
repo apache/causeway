@@ -18,81 +18,77 @@
  */
 package org.apache.isis.objectstore.jdo.service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+
 import javax.jdo.annotations.PersistenceCapable;
+
 import com.google.common.base.Function;
-import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
-import org.reflections.Reflections;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.isis.applib.annotation.Hidden;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
-@Hidden
+import org.apache.isis.applib.util.ScanUtils;
+
 public class RegisterEntities {
 
-    @SuppressWarnings("unused")
-    private final static Logger LOG = LoggerFactory.getLogger(RegisterEntities.class);
-    
     public final static String PACKAGE_PREFIX_KEY = "isis.persistor.datanucleus.RegisterEntities.packagePrefix";
 
-    // //////////////////////////////////////
+    //region > init
 
-    private String packagePrefixes;
-
-    @PostConstruct
-    public void init(Map<String,String> configuration) {
-        packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
+    public RegisterEntities(final Map<String, String> configuration) {
+        String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
         if(Strings.isNullOrEmpty(packagePrefixes)) {
-            throw new IllegalStateException("Could not locate '" + PACKAGE_PREFIX_KEY + "' key in property files - aborting");
+            throw new IllegalArgumentException(String.format(
+                    "Could not locate '%s' key in property files - aborting",
+                    PACKAGE_PREFIX_KEY));
         }
-        
-        registerAllPersistenceCapables();
+
+        domPackages = parseDomPackages(packagePrefixes);
+        this.entityTypes = scanForEntityTypesIn(this.domPackages);
     }
 
-    @PreDestroy
-    public void shutdown() {
+    //endregion
+
+    //region > domPackages
+    private List<String> domPackages;
+
+    public List<String> getDomPackages() {
+        return domPackages;
+    }
+    //endregion
+
+    //region > entityTypes
+    private Set<String> entityTypes;
+
+    public Set<String> getEntityTypes() {
+        return entityTypes;
+    }
+    //endregion
+
+    //region > helpers
+    private static Set<String> scanForEntityTypesIn(final List<String> domPackages) {
+        Set<String> entityTypes = Sets.newLinkedHashSet();
+        for (final String packagePrefix : domPackages) {
+            final Iterable<String> entityTypes1 = ScanUtils.scanForNamesOfClassesWithAnnotation(domPackages, PersistenceCapable.class);
+            if(Iterables.isEmpty(entityTypes1)) {
+                throw new IllegalArgumentException(String.format(
+                        "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
+                        "Check value of '%s' key in isis.properties etc.\n",
+                        packagePrefix,
+                        PACKAGE_PREFIX_KEY));
+            }
+            Iterables.addAll(entityTypes, entityTypes1);
+        }
+        return entityTypes;
     }
 
-    private void registerAllPersistenceCapables() {
-
-        for (final String packagePrefix : Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())) {
-            Reflections reflections = new Reflections(packagePrefix);
-            
-            Set<Class<?>> entityTypes = 
-                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-            
-            if(noEntitiesIn(entityTypes)) {
-                throw new IllegalStateException("Could not locate any @PersistenceCapable entities in package " + packagePrefix);
-            }
-            for (Class<?> entityType : entityTypes) {
-                if(ignore(entityType)) {
-                    // ignore (probably a testing class)
-                    continue;
-                }
-                getSpecificationLoader().loadSpecification(entityType);
-            }
-        }
-    }
-
-    private static boolean ignore(final Class<?> entityType) {
-        try {
-            if(entityType.isAnonymousClass() || entityType.isLocalClass() || entityType.isMemberClass()) {
-                return true;
-            }
-            final PersistenceCapable persistenceCapable = entityType.getAnnotation(PersistenceCapable.class);
-            final boolean hasPersistenceCapable = persistenceCapable != null;
-            return !hasPersistenceCapable; // don't ignore if has @PersistenceCapable
-        } catch (NoClassDefFoundError ex) {
-            return true;
-        }
+    private static List<String> parseDomPackages(String packagePrefixes) {
+        return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
     }
 
     private static Function<String,String> trim() {
@@ -103,30 +99,6 @@ public class RegisterEntities {
             }
         };
     }
+    //endregion
 
-    /**
-     * {@link Reflections} seems to return a set with 1 null element if none can be found.
-     */
-    private static boolean noEntitiesIn(Set<Class<?>> entityTypes) {
-        return Iterables.filter(entityTypes, nullClass()).iterator().hasNext();
-    }
-
-    private static Predicate<Class<?>> nullClass() {
-        return new Predicate<Class<?>>() {
-
-            @Override
-            public boolean apply(Class<?> input) {
-                return input == null;
-            }
-        };
-    }
-
-    // //////////////////////////////////////
-
-    SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-
-    
 }

@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -32,6 +34,6 @@ public interface PersistenceMechanismInstaller extends Installer, ObjectStoreFac
 
     static String TYPE = "persistor";
 
-    PersistenceSessionFactory createPersistenceSessionFactory(DeploymentType deploymentType);
+    PersistenceSessionFactory createPersistenceSessionFactory(DeploymentType deploymentType, final List<Object> services);
 
 }

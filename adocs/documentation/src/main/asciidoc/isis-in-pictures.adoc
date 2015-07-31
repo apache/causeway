@@ -91,7 +91,7 @@ In general though, all actions are associated with some object, and are (at leas
 
 === Contributions
 
-As an alternative to placing actions (business logic) on a domain object, it can instead be placed on an (application-scoped, stateless) domain service. When an object is rendered by Apache Isis, it will automatically render all "contributed" behaviour; rather like traits or aspect-oriented mix-ins).
+As an alternative to placing actions (business logic) on a domain object, it can instead be placed on an (application-scoped, stateless) domain service. When an object is rendered by Apache Isis, it will automatically render all "contributed" behaviour; rather like traits or aspect-oriented mix-ins.
 
 In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) and also the "similar to" collection are all contributed:
 
@@ -108,7 +108,7 @@ image::{_imagesdir}/isis-in-pictures/067-contributed-action.png[width="600px",li
 
 == Extensible Views
 
-The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been architected to be extensible. For example, when a collection of objects is rendered, this is just one several views, as shown in the selector drop-down:
+The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible. For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:
 
 image::{_imagesdir}/isis-in-pictures/070-pluggable-views.png[width="600px",link="{_imagesdir}/isis-in-pictures/070-pluggable-views.png"]
 
@@ -128,7 +128,7 @@ image::{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png[width="600px",li
 
 
 
-Yet another "view" (though this one is rather simpler is that provided by the Isis Addons https://github.com/isisaddons/isis-wicket-excel[excel component] (non ASF). This provides a download button to the table as a spreadsheet:
+Yet another "view" (though this one is rather simpler) is that provided by the Isis Addons https://github.com/isisaddons/isis-wicket-excel[excel component] (non ASF). This provides a download button to the table as a spreadsheet:
 
 image::{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png[width="600px",link="{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png"]
 
@@ -152,7 +152,7 @@ Please note that the Isis Addons are not part of ASF, but they _are_ all license
 
 == Security, Auditing and more...
 
-As well as providing extensions to the UI, the Isis Addons provides a rich set of modules to support various cross-cutting concerns.
+As well as providing extensions to the UI, the Isis Addons provide a rich set of modules to support various cross-cutting concerns.
 
 Under the activity menu are four sets of services which provide support for https://github.com/isisaddons/isis-module-sessionlogger[user session logging/auditing] (non ASF), https://github.com/isisaddons/isis-module-command[command profiling] (non ASF), https://github.com/isisaddons/isis-module-audit[(object change) auditing] (shown, non-ASF) and (inter-system) https://github.com/isisaddons/isis-module-publishing[event publishing] (non ASF):
 
@@ -161,7 +161,7 @@ image::{_imagesdir}/isis-in-pictures/120-auditing.png[width="600px",link="{_imag
 
 
 
-In the security menu is access to the rich set of functionality provided by the Isis addons https://github.com/isisaddons/isis-module-security[security module] (non ASF):
+In the security menu is access to the rich set of functionality provided by the Isis Addons https://github.com/isisaddons/isis-module-security[security module] (non ASF):
 
 image::{_imagesdir}/isis-in-pictures/130-security.png[width="600px",link="{_imagesdir}/isis-in-pictures/130-security.png"]
 
@@ -175,7 +175,7 @@ image::{_imagesdir}/isis-in-pictures/140-i18n.png[width="600px",link="{_imagesdi
 
 
 
-The Isis addons also provides a module for managing application and user https://github.com/isisaddons/isis-module-settings[settings] (non ASF). Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
+The Isis Addons also provides a module for managing application and user https://github.com/isisaddons/isis-module-settings[settings] (non ASF). Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
 image::{_imagesdir}/isis-in-pictures/150-appsettings.png[width="600px",link="{_imagesdir}/isis-in-pictures/150-appsettings.png"]
 
@@ -184,7 +184,7 @@ image::{_imagesdir}/isis-in-pictures/150-appsettings.png[width="600px",link="{_i
 
 === Multi-tenancy support
 
-Of the various Isis addons, the https://github.com/isisaddons/isis-module-security[security module] has the most features. One significant feature is the ability to associate users and objects with a "tenancy". The todoapp uses this feature so that different users' list of todo items are kept separate from one another. A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
+Of the various Isis Addons, the https://github.com/isisaddons/isis-module-security[security module] has the most features. One significant feature is the ability to associate users and objects with a "tenancy". The todoapp uses this feature so that different users' list of todo items are kept separate from one another. A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
 image::{_imagesdir}/isis-in-pictures/160-switch-tenancy.png[width="600px",link="{_imagesdir}/isis-in-pictures/160-switch-tenancy.png"]
 

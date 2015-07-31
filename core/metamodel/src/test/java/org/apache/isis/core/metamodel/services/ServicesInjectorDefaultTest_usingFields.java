@@ -81,12 +81,11 @@ public class ServicesInjectorDefaultTest_usingFields {
         service1 = new SomeDomainService1();
         service3 = new SomeDomainService3();
         service2 = new SomeDomainService2();
-        injector = new ServicesInjectorDefault();
+        injector = new ServicesInjectorDefault(Arrays.asList(container, service1, service3, service2));
     }
 
     @Test
     public void shouldInjectContainer() {
-        injector.setServices(Arrays.asList(container, service1, service3, service2));
 
         injector.injectServicesInto(service1);
         injector.injectServicesInto(service2);

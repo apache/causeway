@@ -120,7 +120,6 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-log4j</artifactId>
@@ -153,11 +152,7 @@
             <artifactId>log4j</artifactId>
         </dependency>
 
-        <!--  for the RegisterEntities service -->
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-        </dependency>
+        <!-- for our home-grown proxies for @RequestScoped -->
         <dependency>
             <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
@@ -169,44 +164,57 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Email Notification Service -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-email</artifactId>
-            <version>1.3.3</version>
-            <exclusions>
-                <exclusion>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>email-notification-service</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.commons</groupId>
+                    <artifactId>commons-email</artifactId>
+                    <version>1.3.3</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>javax.mail</groupId>
+                            <artifactId>mail</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
                     <groupId>javax.mail</groupId>
                     <artifactId>mail</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-            <exclusions>
-                <exclusion>
+                    <version>1.4.7</version>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>javax.activation</groupId>
+                            <artifactId>activation</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
                     <groupId>javax.activation</groupId>
                     <artifactId>activation</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+                    <version>1.1.1</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>axon-event-bus</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.axonframework</groupId>
+                    <artifactId>axon-core</artifactId>
+                    <version>2.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
 
-        <dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <!-- Email Notification Service -->
-        
-        <!-- Axon Event Bus Service -->
-        <dependency>
-            <groupId>org.axonframework</groupId>
-            <artifactId>axon-core</artifactId>
-            <version>2.4</version>
-        </dependency>
-
-    </dependencies>
+    </profiles>
 </project>

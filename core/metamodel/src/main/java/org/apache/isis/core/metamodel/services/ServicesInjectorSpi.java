@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.services;
 
-import java.util.List;
-
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -32,12 +30,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  * Can be considered a mutable SPI to the {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector} immutable API.
  */
 public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
-
-
-    /**
-     * Services to be injected.
-     */
-    void setServices(List<Object> services);
 
 
     /**
@@ -53,4 +45,8 @@ public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injecta
     <T> void replaceService(T originalService, T replacementService);
 
     boolean isRegisteredService(Class<?> cls);
+
+    <T> void addFallbackIfRequired(Class<T> serviceClass, T serviceInstance);
+
+    void validateServices();
 }
