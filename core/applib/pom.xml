@@ -161,10 +161,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- as used by ClassDiscoveryServiceUsingFastClasspathScanner -->
+        <!-- as used by ClassDiscoveryServiceUsingReflections -->
         <dependency>
-            <groupId>io.github.lukehutch</groupId>
-            <artifactId>fast-classpath-scanner</artifactId>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
         </dependency>
 
     </dependencies>

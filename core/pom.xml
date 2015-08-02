@@ -116,8 +116,6 @@
         <javassist.version>3.19.0-GA</javassist.version>
         <reflections.version>0.9.9</reflections.version>
 
-        <fast-classpath-scanner.version>1.6.0</fast-classpath-scanner.version>
-
         <commons-logging.version>1.1.2</commons-logging.version>
         <commons-cli.version>1.2</commons-cli.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
@@ -1352,19 +1350,7 @@ ${license.additional-notes}
             <dependency>
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
-                <version>0.9.9</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.github.lukehutch</groupId>
-                <artifactId>fast-classpath-scanner</artifactId>
-                <version>${fast-classpath-scanner.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>junit</groupId>
-                        <artifactId>junit</artifactId>
-                    </exclusion>
-                </exclusions>
+                <version>${reflections.version}</version>
             </dependency>
 
             <!-- Bytecode libraries -->

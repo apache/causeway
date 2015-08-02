@@ -25,9 +25,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
-
 import javax.annotation.PreDestroy;
-
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -36,20 +34,18 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-
+import org.reflections.Reflections;
+import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.not;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.matchprocessor.ClassAnnotationMatchProcessor;
 
 public class ServicesInstallerFromAnnotation extends InstallerAbstract implements ServicesInstaller {
 
@@ -212,31 +208,22 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
         initIfRequired();
 
         final List<String> packagePrefixList = asList(packagePrefixes);
-        final Iterable<Class<?>> domainServiceClasses = findClassesUsingFastClasspathScanner(packagePrefixList);
+
+        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
+        final Reflections reflections = new Reflections(packagePrefixList);
+
+        final Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(DomainService.class);
+        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(typesAnnotatedWith, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
             // we want the class name in order to instantiate it
             // (and *not* the value of the @DomainServiceLayout(named=...) annotation attribute)
             final String fullyQualifiedClassName = cls.getName();
+            final String name = nameOf(cls);
 
             ServicesInstallerUtils.appendInPosition(positionedServices, order, fullyQualifiedClassName);
         }
-    }
-
-    protected Iterable<Class<?>> findClassesUsingFastClasspathScanner(final List<String> packagePrefixList) {
-        final Set<Class<?>> classes = Sets.newLinkedHashSet();
-        new FastClasspathScanner(packagePrefixList.toArray(new String[]{}))
-                .matchClassesWithAnnotation(DomainService.class, new ClassAnnotationMatchProcessor() {
-                    @Override
-                    public void processMatch(final Class<?> aClass) {
-                        if(instantiatable().apply(aClass)) {
-                            classes.add(aClass);
-                        }
-                    }
-                })
-                .scan();
-        return classes;
     }
 
     private static String orderOf(final Class<?> cls) {
@@ -269,5 +256,6 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     public List<Class<?>> getTypes() {
         return listOf(List.class); // ie List<Object.class>, of services
     }
+
 
 }

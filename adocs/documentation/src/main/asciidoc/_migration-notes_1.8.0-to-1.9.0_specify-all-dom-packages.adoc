@@ -14,15 +14,7 @@ Apache Isis automatically scans for certain classes on the classpath in order to
 
 * searching for classes annotated with xref:rg.adoc#_rg_annotations_manpage-PersistenceCapable[`@PersistenceCapable`].
 
-Prior to 1.9.0 we used the link:https://github.com/ronmamo/reflections[Reflections] library to do this, which under the covers uses link:http://www.javassist.org/[Javassist].  This is a relatively heavyweight approach.
-
-In 1.9.0 we have changed to using the link:https://github.com/lukehutch/fast-classpath-scanner[Fast-Classpath-Scanner] library, which is altogether more lightweight and has no dependencies.
-
-Generally this change should be transparent, however there are two points to double-check.
-
-== Ensure dom classes registered
-
-First, you should ensure that all domain classes are correctly registered using the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` key.  This should include any domain classes for addon modules.
+For the last of these we have tightened up the validation, to ensure that each package specified in the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` key does indeed include at least one annotated entity.  This should include any domain classes for addon modules.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]'s configuration now reads:
 
@@ -43,10 +35,4 @@ isis.persistor.datanucleus.RegisterEntities.packagePrefix=\
 Alternatively, could have just specified `org.isisaddons.module` instead of enumerating every addon.  This would be a bit slower, but more maintainable.
 ====
 
-If you fail to do this then DataNucleus will build up its metamodel lazily, rather than validate all classes up-front.  This can call issues: we've seen malformed SQL being submitted when DN wasn't aware of subclasses of a superclass, and we've also seen deadlocks when running against HSQLDB as it attempts to perform a DDL statement intermixed with DML statements.
-
-== Ensure services annotated
-
-In the previous implementation the xref:rg.adoc#_rg_annotations_manpage-DomainService[`@DomainService`] annotation could be applied to a superclass, and would be automatically picked up by any subclasses.
-
-With the new implementation this is no longer the case; every concrete domain service must be annotated with `@DomainService`.
+If you fail to do specify all packages things may still work, however DataNucleus will build up its metamodel lazily.  This can call issues: we've seen malformed SQL being submitted when DN wasn't aware of subclasses of a superclass, and we've also seen deadlocks when running against HSQLDB as it attempts to perform a DDL statement intermixed with DML statements.
