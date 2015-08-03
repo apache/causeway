@@ -16,7 +16,7 @@ If you have an existing Apache Isis app that you want to upgrade, then you'll ne
 
 == In the parent `pom.xml`
 
-under the `<project>/<properties>`, remove:
+under the `project/properties`, remove:
 
 [source,xml]
 ----
@@ -30,7 +30,7 @@ under the `<project>/<properties>`, remove:
 
 == In `dom/pom.xml`,
 
-under `<build>/<plugins>`, remove:
+under `build/plugins`, remove:
 
 [source,xml]
 ----
@@ -55,7 +55,7 @@ under `<build>/<plugins>`, remove:
 </plugin>
 ----
 
-and (if you have it) under `<build>/<pluginManagement>/<plugins>`, remove:
+and (if you have it) under `build/pluginManagement/plugins`, remove:
 
 [source,xml]
 ----
@@ -93,7 +93,7 @@ and (if you have it) under `<build>/<pluginManagement>/<plugins>`, remove:
 ----
 
 
-and instead in `<profiles>` add:
+and instead, under `<profiles>` add:
 
 
 [source,xml]
@@ -207,6 +207,11 @@ isis.persistor.datanucleus.impl.datanucleus.schema.validateConstraints=true
 Previously Apache Isis would automatically add the auto-create property if they were absent from `isis.properties`, set to "true".  The framework does still add the property, but now sets it to "false".  This is to prevent the framework from unexpectedly modifying a target database if the application was misconfigured and the auto-create property not defined.
 
 The framework will also automatically add the auto-validate property.  Previously this was set to "true" and it is _still_ set to "true"; there is no risk of the target database being modified as a result of this auto-validate property being defaulted by the framework.
+====
+
+[IMPORTANT]
+====
+Setting `autoCreateAll` to `true` is important to do when running with an in-memory database.  If you don't do this then the tables will be created lazily anyway by DataNucleus, but in some circumstances this can lead to deadlocks.
 ====
 
 
