@@ -19,15 +19,13 @@
 package org.apache.isis.objectstore.jdo.datanucleus;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Locale;
 import java.util.Map;
 
-import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
-import javax.jdo.datastore.JDOConnection;
 
 import com.google.common.base.Strings;
 
@@ -65,17 +63,17 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
             return;
         }
 
-        JDOConnection dataStoreConnection = null;
         Connection connection = null;
         Statement statement = null;
 
+        final String driverName = properties.get("javax.jdo.option.ConnectionDriverName");
+        final String url = properties.get("javax.jdo.option.ConnectionURL");
+        final String userName = properties.get("javax.jdo.option.ConnectionUserName");
+        final String password = properties.get("javax.jdo.option.ConnectionPassword");
 
-        final PersistenceManager persistenceManager =
-                persistenceManagerFactory.getPersistenceManager();
-        dataStoreConnection = persistenceManager.getDataStoreConnection();
         try {
-            final Object connectionObj = dataStoreConnection.getNativeConnection();
-            connection = (java.sql.Connection) connectionObj;
+
+            connection = DriverManager.getConnection(url, userName, password);
 
             statement = connection.createStatement();
             if(skip(cmd, statement)) {
@@ -88,7 +86,7 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
 
         } finally {
             closeSafely(statement);
-            dataStoreConnection.close();
+            closeSafely(connection);
         }
 
     }
@@ -148,10 +146,16 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
         String url = getProperties().get("javax.jdo.option.ConnectionURL");
 
         if(url.contains("postgres")) {
-            schemaName = schemaName.toLowerCase(Locale.ROOT);
+            // in DN 4.0, was forcing lower case:
+            // schemaName = schemaName.toLowerCase(Locale.ROOT);
+
+            // in DN 4.1, am guessing that may be ok to leave unchaged (quoted identifiers?)
         }
         if(url.contains("hsqldb")) {
+            // in DN 4.0, was forcing upper case:
             // schemaName = schemaName.toUpperCase(Locale.ROOT);
+
+            // in DN 4.1, seems to be ok to leave as unchanged (is quoted identifiers what makes this work?)
         }
         if(url.contains("sqlserver")) {
             // unchanged

@@ -104,7 +104,7 @@ and instead, under `<profiles>` add:
         <activeByDefault>true</activeByDefault>
     </activation>
     <properties>
-        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+        <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
     </properties>
     <build>
         <pluginManagement>

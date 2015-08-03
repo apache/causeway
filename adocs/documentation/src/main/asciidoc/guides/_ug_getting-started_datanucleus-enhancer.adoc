@@ -33,7 +33,7 @@ The configuration described below is automatically set up by the xref:ug.adoc#_u
         <activeByDefault>true</activeByDefault>
     </activation>
     <properties>
-        <datanucleus-maven-plugin.version>4.0.0-release</datanucleus-maven-plugin.version>
+        <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
     </properties>
     <build>
         <plugins>
