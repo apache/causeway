@@ -93,7 +93,7 @@ public class RegisterEntities {
             if(!entitiesIn(entityTypesInPackage)) {
                 throw new IllegalArgumentException(String.format(
                         "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
-                                "Check value of '%s' key in isis.properties etc.\n",
+                                "Check value of '%s' key in WEB-INF/*.properties\n",
                         packageName,
                         PACKAGE_PREFIX_KEY));
             }
