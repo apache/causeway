@@ -110,7 +110,7 @@ To run the RAT tool, use:
 
 [source,bash]
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
 for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
 ----
 
@@ -133,7 +133,7 @@ groovy ../scripts/addmissinglicenses.groovy -x
 
 [source,bash]
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=0 -o
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=0 -o && \
 for a in `find . -name rat.txt -print`; do grep '!???' $a; done
 ----
 
@@ -148,7 +148,7 @@ To capture the missing license information, use:
 
 [source,bash]
 ----
-mvn license:download-licenses
+mvn license:download-licenses && \
 groovy ../scripts/checkmissinglicenses.groovy
 ----
 
