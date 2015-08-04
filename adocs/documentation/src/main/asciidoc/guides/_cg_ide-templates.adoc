@@ -24,30 +24,30 @@ The following table lists the templates available to download:
 
 |Apache Isis Domain Objects
 |is
-|link:./resources/templates/isis-templates-idea.xml[Download]
-|link:./resources/templates/isis-templates.xml[Download]
+|link:../resources/templates/isis-templates-idea.xml[Download]
+|link:../resources/templates/isis-templates.xml[Download]
 
 
 |JUnit tests
 |ju
-|link:./resources/templates/junit4-templates-idea.xml[Download]
-|link:./resources/templates/junit4-templates.xml[Download]
+|link:../resources/templates/junit4-templates-idea.xml[Download]
+|link:../resources/templates/junit4-templates.xml[Download]
 
 
 |JMock tests
 |jm
-|link:./resources/templates/jmock2-templates-idea.xml[Download]
-|link:./resources/templates/jmock2-templates.xml[Download]
+|link:../resources/templates/jmock2-templates-idea.xml[Download]
+|link:../resources/templates/jmock2-templates.xml[Download]
 
 |Asciidoc
 |ad
-|link:./resources/templates/asciidoc-templates-idea.xml[Download]
+|link:../resources/templates/asciidoc-templates-idea.xml[Download]
 |(none )
 
 |===
 
 
-The most commonly used Apache Isis domain objects templates are also listed on the link:./cheat-sheet.html[Apache Isis cheat sheet].
+The most commonly used Apache Isis domain objects templates are also listed on the link:../cheat-sheet.html[Apache Isis cheat sheet].
 
 
 
