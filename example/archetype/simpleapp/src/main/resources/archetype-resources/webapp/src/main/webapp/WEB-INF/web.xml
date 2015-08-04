@@ -215,7 +215,7 @@
 
     <context-param>
         <param-name>deploymentType</param-name>
-        <param-value>SERVER_EXPLORATION</param-value>
+        <param-value>SERVER_PROTOTYPE</param-value>
     </context-param>
 
     <context-param>
