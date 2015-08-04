@@ -34,3 +34,4 @@ include::_cg_asciidoc.adoc[leveloffset=+1]
 include::_cg_committers.adoc[leveloffset=+1]
 
 include::_cg_git-cookbook.adoc[leveloffset=+1]
+include::_cg_asciidoc-templates.adoc[leveloffset=+1]

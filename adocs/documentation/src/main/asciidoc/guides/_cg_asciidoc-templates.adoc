@@ -1,0 +1,804 @@
+[[_cg_asciidoc-templates]]
+= Appendix: Asciidoc Templates
+:notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
+:_basedir: ../
+:_imagesdir: images/
+:toc: right
+
+
+
+This appendix lists the (IntelliJ) live templates available for xref:cg.adoc#_cg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:cg.adoc#_cg_ide-templates[here].
+
+In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
+
+== Callouts
+
+The Asciidoctor terminology is an "admonition".
+
+[cols="1,4,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adadmimportant`
+| `[IMPORTANT] +
+==== +
+xxx +
+====`
+|[IMPORTANT]
+====
+xxx
+====
+
+|`adadmnote`
+| `[NOTE] +
+==== +
+xxx +
+====`
+|[NOTE]
+====
+xxx
+====
+
+|`adadmtip`
+| `[TIP] +
+==== +
+xxx +
+====`
+|[TIP]
+====
+xxx
+====
+
+|`adadmwarning`
+| `[WARNING] +
+==== +
+xxx +
+====`
+|[WARNING]
+====
+xxx
+====
+
+|===
+
+
+== TODO notes
+
+Add as a placeholder for documentation still to be written or which is work-in-progress.
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adtodo`
+|pass:[<pre>NOTE: TODO</pre>]
+|NOTE: TODO
+
+|`adwip`
+|pass:[<pre>NOTE: WIP - xxx</pre>]
+
+where:
+
+* `xxx` is additional explanatory text
+
+|NOTE: WIP - cool new feature
+
+|===
+
+
+
+
+== Xref to Contributors' Guide
+
+Cross-references (links) to the xref:cg.adoc#_cg[Contributors' Guide] (this document).
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+
+|`adcg`
+|pass:[<pre>xref:cg.adoc#_cg[Contributors' Guide\]</pre>] +
+
+a hyperlink to the contributors guide.
+|xref:cg.adoc#_cg[Contributors' Guide]
+
+|`adcg1`
+|pass:[<pre>xref:cg.adoc#_cg_xxx[ttt\]</pre>]
+
+a hyperlink to a level 1 (chapter) within the contributors guide, where:
+
+* `xxx` is the chapter's anchor
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates/]</pre>]
+
+|xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates]
+
+
+|`adcg2`
+|pass:[<pre>xref:cg.adoc#_cg_xxx_yyy[ttt\]</pre>]
+
+a hyperlink to a level 2 (chapter and section) within the contributors guide, where:
+
+* `xxx` and `yyy` make up the anchor to the section within the chapter
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:cg.adoc#_cg_committers_release-process[Release process/]</pre>]
+
+|xref:cg.adoc#_cg_committers_release-process[Release process]
+
+|===
+
+
+
+== Xref to Reference Guide
+
+Cross-references (links) to the xref:rg.adoc#_rg[Reference Guide].
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adrg`
+|pass:[<pre>xref:rg.adoc#_rg[Reference Guide\]</pre>]
+
+a hyperlink to the Reference Guide.
+
+|xref:rg.adoc#_rg[Reference Guide]
+
+|`adrg1`
+|pass:[<pre>xref:rg.adoc#_rg_xxx[ttt\]</pre>]
+
+a hyperlink to a level 1 (chapter) within the reference guide, where:
+
+* `xxx` is the chapter's anchor
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_annotations[Annotations\]</pre>]
+
+|xref:rg.adoc#_rg_annotations[Annotations]
+
+
+
+|`adrg2`
+|pass:[<pre>xref:rg.adoc#_rg_xxx_yyy[ttt\]</pre>]
+
+a hyperlink to a level 2 (chapter and section) within the reference guide, where:
+
+* `xxx` and `yyy` make up the anchor to the section within the chapter
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_object-layout_dynamic_[Dynamic object layout]</pre>]
+
+|xref:rg.adoc#_rg_object-layout_dynamic[Dynamic object layout]
+
+
+
+|`adrg3`
+|pass:[<pre>xref:rg.adoc#_rg_xxx_yyy_zzz[ttt\]</pre>]
+
+a hyperlink to a level 3 (chapter, section, subsection) within the reference guide, where:
+
+* `xxx`, `yyy`, `zzz` make up the anchor to the subsection within the chapter
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_runtime_application-specific_application-css[Application-specific CSS\]</pre>]
+
+|xref:rg.adoc#_rg_runtime_application-specific_application-css[Application-specific CSS]
+
+
+
+|`adrgcfg`
+|pass:[<pre>xref:rg.adoc#_rg_runtime_configuring-core[configuration properties]</pre>]
+
+a hyperlink to the reference guide's catalogue of the Apache Isis configuration properties.
+
+|xref:rg.adoc#_rg_runtime_configuring-core[configuration properties]
+
+
+
+|`adrgcs`
+|pass:[<pre>xref:rg.adoc#_rg_classes_super_manpage-xxx[`xxx`\]</pre>]
+
+a hyperlink to the "man page" for a superclass, where:
+
+* `xxx` is the superclass (eg `AbstractDomainService`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainService[`AbstractDomainService`\]</pre>]
+
+|xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainService[`AbstractDomainService`]
+
+
+
+|`adrgcu`
+|pass:[<pre>xref:rg.adoc#_rg_classes_utility_manpage-xxx[`xxx`\]</pre>]
+
+a hyperlink to the "man page" for a utility class, where:
+
+* `xxx` is the utility class (eg `TitleBuffer`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_classes_utility_manpage-TitleBuffer[`TitleBuffer`\]</pre>]
+
+|xref:rg.adoc#_rg_classes_utility_manpage-TitleBuffer[`TitleBuffer`]
+
+
+
+|`adrgcv`
+|pass:[<pre>xref:rg.adoc#_rg_classes_value-types_manpage-xxx[`xxx`\]</pre>]
+
+
+a hyperlink to the "man page" for an applib value class, where:
+
+* `xxx` is the utility class (eg `Blob`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_classes_value-types_manpage-Blob[`Blob`\]</pre>]
+
+|xref:rg.adoc#_rg_classes_value-types_manpage-Blob[`Blob`]
+
+
+
+|`adrgmp`
+|pass:[<pre>xref:rg.adoc#_rg_methods_prefixes_manpage-xxx[`xxx...()`\]</pre>]
+
+a hyperlink to the "man page" for a prefixed method, where:
+
+* `xxx` is the method prefix (eg `disable...()`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`\]</pre>]
+
+|xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`]
+
+
+
+|`adrgmr`
+|pass:[<pre></pre>]
+
+a hyperlink to the "man page" for a reserved method, where:
+
+* `xxx` is the method prefix (eg `title()`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`\]</pre>]
+
+|xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`]
+
+
+
+|`adrgna`
+|pass:[<pre>xref:rg.adoc#_rg_annotations_manpage-xxx[`@xxx`]</pre>]
+
+a hyperlink to the "man page" for an annotation, where:
+
+* `xxx` is the annotation type (eg `@Action`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_annotations_manpage-Action[`@Action`\]</pre>]
+
+|xref:rg.adoc#_rg_annotations_manpage-Action[`@Action`]
+
+
+
+|`adrgnt`
+|pass:[<pre>xref:rg.adoc#_rg_annotations_manpage-xxx_ttt[`@xxx#ttt()`]</pre>]
+
+a hyperlink to the "man page" for the specific attribute (field) of an annotation, where:
+
+* `xxx` is the annotation type (eg `@Action`)
+* `ttt` is the attribute (eg `@semantics`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`@Action#semantics()`\]</pre>]
+
+|xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`@Action#semantics()`]
+
+
+
+|`adrgsa`
+|pass:[<pre></pre>]
+
+a hyperlink to the "man page" for an (API) domain service, where:
+
+* `xxx` is the domain service (eg `DomainObjectContainer`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`\]</pre>]
+
+|xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
+
+
+
+|`adrgss`
+|pass:[<pre></pre>]
+
+a hyperlink to the "man page" for an (SPI) domain service, where:
+
+* `xxx` is the domain service (eg `ContentMappingService`)
+
+for example:
+
+pass:[<pre>xref:rg.adoc#_rg_services-spi_manpage-ContentMappingService[`ContentMappingService`\]</pre>]
+|xref:rg.adoc#_rg_services-spi_manpage-ContentMappingService[`ContentMappingService`]
+
+
+
+|===
+
+
+
+== Xref to the Users' Guide
+
+Cross-references (links) to the xref:ug.adoc#_ug[Users' Guide].
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adug`
+|pass:[<pre>xref:ug.adoc#_ug[Users' Guide\]</pre>]
+
+a hyperlink to the Users' Guide.
+
+|xref:ug.adoc#_ug[Users' Guide]
+
+
+
+|`adug1`
+|pass:[<pre>xref:ug.adoc#xxx[ttt\]</pre>]
+
+a hyperlink to a level 1 (chapter) within the users' guide, where:
+
+* `xxx` is the chapter's anchor
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:ug.adoc#_ug_core-concepts[Core concepts\]</pre>]
+
+|xref:ug.adoc#_ug_core-concepts[Core concepts]
+
+
+
+|`adug2`
+|pass:[<pre>xref:ug.adoc#xxx_yyy[ttt\]</pre>]
+
+a hyperlink to a level 2 (chapter and section) within the users' guide, where:
+
+* `xxx` and `yyy` make up the anchor to the section within the chapter
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:ug.adoc#core-concepts_philosophy[Philosophy\]</pre>]
+
+
+|xref:ug.adoc#core-concepts_philosophy[Philosophy]
+
+
+
+|`adug3`
+|pass:[<pre>xref:ug.adoc#xxx_yyy_zzz[ttt\]</pre>]
+
+a hyperlink to a level 3 (chapter, section, subsection) within the users' guide, where:
+
+* `xxx`, `yyy`, `zzz` make up the anchor to the subsection within the chapter
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern\]</pre>]
+
+|xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern]
+
+
+
+
+|`adugsimpleapp`
+|pass:[<pre>xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
+
+A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
+
+|xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype]
+
+
+|`adugvro`
+|pass:[<pre>xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer\]</pre>]
+
+A hyperlink to the Restful Objects viewer chapter.
+
+|xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]
+
+
+
+|`adugvw`
+|pass:[<pre>xref:ug.adoc#_ug_wicket-viewer[Wicket viewer\]</pre>]
+
+A hyperlink to the Wicket viewer chapter.
+
+|xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]
+
+
+
+|===
+
+
+
+
+== Link to Isis Addons
+
+Links to (non-ASF) link:http://isisaddons.org[Isis Addons]
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+
+|`adlinkaddons`
+|pass:[<pre>(non-ASF) link:http://isisaddons.org[Isis Addons\]</pre>]
+
+link to the Isis Addons website.
+
+|(non-ASF) link:http://isisaddons.org[Isis Addons]
+
+
+
+|`adlinkaddonsapp`
+|pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-app-xxx[Isis addons' xxx]</pre>]
+
+link to the github repo for an example app from the Isis addons; where:
+
+* `xxx` is the name of the example app being linked to
+
+for example:
+
+pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp\]</pre>]
+
+|(non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]
+
+
+
+|`adlinkaddonsmodule`
+|pass:[<pre></pre>]
+
+link to the github repo for a module from the Isis addons; where:
+
+* `xxx` is the name of the module being linked to
+
+for example:
+
+pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security\] module</pre>]
+
+|(non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module
+
+
+
+|`adlinkaddonswicket`
+|pass:[<pre></pre>]
+
+link to the github repo for a wicket UI component from the Isis addons; where:
+
+* `xxx` is the name of the wicket UI component being linked to
+
+for example:
+
+pass:[<pre>(non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 \] wicket extension</pre>]
+
+
+|(non-ASF) http://github.com/isisaddons/isis-wicket-gmap3[Isis addons' gmap3 ] wicket extension
+
+|===
+
+
+
+
+== Source code
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adsrcjava`
+|`[source,java] +
+---- +
+xxx +
+----`
+
+where:
+
+* `xxx` is the source code snippet.
+
+|[source,java]
+----
+public class Foo {
+    ...
+}
+----
+
+
+|`adsrcjavac`
+|as for `adsrcjava`, but with a caption above
+|
+
+
+
+|`adsrcjavascript`
+|`[source,javascript] +
+---- +
+xxx +
+----`
+
+where:
+
+* `xxx` is the source code snippet.
+
+|[source,javascript]
+----
+$(document).ready(function() {
+	...
+});
+----
+
+
+
+|`adsrcjavascriptc`
+|as for `adsrcjavascript`, but with a caption above
+
+|
+
+|`adsrcother`
+|`[source,nnn] +
+---- +
+xxx +
+----`
+
+where:
+
+* `nnn` is the programming language
+* `xxx` is the source code snippet.
+
+|
+
+|`adsrcotherc`
+|as for `adsrcother`, but with a caption above
+
+
+|
+
+|`adsrcxml`
+|`[source,javascript] +
+---- +
+xxx +
+----`
+
+where:
+
+* `xxx` is the source code snippet.
+
+|[source,xml]
+----
+<html>
+    <title>
+       hello world!
+    </title>
+</html>
+----
+
+
+|`adsrcxmlc`
+|as for `adsrcxml`, but with a caption above
+|
+
+|===
+
+
+== Images
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adimgfile`
+|pass:[<pre>image::{_imagesdir}xxx/yyy.png[width="WWWpx",link="{_imagesdir}xxx/yyy.png"\]</pre>]
+
+embeds specified image, where:
+
+* `xxx` is the subdirectory under the `images/` directory
+* `yyy` is the image
+* `WWW` is the width, in pixels.
+
+for example:
+
+pass:[<pre>image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"\]</pre>]
+
+|image::{_imagesdir}wicket-viewer/layouts/estatio-Lease.png[width="300px",link="{_imagesdir}wicket-viewer/layouts/estatio-Lease.png"]
+
+
+
+|`adimgfilec`
+|as for `adimgfile`, but with a caption above
+|
+
+
+|`adimgurl`
+|pass:[<pre>image::xxx[width="WWWpx",link="xxx"\]</pre>]
+
+embeds image from specified URL, where:
+
+* `xxx` is the URL to the image
+* `WWW` is the width, in pixels.
+
+|
+
+
+
+|`adimgurlc`
+|as for `adimgurl`, but with a caption above
+|
+
+
+|===
+
+
+
+== YouTube (screencasts)
+
+Embedded youtube screencasts
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adyoutube`
+|pass:[<pre>video::xxx[youtube,width="WWWpx",height="HHHpx"\]</pre>]
+
+where:
+
+* `xxx` is the youtube reference
+* `WWW` is the width, in pixels
+* `HHH` is the height, in pixels
+
+for example:
+
+pass:[<pre>video::bj8735nBRR4[youtube,width="210px",height="118px"\] </pre>]
+
+|video::bj8735nBRR4[youtube,width="210px",height="118px"]
+
+
+|`adyoutubec`
+|as for `youtube`, but with a caption above
+|
+
+|===
+
+
+== Tables
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adtbl3`
+|Table with 3 columns, 3 rows.
+|
+
+
+|===
+
+
+== Misc.
+
+[cols="1,4a,2a", options="header"]
+|===
+| Abbrev.
+| Produces
+| Example
+
+|`adai`
+|pass:[<pre>Apache Isis</pre>] +
+
+That is, the literal text "Apache Isis".
+|Apache Isis
+
+
+
+|`adlink`
+|pass:[<pre>link:xxx[ttt\]</pre>]
+
+, where:
+
+* `xxx` is
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>link:http://isis.apache.org[Apache Isis website\]</pre>]
+
+|link:http://isis.apache.org[Apache Isis website]
+
+
+
+
+|`adanchany`
+|pass:[<pre>= anchor:[xxx\]</pre>]
+
+defines an inline anchor to any heading, where:
+
+* `xxx` is the anchor text.
+
+For example:
+
+pass:[<pre>= anchor:[_ug_i18n\] Internationalization</pre>]
+
+An alternative (more commonly used in our documentation) is to use the `[[...]]` directly above the heading:
+
+pass:[<pre>[[_ug_i18n\]\]
+= Internationalization</pre>]
+
+|
+
+
+|`adxrefany`
+|pass:[<pre>xref:[xxx\]</pre>]
+
+cross-reference to any document/anchor, where:
+
+* `xxx` is the fully qualified document with optional anchor
+
+|
+
+
+|`adfootnote`
+|pass:[<pre>.footnote:[\]</pre>]
+
+defines a footnote
+|.footnote:[this is a footnote]
+
+
+
+|===
+
+
+
+

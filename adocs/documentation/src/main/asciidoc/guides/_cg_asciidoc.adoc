@@ -16,7 +16,6 @@ Publishing is performed by copying the generated HTML to a different git reposit
 
 
 
-
 == Where to find the Docs
 
 The (Asciidoc) source code can be found at `adocs/documentation` (relative to root).  Online you'll find it link:https://github.com/apache/isis/tree/master/adocs/documentation[cloned to github here].
@@ -58,6 +57,13 @@ xxx-xxx/resources/.
                          /nnn-nnn/
 ----
 
+
+
+== Writing the docs
+
+We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:cg.adoc#_cg_ide-templates[IDE templates].  These provide a large number of helper templates.
+
+An xref:cg.adoc#_cg_appendix_asciidoc-templates[appendix] lists all the templates available, demonstrating their intended usage and output.
 
 
 == Build and Review (using Maven)

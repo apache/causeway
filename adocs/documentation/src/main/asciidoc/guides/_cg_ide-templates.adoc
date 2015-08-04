@@ -11,7 +11,7 @@ We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis doma
 
 == Download
 
-The following table lists the templates to download
+The following table lists the templates available to download:
 
 [cols="1a,1a,1a,1a", options="header"]
 |===
@@ -39,6 +39,11 @@ The following table lists the templates to download
 |link:./resources/templates/jmock2-templates-idea.xml[Download]
 |link:./resources/templates/jmock2-templates.xml[Download]
 
+|Asciidoc
+|ad
+|link:./resources/templates/asciidoc-templates-idea.xml[Download]
+|(none )
+
 |===
 
 
@@ -50,11 +55,13 @@ The most commonly used Apache Isis domain objects templates are also listed on t
 
 === IntelliJ
 
-To install in IntelliJ, copy to the relevant `config/templates` directory, eg:
+To install in IntelliJ (Community edition 14), copy to the relevant `config/templates` directory, eg:
 
-* Windows `<User home>\.IntelliJIdea14\config\templates`
-* Linux `~/.IntelliJIdea14/config/templates`
-* Mac OS `~/Library/Preferences/IntelliJIdea14/templates`
+* Windows `<User home>\.IdeaIC14\config\templates`
+* Linux `~/.IdeaIC14/config/templates`
+* Mac OS `~/Library/Preferences/IdeaIC14/templates`
+
+If using the Ultimate edition, the directory is `.IntelliJIdea14` rather than `IdeaIC14`.
 
 
 === Eclipse

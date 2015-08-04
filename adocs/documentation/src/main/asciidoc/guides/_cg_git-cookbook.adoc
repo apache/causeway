@@ -8,7 +8,7 @@
 
 
 
-This section describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
+This appendix describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
 
 * xref:cg.adoc#_cg_building-isis[building Apache Isis]
 * xref:cg.adoc#_cg_git-policy[Git policy]
