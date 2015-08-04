@@ -73,9 +73,15 @@ Obviously, don't update Apache Isis' `SNAPSHOT` references; these get updated by
 
 == Releasing Core
 
-First, we release `core`.
+First, we release `core`.  Switch to the appropriate directory:
+
+[source,bash]
+----
+cd core
+----
 
 === Set environment variables
+
 
 We use environment variables to parameterize as many of the steps as possible.
 
@@ -352,6 +358,12 @@ You may (again) be prompted for gpg passphrase.  All being well this command wil
 
 Apache Isis archetypes are reverse engineered from example applications. Once reverse engineered, the source is checked into git (replacing any earlier version of the archetype) and released.
 
+Switch to the directory containing the `simpleapp` example:
+
+[source,bash]
+----
+cd ../example/application/simpleapp
+----
 
 === Setup environment variables
 
