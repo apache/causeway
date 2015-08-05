@@ -452,43 +452,24 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         IsisContext.closeSession();
     }
 
-    private IsisSystemDefault createIsisSystem(List<Object> services) {
-
-        final IsisSystemDefault system = new IsisSystemDefault(DeploymentType.UNIT_TESTING, services) {
-            @Override
-            public IsisConfiguration getConfiguration() {
-                if(IsisSystemForTest.this.configuration != null) {
-                    return IsisSystemForTest.this.configuration;
-                } else {
-                    return super.getConfiguration();
-                }
-            }
-            @Override
-            protected ProgrammingModel obtainReflectorProgrammingModel() {
-                if(IsisSystemForTest.this.programmingModel != null) {
-                    return IsisSystemForTest.this.programmingModel;
-                } else {
-                    return super.obtainReflectorProgrammingModel();
-                }
-            }
-            @Override
-            protected MetaModelValidator obtainReflectorMetaModelValidator() {
-                if(IsisSystemForTest.this.metaModelValidator != null) {
-                    return IsisSystemForTest.this.metaModelValidator;
-                } else {
-                    return super.obtainReflectorMetaModelValidator();
-                }
-            }
-            @Override
-            protected PersistenceMechanismInstaller obtainPersistenceMechanismInstaller(IsisConfiguration configuration) {
-                final PersistenceMechanismInstaller installer = IsisSystemForTest.this.persistenceMechanismInstaller;
-                configuration.injectInto(installer);
-                return installer;
-            }
-        };
-        return system;
+    private IsisConfiguration getConfigurationElseDefault() {
+        if(this.configuration != null) {
+            return this.configuration;
+        } else {
+            return IsisSystemDefault.defaultConfiguration();
+        }
     }
 
+
+    private IsisSystemDefault createIsisSystem(List<Object> services) {
+
+        final IsisSystemDefault system = new IsisSystemDefault(
+                DeploymentType.UNIT_TESTING, services,
+                getConfigurationElseDefault(),
+                this.programmingModel,
+                this.metaModelValidator);
+        return system;
+    }
 
 
     ////////////////////////////////////////////////////////////

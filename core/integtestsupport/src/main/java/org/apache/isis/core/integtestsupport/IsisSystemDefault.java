@@ -19,7 +19,6 @@
 package org.apache.isis.core.integtestsupport;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -58,13 +57,26 @@ import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 public class IsisSystemDefault extends IsisSystemAbstract {
 
-    private final IsisConfigurationDefault configuration;
+    private final IsisConfiguration configuration;
     private final List<Object> servicesIfAny;
+    private final ProgrammingModel programmingModelOverride;
+    private final MetaModelValidator metaModelValidatorOverride;
 
-    public IsisSystemDefault(DeploymentType deploymentType, List<Object> services) {
+    public IsisSystemDefault(
+            final DeploymentType deploymentType,
+            final List<Object> services,
+            final IsisConfiguration configuration,
+            final ProgrammingModel programmingModelOverride,
+            final MetaModelValidator metaModelValidatorOverride) {
         super(deploymentType);
-        this.configuration = new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
+        this.configuration = configuration;
         this.servicesIfAny = services;
+        this.programmingModelOverride = programmingModelOverride;
+        this.metaModelValidatorOverride = metaModelValidatorOverride;
+    }
+
+    static IsisConfiguration defaultConfiguration() {
+        return new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
     }
 
     /**
@@ -112,7 +124,8 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      */
     @Override
     protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
-        
+
+
         final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
         final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
         final MetaModelValidator mmv = obtainReflectorMetaModelValidator();
@@ -125,6 +138,11 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Optional hook method.
      */
     protected ProgrammingModel obtainReflectorProgrammingModel() {
+
+        if (programmingModelOverride != null) {
+            return programmingModelOverride;
+        }
+
         final ProgrammingModelFacetsJava5 programmingModel = new ProgrammingModelFacetsJava5();
 
         // TODO: this is duplicating logic in JavaReflectorInstallerNoDecorators; need to unify.
@@ -138,13 +156,16 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Optional hook method.
      */
     protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
-        return Sets.newHashSet((FacetDecorator)new StandardTransactionFacetDecorator(getConfiguration()));
+        return Sets.newHashSet((FacetDecorator) new StandardTransactionFacetDecorator(getConfiguration()));
     }
 
     /**
      * Optional hook method.
      */
     protected MetaModelValidator obtainReflectorMetaModelValidator() {
+        if(metaModelValidatorOverride != null) {
+            return metaModelValidatorOverride;
+        }
         return new MetaModelValidatorDefault();
     }
 
@@ -175,27 +196,16 @@ public class IsisSystemDefault extends IsisSystemAbstract {
         return new AuthorizationManagerStandard(getConfiguration());
     }
 
-    /**
-     * The in-memory object store (unless overridden by {@link #obtainPersistenceMechanismInstaller(IsisConfiguration)}).
-     */
     @Override
     protected PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType, final List<Object> services) throws IsisSystemException {
-        PersistenceMechanismInstaller installer = obtainPersistenceMechanismInstaller(getConfiguration());
-        if(installer == null) {
-            final DataNucleusPersistenceMechanismInstaller persistenceMechanismInstaller = new DataNucleusPersistenceMechanismInstaller();
-            persistenceMechanismInstaller.setConfiguration(getConfiguration());
-            installer = persistenceMechanismInstaller;
-        }
+        PersistenceMechanismInstaller installer =
+                createPersistenceMechanismInstaller(getConfiguration());
         return installer.createPersistenceSessionFactory(deploymentType, services);
     }
 
-
-    /**
-     * Optional hook; if returns <tt>null</tt> then the {@link #obtainPersistenceSessionFactory(DeploymentType)} is used.
-     */
-    protected PersistenceMechanismInstaller obtainPersistenceMechanismInstaller(IsisConfiguration configuration) throws IsisSystemException {
+    private PersistenceMechanismInstaller createPersistenceMechanismInstaller(IsisConfiguration configuration) throws IsisSystemException {
         DataNucleusPersistenceMechanismInstaller installer = new DataNucleusPersistenceMechanismInstaller();
-        installer.setConfiguration(getConfiguration());
+        installer.setConfiguration(configuration);
         return installer;
     }
 
