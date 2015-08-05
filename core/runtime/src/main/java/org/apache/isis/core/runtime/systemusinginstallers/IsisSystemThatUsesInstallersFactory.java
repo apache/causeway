@@ -25,7 +25,6 @@ import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.IsisSystemFactory;
-import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 
 /**
  * Implementation of {@link IsisSystemFactory} that uses {@link InstallerLookup}
@@ -35,19 +34,12 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
 
     private final InstallerLookup installerLookup;
 
-    // //////////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////////
-
     @Inject
     public IsisSystemThatUsesInstallersFactory(final InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
     }
 
-    // //////////////////////////////////////////////////////////
-    // init, shutdown
-    // //////////////////////////////////////////////////////////
-
+    //region > init, shutdown
     @Override
     public void init() {
         // nothing to do
@@ -57,25 +49,13 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
     public void shutdown() {
         // nothing to do
     }
-
-    // //////////////////////////////////////////////////////////
-    // main API
-    // //////////////////////////////////////////////////////////
+    //endregion
 
     @Override
     public IsisSystem createSystem(final DeploymentType deploymentType) {
-
         IsisComponentProviderUsingInstallers componentProvider =
                 new IsisComponentProviderUsingInstallers(deploymentType, installerLookup);
-        return new IsisSystemUsingComponentProvider(componentProvider);
-    }
-
-    // //////////////////////////////////////////////////////////
-    // Dependencies (injected or defaulted in constructor)
-    // //////////////////////////////////////////////////////////
-
-    public SystemDependencyInjector getInstallerLookup() {
-        return installerLookup;
+        return new IsisSystem(componentProvider);
     }
 
 }

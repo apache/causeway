@@ -20,47 +20,164 @@
 package org.apache.isis.core.runtime.system.session;
 
 import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+
 /**
  * Analogous (and in essence a wrapper for) a JDO <code>PersistenceManagerFactory</code>
  * 
- * @see IsisSession
+ * Creates an implementation of
+ * {@link IsisSessionFactory#openSession(AuthenticationSession)} to create an
+ * {@link IsisSession}, but delegates to subclasses to actually obtain the
+ * components that make up that {@link IsisSession}.
+ *
+ * <p>
+ * The idea is that one subclass can use the {@link InstallerLookup} design to
+ * lookup installers for components (and hence create the components
+ * themselves), whereas another subclass might simply use Spring (or another DI
+ * container) to inject in the components according to some Spring-configured
+ * application context.
  */
-public interface IsisSessionFactory extends ApplicationScopedComponent {
+
+public class IsisSessionFactory implements ApplicationScopedComponent {
+
+
+    @SuppressWarnings("unused")
+    private final static Logger LOG = LoggerFactory.getLogger(IsisSessionFactory.class);
+
+    private final DeploymentType deploymentType;
+    private final IsisConfiguration configuration;
+    private final SpecificationLoaderSpi specificationLoaderSpi;
+    private final AuthenticationManager authenticationManager;
+    private final AuthorizationManager authorizationManager;
+    private final PersistenceSessionFactory persistenceSessionFactory;
+    private final OidMarshaller oidMarshaller;
+
+    public IsisSessionFactory (
+            final DeploymentType deploymentType,
+            final IsisConfiguration configuration,
+            final SpecificationLoaderSpi specificationLoader,
+            final AuthenticationManager authenticationManager,
+            final AuthorizationManager authorizationManager,
+            final PersistenceSessionFactory persistenceSessionFactory,
+            final OidMarshaller oidMarshaller) {
+
+        ensureThatArg(deploymentType, is(not(nullValue())));
+        ensureThatArg(configuration, is(not(nullValue())));
+        ensureThatArg(specificationLoader, is(not(nullValue())));
+        ensureThatArg(authenticationManager, is(not(nullValue())));
+        ensureThatArg(authorizationManager, is(not(nullValue())));
+        ensureThatArg(persistenceSessionFactory, is(not(nullValue())));
+
+        this.deploymentType = deploymentType;
+        this.configuration = configuration;
+        this.specificationLoaderSpi = specificationLoader;
+        this.authenticationManager = authenticationManager;
+        this.authorizationManager = authorizationManager;
+        this.persistenceSessionFactory = persistenceSessionFactory;
+        this.oidMarshaller = oidMarshaller;
+    }
+
+
+
+    // ///////////////////////////////////////////
+    // init, shutdown
+    // ///////////////////////////////////////////
+
+    /**
+     * Wires components as necessary, and then
+     * {@link ApplicationScopedComponent#init() init}ializes all.
+     */
+    @Override
+    public void init() {
+        final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
+        specificationLoaderSpi.setServiceInjector(servicesInjector);
+
+        specificationLoaderSpi.init();
+
+        // must come after init of spec loader.
+        specificationLoaderSpi.injectInto(persistenceSessionFactory);
+
+        authenticationManager.init();
+        authorizationManager.init();
+        persistenceSessionFactory.init();
+
+    }
+
+
+
+    @Override
+    public void shutdown() {
+
+        persistenceSessionFactory.shutdown();
+        authenticationManager.shutdown();
+        specificationLoaderSpi.shutdown();
+    }
+
 
     /**
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.
      */
-    IsisSession openSession(final AuthenticationSession session);
+    public IsisSession openSession(final AuthenticationSession authenticationSession) {
+        final PersistenceSession persistenceSession = persistenceSessionFactory.createPersistenceSession();
+        ensureThatArg(persistenceSession, is(not(nullValue())));
 
-    /**
-     * The {@link ApplicationScopedComponent application-scoped}
-     * {@link DeploymentType}.
-     */
-    public DeploymentType getDeploymentType();
+        // inject into persistenceSession any/all application-scoped components
+        // that it requires
+        getSpecificationLoader().injectInto(persistenceSession);
+
+        return newIsisSession(authenticationSession, persistenceSession);
+    }
+
+    protected IsisSession newIsisSession(
+            final AuthenticationSession authenticationSession,
+            final PersistenceSession persistenceSession) {
+        return new IsisSession(this, authenticationSession, persistenceSession);
+    }
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
      * {@link IsisConfiguration}.
      */
-    public IsisConfiguration getConfiguration();
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    /**
+     * The {@link ApplicationScopedComponent application-scoped}
+     * {@link DeploymentType}.
+     */
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
+    }
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
      * {@link SpecificationLoaderSpi}.
      */
-    public SpecificationLoaderSpi getSpecificationLoader();
+    public SpecificationLoaderSpi getSpecificationLoader() {
+        return specificationLoaderSpi;
+    }
 
     /**
      * The {@link AuthenticationManager} that will be used to authenticate and
@@ -68,27 +185,38 @@ public interface IsisSessionFactory extends ApplicationScopedComponent {
      * {@link IsisSession#getAuthenticationSession() within} the
      * {@link IsisSession}.
      */
-    public AuthenticationManager getAuthenticationManager();
+    public AuthenticationManager getAuthenticationManager() {
+        return authenticationManager;
+    }
 
     /**
      * The {@link AuthorizationManager} that will be used to authorize access to
      * domain objects.
      */
-    public AuthorizationManager getAuthorizationManager();
+    public AuthorizationManager getAuthorizationManager() {
+        return authorizationManager;
+    }
 
     /**
      * The {@link org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory} that will be used to create
      * {@link PersistenceSession} {@link IsisSession#getPersistenceSession()
      * within} the {@link IsisSession}.
      */
-    public PersistenceSessionFactory getPersistenceSessionFactory();
+    public PersistenceSessionFactory getPersistenceSessionFactory() {
+        return persistenceSessionFactory;
+    }
 
-    public List<Object> getServices();
+    public List<Object> getServices() {
+        return getPersistenceSessionFactory().getServicesInjector().getRegisteredServices();
+    }
 
     /**
      * The {@link OidMarshaller} to use for marshalling and unmarshalling {@link Oid}s
      * into strings.
      */
-	public OidMarshaller getOidMarshaller();
+    public OidMarshaller getOidMarshaller() {
+        return oidMarshaller;
+    }
+
 
 }

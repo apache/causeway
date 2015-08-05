@@ -61,7 +61,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemUsingComponentProvider;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
@@ -368,7 +368,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
             isisLoggingConfigurer.configureLogging(".", new String[]{});
 
-            isisSystem = createIsisSystem(services);
+            IsisComponentProvider componentProvider = new IsisComponentProviderDefault(
+                    DeploymentType.UNIT_TESTING, services,
+                    getConfigurationElseDefault(),
+                    this.programmingModel,
+                    this.metaModelValidator);
+
+            isisSystem = new IsisSystem(componentProvider);
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -459,20 +465,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                 ? configuration
                 : IsisComponentProviderDefault.defaultConfiguration();
     }
-
-
-    private IsisSystem createIsisSystem(List<Object> services) {
-
-        IsisComponentProviderDefault componentProvider = new IsisComponentProviderDefault(
-                DeploymentType.UNIT_TESTING, services,
-                getConfigurationElseDefault(),
-                this.programmingModel,
-                this.metaModelValidator);
-
-        return new IsisSystemUsingComponentProvider(
-                componentProvider);
-    }
-
 
     ////////////////////////////////////////////////////////////
     // listeners
