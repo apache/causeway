@@ -45,7 +45,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
-import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -179,13 +178,9 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
         return new MetaModelValidatorDefault();
     }
 
-    /**
-     * Optional hook method.
-     */
     protected List<LayoutMetadataReader> obtainLayoutMetadataReaders() {
         return Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson());
     }
-
 
     /**
      * The standard authentication manager, configured with the default authenticator (allows all requests through).
@@ -210,16 +205,8 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException {
-        PersistenceMechanismInstaller installer =
-                createPersistenceMechanismInstaller(getConfiguration());
-        return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi);
-    }
-
-    private PersistenceMechanismInstaller createPersistenceMechanismInstaller(IsisConfiguration configuration) throws IsisSystemException {
         DataNucleusPersistenceMechanismInstaller installer = new DataNucleusPersistenceMechanismInstaller();
-        installer.setConfiguration(configuration);
-        return installer;
+        return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration());
     }
-
 
 }

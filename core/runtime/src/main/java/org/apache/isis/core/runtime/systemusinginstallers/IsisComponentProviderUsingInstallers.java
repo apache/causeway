@@ -147,13 +147,11 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
             final DeploymentType deploymentType,
             final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
-
         return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
     @Override
     public List<Object> obtainServices() {
-
         return servicesInstaller.getServices(getDeploymentType());
     }
 
@@ -161,7 +159,7 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException {
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi);
+        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration());
     }
 
 }

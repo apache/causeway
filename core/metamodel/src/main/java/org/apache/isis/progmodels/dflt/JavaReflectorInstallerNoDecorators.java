@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 /**
  * An implementation of {@link ObjectReflectorInstaller} without support for {@link FacetDecoratorInstaller}
- * being looked up (since this functionality is only available from <tt>runtimes.dflt</tt>).
+ * being looked up (since this functionality is only available from <tt>core.runtime</tt>).
  */
 public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implements ObjectReflectorInstaller {
 

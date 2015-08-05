@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -33,6 +34,9 @@ public interface PersistenceMechanismInstaller extends Installer, ObjectStoreFac
 
     static String TYPE = "persistor";
 
-    PersistenceSessionFactory createPersistenceSessionFactory(DeploymentType deploymentType, final ServicesInjectorSpi services);
+    PersistenceSessionFactory createPersistenceSessionFactory(
+            DeploymentType deploymentType,
+            final ServicesInjectorSpi services,
+            final IsisConfiguration configuration);
 
 }

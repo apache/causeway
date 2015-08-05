@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -62,20 +61,40 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
     private Boolean fixturesInstalled;
 
     private final ServicesInjectorSpi servicesInjector;
-    private RuntimeContext runtimeContext;
+    private RuntimeContextFromSession runtimeContext;
 
     public PersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
             final IsisConfiguration isisConfiguration,
-            final ObjectStoreFactory objectStoreFactory) {
+            final ObjectStoreFactory objectStoreFactory,
+            final RuntimeContextFromSession runtimeContext) {
 
+        ensureThatState(deploymentType, is(notNullValue()));
         ensureThatState(servicesInjector, is(notNullValue()));
+        ensureThatState(isisConfiguration, is(not(nullValue())));
+        ensureThatState(objectStoreFactory, is(not(nullValue())));
+        ensureThatState(runtimeContext, is(not(nullValue())));
 
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
         this.objectStoreFactory = objectStoreFactory;
         this.servicesInjector = servicesInjector;
+        this.runtimeContext = runtimeContext;
+
+        final Properties properties = applicationPropertiesFrom(getConfiguration());
+        runtimeContext.setProperties(properties);
+    }
+
+    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
+        final Properties properties = new Properties();
+        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
+        for (final String key : applicationConfiguration) {
+            final String value = applicationConfiguration.getString(key);
+            final String newKey = key.substring("application.".length());
+            properties.setProperty(newKey, value);
+        }
+        return properties;
     }
 
     public DeploymentType getDeploymentType() {
@@ -87,12 +106,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
     }
 
     public PersistenceSession createPersistenceSession() {
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("installing " + this.getClass().getName());
-        }
-
-        ServicesInjectorSpi servicesInjector = getServicesInjector();
 
         final ObjectStore objectStore = objectStoreFactory.createObjectStore(getConfiguration());
         ensureThatArg(objectStore, is(not(nullValue())));
@@ -113,12 +126,8 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
             FixtureClock.initialize();
         }
 
-        runtimeContext = createRuntimeContext(getConfiguration());
-        ensureThatState(runtimeContext, is(not(nullValue())));
-
-        // inject the specification loader etc.
         runtimeContext.injectInto(servicesInjector);
-        
+
         // wire up components
         getSpecificationLoader().injectInto(runtimeContext);
 
@@ -129,23 +138,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
         servicesInjector.init();
     }
 
-    private RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
-        final Properties properties = applicationPropertiesFrom(configuration);
-        runtimeContext.setProperties(properties);
-        return runtimeContext;
-    }
-
-    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
-        final Properties properties = new Properties();
-        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
-        for (final String key : applicationConfiguration) {
-            final String value = applicationConfiguration.getString(key);
-            final String newKey = key.substring("application.".length());
-            properties.setProperty(newKey, value);
-        }
-        return properties;
-    }
 
 
 
@@ -202,10 +194,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
         return configuration;
     }
     
-    // //////////////////////////////////////////////////////
-    // Dependencies (injected via setters)
-    // //////////////////////////////////////////////////////
-
     // //////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////
