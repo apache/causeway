@@ -143,28 +143,9 @@
 
     <dependencies>
     
-        <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-dom</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-fixture</artifactId>
-            <exclusions>
-                <exclusion>
-                    <!-- so don't pick up transitive dependency to asm 4.0.0 -->
-                    <groupId>org.datanucleus</groupId>
-                    <artifactId>datanucleus-enhancer</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>simpleapp-glob</artifactId>
         </dependency>
         
         <!-- other isis components -->

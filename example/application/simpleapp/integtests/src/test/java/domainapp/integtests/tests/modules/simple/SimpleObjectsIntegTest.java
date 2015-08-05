@@ -33,8 +33,8 @@ import org.junit.Test;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.dom.modules.simple.SimpleObjects;
+import domainapp.dom.simple.SimpleObject;
+import domainapp.dom.simple.SimpleObjects;
 import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.SimpleAppIntegTest;

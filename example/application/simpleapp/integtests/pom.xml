@@ -83,10 +83,9 @@
     </build>
     <dependencies>
 
-        <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-fixture</artifactId>
+            <artifactId>simpleapp-glob</artifactId>
         </dependency>
 
         <dependency>

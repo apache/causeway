@@ -16,56 +16,35 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package domainapp.glob.app.homepage;
 
-package domainapp.fixture.modules.simple;
+import java.util.List;
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.annotation.ViewModel;
 
 import domainapp.dom.simple.SimpleObject;
 import domainapp.dom.simple.SimpleObjects;
 
-public class SimpleObjectCreate extends FixtureScript {
+@ViewModel
+public class HomePageViewModel {
 
-    //region > name (input)
-    private String name;
-    /**
-     * Name of the object (required)
-     */
-    public String getName() {
-        return name;
-    }
-
-    public SimpleObjectCreate setName(final String name) {
-        this.name = name;
-        return this;
+    //region > title
+    public String title() {
+        return getObjects().size() + " objects";
     }
     //endregion
 
-
-    //region > simpleObject (output)
-    private SimpleObject simpleObject;
-
-    /**
-     * The created simple object (output).
-     * @return
-     */
-    public SimpleObject getSimpleObject() {
-        return simpleObject;
+    //region > object (collection)
+    @org.apache.isis.applib.annotation.HomePage
+    public List<SimpleObject> getObjects() {
+        return simpleObjects.listAll();
     }
     //endregion
 
-    @Override
-    protected void execute(final ExecutionContext ec) {
-
-        String name = checkParam("name", ec, String.class);
-
-        this.simpleObject = wrap(simpleObjects).create(name);
-
-        // also make available to UI
-        ec.addResult(this, simpleObject);
-    }
+    //region > injected services
 
     @javax.inject.Inject
-    private SimpleObjects simpleObjects;
+    SimpleObjects simpleObjects;
 
+    //endregion
 }

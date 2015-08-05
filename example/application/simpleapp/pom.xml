@@ -334,6 +334,7 @@
     <modules>
         <module>dom</module>
         <module>fixture</module>
+        <module>glob</module>
         <module>integtests</module>
         <module>webapp</module>
     </modules>
@@ -373,6 +374,11 @@
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>simpleapp-fixture</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>simpleapp-glob</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

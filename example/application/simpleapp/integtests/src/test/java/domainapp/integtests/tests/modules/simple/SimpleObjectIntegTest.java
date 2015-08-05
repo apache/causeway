@@ -28,7 +28,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 
-import domainapp.dom.modules.simple.SimpleObject;
+import domainapp.dom.simple.SimpleObject;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
