@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -147,7 +148,6 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
             final DeploymentType deploymentType,
             final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
 
-
         return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
@@ -160,8 +160,8 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final List<Object> services) throws IsisSystemException {
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, services);
+            final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException {
+        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi);
     }
 
 }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -47,8 +48,8 @@ public interface IsisComponentProvider {
             IsisSystemException;
 
     PersistenceSessionFactory providePersistenceSessionFactory(
-            DeploymentType deploymentType,
-            final List<Object> services) throws IsisSystemException;
+            final DeploymentType deploymentType,
+            final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException;
 
     AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
 

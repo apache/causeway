@@ -84,7 +84,7 @@ public class IsisSessionFactoryAbstractTest_init_and_shutdown {
     public void validate_DomainServicesWithDuplicateIds() {
         serviceList.add(new DomainServiceWithSomeId());
         serviceList.add(new DomainServiceWithDuplicateId());
-        isf = new IsisSessionFactory(mockDeploymentType, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory, mockOidMarshaller) {
+        isf = new IsisSessionFactory(mockDeploymentType, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory) {
         };
     }
 }

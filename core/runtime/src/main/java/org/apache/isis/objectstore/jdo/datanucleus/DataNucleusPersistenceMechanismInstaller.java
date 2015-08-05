@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -90,8 +91,8 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     //region > createPersistenceSessionFactory
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(
-            final DeploymentType deploymentType, final List<Object> services) {
-        return new PersistenceSessionFactory(deploymentType, services, getConfiguration(), this);
+            final DeploymentType deploymentType, final ServicesInjectorSpi servicesInjector) {
+        return new PersistenceSessionFactory(deploymentType, servicesInjector, getConfiguration(), this);
     }
     //endregion
 

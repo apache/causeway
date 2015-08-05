@@ -73,14 +73,13 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final OidMarshaller oidMarshaller;
 
-    public IsisSessionFactory (
+    public IsisSessionFactory(
             final DeploymentType deploymentType,
             final IsisConfiguration configuration,
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
-            final PersistenceSessionFactory persistenceSessionFactory,
-            final OidMarshaller oidMarshaller) {
+            final PersistenceSessionFactory persistenceSessionFactory) {
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
@@ -95,7 +94,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
         this.persistenceSessionFactory = persistenceSessionFactory;
-        this.oidMarshaller = oidMarshaller;
+        this.oidMarshaller = new OidMarshaller();;
     }
 
 

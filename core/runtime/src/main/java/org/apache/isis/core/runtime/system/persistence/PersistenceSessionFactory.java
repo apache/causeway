@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.util.List;
 import java.util.Properties;
 
 import org.slf4j.Logger;
@@ -32,7 +31,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
@@ -68,16 +66,16 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
 
     public PersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final List<Object> serviceList,
+            final ServicesInjectorSpi servicesInjector,
             final IsisConfiguration isisConfiguration,
             final ObjectStoreFactory objectStoreFactory) {
 
-        ensureThatState(serviceList, is(notNullValue()));
+        ensureThatState(servicesInjector, is(notNullValue()));
 
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
         this.objectStoreFactory = objectStoreFactory;
-        servicesInjector = new ServicesInjectorDefault(serviceList);
+        this.servicesInjector = servicesInjector;
     }
 
     public DeploymentType getDeploymentType() {

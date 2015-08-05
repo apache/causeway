@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -208,10 +209,10 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
-            final List<Object> services) throws IsisSystemException {
+            final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException {
         PersistenceMechanismInstaller installer =
                 createPersistenceMechanismInstaller(getConfiguration());
-        return installer.createPersistenceSessionFactory(deploymentType, services);
+        return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi);
     }
 
     private PersistenceMechanismInstaller createPersistenceMechanismInstaller(IsisConfiguration configuration) throws IsisSystemException {

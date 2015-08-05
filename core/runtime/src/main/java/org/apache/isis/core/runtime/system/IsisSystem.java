@@ -36,8 +36,8 @@ import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ListExtensions;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -153,24 +153,25 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
     private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
         final List<Object> services = isisComponentProvider.obtainServices();
+
+        ServicesInjectorSpi servicesInjectorSpi = new ServicesInjectorDefault(services);
+        servicesInjectorSpi.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
+        servicesInjectorSpi.validateServices();
+
         final PersistenceSessionFactory persistenceSessionFactory =
-                isisComponentProvider.providePersistenceSessionFactory(deploymentType, services);
+                isisComponentProvider.providePersistenceSessionFactory(deploymentType, servicesInjectorSpi);
 
         final IsisConfiguration configuration = getConfiguration();
-        final AuthenticationManager authenticationManager = isisComponentProvider
-                .provideAuthenticationManager(deploymentType);
-        final AuthorizationManager authorizationManager = isisComponentProvider
-                .provideAuthorizationManager(deploymentType);
-        final OidMarshaller oidMarshaller = createOidMarshaller();
+        final AuthenticationManager authenticationManager =
+                isisComponentProvider.provideAuthenticationManager(deploymentType);
+        final AuthorizationManager authorizationManager =
+                isisComponentProvider.provideAuthorizationManager(deploymentType);
 
         final Collection<MetaModelRefiner> metaModelRefiners =
                 refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
-        final SpecificationLoaderSpi reflector = isisComponentProvider
-                .provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
+        final SpecificationLoaderSpi reflector =
+                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
-        ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
-        servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
-        servicesInjector.validateServices();
 
         // bind metamodel to the (runtime) framework
         final RuntimeContextFromSession runtimeContext = createRuntimeContextFromSession();
@@ -179,7 +180,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         return new IsisSessionFactory (
                 deploymentType, configuration, reflector,
                 authenticationManager, authorizationManager,
-                persistenceSessionFactory, oidMarshaller);
+                persistenceSessionFactory);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
@@ -288,9 +289,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         return IsisContext.getSpecificationLoader().allSpecifications();
     }
 
-    private OidMarshaller createOidMarshaller() {
-        return new OidMarshaller();
-    }
 
     private RuntimeContextFromSession createRuntimeContextFromSession() {
         return new RuntimeContextFromSession();
