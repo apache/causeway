@@ -54,18 +54,20 @@ import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemUsingComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 
 /**
- * Wraps a plain {@link IsisSystemDefault}, and provides a number of features to assist with testing.
+ * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
  */
 public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServiceProvider {
 
@@ -146,7 +148,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // //////////////////////////////////////
 
 
-    private IsisSystemDefault isisSystem;
+    private IsisSystem isisSystem;
     private AuthenticationSession authenticationSession;
 
     private final IsisConfiguration configuration;
@@ -453,22 +455,22 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private IsisConfiguration getConfigurationElseDefault() {
-        if(this.configuration != null) {
-            return this.configuration;
-        } else {
-            return IsisSystemDefault.defaultConfiguration();
-        }
+        return configuration != null
+                ? configuration
+                : IsisComponentProviderDefault.defaultConfiguration();
     }
 
 
-    private IsisSystemDefault createIsisSystem(List<Object> services) {
+    private IsisSystem createIsisSystem(List<Object> services) {
 
-        final IsisSystemDefault system = new IsisSystemDefault(
+        IsisComponentProviderDefault componentProvider = new IsisComponentProviderDefault(
                 DeploymentType.UNIT_TESTING, services,
                 getConfigurationElseDefault(),
                 this.programmingModel,
                 this.metaModelValidator);
-        return system;
+
+        return new IsisSystemUsingComponentProvider(
+                componentProvider);
     }
 
 
@@ -523,12 +525,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     ////////////////////////////////////////////////////////////
 
     /**
-     * The {@link IsisSystemDefault} created during {@link #setUpSystem()}.
+     * The {@link IsisSystem} created during {@link #setUpSystem()}.
      *
      * <p>
      * Can fine-tune the actual implementation using the hook {@link #createIsisSystem(List)}.
      */
-    public IsisSystemDefault getIsisSystem() {
+    public IsisSystem getIsisSystem() {
         return isisSystem;
     }
 

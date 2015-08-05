@@ -16,6 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
 package org.apache.isis.core.integtestsupport;
 
 import java.util.Collection;
@@ -48,27 +49,29 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemAbstract;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
-public class IsisSystemDefault extends IsisSystemAbstract {
+public class IsisComponentProviderDefault implements IsisComponentProvider {
+
+    private final DeploymentType deploymentType;
 
     private final IsisConfiguration configuration;
     private final List<Object> servicesIfAny;
     private final ProgrammingModel programmingModelOverride;
     private final MetaModelValidator metaModelValidatorOverride;
 
-    public IsisSystemDefault(
+    public IsisComponentProviderDefault(
             final DeploymentType deploymentType,
             final List<Object> services,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType);
+        this.deploymentType = deploymentType;
         this.configuration = configuration;
         this.servicesIfAny = services;
         this.programmingModelOverride = programmingModelOverride;
@@ -78,6 +81,13 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     static IsisConfiguration defaultConfiguration() {
         return new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
     }
+
+
+    @Override
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
+    }
+
 
     /**
      * Reads <tt>isis.properties</tt> (and other optional property files) from the &quot;config&quot; package on the current classpath.
@@ -92,7 +102,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Either the services explicitly provided by a constructor, otherwise reads from the configuration.
      */
     @Override
-    protected List<Object> obtainServices() {
+    public List<Object> obtainServices() {
         if(servicesIfAny != null) {
             return servicesIfAny;
         }
@@ -105,7 +115,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * Install fixtures from configuration.
      */
     @Override
-    protected FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
+    public FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
         final FixturesInstallerFromConfiguration fixturesInstallerFromConfiguration = new FixturesInstallerFromConfiguration();
         fixturesInstallerFromConfiguration.setConfiguration(getConfiguration());
         return fixturesInstallerFromConfiguration;
@@ -113,31 +123,30 @@ public class IsisSystemDefault extends IsisSystemAbstract {
 
 
     /**
-     * Optional hook method, to create the reflector with defaults (Java5, with cglib, and only the transaction facet decorators)
-     * 
      * <p>
      * Each of the subcomponents can be overridden if required.
-     * 
+     *
      * @see #obtainReflectorFacetDecoratorSet()
      * @see #obtainReflectorMetaModelValidator()
      * @see #obtainReflectorProgrammingModel()
      */
     @Override
-    protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(DeploymentType deploymentType, Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+    public SpecificationLoaderSpi provideSpecificationLoaderSpi(
+            DeploymentType deploymentType,
+            Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
 
 
         final ProgrammingModel programmingModel = obtainReflectorProgrammingModel();
         final Set<FacetDecorator> facetDecorators = obtainReflectorFacetDecoratorSet();
         final MetaModelValidator mmv = obtainReflectorMetaModelValidator();
         final List<LayoutMetadataReader> layoutMetadataReaders = obtainLayoutMetadataReaders();
-        return JavaReflectorHelper.createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv, getConfiguration());
+        return JavaReflectorHelper
+                .createObjectReflector(programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv,
+                        getConfiguration());
     }
 
 
-    /**
-     * Optional hook method.
-     */
-    protected ProgrammingModel obtainReflectorProgrammingModel() {
+    private ProgrammingModel obtainReflectorProgrammingModel() {
 
         if (programmingModelOverride != null) {
             return programmingModelOverride;
@@ -155,7 +164,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     /**
      * Optional hook method.
      */
-    protected Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
+    private Set<FacetDecorator> obtainReflectorFacetDecoratorSet() {
         return Sets.newHashSet((FacetDecorator) new StandardTransactionFacetDecorator(getConfiguration()));
     }
 
@@ -181,7 +190,7 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * The standard authentication manager, configured with the default authenticator (allows all requests through).
      */
     @Override
-    protected AuthenticationManager obtainAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException {
+    public AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException {
         final AuthenticationManagerStandard authenticationManager = new AuthenticationManagerStandard(getConfiguration());
         Authenticator authenticator = new AuthenticatorBypass(configuration);
         authenticationManager.addAuthenticator(authenticator);
@@ -192,12 +201,14 @@ public class IsisSystemDefault extends IsisSystemAbstract {
      * The standard authorization manager, allowing all access.
      */
     @Override
-    protected AuthorizationManager obtainAuthorizationManager(DeploymentType deploymentType) {
+    public AuthorizationManager provideAuthorizationManager(DeploymentType deploymentType) {
         return new AuthorizationManagerStandard(getConfiguration());
     }
 
     @Override
-    protected PersistenceSessionFactory obtainPersistenceSessionFactory(DeploymentType deploymentType, final List<Object> services) throws IsisSystemException {
+    public PersistenceSessionFactory providePersistenceSessionFactory(
+            DeploymentType deploymentType,
+            final List<Object> services) throws IsisSystemException {
         PersistenceMechanismInstaller installer =
                 createPersistenceMechanismInstaller(getConfiguration());
         return installer.createPersistenceSessionFactory(deploymentType, services);
@@ -208,5 +219,6 @@ public class IsisSystemDefault extends IsisSystemAbstract {
         installer.setConfiguration(configuration);
         return installer;
     }
+
 
 }

@@ -32,7 +32,6 @@ public class ServiceInitializer {
     private final static Logger LOG = LoggerFactory.getLogger(ServiceInitializer.class);
 
     private Map<String, String> props;
-    
 
     private Map<Object, Method> postConstructMethodsByService = Maps.newLinkedHashMap(); 
     private Map<Object, Method> preDestroyMethodsByService = Maps.newLinkedHashMap(); 
@@ -120,7 +119,6 @@ public class ServiceInitializer {
         }
     }
 
-
     public void preDestroy() {
         LOG.info("calling @PreDestroy on all domain services");
         for (final Map.Entry<Object, Method> entry : preDestroyMethodsByService.entrySet()) {
@@ -137,6 +135,5 @@ public class ServiceInitializer {
             }
         }
     }
-
 
 }

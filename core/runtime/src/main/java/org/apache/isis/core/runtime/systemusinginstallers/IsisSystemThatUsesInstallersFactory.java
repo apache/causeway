@@ -65,11 +65,9 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
     @Override
     public IsisSystem createSystem(final DeploymentType deploymentType) {
 
-        final IsisSystemUsingInstallers system = new IsisSystemUsingInstallers(deploymentType, installerLookup);
-
-        system.lookupAndSetAuthenticatorAndAuthorization(deploymentType);
-        system.lookupAndSetFixturesInstaller();
-        return system;
+        IsisComponentProviderUsingInstallers componentProvider =
+                new IsisComponentProviderUsingInstallers(deploymentType, installerLookup);
+        return new IsisSystemUsingComponentProvider(componentProvider);
     }
 
     // //////////////////////////////////////////////////////////
