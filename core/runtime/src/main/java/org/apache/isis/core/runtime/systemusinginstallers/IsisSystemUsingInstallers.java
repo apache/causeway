@@ -21,8 +21,10 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.Collection;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -34,17 +36,18 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
-import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
@@ -59,6 +62,7 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
     private FixturesInstaller fixtureInstaller;
 
+
     // ///////////////////////////////////////////
     // Constructors
     // ///////////////////////////////////////////
@@ -69,32 +73,18 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         this.installerLookup = installerLookup;
     }
 
-    // ///////////////////////////////////////////
-    // InstallerLookup
-    // ///////////////////////////////////////////
-
-    /**
-     * As per
-     * {@link #IsisSystemUsingInstallers(DeploymentType, InstallerLookup)
-     * constructor}.
-     */
-    public SystemDependencyInjector getInstallerLookup() {
-        return installerLookup;
-    }
-
-    // ///////////////////////////////////////////
-    // Create context hooks
-    // ///////////////////////////////////////////
-
 
     // ///////////////////////////////////////////
     // Configuration
     // ///////////////////////////////////////////
 
     /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}
-     * held by the {@link #getInstallerLookup() installer lookup}.
-     * 
+     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}.
+     *
+     * <p>
+     *     ... as held by the internal {@link InstallerLookup}.
+     * </p>
+     *
      * @see InstallerLookup#getConfiguration()
      */
     @Override
@@ -143,10 +133,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         return authorizationInstaller.createAuthorizationManager();
     }
 
-    // ///////////////////////////////////////////
-    // Fixtures
-    // ///////////////////////////////////////////
-
     public void lookupAndSetFixturesInstaller() {
         final IsisConfiguration configuration = installerLookup.getConfiguration();
         final String fixture = configuration.getString(SystemConstants.FIXTURES_INSTALLER_KEY);
@@ -157,10 +143,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         }
     }
 
-    public void setFixtureInstaller(final FixturesInstaller fixtureInstaller) {
-        this.fixtureInstaller = fixtureInstaller;
-    }
-
     @Override
     protected FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
         return fixtureInstaller;
@@ -169,10 +151,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
     // ///////////////////////////////////////////
     // Reflector
     // ///////////////////////////////////////////
-
-    public void setReflectorInstaller(final ObjectReflectorInstaller reflectorInstaller) {
-        this.reflectorInstaller = reflectorInstaller;
-    }
 
     @Override
     protected SpecificationLoaderSpi obtainSpecificationLoaderSpi(final DeploymentType deploymentType, final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
@@ -188,14 +166,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
-    // ///////////////////////////////////////////
-    // Container and Services
-    // ///////////////////////////////////////////
-
-    public void setServicesInstaller(final ServicesInstaller servicesInstaller) {
-        this.servicesInstaller = servicesInstaller;
-    }
-
     @Override
     protected List<Object> obtainServices() {
         if (servicesInstaller == null) {
@@ -206,14 +176,6 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
         return servicesInstaller.getServices(getDeploymentType());
     }
 
-
-    // ///////////////////////////////////////////
-    // PersistenceSessionFactory
-    // ///////////////////////////////////////////
-
-    public void setPersistenceMechanismInstaller(final PersistenceMechanismInstaller persistenceMechanismInstaller) {
-        this.persistenceMechanismInstaller = persistenceMechanismInstaller;
-    }
 
     @Override
     protected PersistenceSessionFactory obtainPersistenceSessionFactory(final DeploymentType deploymentType, final List<Object> services) throws IsisSystemException {

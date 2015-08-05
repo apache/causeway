@@ -61,26 +61,10 @@ public class IsisSystemDefault extends IsisSystemAbstract {
     private final IsisConfigurationDefault configuration;
     private final List<Object> servicesIfAny;
 
-    public IsisSystemDefault(Object... servicesIfAny) {
-        this(DeploymentType.SERVER, servicesIfAny);
-    }
-
-    public IsisSystemDefault(List<Object> services) {
-        this(DeploymentType.SERVER, services);
-    }
-
-    public IsisSystemDefault(DeploymentType deploymentType, Object... servicesIfAny) {
-        this(deploymentType, asList(servicesIfAny));
-    }
-
     public IsisSystemDefault(DeploymentType deploymentType, List<Object> services) {
         super(deploymentType);
         this.configuration = new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
         this.servicesIfAny = services;
-    }
-
-    private static List<Object> asList(Object... objects) {
-        return objects != null? Collections.unmodifiableList(Lists.newArrayList(objects)): null;
     }
 
     /**
