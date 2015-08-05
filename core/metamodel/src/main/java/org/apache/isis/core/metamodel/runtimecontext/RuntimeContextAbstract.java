@@ -156,7 +156,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         });
     }
 
-    public void setProperties(final Properties properties) {
+    protected void setProperties(final Properties properties) {
         this.properties = properties;
     }
 

@@ -152,16 +152,18 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
+        final IsisConfiguration configuration = isisComponentProvider.getConfiguration();
         final List<Object> services = isisComponentProvider.obtainServices();
 
         ServicesInjectorSpi servicesInjectorSpi = new ServicesInjectorDefault(services);
         servicesInjectorSpi.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
         servicesInjectorSpi.validateServices();
 
-        final PersistenceSessionFactory persistenceSessionFactory =
-                isisComponentProvider.providePersistenceSessionFactory(deploymentType, servicesInjectorSpi);
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(configuration);
 
-        final IsisConfiguration configuration = getConfiguration();
+        final PersistenceSessionFactory persistenceSessionFactory =
+                isisComponentProvider.providePersistenceSessionFactory(deploymentType, servicesInjectorSpi, runtimeContext);
+
         final AuthenticationManager authenticationManager =
                 isisComponentProvider.provideAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager =
@@ -172,9 +174,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         final SpecificationLoaderSpi reflector =
                 isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
-
         // bind metamodel to the (runtime) framework
-        final RuntimeContextFromSession runtimeContext = createRuntimeContextFromSession();
         runtimeContext.injectInto(reflector);
 
         return new IsisSessionFactory (
@@ -287,11 +287,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     Collection<ObjectSpecification> allSpecifications() {
         return IsisContext.getSpecificationLoader().allSpecifications();
-    }
-
-
-    private RuntimeContextFromSession createRuntimeContextFromSession() {
-        return new RuntimeContextFromSession();
     }
 
     //endregion

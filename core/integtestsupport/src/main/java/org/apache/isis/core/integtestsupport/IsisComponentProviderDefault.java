@@ -45,6 +45,7 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandard;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
@@ -204,9 +205,10 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException {
+            final ServicesInjectorSpi servicesInjectorSpi,
+            final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
         DataNucleusPersistenceMechanismInstaller installer = new DataNucleusPersistenceMechanismInstaller();
-        return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration());
+        return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration(), runtimeContext);
     }
 
 }

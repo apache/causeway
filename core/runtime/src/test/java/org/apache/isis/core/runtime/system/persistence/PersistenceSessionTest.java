@@ -142,7 +142,7 @@ public class PersistenceSessionTest {
             }
         });
 
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(mockConfiguration);
         final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);

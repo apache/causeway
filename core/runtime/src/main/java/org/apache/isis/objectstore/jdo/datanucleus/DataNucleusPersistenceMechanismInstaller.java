@@ -94,12 +94,14 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     public PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final IsisConfiguration configuration) {
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
+            final IsisConfiguration configuration,
+            final RuntimeContextFromSession runtimeContext) {
+
         DataNucleusPersistenceMechanismInstaller objectStoreFactory = this;
         return new PersistenceSessionFactory(deploymentType, servicesInjector, configuration, objectStoreFactory, runtimeContext);
     }
     //endregion
+
 
     //region > createObjectStore
 

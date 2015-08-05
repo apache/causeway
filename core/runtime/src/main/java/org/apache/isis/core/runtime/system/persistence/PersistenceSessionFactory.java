@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,19 +80,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner, ApplicationS
         this.servicesInjector = servicesInjector;
         this.runtimeContext = runtimeContext;
 
-        final Properties properties = applicationPropertiesFrom(getConfiguration());
-        runtimeContext.setProperties(properties);
-    }
-
-    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
-        final Properties properties = new Properties();
-        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
-        for (final String key : applicationConfiguration) {
-            final String value = applicationConfiguration.getString(key);
-            final String newKey = key.substring("application.".length());
-            properties.setProperty(newKey, value);
-        }
-        return properties;
     }
 
     public DeploymentType getDeploymentType() {

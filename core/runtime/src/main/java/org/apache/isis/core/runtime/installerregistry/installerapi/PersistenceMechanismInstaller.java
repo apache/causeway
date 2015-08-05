@@ -21,8 +21,11 @@ package org.apache.isis.core.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectStoreFactory;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -30,13 +33,14 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory
 /**
  * Installs a {@link PersistenceSession} during system start up.
  */
-public interface PersistenceMechanismInstaller extends Installer, ObjectStoreFactory {
+public interface PersistenceMechanismInstaller extends Installer, ObjectStoreFactory, IsisConfigurationBuilderAware,
+        MetaModelRefiner {
 
     static String TYPE = "persistor";
 
     PersistenceSessionFactory createPersistenceSessionFactory(
-            DeploymentType deploymentType,
-            final ServicesInjectorSpi services,
-            final IsisConfiguration configuration);
+            final DeploymentType deploymentType,
+            final ServicesInjectorSpi servicesInjector,
+            final IsisConfiguration configuration, final RuntimeContextFromSession runtimeContext);
 
 }

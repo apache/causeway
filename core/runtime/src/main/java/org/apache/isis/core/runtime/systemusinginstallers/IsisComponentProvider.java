@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -49,7 +50,8 @@ public interface IsisComponentProvider {
 
     PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi) throws IsisSystemException;
+            final ServicesInjectorSpi servicesInjectorSpi,
+            final RuntimeContextFromSession runtimeContext) throws IsisSystemException;
 
     AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
 

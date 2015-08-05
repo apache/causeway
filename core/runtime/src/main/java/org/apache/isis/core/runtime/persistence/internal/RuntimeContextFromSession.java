@@ -20,6 +20,8 @@
 package org.apache.isis.core.runtime.persistence.internal;
 
 import java.util.List;
+import java.util.Properties;
+
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
@@ -28,6 +30,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
@@ -82,7 +85,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     // Constructor
     // //////////////////////////////////////////////////////////////////
 
-    public RuntimeContextFromSession() {
+
+    public RuntimeContextFromSession(final IsisConfiguration configuration) {
+
+        final Properties properties = applicationPropertiesFrom(configuration);
+        setProperties(properties);
+
         this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
 
             @Override
@@ -307,6 +315,18 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
         };
     }
+
+    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
+        final Properties properties = new Properties();
+        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
+        for (final String key : applicationConfiguration) {
+            final String value = applicationConfiguration.getString(key);
+            final String newKey = key.substring("application.".length());
+            properties.setProperty(newKey, value);
+        }
+        return properties;
+    }
+
 
     // //////////////////////////////////////////////////////////////////
     // Components
