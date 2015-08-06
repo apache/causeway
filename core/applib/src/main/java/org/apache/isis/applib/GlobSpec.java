@@ -112,7 +112,8 @@ public interface GlobSpec {
     public List<Class<?>> getModules();
 
     /**
-     * If non-null, overrides the value of <tt>isis.authentication</tt> configuration property.
+     * If non-null, overrides the value of <tt>isis.authentication</tt> configuration property to specify the
+     * authentication mechanism.
      *
      * <p>
      *     Ignored for integration tests (which always uses the 'bypass' mechanism).

@@ -16,26 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.integtests.bootstrap;
+package domainapp.glob;
 
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+/**
+ * Bypasses security, meaning any user/password combination can be used to login.
+ */
+public class DomainAppGlobSpecBypass extends DomainAppGlobSpec {
 
-import domainapp.glob.DomainAppGlobSpec;
-
-public class SimpleAppSystemInitializer {
-
-    public static void initIsft() {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new DomainAppGlobSpec())
-                    .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
+    @Override
+    public String getAuthenticationMechanism() {
+        return "bypass";
     }
 
+    @Override
+    public String getAuthorizationMechanism() {
+        return "bypass";
+    }
 }

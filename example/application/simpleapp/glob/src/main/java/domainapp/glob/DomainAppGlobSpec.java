@@ -22,36 +22,67 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.GlobSpec;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.DomainAppDomainModule;
+import domainapp.fixture.DomainAppFixturesProvider;
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
-public final class DomainAppGlobSpec implements GlobSpec {
+/**
+ * Bootstrap the application.
+ */
+public class DomainAppGlobSpec implements GlobSpec {
 
+    /**
+     * Load all services and entities found in (the packages and subpackages within) these modules
+     */
     @Override
     public List<Class<?>> getModules() {
         return Arrays.asList(
-                DomainAppDomainModule.class,
-                DomainAppGlobSpec.class
+                DomainAppDomainModule.class, // entities and repositories
+                DomainAppFixturesProvider.class, // fixture configuration
+                DomainAppGlobSpec.class      // home page service
         );
     }
 
+    /**
+     * Use shiro for authentication.
+     *
+     * <p>
+     *     NB: this is ignored for integration tests, which always use "bypass".
+     * </p>
+     */
     @Override
     public String getAuthenticationMechanism() {
-        return null;
+        return "shiro";
     }
 
+    /**
+     * Use shiro for authorization.
+     *
+     * <p>
+     *     NB: this is ignored for integration tests, which always use "bypass".
+     * </p>
+     */
     @Override
     public String getAuthorizationMechanism() {
-        return null;
+        return "shiro";
     }
 
+    /**
+     * Run these fixtures.
+     */
     @Override
     public List<Class<? extends FixtureScript>> getFixtures() {
-        return null;
+        return Lists.newArrayList(RecreateSimpleObjects.class);
     }
 
+    /**
+     * No additional overrides
+     */
     @Override
     public Map<String, String> getConfigurationProperties() {
         return null;

@@ -22,20 +22,20 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
 import org.apache.isis.applib.GlobSpec;
-import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -111,18 +111,22 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
         return Joiner.on(',').join(iter);
     }
 
-    protected void specifyFixtureScriptsUsing(final GlobSpec globSpec) {
-        List<Class<? extends FixtureScript>> fixtureClasses = globSpec.getFixtures();
-        final String fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
-        putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
-    }
-
-    private String fixtureClassNamesFrom(final List<Class<? extends FixtureScript>> fixtureClasses) {
-        if (fixtureClasses == null) {
+    protected String fixtureClassNamesFrom(final List<?> fixtures) {
+        if (fixtures == null) {
             return null;
         }
-        final Iterable<String> iter = Iterables.transform(fixtureClasses, ClassUtil.Functions.nameOf());
-        return Joiner.on(',').join(iter);
+        final Iterable<String> fixtureClassNames = Iterables.transform(fixtures, classNameOf());
+        return Joiner.on(',').join(fixtureClassNames);
+    }
+
+    private Function<Object, String> classNameOf() {
+        return new Function<Object, String>() {
+                        @Nullable @Override
+                        public String apply(final Object input) {
+                            Class<?> aClass = input instanceof Class ? (Class<?>)input: input.getClass();
+                            return aClass.getName();
+                        }
+                    };
     }
 
     protected void overrideConfigurationUsing(final GlobSpec globSpec) {
@@ -172,7 +176,7 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     }
 
     @Override
-    public FixturesInstaller provideFixturesInstaller() throws IsisSystemException {
+    public FixturesInstaller provideFixturesInstaller() {
         return fixturesInstaller;
     }
 

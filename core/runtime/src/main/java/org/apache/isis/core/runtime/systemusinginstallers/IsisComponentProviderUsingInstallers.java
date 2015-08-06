@@ -20,8 +20,10 @@
 package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -29,13 +31,13 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
+import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
@@ -52,7 +54,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
     private ObjectReflectorInstaller reflectorInstaller;
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
-
 
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
@@ -78,7 +79,9 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
             final String authorizationMechanism = globSpec.getAuthorizationMechanism();
             putConfigurationProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
-            specifyFixtureScriptsUsing(globSpec);
+            List<Class<? extends FixtureScript>> fixtureClasses = globSpec.getFixtures();
+            final String fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
+            putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
 
             overrideConfigurationUsing(globSpec);
         }
@@ -133,8 +136,6 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         configuration = this.installerLookup.getConfiguration();
 
         // eagerly calculate
-
-
         authenticationManager = authenticationInstaller.createAuthenticationManager();
         authorizationManager = authorizationInstaller.createAuthorizationManager();
         services = servicesInstaller.getServices();
@@ -156,7 +157,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
-            final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+            final Collection<MetaModelRefiner> metaModelRefiners) {
         return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
@@ -165,7 +166,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi,
-            final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
+            final RuntimeContextFromSession runtimeContext) {
         return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi,
                 getConfiguration(),
                 runtimeContext);

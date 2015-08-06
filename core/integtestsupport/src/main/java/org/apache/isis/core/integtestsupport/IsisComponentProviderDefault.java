@@ -27,6 +27,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.fixtures.InstallableFixture;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
@@ -68,6 +70,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
             final DeploymentType deploymentType,
             final GlobSpec globSpecIfAny,
             final List<Object> servicesOverride,
+            final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
@@ -75,19 +78,32 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
 
         this.configuration = elseDefault(configurationOverride);
 
+        final String fixtureClassNamesCsv;
         if(globSpec != null) {
 
             specifyServicesAndRegisteredEntitiesUsing(globSpec);
 
-            specifyFixtureScriptsUsing(globSpec);
+            // required to prevent RegisterEntities validation from complaining
+            // if it can't find any @PersistenceCapable entities in a module
+            // that contains only services.
+            putConfigurationProperty(
+                    "isis.globSpec", globSpecIfAny.getClass().getName()
+            );
+
+            List<Class<? extends FixtureScript>> fixtureClasses = globSpec.getFixtures();
+            fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
+
             overrideConfigurationUsing(globSpec);
 
             this.services = createServices(configuration);
 
         } else {
+            fixtureClassNamesCsv = fixtureClassNamesFrom(fixturesOverride);
+
             this.services = elseDefault(servicesOverride, configuration);
         }
 
+        putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
         this.fixturesInstaller = createFixturesInstaller(configuration);
 
         // integration tests ignore globSpec for authentication and authorization.
@@ -98,6 +114,8 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
         this.metaModelValidator = elseDefault(metaModelValidatorOverride);
 
     }
+
+
 
     //region > globSpec
 
@@ -205,7 +223,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
     }
 
     @Override
-    public FixturesInstaller provideFixturesInstaller() throws IsisSystemException {
+    public FixturesInstaller provideFixturesInstaller()  {
         return fixturesInstaller;
     }
 
@@ -241,7 +259,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi,
-            final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
+            final RuntimeContextFromSession runtimeContext) {
         DataNucleusPersistenceMechanismInstaller installer = new DataNucleusPersistenceMechanismInstaller();
         return installer.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration(), runtimeContext);
     }

@@ -43,12 +43,12 @@ public interface IsisComponentProvider {
 
     IsisConfiguration getConfiguration();
 
-    AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException;
+    AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType);
     AuthorizationManager provideAuthorizationManager(final DeploymentType deploymentType);
 
     List<Object> provideServices();
 
-    FixturesInstaller provideFixturesInstaller() throws IsisSystemException;
+    FixturesInstaller provideFixturesInstaller();
 
     SpecificationLoaderSpi provideSpecificationLoaderSpi(Collection<MetaModelRefiner> metaModelRefiners)
             throws IsisSystemException;
@@ -56,6 +56,6 @@ public interface IsisComponentProvider {
     PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi,
-            final RuntimeContextFromSession runtimeContext) throws IsisSystemException;
+            final RuntimeContextFromSession runtimeContext);
 
 }

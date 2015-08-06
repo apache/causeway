@@ -49,10 +49,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -147,25 +149,27 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     // //////////////////////////////////////
 
+    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
+
+
+    // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
+    private final GlobSpec globSpecForComponentProvider;
+    private final IsisConfiguration configurationForComponentProvider;
+    private final List<Object> servicesForComponentProvider;
+    private final List<InstallableFixture> fixturesForComponentProvider;
+    private final MetaModelValidator metaModelValidatorForComponentProvider;
+    private final ProgrammingModel programmingModelForComponentProvider;
+
+    // populated at #setupSystem
+    private IsisComponentProvider componentProvider;
 
     private IsisSystem isisSystem;
+
+    private final AuthenticationRequest authenticationRequestIfAny;
     private AuthenticationSession authenticationSession;
 
-    private final GlobSpec globSpecIfAny;
-    private final IsisConfiguration configurationOverride;
-    private final AuthenticationRequest authenticationRequest;
-    private final List<Object> servicesIfAny;
-    private final List<InstallableFixture> fixtures;
     private List <Listener> listeners;
-    
-    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
-    
-    private final MetaModelValidator metaModelValidatorOverride;
-    private final ProgrammingModel programmingModelOverride;
-    
-    private DomainObjectContainer container;
 
-    
     ////////////////////////////////////////////////////////////
     // constructor
     ////////////////////////////////////////////////////////////
@@ -174,7 +178,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
         
-        private IsisConfigurationDefault configuration;
+        private IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+        private final IsisConfigurationDefault configurationAsPerGlobSpec = new IsisConfigurationDefault();
+
         private GlobSpec globSpecIfAny;
 
         private MetaModelValidator metaModelValidatorOverride;
@@ -229,7 +235,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             }
 
             configuration.put(
-                    "isis.services.ServicesInstallerFromAnnotation.packagePrefix",
+                    ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY,
                     Joiner.on(",").join(packagePrefixes)
             );
 
@@ -255,6 +261,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
          */
         @Deprecated
         public Builder withFixtures(InstallableFixture... fixtures) {
+            if(globSpecIfAny != null) {
+                throw new IllegalStateException("A globSpec has already been provided");
+            }
             this.fixtures.addAll(Arrays.asList(fixtures));
             return this;
         }
@@ -331,13 +340,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             final List<Object> servicesIfAny,
             final List<InstallableFixture> fixtures,
             final List<Listener> listeners) {
-        this.globSpecIfAny = globSpecIfAny;
-        this.configurationOverride = configurationOverride;
-        this.programmingModelOverride = programmingModelOverride;
-        this.metaModelValidatorOverride = metaModelValidatorOverride;
-        this.authenticationRequest = authenticationRequest;
-        this.servicesIfAny = servicesIfAny;
-        this.fixtures = fixtures;
+        this.globSpecForComponentProvider = globSpecIfAny;
+        this.configurationForComponentProvider = configurationOverride;
+        this.programmingModelForComponentProvider = programmingModelOverride;
+        this.metaModelValidatorForComponentProvider = metaModelValidatorOverride;
+        this.authenticationRequestIfAny = authenticationRequest;
+        this.servicesForComponentProvider = servicesIfAny;
+        this.fixturesForComponentProvider = fixtures;
         this.listeners = listeners;
     }
 
@@ -382,18 +391,20 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
         if(firstTime) {
             IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
-            isisLoggingConfigurer.configureLogging(".", new String[]{});
+            isisLoggingConfigurer.configureLogging(".", new String[] {});
 
-            IsisComponentProvider componentProvider = new IsisComponentProviderDefault(
+            componentProvider = new IsisComponentProviderDefault(
                     DeploymentType.UNIT_TESTING,
-                    globSpecIfAny,
-                    servicesIfAny,
-                    this.configurationOverride,
-                    this.programmingModelOverride,
-                    this.metaModelValidatorOverride
+                    globSpecForComponentProvider,
+                    servicesForComponentProvider,
+                    fixturesForComponentProvider,
+                    configurationForComponentProvider,
+                    programmingModelForComponentProvider,
+                    metaModelValidatorForComponentProvider
             );
 
             isisSystem = new IsisSystem(componentProvider);
+
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -403,7 +414,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
-        authenticationSession = authenticationManager.authenticate(authenticationRequest);
+        authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         setContainer(getContainer());
 
@@ -417,9 +428,8 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
 
     private void wireAndInstallFixtures() {
-        FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
-        fid.addFixture(fixtures);
-        fid.installFixtures();
+        FixturesInstaller fixturesInstaller = componentProvider.provideFixturesInstaller();
+        fixturesInstaller.installFixtures();
     }
 
     private enum FireListeners {
@@ -431,7 +441,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public DomainObjectContainer getContainer() {
-        for (Object service : servicesIfAny) {
+        for (Object service : isisSystem.getSessionFactory().getServices()) {
             if(service instanceof DomainObjectContainer) {
                 return (DomainObjectContainer) service;
             }
@@ -487,7 +497,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private void fireInitAndPreSetupSystem(boolean firstTime) throws Exception {
         if(firstTime) {
             for(Listener listener: listeners) {
-                listener.init(configurationOverride);
+                listener.init(componentProvider.getConfiguration());
             }
         }
         for(Listener listener: listeners) {
@@ -799,7 +809,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // (for each test, rather than at bootstrap)
     ////////////////////////////////////////////////////////////
 
-    
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
+     */
+    @Deprecated
     public void installFixtures(final InstallableFixture... fixtures) {
         final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
         for (InstallableFixture fixture : fixtures) {
@@ -845,9 +858,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * @param container the container to set
+     *
+     * @deprecated
      */
+    @Deprecated
     public void setContainer(DomainObjectContainer container) {
-        this.container = container;
+        // no-op
     }
 
     
