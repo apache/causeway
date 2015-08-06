@@ -20,20 +20,22 @@
 package org.apache.isis.core.runtime.services;
 
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
+
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.core.commons.config.InstallerAbstract;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
-public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAbstract implements ServicesInstaller {
+public class ServicesInstallerFromConfigurationAndAnnotation extends ServicesInstallerAbstract  {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromConfigurationAndAnnotation.class);
+
+    public static final String NAME = "configuration-and-annotation";
 
     private final ServiceInstantiator serviceInstantiator;
     private final ServicesInstallerFromConfiguration servicesInstallerFromConfiguration;
@@ -45,7 +47,7 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
     }
 
     public ServicesInstallerFromConfigurationAndAnnotation(final ServiceInstantiator serviceInstantiator) {
-        super(ServicesInstaller.TYPE, "configuration-and-annotation");
+        super(NAME);
 
         this.serviceInstantiator = serviceInstantiator;
         servicesInstallerFromConfiguration = new ServicesInstallerFromConfiguration(serviceInstantiator);
@@ -80,23 +82,19 @@ public class ServicesInstallerFromConfigurationAndAnnotation extends InstallerAb
 
     // //////////////////////////////////////
 
-    private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
+    private List<Object> serviceList;
 
     @Override
-    public List<Object> getServices(final DeploymentType deploymentType) {
-
+    public List<Object> getServices() {
         LOG.info("installing " + this.getClass().getName());
 
-        List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
         if(serviceList == null) {
 
             final SortedMap<String,SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
-            servicesInstallerFromConfiguration.appendServices(deploymentType, positionedServices);
-            servicesInstallerFromAnnotation.appendServices(deploymentType, positionedServices);
+            servicesInstallerFromConfiguration.appendServices(positionedServices);
+            servicesInstallerFromAnnotation.appendServices(positionedServices);
 
             serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
-
-            servicesByDeploymentType.put(deploymentType, serviceList);
         }
 
         return serviceList;

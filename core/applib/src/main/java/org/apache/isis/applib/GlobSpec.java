@@ -113,22 +113,30 @@ public interface GlobSpec {
 
     /**
      * If non-null, overrides the value of <tt>isis.authentication</tt> configuration property.
+     *
+     * <p>
+     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
+     * </p>
      */
     public String getAuthenticationMechanism();
 
     /**
      * If non-null, overrides the value of <tt>isis.authorization</tt> configuration property.
+     *
+     * <p>
+     *     Ignored for integration tests (which always uses the 'bypass' mechanism).
+     * </p>
      */
     public String getAuthorizationMechanism();
 
     /**
      * If non-null, overrides the value of <tt>isis.fixtures</tt> configuration property.
      */
-    public List<FixtureScript> getFixtures();
+    public List<Class<? extends FixtureScript>> getFixtures();
 
     /**
      * Overrides for any other configuration properties.
      */
-    public Map<String,String> getConfiguration();
+    public Map<String,String> getConfigurationProperties();
 
 }

@@ -63,13 +63,14 @@ public final class SystemConstants {
      */
     public final static String OBJECT_PERSISTOR_INSTALLER_KEY = ConfigurationConstants.ROOT + PersistenceMechanismInstaller.TYPE;
 
-    // TODO: inline
     public static final String OBJECT_PERSISTOR_KEY = OBJECT_PERSISTOR_INSTALLER_KEY;
-    // TODO: move to being a responsibility of DeploymentType instead
-    public static final String OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT = "datanucleus";
-    // TODO: move to being a responsibility of DeploymentType instead
-    public static final String OBJECT_PERSISTOR_PRODUCTION_DEFAULT = "datanucleus";
+    public static final String OBJECT_PERSISTOR_DEFAULT = "datanucleus";
 
+
+    /**
+     * Key used to lookup {@link org.apache.isis.applib.GlobSpec} (if any) from the {@link IsisConfiguration}.
+     */
+    public static final String GLOB_SPEC_KEY = ConfigurationConstants.ROOT + "globSpec";
 
     /**
      * Key used to lookup {@link AuthenticationManager authentication manager}
@@ -79,13 +80,9 @@ public final class SystemConstants {
      */
     public static final String AUTHENTICATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE;
     /**
-     * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if not exploring.
+     * Default for {@link #AUTHENTICATION_INSTALLER_KEY}.
      */
     public static final String AUTHENTICATION_DEFAULT = "shiro";
-    /**
-     * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if exploring.
-     */
-    public static final String AUTHENTICATION_EXPLORATION_DEFAULT = "shiro";
 
     /**
      * Key used to lookup {@link AuthorizationManager authorization manager} in
@@ -95,14 +92,9 @@ public final class SystemConstants {
      */
     public static final String AUTHORIZATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE;
     /**
-     * Default for {@link #AUTHORIZATION_DEFAULT} if production.
+     * Default for {@link #AUTHORIZATION_DEFAULT}.
      */
     public static final String AUTHORIZATION_DEFAULT = "shiro";
-
-    /**
-     * Default for {@link #AUTHORIZATION_DEFAULT} if not production.
-     */
-    public static final String AUTHORIZATION_NON_PRODUCTION_DEFAULT = "shiro";
 
     /**
      * Key used to lookup {@link ServicesInstaller services installer} in

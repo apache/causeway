@@ -31,7 +31,8 @@ public class FixturesInstallerFromConfiguration extends FixturesInstallerAbstrac
 
     private static final Logger LOG = LoggerFactory.getLogger(FixturesInstallerFromConfiguration.class);
 
-    private static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
+    public static final String FIXTURES = ConfigurationConstants.ROOT + "fixtures";
+
     /**
      * @deprecated - just adds to the cognotive load...
      */

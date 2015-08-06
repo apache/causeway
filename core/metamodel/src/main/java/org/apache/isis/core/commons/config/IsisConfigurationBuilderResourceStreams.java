@@ -145,15 +145,20 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
         configurationResources.add(new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
     }
 
-    /**
-     * Adds additional property.
-     */
     @Override
     public synchronized void add(final String key, final String value) {
         if (locked) {
             throw new IsisException("Configuration has been locked and cannot be changed");
         }
         configuration.add(key, value);
+    }
+
+    @Override
+    public synchronized void put(final String key, final String value) {
+        if (locked) {
+            throw new IsisException("Configuration has been locked and cannot be changed");
+        }
+        configuration.put(key, value);
     }
 
     public void lockConfiguration() {

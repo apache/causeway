@@ -47,29 +47,22 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
 import org.apache.isis.core.security.authentication.AuthenticatorBypass;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.progmodels.dflt.JavaReflectorHelper;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
-public class IsisComponentProviderDefault implements IsisComponentProvider {
+public class IsisComponentProviderDefault extends IsisComponentProviderAbstract {
 
-    private final DeploymentType deploymentType;
-    private final GlobSpec globSpecIfAny;
-
-    private final IsisConfiguration configuration;
-    private final List<Object> services;
     private final ProgrammingModel programmingModel;
     private final MetaModelValidator metaModelValidator;
-    private final FixturesInstaller fixturesInstaller;
-    private final AuthenticationManager authenticationManager;
-    private final AuthorizationManager authorizationManager;
 
     public IsisComponentProviderDefault(
             final DeploymentType deploymentType,
@@ -78,45 +71,76 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
             final IsisConfiguration configurationOverride,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-
-        this.deploymentType = deploymentType;
-        this.globSpecIfAny = globSpecIfAny;
-
-        // TODO: alter behaviour accordingly if a globSpec has been provided.
+        super(deploymentType, globSpecIfAny);
 
         this.configuration = elseDefault(configurationOverride);
-        this.services = elseDefault(servicesOverride, deploymentType, configuration);
-        this.programmingModel = elseDefault(programmingModelOverride, configuration);
-        this.metaModelValidator = elseDefault(metaModelValidatorOverride);
+
+        if(globSpec != null) {
+
+            specifyServicesAndRegisteredEntitiesUsing(globSpec);
+
+            specifyFixtureScriptsUsing(globSpec);
+            overrideConfigurationUsing(globSpec);
+
+            this.services = createServices(configuration);
+
+        } else {
+            this.services = elseDefault(servicesOverride, configuration);
+        }
 
         this.fixturesInstaller = createFixturesInstaller(configuration);
+
+        // integration tests ignore globSpec for authentication and authorization.
         this.authenticationManager = createAuthenticationManager(configuration);
         this.authorizationManager = createAuthorizationManager(configuration);
 
+        this.programmingModel = elseDefault(programmingModelOverride, configuration);
+        this.metaModelValidator = elseDefault(metaModelValidatorOverride);
+
     }
+
+    //region > globSpec
+
+    private List<Object> createServices(
+            final IsisConfiguration configuration) {
+        final ServicesInstallerFromAnnotation servicesInstaller = new ServicesInstallerFromAnnotation();
+        servicesInstaller.setConfiguration(configuration);
+        return servicesInstaller.getServices();
+    }
+
+
+    @Override
+    protected void doPutConfigurationProperty(final String key, final String value) {
+        // bit hacky :-(
+        IsisConfigurationDefault configurationDefault = (IsisConfigurationDefault) this.configuration;
+        configurationDefault.put(key, value);
+    }
+
+    //endregion
 
     /**
      * Default will read <tt>isis.properties</tt> (and other optional property files) from the &quot;config&quot;
      * package on the current classpath.
      */
-    private static IsisConfiguration elseDefault(final IsisConfiguration configuration) {
+    private static IsisConfigurationDefault elseDefault(final IsisConfiguration configuration) {
         return configuration != null
-                ? configuration
+                ? (IsisConfigurationDefault) configuration
                 : new IsisConfigurationDefault(ResourceStreamSourceContextLoaderClassPath.create("config"));
     }
 
-    private static List<Object> elseDefault(final List<Object> servicesOverride, DeploymentType deploymentType, final IsisConfiguration configuration) {
+    private static List<Object> elseDefault(
+            final List<Object> servicesOverride,
+            final IsisConfiguration configuration) {
         return servicesOverride != null
                 ? servicesOverride
-                : createDefaultServices(deploymentType, configuration);
+                : createDefaultServices(configuration);
     }
 
     private static List<Object> createDefaultServices(
-            final DeploymentType deploymentType,
             final IsisConfiguration configuration) {
         final ServicesInstallerFromConfiguration servicesInstaller = new ServicesInstallerFromConfiguration();
         servicesInstaller.setConfiguration(configuration);
-        return servicesInstaller.getServices(deploymentType);
+        return servicesInstaller.getServices();
     }
 
 
@@ -176,18 +200,17 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
     }
 
     @Override
-    public List<Object> obtainServices() {
+    public List<Object> provideServices() {
         return services;
     }
 
     @Override
-    public FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
+    public FixturesInstaller provideFixturesInstaller() throws IsisSystemException {
         return fixturesInstaller;
     }
 
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
-            DeploymentType deploymentType, // unused
             Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
 
         final Set<FacetDecorator> facetDecorators = Sets
@@ -205,7 +228,7 @@ public class IsisComponentProviderDefault implements IsisComponentProvider {
     }
 
     @Override
-    public AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) throws IsisSystemException {
+    public AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType) {
         return authenticationManager;
     }
 

@@ -19,47 +19,12 @@
 
 package org.apache.isis.core.runtime.services;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.runtime.system.DeploymentType;
-
-import static org.apache.isis.core.commons.lang.ObjectExtensions.asCollectionT;
 
 public abstract class ServicesInstallerAbstract extends InstallerAbstract implements ServicesInstaller {
-    private final List<Object> services = new ArrayList<Object>();
 
     public ServicesInstallerAbstract(final String name) {
         super(ServicesInstaller.TYPE, name);
-    }
-
-    /**
-     * Add this service, automatically unravelling if is a {@link Collection} of
-     * services.
-     * 
-     * @param service
-     */
-    public void addService(final Object service) {
-        if (service instanceof Collection) {
-            // unravel if necessary
-            final Collection<Object> services = asCollectionT(service, Object.class);
-            for (final Object eachService : services) {
-                addService(eachService);
-            }
-        } else {
-            services.add(service);
-        }
-    }
-
-    public void addServices(final List<Object> services) {
-        addService(services);
-    }
-
-    @Override
-    public List<Object> getServices(final DeploymentType deploymentType) {
-        return services;
     }
 
 

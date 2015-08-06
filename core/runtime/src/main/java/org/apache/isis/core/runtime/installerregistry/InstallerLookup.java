@@ -25,10 +25,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.Installer;
@@ -54,13 +57,14 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjector;
 import org.apache.isis.core.runtime.systemdependencyinjector.SystemDependencyInjectorAware;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * The installers correspond more-or-less to the configurable top-level
@@ -90,27 +94,11 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
 
     private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
 
+    //region > Constructor
+
     private final List<Installer> installerList = Lists.newArrayList();
 
-    /**
-     * A mutable representation of the {@link IsisConfiguration configuration},
-     * injected prior to {@link #init()}.
-     *
-     * <p>
-     *
-     * @see #setConfigurationBuilder(IsisConfigurationBuilder)
-     */
-    private IsisConfigurationBuilder isisConfigurationBuilder;
-
-    // ////////////////////////////////////////////////////////
-    // Constructor
-    // ////////////////////////////////////////////////////////
-
     public InstallerLookup() {
-        loadInstallers();
-    }
-
-    private void loadInstallers() {
         final InputStream in = getInstallerRegistryStream(IsisInstallerRegistry.INSTALLER_REGISTRY_FILE);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         try {
@@ -145,10 +133,9 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         AboutIsis.setComponentDetails(installerVersionList);
     }
 
-    // ////////////////////////////////////////////////////////
-    // InstallerRepository impl.
-    // ////////////////////////////////////////////////////////
+    //endregion
 
+    //region > InstallerRepository impl.
     /**
      * This method (and only this method) may be called prior to {@link #init()
      * initialization}.
@@ -163,11 +150,9 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         }
         return list.toArray(new Installer[list.size()]);
     }
+    //endregion
 
-    // ////////////////////////////////////////////////////////
-    // init, shutdown
-    // ////////////////////////////////////////////////////////
-
+    //region > init, shutdown
     @Override
     public void init() {
         ensureDependenciesInjected();
@@ -181,44 +166,53 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     public void shutdown() {
         // nothing to do.
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // metamodel
-    // /////////////////////////////////////////////////////////
-
+    //region > metamodel
     public ObjectReflectorInstaller reflectorInstaller(final String requested) {
         return getInstaller(ObjectReflectorInstaller.class, requested, SystemConstants.REFLECTOR_KEY, SystemConstants.REFLECTOR_DEFAULT);
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // framework
-    // /////////////////////////////////////////////////////////
+    //region > framework
 
-    public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested, final DeploymentType deploymentType) {
-        return getInstaller(AuthenticationManagerInstaller.class, requested, SystemConstants.AUTHENTICATION_INSTALLER_KEY, deploymentType.isExploring() ? SystemConstants.AUTHENTICATION_EXPLORATION_DEFAULT : SystemConstants.AUTHENTICATION_DEFAULT);
+    public AuthenticationManagerInstaller authenticationManagerInstaller(final String requested) {
+        return getInstaller(
+                AuthenticationManagerInstaller.class, requested,
+                SystemConstants.AUTHENTICATION_INSTALLER_KEY,
+                SystemConstants.AUTHENTICATION_DEFAULT);
     }
 
-    public AuthorizationManagerInstaller authorizationManagerInstaller(final String requested, final DeploymentType deploymentType) {
-        return getInstaller(AuthorizationManagerInstaller.class, requested, SystemConstants.AUTHORIZATION_INSTALLER_KEY, !deploymentType.isProduction() ? SystemConstants.AUTHORIZATION_NON_PRODUCTION_DEFAULT : SystemConstants.AUTHORIZATION_DEFAULT);
+    public AuthorizationManagerInstaller authorizationManagerInstaller(final String requested) {
+        return getInstaller(
+                AuthorizationManagerInstaller.class, requested,
+                SystemConstants.AUTHORIZATION_INSTALLER_KEY,
+                SystemConstants.AUTHORIZATION_DEFAULT);
     }
 
     public FixturesInstaller fixturesInstaller(final String requested) {
-        return getInstaller(FixturesInstaller.class, requested, SystemConstants.FIXTURES_INSTALLER_KEY, SystemConstants.FIXTURES_INSTALLER_DEFAULT);
+        return getInstaller(
+                FixturesInstaller.class, requested,
+                SystemConstants.FIXTURES_INSTALLER_KEY,
+                SystemConstants.FIXTURES_INSTALLER_DEFAULT);
     }
 
-    public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested, final DeploymentType deploymentType) {
-        final String persistorDefault = deploymentType.isExploring() || deploymentType.isPrototyping() ? SystemConstants.OBJECT_PERSISTOR_NON_PRODUCTION_DEFAULT : SystemConstants.OBJECT_PERSISTOR_PRODUCTION_DEFAULT;
-        return getInstaller(PersistenceMechanismInstaller.class, requested, SystemConstants.OBJECT_PERSISTOR_KEY, persistorDefault);
+    public PersistenceMechanismInstaller persistenceMechanismInstaller(final String requested) {
+        return getInstaller(
+                PersistenceMechanismInstaller.class, requested,
+                SystemConstants.OBJECT_PERSISTOR_KEY,
+                SystemConstants.OBJECT_PERSISTOR_DEFAULT);
     }
 
     public ServicesInstaller servicesInstaller(final String requestedImplementationName) {
-        return getInstaller(ServicesInstaller.class, requestedImplementationName, SystemConstants.SERVICES_INSTALLER_KEY, SystemConstants.SERVICES_INSTALLER_DEFAULT);
+        return getInstaller(
+                ServicesInstaller.class, requestedImplementationName,
+                SystemConstants.SERVICES_INSTALLER_KEY,
+                SystemConstants.SERVICES_INSTALLER_DEFAULT);
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // framework - generic
-    // /////////////////////////////////////////////////////////
-
+    //region > framework - generic
     @SuppressWarnings("unchecked")
     public <T extends Installer> T getInstaller(final Class<T> cls, final String implName) {
         Assert.assertNotNull("No name specified", implName);
@@ -263,10 +257,9 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
             return null;
         }
     }
+    //endregion
 
-    // ////////////////////////////////////////////////////////
-    // Helpers
-    // ////////////////////////////////////////////////////////
+    //region > Helpers
 
     private <T extends Installer> T getInstaller(final Class<T> requiredType, String reqImpl, final String key, final String defaultImpl) {
         if (reqImpl == null) {
@@ -299,11 +292,9 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         }
         return in;
     }
+    //endregion
 
-    // ////////////////////////////////////////////////////////
-    // Configuration
-    // ////////////////////////////////////////////////////////
-
+    //region > Configuration
     /**
      * Returns a <i>snapshot</i> of the current {@link IsisConfiguration}.
      *
@@ -321,15 +312,17 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         }
     }
 
+    public void putConfigurationProperty(final String key, final String value) {
+        isisConfigurationBuilder.put(key, value);
+    }
+    //endregion
+
+    //region > SystemDependencyInjector, Injectable
     @Override
     public <T> T injectDependenciesInto(final T candidate) {
         injectInto(candidate);
         return candidate;
     }
-
-    // ////////////////////////////////////////////////////////////////////
-    // Injectable
-    // ////////////////////////////////////////////////////////////////////
 
     @Override
     public void injectInto(final Object candidate) {
@@ -343,10 +336,17 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         }
         isisConfigurationBuilder.injectInto(candidate);
     }
+    //endregion
 
-    // ////////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ////////////////////////////////////////////////////////
+    //region > Dependencies (injected)
+
+    /**
+     * A mutable representation of the {@link IsisConfiguration configuration},
+     * injected prior to {@link #init()}.
+     *
+     * @see #setConfigurationBuilder(IsisConfigurationBuilder)
+     */
+    private IsisConfigurationBuilder isisConfigurationBuilder;
 
     public IsisConfigurationBuilder getConfigurationBuilder() {
         return isisConfigurationBuilder;
@@ -357,5 +357,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     public void setConfigurationBuilder(final IsisConfigurationBuilder configurationLoader) {
         this.isisConfigurationBuilder = configurationLoader;
     }
+    //endregion
 
 }

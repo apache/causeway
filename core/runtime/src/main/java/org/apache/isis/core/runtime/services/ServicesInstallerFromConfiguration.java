@@ -20,31 +20,40 @@
 package org.apache.isis.core.runtime.services;
 
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.ConfigurationConstants;
-import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
-public class ServicesInstallerFromConfiguration extends InstallerAbstract implements ServicesInstaller {
+public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstract  {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromConfiguration.class);
 
+    public static final String NAME = "configuration";
+
     private static final String SERVICES = "services";
+
+    /**
+     * @deprecated
+     */
+    @Deprecated
     private static final String EXPLORATION_OBJECTS = "exploration-objects";
 
     /**
-     * @deprecated - just adds to the cognotive load...
+     * @deprecated - just adds to the cognitive load...
      */
     @Deprecated
     private static final String SERVICES_PREFIX = "services.prefix";
@@ -58,13 +67,12 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     }
 
     ServicesInstallerFromConfiguration(final ServiceInstantiator serviceInstantiator) {
-        super(ServicesInstaller.TYPE, "configuration");
+        super(NAME);
         this.serviceInstantiator = serviceInstantiator;
     }
 
     // //////////////////////////////////////
 
-    private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
 
     @Override
     public void setIgnoreFailures(boolean ignoreFailures) {
@@ -92,52 +100,42 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
     }
 
 
-    @Override
-    public List<Object> getServices(final DeploymentType deploymentType) {
+    // //////////////////////////////////////
 
+    private List<Object> serviceList;
+
+    @Override
+    public List<Object> getServices() {
         LOG.info("installing " + this.getClass().getName());
 
         // rather nasty, lazily copy over the configuration to the instantiator
         serviceInstantiator.setConfiguration(getConfiguration());
 
-        List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
         if(serviceList == null) {
 
             final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
-            appendServices(deploymentType, positionedServices);
+            appendServices(positionedServices);
 
             serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
-
-            servicesByDeploymentType.put(deploymentType, serviceList);
         }
         return serviceList;
-    }
 
+    }
 
     // //////////////////////////////////////
 
     public void appendServices(
-            final DeploymentType deploymentType,
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
-        appendConfiguredServices(null, positionedServices);
-        appendConfiguredServices(deploymentType, positionedServices);
-
-        appendObjectFixtureService(null, positionedServices);
+        appendConfiguredServices(positionedServices);
+        appendObjectFixtureService(positionedServices, getConfiguration());
     }
 
     private void appendConfiguredServices(
-            final DeploymentType deploymentType,
             final SortedMap<String, SortedSet<String>> positionedServices) {
-        String group = deploymentType != null? deploymentType.name(): null;
-        final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
 
-        String servicePrefix = getConfiguration().getString(root + SERVICES_PREFIX);
-        if (group != null && servicePrefix == null) {
-            servicePrefix = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
-        }
-
-        final String configuredServices = getConfiguration().getString(root + SERVICES);
+        String servicePrefix = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
+        final String configuredServices = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES);
         if (configuredServices == null) {
             return;
         }
@@ -174,14 +172,16 @@ public class ServicesInstallerFromConfiguration extends InstallerAbstract implem
         return buf.toString();
     }
 
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    private static void appendObjectFixtureService(
+            final SortedMap<String, SortedSet<String>> positionedServices, final IsisConfiguration configuration) {
 
-    private void appendObjectFixtureService(DeploymentType deploymentType, final SortedMap<String, SortedSet<String>> positionedServices) {
-
-        final String group = deploymentType != null? deploymentType.name(): null;
-        final String root = ConfigurationConstants.ROOT + (group == null ? "" : group.toLowerCase() + ".");
-
-        if (getConfiguration().getBoolean(root + EXPLORATION_OBJECTS)) {
-            final DeploymentType explorationDeploymentType = DeploymentType.lookup(getConfiguration().getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
+        if (configuration.getBoolean(ConfigurationConstants.ROOT + EXPLORATION_OBJECTS)) {
+            final DeploymentType explorationDeploymentType = DeploymentType.lookup(configuration.getString(
+                    SystemConstants.DEPLOYMENT_TYPE_KEY));
             if (explorationDeploymentType.isExploring()) {
                 ServicesInstallerUtils.appendInPosition(positionedServices, "" + Integer.MAX_VALUE, ObjectFixtureService.class.getName());
             }

@@ -48,12 +48,12 @@ public final class DomainAppGlobSpec implements GlobSpec {
     }
 
     @Override
-    public List<FixtureScript> getFixtures() {
+    public List<Class<? extends FixtureScript>> getFixtures() {
         return null;
     }
 
     @Override
-    public Map<String, String> getConfiguration() {
+    public Map<String, String> getConfigurationProperties() {
         return null;
     }
 

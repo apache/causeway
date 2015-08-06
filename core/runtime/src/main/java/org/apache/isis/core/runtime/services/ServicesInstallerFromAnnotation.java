@@ -21,11 +21,12 @@ package org.apache.isis.core.runtime.services;
 
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
+
 import javax.annotation.PreDestroy;
+
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
@@ -34,23 +35,24 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.reflections.Reflections;
 import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
-import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 import static com.google.common.base.Predicates.and;
 import static com.google.common.base.Predicates.not;
 
-public class ServicesInstallerFromAnnotation extends InstallerAbstract implements ServicesInstaller {
+public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInstallerFromAnnotation.class);
 
+    public static final String NAME = "annotation";
     public final static String PACKAGE_PREFIX_KEY = "isis.services.ServicesInstallerFromAnnotation.packagePrefix";
 
     /**
@@ -83,7 +85,7 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
     }
 
     public ServicesInstallerFromAnnotation(final ServiceInstantiator serviceInstantiator) {
-        super(ServicesInstaller.TYPE, "annotation");
+        super(NAME);
         this.serviceInstantiator = serviceInstantiator;
     }
 
@@ -181,30 +183,25 @@ public class ServicesInstallerFromAnnotation extends InstallerAbstract implement
 
     // //////////////////////////////////////
 
-    private Map<DeploymentType, List<Object>> servicesByDeploymentType = Maps.newHashMap();
+    private List<Object> serviceList;
 
     @Override
-    public List<Object> getServices(final DeploymentType deploymentType) {
+    public List<Object> getServices() {
         initIfRequired();
 
-        List<Object> serviceList = servicesByDeploymentType.get(deploymentType);
-        if(serviceList == null) {
+        if(this.serviceList == null) {
 
             final SortedMap<String, SortedSet<String>> positionedServices = Maps.newTreeMap(new DeweyOrderComparator());
-            appendServices(deploymentType, positionedServices);
+            appendServices(positionedServices);
 
-            serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
-
-            servicesByDeploymentType.put(deploymentType, serviceList);
+            this.serviceList = ServicesInstallerUtils.instantiateServicesFrom(positionedServices, serviceInstantiator);
         }
         return serviceList;
     }
 
     // //////////////////////////////////////
 
-    public void appendServices(
-            final DeploymentType deploymentType,
-            final SortedMap<String, SortedSet<String>> positionedServices) {
+    public void appendServices(final SortedMap<String, SortedSet<String>> positionedServices) {
         initIfRequired();
 
         final List<String> packagePrefixList = asList(packagePrefixes);

@@ -153,7 +153,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
     private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
         final IsisConfiguration configuration = isisComponentProvider.getConfiguration();
-        final List<Object> services = isisComponentProvider.obtainServices();
+        final List<Object> services = isisComponentProvider.provideServices();
 
         ServicesInjectorSpi servicesInjectorSpi = new ServicesInjectorDefault(services);
         servicesInjectorSpi.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
@@ -172,7 +172,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         final Collection<MetaModelRefiner> metaModelRefiners =
                 refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
         final SpecificationLoaderSpi reflector =
-                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
+                isisComponentProvider.provideSpecificationLoaderSpi(metaModelRefiners);
 
         // bind metamodel to the (runtime) framework
         runtimeContext.injectInto(reflector);
@@ -225,7 +225,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     private void installFixturesIfRequired() throws IsisSystemException {
 
-        fixtureInstaller = isisComponentProvider.obtainFixturesInstaller();
+        fixtureInstaller = isisComponentProvider.provideFixturesInstaller();
         if (isNoop(fixtureInstaller)) {
             return;
         }
