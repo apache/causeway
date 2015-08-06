@@ -26,7 +26,7 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
-import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -68,32 +68,32 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
 
     public IsisComponentProviderDefault(
             final DeploymentType deploymentType,
-            final GlobSpec globSpecIfAny,
+            final AppManifest appManifestIfAny,
             final List<Object> servicesOverride,
             final List<InstallableFixture> fixturesOverride,
             final IsisConfiguration configurationOverride,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride) {
-        super(deploymentType, globSpecIfAny);
+        super(deploymentType, appManifestIfAny);
 
         this.configuration = elseDefault(configurationOverride);
 
         final String fixtureClassNamesCsv;
-        if(globSpec != null) {
+        if(appManifest != null) {
 
-            specifyServicesAndRegisteredEntitiesUsing(globSpec);
+            specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             // required to prevent RegisterEntities validation from complaining
             // if it can't find any @PersistenceCapable entities in a module
             // that contains only services.
             putConfigurationProperty(
-                    "isis.globSpec", globSpecIfAny.getClass().getName()
+                    "isis.globSpec", appManifestIfAny.getClass().getName()
             );
 
-            List<Class<? extends FixtureScript>> fixtureClasses = globSpec.getFixtures();
+            List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
             fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
 
-            overrideConfigurationUsing(globSpec);
+            overrideConfigurationUsing(appManifest);
 
             this.services = createServices(configuration);
 

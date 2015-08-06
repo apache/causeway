@@ -28,7 +28,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 
-import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -49,7 +49,7 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     /**
      * may be null.
      */
-    protected final GlobSpec globSpec;
+    protected final AppManifest appManifest;
 
     /**
      * populated by subclass, in its constructor.
@@ -74,10 +74,10 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
 
     public IsisComponentProviderAbstract(
             final DeploymentType deploymentType,
-            final GlobSpec globSpec) {
+            final AppManifest appManifest) {
 
         this.deploymentType = deploymentType;
-        this.globSpec = globSpec;
+        this.appManifest = appManifest;
     }
 
     /**
@@ -93,15 +93,15 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
 
 
     //region > globSpec helpers
-    protected void specifyServicesAndRegisteredEntitiesUsing(final GlobSpec globSpec) {
-        final String packageNamesCsv = modulePackageNamesFrom(globSpec);
+    protected void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {
+        final String packageNamesCsv = modulePackageNamesFrom(appManifest);
 
         putConfigurationProperty(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
         putConfigurationProperty(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
     }
 
-    private String modulePackageNamesFrom(final GlobSpec globSpec) {
-        List<Class<?>> modules = globSpec.getModules();
+    private String modulePackageNamesFrom(final AppManifest appManifest) {
+        List<Class<?>> modules = appManifest.getModules();
         if (modules == null || modules.isEmpty()) {
             throw new IllegalArgumentException(
                     "If a globSpec is provided then it must return a non-empty set of modules");
@@ -129,8 +129,8 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
                     };
     }
 
-    protected void overrideConfigurationUsing(final GlobSpec globSpec) {
-        final Map<String, String> configurationProperties = globSpec.getConfigurationProperties();
+    protected void overrideConfigurationUsing(final AppManifest appManifest) {
+        final Map<String, String> configurationProperties = appManifest.getConfigurationProperties();
         if (configurationProperties != null) {
             for (Map.Entry<String, String> configProp : configurationProperties.entrySet()) {
                 putConfigurationProperty(configProp.getKey(), configProp.getValue());

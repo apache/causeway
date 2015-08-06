@@ -16,35 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.glob.app.homepage;
+package domainapp.home;
 
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+/**
+ * Run the app but without setting up any fixtures.
+ */
+public class SimpleAppManifestNoFixtures extends SimpleAppManifest {
 
-@ViewModel
-public class HomePageViewModel {
-
-    //region > title
-    public String title() {
-        return getObjects().size() + " objects";
+    @Override
+    public List<Class<? extends FixtureScript>> getFixtures() {
+        return Collections.emptyList();
     }
-    //endregion
 
-    //region > object (collection)
-    @org.apache.isis.applib.annotation.HomePage
-    public List<SimpleObject> getObjects() {
-        return simpleObjects.listAll();
-    }
-    //endregion
-
-    //region > injected services
-
-    @javax.inject.Inject
-    SimpleObjects simpleObjects;
-
-    //endregion
 }

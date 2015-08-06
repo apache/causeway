@@ -16,12 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.glob;
+package domainapp.home;
 
 /**
  * Bypasses security, meaning any user/password combination can be used to login.
  */
-public class DomainAppGlobSpecBypass extends DomainAppGlobSpec {
+public class SimpleAppManifestBypass extends SimpleAppManifest {
 
     @Override
     public String getAuthenticationMechanism() {

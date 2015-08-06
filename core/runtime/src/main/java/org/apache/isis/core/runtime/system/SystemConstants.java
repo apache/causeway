@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.system;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -68,7 +69,7 @@ public final class SystemConstants {
 
 
     /**
-     * Key used to lookup {@link org.apache.isis.applib.GlobSpec} (if any) from the {@link IsisConfiguration}.
+     * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
      */
     public static final String GLOB_SPEC_KEY = ConfigurationConstants.ROOT + "globSpec";
 

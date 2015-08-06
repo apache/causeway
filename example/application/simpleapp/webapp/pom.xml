@@ -145,7 +145,7 @@
     
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>simpleapp-glob</artifactId>
+            <artifactId>simpleapp-home</artifactId>
         </dependency>
         
         <!-- other isis components -->
@@ -162,21 +162,11 @@
             <artifactId>isis-core-security-shiro</artifactId>
         </dependency>
 
-
         <!-- isis core -->
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-wrapper</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>isis-core-security</artifactId>
         </dependency>
-
 
         <!-- to run using WebServer (optional) -->
         <dependency>

@@ -30,11 +30,11 @@ import domainapp.fixture.scenarios.RecreateSimpleObjects;
  * Specifies where to find fixtures, and other settings.
  */
 @DomainService(nature = NatureOfService.DOMAIN)
-public class DomainAppFixturesProvider implements FixtureScriptsSpecificationProvider {
+public class DomainAppFixtureScriptsSpecificationProvider implements FixtureScriptsSpecificationProvider {
     @Override
     public FixtureScriptsSpecification getSpecification() {
         return FixtureScriptsSpecification
-                .builder(DomainAppFixturesProvider.class)
+                .builder(DomainAppFixtureScriptsSpecificationProvider.class)
                 .with(FixtureScripts.MultipleExecutionStrategy.EXECUTE)
                 .withRunScriptDefault(RecreateSimpleObjects.class)
                 .withRunScriptDropDown(FixtureScriptsSpecification.DropDownPolicy.CHOICES)

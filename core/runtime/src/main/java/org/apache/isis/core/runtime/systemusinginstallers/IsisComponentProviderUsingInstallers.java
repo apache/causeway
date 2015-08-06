@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -65,25 +65,25 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
         this.installerLookup = installerLookup;
 
-        if(globSpec != null) {
+        if(appManifest != null) {
 
-            specifyServicesAndRegisteredEntitiesUsing(globSpec);
+            specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             // by using the annotations installer (as opposed to the configuration-and-annotations installer),
             // any services defined with the "isis.services" key will be IGNORED.
             putConfigurationProperty(SystemConstants.SERVICES_INSTALLER_KEY, ServicesInstallerFromAnnotation.NAME);
 
-            final String authenticationMechanism = globSpec.getAuthenticationMechanism();
+            final String authenticationMechanism = appManifest.getAuthenticationMechanism();
             putConfigurationProperty(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
 
-            final String authorizationMechanism = globSpec.getAuthorizationMechanism();
+            final String authorizationMechanism = appManifest.getAuthorizationMechanism();
             putConfigurationProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
-            List<Class<? extends FixtureScript>> fixtureClasses = globSpec.getFixtures();
+            List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
             final String fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
             putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
 
-            overrideConfigurationUsing(globSpec);
+            overrideConfigurationUsing(appManifest);
         }
 
         // loading installers causes the configuration to be appended to successively
@@ -143,9 +143,9 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         ensureInitialized();
     }
 
-    private static GlobSpec globSpecIfAny(final InstallerLookup installerLookup) {
+    private static AppManifest globSpecIfAny(final InstallerLookup installerLookup) {
         final String globSpecIfAny = installerLookup.getConfiguration().getString(SystemConstants.GLOB_SPEC_KEY);
-        return globSpecIfAny != null? InstanceUtil.createInstance(globSpecIfAny, GlobSpec.class): null;
+        return globSpecIfAny != null? InstanceUtil.createInstance(globSpecIfAny, AppManifest.class): null;
     }
 
     protected void doPutConfigurationProperty(final String key, final String value) {

@@ -16,21 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.glob;
+package domainapp.fixture;
 
-import java.util.Collections;
-import java.util.List;
+public final class DomainAppFixtureModule {
 
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Run the app but without setting up any fixtures.
- */
-public class DomainAppGlobSpecNoFixtures extends DomainAppGlobSpec {
-
-    @Override
-    public List<Class<? extends FixtureScript>> getFixtures() {
-        return Collections.emptyList();
-    }
 
 }

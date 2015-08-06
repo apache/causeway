@@ -334,7 +334,7 @@
     <modules>
         <module>dom</module>
         <module>fixture</module>
-        <module>glob</module>
+        <module>home</module>
         <module>integtests</module>
         <module>webapp</module>
     </modules>
@@ -378,7 +378,7 @@
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>simpleapp-glob</artifactId>
+                <artifactId>simpleapp-home</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

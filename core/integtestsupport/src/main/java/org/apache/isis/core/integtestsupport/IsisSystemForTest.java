@@ -32,7 +32,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.command.Command;
@@ -153,7 +153,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
 
     // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
-    private final GlobSpec globSpecForComponentProvider;
+    private final AppManifest appManifestForComponentProvider;
     private final IsisConfiguration configurationForComponentProvider;
     private final List<Object> servicesForComponentProvider;
     private final List<InstallableFixture> fixturesForComponentProvider;
@@ -181,7 +181,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private IsisConfigurationDefault configuration = new IsisConfigurationDefault();
         private final IsisConfigurationDefault configurationAsPerGlobSpec = new IsisConfigurationDefault();
 
-        private GlobSpec globSpecIfAny;
+        private AppManifest appManifestIfAny;
 
         private MetaModelValidator metaModelValidatorOverride;
         private ProgrammingModel programmingModelOverride;
@@ -221,13 +221,13 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
-        public Builder with(GlobSpec globSpec) {
-            this.globSpecIfAny = globSpec;
+        public Builder with(AppManifest appManifest) {
+            this.appManifestIfAny = appManifest;
             return this;
         }
 
         public Builder withServicesIn(String... packagePrefixes ) {
-            if(globSpecIfAny != null) {
+            if(appManifestIfAny != null) {
                 throw new IllegalStateException("A globSpec has already been provided");
             }
             if(packagePrefixes.length == 0) {
@@ -249,7 +249,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         public Builder withServices(Object... services) {
-            if(globSpecIfAny != null) {
+            if(appManifestIfAny != null) {
                 throw new IllegalStateException("A globSpec has already been provided");
             }
             this.services.addAll(Arrays.asList(services));
@@ -261,7 +261,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
          */
         @Deprecated
         public Builder withFixtures(InstallableFixture... fixtures) {
-            if(globSpecIfAny != null) {
+            if(appManifestIfAny != null) {
                 throw new IllegalStateException("A globSpec has already been provided");
             }
             this.fixtures.addAll(Arrays.asList(fixtures));
@@ -276,7 +276,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         public IsisSystemForTest build() {
             final IsisSystemForTest isisSystem =
                     new IsisSystemForTest(
-                            globSpecIfAny,
+                            appManifestIfAny,
                             configuration,
                             programmingModelOverride,
                             metaModelValidatorOverride,
@@ -332,7 +332,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private IsisSystemForTest(
-            final GlobSpec globSpecIfAny,
+            final AppManifest appManifestIfAny,
             final IsisConfiguration configurationOverride,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride,
@@ -340,7 +340,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             final List<Object> servicesIfAny,
             final List<InstallableFixture> fixtures,
             final List<Listener> listeners) {
-        this.globSpecForComponentProvider = globSpecIfAny;
+        this.appManifestForComponentProvider = appManifestIfAny;
         this.configurationForComponentProvider = configurationOverride;
         this.programmingModelForComponentProvider = programmingModelOverride;
         this.metaModelValidatorForComponentProvider = metaModelValidatorOverride;
@@ -395,7 +395,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
             componentProvider = new IsisComponentProviderDefault(
                     DeploymentType.UNIT_TESTING,
-                    globSpecForComponentProvider,
+                    appManifestForComponentProvider,
                     servicesForComponentProvider,
                     fixturesForComponentProvider,
                     configurationForComponentProvider,

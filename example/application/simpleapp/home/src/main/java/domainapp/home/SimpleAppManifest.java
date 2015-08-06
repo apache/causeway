@@ -16,25 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.glob;
+package domainapp.home;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.GlobSpec;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.DomainAppDomainModule;
-import domainapp.fixture.DomainAppFixturesProvider;
+import domainapp.fixture.DomainAppFixtureModule;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
 /**
  * Bootstrap the application.
  */
-public class DomainAppGlobSpec implements GlobSpec {
+public class SimpleAppManifest implements AppManifest {
 
     /**
      * Load all services and entities found in (the packages and subpackages within) these modules
@@ -42,10 +43,18 @@ public class DomainAppGlobSpec implements GlobSpec {
     @Override
     public List<Class<?>> getModules() {
         return Arrays.asList(
-                DomainAppDomainModule.class, // entities and repositories
-                DomainAppFixturesProvider.class, // fixture configuration
-                DomainAppGlobSpec.class      // home page service
+                DomainAppDomainModule.class,  // domain (entities and repositories)
+                DomainAppFixtureModule.class, // fixtures
+                SimpleAppManifest.class  // home page service
         );
+    }
+
+    /**
+     * No additional services.
+     */
+    @Override
+    public List<Class<?>> getAdditionalServices() {
+        return Collections.emptyList();
     }
 
     /**
