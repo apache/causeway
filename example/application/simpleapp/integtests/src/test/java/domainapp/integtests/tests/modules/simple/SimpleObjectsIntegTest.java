@@ -35,7 +35,7 @@ import org.apache.isis.applib.fixturescripts.FixtureScripts;
 
 import domainapp.dom.simple.SimpleObject;
 import domainapp.dom.simple.SimpleObjects;
-import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
+import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
 import domainapp.integtests.tests.SimpleAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;

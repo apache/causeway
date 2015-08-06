@@ -28,8 +28,8 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.simple.SimpleObject;
-import domainapp.fixture.modules.simple.SimpleObjectCreate;
-import domainapp.fixture.modules.simple.SimpleObjectsTearDown;
+import domainapp.fixture.dom.simple.SimpleObjectCreate;
+import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
 
 public class RecreateSimpleObjects extends FixtureScript {
 

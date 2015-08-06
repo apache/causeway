@@ -47,7 +47,7 @@ public class SimpleAppSystemInitializer {
         private static IsisConfiguration testConfiguration() {
             final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
 
-            testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom.modules");
+            testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom");
             return testConfiguration;
         }
     }

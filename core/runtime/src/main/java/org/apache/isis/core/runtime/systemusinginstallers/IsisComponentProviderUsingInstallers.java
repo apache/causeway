@@ -51,7 +51,6 @@ import static org.hamcrest.CoreMatchers.nullValue;
 public class IsisComponentProviderUsingInstallers implements IsisComponentProvider {
 
     private final DeploymentType deploymentType;
-    private final InstallerLookup installerLookup;
 
     private AuthenticationManagerInstaller authenticationInstaller;
     private AuthorizationManagerInstaller authorizationInstaller;
@@ -60,34 +59,37 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
     private FixturesInstaller fixtureInstaller;
 
+    private final IsisConfiguration configuration;
+
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
             final InstallerLookup installerLookup) {
+
         this.deploymentType = deploymentType;
         ensureThatArg(installerLookup, is(not(nullValue())));
-        this.installerLookup = installerLookup;
 
-        lookupAndSetInstallers(deploymentType);
-    }
+        // TODO: we check for isis.globSpec, and alter the bootstrapping accordingly...
 
-    private void lookupAndSetInstallers(final DeploymentType deploymentType) {
-
+        // loading installers causes the configuration to be appended to successively
         this.authenticationInstaller = installerLookup.authenticationManagerInstaller(
-                getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY),
+                installerLookup.getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY),
                 deploymentType);
 
         this.authorizationInstaller = installerLookup.authorizationManagerInstaller(
-                getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY), deploymentType);
+                installerLookup.getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY), deploymentType);
 
         this.fixtureInstaller = installerLookup.fixturesInstaller(
-                getConfiguration().getString(SystemConstants.FIXTURES_INSTALLER_KEY));
+                installerLookup.getConfiguration().getString(SystemConstants.FIXTURES_INSTALLER_KEY));
 
+        // although there is only one implementation of PersistenceMechanismInstaller, we still do the lookup
+        // because this will add the persistor_datanucleus.properties and persistor.properties to the set of
+        // config files from which we read configuration properties.
         persistenceMechanismInstaller = installerLookup.persistenceMechanismInstaller(
-                getConfiguration().getString(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY),
+                installerLookup.getConfiguration().getString(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY),
                 deploymentType);
 
         reflectorInstaller = installerLookup.reflectorInstaller(
-                getConfiguration().getString(SystemConstants.REFLECTOR_KEY));
+                installerLookup.getConfiguration().getString(SystemConstants.REFLECTOR_KEY));
 
         servicesInstaller = installerLookup.servicesInstaller(null);
 
@@ -104,30 +106,20 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
 
         // add in transaction support
         reflectorInstaller.addFacetDecoratorInstaller(transactionFacetDecoratorInstaller);
+
+        // capture the final configuration once all components have been loaded
+        configuration = installerLookup.getConfiguration();
     }
 
-    //region > API
-
+    @Override
     public DeploymentType getDeploymentType() {
         return deploymentType;
     }
 
-    /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}.
-     *
-     * <p>
-     *     ... as held by the internal {@link InstallerLookup}.
-     * </p>
-     *
-     * @see InstallerLookup#getConfiguration()
-     */
     @Override
     public IsisConfiguration getConfiguration() {
-        return installerLookup.getConfiguration();
+        return configuration;
     }
-
-    //endregion
-
 
     @Override
     public AuthenticationManager provideAuthenticationManager(final DeploymentType deploymentType) {
@@ -159,7 +151,8 @@ public class IsisComponentProviderUsingInstallers implements IsisComponentProvid
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi, final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
+            final ServicesInjectorSpi servicesInjectorSpi,
+            final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
         return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration(),
                 runtimeContext);
     }

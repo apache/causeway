@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package domainapp.fixture.modules.simple;
+package domainapp.fixture.dom.simple;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
