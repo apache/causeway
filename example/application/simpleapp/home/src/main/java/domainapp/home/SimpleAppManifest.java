@@ -45,7 +45,7 @@ public class SimpleAppManifest implements AppManifest {
         return Arrays.asList(
                 DomainAppDomainModule.class,  // domain (entities and repositories)
                 DomainAppFixtureModule.class, // fixtures
-                SimpleAppManifest.class  // home page service
+                SimpleAppManifest.class       // home page service
         );
     }
 

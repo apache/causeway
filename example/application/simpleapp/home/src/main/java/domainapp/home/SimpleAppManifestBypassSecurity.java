@@ -21,7 +21,7 @@ package domainapp.home;
 /**
  * Bypasses security, meaning any user/password combination can be used to login.
  */
-public class SimpleAppManifestBypass extends SimpleAppManifest {
+public class SimpleAppManifestBypassSecurity extends SimpleAppManifest {
 
     @Override
     public String getAuthenticationMechanism() {

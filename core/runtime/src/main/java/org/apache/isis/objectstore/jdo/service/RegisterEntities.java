@@ -38,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class RegisterEntities {
@@ -50,9 +51,9 @@ public class RegisterEntities {
     // //////////////////////////////////////
 
     // determines how to handle missing entities in a package
-    // if globSpec is in use, just log it (because we use packages also to indicate presence of services);
-    // if globSpec NOT in use, then treat this as an error.
-    private final boolean globSpecSpecified;
+    // if appManifest is in use, just log it (because we use packages also to indicate presence of services);
+    // if appManifest is NOT in use, then treat this as an error.
+    private final boolean appManifestSpecified;
 
     //region > domPackages
     private final List<String> domPackages;
@@ -78,16 +79,16 @@ public class RegisterEntities {
                     PACKAGE_PREFIX_KEY));
         }
         domPackages = parseDomPackages(packagePrefixes);
-        this.globSpecSpecified = configuration.get("isis.globSpec") != null;
+        this.appManifestSpecified = configuration.get(SystemConstants.APP_MANIFEST_KEY) != null;
 
-        this.entityTypes = scanForEntityTypesIn(this.domPackages, this.globSpecSpecified);
+        this.entityTypes = scanForEntityTypesIn(this.domPackages, this.appManifestSpecified);
     }
 
     private static List<String> parseDomPackages(String packagePrefixes) {
         return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
     }
 
-    private static Set<String> scanForEntityTypesIn(final List<String> domPackages, final boolean globSpecSpecified) {
+    private static Set<String> scanForEntityTypesIn(final List<String> domPackages, final boolean appManifestSpecified) {
         final Set<String> entityTypes = Sets.newLinkedHashSet();
         for (final String packageName : domPackages) {
             Reflections reflections = new Reflections(packageName);
@@ -97,7 +98,7 @@ public class RegisterEntities {
 
             if(!entitiesIn(entityTypesInPackage)) {
 
-                if(globSpecSpecified) {
+                if(appManifestSpecified) {
                     if(LOG.isDebugEnabled()) {
                         LOG.debug("Could not locate any @PersistenceCapable entities in module '%s'; ignoring\n", packageName);
                     }

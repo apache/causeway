@@ -179,7 +179,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
         
         private IsisConfigurationDefault configuration = new IsisConfigurationDefault();
-        private final IsisConfigurationDefault configurationAsPerGlobSpec = new IsisConfigurationDefault();
 
         private AppManifest appManifestIfAny;
 
@@ -228,7 +227,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         public Builder withServicesIn(String... packagePrefixes ) {
             if(appManifestIfAny != null) {
-                throw new IllegalStateException("A globSpec has already been provided");
+                throw new IllegalStateException("An appManifest has already been provided; instead use AppManifest#getAdditionalServices()");
             }
             if(packagePrefixes.length == 0) {
                 throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
@@ -250,7 +249,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         public Builder withServices(Object... services) {
             if(appManifestIfAny != null) {
-                throw new IllegalStateException("A globSpec has already been provided");
+                throw new IllegalStateException("An appManifest has already been provided");
             }
             this.services.addAll(Arrays.asList(services));
             return this;
@@ -262,7 +261,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         @Deprecated
         public Builder withFixtures(InstallableFixture... fixtures) {
             if(appManifestIfAny != null) {
-                throw new IllegalStateException("A globSpec has already been provided");
+                throw new IllegalStateException("An appManifest has already been provided");
             }
             this.fixtures.addAll(Arrays.asList(fixtures));
             return this;
@@ -278,11 +277,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
                     new IsisSystemForTest(
                             appManifestIfAny,
                             configuration,
-                            programmingModelOverride,
+                            services, fixtures, programmingModelOverride,
                             metaModelValidatorOverride,
                             authenticationRequest,
-                            services,
-                            fixtures,
                             listeners);
             if(level != null) {
                 isisSystem.setLevel(level);
@@ -334,19 +331,19 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private IsisSystemForTest(
             final AppManifest appManifestIfAny,
             final IsisConfiguration configurationOverride,
+            final List<Object> servicesIfAny,
+            final List<InstallableFixture> fixturesIfAny,
             final ProgrammingModel programmingModelOverride,
             final MetaModelValidator metaModelValidatorOverride,
             final AuthenticationRequest authenticationRequest,
-            final List<Object> servicesIfAny,
-            final List<InstallableFixture> fixtures,
             final List<Listener> listeners) {
         this.appManifestForComponentProvider = appManifestIfAny;
         this.configurationForComponentProvider = configurationOverride;
+        this.servicesForComponentProvider = servicesIfAny;
+        this.fixturesForComponentProvider = fixturesIfAny;
         this.programmingModelForComponentProvider = programmingModelOverride;
         this.metaModelValidatorForComponentProvider = metaModelValidatorOverride;
         this.authenticationRequestIfAny = authenticationRequest;
-        this.servicesForComponentProvider = servicesIfAny;
-        this.fixturesForComponentProvider = fixtures;
         this.listeners = listeners;
     }
 

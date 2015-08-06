@@ -45,6 +45,7 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     public static final String NAME = "configuration";
 
     private static final String SERVICES = "services";
+    public static final String SERVICES_KEY = ConfigurationConstants.ROOT + SERVICES;
 
     /**
      * @deprecated
@@ -57,6 +58,11 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
      */
     @Deprecated
     private static final String SERVICES_PREFIX = "services.prefix";
+    /**
+     * @deprecated
+     */
+    @Deprecated
+    private static final String SERVICES_PREFIX_KEY = ConfigurationConstants.ROOT + SERVICES_PREFIX;
 
     private final static Pattern POSITIONED_SERVICE_REGEX = Pattern.compile("((\\d+):)(.*)");
 
@@ -134,8 +140,8 @@ public class ServicesInstallerFromConfiguration extends ServicesInstallerAbstrac
     private void appendConfiguredServices(
             final SortedMap<String, SortedSet<String>> positionedServices) {
 
-        String servicePrefix = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES_PREFIX);
-        final String configuredServices = getConfiguration().getString(ConfigurationConstants.ROOT + SERVICES);
+        String servicePrefix = getConfiguration().getString(SERVICES_PREFIX_KEY);
+        final String configuredServices = getConfiguration().getString(SERVICES_KEY);
         if (configuredServices == null) {
             return;
         }

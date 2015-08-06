@@ -71,7 +71,7 @@ public final class SystemConstants {
     /**
      * Key used to lookup {@link AppManifest} (if any) from the {@link IsisConfiguration}.
      */
-    public static final String GLOB_SPEC_KEY = ConfigurationConstants.ROOT + "globSpec";
+    public static final String APP_MANIFEST_KEY = ConfigurationConstants.ROOT + "appManifest";
 
     /**
      * Key used to lookup {@link AuthenticationManager authentication manager}
@@ -106,7 +106,7 @@ public final class SystemConstants {
     /**
      * Default for {@link #SERVICES_INSTALLER_KEY}
      */
-    public static final String SERVICES_INSTALLER_DEFAULT = "configuration";
+    public static final String SERVICES_INSTALLER_DEFAULT = "configuration-and-annotation";
 
     /**
      * Key used to lookup {@link FixturesInstaller fixtures installer} in

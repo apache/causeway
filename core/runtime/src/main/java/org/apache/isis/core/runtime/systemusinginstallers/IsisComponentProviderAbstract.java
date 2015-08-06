@@ -35,6 +35,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
@@ -92,38 +93,47 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     }
 
 
-    //region > globSpec helpers
+    //region > appManifest helpers
     protected void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {
         final String packageNamesCsv = modulePackageNamesFrom(appManifest);
 
         putConfigurationProperty(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
         putConfigurationProperty(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
+
+        final List<Class<?>> additionalServices = appManifest.getAdditionalServices();
+        if(additionalServices != null) {
+            putConfigurationProperty(ServicesInstallerFromConfiguration.SERVICES_KEY, classNamesFrom(additionalServices));
+        }
     }
+
 
     private String modulePackageNamesFrom(final AppManifest appManifest) {
         List<Class<?>> modules = appManifest.getModules();
         if (modules == null || modules.isEmpty()) {
             throw new IllegalArgumentException(
-                    "If a globSpec is provided then it must return a non-empty set of modules");
+                    "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
         final Iterable<String> iter = Iterables.transform(modules, ClassUtil.Functions.packageNameOf());
         return Joiner.on(',').join(iter);
     }
 
-    protected String fixtureClassNamesFrom(final List<?> fixtures) {
-        if (fixtures == null) {
+    protected String classNamesFrom(final List<?> objectsOrClasses) {
+        if (objectsOrClasses == null) {
             return null;
         }
-        final Iterable<String> fixtureClassNames = Iterables.transform(fixtures, classNameOf());
+        final Iterable<String> fixtureClassNames = Iterables.transform(objectsOrClasses, classNameOf());
         return Joiner.on(',').join(fixtureClassNames);
     }
 
-    private Function<Object, String> classNameOf() {
+    private static Function<Object, String> classNameOf() {
         return new Function<Object, String>() {
                         @Nullable @Override
                         public String apply(final Object input) {
-                            Class<?> aClass = input instanceof Class ? (Class<?>)input: input.getClass();
+                            Class<?> aClass =
+                                    input instanceof Class
+                                        ? (Class<?>)input
+                                        : input.getClass();
                             return aClass.getName();
                         }
                     };

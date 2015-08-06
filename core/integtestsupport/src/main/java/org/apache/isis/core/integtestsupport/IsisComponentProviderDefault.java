@@ -49,10 +49,11 @@ import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerS
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
@@ -87,18 +88,18 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
             // if it can't find any @PersistenceCapable entities in a module
             // that contains only services.
             putConfigurationProperty(
-                    "isis.globSpec", appManifestIfAny.getClass().getName()
+                    SystemConstants.APP_MANIFEST_KEY, appManifestIfAny.getClass().getName()
             );
 
             List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
-            fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
+            fixtureClassNamesCsv = classNamesFrom(fixtureClasses);
 
             overrideConfigurationUsing(appManifest);
 
             this.services = createServices(configuration);
 
         } else {
-            fixtureClassNamesCsv = fixtureClassNamesFrom(fixturesOverride);
+            fixtureClassNamesCsv = classNamesFrom(fixturesOverride);
 
             this.services = elseDefault(servicesOverride, configuration);
         }
@@ -106,7 +107,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
         putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
         this.fixturesInstaller = createFixturesInstaller(configuration);
 
-        // integration tests ignore globSpec for authentication and authorization.
+        // integration tests ignore appManifest for authentication and authorization.
         this.authenticationManager = createAuthenticationManager(configuration);
         this.authorizationManager = createAuthorizationManager(configuration);
 
@@ -117,11 +118,11 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
 
 
 
-    //region > globSpec
+    //region > appManifest
 
-    private List<Object> createServices(
-            final IsisConfiguration configuration) {
-        final ServicesInstallerFromAnnotation servicesInstaller = new ServicesInstallerFromAnnotation();
+    private List<Object> createServices(final IsisConfiguration configuration) {
+        final ServicesInstallerFromConfigurationAndAnnotation servicesInstaller =
+                new ServicesInstallerFromConfigurationAndAnnotation();
         servicesInstaller.setConfiguration(configuration);
         return servicesInstaller.getServices();
     }

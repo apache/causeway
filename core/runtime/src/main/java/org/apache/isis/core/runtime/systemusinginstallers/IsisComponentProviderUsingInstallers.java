@@ -36,7 +36,7 @@ import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
-import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -58,7 +58,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
             final InstallerLookup installerLookup) {
-        super(deploymentType, globSpecIfAny(installerLookup));
+        super(deploymentType, appManifestIfAny(installerLookup));
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(installerLookup, is(not(nullValue())));
@@ -69,9 +69,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
             specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
-            // by using the annotations installer (as opposed to the configuration-and-annotations installer),
-            // any services defined with the "isis.services" key will be IGNORED.
-            putConfigurationProperty(SystemConstants.SERVICES_INSTALLER_KEY, ServicesInstallerFromAnnotation.NAME);
+            putConfigurationProperty(SystemConstants.SERVICES_INSTALLER_KEY, ServicesInstallerFromConfigurationAndAnnotation.NAME);
 
             final String authenticationMechanism = appManifest.getAuthenticationMechanism();
             putConfigurationProperty(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
@@ -80,7 +78,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
             putConfigurationProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
             List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
-            final String fixtureClassNamesCsv = fixtureClassNamesFrom(fixtureClasses);
+            final String fixtureClassNamesCsv = classNamesFrom(fixtureClasses);
             putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
 
             overrideConfigurationUsing(appManifest);
@@ -143,9 +141,9 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         ensureInitialized();
     }
 
-    private static AppManifest globSpecIfAny(final InstallerLookup installerLookup) {
-        final String globSpecIfAny = installerLookup.getConfiguration().getString(SystemConstants.GLOB_SPEC_KEY);
-        return globSpecIfAny != null? InstanceUtil.createInstance(globSpecIfAny, AppManifest.class): null;
+    private static AppManifest appManifestIfAny(final InstallerLookup installerLookup) {
+        final String appManifestIfAny = installerLookup.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
+        return appManifestIfAny != null? InstanceUtil.createInstance(appManifestIfAny, AppManifest.class): null;
     }
 
     protected void doPutConfigurationProperty(final String key, final String value) {
