@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.system;
 
+import javax.annotation.Nullable;
+
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
@@ -27,6 +29,6 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
  */
 public interface IsisSystemFactory extends ApplicationScopedComponent {
 
-    IsisSystem createSystem(final DeploymentType deploymentType, final AppManifest appManifestIfAny);
+    IsisSystem createSystem(final DeploymentType deploymentType, @Nullable final AppManifest appManifestIfAny);
 
 }

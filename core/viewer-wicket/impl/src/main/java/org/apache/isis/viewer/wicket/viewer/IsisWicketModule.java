@@ -23,10 +23,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
 import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
 import org.apache.isis.core.runtime.services.userreg.EmailNotificationServiceDefault;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -90,9 +92,11 @@ public class IsisWicketModule extends AbstractModule {
                 .to(EmailNotificationServiceDefault.class);
 
         bind(String.class).annotatedWith(Names.named("applicationName")).toInstance("Apache Isis Wicket Viewer");
-        bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String)null));
+        bind(String.class).annotatedWith(Names.named("applicationCss")).toProvider(Providers.of((String) null));
         bind(String.class).annotatedWith(Names.named("applicationJs")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toProvider(Providers.of((String)null));
         bind(String.class).annotatedWith(Names.named("aboutMessage")).toProvider(Providers.of((String)null));
+
+        bind(AppManifest.class).toInstance(IsisSystemThatUsesInstallersFactory.NOOP);
     }
 }

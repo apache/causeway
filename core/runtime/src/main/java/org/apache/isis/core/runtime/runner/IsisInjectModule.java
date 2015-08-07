@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.runner;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -136,7 +134,7 @@ public class IsisInjectModule extends AbstractModule {
     protected IsisSystem provideIsisSystem(
             final DeploymentType deploymentType,
             final IsisSystemFactory systemFactory,
-            @Nullable final AppManifest appManifestIfAny) {
+            final AppManifest appManifestIfAny) {
         final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
         system.init();
         return system;

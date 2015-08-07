@@ -282,16 +282,14 @@ As noted above, the generated app is a very simple application consisting of a s
 |`myapp`
 |The parent (aggregator) module
 
+|`myapp-app`
+|(1.9.0) The "app" module, containing the (optional) app manifest and any application-level services.
+
 |`myapp-dom`
 |The domain object model, consisting of `SimpleObject` and `SimpleObjects` (repository) domain service.
 
 |`myapp-fixture`
 |Domain object fixtures used for initializing the system when being demo'ed or for unit testing.
-
-|`myapp-home`
-|(1.9.0) The "home" module, containing the (optional) app manifest and any application-level services. +
-
-The app manifest partially replaces the
 
 |`myapp-integtests`
 |End-to-end xref:ug.adoc#_ug_testing_integ-test-support[integration tests] that exercise from the UI through to the database
