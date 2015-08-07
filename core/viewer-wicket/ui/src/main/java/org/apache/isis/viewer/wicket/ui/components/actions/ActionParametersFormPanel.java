@@ -19,6 +19,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+
 import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Component;
@@ -29,6 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -182,7 +185,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             okButton.add(new JGrowlBehaviour());
             setDefaultButton(okButton);
             add(okButton);
-            
+            applyAreYouSure(okButton);
+
             AjaxButton cancelButton = new AjaxButton(ID_CANCEL_BUTTON, new ResourceModel("cancelLabel")) {
                 private static final long serialVersionUID = 1L;
 
@@ -201,6 +205,21 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             // TODO: hide cancel button if dialogs disabled, as not yet implemented.
             if(ActionPromptModalWindow.isActionPromptModalDialogDisabled()) {
                 cancelButton.setVisible(false);
+            }
+        }
+
+        /**
+         * If the {@literal @}Action has "are you sure?" semantics then apply {@link ConfirmationBehavior}
+         * that will ask for confirmation before executing the Ajax request.
+         *
+         * @param button The button which action should be confirmed
+         */
+        private void applyAreYouSure(AjaxButton button) {
+            ActionModel actionModel = getActionModel();
+            final ObjectAction action = actionModel.getActionMemento().getAction();
+            ActionSemantics.Of semantics = action.getSemantics();
+            if (semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE || semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) {
+                button.add(new ConfirmationBehavior());
             }
         }
 

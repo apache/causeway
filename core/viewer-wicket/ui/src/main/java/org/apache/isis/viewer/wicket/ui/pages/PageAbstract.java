@@ -20,7 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.pages;
 
 import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.references.BootlintJavaScriptReference;
+import de.agilecoders.wicket.core.markup.html.references.BootlintHeaderItem;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.icon.FontAwesomeCssReference;
@@ -271,7 +271,7 @@ public abstract class PageAbstract extends WebPage implements ActionPromptProvid
     }
 
     private void addBootLint(final IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(BootlintJavaScriptReference.INSTANCE));
+        response.render(BootlintHeaderItem.INSTANCE);
     }
 
     private boolean isModernBrowser() {
