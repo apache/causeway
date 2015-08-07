@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 public interface ServicesInstaller extends Installer, IsisConfigurationAware {
 
@@ -34,7 +33,7 @@ public interface ServicesInstaller extends Installer, IsisConfigurationAware {
      */
     static String TYPE = "services-installer";
 
-    List<Object> getServices(DeploymentType deploymentType);
+    List<Object> getServices();
 
     void setIgnoreFailures(boolean ignoreFailures);
 }

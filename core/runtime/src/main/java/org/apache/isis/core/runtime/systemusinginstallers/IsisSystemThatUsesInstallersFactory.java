@@ -19,8 +19,13 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.inject.Inject;
 
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -32,6 +37,38 @@ import org.apache.isis.core.runtime.system.IsisSystemFactory;
  */
 public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
 
+    /**
+     * Placeholder for no {@link AppManifest}.
+     *
+     * <p>
+     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
+     *     null in {@link #createSystem(DeploymentType, AppManifest)}.
+     * </p>
+     */
+    public static final AppManifest NOOP = new AppManifest() {
+        @Override public List<Class<?>> getModules() {
+            return null;
+        }
+        @Override public List<Class<?>> getAdditionalServices() {
+            return null;
+        }
+
+        @Override public String getAuthenticationMechanism() {
+            return null;
+        }
+
+        @Override public String getAuthorizationMechanism() {
+            return null;
+        }
+
+        @Override public List<Class<? extends FixtureScript>> getFixtures() {
+            return null;
+        }
+
+        @Override public Map<String, String> getConfigurationProperties() {
+            return null;
+        }
+    };
     private final InstallerLookup installerLookup;
 
     @Inject
@@ -52,9 +89,13 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
     //endregion
 
     @Override
-    public IsisSystem createSystem(final DeploymentType deploymentType) {
+    public IsisSystem createSystem(final DeploymentType deploymentType, final AppManifest appManifestIfAny) {
         IsisComponentProviderUsingInstallers componentProvider =
-                new IsisComponentProviderUsingInstallers(deploymentType, installerLookup);
+                new IsisComponentProviderUsingInstallers(
+                        deploymentType,
+                        appManifestIfAny == NOOP
+                                ? null
+                                : appManifestIfAny, installerLookup);
         return new IsisSystem(componentProvider);
     }
 

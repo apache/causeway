@@ -332,6 +332,7 @@
     </build>
 
     <modules>
+        <module>app</module>
         <module>dom</module>
         <module>fixture</module>
         <module>integtests</module>
@@ -365,6 +366,11 @@
 
 
             <!-- this project's own modules -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>simpleapp-app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
                 <artifactId>simpleapp-dom</artifactId>

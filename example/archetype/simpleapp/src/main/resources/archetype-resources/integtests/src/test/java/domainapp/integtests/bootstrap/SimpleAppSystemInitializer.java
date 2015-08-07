@@ -21,37 +21,24 @@
  */
 package domainapp.integtests.bootstrap;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+
+import domainapp.home.SimpleAppManifest;
 
 public class SimpleAppSystemInitializer {
 
     public static void initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();
         if(isft == null) {
-            isft = new SimpleAppSystemBuilder().build().setUpSystem();
+            isft = new IsisSystemForTest.Builder()
+                    .withLoggingAt(org.apache.log4j.Level.INFO)
+                    .with(new SimpleAppManifest())
+                    .with(new IsisConfigurationForJdoIntegTests())
+                    .build()
+                    .setUpSystem();
             IsisSystemForTest.set(isft);
         }
     }
 
-    private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
-
-        public SimpleAppSystemBuilder() {
-            withLoggingAt(org.apache.log4j.Level.INFO);
-            with(testConfiguration());
-            with(new DataNucleusPersistenceMechanismInstaller());
-
-            // services annotated with @DomainService
-            withServicesIn( "domainapp" );
-        }
-
-        private static IsisConfiguration testConfiguration() {
-            final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
-
-            testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom.modules");
-            return testConfiguration;
-        }
-    }
 }

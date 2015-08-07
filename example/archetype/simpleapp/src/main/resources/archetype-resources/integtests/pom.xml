@@ -46,10 +46,9 @@
     </build>
     <dependencies>
 
-        <!-- other modules in this project -->
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>${rootArtifactId}-fixture</artifactId>
+            <artifactId>${rootArtifactId}-app</artifactId>
         </dependency>
 
         <dependency>
@@ -69,15 +68,6 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-wrapper</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-runtime</artifactId>
         </dependency>
 
         <dependency>

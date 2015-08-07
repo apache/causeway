@@ -20,11 +20,14 @@
 package org.apache.isis.core.runtime.runner;
 
 import java.util.List;
+
 import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
@@ -128,8 +131,11 @@ public class IsisInjectModule extends AbstractModule {
     @Provides
     @Inject
     @Singleton
-    protected IsisSystem provideIsisSystem(final DeploymentType deploymentType, final IsisSystemFactory systemFactory) {
-        final IsisSystem system = systemFactory.createSystem(deploymentType);
+    protected IsisSystem provideIsisSystem(
+            final DeploymentType deploymentType,
+            final IsisSystemFactory systemFactory,
+            final AppManifest appManifestIfAny) {
+        final IsisSystem system = systemFactory.createSystem(deploymentType, appManifestIfAny);
         system.init();
         return system;
     }

@@ -22,22 +22,22 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
-import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
+import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
@@ -48,120 +48,152 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class IsisComponentProviderUsingInstallers implements IsisComponentProvider {
+public class IsisComponentProviderUsingInstallers extends IsisComponentProviderAbstract {
 
-    private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
 
-    private AuthenticationManagerInstaller authenticationInstaller;
-    private AuthorizationManagerInstaller authorizationInstaller;
     private ObjectReflectorInstaller reflectorInstaller;
-    private ServicesInstaller servicesInstaller;
     private PersistenceMechanismInstaller persistenceMechanismInstaller;
-    private FixturesInstaller fixtureInstaller;
 
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
+            final AppManifest appManifestIfAny,
             final InstallerLookup installerLookup) {
-        this.deploymentType = deploymentType;
+        super(deploymentType, appManifestIfAny(appManifestIfAny, installerLookup));
+
+        ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(installerLookup, is(not(nullValue())));
+
         this.installerLookup = installerLookup;
 
-        lookupAndSetInstallers(deploymentType);
-    }
+        if(appManifest != null) {
 
-    private void lookupAndSetInstallers(final DeploymentType deploymentType) {
+            putAppManifestKey();
 
-        this.authenticationInstaller = installerLookup.authenticationManagerInstaller(
-                getConfiguration().getString(SystemConstants.AUTHENTICATION_INSTALLER_KEY),
-                deploymentType);
+            specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
-        this.authorizationInstaller = installerLookup.authorizationManagerInstaller(
-                getConfiguration().getString(SystemConstants.AUTHORIZATION_INSTALLER_KEY), deploymentType);
+            putConfigurationProperty(SystemConstants.SERVICES_INSTALLER_KEY, ServicesInstallerFromConfigurationAndAnnotation.NAME);
 
-        this.fixtureInstaller = installerLookup.fixturesInstaller(
-                getConfiguration().getString(SystemConstants.FIXTURES_INSTALLER_KEY));
+            final String authenticationMechanism = appManifest.getAuthenticationMechanism();
+            putConfigurationProperty(SystemConstants.AUTHENTICATION_INSTALLER_KEY, authenticationMechanism);
 
-        persistenceMechanismInstaller = installerLookup.persistenceMechanismInstaller(
-                getConfiguration().getString(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY),
-                deploymentType);
+            final String authorizationMechanism = appManifest.getAuthorizationMechanism();
+            putConfigurationProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY, authorizationMechanism);
 
-        reflectorInstaller = installerLookup.reflectorInstaller(
-                getConfiguration().getString(SystemConstants.REFLECTOR_KEY));
+            List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
+            final String fixtureClassNamesCsv = classNamesFrom(fixtureClasses);
+            putConfigurationProperty(FixturesInstallerFromConfiguration.FIXTURES, fixtureClassNamesCsv);
 
-        servicesInstaller = installerLookup.servicesInstaller(null);
+            overrideConfigurationUsing(appManifest);
+        }
+
+        // loading installers causes the configuration to be appended to successively
+        AuthenticationManagerInstaller authenticationInstaller = this.installerLookup.authenticationManagerInstaller(
+                configProperty(SystemConstants.AUTHENTICATION_INSTALLER_KEY));
+
+        AuthorizationManagerInstaller authorizationInstaller = this.installerLookup.authorizationManagerInstaller(
+                configProperty(SystemConstants.AUTHORIZATION_INSTALLER_KEY));
+
+        this.fixturesInstaller = this.installerLookup.fixturesInstaller(
+                configProperty(SystemConstants.FIXTURES_INSTALLER_KEY));
+
+        ServicesInstaller servicesInstaller = this.installerLookup.servicesInstaller(null);
+
+        // although there is only one implementation of PersistenceMechanismInstaller, we still do the lookup
+        // because this will add the persistor_datanucleus.properties and persistor.properties to the set of
+        // config files from which we read configuration properties.
+        persistenceMechanismInstaller = this.installerLookup.persistenceMechanismInstaller(
+                configProperty(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY)
+        );
+
+        reflectorInstaller = this.installerLookup.reflectorInstaller(
+                configProperty(SystemConstants.REFLECTOR_KEY));
 
         TransactionFacetDecoratorInstaller transactionFacetDecoratorInstaller =
-                installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class);
+                this.installerLookup.getInstaller(TransactionFacetDecoratorInstaller.class);
 
-        ensureThatState(authenticationInstaller, is(not(nullValue())), "authenticationInstaller could not be looked up");
-        ensureThatState(authorizationInstaller, is(not(nullValue())), "authorizationInstaller could not be looked up");
-        ensureThatState(fixtureInstaller, is(not(nullValue())), "fixtureInstaller could not be looked up");
-        ensureThatState(persistenceMechanismInstaller, is(not(nullValue())), "persistenceMechanismInstaller could not be looked up");
-        ensureThatState(reflectorInstaller, is(not(nullValue())), "reflectorInstaller could not be looked up");
-        ensureThatState(transactionFacetDecoratorInstaller, is(not(nullValue())), "transactionFacetDecoratorInstaller could not be looked up");
-        ensureThatState(servicesInstaller, is(not(nullValue())), "servicesInstaller could not be looked up");
+
+        // ensure we were able to load all components via InstallerLookup (fail fast)
+        ensureThatState(authenticationInstaller, is(not(nullValue())),
+                "authenticationInstaller could not be looked up");
+        ensureThatState(authorizationInstaller, is(not(nullValue())),
+                "authorizationInstaller could not be looked up");
+        ensureThatState(servicesInstaller, is(not(nullValue())),
+                "servicesInstaller could not be looked up");
+        ensureThatState(fixturesInstaller, is(not(nullValue())),
+                "fixtureInstaller could not be looked up");
+        ensureThatState(transactionFacetDecoratorInstaller, is(not(nullValue())),
+                "transactionFacetDecoratorInstaller could not be looked up");
+        ensureThatState(persistenceMechanismInstaller, is(not(nullValue())),
+                "persistenceMechanismInstaller could not be looked up");
+        ensureThatState(reflectorInstaller, is(not(nullValue())),
+                "reflectorInstaller could not be looked up");
+
 
         // add in transaction support
         reflectorInstaller.addFacetDecoratorInstaller(transactionFacetDecoratorInstaller);
-    }
 
-    //region > API
+        // capture the final configuration once all components have been loaded
+        configuration = this.installerLookup.getConfiguration();
 
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
+        // eagerly calculate
+        authenticationManager = authenticationInstaller.createAuthenticationManager();
+        authorizationManager = authorizationInstaller.createAuthorizationManager();
+        services = servicesInstaller.getServices();
+
+        ensureInitialized();
     }
 
     /**
-     * Returns a <i>snapshot</i> of the {@link IsisConfiguration configuration}.
-     *
-     * <p>
-     *     ... as held by the internal {@link InstallerLookup}.
-     * </p>
-     *
-     * @see InstallerLookup#getConfiguration()
+     * If an {@link AppManifest} was explicitly provided (eg from the Guice <tt>IsisWicketModule</tt> when running
+     * unde the Wicket viewer) then use that; otherwise read the <tt>isis.properties</tt> config file and look
+     * for an <tt>isis.appManifest</tt> entry instead.
      */
-    @Override
-    public IsisConfiguration getConfiguration() {
-        return installerLookup.getConfiguration();
+    private static AppManifest appManifestIfAny(
+            final AppManifest appManifestFromConstructor,
+            final InstallerLookup installerLookup) {
+        if(appManifestFromConstructor != null) {
+            return appManifestFromConstructor;
+        }
+        final String appManifestFromConfiguration = installerLookup.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
+        return appManifestFromConfiguration != null? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class): null;
     }
 
+    protected void doPutConfigurationProperty(final String key, final String value) {
+        this.installerLookup.putConfigurationProperty(key, value);
+    }
     //endregion
 
 
-    @Override
-    public AuthenticationManager provideAuthenticationManager(final DeploymentType deploymentType) {
-        return authenticationInstaller.createAuthenticationManager();
-    }
-
-    @Override
-    public  AuthorizationManager provideAuthorizationManager(final DeploymentType deploymentType) {
-        return authorizationInstaller.createAuthorizationManager();
-    }
-
-    @Override
-    public FixturesInstaller obtainFixturesInstaller() throws IsisSystemException {
-        return fixtureInstaller;
-    }
 
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
-            final DeploymentType deploymentType,
-            final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+            final Collection<MetaModelRefiner> metaModelRefiners) {
         return reflectorInstaller.createReflector(metaModelRefiners);
     }
 
-    @Override
-    public List<Object> obtainServices() {
-        return servicesInstaller.getServices(getDeploymentType());
-    }
 
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi, final RuntimeContextFromSession runtimeContext) throws IsisSystemException {
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi, getConfiguration(),
+            final ServicesInjectorSpi servicesInjectorSpi,
+            final RuntimeContextFromSession runtimeContext) {
+        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi,
+                getConfiguration(),
                 runtimeContext);
     }
+
+    //region > helpers
+
+    /**
+     * Returns the current value of the configuration property.
+     *
+     * Note that this may change over time as new installers are loaded (= new config property files).
+     */
+    private String configProperty(final String key) {
+        return this.installerLookup.getConfiguration().getString(key);
+    }
+    //endregion
+
 
 }

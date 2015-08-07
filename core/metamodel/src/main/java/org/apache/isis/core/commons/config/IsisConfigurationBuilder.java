@@ -44,7 +44,15 @@ public interface IsisConfigurationBuilder extends Injectable {
     
     void addConfigurationResource(final String installerName, final NotFoundPolicy notFoundPolicy);
 
+    /**
+     * Adds additional property; if already present then will _not_ be replaced.
+     */
     void add(final String key, final String value);
+
+    /**
+     * Adds/updates property; if already present then _will_ be replaced.
+     */
+    void put(final String key, final String value);
 
     /**
      * The underlying {@link ResourceStreamSource} from which the configuration

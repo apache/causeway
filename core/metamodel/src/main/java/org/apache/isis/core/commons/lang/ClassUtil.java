@@ -24,6 +24,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 
 public final class ClassUtil {
@@ -172,6 +175,35 @@ public final class ClassUtil {
             return Thread.currentThread().getContextClassLoader().loadClass(fullName);
         } catch (final ClassNotFoundException e) {
             return null;
+        }
+    }
+
+    public static class Functions {
+        private Functions(){}
+
+        public static Function<Class<?>, String> nameOf() {
+            return new Function<Class<?>, String>() {
+                @Nullable @Override public String apply(final Class<?> input) {
+                    return input.getName();
+                }
+            };
+        }
+
+        public static Function<Class<?>, Package> packageOf() {
+            return new Function<Class<?>, Package>() {
+                @Nullable @Override
+                public Package apply(final Class<?> input) {
+                    return input.getPackage();
+                }
+            };
+        }
+
+        public static Function<Class<?>, String> packageNameOf() {
+            return new Function<Class<?>, String>() {
+                @Nullable @Override public String apply(final Class<?> input) {
+                    return input.getPackage().getName();
+                }
+            };
         }
     }
 

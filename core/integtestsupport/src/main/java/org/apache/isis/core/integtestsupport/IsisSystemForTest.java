@@ -32,6 +32,7 @@ import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.command.Command;
@@ -48,10 +49,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerDelegate;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
+import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -64,7 +67,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 
 /**
  * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
@@ -147,25 +149,27 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     // //////////////////////////////////////
 
+    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
+
+
+    // these fields 'xxxForComponentProvider' are used to initialize the IsisComponentProvider, but shouldn't be used thereafter.
+    private final AppManifest appManifestForComponentProvider;
+    private final IsisConfiguration configurationForComponentProvider;
+    private final List<Object> servicesForComponentProvider;
+    private final List<InstallableFixture> fixturesForComponentProvider;
+    private final MetaModelValidator metaModelValidatorForComponentProvider;
+    private final ProgrammingModel programmingModelForComponentProvider;
+
+    // populated at #setupSystem
+    private IsisComponentProvider componentProvider;
 
     private IsisSystem isisSystem;
+
+    private final AuthenticationRequest authenticationRequestIfAny;
     private AuthenticationSession authenticationSession;
 
-    private final IsisConfiguration configuration;
-    private final PersistenceMechanismInstaller persistenceMechanismInstaller;
-    private final AuthenticationRequest authenticationRequest;
-    private final List<Object> services;
-    private final List<InstallableFixture> fixtures;
     private List <Listener> listeners;
-    
-    private org.apache.log4j.Level level = org.apache.log4j.Level.INFO;
-    
-    private final MetaModelValidator metaModelValidator;
-    private final ProgrammingModel programmingModel;
-    
-    private DomainObjectContainer container;
 
-    
     ////////////////////////////////////////////////////////////
     // constructor
     ////////////////////////////////////////////////////////////
@@ -174,10 +178,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
         private AuthenticationRequest authenticationRequest = new AuthenticationRequestNameOnly("tester");
         
-        private IsisConfigurationDefault configuration;
-        private PersistenceMechanismInstaller persistenceMechanismInstaller = new DataNucleusPersistenceMechanismInstaller();
-        private MetaModelValidator metaModelValidator;
-        private ProgrammingModel programmingModel;
+        private IsisConfigurationDefault configuration = new IsisConfigurationDefault();
+
+        private AppManifest appManifestIfAny;
+
+        private MetaModelValidator metaModelValidatorOverride;
+        private ProgrammingModel programmingModelOverride;
 
         private final List<Object> services = Lists.newArrayList();
         private final List<InstallableFixture> fixtures = Lists.newArrayList();
@@ -190,30 +196,51 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             this.configuration = (IsisConfigurationDefault) configuration;
             return this;
         }
-        
+
+        /**
+         * @deprecated - this is now a no-op because there is now only a single implementation of {@link PersistenceMechanismInstaller}, so this is redundant.
+         */
+        @Deprecated
         public Builder with(PersistenceMechanismInstaller persistenceMechanismInstaller) {
-            this.persistenceMechanismInstaller = persistenceMechanismInstaller;
             return this;
         }
-        
+
+        public Builder with(MetaModelValidator metaModelValidator) {
+            this.metaModelValidatorOverride = metaModelValidator;
+            return this;
+        }
+
+        public Builder with(ProgrammingModel programmingModel) {
+            this.programmingModelOverride = programmingModel;
+            return this;
+        }
+
         public Builder with(AuthenticationRequest authenticationRequest) {
             this.authenticationRequest = authenticationRequest;
             return this;
         }
 
+        public Builder with(AppManifest appManifest) {
+            this.appManifestIfAny = appManifest;
+            return this;
+        }
+
         public Builder withServicesIn(String... packagePrefixes ) {
+            if(appManifestIfAny != null) {
+                throw new IllegalStateException("An appManifest has already been provided; instead use AppManifest#getAdditionalServices()");
+            }
             if(packagePrefixes.length == 0) {
                 throw new IllegalArgumentException("Specify packagePrefixes to search for @DomainService-annotated services");
             }
 
             configuration.put(
-                    "isis.services.ServicesInstallerFromAnnotation.packagePrefix",
+                    ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY,
                     Joiner.on(",").join(packagePrefixes)
             );
 
             final ServicesInstaller installer = new ServicesInstallerFromConfigurationAndAnnotation();
             installer.setConfiguration(configuration);
-            final List<Object> serviceList = installer.getServices(null);
+            final List<Object> serviceList = installer.getServices();
             this.services.addAll(serviceList);
 
             installer.init();
@@ -221,6 +248,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         public Builder withServices(Object... services) {
+            if(appManifestIfAny != null) {
+                throw new IllegalStateException("An appManifest has already been provided");
+            }
             this.services.addAll(Arrays.asList(services));
             return this;
         }
@@ -230,6 +260,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
          */
         @Deprecated
         public Builder withFixtures(InstallableFixture... fixtures) {
+            if(appManifestIfAny != null) {
+                throw new IllegalStateException("An appManifest has already been provided");
+            }
             this.fixtures.addAll(Arrays.asList(fixtures));
             return this;
         }
@@ -242,13 +275,11 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         public IsisSystemForTest build() {
             final IsisSystemForTest isisSystem =
                     new IsisSystemForTest(
+                            appManifestIfAny,
                             configuration,
-                            programmingModel,
-                            metaModelValidator,
-                            persistenceMechanismInstaller,
+                            services, fixtures, programmingModelOverride,
+                            metaModelValidatorOverride,
                             authenticationRequest,
-                            services,
-                            fixtures,
                             listeners);
             if(level != null) {
                 isisSystem.setLevel(level);
@@ -291,15 +322,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
             return this;
         }
 
-        public Builder with(MetaModelValidator metaModelValidator) {
-            this.metaModelValidator = metaModelValidator;
-            return this;
-        }
-
-        public Builder with(ProgrammingModel programmingModel) {
-            this.programmingModel = programmingModel;
-            return this;
-        }
     }
 
     public static Builder builder() {
@@ -307,21 +329,21 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     private IsisSystemForTest(
-            final IsisConfiguration configuration, 
-            final ProgrammingModel programmingModel, 
-            final MetaModelValidator metaModelValidator, 
-            final PersistenceMechanismInstaller persistenceMechanismInstaller, 
-            final AuthenticationRequest authenticationRequest, 
-            final List<Object> services, 
-            final List<InstallableFixture> fixtures, 
+            final AppManifest appManifestIfAny,
+            final IsisConfiguration configurationOverride,
+            final List<Object> servicesIfAny,
+            final List<InstallableFixture> fixturesIfAny,
+            final ProgrammingModel programmingModelOverride,
+            final MetaModelValidator metaModelValidatorOverride,
+            final AuthenticationRequest authenticationRequest,
             final List<Listener> listeners) {
-        this.configuration = configuration;
-        this.programmingModel = programmingModel;
-        this.metaModelValidator = metaModelValidator;
-        this.persistenceMechanismInstaller = persistenceMechanismInstaller;
-        this.authenticationRequest = authenticationRequest;
-        this.services = services;
-        this.fixtures = fixtures;
+        this.appManifestForComponentProvider = appManifestIfAny;
+        this.configurationForComponentProvider = configurationOverride;
+        this.servicesForComponentProvider = servicesIfAny;
+        this.fixturesForComponentProvider = fixturesIfAny;
+        this.programmingModelForComponentProvider = programmingModelOverride;
+        this.metaModelValidatorForComponentProvider = metaModelValidatorOverride;
+        this.authenticationRequestIfAny = authenticationRequest;
         this.listeners = listeners;
     }
 
@@ -366,15 +388,20 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         
         if(firstTime) {
             IsisLoggingConfigurer isisLoggingConfigurer = new IsisLoggingConfigurer(getLevel());
-            isisLoggingConfigurer.configureLogging(".", new String[]{});
+            isisLoggingConfigurer.configureLogging(".", new String[] {});
 
-            IsisComponentProvider componentProvider = new IsisComponentProviderDefault(
-                    DeploymentType.UNIT_TESTING, services,
-                    getConfigurationElseDefault(),
-                    this.programmingModel,
-                    this.metaModelValidator);
+            componentProvider = new IsisComponentProviderDefault(
+                    DeploymentType.UNIT_TESTING,
+                    appManifestForComponentProvider,
+                    servicesForComponentProvider,
+                    fixturesForComponentProvider,
+                    configurationForComponentProvider,
+                    programmingModelForComponentProvider,
+                    metaModelValidatorForComponentProvider
+            );
 
             isisSystem = new IsisSystem(componentProvider);
+
 
             // ensures that a FixtureClock is installed as the singleton underpinning the ClockService
             FixtureClock.initialize();
@@ -384,7 +411,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
 
         final AuthenticationManager authenticationManager = isisSystem.getSessionFactory().getAuthenticationManager();
-        authenticationSession = authenticationManager.authenticate(authenticationRequest);
+        authenticationSession = authenticationManager.authenticate(authenticationRequestIfAny);
 
         setContainer(getContainer());
 
@@ -396,10 +423,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         }
     }
 
+
     private void wireAndInstallFixtures() {
-        FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
-        fid.addFixture(fixtures);
-        fid.installFixtures();
+        FixturesInstaller fixturesInstaller = componentProvider.provideFixturesInstaller();
+        fixturesInstaller.installFixtures();
     }
 
     private enum FireListeners {
@@ -411,7 +438,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     public DomainObjectContainer getContainer() {
-        for (Object service : services) {
+        for (Object service : isisSystem.getSessionFactory().getServices()) {
             if(service instanceof DomainObjectContainer) {
                 return (DomainObjectContainer) service;
             }
@@ -460,12 +487,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         IsisContext.closeSession();
     }
 
-    private IsisConfiguration getConfigurationElseDefault() {
-        return configuration != null
-                ? configuration
-                : IsisComponentProviderDefault.defaultConfiguration();
-    }
-
     ////////////////////////////////////////////////////////////
     // listeners
     ////////////////////////////////////////////////////////////
@@ -473,7 +494,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     private void fireInitAndPreSetupSystem(boolean firstTime) throws Exception {
         if(firstTime) {
             for(Listener listener: listeners) {
-                listener.init(configuration);
+                listener.init(componentProvider.getConfiguration());
             }
         }
         for(Listener listener: listeners) {
@@ -518,9 +539,6 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * The {@link IsisSystem} created during {@link #setUpSystem()}.
-     *
-     * <p>
-     * Can fine-tune the actual implementation using the hook {@link #createIsisSystem(List)}.
      */
     public IsisSystem getIsisSystem() {
         return isisSystem;
@@ -788,7 +806,10 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     // (for each test, rather than at bootstrap)
     ////////////////////////////////////////////////////////////
 
-    
+    /**
+     * @deprecated - use {@link org.apache.isis.applib.fixturescripts.FixtureScripts} domain service instead.
+     */
+    @Deprecated
     public void installFixtures(final InstallableFixture... fixtures) {
         final FixturesInstallerDelegate fid = new FixturesInstallerDelegate(getPersistenceSession());
         for (InstallableFixture fixture : fixtures) {
@@ -834,9 +855,12 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
 
     /**
      * @param container the container to set
+     *
+     * @deprecated
      */
+    @Deprecated
     public void setContainer(DomainObjectContainer container) {
-        this.container = container;
+        // no-op
     }
 
     

@@ -21,6 +21,7 @@ package org.apache.isis.tool.mavenplugin;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
+
 import org.apache.maven.model.Plugin;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -29,6 +30,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
@@ -36,7 +38,6 @@ import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoR
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
@@ -99,7 +100,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
         servicesInstaller.setIgnoreFailures(true);
         servicesInstaller.init();
 
-        return servicesInstaller.getServices(DeploymentType.SERVER_PROTOTYPE);
+        return servicesInstaller.getServices();
     }
 
     private IsisConfiguration getIsisConfiguration() throws MojoFailureException {
