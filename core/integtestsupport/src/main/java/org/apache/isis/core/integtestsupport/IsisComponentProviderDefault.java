@@ -53,7 +53,6 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
-import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderAbstract;
 import org.apache.isis.core.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;
@@ -82,14 +81,9 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
         final String fixtureClassNamesCsv;
         if(appManifest != null) {
 
-            specifyServicesAndRegisteredEntitiesUsing(appManifest);
+            putAppManifestKey();
 
-            // required to prevent RegisterEntities validation from complaining
-            // if it can't find any @PersistenceCapable entities in a module
-            // that contains only services.
-            putConfigurationProperty(
-                    SystemConstants.APP_MANIFEST_KEY, appManifestIfAny.getClass().getName()
-            );
+            specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();
             fixtureClassNamesCsv = classNamesFrom(fixtureClasses);

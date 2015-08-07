@@ -37,6 +37,7 @@ import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -79,6 +80,19 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
 
         this.deploymentType = deploymentType;
         this.appManifest = appManifest;
+
+    }
+
+    protected void putAppManifestKey() {
+        if (this.appManifest == null) {
+            return;
+        }
+        // required to prevent RegisterEntities validation from complaining
+        // if it can't find any @PersistenceCapable entities in a module
+        // that contains only services.
+        putConfigurationProperty(
+                SystemConstants.APP_MANIFEST_KEY, this.appManifest.getClass().getName()
+        );
     }
 
     /**

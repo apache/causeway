@@ -22,10 +22,11 @@ package org.apache.isis.viewer.wicket.viewer;
 import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 import com.google.inject.util.Providers;
+
 import org.apache.isis.applib.services.email.EmailService;
 import org.apache.isis.applib.services.userreg.EmailNotificationService;
-import org.apache.isis.core.runtime.services.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.core.runtime.services.email.EmailServiceDefault;
+import org.apache.isis.core.runtime.services.userreg.EmailNotificationServiceDefault;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.models.ImageResourceCache;
 import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistrar;
@@ -62,6 +63,7 @@ import org.apache.isis.viewer.wicket.viewer.settings.WicketViewerSettingsDefault
  *         bind(String.class).annotatedWith(Names.named("applicationJs")).toInstance("scripts/application.js");
  *         bind(String.class).annotatedWith(Names.named("welcomeMessage")).toInstance("Hello, welcome to my app");
  *         bind(String.class).annotatedWith(Names.named("aboutMessage")).toInstance("MyApp v1.0.0");
+ *         bind(AppManifest.class).toInstance(new MyAppManifest());
  *      }
  *  };
  * final Module overridden = Modules.override(isisDefaults).with(myAppOverrides);

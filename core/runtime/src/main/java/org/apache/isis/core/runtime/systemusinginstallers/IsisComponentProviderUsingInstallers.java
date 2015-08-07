@@ -57,8 +57,9 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
     public IsisComponentProviderUsingInstallers(
             final DeploymentType deploymentType,
+            final AppManifest appManifestIfAny,
             final InstallerLookup installerLookup) {
-        super(deploymentType, appManifestIfAny(installerLookup));
+        super(deploymentType, appManifestIfAny(appManifestIfAny, installerLookup));
 
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(installerLookup, is(not(nullValue())));
@@ -66,6 +67,8 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         this.installerLookup = installerLookup;
 
         if(appManifest != null) {
+
+            putAppManifestKey();
 
             specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
@@ -141,9 +144,19 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         ensureInitialized();
     }
 
-    private static AppManifest appManifestIfAny(final InstallerLookup installerLookup) {
-        final String appManifestIfAny = installerLookup.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
-        return appManifestIfAny != null? InstanceUtil.createInstance(appManifestIfAny, AppManifest.class): null;
+    /**
+     * If an {@link AppManifest} was explicitly provided (eg from the Guice <tt>IsisWicketModule</tt> when running
+     * unde the Wicket viewer) then use that; otherwise read the <tt>isis.properties</tt> config file and look
+     * for an <tt>isis.appManifest</tt> entry instead.
+     */
+    private static AppManifest appManifestIfAny(
+            final AppManifest appManifestFromConstructor,
+            final InstallerLookup installerLookup) {
+        if(appManifestFromConstructor != null) {
+            return appManifestFromConstructor;
+        }
+        final String appManifestFromConfiguration = installerLookup.getConfiguration().getString(SystemConstants.APP_MANIFEST_KEY);
+        return appManifestFromConfiguration != null? InstanceUtil.createInstance(appManifestFromConfiguration, AppManifest.class): null;
     }
 
     protected void doPutConfigurationProperty(final String key, final String value) {

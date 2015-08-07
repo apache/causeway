@@ -21,6 +21,7 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 
 import com.google.inject.Inject;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
@@ -52,9 +53,9 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
     //endregion
 
     @Override
-    public IsisSystem createSystem(final DeploymentType deploymentType) {
+    public IsisSystem createSystem(final DeploymentType deploymentType, final AppManifest appManifestIfAny) {
         IsisComponentProviderUsingInstallers componentProvider =
-                new IsisComponentProviderUsingInstallers(deploymentType, installerLookup);
+                new IsisComponentProviderUsingInstallers(deploymentType, appManifestIfAny, installerLookup);
         return new IsisSystem(componentProvider);
     }
 
