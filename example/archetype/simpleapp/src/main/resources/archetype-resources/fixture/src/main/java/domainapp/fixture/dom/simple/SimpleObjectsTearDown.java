@@ -19,26 +19,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.integtests.bootstrap;
 
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+package domainapp.fixture.dom.simple;
 
-import domainapp.home.SimpleAppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
 
-public class SimpleAppSystemInitializer {
+public class SimpleObjectsTearDown extends FixtureScript {
 
-    public static void initIsft() {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new SimpleAppManifest())
-                    .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
+    @Override
+    protected void execute(ExecutionContext executionContext) {
+        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"simple${symbol_escape}".${symbol_escape}"SimpleObject${symbol_escape}"");
     }
+
+
+    @javax.inject.Inject
+    private IsisJdoSupport isisJdoSupport;
 
 }

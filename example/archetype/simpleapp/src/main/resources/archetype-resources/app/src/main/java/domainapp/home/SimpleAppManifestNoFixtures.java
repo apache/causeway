@@ -19,26 +19,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.integtests.bootstrap;
+package domainapp.home;
 
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import java.util.Collections;
+import java.util.List;
 
-import domainapp.home.SimpleAppManifest;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-public class SimpleAppSystemInitializer {
+/**
+ * Run the app but without setting up any fixtures.
+ */
+public class SimpleAppManifestNoFixtures extends SimpleAppManifest {
 
-    public static void initIsft() {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new SimpleAppManifest())
-                    .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
+    @Override
+    public List<Class<? extends FixtureScript>> getFixtures() {
+        return Collections.emptyList();
     }
 
 }

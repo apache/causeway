@@ -20,12 +20,12 @@
  *  under the License.
  */
 
-package domainapp.fixture.modules.simple;
+package domainapp.fixture.dom.simple;
 
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.dom.modules.simple.SimpleObjects;
+import domainapp.dom.simple.SimpleObject;
+import domainapp.dom.simple.SimpleObjects;
 
 public class SimpleObjectCreate extends FixtureScript {
 

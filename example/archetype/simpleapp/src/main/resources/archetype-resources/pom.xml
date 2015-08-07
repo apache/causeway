@@ -354,6 +354,11 @@
             <!-- this project's own modules -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
+                <artifactId>${rootArtifactId}-app</artifactId>
+                <version>${version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>${rootArtifactId}-dom</artifactId>
                 <version>${version}</version>
             </dependency>

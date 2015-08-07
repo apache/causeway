@@ -19,21 +19,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package domainapp.home;
 
-package domainapp.fixture.modules.simple;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.services.jdosupport.IsisJdoSupport;
-
-public class SimpleObjectsTearDown extends FixtureScript {
+/**
+ * Bypasses security, meaning any user/password combination can be used to login.
+ */
+public class SimpleAppManifestBypassSecurity extends SimpleAppManifest {
 
     @Override
-    protected void execute(ExecutionContext executionContext) {
-        isisJdoSupport.executeUpdate("delete from ${symbol_escape}"simple${symbol_escape}".${symbol_escape}"SimpleObject${symbol_escape}"");
+    public String getAuthenticationMechanism() {
+        return "bypass";
     }
 
-
-    @javax.inject.Inject
-    private IsisJdoSupport isisJdoSupport;
-
+    @Override
+    public String getAuthorizationMechanism() {
+        return "bypass";
+    }
 }

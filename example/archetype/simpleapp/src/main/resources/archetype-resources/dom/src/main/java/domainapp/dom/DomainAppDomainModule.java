@@ -19,35 +19,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.dom.app.homepage;
+package domainapp.dom;
 
-import java.util.List;
+public final class DomainAppDomainModule {
 
-import org.apache.isis.applib.annotation.ViewModel;
 
-import domainapp.dom.modules.simple.SimpleObject;
-import domainapp.dom.modules.simple.SimpleObjects;
-
-@ViewModel
-public class HomePageViewModel {
-
-    //region > title
-    public String title() {
-        return getObjects().size() + " objects";
-    }
-    //endregion
-
-    //region > object (collection)
-    @org.apache.isis.applib.annotation.HomePage
-    public List<SimpleObject> getObjects() {
-        return simpleObjects.listAll();
-    }
-    //endregion
-
-    //region > injected services
-
-    @javax.inject.Inject
-    SimpleObjects simpleObjects;
-
-    //endregion
 }
