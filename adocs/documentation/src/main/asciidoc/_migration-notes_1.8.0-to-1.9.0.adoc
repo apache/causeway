@@ -18,6 +18,7 @@ include::_migration-notes_1.8.0-to-1.9.0_upgrading-to-java8.adoc[leveloffset=+1]
 include::_migration-notes_1.8.0-to-1.9.0_exception-recognizer.adoc[leveloffset=+1]
 include::_migration-notes_1.8.0-to-1.9.0_fixture-scripts-specification-provider.adoc[leveloffset=+1]
 include::_migration-notes_1.8.0-to-1.9.0_war-packaging.adoc[leveloffset=+1]
+include::_migration-notes_1.8.0-to-1.9.0_bootstrapping-using-AppManifest.adoc[leveloffset=+1]
 
 
 

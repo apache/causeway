@@ -33,10 +33,10 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 
 import domainapp.dom.simple.SimpleObject;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
-import domainapp.integtests.tests.SimpleAppIntegTest;
+import domainapp.integtests.tests.DomainAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectIntegTest extends SimpleAppIntegTest {
+public class SimpleObjectIntegTest extends DomainAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;

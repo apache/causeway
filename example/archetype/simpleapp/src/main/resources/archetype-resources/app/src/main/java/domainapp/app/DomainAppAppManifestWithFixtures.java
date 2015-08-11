@@ -19,26 +19,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.integtests.bootstrap;
+package domainapp.app;
 
-import org.apache.isis.core.integtestsupport.IsisSystemForTest;
-import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import domainapp.home.SimpleAppManifest;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-public class SimpleAppSystemInitializer {
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 
-    public static void initIsft() {
-        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
-        if(isft == null) {
-            isft = new IsisSystemForTest.Builder()
-                    .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new SimpleAppManifest())
-                    .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
-            IsisSystemForTest.set(isft);
-        }
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
+
+/**
+ * Run the app but without setting up any fixtures.
+ */
+public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
+
+    /**
+     * Fixtures to be installed.
+     */
+    @Override
+    public List<Class<? extends FixtureScript>> getFixtures() {
+        return Lists.newArrayList(RecreateSimpleObjects.class);
+    }
+
+    /**
+     * Force fixtures to be loaded.
+     */
+    @Override
+    public Map<String, String> getConfigurationProperties() {
+        HashMap<String,String> props = Maps.newHashMap();
+        props.put("isis.persistor.datanucleus.install-fixtures","true");
+        return props;
     }
 
 }

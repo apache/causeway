@@ -16,20 +16,40 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.home;
+package domainapp.app;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+
+import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
 /**
- * Bypasses security, meaning any user/password combination can be used to login.
+ * Run the app but without setting up any fixtures.
  */
-public class SimpleAppManifestBypassSecurity extends SimpleAppManifest {
+public class DomainAppAppManifestWithFixtures extends DomainAppAppManifest {
 
+    /**
+     * Fixtures to be installed.
+     */
     @Override
-    public String getAuthenticationMechanism() {
-        return "bypass";
+    public List<Class<? extends FixtureScript>> getFixtures() {
+        return Lists.newArrayList(RecreateSimpleObjects.class);
     }
 
+    /**
+     * Force fixtures to be loaded.
+     */
     @Override
-    public String getAuthorizationMechanism() {
-        return "bypass";
+    public Map<String, String> getConfigurationProperties() {
+        HashMap<String,String> props = Maps.newHashMap();
+        props.put("isis.persistor.datanucleus.install-fixtures","true");
+        return props;
     }
+
 }

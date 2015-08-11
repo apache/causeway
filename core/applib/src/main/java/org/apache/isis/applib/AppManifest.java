@@ -99,18 +99,8 @@ public interface AppManifest {
      *     <tt>isis.services.ServicesInstallerFromAnnotation.packagePrefix</tt> key (usually found in the
      *     <tt>isis.properties</tt> file) and the
      *     <tt>isis.persistor.datanucleus.RegisterEntities.packagePrefix</tt> key (usually found in the
-     *     <tt>persistor_datanucleus.properties</tt> file).
-     * </p>
-     *
-     * <p>
-     *     If a manifest has been provided then the value of <tt>isis.services-installer</tt> configuration property
-     *     will be ignored and the <tt>isis.services.ServicesInstallerFromAnnotation.packagePrefix</tt>
-     *     configuration property will be ignored.
-     * </p>
-     *
-     * <p>
-     *     Note: the class implementing this interface will typically include itself in the list of classes, so that any
-     *     "global" services (for example an application home page) are also picked up.
+     *     <tt>persistor_datanucleus.properties</tt> file).  The value of the <tt>isis.services-installer</tt>
+     *     configuration property is also ignored.
      * </p>
      */
     public List<Class<?>> getModules();
@@ -121,8 +111,8 @@ public interface AppManifest {
      * services defined via {@link #getModules()}.
      *
      * <p>
-     *     Normally we recommend services are defined exclusively through {@link #getModules()}, and that this metho
-     *     should return an empty list.  However, this method exists to support those use cases where either the
+     *     Normally we recommend services are defined exclusively through {@link #getModules()}, and that this method
+     *     should therefore return an empty list.  However, this method exists to support those use cases where either the
      *     service required does not have a {@link DomainService} annotation, or where it does have the annotation
      *     but its containing module cannot (for whatever reason) be listed under {@link #getModules()}.
      * </p>

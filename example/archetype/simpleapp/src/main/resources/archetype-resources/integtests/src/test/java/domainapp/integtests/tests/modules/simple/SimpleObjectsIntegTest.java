@@ -40,10 +40,10 @@ import domainapp.dom.simple.SimpleObject;
 import domainapp.dom.simple.SimpleObjects;
 import domainapp.fixture.dom.simple.SimpleObjectsTearDown;
 import domainapp.fixture.scenarios.RecreateSimpleObjects;
-import domainapp.integtests.tests.SimpleAppIntegTest;
+import domainapp.integtests.tests.DomainAppIntegTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleObjectsIntegTest extends SimpleAppIntegTest {
+public class SimpleObjectsIntegTest extends DomainAppIntegTest {
 
     @Inject
     FixtureScripts fixtureScripts;

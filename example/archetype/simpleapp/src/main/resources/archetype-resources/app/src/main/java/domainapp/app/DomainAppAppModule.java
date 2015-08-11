@@ -19,21 +19,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.home;
+package domainapp.app;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.isis.applib.fixturescripts.FixtureScript;
-
-/**
- * Run the app but without setting up any fixtures.
- */
-public class SimpleAppManifestNoFixtures extends SimpleAppManifest {
-
-    @Override
-    public List<Class<? extends FixtureScript>> getFixtures() {
-        return Collections.emptyList();
-    }
-
+public final class DomainAppAppModule {
+    private DomainAppAppModule(){}
 }

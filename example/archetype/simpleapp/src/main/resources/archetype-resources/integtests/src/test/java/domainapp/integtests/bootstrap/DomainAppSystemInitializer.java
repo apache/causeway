@@ -19,35 +19,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.home.services.homepage;
+package domainapp.integtests.bootstrap;
 
-import java.util.List;
+import org.apache.isis.core.integtestsupport.IsisSystemForTest;
+import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
-import org.apache.isis.applib.annotation.ViewModel;
+import domainapp.app.DomainAppAppManifest;
 
-import domainapp.dom.simple.SimpleObject;
-import domainapp.dom.simple.SimpleObjects;
+public class DomainAppSystemInitializer {
 
-@ViewModel
-public class HomePageViewModel {
-
-    //region > title
-    public String title() {
-        return getObjects().size() + " objects";
+    public static void initIsft() {
+        IsisSystemForTest isft = IsisSystemForTest.getElseNull();
+        if(isft == null) {
+            isft = new IsisSystemForTest.Builder()
+                    .withLoggingAt(org.apache.log4j.Level.INFO)
+                    .with(new DomainAppAppManifest())
+                    .with(new IsisConfigurationForJdoIntegTests())
+                    .build()
+                    .setUpSystem();
+            IsisSystemForTest.set(isft);
+        }
     }
-    //endregion
 
-    //region > object (collection)
-    @org.apache.isis.applib.annotation.HomePage
-    public List<SimpleObject> getObjects() {
-        return simpleObjects.listAll();
-    }
-    //endregion
-
-    //region > injected services
-
-    @javax.inject.Inject
-    SimpleObjects simpleObjects;
-
-    //endregion
 }

@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -16,24 +19,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.integtests.tests;
+package domainapp.app;
 
-import org.junit.BeforeClass;
+/**
+ * Bypasses security, meaning any user/password combination can be used to login.
+ */
+public class DomainAppAppManifestBypassSecurity extends DomainAppAppManifest {
 
-import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
-import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
-
-import domainapp.integtests.bootstrap.SimpleAppSystemInitializer;
-
-public abstract class SimpleAppIntegTest extends IntegrationTestAbstract {
-
-    @BeforeClass
-    public static void initClass() {
-        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
-        SimpleAppSystemInitializer.initIsft();
-
-        // instantiating will install onto ThreadLocal
-        new ScenarioExecutionForIntegration();
+    @Override
+    public String getAuthenticationMechanism() {
+        return "bypass";
     }
 
+    @Override
+    public String getAuthorizationMechanism() {
+        return "bypass";
+    }
 }

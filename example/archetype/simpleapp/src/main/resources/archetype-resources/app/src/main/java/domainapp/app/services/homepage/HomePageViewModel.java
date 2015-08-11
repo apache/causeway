@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -16,7 +19,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.home.services.homepage;
+package domainapp.app.services.homepage;
 
 import java.util.List;
 

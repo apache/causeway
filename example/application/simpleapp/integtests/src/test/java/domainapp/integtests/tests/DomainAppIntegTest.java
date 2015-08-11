@@ -1,6 +1,3 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -26,14 +23,14 @@ import org.junit.BeforeClass;
 import org.apache.isis.core.integtestsupport.IntegrationTestAbstract;
 import org.apache.isis.core.integtestsupport.scenarios.ScenarioExecutionForIntegration;
 
-import domainapp.integtests.bootstrap.SimpleAppSystemInitializer;
+import domainapp.integtests.bootstrap.DomainAppSystemInitializer;
 
-public abstract class SimpleAppIntegTest extends IntegrationTestAbstract {
+public abstract class DomainAppIntegTest extends IntegrationTestAbstract {
 
     @BeforeClass
     public static void initClass() {
         org.apache.log4j.PropertyConfigurator.configure("logging.properties");
-        SimpleAppSystemInitializer.initIsft();
+        DomainAppSystemInitializer.initIsft();
 
         // instantiating will install onto ThreadLocal
         new ScenarioExecutionForIntegration();

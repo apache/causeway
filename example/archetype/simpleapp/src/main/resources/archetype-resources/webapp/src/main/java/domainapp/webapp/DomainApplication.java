@@ -34,14 +34,12 @@ import com.google.inject.name.Names;
 import com.google.inject.util.Modules;
 import com.google.inject.util.Providers;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketApplication;
 
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.IBootstrapSettings;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
 import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-import domainapp.home.SimpleAppManifest;
 
 /**
  * As specified in <tt>web.xml</tt>.
@@ -54,16 +52,15 @@ import domainapp.home.SimpleAppManifest;
  *    &lt;filter-class>org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class>
  *    &lt;init-param>
  *      &lt;param-name>applicationClassName&lt;/param-name>
- *      &lt;param-value>webapp.SimpleApplication&lt;/param-value>
+ *      &lt;param-value>domainapp.webapp.DomainApplication&lt;/param-value>
  *    &lt;/init-param>
  * &lt;/filter>
  * </pre>
  * 
  */
-public class SimpleApplication extends IsisWicketApplication {
+public class DomainApplication extends IsisWicketApplication {
 
     private static final long serialVersionUID = 1L;
-
 
     @Override
     protected void init() {
@@ -88,7 +85,7 @@ public class SimpleApplication extends IsisWicketApplication {
                 bind(InputStream.class).annotatedWith(Names.named("metaInfManifest")).toProvider(
                         Providers.of(getServletContext().getResourceAsStream("/META-INF/MANIFEST.MF")));
                 // if uncommented, then overrides isis.appManifest in config file.
-                // bind(AppManifest.class).toInstance(new SimpleAppManifest());
+                // bind(AppManifest.class).toInstance(new DomainAppAppManifest());
             }
         };
 

@@ -21,16 +21,16 @@ package domainapp.integtests.bootstrap;
 import org.apache.isis.core.integtestsupport.IsisSystemForTest;
 import org.apache.isis.objectstore.jdo.datanucleus.IsisConfigurationForJdoIntegTests;
 
-import domainapp.home.SimpleAppManifest;
+import domainapp.app.DomainAppAppManifest;
 
-public class SimpleAppSystemInitializer {
+public class DomainAppSystemInitializer {
 
     public static void initIsft() {
         IsisSystemForTest isft = IsisSystemForTest.getElseNull();
         if(isft == null) {
             isft = new IsisSystemForTest.Builder()
                     .withLoggingAt(org.apache.log4j.Level.INFO)
-                    .with(new SimpleAppManifest())
+                    .with(new DomainAppAppManifest())
                     .with(new IsisConfigurationForJdoIntegTests())
                     .build()
                     .setUpSystem();

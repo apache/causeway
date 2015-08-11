@@ -1,6 +1,3 @@
-#set( $symbol_pound = '#' )
-#set( $symbol_dollar = '$' )
-#set( $symbol_escape = '\' )
 /*
  *  Licensed to the Apache Software Foundation (ASF) under one
  *  or more contributor license agreements.  See the NOTICE file
@@ -19,26 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package domainapp.home;
+package domainapp.app;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.Lists;
-
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 
 import domainapp.dom.DomainAppDomainModule;
 import domainapp.fixture.DomainAppFixtureModule;
-import domainapp.fixture.scenarios.RecreateSimpleObjects;
 
 /**
  * Bootstrap the application.
  */
-public class SimpleAppManifest implements AppManifest {
+public class DomainAppAppManifest implements AppManifest {
 
     /**
      * Load all services and entities found in (the packages and subpackages within) these modules
@@ -48,7 +42,7 @@ public class SimpleAppManifest implements AppManifest {
         return Arrays.asList(
                 DomainAppDomainModule.class,  // domain (entities and repositories)
                 DomainAppFixtureModule.class, // fixtures
-                SimpleAppManifest.class       // home page service
+                DomainAppAppModule.class      // home page service etc
         );
     }
 
@@ -85,15 +79,15 @@ public class SimpleAppManifest implements AppManifest {
     }
 
     /**
-     * Run these fixtures.
+     * No fixtures.
      */
     @Override
     public List<Class<? extends FixtureScript>> getFixtures() {
-        return Lists.newArrayList(RecreateSimpleObjects.class);
+        return Collections.emptyList();
     }
 
     /**
-     * No additional overrides
+     * No overrides.
      */
     @Override
     public Map<String, String> getConfigurationProperties() {
