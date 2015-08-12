@@ -15,7 +15,7 @@ This guide also documents the domain services, both those that act as an xref:rg
 
 Also part of the reference manual are the details of how to influence the xref:rg.adoc#_rg_object-layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it catalogues all the various xref:rg.adoc#_rg_runtime[configuration properties] available that influence the behaviour of the framework and the API domain services.
 
-This reference guide does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.  The reference guide also does _not_ explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
+This reference guide does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.  The reference guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
 
 
 

@@ -88,11 +88,23 @@ See xref:ug.adoc#_ug_extending_programming-model_custom-validator[Custom Validat
 | `true`,`false` (`true`)
 | Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
 
+
+|`isis.services.` +
+`ServicesInstallerFromAnnotation.` +
+`packagePrefix`
+|fully qualified package names (CSV)
+|to search for domain services (including all subpackages).
+
+This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+
+
 |`isis.services`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated as domain services.  +
 
 Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+
+This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -120,7 +132,8 @@ Each entry can be optionally prefixed by "n:" specifying the relative order on t
 
 
 
-|`ContentNegotiation-` +
+|`isis.services.` +
+`ContentNegotiation-` +
 `ServiceXRoDomainType` +
 .prettyPrint
 | `true`,`false` (depends)

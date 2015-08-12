@@ -89,6 +89,8 @@ private static class DomainAppSystemBuilder extends IsisSystemForTest.Builder { 
 <5> equivalent to `isis.persistor.datanucleus.RegisterEntities.packagePrefix` key (typically in `persistor_datanucleus.properties`)
 
 
+
+
 This builder could then be used within the system initializer:
 
 [source,java]

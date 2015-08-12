@@ -27,9 +27,11 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 
 |`isis.persistor.datanucleus.` +
 `RegisterEntities.packagePrefix`
-| fully qualified package names (CSV)
-| of class names; specifies the entities early rather than allow DataNucleus to find the entities lazily.  Strongly recommended (subtle issues can sometimes arise if lazy discovery is used).
-Further xref:rg.adoc#_rg_runtime_configuring-datanucleus_eagerly-registering-entities[discussion below].
+|fully qualified package names (CSV)
+|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:rg.adoc#_rg_runtime_configuring-datanucleus_eagerly-registering-entities[discussion below].
+
+This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+
 
 |`isis.persistor.datanucleus.` +
 `PublishingService.serializedForm`

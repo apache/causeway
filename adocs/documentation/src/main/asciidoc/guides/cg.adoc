@@ -17,7 +17,7 @@ This contributors' guide has three related audiences:
 
 * committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
 
-The developer' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.
+The developer' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also doesn't describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.
 
 
 include::_cg_ide.adoc[leveloffset=+1]

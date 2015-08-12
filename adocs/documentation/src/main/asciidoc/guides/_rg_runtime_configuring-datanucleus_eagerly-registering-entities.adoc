@@ -4,41 +4,20 @@
 :_basedir: ../
 :_imagesdir: images/
 
-Both Apache Isis and DataNucleus have their own metamodels of the domain entities. Apache Isis builds its metamodel by walking the graph of types from the services registered using `@DomainService` or explicitly registered in `isis.properties`. The JDO objectstore then takes these types and registers them with DataNucleus.
+
+
+Both Apache Isis and DataNucleus have their own metamodels of the domain entities. Apache Isis builds its metamodel by walking the graph of types of the domain services.  The JDO/DataNucleus objectstore then takes these types and registers them with DataNucleus.
 
 In some cases, though, not every entity type is discoverable from the API of the service actions. This is especially the case if you have lots of subtypes (where the action method specifies only the supertype). In such cases the Isis and JDO metamodels is built lazily, when an instance of that (sub)type is first encountered.
 
-Isis is quite happy for the metamodel to be lazily created, and - to be fair - DataNucleus also works well in most cases. In some cases, though, we have found that the JDBC driver (eg HSQLDB) will deadlock if DataNucleus tries to submit some DDL (for a lazily discovered type) intermingled with DML (for updating).
+Apache Isis is quite happy for the metamodel to be lazily created, and - to be fair - DataNucleus also works well in most cases. In some cases, though, we have found that the JDBC driver (eg HSQLDB) will deadlock if DataNucleus tries to submit some DDL (for a lazily discovered type) intermingled with DML (for updating).  In any case, it's probably not good practice to have DataNucleus work this way.
 
-In any case, it's probably not good practice to have DataNucleus work this way. The `RegisterEntities` service can therefore be registered in order to do the eager registration. It searches for all `@PersistenceCapable` entities under specified package(s), and registers them all.
+The framework thus provide mechanisms to search for all `@PersistenceCapable` entities under specified package(s), and registers them all eagerly.  In fact there are two:
 
-[WARNING]
-====
-There's a chance that (from 1.6.0+) feature may be (partly?) broken; see https://issues.apache.org/jira/browse/ISIS-847[ISIS-847].
-====
+* as of 1.9.0 the recommended (and simpler) approach is to specify an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`], either as a xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property or programmatically.
 
+* for earlier versions the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` configuration property can be specified.  To bootstrap as a webapp this is usually specified in `persistor_datanucleus.properties`.  (This is also supported in 1.9.0 if no `AppManifest` is specified.  For integration testing this can be specified programatically.
 
-== Specify the Package Prefix(es)
-
-In the `persistor_datanucleus.properties`, specify the package prefix(es) of your application, to provide a hint for finding the `@PersistenceCapable` classes.
-
-The value of this property can be a comma-separated list (if there is more than one package or Maven module that holds persistable entities).
+Further discussion on specifying the package(s) in integration testing (for either approach) can be found in the xref:ug.adoc#_ug_testing_integ-test-support_bootstrapping[user guide].
 
 
-== Integration Testing
-
-The `IsisConfigurationForJdoIntegTests`, recommended for use in xref:ug.adoc#_ug_testing_integ-test-support[Integration Testing] provides the `#addRegisterEntitiesPackagePrefix()` method to set up this configuration property:
-
-[source,java]
-.Integration test bootstrapping
-----
-private static class SimpleAppSystemBuilder extends IsisSystemForTest.Builder {
-    ...
-    private static IsisConfiguration testConfiguration() {
-        final IsisConfigurationForJdoIntegTests testConfiguration = new IsisConfigurationForJdoIntegTests();
-        testConfiguration.addRegisterEntitiesPackagePrefix("domainapp.dom.modules"); // <1>
-        return testConfiguration;
-    }
-}
-----
-<1> specify the package prefix(es) for integration testing.
