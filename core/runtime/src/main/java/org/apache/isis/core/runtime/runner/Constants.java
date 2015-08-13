@@ -38,11 +38,11 @@ public final class Constants {
     public static final String REFLECTOR_OPT = "l";
     public static final String REFLECTOR_LONG_OPT = ObjectReflectorInstaller.TYPE;
 
-    public static final String OBJECT_PERSISTENCE_OPT = "r";
-    public static final String OBJECT_PERSISTENCE_LONG_OPT = PersistenceMechanismInstaller.TYPE;
-
     public static final String CONFIGURATION_OPT = "c";
     public static final String CONFIGURATION_LONG_OPT = "config";
+
+    public static final String APP_MANIFEST_OPT = "m";
+    public static final String APP_MANIFEST_LONG_OPT = "manifest";
 
     public static final String FIXTURE_OPT = "f";
     public static final String FIXTURE_LONG_OPT = "fixture";
