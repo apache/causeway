@@ -37,6 +37,7 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -89,35 +90,38 @@ public class RegisterEntities {
     }
 
     private static Set<String> scanForEntityTypesIn(final List<String> domPackages, final boolean appManifestSpecified) {
+
         final Set<String> entityTypes = Sets.newLinkedHashSet();
-        for (final String packageName : domPackages) {
-            Reflections reflections = new Reflections(packageName);
 
-            final Set<Class<?>> entityTypesInPackage =
-                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
+        Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
+        if(persistenceCapableTypes == null) {
+            // if no appManifest
+            persistenceCapableTypes = Sets.newLinkedHashSet();
 
-            if(!entitiesIn(entityTypesInPackage)) {
+            for (final String packageName : domPackages) {
+                Reflections reflections = new Reflections(packageName);
+                final Set<Class<?>> entityTypesInPackage =
+                        reflections.getTypesAnnotatedWith(PersistenceCapable.class);
 
-                if(appManifestSpecified) {
-                    if(LOG.isDebugEnabled()) {
-                        LOG.debug("Could not locate any @PersistenceCapable entities in module '%s'; ignoring\n", packageName);
-                    }
-                } else {
+                if(!entitiesIn(entityTypesInPackage)) {
                     throw new IllegalArgumentException(String.format(
                             "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
                                     "Check value of '%s' key in WEB-INF/*.properties\n",
                             packageName,
                             PACKAGE_PREFIX_KEY));
                 }
-            }
-            for (Class<?> entityType : entityTypesInPackage) {
-                if(ignore(entityType)) {
-                    continue;
-                }
-                entityTypes.add(entityType.getCanonicalName());
+                persistenceCapableTypes.addAll(entityTypesInPackage);
             }
         }
+
+        for (Class<?> persistenceCapableType : persistenceCapableTypes) {
+            if(ignore(persistenceCapableType)) {
+                continue;
+            }
+            entityTypes.add(persistenceCapableType.getCanonicalName());
+        }
         return entityTypes;
+
     }
 
     private static boolean ignore(final Class<?> entityType) {

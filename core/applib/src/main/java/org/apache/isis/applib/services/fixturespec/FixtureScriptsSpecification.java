@@ -45,7 +45,7 @@ public class FixtureScriptsSpecification {
     /**
      * Typically preferable to use the create using the {@link FixtureScriptsSpecification.Builder}
      * (obtained from {@link #builder(Class)}).
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
      * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}.
      * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
      * @param runScriptDefaultScriptClass - the fixture script to provide as a default in {@link FixtureScripts#runFixtureScript(FixtureScript, String)} action.
@@ -75,6 +75,9 @@ public class FixtureScriptsSpecification {
     private final Class<? extends FixtureScript> runScriptDefaultScriptClass;
     private final DropDownPolicy dropDownPolicy;
 
+    /**
+     * Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
+     */
     @Programmatic
     public String getPackagePrefix() {
         return packagePrefix;

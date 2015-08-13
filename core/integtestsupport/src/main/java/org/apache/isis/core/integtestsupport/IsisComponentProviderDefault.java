@@ -81,8 +81,8 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
         final String fixtureClassNamesCsv;
         if(appManifest != null) {
 
-            putAppManifestKey();
-
+            putAppManifestKey(appManifest);
+            registerPackageNames(appManifest);
             specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();

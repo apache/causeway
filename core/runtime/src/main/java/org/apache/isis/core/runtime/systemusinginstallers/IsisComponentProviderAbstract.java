@@ -19,16 +19,26 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
+import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import org.reflections.Reflections;
+import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -83,15 +93,12 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
 
     }
 
-    protected void putAppManifestKey() {
-        if (this.appManifest == null) {
-            return;
-        }
+    protected void putAppManifestKey(final AppManifest appManifest) {
         // required to prevent RegisterEntities validation from complaining
         // if it can't find any @PersistenceCapable entities in a module
         // that contains only services.
         putConfigurationProperty(
-                SystemConstants.APP_MANIFEST_KEY, this.appManifest.getClass().getName()
+                SystemConstants.APP_MANIFEST_KEY, appManifest.getClass().getName()
         );
     }
 
@@ -109,7 +116,8 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
 
     //region > appManifest helpers
     protected void specifyServicesAndRegisteredEntitiesUsing(final AppManifest appManifest) {
-        final String packageNamesCsv = modulePackageNamesFrom(appManifest);
+        final Iterable<String> packageNames = modulePackageNamesFrom(appManifest);
+        final String packageNamesCsv = Joiner.on(',').join(packageNames);
 
         putConfigurationProperty(ServicesInstallerFromAnnotation.PACKAGE_PREFIX_KEY, packageNamesCsv);
         putConfigurationProperty(RegisterEntities.PACKAGE_PREFIX_KEY, packageNamesCsv);
@@ -120,16 +128,34 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
         }
     }
 
+    protected void registerPackageNames(final AppManifest appManifest) {
+        final Iterable<String> packageNameList = modulePackageNamesFrom(appManifest);
+        final AppManifest.Registry registry = AppManifest.Registry.instance();
 
-    private String modulePackageNamesFrom(final AppManifest appManifest) {
+        final List<String> packages = Lists.newArrayList();
+        packages.addAll(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
+        Iterables.addAll(packages, packageNameList);
+
+        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
+
+        final Reflections reflections = new Reflections(packages);
+        final Set<Class<?>> domainServiceTypes = reflections.getTypesAnnotatedWith(DomainService.class);
+        final Set<Class<?>> persistenceCapableTypes = reflections.getTypesAnnotatedWith(PersistenceCapable.class);
+        final Set<Class<? extends FixtureScript>> fixtureScriptTypes = reflections.getSubTypesOf(FixtureScript.class);
+
+        registry.setDomainServiceTypes(domainServiceTypes);
+        registry.setPersistenceCapableTypes(persistenceCapableTypes);
+        registry.setFixtureScriptTypes(fixtureScriptTypes);
+    }
+
+    private Iterable<String> modulePackageNamesFrom(final AppManifest appManifest) {
         List<Class<?>> modules = appManifest.getModules();
         if (modules == null || modules.isEmpty()) {
             throw new IllegalArgumentException(
                     "If an appManifest is provided then it must return a non-empty set of modules");
         }
 
-        final Iterable<String> iter = Iterables.transform(modules, ClassUtil.Functions.packageNameOf());
-        return Joiner.on(',').join(iter);
+        return Iterables.transform(modules, ClassUtil.Functions.packageNameOf());
     }
 
     protected String classNamesFrom(final List<?> objectsOrClasses) {

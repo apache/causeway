@@ -125,7 +125,7 @@ public abstract class FixtureScripts extends AbstractService {
      * defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
      * if multiple instances of the same fixture script class are encountered.
      *
-     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
+     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".  Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
      *
      * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
      */
@@ -139,7 +139,7 @@ public abstract class FixtureScripts extends AbstractService {
      * Defaults to {@link FixtureScripts.NonPersistedObjectsStrategy#PERSIST persist}
      * strategy (if non-persisted objects are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}).
      *
-     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany"
+     * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
      * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
      *
      * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
@@ -157,7 +157,7 @@ public abstract class FixtureScripts extends AbstractService {
      * Defaults {@link #getMultipleExecutionStrategy()} to {@link FixtureScripts.MultipleExecutionStrategy#IGNORE ignore}
      * if multiple instances of the same fixture script class are encountered.
      *
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
      * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
      *
      * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
@@ -171,7 +171,7 @@ public abstract class FixtureScripts extends AbstractService {
     }
 
     /**
-     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany"
+     * @param packagePrefix  - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
      * @param nonPersistedObjectsStrategy - how to handle any non-persisted objects that are {@link #newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link org.apache.isis.applib.fixturescripts.FixtureResultList}.
      * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
      *
@@ -271,7 +271,7 @@ public abstract class FixtureScripts extends AbstractService {
         Collections.sort(fixtureScripts, new Comparator<FixtureScript>() {
             @Override
             public int compare(final FixtureScript o1, final FixtureScript o2) {
-                return ObjectContracts.compare(o1, o2, "friendlyName,qualifiedName");
+                return ObjectContracts.compare(o1, o2, "friendlyName","qualifiedName");
             }
         });
         return fixtureScripts;
@@ -346,6 +346,7 @@ public abstract class FixtureScripts extends AbstractService {
                     public boolean apply(final FixtureScript input) {
                         return contains(input.getFriendlyName()) || contains(input.getLocalName());
                     }
+
                     private boolean contains(final String str) {
                         return str != null && str.contains(arg);
                     }

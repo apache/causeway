@@ -26,6 +26,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 
 import javax.annotation.PreDestroy;
+import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
@@ -37,12 +38,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.reflections.Reflections;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import org.reflections.vfs.Vfs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 
 import static com.google.common.base.Predicates.and;
@@ -67,16 +74,7 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
      *     with the first service found used.
      * </p>
      */
-    public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(
-                                        "org.apache.isis.applib",
-                                        "org.apache.isis.core.wrapper" ,
-                                        "org.apache.isis.core.metamodel.services" ,
-                                        "org.apache.isis.core.runtime.services" ,
-                                        "org.apache.isis.objectstore.jdo.applib.service" ,
-                                        "org.apache.isis.viewer.restfulobjects.rendering.service" ,
-                                        "org.apache.isis.objectstore.jdo.datanucleus.service.support" ,
-                                        "org.apache.isis.objectstore.jdo.datanucleus.service.eventbus" ,
-                                        "org.apache.isis.viewer.wicket.viewer.services");
+    public final static String PACKAGE_PREFIX_STANDARD = Joiner.on(",").join(AppManifest.Registry.FRAMEWORK_PROVIDED_SERVICES);
 
     private final ServiceInstantiator serviceInstantiator;
 
@@ -206,11 +204,15 @@ public class ServicesInstallerFromAnnotation extends ServicesInstallerAbstract {
 
         final List<String> packagePrefixList = asList(packagePrefixes);
 
-        Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
-        final Reflections reflections = new Reflections(packagePrefixList);
+        Set<Class<?>> domainServiceTypes = AppManifest.Registry.instance().getDomainServiceTypes();
+        if(domainServiceTypes == null) {
+            // if no appManifest
+            Vfs.setDefaultURLTypes(ClassDiscoveryServiceUsingReflections.getUrlTypes());
+            final Reflections reflections = new Reflections(packagePrefixList);
+            domainServiceTypes = reflections.getTypesAnnotatedWith(DomainService.class);
+        }
 
-        final Set<Class<?>> typesAnnotatedWith = reflections.getTypesAnnotatedWith(DomainService.class);
-        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(typesAnnotatedWith, instantiatable()));
+        final List<Class<?>> domainServiceClasses = Lists.newArrayList(Iterables.filter(domainServiceTypes, instantiatable()));
         for (final Class<?> cls : domainServiceClasses) {
 
             final String order = orderOf(cls);
