@@ -360,6 +360,19 @@ public abstract class FixtureScripts extends AbstractService {
 
     //endregion
 
+    //region > programmatic API
+    @Programmatic
+    public FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
+        final List<FixtureScript> fixtureScripts = getFixtureScriptList();
+        for (final FixtureScript fs : fixtureScripts) {
+            if(fixtureScriptClass.isAssignableFrom(fs.getClass())) {
+                return fs;
+            }
+        }
+        return null;
+    }
+    //endregion
+
     //region > hooks
 
     /**
@@ -369,18 +382,6 @@ public abstract class FixtureScripts extends AbstractService {
         final List<FixtureScript> fixtureScripts = getFixtureScriptList();
         for (final FixtureScript fs : fixtureScripts) {
             if(fs.getQualifiedName().contains(qualifiedName)) {
-                return fs;
-            }
-        }
-        return null;
-    }
-    /**
-     * Optional hook.
-     */
-    protected FixtureScript findFixtureScriptFor(final Class<? extends FixtureScript> fixtureScriptClass) {
-        final List<FixtureScript> fixtureScripts = getFixtureScriptList();
-        for (final FixtureScript fs : fixtureScripts) {
-            if(fixtureScriptClass.isAssignableFrom(fs.getClass())) {
                 return fs;
             }
         }
