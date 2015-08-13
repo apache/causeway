@@ -246,7 +246,8 @@ public abstract class FixtureScripts extends AbstractService {
     //region > fixtureScriptList (lazily built)
 
     private List<FixtureScript> fixtureScriptList;
-    private List<FixtureScript> getFixtureScriptList() {
+    @Programmatic
+    public List<FixtureScript> getFixtureScriptList() {
         if(fixtureScriptList == null) {
             fixtureScriptList = findAndInstantiateFixtureScripts();
         }
@@ -372,6 +373,16 @@ public abstract class FixtureScripts extends AbstractService {
         }
         return null;
     }
+
+    @Programmatic
+    public FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
+        final ExecutionParameters executionParameters =
+                executionParametersService != null
+                        ? executionParametersService.newExecutionParameters(parameters)
+                        : new ExecutionParameters(parameters);
+        return FixtureScript.ExecutionContext.create(executionParameters, this);
+    }
+
     //endregion
 
     //region > hooks
@@ -389,16 +400,6 @@ public abstract class FixtureScripts extends AbstractService {
         return null;
     }
 
-    /**
-     * Optional hook.
-     */
-    protected FixtureScript.ExecutionContext newExecutionContext(final String parameters) {
-        final ExecutionParameters executionParameters =
-                executionParametersService != null
-                        ? executionParametersService.newExecutionParameters(parameters)
-                        : new ExecutionParameters(parameters);
-        return FixtureScript.ExecutionContext.create(executionParameters, this);
-    }
 
 
     //endregion
