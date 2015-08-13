@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 import java.util.List;
 import com.google.common.collect.Lists;
@@ -219,7 +220,14 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             final ObjectAction action = actionModel.getActionMemento().getAction();
             ActionSemantics.Of semantics = action.getSemantics();
             if (semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE || semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) {
-                button.add(new ConfirmationBehavior());
+                ConfirmationConfig confirmationConfig = new ConfirmationConfig();
+                // TODO ISIS-1007 Use i18n for the title and the labels
+                confirmationConfig.withTitle("Are you sure?");
+                confirmationConfig.withBtnOkLabel("Confirm");
+                confirmationConfig.withBtnCancelLabel("Cancel");
+                confirmationConfig.withBtnOkClass("btn btn-danger");
+                confirmationConfig.withBtnCancelClass("btn btn-default");
+                button.add(new ConfirmationBehavior(confirmationConfig));
             }
         }
 
