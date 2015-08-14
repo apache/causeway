@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -179,8 +180,12 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     }
 
     @Override
-    public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
-        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter);
+    public ObjectAdapter[][] getChoices(
+            final ObjectAdapter target,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter, authenticationSession,
+                deploymentCategory);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
         

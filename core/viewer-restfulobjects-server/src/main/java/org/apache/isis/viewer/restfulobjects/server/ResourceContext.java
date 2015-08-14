@@ -43,17 +43,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext2 {
+public class ResourceContext implements RendererContext3 {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -73,7 +74,9 @@ public class ResourceContext implements RendererContext2 {
     private List<List<String>> followLinks;
 
     private final Where where;
+    private final DeploymentType deploymentType;
     private final String urlUnencodedQueryString;
+
     private JsonRepresentation readQueryStringAsMap;
 
     //region > constructor and init
@@ -94,7 +97,8 @@ public class ResourceContext implements RendererContext2 {
             final PersistenceSession persistenceSession,
             final AdapterManager objectAdapterLookup,
             final SpecificationLoader specificationLookup,
-            final IsisConfiguration configuration) {
+            final IsisConfiguration configuration,
+            final DeploymentType deploymentType) {
 
         this.httpHeaders = httpHeaders;
         this.providers = providers;
@@ -111,6 +115,7 @@ public class ResourceContext implements RendererContext2 {
         this.adapterManager = objectAdapterLookup;
         this.specificationLookup = specificationLookup;
         this.where = where;
+        this.deploymentType = deploymentType;
 
         init(representationType);
     }
@@ -253,6 +258,10 @@ public class ResourceContext implements RendererContext2 {
 
     public SecurityContext getSecurityContext() {
         return securityContext;
+    }
+
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
     }
 
     @Override

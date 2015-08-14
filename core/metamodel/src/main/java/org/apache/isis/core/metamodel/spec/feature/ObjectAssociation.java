@@ -34,6 +34,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -68,7 +69,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from.
      */
-    public ObjectAdapter[] getChoices(ObjectAdapter object);
+    public ObjectAdapter[] getChoices(
+            ObjectAdapter object,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 
 
     /**
@@ -80,7 +84,11 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns a list of possible references/values for this field, which the
      * user can choose from, based on the provided search argument.
      */
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg);
+    public ObjectAdapter[] getAutoComplete(
+            final ObjectAdapter object,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 
     int getAutoCompleteMinLength();
 

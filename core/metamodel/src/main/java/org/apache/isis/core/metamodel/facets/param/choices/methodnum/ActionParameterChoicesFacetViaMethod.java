@@ -23,22 +23,32 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 
 public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
 
-    public ActionParameterChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
+    public ActionParameterChoicesFacetViaMethod(
+            final Method method,
+            final Class<?> choicesType,
+            final FacetHolder holder,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager) {
         super(holder, specificationLookup, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
@@ -69,17 +79,30 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
-        final Object choices = ObjectAdapter.InvokeUtils.invokeAutofit(method, adapter, argumentsIfAvailable, getAdapterManager());
+    public Object[] getChoices(
+            final ObjectAdapter adapter,
+            final List<ObjectAdapter> argumentsIfAvailable,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        final Object choices =
+                ObjectAdapter.InvokeUtils.invokeAutofit(
+                    method, adapter, argumentsIfAvailable, getAdapterManager());
         if (choices == null) {
             return new Object[0];
         }
-        if (choices.getClass().isArray()) {
-            return ObjectExtensions.asArray(choices);
-        } else {
-            final ObjectSpecification specification = getSpecification(choicesType);
-            return CollectionUtils.getCollectionAsObjectArray(choices, specification, getAdapterManager());
-        }
+        final ObjectAdapter objectAdapter = getAdapterManager().adapterFor(choices);
+        final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
+        final Class<?> parameterType = facetedMethodParameter.getType();
+        final List<ObjectAdapter> visibleAdapters =
+                ObjectAdapter.Util.visibleAdapters(
+                        objectAdapter, parameterType,
+                        authenticationSession, deploymentCategory,
+                        getSpecificationLookup());
+        final List<Object> visibleObjects = Lists.newArrayList(
+                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+
+        final ObjectSpecification parameterSpec = getSpecification(parameterType);
+        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getAdapterManager());
     }
 
     @Override

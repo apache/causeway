@@ -28,8 +28,10 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.marker.Bounded;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -109,14 +111,20 @@ public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract impl
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
-    public Object[] getChoices(ObjectAdapter adapter) {
+    public Object[] getChoices(
+            ObjectAdapter adapter,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final Query query = new QueryFindAllInstances(getObjectSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-        final List<ObjectAdapter> adapters = Lists.newArrayList(allInstancesAdapter.iterator());
+
+        final List<ObjectAdapter> adapters =
+                ObjectAdapter.Util.visibleAdapters(
+                    allInstancesAdapter, getObjectSpecification(), authenticationSession, deploymentCategory);
+
         final List<Object> pojos = Lists.transform(adapters, ObjectAdapter.Functions.getObject());
         return Lists.newArrayList(pojos).toArray();
     }
-
 
 
 }

@@ -31,11 +31,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -50,12 +51,12 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context2 {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context3 {
 
-        private final RendererContext2 rendererContext;
+        private final RendererContext3 rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
 
-        RepresentationServiceContextAdapter(final RendererContext2 rendererContext, final ObjectAdapterLinkTo adapterLinkTo) {
+        RepresentationServiceContextAdapter(final RendererContext3 rendererContext, final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
         }
@@ -93,6 +94,11 @@ public class DomainResourceHelper {
         @Override
         public Where getWhere() {
             return rendererContext.getWhere();
+        }
+
+        @Override
+        public DeploymentType getDeploymentType() {
+            return rendererContext.getDeploymentType();
         }
 
         @Override

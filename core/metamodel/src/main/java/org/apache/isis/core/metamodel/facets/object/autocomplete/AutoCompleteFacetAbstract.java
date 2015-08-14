@@ -22,12 +22,14 @@ package org.apache.isis.core.metamodel.facets.object.autocomplete;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -68,7 +70,10 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     }
 
     @Override
-    public List<ObjectAdapter> execute(final String search) {
+    public List<ObjectAdapter> execute(
+            final String search,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
 
         cacheRepositoryAndRepositoryActionIfRequired();
         if(repositoryAction == null || repository == null) {
@@ -79,11 +84,15 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
         final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter} );
         // check a collection was returned
-        if(CollectionFacetUtils.getCollectionFacetFromSpec(resultAdapter) == null) {
+        if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
             return Collections.emptyList();
         }
-        return CollectionFacetUtils.convertToAdapterList(resultAdapter);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
+        final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+        return ObjectAdapter.Util.visibleAdapters(
+                        adapterList, getFacetHolder(), authenticationSession, deploymentCategory);
     }
+
 
     private void cacheRepositoryAndRepositoryActionIfRequired() {
         if(!cachedRepositoryAction) {

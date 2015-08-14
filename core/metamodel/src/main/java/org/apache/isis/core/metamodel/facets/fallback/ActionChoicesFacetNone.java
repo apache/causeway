@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.fallback;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacetAbstract;
 
@@ -30,7 +32,10 @@ public class ActionChoicesFacetNone extends ActionChoicesFacetAbstract {
     }
 
     @Override
-    public Object[][] getChoices(final ObjectAdapter inObject) {
+    public Object[][] getChoices(
+            final ObjectAdapter inObject,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         return new ObjectAdapter[0][0];
     }
 

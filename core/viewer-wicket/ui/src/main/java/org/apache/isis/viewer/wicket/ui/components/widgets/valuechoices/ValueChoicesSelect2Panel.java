@@ -16,15 +16,18 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.List;
+
+import javax.inject.Inject;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import com.vaynberg.wicket.select2.ChoiceProvider;
 import com.vaynberg.wicket.select2.Select2Choice;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -32,8 +35,10 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -103,12 +108,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     }
 
     private List<ObjectAdapterMemento> getChoiceMementos(final ObjectAdapter[] argumentsIfAvailable) {
-        final List<ObjectAdapter> choices = scalarModel.getChoices(argumentsIfAvailable);
+        final List<ObjectAdapter> choices =
+                scalarModel.getChoices(argumentsIfAvailable, getAuthenticationSession(), getDeploymentCategory());
         
         // take a copy otherwise is only lazily evaluated
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
     }
-
 
     protected void addStandardSemantics() {
         setRequiredIfSpecified();
@@ -269,6 +274,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     
     // //////////////////////////////////////
 
+
     public ObjectAdapterMemento getPending() {
         return pending;
     }
@@ -278,6 +284,10 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     public ScalarModel getScalarModel() {
         return scalarModel;
+    }
+
+    private DeploymentCategory getDeploymentCategory() {
+        return getDeploymentType().getDeploymentCategory();
     }
 
     @Inject

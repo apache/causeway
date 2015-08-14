@@ -23,11 +23,13 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
@@ -282,6 +284,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      */
     public boolean isMemberVisible() {
         return visibility().isAllowed();
+    }
+
+    protected DeploymentType determineDeploymentTypeFrom(final RendererContext rendererContext) {
+        if(rendererContext instanceof RendererContext3) {
+            return ((RendererContext3) rendererContext).getDeploymentType();
+        } else {
+            return DeploymentType.SERVER; // fallback
+        }
     }
 
     protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -222,7 +223,10 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter ownerAdapter) {
+    public ObjectAdapter[] getChoices(
+            final ObjectAdapter ownerAdapter,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         return new ObjectAdapter[0];
     }
 
@@ -238,7 +242,10 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+    public ObjectAdapter[] getAutoComplete(
+            ObjectAdapter object,
+            String searchArg,
+            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
         return new ObjectAdapter[0];
     }
     

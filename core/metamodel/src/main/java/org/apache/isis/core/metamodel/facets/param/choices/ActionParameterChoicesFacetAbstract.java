@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -36,7 +35,10 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
 
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
+    public ActionParameterChoicesFacetAbstract(
+            final FacetHolder holder,
+            final SpecificationLoader specificationLookup,
+            final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;

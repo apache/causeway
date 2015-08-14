@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -111,7 +112,8 @@ public abstract class ResourceAbstract {
 
         this.resourceContext = new ResourceContext(
                 representationType, httpHeaders, providers, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
-                securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration());
+                securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration(),
+                getDeploymentType());
     }
 
     protected ResourceContext getResourceContext() {
@@ -152,6 +154,10 @@ public abstract class ResourceAbstract {
     // //////////////////////////////////////////////////////////////
     // Dependencies (from singletons)
     // //////////////////////////////////////////////////////////////
+
+    protected DeploymentType getDeploymentType() {
+        return IsisContext.getDeploymentType();
+    }
 
     protected IsisConfiguration getConfiguration () {
         return IsisContext.getConfiguration();

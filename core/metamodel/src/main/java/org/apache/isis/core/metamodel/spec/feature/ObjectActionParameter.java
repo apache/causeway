@@ -26,6 +26,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 
@@ -100,7 +101,11 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from, based on the input search argument.
      */
-    ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg);
+    ObjectAdapter[] getAutoComplete(
+            final ObjectAdapter adapter,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 
     
     
@@ -115,7 +120,11 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * Returns a list of possible references/values for this parameter, which the
      * user can choose from.
      */
-    ObjectAdapter[] getChoices(ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable);
+    ObjectAdapter[] getChoices(
+            final ObjectAdapter adapter,
+            final ObjectAdapter[] argumentsIfAvailable,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 
 
     ObjectAdapter getDefault(ObjectAdapter adapter);

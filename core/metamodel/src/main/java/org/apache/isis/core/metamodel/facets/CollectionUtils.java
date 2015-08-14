@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public final class CollectionUtils {
@@ -31,7 +30,7 @@ public final class CollectionUtils {
 
     public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, final AdapterManager adapterMap) {
         final ObjectAdapter collection = adapterMap.adapterFor(option);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         final Object[] optionArray = new Object[facet.size(collection)];
         int j = 0;
         for (final ObjectAdapter nextElement : facet.iterable(collection)) {

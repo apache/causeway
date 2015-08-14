@@ -43,6 +43,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -356,7 +357,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
     private List<ObjectAdapterMemento> obtainChoiceMementos(final ObjectAdapter[] argsIfAvailable) {
         final List<ObjectAdapter> choices = Lists.newArrayList();
         if(getModel().hasChoices()) {
-            choices.addAll(getModel().getChoices(argsIfAvailable));
+            choices.addAll(getModel().getChoices(argsIfAvailable, getAuthenticationSession(), getDeploymentCategory()));
         }
         // take a copy otherwise is only lazily evaluated
         return Lists.newArrayList(Lists.transform(choices, ObjectAdapterMemento.Functions.fromAdapter()));
@@ -399,8 +400,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
             protected List<ObjectAdapterMemento> obtainMementos(String term) {
                 final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
                 final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
-                final List<ObjectAdapter> results = autoCompleteFacet.execute(term);
-                return Lists.transform(results, ObjectAdapterMemento.Functions.fromAdapter());
+                final List<ObjectAdapter> autoCompleteAdapters =
+                        autoCompleteFacet.execute(term, getAuthenticationSession(), getDeploymentCategory());
+                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
+                return Lists.newArrayList(
+                        Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter()));
             }
         };
     }
@@ -415,10 +419,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
             protected List<ObjectAdapterMemento> obtainMementos(String term) {
                 final List<ObjectAdapter> autoCompleteChoices = Lists.newArrayList();
                 if(getScalarModel().hasAutoComplete()) {
-                    autoCompleteChoices.addAll(getScalarModel().getAutoComplete(term));
+                    final List<ObjectAdapter> autoCompleteAdapters =
+                            getScalarModel().getAutoComplete(term, getAuthenticationSession(), getDeploymentCategory());
+                    autoCompleteChoices.addAll(autoCompleteAdapters);
                 }
-                // take a copy otherwise is only lazily evaluated
-                return Lists.newArrayList(Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
+                // take a copy otherwise so is eagerly evaluated and memento objects correctly built
+                return Lists.newArrayList(
+                        Lists.transform(autoCompleteChoices, ObjectAdapterMemento.Functions.fromAdapter()));
             }
             
         };
@@ -516,6 +523,11 @@ public class ReferencePanel extends ScalarPanelAbstract {
         final AutoCompleteFacet autoCompleteFacet = 
                 (typeOfSpecification != null)? typeOfSpecification.getFacet(AutoCompleteFacet.class):null;
         return autoCompleteFacet != null;
+    }
+
+
+    private DeploymentCategory getDeploymentCategory() {
+        return getDeploymentType().getDeploymentCategory();
     }
 
     @Inject

@@ -19,12 +19,16 @@
 package org.apache.isis.viewer.restfulobjects.server;
 
 import java.util.HashMap;
+
 import javax.servlet.http.HttpServletRequest;
+
 import com.google.common.collect.Maps;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -52,7 +56,7 @@ public class ResourceContextTest_getArg {
         givenServletRequestQueryString(queryString);
         givenServletRequestParameterMapEmpty();
 
-        resourceContext = new ResourceContext(null, null, null, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null) {
+        resourceContext = new ResourceContext(null, null, null, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //
@@ -68,7 +72,7 @@ public class ResourceContextTest_getArg {
         givenServletRequestQueryString(queryString);
         givenServletRequestParameterMapEmpty();
 
-        resourceContext = new ResourceContext(null, null, null, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null) {
+        resourceContext = new ResourceContext(null, null, null, null, null, null, (String)null, httpServletRequest, null, null, null, null, null, null, null, null, null) {
             @Override
             void init(final RepresentationType representationType) {
                 //

@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -433,7 +434,10 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
+    public ObjectAdapter[][] getChoices(
+            final ObjectAdapter target,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
 
         final int parameterCount = getParameterCount();
         Object[][] parameterChoicesPojos;
@@ -443,13 +447,15 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         if (!facet.isNoop()) {
             // using the old choicesXxx() approach
-            parameterChoicesPojos = facet.getChoices(target);
+            parameterChoicesPojos = facet.getChoices(target, authenticationSession, deploymentCategory);
 
             // if no options, or not the right number of pojos, then default
             if (parameterChoicesPojos == null) {
                 parameterChoicesPojos = new Object[parameterCount][];
             } else if (parameterChoicesPojos.length != parameterCount) {
-                throw new DomainModelException("Choices array of incompatible size; expected " + parameterCount + " elements, but was " + parameterChoicesPojos.length + " for " + facet);
+                throw new DomainModelException(
+                        String.format("Choices array of incompatible size; expected %d elements, but was %d for %s",
+                                parameterCount, parameterChoicesPojos.length, facet));
             }
         } else {
             // use the new choicesNXxx approach for each param in turn
@@ -459,7 +465,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null);
+                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null, authenticationSession,
+                            deploymentCategory);
                 } else {
                     parameterChoicesPojos[i] = new Object[0];
                 }
@@ -471,22 +478,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
-                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
+                ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
+                        getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
                 parameterChoicesAdapters[i] = new ObjectAdapter[parameterChoicesPojos[i].length];
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
-            } else 
-                // now incorporated into above choices processing (BoundedFacet is no more) 
-                /*if (BoundedFacetUtils.isBoundedSet(paramSpec)) {
-                final QueryFindAllInstances<ObjectAdapter> query = new QueryFindAllInstances<ObjectAdapter>(paramSpec.getFullIdentifier());
-                final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-                parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];
-                int j = 0;
-                for (final ObjectAdapter adapter : allInstancesAdapter) {
-                    parameterChoicesAdapters[i][j++] = adapter;
-                }
-            } else */ if (paramSpec.isNotCollection()) {
+            } else if (paramSpec.isNotCollection()) {
                 parameterChoicesAdapters[i] = new ObjectAdapter[0];
             } else {
                 throw new UnknownTypeException(paramSpec);

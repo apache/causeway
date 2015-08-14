@@ -21,8 +21,10 @@ package org.apache.isis.core.metamodel.facets.param.choices.enums;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -37,7 +39,11 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter, final List<ObjectAdapter> arguments) {
+    public Object[] getChoices(
+            final ObjectAdapter adapter,
+            final List<ObjectAdapter> arguments,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final FacetHolder facetHolder = getFacetHolder();
         final TypedHolder paramPeer = (TypedHolder) facetHolder;
         final ObjectSpecification noSpec = getSpecification(paramPeer.getType());
@@ -45,7 +51,7 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionPa
         if (choicesFacet == null) {
             return new Object[0];
         }
-        return choicesFacet.getChoices(adapter);
+        return choicesFacet.getChoices(adapter, authenticationSession, deploymentCategory);
     }
 
 }

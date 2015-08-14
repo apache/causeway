@@ -82,7 +82,10 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public ObjectAdapter[] getChoices(final ObjectAdapter object) {
+            public ObjectAdapter[] getChoices(
+                    final ObjectAdapter object,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 return null;
             }
 
@@ -96,12 +99,20 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Where where) {
+            public UsabilityContext<?> createUsableInteractionContext(
+                    final AuthenticationSession session,
+                    final InteractionInvocationMethod invocationMethod,
+                    final ObjectAdapter target,
+                    final Where where) {
                 return null;
             }
 
             @Override
-            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, final Where where) {
+            public VisibilityContext<?> createVisibleInteractionContext(
+                    final AuthenticationSession session,
+                    final InteractionInvocationMethod invocationMethod,
+                    final ObjectAdapter targetObjectAdapter,
+                    final Where where) {
                 return null;
             }
 
@@ -126,7 +137,11 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             }
 
             @Override
-            public ObjectAdapter[] getAutoComplete(ObjectAdapter object, String searchArg) {
+            public ObjectAdapter[] getAutoComplete(
+                    final ObjectAdapter object,
+                    final String searchArg,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 return null;
             }
             @Override

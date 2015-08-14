@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.autocomplete;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -39,7 +41,11 @@ public interface PropertyAutoCompleteFacet extends Facet {
     /**
      * Gets the available auto-complete choices for this property.
      */
-    public Object[] autoComplete(ObjectAdapter inObject, String searchArg);
+    public Object[] autoComplete(
+            final ObjectAdapter inObject,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
     /**
      * The minimum number of characters that need to be entered.
      */

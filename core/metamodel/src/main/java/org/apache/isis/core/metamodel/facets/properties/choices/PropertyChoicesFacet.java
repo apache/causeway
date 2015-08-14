@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -44,5 +46,9 @@ public interface PropertyChoicesFacet extends Facet {
     /**
      * Gets the available choices for this property.
      */
-    public Object[] getChoices(ObjectAdapter adapter, SpecificationLoader specificationLookup);
+    public Object[] getChoices(
+            final ObjectAdapter adapter,
+            final SpecificationLoader specificationLookup,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 }

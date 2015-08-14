@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.param.autocomplete;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -32,7 +34,10 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ActionParameterAutoCompleteFacet extends Facet {
 
-    public Object[] autoComplete(ObjectAdapter inObject, String searchArg);
+    public Object[] autoComplete(
+            ObjectAdapter inObject,
+            String searchArg,
+            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
     /**
      * The minimum number of characters that need to be entered.
      */

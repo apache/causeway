@@ -26,6 +26,8 @@ import java.util.Map;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
@@ -36,11 +38,20 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 /**
  * Adapters to domain objects, where the application is written in terms of
@@ -331,6 +342,69 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
             return false;
         }
 
+        /**
+         * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
+         * {@link ObjectAdapter}s of those that are visible (as per any facet(s) installed on the element class
+         * of the collection).
+         */
+        public static List<ObjectAdapter> visibleAdapters(
+                final ObjectAdapter collectionAdapter,
+                final Class<?> cls,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory,
+                final SpecificationLoader specificationLoader) {
+
+            final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collectionAdapter);
+            Iterable<ObjectAdapter> objectAdapters = facet.iterable(collectionAdapter);
+
+            return visibleAdapters(objectAdapters, cls, authenticationSession, deploymentCategory, specificationLoader);
+        }
+
+        /**
+         * as per {@link #visibleAdapters(ObjectAdapter, Class, AuthenticationSession, DeploymentCategory, SpecificationLoader)}.
+         */
+        public static List<ObjectAdapter> visibleAdapters(
+                final Iterable<ObjectAdapter> objectAdapters,
+                final Class<?> cls,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory,
+                final SpecificationLoader specificationLoader) {
+            ObjectSpecification paramSpec = specificationLoader.loadSpecification(cls);
+            return visibleAdapters(objectAdapters, paramSpec, authenticationSession, deploymentCategory);
+        }
+
+        /**
+         * as per {@link #visibleAdapters(ObjectAdapter, Class, AuthenticationSession, DeploymentCategory, SpecificationLoader)}.
+         */
+        public static List<ObjectAdapter> visibleAdapters(
+                final Iterable<ObjectAdapter> objectAdapters,
+                final FacetHolder facetHolder,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory) {
+            final List<ObjectAdapter> adapters = Lists.newArrayList();
+            for (final ObjectAdapter adapter : objectAdapters) {
+                final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
+                        deploymentCategory);
+                InteractionResult visibleResult = InteractionUtils.isVisibleResult(facetHolder, context);
+                if(visibleResult.isNotVetoing()) {
+                    adapters.add(adapter);
+                }
+            }
+            return adapters;
+        }
+
+        private static VisibilityContext<?> createVisibleInteractionContext(
+                final ObjectAdapter objectAdapter,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory) {
+            return new ObjectVisibilityContext(
+                    deploymentCategory,
+                    authenticationSession,
+                    InteractionInvocationMethod.BY_USER,
+                    objectAdapter,
+                    objectAdapter.getSpecification().getIdentifier(),
+                    Where.OBJECT_FORMS);
+        }
     }
 
     public final class InvokeUtils {

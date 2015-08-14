@@ -36,17 +36,18 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
+import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
-import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
@@ -160,10 +161,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
-            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable) {
+            public List<ObjectAdapter> getChoices(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argumentsIfAvailable,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK),
+                        authenticationSession, deploymentCategory);
                 return choicesAsList(choices);
             }
 
@@ -175,10 +181,18 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
 
             @Override
-            public List<ObjectAdapter> getAutoComplete(final ScalarModel scalarModel, String searchArg) {
+            public List<ObjectAdapter> getAutoComplete(
+                    final ScalarModel scalarModel,
+                    final String searchArg,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices = property.getAutoComplete(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), searchArg);
+                final ObjectAdapter parentAdapter =
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                final ObjectAdapter[] choices = property.getAutoComplete(
+                        parentAdapter, searchArg,
+                        authenticationSession, deploymentCategory);
                 return choicesAsList(choices);
             }
 
@@ -324,10 +338,18 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return actionParameter.hasChoices();
             }
             @Override
-            public List<ObjectAdapter> getChoices(final ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable) {
+            public List<ObjectAdapter> getChoices(
+                    final ScalarModel scalarModel,
+                    final ObjectAdapter[] argumentsIfAvailable,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices = actionParameter.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK), argumentsIfAvailable);
+                final ObjectAdapter parentAdapter =
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                final ObjectAdapter[] choices = actionParameter.getChoices(
+                        parentAdapter, argumentsIfAvailable,
+                        authenticationSession, deploymentCategory);
                 return choicesAsList(choices);
             }
 
@@ -338,10 +360,19 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 return actionParameter.hasAutoComplete();
             }
             @Override
-            public List<ObjectAdapter> getAutoComplete(final ScalarModel scalarModel, final String searchArg) {
+            public List<ObjectAdapter> getAutoComplete(
+                    final ScalarModel scalarModel,
+                    final String searchArg,
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory) {
                 final ActionParameterMemento parameterMemento = scalarModel.getParameterMemento();
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
-                final ObjectAdapter[] choices = actionParameter.getAutoComplete(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK), searchArg);
+
+                final ObjectAdapter parentAdapter =
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                final ObjectAdapter[] choices = actionParameter.getAutoComplete(
+                        parentAdapter, searchArg,
+                        authenticationSession, deploymentCategory);
                 return choicesAsList(choices);
             }
 
@@ -436,10 +467,17 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         }
 
         public abstract boolean hasChoices(ScalarModel scalarModel);
-        public abstract List<ObjectAdapter> getChoices(ScalarModel scalarModel, final ObjectAdapter[] argumentsIfAvailable);
+        public abstract List<ObjectAdapter> getChoices(
+                final ScalarModel scalarModel,
+                final ObjectAdapter[] argumentsIfAvailable,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory);
 
         public abstract boolean hasAutoComplete(ScalarModel scalarModel);
-        public abstract List<ObjectAdapter> getAutoComplete(ScalarModel scalarModel, String searchArg);
+        public abstract List<ObjectAdapter> getAutoComplete(
+                ScalarModel scalarModel,
+                String searchArg,
+                final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
         
         public abstract void resetVersion(ScalarModel scalarModel);
@@ -637,16 +675,22 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.hasChoices(this);
     }
 
-    public List<ObjectAdapter> getChoices(final ObjectAdapter[] argumentsIfAvailable) {
-        return kind.getChoices(this, argumentsIfAvailable);
+    public List<ObjectAdapter> getChoices(
+            final ObjectAdapter[] argumentsIfAvailable,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        return kind.getChoices(this, argumentsIfAvailable, authenticationSession, deploymentCategory);
     }
 
     public boolean hasAutoComplete() {
         return kind.hasAutoComplete(this);
     }
 
-    public List<ObjectAdapter> getAutoComplete(String searchTerm) {
-        return kind.getAutoComplete(this, searchTerm);
+    public List<ObjectAdapter> getAutoComplete(
+            final String searchTerm,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        return kind.getAutoComplete(this, searchTerm, authenticationSession, deploymentCategory);
     }
 
     /**

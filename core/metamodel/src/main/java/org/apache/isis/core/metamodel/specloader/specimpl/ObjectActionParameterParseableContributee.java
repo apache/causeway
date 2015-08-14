@@ -18,8 +18,10 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 /**
@@ -57,8 +59,13 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg) {
-        return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg);
+    public ObjectAdapter[] getAutoComplete(
+            final ObjectAdapter adapter,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg, authenticationSession,
+                deploymentCategory);
     }
 
     protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {

@@ -258,12 +258,17 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter adapter, String searchArg) {
+    public ObjectAdapter[] getAutoComplete(
+            ObjectAdapter adapter,
+            String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.autoComplete(adapter, searchArg);
+
+            final Object[] choices = facet.autoComplete(adapter, searchArg, authenticationSession, deploymentCategory);
             checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getAdapterMap().adapterFor(choice));
@@ -295,21 +300,28 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter adapter, final ObjectAdapter[] argumentsIfAvailable) {
+    public ObjectAdapter[] getChoices(
+            final ObjectAdapter adapter,
+            final ObjectAdapter[] argumentsIfAvailable,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter, argListIfAvailable);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
         
-        return findChoices(target, args);
+        return findChoices(target, args, authenticationSession, deploymentCategory);
     }
 
-    private ObjectAdapter[] findChoices(final ObjectAdapter target, final List<ObjectAdapter> args) {
+    private ObjectAdapter[] findChoices(
+            final ObjectAdapter target,
+            final List<ObjectAdapter> args,
+            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, args);
+            final Object[] choices = facet.getChoices(target, args, authenticationSession, deploymentCategory);
             checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
             for (final Object choice : choices) {
                 ObjectAdapter adapter = choice != null? getAdapterMap().adapterFor(choice) : null;

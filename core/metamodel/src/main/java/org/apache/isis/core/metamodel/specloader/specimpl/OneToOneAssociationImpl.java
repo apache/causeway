@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -242,9 +243,13 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     }
 
     @Override
-    public ObjectAdapter[] getChoices(final ObjectAdapter ownerAdapter) {
+    public ObjectAdapter[] getChoices(
+            final ObjectAdapter ownerAdapter,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLookup());
+        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLookup(),
+                authenticationSession, deploymentCategory);
         if (pojoOptions != null) {
             List<ObjectAdapter> adapters = Lists.transform(
                     Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
@@ -276,9 +281,14 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     }
 
     @Override
-    public ObjectAdapter[] getAutoComplete(ObjectAdapter ownerAdapter, String searchArg) {
+    public ObjectAdapter[] getAutoComplete(
+            final ObjectAdapter ownerAdapter,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
-        final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg);
+        final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
+                authenticationSession, deploymentCategory);
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {

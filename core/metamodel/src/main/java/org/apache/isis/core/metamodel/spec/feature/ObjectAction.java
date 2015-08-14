@@ -23,6 +23,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -193,7 +194,10 @@ public interface ObjectAction extends ObjectMember {
      * Returns a list of possible references/values for each parameter, which
      * the user can choose from.
      */
-    ObjectAdapter[][] getChoices(ObjectAdapter target);
+    ObjectAdapter[][] getChoices(
+            ObjectAdapter target,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
 
     // //////////////////////////////////////////////////////
     // Utils

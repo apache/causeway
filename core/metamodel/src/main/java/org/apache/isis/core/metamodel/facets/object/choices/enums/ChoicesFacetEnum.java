@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.enums;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacetAbstract;
 
@@ -33,7 +35,10 @@ public class ChoicesFacetEnum extends ChoicesFacetAbstract {
     }
 
     @Override
-    public Object[] getChoices(final ObjectAdapter adapter) {
+    public Object[] getChoices(
+            final ObjectAdapter adapter,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
         return choices;
     }
 

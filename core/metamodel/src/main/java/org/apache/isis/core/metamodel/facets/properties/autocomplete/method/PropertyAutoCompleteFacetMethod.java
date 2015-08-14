@@ -23,16 +23,21 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ObjectExtensions;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacetAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.facets.CollectionUtils;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 
 public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAbstract implements ImperativeFacet {
 
@@ -82,21 +87,44 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     }
 
     @Override
-    public Object[] autoComplete(ObjectAdapter owningAdapter, String searchArg) {
-        final Object options = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
-        if (options == null) {
+    public Object[] autoComplete(
+            final ObjectAdapter owningAdapter,
+            final String searchArg,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+
+        final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
+        if (collectionOrArray == null) {
             return null;
         }
-        if (options.getClass().isArray()) {
-            return ObjectExtensions.asArray(options);
-        }
-        final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
-        return CollectionUtils.getCollectionAsObjectArray(options, specification, getAdapterManager());
+
+        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+
+        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
+        final Class<?> propertyType = facetedMethod.getType();
+
+        final List<ObjectAdapter> visibleAdapters =
+                ObjectAdapter.Util.visibleAdapters(
+                        collectionAdapter, propertyType,
+                        authenticationSession, deploymentCategory,
+                        getSpecificationLookup());
+        final List<Object> filteredObjects = Lists.newArrayList(
+                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+
+        final ObjectSpecification propertySpec = getSpecification(propertyType);
+        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, propertySpec, getAdapterManager());
     }
 
     @Override
     protected String toStringValues() {
         return "method=" + method + ",class=" + choicesClass;
+    }
+
+
+
+
+    protected ObjectSpecification getSpecification(final Class<?> type) {
+        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
     }
 
     // ////////////////////////////////////////////
@@ -106,6 +134,11 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     protected AdapterManager getAdapterManager() {
         return adapterManager;
     }
+
+    protected SpecificationLoader getSpecificationLookup() {
+        return specificationLookup;
+    }
+
 
 
 }

@@ -16,21 +16,15 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.restfulobjects.rendering;
 
-package org.apache.isis.core.metamodel.facets.object.autocomplete;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
-import java.util.List;
+/**
+ * TODO: roll-up in the future (introduced only so that API does not break)
+ */
+public interface RendererContext3 extends RendererContext2 {
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
-public interface AutoCompleteFacet extends Facet {
-
-    public List<ObjectAdapter> execute(
-            String search,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+    public DeploymentType getDeploymentType();
 
 }
