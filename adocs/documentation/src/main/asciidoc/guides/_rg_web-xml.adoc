@@ -48,9 +48,9 @@ Servlet context listeners are used to perform initialization on application star
 
 === `EnvironmentLoaderListener` (Shiro)
 
-NOTE: WIP
+Bootstrap listener to startup and shutdown the web application's Shiro `WebEnvironment` at startup and shutdown respectively.
 
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -65,9 +65,7 @@ definition:
 
 The `IsisWebAppBootstrapper` servlet context listener bootstraps the shared (global) metadata for the Apache Isis framework.  This listener is not required (indeed must not be configured) if the Wicket viewer is in use.
 
-NOTE: WIP
-
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -76,7 +74,7 @@ definition:
 </listener>
 ----
 
-context parameters:
+Its context parameters are:
 
 [source,xml]
 ----
@@ -95,9 +93,7 @@ context parameters:
 
 The `ResteasyBootstrap` servlet context listener initializes the RestEasy runtime, specifying that classes (namely, those specified in Isis' `RestfulObjectsApplication`) to be exposed as REST resources.  It is required if the Restful Objects viewer is to be deployed.
 
-NOTE: WIP
-
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -127,15 +123,14 @@ There are two relevant context parameters:
 [[_rg_web-xml_servlets]]
 == Servlets
 
-NOTE: WIP
+Servlets process HTTP requests and return corresponding responses.
 
 
 === `HttpServletDispatcher` (RestEasy)
 
-NOTE: WIP
+This servlet is provided by the RestEasy framework, and does the dispatching to the resources defined by Apache Isis' `RestfulObjectsApplication` (see above).
 
-
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -145,7 +140,7 @@ definition:
 </servlet>
 ----
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -160,7 +155,7 @@ mapping:
 
 NOTE: WIP
 
-definition
+Its definition is:
 
 [source,xml]
 ----
@@ -170,7 +165,7 @@ definition
 </servlet>
 ----
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -216,7 +211,7 @@ The order in which filters appear in `web.xml` matters: first to last they defin
 
 NOTE: WIP
 
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -226,7 +221,7 @@ definition:
 </filter>
 ----
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -241,7 +236,7 @@ mapping:
 
 NOTE: WIP
 
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -252,7 +247,7 @@ definition:
 ----
 
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -272,7 +267,7 @@ mapping:
 
 NOTE: WIP
 
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -287,7 +282,7 @@ definition:
 ----
 <1> cache time, in seconds
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -327,7 +322,7 @@ mapping:
 NOTE: WIP
 
 
-definition:
+Its definition is:
 
 [source,xml]
 ----
@@ -342,7 +337,7 @@ definition:
 ----
 <1> specify the application (subclass of `IsisWicketApplication`) to use
 
-mapping:
+Its mapping is:
 
 [source,xml]
 ----
@@ -417,7 +412,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 NOTE: WIP
 
-definition:
+Its definition is:
 
 [source,xml]
 ----

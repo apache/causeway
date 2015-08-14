@@ -225,19 +225,28 @@ public class IsisRunner {
         addOptionHandler(optionHandlerDeploymentType);
         addOptionHandler(new OptionHandlerConfiguration());
 
-        addOptionHandler(new OptionHandlerReflector(installerLookup));
+        // intention is to delete this: better to use isis.reflector.facets.include and isis.reflector.facets.exclude properties
+        // addOptionHandler(new OptionHandlerReflector(installerLookup));
 
         addOptionHandler(new OptionHandlerAppManifest());
         addOptionHandler(new OptionHandlerFixture());
-        addOptionHandler(new OptionHandlerNoSplash());
+
+        // no-op
+        //addOptionHandler(new OptionHandlerNoSplash());
+
         addOptionHandler(new OptionHandlerAdditionalProperty());
         addOptionHandler(new OptionHandlerFixtureFromEnvironmentVariable());
         addOptionHandler(new OptionHandlerSystemProperties());
 
-        addOptionHandler(new OptionHandlerDebug());
-        addOptionHandler(new OptionHandlerDiagnostics());
-        addOptionHandler(new OptionHandlerQuiet());
-        addOptionHandler(new OptionHandlerVerbose());
+        // no-op
+        // addOptionHandler(new OptionHandlerDebug());
+
+        // no-op
+        // addOptionHandler(new OptionHandlerDiagnostics());
+        // no-op
+        // addOptionHandler(new OptionHandlerQuiet());
+        // no-op
+        // addOptionHandler(new OptionHandlerVerbose());
 
         addOptionHandler(new OptionHandlerHelp());
         addOptionHandler(new OptionHandlerVersion());

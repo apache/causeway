@@ -239,12 +239,11 @@ The first (programmatic) approach takes precedence over the second approach (con
 
 [TIP]
 ====
-If you use the `org.apache.isis.WebServer` class to launch your application from the xref:ug.adoc#_ug_deployment_cmd-line[command line], then should be aware that arbitrary configuration properties can be specified as system properties.  In particular, therefore, you can override the `isis.appManifest` configuration property:
+If you use the `org.apache.isis.WebServer` class to launch your application from the xref:ug.adoc#_ug_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
 
 [source,ini]
 ----
-java -Disis.appManifest=com.mycompany.myapp.MyAppAppManifestWithFixtures \
-     org.apache.isis.WebServer
+java org.apache.isis.WebServer -m com.mycompany.myapp.MyAppAppManifestWithFixtures
 ----
 
 ====

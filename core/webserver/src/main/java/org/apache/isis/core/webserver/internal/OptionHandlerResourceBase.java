@@ -29,6 +29,10 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.core.webserver.WebServerConstants;
 
+/**
+ * @deprecated  - although was used, is too obscure.
+ */
+@Deprecated
 public final class OptionHandlerResourceBase implements OptionHandler {
     private String resourceBase;
     static final String RESOURCE_BASE_LONG_OPT = "webapp";

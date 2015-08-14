@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.NO_SPLASH_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.NO_SPLASH_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
@@ -30,6 +27,13 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
+import static org.apache.isis.core.runtime.runner.Constants.NO_SPLASH_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.NO_SPLASH_OPT;
+
+/**
+ * @deprecated - this seems to be a no-op; it is no longer registered in IsisRunner/IsisWebServer
+ */
+@Deprecated
 public class OptionHandlerNoSplash extends OptionHandlerAbstract {
 
     private boolean noSplash;

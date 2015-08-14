@@ -5,28 +5,22 @@
 :_imagesdir: images/
 
 
-NOTE: TODO
+Some pointers when deploying to Tomcat (or any other servlet container).
 
 == Externalized Configuration
 
-NOTE: TODO
+See the guidance xref:ug.adoc#_ug_deployment_externalized-configuration[below].
 
 
 == JVM Args
 
-NOTE: TODO
-
-
-for the `WrapperFactory` (uses link:http://www.javassist.org[Javassist])
-
-using:
+The xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`] uses link:http://www.javassist.org[Javassist] to create on-the-fly classes acting as a proxy.  The cost of these proxies can be mitigated using:
 
 [source,ini]
 ----
 -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC
 ----
 
-You can hint the JVM to unload dynamically created classes which ClassLoaders are still around.
 
 
 == Using a JNDI Datasource

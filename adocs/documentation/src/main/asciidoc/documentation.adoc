@@ -16,6 +16,11 @@ pass:[</p></div>]
 pass:[<br/>]
 
 
+
+
+[.documentation-page]
+--
+
 [cols="1a,1a,1a",frame="none"]
 |===
 
@@ -129,13 +134,10 @@ including:
 * link:migration-notes.html[Migration Notes]
 
 
-
-
-
 |====
 
 
-
+--
 
 
 

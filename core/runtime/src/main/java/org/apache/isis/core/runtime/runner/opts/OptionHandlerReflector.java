@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.REFLECTOR_LONG_OPT;
-import static org.apache.isis.core.runtime.runner.Constants.REFLECTOR_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -35,6 +32,13 @@ import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.system.SystemConstants;
 
+import static org.apache.isis.core.runtime.runner.Constants.REFLECTOR_LONG_OPT;
+import static org.apache.isis.core.runtime.runner.Constants.REFLECTOR_OPT;
+
+/**
+ * @deprecated - far better to use `isis.reflector.facets.include` and `isis.reflector.facets.exclude`; no longer registered in IsisRunner/IsisWebServer
+ */
+@Deprecated
 public class OptionHandlerReflector extends OptionHandlerAbstract {
 
     private final InstallerRepository installerRepository;

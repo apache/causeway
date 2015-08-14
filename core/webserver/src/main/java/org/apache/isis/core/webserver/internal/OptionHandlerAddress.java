@@ -32,6 +32,10 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandler;
 import org.apache.isis.core.webserver.WebServerConstants;
 
+/**
+ * @deprecated - never completed (unused)
+ */
+@Deprecated
 public final class OptionHandlerAddress implements OptionHandler {
     private String address;
     static final String ADDRESS_OPT = "a";

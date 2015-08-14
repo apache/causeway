@@ -33,10 +33,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.IsisRunner;
-import org.apache.isis.core.webserver.internal.OptionHandlerAddress;
 import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebServer;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
-import org.apache.isis.core.webserver.internal.OptionHandlerResourceBase;
 import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
 
 public class WebServer {
@@ -111,11 +109,18 @@ public class WebServer {
     }
 
     private void addOptionHandlersAndValidators(IsisRunner runner) {
+
         // adjustments
         runner.addOptionHandler(new OptionHandlerPort());
-        runner.addOptionHandler(new OptionHandlerAddress());
-        runner.addOptionHandler(new OptionHandlerResourceBase());
-        runner.addOptionHandler(new OptionHandlerStartupMode());
+
+        // unused
+        // runner.addOptionHandler(new OptionHandlerAddress());
+
+        // too obscure
+        // runner.addOptionHandler(new OptionHandlerResourceBase());
+
+        // REVIEW: clashes with -a flag.
+        //runner.addOptionHandler(new OptionHandlerStartupMode());
     }
 
     public void stop() {

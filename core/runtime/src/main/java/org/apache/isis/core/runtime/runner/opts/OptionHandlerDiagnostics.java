@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.runner.opts;
 
-import static org.apache.isis.core.runtime.runner.Constants.DIAGNOSTICS_OPT;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
@@ -29,6 +27,12 @@ import org.apache.isis.core.runtime.optionhandler.BootPrinter;
 import org.apache.isis.core.runtime.optionhandler.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.runner.Constants;
 
+import static org.apache.isis.core.runtime.runner.Constants.DIAGNOSTICS_OPT;
+
+/**
+ * @deprecated - this seems to be a no-op; it is no longer registered in IsisRunner/IsisWebServer
+ */
+@Deprecated
 public class OptionHandlerDiagnostics extends OptionHandlerAbstract {
 
     public OptionHandlerDiagnostics() {
