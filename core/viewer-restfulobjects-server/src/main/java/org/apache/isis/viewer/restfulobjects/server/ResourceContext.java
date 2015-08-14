@@ -69,7 +69,7 @@ public class ResourceContext implements RendererContext3 {
     private final AuthenticationSession authenticationSession;
     private final PersistenceSession persistenceSession;
     private final AdapterManager adapterManager;
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
 
     private List<List<String>> followLinks;
 
@@ -96,7 +96,7 @@ public class ResourceContext implements RendererContext3 {
             final AuthenticationSession authenticationSession,
             final PersistenceSession persistenceSession,
             final AdapterManager objectAdapterLookup,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final IsisConfiguration configuration,
             final DeploymentType deploymentType) {
 
@@ -113,7 +113,7 @@ public class ResourceContext implements RendererContext3 {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.adapterManager = objectAdapterLookup;
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.where = where;
         this.deploymentType = deploymentType;
 
@@ -293,8 +293,8 @@ public class ResourceContext implements RendererContext3 {
         return persistenceSession.getServices();
     }
 
-    public SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    public SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     @Override

@@ -139,7 +139,8 @@ public class Memento implements Serializable {
             final ObjectAdapter value = objectAssoc.get(adapter);
             assocData = facet.toEncodedString(value);
         } else if (objectAssoc.isOneToOneAssociation()) {
-            final ObjectAdapter referencedAdapter = ((OneToOneAssociation) objectAssoc).get(adapter);
+            final ObjectAdapter referencedAdapter = ((OneToOneAssociation) objectAssoc).get(adapter
+            );
             assocData = createReferenceData(referencedAdapter);
         } else {
             throw new UnknownTypeException(objectAssoc);

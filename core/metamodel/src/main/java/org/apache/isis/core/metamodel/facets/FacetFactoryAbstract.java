@@ -66,7 +66,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
      * Injected
      */
     @Override
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
         this.specificationLoader = specificationLookup;
     }
 

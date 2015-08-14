@@ -46,7 +46,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnClass() {
 
         final NamedFacetOnTypeAnnotationFactory facetFactory = new NamedFacetOnTypeAnnotationFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         @Named("some name")
         class Customer {
@@ -67,7 +67,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnProperty() {
 
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -91,7 +91,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnCollection() {
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -115,7 +115,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     public void testNamedAnnotationPickedUpOnAction() {
         final NamedFacetOnMemberFactory facetFactory = new NamedFacetOnMemberFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -139,7 +139,7 @@ public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     public void testNamedAnnotationPickedUpOnActionParameter() {
 
         final NamedFacetOnParameterAnnotationFactory facetFactory = new NamedFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         class Customer {
             @SuppressWarnings("unused")

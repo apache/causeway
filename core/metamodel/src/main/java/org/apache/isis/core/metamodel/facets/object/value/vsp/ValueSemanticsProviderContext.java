@@ -47,7 +47,7 @@ public class ValueSemanticsProviderContext {
         return authenticationSessionProvider;
     }
 
-    public SpecificationLoader getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;
     }
 

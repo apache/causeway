@@ -42,19 +42,19 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     private final Method method;
     private final Class<?> choicesType;
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
 
     public ActionChoicesFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
     }
 
@@ -116,9 +116,9 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
-                        collectionAdapter, parameterType,
-                        authenticationSession, deploymentCategory,
-                        getSpecificationLookup());
+                        collectionAdapter,
+                        authenticationSession, deploymentCategory
+                );
         final List<Object> filteredObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 
@@ -132,15 +132,15 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     }
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
     }
 
     // ///////////////////////////////////////////////////////
     // Dependencies
     // ///////////////////////////////////////////////////////
 
-    private SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    private SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     private AdapterManager getAdapterManager() {

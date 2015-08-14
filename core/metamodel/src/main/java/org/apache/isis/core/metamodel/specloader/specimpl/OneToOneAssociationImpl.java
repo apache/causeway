@@ -62,7 +62,7 @@ import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
     public OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
-        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLoader(), facetedMethod.getType()), objectMemberContext);
     }
     
     protected OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectSpecification objectSpec, final ObjectMemberContext objectMemberContext) {
@@ -129,7 +129,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object referencedPojo = facet.getProperty(ownerAdapter);
+        final Object referencedPojo = facet.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory());
 
         if (referencedPojo == null) {
             return null;
@@ -144,7 +144,8 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
      */
     @Override
     public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter ownerAdapter) {
-        return new PropertyAccessContext(getDeploymentCategory(), session, InteractionInvocationMethod.BY_USER, ownerAdapter, getIdentifier(), get(ownerAdapter));
+        return new PropertyAccessContext(getDeploymentCategory(), session, InteractionInvocationMethod.BY_USER, ownerAdapter, getIdentifier(), get(ownerAdapter
+        ));
     }
 
     @Override
@@ -248,7 +249,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final AuthenticationSession authenticationSession,
             final DeploymentCategory deploymentCategory) {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLookup(),
+        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLoader(),
                 authenticationSession, deploymentCategory);
         if (pojoOptions != null) {
             List<ObjectAdapter> adapters = Lists.transform(

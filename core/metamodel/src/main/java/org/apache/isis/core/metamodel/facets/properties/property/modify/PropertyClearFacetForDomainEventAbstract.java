@@ -73,7 +73,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
 
 
         // ... post the executing event
-        final Object oldValue = getterFacet.getProperty(targetAdapter);
+        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null);
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.EXECUTING,
@@ -85,7 +85,7 @@ public abstract class PropertyClearFacetForDomainEventAbstract
         clearFacet.clearProperty(targetAdapter);
 
         // reading the actual value from the target object, playing it safe...
-        final Object actualNewValue = getterFacet.getProperty(targetAdapter);
+        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null);
         if(Objects.equal(oldValue, actualNewValue)) {
             // do nothing.
             return;

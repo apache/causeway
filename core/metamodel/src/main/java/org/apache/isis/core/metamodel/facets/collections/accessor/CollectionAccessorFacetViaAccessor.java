@@ -23,18 +23,30 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAccessorFacetAbstract implements ImperativeFacet {
 
     private final Method method;
 
-    public CollectionAccessorFacetViaAccessor(final Method method, final FacetHolder holder) {
-        super(holder);
+    public CollectionAccessorFacetViaAccessor(
+            final Method method,
+            final FacetHolder holder,
+            final AdapterManager adapterManager,
+            final SpecificationLoader specificationLoader) {
+        super(holder, adapterManager, specificationLoader);
         this.method = method;
     }
 
@@ -69,8 +81,25 @@ public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAcce
     }
 
     @Override
-    public Object getProperty(final ObjectAdapter owningAdapter) {
-        return ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+    public Object getProperty(
+            final ObjectAdapter owningAdapter,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
+
+        final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
+
+        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
+        final Class<?> collectionElementType = facetedMethod.getType();
+
+        final List<ObjectAdapter> visibleAdapters =
+                ObjectAdapter.Util.visibleAdapters(
+                        collectionAdapter,
+                        authenticationSession, deploymentCategory);
+        final List<Object> visibleObjects = Lists.newArrayList(
+                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+
+        return visibleObjects;
     }
 
     @Override

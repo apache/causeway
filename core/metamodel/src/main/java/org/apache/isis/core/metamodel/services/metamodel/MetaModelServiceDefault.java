@@ -76,7 +76,7 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
     private SpecificationLoader specificationLookup;
 
     @Override
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
     //endregion

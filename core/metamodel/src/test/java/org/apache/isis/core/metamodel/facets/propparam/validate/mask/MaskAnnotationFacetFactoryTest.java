@@ -50,7 +50,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnClass() {
         final MaskFacetOnTypeAnnotationFactory facetFactory = new MaskFacetOnTypeAnnotationFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         @Mask("###")
         class Customer {
@@ -66,7 +66,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -88,7 +88,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationPickedUpOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -108,7 +108,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForNonStringsProperty() {
         final MaskFacetOnPropertyAnnotationFactory facetFactory = new MaskFacetOnPropertyAnnotationFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -126,7 +126,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
         final MaskFacetOnParameterAnnotationFactory facetFactory = new MaskFacetOnParameterAnnotationFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")

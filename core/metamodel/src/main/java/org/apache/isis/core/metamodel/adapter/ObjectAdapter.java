@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -51,7 +50,6 @@ import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 /**
  * Adapters to domain objects, where the application is written in terms of
@@ -346,51 +344,60 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
          * {@link ObjectAdapter}s of those that are visible (as per any facet(s) installed on the element class
          * of the collection).
+         *
+         * @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * @param authenticationSession - the user requesting the collection; if null then no filtering will be performed
+         * @param deploymentCategory - whether prototyping etc
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final ObjectAdapter collectionAdapter,
-                final Class<?> cls,
                 final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
-                final SpecificationLoader specificationLoader) {
+                final DeploymentCategory deploymentCategory) {
 
             final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collectionAdapter);
             Iterable<ObjectAdapter> objectAdapters = facet.iterable(collectionAdapter);
 
-            return visibleAdapters(objectAdapters, cls, authenticationSession, deploymentCategory, specificationLoader);
+            return visibleAdapters(objectAdapters, authenticationSession, deploymentCategory);
         }
 
         /**
-         * as per {@link #visibleAdapters(ObjectAdapter, Class, AuthenticationSession, DeploymentCategory, SpecificationLoader)}.
+         * as per {@link #visibleAdapters(ObjectAdapter, AuthenticationSession, DeploymentCategory)}.
+         *
+         * @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
+         * @param deploymentCategory - whether prototyping etc; may influence visibility
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final Iterable<ObjectAdapter> objectAdapters,
-                final Class<?> cls,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
-                final SpecificationLoader specificationLoader) {
-            ObjectSpecification paramSpec = specificationLoader.loadSpecification(cls);
-            return visibleAdapters(objectAdapters, paramSpec, authenticationSession, deploymentCategory);
-        }
-
-        /**
-         * as per {@link #visibleAdapters(ObjectAdapter, Class, AuthenticationSession, DeploymentCategory, SpecificationLoader)}.
-         */
-        public static List<ObjectAdapter> visibleAdapters(
-                final Iterable<ObjectAdapter> objectAdapters,
-                final FacetHolder facetHolder,
                 final AuthenticationSession authenticationSession,
                 final DeploymentCategory deploymentCategory) {
             final List<ObjectAdapter> adapters = Lists.newArrayList();
             for (final ObjectAdapter adapter : objectAdapters) {
-                final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
-                        deploymentCategory);
-                InteractionResult visibleResult = InteractionUtils.isVisibleResult(facetHolder, context);
-                if(visibleResult.isNotVetoing()) {
+                final boolean visible = isVisible(adapter, authenticationSession, deploymentCategory);
+                if(visible) {
                     adapters.add(adapter);
                 }
             }
             return adapters;
+        }
+
+        /**
+         * @param adapter - an adapter around the domain object whose visibility is being checked
+         * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
+         * @param deploymentCategory - whether prototyping etc; may influence visibility
+         */
+        public static boolean isVisible(
+                final ObjectAdapter adapter,
+                final AuthenticationSession authenticationSession,
+                final DeploymentCategory deploymentCategory) {
+            if(authenticationSession == null) {
+                return true;
+            }
+            final ObjectSpecification objectSpecification = adapter.getSpecification();
+            final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
+                    deploymentCategory);
+            InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
+            return visibleResult.isNotVetoing();
         }
 
         private static VisibilityContext<?> createVisibleInteractionContext(

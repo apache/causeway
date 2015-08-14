@@ -20,12 +20,18 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
+
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
-public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract implements PropertyOrCollectionIdentifyingFacetFactory {
+public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
+        extends MethodPrefixBasedFacetFactoryAbstract
+        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware {
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
+    private AdapterManager adapterManager;
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
@@ -37,6 +43,18 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
 
     protected CollectionTypeRegistry getCollectionTypeRepository() {
         return collectionTypeRegistry;
+    }
+
+    // //////////////////////////////////////
+
+
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
+    }
+
+    @Override
+    public void setAdapterManager(final AdapterManager adapterManager) {
+        this.adapterManager = adapterManager;
     }
 
 

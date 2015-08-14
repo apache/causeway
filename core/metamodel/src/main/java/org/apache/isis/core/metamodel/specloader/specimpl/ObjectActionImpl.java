@@ -123,7 +123,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             // this shouldn't happen; return Type always defined, even if represents void.class
             return false;
         }
-        return getReturnType() != getSpecificationLookup().loadSpecification(void.class);
+        return getReturnType() != getSpecificationLoader().loadSpecification(void.class);
     }
 
 
@@ -203,7 +203,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final List<FacetedMethodParameter> paramPeers = getFacetedMethod().getParameters();
             for (int i = 0; i < parameterCount; i++) {
                 final TypedHolder paramPeer = paramPeers.get(i);
-                final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLookup(), paramPeer.getType());
+                final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLoader(), paramPeer.getType());
                 
                 final ObjectActionParameter parameter;
                 if (specification.isParseable()) {
@@ -365,7 +365,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             LOG.debug("execute action " + target + "." + getId());
         }
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(this, target, arguments);
+        return facet.invoke(this, target, arguments, getAuthenticationSession(), getDeploymentCategory());
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
@@ -394,7 +394,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             }
             for (int i = 0; i < parameterCount; i++) {
                 if (parameterDefaultPojos[i] != null) {
-                    final ObjectSpecification componentSpec = getSpecificationLookup().loadSpecification(parameterDefaultPojos[i].getClass());
+                    final ObjectSpecification componentSpec = getSpecificationLoader().loadSpecification(parameterDefaultPojos[i].getClass());
                     final ObjectSpecification parameterSpec = parameters.get(i).getSpecification();
                     if (!componentSpec.isOfType(parameterSpec)) {
                         throw new DomainModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected " + parameterSpec.getFullIdentifier() + ", but was " + componentSpec.getFullIdentifier());
@@ -479,7 +479,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
                 ObjectActionParameterAbstract.checkChoicesOrAutoCompleteType(
-                        getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
+                        getSpecificationLoader(), parameterChoicesPojos[i], paramSpec);
                 parameterChoicesAdapters[i] = new ObjectAdapter[parameterChoicesPojos[i].length];
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);

@@ -47,7 +47,7 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
 
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private SpecificationLoader specificationLookup;
+    private SpecificationLoader specificationLoader;
     private AdapterManager adapterManager;
     private ObjectPersistor objectPersistor;
 
@@ -221,7 +221,7 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getObjectPersistor());
+        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getObjectPersistor());
     }
 
     @Override
@@ -291,13 +291,13 @@ public abstract class WrapperFactoryAbstract implements WrapperFactory, Authenti
     }
 
     
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
     @Programmatic
     @Override
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
+        this.specificationLoader = specificationLookup;
     }
 
     protected ObjectPersistor getObjectPersistor() {

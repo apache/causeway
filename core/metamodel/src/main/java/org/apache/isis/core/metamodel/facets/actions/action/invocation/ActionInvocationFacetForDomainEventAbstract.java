@@ -21,11 +21,13 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +48,12 @@ import org.apache.isis.applib.services.command.spi.CommandService;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -59,6 +63,7 @@ import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.command.CommandFacet;
 import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -132,7 +137,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link #invoke(org.apache.isis.core.metamodel.adapter.ObjectAdapter, org.apache.isis.core.metamodel.adapter.ObjectAdapter[])}
+     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], AuthenticationSession, DeploymentCategory)}
      */
     public static class InvocationResult {
 
@@ -169,15 +174,21 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     @Override
-    public ObjectAdapter invoke(final ObjectAdapter targetAdapter, final ObjectAdapter[] argumentAdapters) {
-        return invoke(null, targetAdapter, argumentAdapters);
+    public ObjectAdapter invoke(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter[] argumentAdapters,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
+        return invoke(null, targetAdapter, argumentAdapters, authenticationSession, deploymentCategory);
     }
 
     @Override
     public ObjectAdapter invoke(
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] arguments) {
+            final ObjectAdapter[] arguments,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
@@ -191,9 +202,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         command,
                         null);
 
-
         // ... invoke the action
         final InvocationResult invocationResult = internalInvoke(command, owningAction, targetAdapter, arguments);
+        final ObjectAdapter invocationResultAdapter = invocationResult.getAdapter();
 
         // ... post the executed event
         if (invocationResult.getWhetherInvoked()) {
@@ -204,11 +215,30 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     eventType, verify(event),
                     owningAction, targetAdapter, arguments,
                     command,
-                    invocationResult.getAdapter());
+                    invocationResultAdapter);
         }
 
-        return invocationResult.getAdapter();
+        if(invocationResultAdapter != null) {
+            Object result = invocationResultAdapter.getObject();
+            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
+            if(result instanceof Collection) {
+                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
 
+                final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+                final List<ObjectAdapter> visibleAdapters = ObjectAdapter.Util
+                        .visibleAdapters(adapterList, authenticationSession, deploymentCategory);
+                final List<Object> visibleObjects =
+                        Lists.newArrayList(Lists.transform(
+                                visibleAdapters, ObjectAdapter.Functions.getObject()));
+                final ObjectAdapter visibleObjectsAsAdapter = getAdapterManager().adapterFor(visibleObjects);
+                return visibleObjectsAsAdapter;
+            } else {
+                boolean visible = ObjectAdapter.Util
+                        .isVisible(resultAdapter, authenticationSession, deploymentCategory);
+                return visible?resultAdapter:null;
+            }
+        }
+        return invocationResultAdapter;
     }
 
     /**

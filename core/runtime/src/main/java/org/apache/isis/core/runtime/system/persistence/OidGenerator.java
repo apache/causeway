@@ -56,7 +56,7 @@ public class OidGenerator implements DebuggableWithTitle {
      * TODO: the responsibility for knowing if this pojo is a view model or not are split unhappily between this class and the {@link org.apache.isis.core.runtime.system.persistence.IdentifierGenerator} impl.
      */
     public final RootOid createTransientOrViewModelOid(final Object pojo) {
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(pojo.getClass());
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(pojo.getClass());
         final ObjectSpecId objectSpecId = spec.getSpecId();
         final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
         final State state = spec.containsDoOpFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
@@ -94,7 +94,7 @@ public class OidGenerator implements DebuggableWithTitle {
         final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
         final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo, transientRootOid);
         
-        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
         final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.PERSISTENT;
         return new RootOidDefault(objectSpecId, persistentIdentifier, state);
     }
@@ -108,7 +108,7 @@ public class OidGenerator implements DebuggableWithTitle {
 
     private ObjectSpecId objectSpecIdFor(final Object pojo) {
         final Class<? extends Object> cls = pojo.getClass();
-        final ObjectSpecification objectSpec = getSpecificationLookup().loadSpecification(cls);
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
         return objectSpec.getSpecId();
     }
 
@@ -135,7 +135,7 @@ public class OidGenerator implements DebuggableWithTitle {
     // context
     //////////////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
+    protected SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
 

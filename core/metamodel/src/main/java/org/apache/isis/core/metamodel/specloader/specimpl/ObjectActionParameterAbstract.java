@@ -113,7 +113,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectSpecification getSpecification() {
-        return ObjectMemberAbstract.getSpecification(getSpecificationLookup(), peer.getType());
+        return ObjectMemberAbstract.getSpecification(getSpecificationLoader(), peer.getType());
     }
 
     @Override
@@ -269,7 +269,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         if (facet != null) {
 
             final Object[] choices = facet.autoComplete(adapter, searchArg, authenticationSession, deploymentCategory);
-            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
+            checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getAdapterMap().adapterFor(choice));
             }
@@ -322,7 +322,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         if (facet != null) {
             final Object[] choices = facet.getChoices(target, args, authenticationSession, deploymentCategory);
-            checkChoicesOrAutoCompleteType(getSpecificationLookup(), choices, getSpecification());
+            checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ObjectAdapter adapter = choice != null? getAdapterMap().adapterFor(choice) : null;
                 adapters.add(adapter);
@@ -491,8 +491,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getDeploymentCategory();
     }
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return parentAction.getSpecificationLookup();
+    protected SpecificationLoader getSpecificationLoader() {
+        return parentAction.getSpecificationLoader();
     }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {

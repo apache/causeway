@@ -87,10 +87,13 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
             return Collections.emptyList();
         }
+
+        final ObjectSpecification objectSpecification = (ObjectSpecification) getFacetHolder();
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
+
         final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
         return ObjectAdapter.Util.visibleAdapters(
-                        adapterList, getFacetHolder(), authenticationSession, deploymentCategory);
+                        adapterList, authenticationSession, deploymentCategory);
     }
 
 

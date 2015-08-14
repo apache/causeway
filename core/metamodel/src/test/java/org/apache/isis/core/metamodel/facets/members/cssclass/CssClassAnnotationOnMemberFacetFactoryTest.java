@@ -35,7 +35,7 @@ public class CssClassAnnotationOnMemberFacetFactoryTest extends AbstractFacetFac
     public void testCssClassAnnotationPickedUpOnProperty() {
 
         final CssClassFacetOnMemberFactory facetFactory = new CssClassFacetOnMemberFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         class Customer {
 

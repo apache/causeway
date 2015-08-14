@@ -80,7 +80,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     @Mock
     private ServicesProvider mockServicesProvider;
     @Mock
-    private SpecificationLoader mockSpecificationLookup;
+    private SpecificationLoader mockSpecificationLoader;
 
     private ObjectMemberContext objectMemberContext;
 
@@ -112,7 +112,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     @Before
     public void setUp() {
 
-        objectMemberContext = new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider);
+        objectMemberContext = new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider,
+                mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter, mockServicesProvider);
         
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -124,11 +125,11 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setObjectPersistor(mockObjectPersistor);
-        wrapperFactory.setSpecificationLookup(mockSpecificationLookup);
+        wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
 
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLookup).loadSpecification(String.class);
+                allowing(mockSpecificationLoader).loadSpecification(String.class);
                 will(returnValue(mockStringSpec));
 
                 allowing(mockStringSpec).getShortIdentifier();
@@ -159,7 +160,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
                 allowing(mockEmployeeAdapter).getSpecification();
                 will(returnValue(mockEmployeeSpec));
 
-                allowing(mockSpecificationLookup).loadSpecification(Employee.class);
+                allowing(mockSpecificationLoader).loadSpecification(Employee.class);
                 will(returnValue(mockEmployeeSpec));
 
                 allowing(mockEmployeeSpec).getMember(methodOf(Employee.class, "getEmployeeRepository"));
@@ -208,7 +209,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     @Test
     public void cannotAccessMethodNotCorrespondingToMember() {
 
-        expectedException.expectMessage("Method 'getEmployeeRepository' being invoked does not correspond to any of the object's fields or actions.");
+        expectedException.expectMessage(
+                "Method 'getEmployeeRepository' being invoked does not correspond to any of the object's fields or actions.");
         
         // then
         assertThat(employeeWO.getEmployeeRepository(), is(notNullValue()));
@@ -309,10 +311,11 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     
     // //////////////////////////////////////
 
-    private static FacetedMethod facetedMethodForProperty(
+    private FacetedMethod facetedMethodForProperty(
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod));
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod, mockAdapterManager,
+                mockSpecificationLoader));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod, null));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));

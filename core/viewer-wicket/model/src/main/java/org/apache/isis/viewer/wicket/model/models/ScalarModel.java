@@ -253,7 +253,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public void reset(ScalarModel scalarModel) {
                 final OneToOneAssociation property = scalarModel.propertyMemento.getProperty();
-                final ObjectAdapter associatedAdapter = property.get(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+                final ObjectAdapter associatedAdapter = property.get(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK)
+                );
 
                 scalarModel.setObject(associatedAdapter);
             }
@@ -554,7 +555,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
     protected void setObject(final ObjectAdapterMemento parentObjectAdapterMemento) {
         final OneToOneAssociation property = propertyMemento.getProperty();
-        final ObjectAdapter associatedAdapter = property.get(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK));
+        final ObjectAdapter associatedAdapter = property.get(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK)
+        );
 
         setObject(associatedAdapter);
     }

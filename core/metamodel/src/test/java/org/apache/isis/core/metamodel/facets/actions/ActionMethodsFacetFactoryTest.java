@@ -100,7 +100,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -122,7 +122,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -146,7 +146,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -170,7 +170,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCannotHaveBothDebugAndThenExplorationPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -191,7 +191,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testCannotHaveBothExplorationAndThenDebugPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -212,7 +212,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsValidateMethodNoArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -242,7 +242,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -272,7 +272,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -301,7 +301,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -324,7 +324,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodNoArgsFacetAndRemovesMethod() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         class Customer {
             @SuppressWarnings("unused")
@@ -353,7 +353,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -416,7 +416,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -435,7 +435,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -454,7 +454,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
         final Method alwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideSomeAction", new Class[] {});
@@ -471,7 +471,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
@@ -486,7 +486,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -505,7 +505,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "otherAction", new Class[] { int.class, Long.class });
@@ -521,7 +521,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
 
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -540,7 +540,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final Method actionMethod = findMethod(CustomerStatic.class, "someAction", new Class[] { int.class, Long.class });
@@ -559,7 +559,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         final ActionParameterDefaultsFacetViaMethodFactory facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -606,7 +606,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
         final ActionParameterChoicesFacetViaMethodFactory facetFactory = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -668,7 +668,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
         final ActionParameterAutoCompleteFacetViaMethodFactory facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -701,11 +701,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testBothChoicesMethodCausesException() {
 
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForParams.setSpecificationLookup(programmableReflector);
+        facetFactoryForParams.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {
@@ -744,11 +744,11 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testBothDefaultMethodCausesException() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterDefaultsFacetViaMethodFactory facetFactoryForParams = new ActionParameterDefaultsFacetViaMethodFactory();
-        facetFactoryForParams.setSpecificationLookup(programmableReflector);
+        facetFactoryForParams.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {

@@ -102,7 +102,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
         if (spec.isParented()) {
             return newAggregatedInstance(this, ofClass);
         } else {
@@ -115,7 +115,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @SuppressWarnings("unchecked")
     @Override
     public <T> T newViewModelInstance(Class<T> ofClass, String memento) {
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
         if (!spec.containsFacet(ViewModelFacet.class)) {
             throw new IsisException("Type must be a ViewModel: " + ofClass);
         }
@@ -131,7 +131,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
-        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
         if (!spec.isParented()) {
             throw new IsisException("Type must be annotated as @Aggregated: " + ofClass);
         }
@@ -756,7 +756,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
     private QuerySubmitter querySubmitter;
-    private SpecificationLoader specificationLookup;
+    private SpecificationLoader specificationLoader;
     private DomainObjectServices domainObjectServices;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
@@ -782,14 +782,14 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
         this.domainObjectServices = domainObjectServices;
     }
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     @Programmatic
     @Override
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
+        this.specificationLoader = specificationLoader;
     }
 
     protected AuthenticationSessionProvider getAuthenticationSessionProvider() {

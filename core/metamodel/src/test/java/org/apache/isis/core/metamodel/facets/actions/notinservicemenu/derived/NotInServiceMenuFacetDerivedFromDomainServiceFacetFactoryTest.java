@@ -44,7 +44,7 @@ public class NotInServiceMenuFacetDerivedFromDomainServiceFacetFactoryTest exten
     @Before
     public void setUp() throws Exception {
         facetFactory = new NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
     }
 
     @Test

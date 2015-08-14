@@ -43,14 +43,13 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         attachPropertyAccessFacetForAccessorMethod(processMethodContext);
     }
 
-    private static void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
-
+    private void attachPropertyAccessFacetForAccessorMethod(final ProcessMethodContext processMethodContext) {
         final Method accessorMethod = processMethodContext.getMethod();
-
         processMethodContext.removeMethod(accessorMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessorMethod, property));
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(
+                                accessorMethod, property, getAdapterManager(), getSpecificationLoader()));
     }
 
     // ///////////////////////////////////////////////////////

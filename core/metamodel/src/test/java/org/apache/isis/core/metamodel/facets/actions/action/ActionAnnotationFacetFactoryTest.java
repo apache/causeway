@@ -124,7 +124,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
     public void setUp() throws Exception {
         facetFactory = new ActionAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
 
         actionMethod = findMethod(Customer.class, "someAction");
     }

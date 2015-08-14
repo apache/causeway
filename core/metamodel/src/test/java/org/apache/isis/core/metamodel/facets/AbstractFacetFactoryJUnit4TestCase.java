@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -47,6 +48,8 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
     @Mock
     protected SpecificationLoaderSpi mockSpecificationLoaderSpi;
+    @Mock
+    protected AdapterManager mockAdapterManager;
     @Mock
     protected MethodRemover mockMethodRemover;
     @Mock

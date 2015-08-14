@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**

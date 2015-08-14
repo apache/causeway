@@ -76,7 +76,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     @Mock
     private ObjectPersistor mockObjectPersistor;
     @Mock
-    private SpecificationLoader mockSpecificationLookup;
+    private SpecificationLoader mockSpecificationLoader;
 
     private Employee employeeDO;
     @Mock
@@ -116,7 +116,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         wrapperFactory.setObjectPersistor(mockObjectPersistor);
-        wrapperFactory.setSpecificationLookup(mockSpecificationLookup);
+        wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
         
         context.checking(new Expectations() {
             {
@@ -138,7 +138,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getIdentifier();
                 will(returnValue(mockPasswordIdentifier));
 
-                allowing(mockSpecificationLookup).loadSpecification(Employee.class);
+                allowing(mockSpecificationLoader).loadSpecification(Employee.class);
                 will(returnValue(mockEmployeeSpec));
                 
                 allowing(mockEmployeeSpec).getMember(with(setPasswordMethod));
@@ -238,7 +238,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
 
 
         // and given
-        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember));
+        facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember,
+                mockAdapterManager, mockSpecificationLoader));
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));

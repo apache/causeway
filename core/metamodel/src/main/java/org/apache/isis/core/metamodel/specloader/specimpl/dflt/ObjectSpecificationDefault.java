@@ -161,7 +161,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         for (final Class<?> interfaceType : interfaceTypes) {
             final Class<?> substitutedInterfaceType = classSubstitutor.getClass(interfaceType);
             if (substitutedInterfaceType != null) {
-                final ObjectSpecification interfaceSpec = getSpecificationLookup().loadSpecification(substitutedInterfaceType);
+                final ObjectSpecification interfaceSpec = getSpecificationLoader().loadSpecification(substitutedInterfaceType);
                 interfaceSpecList.add(interfaceSpec);
             }
         }

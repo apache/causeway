@@ -81,7 +81,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
      * For testing.  
      * 
      * <p>
-     *     In production code, {@link #setSpecificationLookup(org.apache.isis.core.metamodel.spec.SpecificationLoader)}
+     *     In production code, {@link #setSpecificationLoader(org.apache.isis.core.metamodel.spec.SpecificationLoader)}
      *     Pis used instead.
      * </p>
      * @param injectorMethodEvaluator
@@ -459,7 +459,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private InjectorMethodEvaluator injectorMethodEvaluator;
 
     @Override
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup) {
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
         injectorMethodEvaluator = specificationLookup;
     }
 

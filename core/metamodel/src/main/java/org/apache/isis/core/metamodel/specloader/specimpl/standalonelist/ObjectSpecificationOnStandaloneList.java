@@ -64,7 +64,7 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         updateSuperclass(Object.class);
 
         addFacet(new CollectionFacetOnStandaloneList(this));
-        addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLookup()) {
+        addFacet(new TypeOfFacetDefaultToObject(this, getSpecificationLoader()) {
         });
 
         // ObjectList specific

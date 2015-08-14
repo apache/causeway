@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.snapshot;
 
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -37,11 +36,8 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import com.google.common.collect.Maps;
 
@@ -496,7 +492,8 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-            final ObjectAdapter referencedObject = oneToOneAssociation.get(fieldPlace.getObject());
+            final ObjectAdapter referencedObject = oneToOneAssociation.get(fieldPlace.getObject()
+            );
 
             if (referencedObject == null) {
                 return true; // not a failure if the reference was null

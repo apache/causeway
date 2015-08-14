@@ -99,13 +99,13 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
 
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
-                        collectionAdapter, parameterType,
-                        authenticationSession, deploymentCategory, getSpecificationLookup());
-        final List<Object> filteredObjects = Lists.newArrayList(
+                        collectionAdapter,
+                        authenticationSession, deploymentCategory);
+        final List<Object> visibleObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 
         final ObjectSpecification parameterSpec = getSpecification(parameterType);
-        return CollectionUtils.getCollectionAsObjectArray(filteredObjects, parameterSpec, getAdapterManager());
+        return CollectionUtils.getCollectionAsObjectArray(visibleObjects, parameterSpec, getAdapterManager());
     }
 
     @Override

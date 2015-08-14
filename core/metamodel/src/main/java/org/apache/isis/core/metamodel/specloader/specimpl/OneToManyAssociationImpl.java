@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollect
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
@@ -55,7 +54,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public OneToManyAssociationImpl(
             final FacetedMethod facetedMethod, 
             final ObjectMemberContext objectMemberContext) {
-        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
+        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLoader(), facetedMethod.getType()), objectMemberContext);
     }
 
     protected OneToManyAssociationImpl(
@@ -147,7 +146,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter);
+        final Object collection = accessor.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory());
         if (collection == null) {
             return null;
         }
@@ -159,7 +158,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
         final ObjectAdapter collection = get(parentAdapter);
-        final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
+        final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         return facet.size(collection) == 0;
     }
 

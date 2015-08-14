@@ -107,7 +107,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
 
     public ObjectSpecification getSpecification() {
         if (specification == null) {
-            specification = getSpecificationLookup().loadSpecification(getAdaptedClass());
+            specification = getSpecificationLoader().loadSpecification(getAdaptedClass());
         }
         return specification;
     }
@@ -312,7 +312,7 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     // //////////////////////////////////////////////////////////
 
     protected ObjectAdapter createAdapter(final Class<?> type, final Object object) {
-        final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
         if (specification.isNotCollection()) {
             return getAdapterManager().adapterFor(object);
         } else {
@@ -342,8 +342,8 @@ public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbs
     /**
      * From {@link #getContext() context.}
      */
-    protected SpecificationLoader getSpecificationLookup() {
-        return context.getSpecificationLookup();
+    protected SpecificationLoader getSpecificationLoader() {
+        return context.getSpecificationLoader();
     }
 
     /**

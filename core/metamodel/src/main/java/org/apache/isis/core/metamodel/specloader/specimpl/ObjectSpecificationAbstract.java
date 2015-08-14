@@ -107,7 +107,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     
     private final FacetProcessor facetProcessor;
     
@@ -182,7 +182,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.authenticationSessionProvider = specificationContext.getAuthenticationSessionProvider();
         this.servicesProvider = specificationContext.getServicesProvider();
         this.objectInstantiator = specificationContext.getObjectInstantiator();
-        this.specificationLookup = specificationContext.getSpecificationLookup();
+        this.specificationLoader = specificationContext.getSpecificationLoader();
         this.facetProcessor = specificationContext.getFacetProcessor();
         
         this.objectMemberContext = objectMemberContext;
@@ -282,7 +282,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if (superclass == null) {
             return;
         }
-        superclassSpec = getSpecificationLookup().loadSpecification(superclass);
+        superclassSpec = getSpecificationLoader().loadSpecification(superclass);
         if (superclassSpec != null) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("  Superclass " + superclass.getName());
@@ -712,7 +712,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 // make sure don't go into an infinite loop, though.
                 try {
                     invalidatingCache.set(true);
-                    getSpecificationLookup().invalidateCache(getCorrespondingClass());
+                    getSpecificationLoader().invalidateCache(getCorrespondingClass());
                 } finally {
                     invalidatingCache.set(false);
                 }
@@ -1211,8 +1211,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return objectInstantiator;
     }
 
-    public SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    public SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
 

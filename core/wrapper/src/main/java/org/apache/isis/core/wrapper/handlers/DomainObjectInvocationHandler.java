@@ -77,7 +77,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
     private final ObjectPersistor objectPersistor;
 
@@ -123,7 +123,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final WrapperFactory wrapperFactory,
             final ExecutionMode mode,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final ObjectPersistor objectPersistor,
             final ProxyContextHandler proxy) {
@@ -131,7 +131,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         this.proxy = proxy;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.objectPersistor = objectPersistor;
         this.executionMode = mode;
@@ -786,7 +786,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {
-        final ObjectSpecification nos = getSpecificationLookup().loadSpecification(type);
+        final ObjectSpecification nos = getSpecificationLoader().loadSpecification(type);
         return nos;
     }
 
@@ -794,8 +794,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // Dependencies
     // /////////////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {

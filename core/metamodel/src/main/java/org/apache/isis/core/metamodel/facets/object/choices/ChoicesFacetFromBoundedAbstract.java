@@ -120,7 +120,7 @@ public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract impl
 
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
-                    allInstancesAdapter, getObjectSpecification(), authenticationSession, deploymentCategory);
+                    allInstancesAdapter, authenticationSession, deploymentCategory);
 
         final List<Object> pojos = Lists.transform(adapters, ObjectAdapter.Functions.getObject());
         return Lists.newArrayList(pojos).toArray();

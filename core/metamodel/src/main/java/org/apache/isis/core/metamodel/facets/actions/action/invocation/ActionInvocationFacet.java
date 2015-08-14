@@ -24,7 +24,9 @@ import java.util.List;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -41,9 +43,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 public interface ActionInvocationFacet extends Facet {
 
     @Deprecated
-    public ObjectAdapter invoke(ObjectAdapter targetAdapter, ObjectAdapter[] argumentAdapters);
+    public ObjectAdapter invoke(
+            ObjectAdapter targetAdapter,
+            ObjectAdapter[] argumentAdapters,
+            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
 
-    public ObjectAdapter invoke(ObjectAction owningAction, ObjectAdapter targetAdapter, ObjectAdapter[] argumentAdapters);
+    public ObjectAdapter invoke(
+            ObjectAction owningAction,
+            ObjectAdapter targetAdapter,
+            ObjectAdapter[] argumentAdapters,
+            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
 
     public ObjectSpecification getReturnType();
 

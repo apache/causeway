@@ -22,14 +22,13 @@ package org.apache.isis.core.metamodel.facets.collections.accessor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
@@ -41,7 +40,6 @@ public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollect
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-
         attachAccessorFacetForAccessorMethod(processMethodContext);
     }
 
@@ -50,8 +48,8 @@ public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollect
         processMethodContext.removeMethod(accessorMethod);
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
-        final Facet facet = new CollectionAccessorFacetViaAccessor(accessorMethod, holder);
-        FacetUtil.addFacet(facet);
+        FacetUtil.addFacet(new CollectionAccessorFacetViaAccessor(
+                                accessorMethod, holder, getAdapterManager(), getSpecificationLoader()));
     }
 
     // ///////////////////////////////////////////////////////////////

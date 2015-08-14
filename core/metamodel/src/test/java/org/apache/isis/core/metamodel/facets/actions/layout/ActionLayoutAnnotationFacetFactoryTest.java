@@ -47,7 +47,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
     @Before
     public void setUp() throws Exception {
         facetFactory = new ActionLayoutFacetFactory();
-        facetFactory.setSpecificationLookup(mockSpecificationLoaderSpi);
+        facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
     }
 
     @Test

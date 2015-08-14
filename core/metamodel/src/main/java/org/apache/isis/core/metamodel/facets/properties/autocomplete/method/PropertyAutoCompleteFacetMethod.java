@@ -46,13 +46,18 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     private final int minLength;
 
     private final AdapterManager adapterManager;
-    private SpecificationLoader specificationLookup;
+    private SpecificationLoader specificationLoader;
 
-    public PropertyAutoCompleteFacetMethod(final Method method, final Class<?> choicesClass, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
+    public PropertyAutoCompleteFacetMethod(
+            final Method method,
+            final Class<?> choicesClass,
+            final FacetHolder holder,
+            final SpecificationLoader specificationLoader,
+            final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.minLength = MinLengthUtil.determineMinLength(method);
     }
@@ -105,9 +110,9 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
-                        collectionAdapter, propertyType,
-                        authenticationSession, deploymentCategory,
-                        getSpecificationLookup());
+                        collectionAdapter,
+                        authenticationSession, deploymentCategory
+                );
         final List<Object> filteredObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 
@@ -124,7 +129,7 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
 
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
     }
 
     // ////////////////////////////////////////////
@@ -135,8 +140,8 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
         return adapterManager;
     }
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
 

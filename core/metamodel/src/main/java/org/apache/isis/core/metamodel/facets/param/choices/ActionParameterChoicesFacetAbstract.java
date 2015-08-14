@@ -32,28 +32,28 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
 
     public ActionParameterChoicesFacetAbstract(
             final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
     }
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
     }
 
     // /////////////////////////////////////////////////////////
     // Dependencies
     // /////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     protected AdapterManager getAdapterManager() {

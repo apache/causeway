@@ -78,8 +78,8 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
         if(!(pojo instanceof Persistable)) {
             return "1";
         }
-        
-        final ObjectSpecification spec = getSpecificationLookup().lookupBySpecId(objectSpecId);
+
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
         if(spec.containsFacet(ViewModelFacet.class)) {
             ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
             return recreatableObjectFacet.memento(pojo);
@@ -95,15 +95,6 @@ class IdentifierGeneratorForDataNucleus implements IdentifierGenerator {
     public <T extends IdentifierGenerator> T underlying(Class<T> cls) {
         return cls == IdentifierGeneratorForDataNucleus.class? (T) this : null;
     }
-
-    //////////////////////////////////////////////////////////////////
-    // context
-    //////////////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLookup() {
-        return IsisContext.getSpecificationLoader();
-    }
-
 
     // //////////////////////////////////////////////////////////////
     // Debugging

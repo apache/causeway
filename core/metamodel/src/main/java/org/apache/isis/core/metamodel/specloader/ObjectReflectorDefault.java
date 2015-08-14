@@ -545,7 +545,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
         if (SpecificationLoaderAware.class.isAssignableFrom(candidateClass)) {
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);
-            cast.setSpecificationLookup(this);
+            cast.setSpecificationLoader(this);
         }
         if (ServicesInjectorAware.class.isAssignableFrom(candidateClass)) {
             final ServicesInjectorAware cast = ServicesInjectorAware.class.cast(candidate);

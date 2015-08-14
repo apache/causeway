@@ -27,7 +27,7 @@ public class SpecificationContext {
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
     public SpecificationContext(
@@ -35,13 +35,13 @@ public class SpecificationContext {
             final AuthenticationSessionProvider authenticationSessionProvider, 
             final ServicesProvider servicesProvider, 
             final ObjectInstantiator objectInstantiator, 
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final FacetProcessor facetProcessor) {
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.facetProcessor = facetProcessor;
     }
 
@@ -61,8 +61,8 @@ public class SpecificationContext {
         return objectInstantiator;
     }
 
-    public SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    public SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     public FacetProcessor getFacetProcessor() {

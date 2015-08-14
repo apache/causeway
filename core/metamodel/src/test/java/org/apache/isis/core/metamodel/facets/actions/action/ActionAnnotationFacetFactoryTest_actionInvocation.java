@@ -45,7 +45,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
     public void setUp() throws Exception {
         super.setUp();
         facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setSpecificationLookup(programmableReflector);
+        facetFactory.setSpecificationLoader(programmableReflector);
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -148,11 +148,11 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
-        facetFactoryForChoices.setSpecificationLookup(programmableReflector);
+        facetFactoryForChoices.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
-        facetFactoryForDisable.setSpecificationLookup(programmableReflector);
+        facetFactoryForDisable.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
         class Customer {

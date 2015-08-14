@@ -24,6 +24,6 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface SpecificationLoaderAware {
 
     @Programmatic
-    public void setSpecificationLookup(final SpecificationLoader specificationLookup);
+    public void setSpecificationLoader(final SpecificationLoader specificationLookup);
 
 }

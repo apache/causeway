@@ -95,9 +95,9 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         final Class<?> parameterType = facetedMethodParameter.getType();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
-                        objectAdapter, parameterType,
-                        authenticationSession, deploymentCategory,
-                        getSpecificationLookup());
+                        objectAdapter,
+                        authenticationSession, deploymentCategory
+                );
         final List<Object> visibleObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 

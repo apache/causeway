@@ -81,7 +81,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
         this.deploymentCategory = objectMemberContext.getDeploymentCategory();
         this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();
-        this.specificationLookup = objectMemberContext.getSpecificationLookup();
+        this.specificationLookup = objectMemberContext.getSpecificationLoader();
         this.adapterManager = objectMemberContext.getAdapterManager();
         this.servicesProvider = objectMemberContext.getServicesProvider();
         this.querySubmitter = objectMemberContext.getQuerySubmitter();
@@ -313,7 +313,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return authenticationSessionProvider;
     }
 
-    public SpecificationLoader getSpecificationLookup() {
+    public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;
     }
 

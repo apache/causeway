@@ -60,7 +60,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
 
     private static ObjectSpecification typeOfSpec(final ObjectActionImpl objectAction, ObjectMemberContext objectMemberContext) {
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        SpecificationLoader specificationLookup = objectMemberContext.getSpecificationLookup();
+        SpecificationLoader specificationLookup = objectMemberContext.getSpecificationLoader();
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
         // a TypeOfFacet for any contributee associations created from contributed actions.
         Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
@@ -81,7 +81,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLookup()) {};
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLoader()) {};
 
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);

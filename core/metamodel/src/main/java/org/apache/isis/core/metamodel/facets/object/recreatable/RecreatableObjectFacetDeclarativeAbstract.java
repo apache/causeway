@@ -132,7 +132,8 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
                 }
 
                 // otherwise, include
-                final ObjectAdapter propertyValueAdapter = property.get(adapterManager.adapterFor(viewModelPojo));
+                final ObjectAdapter propertyValueAdapter = property.get(adapterManager.adapterFor(viewModelPojo)
+                );
                 if(propertyValueAdapter != null) {
                     final Object propertyValue = propertyValueAdapter.getObject();
                     if(mementoService.canSet(propertyValue)) {

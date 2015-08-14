@@ -32,7 +32,9 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements MethodPrefixBasedFacetFactory {
+public abstract class MethodPrefixBasedFacetFactoryAbstract
+        extends FacetFactoryAbstract
+        implements MethodPrefixBasedFacetFactory {
 
     private final List<String> prefixes;
 

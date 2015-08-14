@@ -19,21 +19,52 @@
 
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements PropertyOrCollectionAccessorFacet {
+
+    private final AdapterManager adapterManager;
+    private final SpecificationLoader specificationLoader;
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
     }
 
-    public PropertyOrCollectionAccessorFacetAbstract(final FacetHolder holder) {
+    public PropertyOrCollectionAccessorFacetAbstract(
+            final FacetHolder holder,
+            final AdapterManager adapterManager,
+            final SpecificationLoader specificationLoader) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.adapterManager = adapterManager;
+        this.specificationLoader = specificationLoader;
     }
 
     @Override
-    public abstract Object getProperty(ObjectAdapter inObject);
+    public abstract Object getProperty(
+            ObjectAdapter inObject,
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory);
+
+    protected ObjectSpecification getSpecification(final Class<?> type) {
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
+    }
+
+    // //////////////////////////////////////
+
+    protected AdapterManager getAdapterManager() {
+        return adapterManager;
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
+    }
+
 }

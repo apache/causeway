@@ -75,7 +75,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
         final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
 
         // get hold of underlying collection
-        final Object collection = getterFacet.getProperty(targetAdapter);
+        final Object collection = getterFacet.getProperty(targetAdapter, null, null);
 
         // don't post event if has set semantics and already contains object
         if(collection instanceof Set) {

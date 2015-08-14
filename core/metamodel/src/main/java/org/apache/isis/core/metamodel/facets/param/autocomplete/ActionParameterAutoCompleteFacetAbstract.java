@@ -32,20 +32,20 @@ public abstract class ActionParameterAutoCompleteFacetAbstract extends FacetAbst
         return ActionParameterAutoCompleteFacet.class;
     }
 
-    private final SpecificationLoader specificationLookup;
+    private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
 
     public ActionParameterAutoCompleteFacetAbstract(
             final FacetHolder holder,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
-        this.specificationLookup = specificationLookup;
+        this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
     }
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
-        return type != null ? getSpecificationLookup().loadSpecification(type) : null;
+        return type != null ? getSpecificationLoader().loadSpecification(type) : null;
     }
 
     @Override
@@ -55,8 +55,8 @@ public abstract class ActionParameterAutoCompleteFacetAbstract extends FacetAbst
     // Dependencies
     // /////////////////////////////////////////////////////////
 
-    protected SpecificationLoader getSpecificationLookup() {
-        return specificationLookup;
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
     }
 
     protected AdapterManager getAdapterManager() {
