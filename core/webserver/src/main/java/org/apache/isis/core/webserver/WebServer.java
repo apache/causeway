@@ -31,11 +31,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
 
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.commons.lang.ArrayExtensions;
-import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webserver.internal.OptionHandlerDeploymentTypeWebServer;
 import org.apache.isis.core.webserver.internal.OptionHandlerPort;
-import org.apache.isis.core.webserver.internal.OptionHandlerStartupMode;
 
 public class WebServer {
 
@@ -68,7 +66,8 @@ public class WebServer {
     public static void main(final String[] args) {
 //        System.out.println("press any key to start...");
 //        readLine();
-        new WebServer().run(ArrayExtensions.append(args, "--" + Constants.NO_SPLASH_LONG_OPT));
+//        final String[] args2 = ArrayExtensions.append(args, "--" + Constants.NO_SPLASH_LONG_OPT);
+        new WebServer().run(args);
     }
 
     private static void readLine() {
@@ -81,16 +80,6 @@ public class WebServer {
             io.printStackTrace();
             System.exit(1);
         }
-    }
-
-    /**
-     * Originally introduced to allow the WebServer to be used by tests.
-     */
-    public void run(final int port) {
-        String[] args = new String[0];
-        args = OptionHandlerStartupMode.appendArg(args, StartupMode.BACKGROUND);
-        args = OptionHandlerPort.appendArg(args, port);
-        run(args);
     }
 
     public void run(final String[] args) {

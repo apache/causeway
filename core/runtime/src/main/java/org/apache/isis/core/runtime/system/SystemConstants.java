@@ -41,18 +41,25 @@ public final class SystemConstants {
      * <p>
      * Use {@link DeploymentType#lookup(String)} to decode.
      */
-
     public static final String DEPLOYMENT_TYPE_KEY = ConfigurationConstants.ROOT + "deploymentType";
+
+
     /**
      * Key used to lookup {@link SpecificationLoaderSpi specification Loader} in
      * {@link IsisConfiguration}, and root for any
      * {@link ObjectReflectorInstaller reflector}-specific configuration keys.
+     *
+     * @deprecated
      */
+    @Deprecated
     public final static String REFLECTOR_KEY = ConfigurationConstants.ROOT + ObjectReflectorInstaller.TYPE;
     
     /**
      * Default for {@link #REFLECTOR_KEY}
+     *
+     * @deprecated
      */
+    @Deprecated
     public static final String REFLECTOR_DEFAULT = "java";
 
 
@@ -61,10 +68,24 @@ public final class SystemConstants {
      * {@link IsisConfiguration}, and root for any
      * {@link PersistenceMechanismInstaller persistor}-specific configuration
      * keys.
+     *
+     * @deprecated
      */
+    @Deprecated
     public final static String OBJECT_PERSISTOR_INSTALLER_KEY = ConfigurationConstants.ROOT + PersistenceMechanismInstaller.TYPE;
 
+    /**
+     *
+     * @deprecated
+     */
+    @Deprecated
     public static final String OBJECT_PERSISTOR_KEY = OBJECT_PERSISTOR_INSTALLER_KEY;
+
+    /**
+     *
+     * @deprecated
+     */
+    @Deprecated
     public static final String OBJECT_PERSISTOR_DEFAULT = "datanucleus";
 
 
@@ -128,13 +149,19 @@ public final class SystemConstants {
     /**
      * Key by which requested user (eg via command line) is made available in
      * {@link IsisConfiguration} .
+     *
+     * @deprecated
      */
+    @Deprecated
     public final static String USER_KEY = ConfigurationConstants.ROOT + "user";
 
     /**
      * Key by which requested password (eg via command line) is made available
      * in {@link IsisConfiguration}.
+     *
+     * @deprecated
      */
+    @Deprecated
     public final static String PASSWORD_KEY = ConfigurationConstants.ROOT + "password";
 
     /**
@@ -143,7 +170,10 @@ public final class SystemConstants {
      * 
      * <p>
      * Use {@link Splash#valueOf(String)} to decode.
+     *
+     * @deprecated
      */
+    @Deprecated
     public static final String NOSPLASH_KEY = ConfigurationConstants.ROOT + "nosplash";
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
