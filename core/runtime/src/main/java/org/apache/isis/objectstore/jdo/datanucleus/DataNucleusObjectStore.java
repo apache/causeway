@@ -415,7 +415,7 @@ public class DataNucleusObjectStore implements ObjectStore {
                     final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
                     if(recognition != null) {
                         if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
-                            throw new ObjectNotFoundException(oid);
+                            throw new ObjectNotFoundException(oid, e);
                         }
                     }
                 }

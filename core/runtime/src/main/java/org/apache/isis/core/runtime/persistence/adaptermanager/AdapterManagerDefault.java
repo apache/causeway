@@ -53,6 +53,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -316,6 +317,8 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             try {
                 final Object pojo = pojoRecreator.recreatePojo(typedOid);
                 adapter = mapRecreatedPojo(typedOid, pojo);
+            } catch(ObjectNotFoundException ex) {
+                throw ex; // just rethrow
             } catch(RuntimeException ex) {
                 throw new PojoRecreationException(typedOid, ex);
             }

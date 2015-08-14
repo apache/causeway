@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -417,7 +418,12 @@ public class ObjectAdapterMemento implements Serializable {
             return new Function<ObjectAdapterMemento, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final ObjectAdapterMemento from) {
-                    return from.getObjectAdapter(concurrencyChecking);
+                    try {
+                        return from.getObjectAdapter(concurrencyChecking);
+                    } catch (ObjectNotFoundException e) {
+                        // this can happen if for example the object is not visible (due to the security tenanted facet)
+                        return null;
+                    }
                 }
             };
         }
