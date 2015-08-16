@@ -247,7 +247,7 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/110-running-the-app/050-runn
 
 You can download 1-page PDFs cheat sheets for IntelliJ's keyboard shortcuts:
 * for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard.pdf[Windows]
-* for MacOS:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf[MacOS]
+* for link:https://www.jetbrains.com/idea/docs/IntelliJIDEA_ReferenceCard_Mac.pdf[MacOS]
 
 Probably the most important shortcut on them is for `Find Action`:
 - `ctrl-shift-A` on Windows

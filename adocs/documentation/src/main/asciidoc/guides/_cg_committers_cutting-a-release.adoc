@@ -28,7 +28,7 @@ These release notes using bash command line tools.  They should work on Linux an
 
 == Obtain Consensus
 
-Before releasing `core`, ensure there is consensus on the xref:../support.html[dev mailing list] that this is the right time for a release. The discussion should include confirming the version number to be used, and to confirm content.
+Before releasing `core`, ensure there is consensus on the link:../support.html[dev mailing list] that this is the right time for a release. The discussion should include confirming the version number to be used, and to confirm content.
 
 These discussions should also confirm the version number of the module being released. This should be in line with our xref:cg.adoc#_cg_committers_versioning-policy[semantic versioning policy].
 
@@ -668,7 +668,7 @@ For each zip there is a corresponding signature file (append .asc to the zip's u
 
 In the source code repo the code has been tagged as isis-1.9.0-RC1 and simpleapp-archetype-1.9.0-RC1.
 
-For instructions on how to verify the release (build from binaries and/or use in Maven directly), see xref:cg.adoc#_cg_committers_verifying-releases[here]
+For instructions on how to verify the release (build from binaries and/or use in Maven directly), see http://isis.apache.org/guides/cg.html#_cg_committers_verifying-releases
 
 Please verify the release and cast your vote.  The vote will be open for a minimum of 72 hours.
 

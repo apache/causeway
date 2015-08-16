@@ -11,7 +11,7 @@
 This appendix describes the commands often used while working with git.  In addition to these basic commands, please make sure you have read:
 
 * xref:cg.adoc#_cg_building-isis[building Apache Isis]
-* xref:cg.adoc#_cg_git-policy[Git policy]
+* xref:cg.adoc#_cg_policies_git-policy[Git policy]
 * xref:cg.adoc#_cg_contributing[Contributing]
 
 
@@ -85,7 +85,7 @@ git commit -m "ISIS-nnn: yada yada"
 
 == Common Workflows
 
-The xref:cg.adoc#_cg_contributing[contributing] page describes the workflow for non-committers.  The xref:cg.adoc#_cg_git-policy[Git policy] page describes a workflow for Apache Isis **committers**.
+The xref:cg.adoc#_cg_contributing[contributing] page describes the workflow for non-committers.  The xref:cg.adoc#_cg_policies_git-policy[Git policy] page describes a workflow for Apache Isis **committers**.
 
 
 
