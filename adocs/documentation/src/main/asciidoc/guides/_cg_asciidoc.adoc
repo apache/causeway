@@ -170,7 +170,7 @@ git checkout asf-site
 
 === Publishing
 
-Back in the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, in the `adocs/documentation` directory and run:
+Back in the `adocs/documentation` directory of the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, run:
 
 [source,bash]
 ----
