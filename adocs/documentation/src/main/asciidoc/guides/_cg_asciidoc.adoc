@@ -68,7 +68,7 @@ An xref:cg.adoc#_cg_appendix_asciidoc-templates[appendix] lists all the template
 
 == Build and Review (using Maven)
 
-To (re)build the documentation locally prior to release, change into adocs/documentation directory and use:
+To (re)build the documentation locally prior to release, change into the `adocs/documentation` directory and use:
 
 [source]
 ----
@@ -170,7 +170,7 @@ git checkout asf-site
 
 === Publishing
 
-Back in the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo , run:
+Back in the main `isis-git.repo`, to copy the generated documents to the `isis-site.git` repo, in the `adocs/documentation` directory and run:
 
 [source,bash]
 ----
