@@ -77,7 +77,7 @@ This moves the release artifacts into an Apache releases repository; from there 
 
 == Release Source Zip
 
-As described in link:the http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist]. Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location. The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`. Only the most recent release of each supported release line should be contained here, old versions should be deleted.
+As described in the link:http://www.apache.org/dev/release-publishing.html#distribution_dist[Apache documentation], each Apache TLP has a `release/TLP-name` directory in the distribution Subversion repository at link:https://dist.apache.org/repos/dist[https://dist.apache.org/repos/dist]. Once a release vote passes, the release manager should `svn add` the artifacts (plus signature and hash files) into this location. The release is then automatically pushed to http://www.apache.org/dist/[http://www.apache.org/dist/] by `svnpubsub`. Only the most recent release of each supported release line should be contained here, old versions should be deleted.
 
 Each project is responsible for the structure of its directory. The directory structure of Apache Isis reflects the directory structure in our git source code repo:
 

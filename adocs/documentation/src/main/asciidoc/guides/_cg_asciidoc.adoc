@@ -68,7 +68,7 @@ An xref:cg.adoc#_cg_appendix_asciidoc-templates[appendix] lists all the template
 
 == Build and Review (using Maven)
 
-To (re)build the documentation locally prior to release, use:
+To (re)build the documentation locally prior to release, change into adocs/documentation directory and use:
 
 [source]
 ----
