@@ -25,13 +25,13 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
 import org.reflections.vfs.SystemDir;
@@ -39,7 +39,6 @@ import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
-import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 
 /**
  * Programmatic specification of the constituent parts of an application, most specifically the modules that contain
@@ -194,7 +193,7 @@ public interface AppManifest {
 
         private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
         public Set<Class<? extends FixtureScript>> getFixtureScriptTypes() {
-            return fixtureScriptTypes;
+            return fixtureScriptTypes == null ? new HashSet<Class<? extends FixtureScript>>() : fixtureScriptTypes;
         }
         public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
             this.fixtureScriptTypes = fixtureScriptTypes;
