@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -32,7 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -89,15 +88,19 @@ public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAcce
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
-        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
-        final Class<?> collectionElementType = facetedMethod.getType();
-
+        // filter for visibility
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
                         authenticationSession, deploymentCategory);
-        final List<Object> visibleObjects = Lists.newArrayList(
-                Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
+        final Object visibleObjects =
+                CollectionUtils.copyOf(
+                    Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                    method.getReturnType());
+        if(visibleObjects == null) {
+            // unable to take a copy (unrecognized return type), so fall back to returning unfiltered.
+            return collectionOrArray;
+        }
 
         return visibleObjects;
     }

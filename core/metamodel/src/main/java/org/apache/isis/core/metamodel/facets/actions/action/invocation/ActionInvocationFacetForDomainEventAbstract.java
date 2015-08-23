@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
@@ -218,27 +219,40 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     invocationResultAdapter);
         }
 
-        if(invocationResultAdapter != null) {
-            Object result = invocationResultAdapter.getObject();
+        if (invocationResultAdapter != null) {
+            // filter for visibility
+            final Object result = invocationResultAdapter.getObject();
             final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
-            if(result instanceof Collection) {
+            if(result instanceof Collection || result.getClass().isArray()) {
                 final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
 
                 final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
-                final List<ObjectAdapter> visibleAdapters = ObjectAdapter.Util
-                        .visibleAdapters(adapterList, authenticationSession, deploymentCategory);
-                final List<Object> visibleObjects =
-                        Lists.newArrayList(Lists.transform(
-                                visibleAdapters, ObjectAdapter.Functions.getObject()));
+                final List<ObjectAdapter> visibleAdapters =
+                        ObjectAdapter.Util.visibleAdapters(
+                                adapterList,
+                                authenticationSession, deploymentCategory);
+                final Object visibleObjects =
+                        CollectionUtils.copyOf(
+                                Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                                method.getReturnType());
+                if(visibleObjects == null) {
+                    // unable to take a copy (unrecognized return type), so fall back to returning unfiltered.
+                    return invocationResultAdapter;
+                }
+
                 final ObjectAdapter visibleObjectsAsAdapter = getAdapterManager().adapterFor(visibleObjects);
+
                 return visibleObjectsAsAdapter;
             } else {
-                boolean visible = ObjectAdapter.Util
-                        .isVisible(resultAdapter, authenticationSession, deploymentCategory);
+                boolean visible =
+                        ObjectAdapter.Util.isVisible(
+                                resultAdapter, authenticationSession,
+                                deploymentCategory);
                 return visible?resultAdapter:null;
             }
         }
-        return invocationResultAdapter;
+        return null;
+
     }
 
     /**
