@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 
 import java.lang.reflect.Method;
+
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -39,19 +41,20 @@ public class ActionInvocationFacetForPostsActionInvokedEventAnnotation
             final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
-            final ActionDomainEventFacetAbstract actionInteractionFacet,
             final FacetHolder holder,
             final RuntimeContext runtimeContext,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(eventType, method, onType, returnType, actionInteractionFacet, holder, runtimeContext, adapterManager, servicesInjector);
+            final ServicesInjector servicesInjector,
+            final IsisConfiguration isisConfiguration) {
+        super(eventType, method, onType, returnType, holder,
+                runtimeContext, adapterManager, servicesInjector, isisConfiguration);
     }
 
     @Override
     protected ActionDomainEvent<?> verify(final ActionDomainEvent<?> event) {
         // will discard event if different type to that specified in the PostsActionInvokedEvent annotation
         // (that is, if the ActionDomainEventFacetDefault was installed by virtue of a no @Action or @ActionInteraction annotation)
-        return event != null && eventType == event.getClass() ? event : null;
+        return event != null && getEventType() == event.getClass() ? event : null;
     }
 
 }

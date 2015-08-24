@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -29,10 +30,13 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbstract implements PropertyOrCollectionAccessorFacet {
+public abstract class PropertyOrCollectionAccessorFacetAbstract
+        extends FacetAbstract
+        implements PropertyOrCollectionAccessorFacet {
 
     private final AdapterManager adapterManager;
     private final SpecificationLoader specificationLoader;
+    private final IsisConfiguration configuration;
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
@@ -41,10 +45,12 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbs
     public PropertyOrCollectionAccessorFacetAbstract(
             final FacetHolder holder,
             final AdapterManager adapterManager,
-            final SpecificationLoader specificationLoader) {
+            final SpecificationLoader specificationLoader,
+            final IsisConfiguration configuration) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.adapterManager = adapterManager;
         this.specificationLoader = specificationLoader;
+        this.configuration = configuration;
     }
 
     @Override
@@ -67,4 +73,7 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract extends FacetAbs
         return specificationLoader;
     }
 
+    protected IsisConfiguration getConfiguration() {
+        return configuration;
+    }
 }

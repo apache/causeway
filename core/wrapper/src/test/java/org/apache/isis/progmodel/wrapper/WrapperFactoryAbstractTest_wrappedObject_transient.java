@@ -37,6 +37,7 @@ import org.apache.isis.applib.events.PropertyVisibilityEvent;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -74,6 +75,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
+    private IsisConfiguration mockConfiguration;
+    @Mock
     private ObjectPersistor mockObjectPersistor;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
@@ -88,6 +91,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     @Mock
     private Identifier mockPasswordIdentifier;
 
+
     @Mock
     protected ObjectAdapter mockPasswordAdapter;
     
@@ -101,7 +105,6 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
 
     private WrapperFactoryAbstract wrapperFactory;
     private Employee employeeWO;
-
 
     @Before
     public void setUp() throws Exception {
@@ -239,7 +242,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember,
-                mockAdapterManager, mockSpecificationLoader));
+                mockAdapterManager, mockSpecificationLoader, mockConfiguration));
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));

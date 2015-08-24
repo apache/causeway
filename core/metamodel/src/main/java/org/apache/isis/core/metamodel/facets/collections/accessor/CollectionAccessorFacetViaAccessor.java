@@ -27,6 +27,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -36,7 +37,9 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAccessorFacetAbstract implements ImperativeFacet {
+public class CollectionAccessorFacetViaAccessor
+        extends PropertyOrCollectionAccessorFacetAbstract
+        implements ImperativeFacet {
 
     private final Method method;
 
@@ -44,8 +47,9 @@ public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAcce
             final Method method,
             final FacetHolder holder,
             final AdapterManager adapterManager,
-            final SpecificationLoader specificationLoader) {
-        super(holder, adapterManager, specificationLoader);
+            final SpecificationLoader specificationLoader,
+            final IsisConfiguration isisConfiguration) {
+        super(holder, adapterManager, specificationLoader, isisConfiguration);
         this.method = method;
     }
 
@@ -88,26 +92,32 @@ public class CollectionAccessorFacetViaAccessor extends PropertyOrCollectionAcce
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
-        // filter for visibility
-        final List<ObjectAdapter> visibleAdapters =
-                ObjectAdapter.Util.visibleAdapters(
-                        collectionAdapter,
-                        authenticationSession, deploymentCategory);
-        final Object visibleObjects =
-                CollectionUtils.copyOf(
-                    Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
-                    method.getReturnType());
-        if(visibleObjects == null) {
-            // unable to take a copy (unrecognized return type), so fall back to returning unfiltered.
-            return collectionOrArray;
+        boolean filterForVisibility = getConfiguration()
+                .getBoolean("isis.reflector.facet.collectionAccessor.filterVisibility", true);
+        if(filterForVisibility) {
+            final List<ObjectAdapter> visibleAdapters =
+                    ObjectAdapter.Util.visibleAdapters(
+                            collectionAdapter,
+                            authenticationSession, deploymentCategory);
+            final Object visibleObjects =
+                    CollectionUtils.copyOf(
+                            Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
+                            method.getReturnType());
+            if (visibleObjects != null) {
+                return visibleObjects;
+            }
+            // would be null if unable to take a copy (unrecognized return type)
+            // fallback to returning the original adapter, without filtering for visibility
         }
 
-        return visibleObjects;
+        // either no filtering, or was unable to filter (unable to take copy due to unrecognized type)
+        return collectionOrArray;
     }
 
     @Override
     protected String toStringValues() {
         return "method=" + method;
     }
+
 
 }

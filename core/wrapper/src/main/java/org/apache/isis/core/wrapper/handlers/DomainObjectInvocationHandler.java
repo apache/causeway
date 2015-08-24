@@ -23,15 +23,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.datanucleus.enhancement.Persistable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.applib.events.InteractionEvent;
@@ -72,9 +74,6 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionContribute
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
-
-    private final Map<Method, Collection<?>> collectionViewObjectsByMethod = new HashMap<Method, Collection<?>>();
-    private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLoader;
@@ -469,29 +468,15 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
      * Looks up (or creates) a proxy for this object.
      */
     private Collection<?> lookupViewObject(final Method method, final String memberName, final Collection<?> collectionToLookup, final OneToManyAssociation otma) {
-        Collection<?> collectionViewObject = collectionViewObjectsByMethod.get(method);
-        if (collectionViewObject == null) {
-            if (collectionToLookup instanceof WrapperObject) {
-                collectionViewObject = collectionToLookup;
-            } else {
-                collectionViewObject = proxy.proxy(collectionToLookup, memberName, this, otma);
-            }
-            collectionViewObjectsByMethod.put(method, collectionViewObject);
-        }
-        return collectionViewObject;
+        return collectionToLookup instanceof WrapperObject
+                ? collectionToLookup
+                : proxy.proxy(collectionToLookup, memberName, this, otma);
     }
 
     private Map<?, ?> lookupViewObject(final Method method, final String memberName, final Map<?, ?> mapToLookup, final OneToManyAssociation otma) {
-        Map<?, ?> mapViewObject = mapViewObjectsByMethod.get(method);
-        if (mapViewObject == null) {
-            if (mapToLookup instanceof WrapperObject) {
-                mapViewObject = mapToLookup;
-            } else {
-                mapViewObject = proxy.proxy(mapToLookup, memberName, this, otma);
-            }
-            mapViewObjectsByMethod.put(method, mapViewObject);
-        }
-        return mapViewObject;
+        return mapToLookup instanceof WrapperObject
+                ? mapToLookup
+                : proxy.proxy(mapToLookup, memberName, this, otma);
     }
 
     // /////////////////////////////////////////////////////////////////

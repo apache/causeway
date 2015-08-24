@@ -31,6 +31,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -81,6 +82,8 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     private ServicesProvider mockServicesProvider;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private IsisConfiguration mockConfiguration;
 
     private ObjectMemberContext objectMemberContext;
 
@@ -99,6 +102,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     @Mock
     private ObjectAdapter mockAdapterForStringJones;
 
+
     private final SimpleSession session = new SimpleSession("tester", Collections.<String>emptyList());
 
     private EmployeeRepository employeeRepository;
@@ -107,7 +111,6 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     private Employee employeeWO;
 
     private WrapperFactoryAbstract wrapperFactory;
-
 
     @Before
     public void setUp() {
@@ -315,7 +318,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
         FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod, mockAdapterManager,
-                mockSpecificationLoader));
+                mockSpecificationLoader, mockConfiguration));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod, null));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));

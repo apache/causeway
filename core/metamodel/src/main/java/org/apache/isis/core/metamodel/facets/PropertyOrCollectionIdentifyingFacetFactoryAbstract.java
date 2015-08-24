@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -28,14 +30,17 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         extends MethodPrefixBasedFacetFactoryAbstract
-        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware {
+        implements PropertyOrCollectionIdentifyingFacetFactory, AdapterManagerAware, IsisConfigurationAware {
 
-    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
-    private AdapterManager adapterManager;
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(final List<FeatureType> featureTypes, final String... prefixes) {
         super(featureTypes, OrphanValidation.DONT_VALIDATE, prefixes);
     }
+
+
+    // //////////////////////////////////////
+
+    private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     protected boolean isCollectionOrArray(final Class<?> cls) {
         return getCollectionTypeRepository().isCollectionType(cls) || getCollectionTypeRepository().isArrayType(cls);
@@ -48,6 +53,8 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
     // //////////////////////////////////////
 
 
+    private AdapterManager adapterManager;
+
     protected AdapterManager getAdapterManager() {
         return adapterManager;
     }
@@ -57,5 +64,17 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract
         this.adapterManager = adapterManager;
     }
 
+    // //////////////////////////////////////
+
+    private IsisConfiguration configuration;
+
+    protected IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    @Override
+    public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
+    }
 
 }

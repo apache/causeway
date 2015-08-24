@@ -30,7 +30,8 @@ import org.apache.isis.core.metamodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
-public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
+public class CollectionAccessorFacetViaAccessorFactory
+        extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
 
     private static final String[] PREFIXES = { MethodPrefixConstants.GET_PREFIX };
 
@@ -48,8 +49,10 @@ public class CollectionAccessorFacetViaAccessorFactory extends PropertyOrCollect
         processMethodContext.removeMethod(accessorMethod);
 
         final FacetHolder holder = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new CollectionAccessorFacetViaAccessor(
-                                accessorMethod, holder, getAdapterManager(), getSpecificationLoader()));
+        FacetUtil.addFacet(
+                new CollectionAccessorFacetViaAccessor(
+                        accessorMethod, holder,
+                        getAdapterManager(), getSpecificationLoader(), getConfiguration()));
     }
 
     // ///////////////////////////////////////////////////////////////

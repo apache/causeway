@@ -209,27 +209,27 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 final Class<? extends ActionInvokedEvent<?>> actionInvokedEventType = postsActionInvokedEvent.value();
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
-                                actionInvokedEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector()), processMethodContext);
+                                actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration), processMethodContext);
             } else
             // deprecated (but more recently)
             if (actionInteraction != null) {
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
-                                actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector()), processMethodContext);
+                                actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
+                                getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration), processMethodContext);
             } else
             // current
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
-                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                        actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration);
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
-                        actionDomainEventType, actionMethod, typeSpec, returnSpec, actionDomainEventFacet, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector());
+                        actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
+                        getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration);
             }
             FacetUtil.addFacet(actionInvocationFacet);
 
@@ -244,7 +244,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Hidden
         final Hidden hiddenAnnotation = Annotations.getAnnotation(processMethodContext.getMethod(), Hidden.class);
-        HiddenFacet facet = hiddenValidator.flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder), processMethodContext);
+        HiddenFacet facet = hiddenValidator
+                .flagIfPresent(HiddenFacetForHiddenAnnotationOnAction.create(hiddenAnnotation, holder),
+                        processMethodContext);
 
         // else search for @Action(hidden=...)
         final Action action = Annotations.getAnnotation(method, Action.class);
@@ -260,7 +262,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Disabled
         final Disabled annotation = Annotations.getAnnotation(method, Disabled.class);
-        DisabledFacet facet = disabledValidator.flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder), processMethodContext);
+        DisabledFacet facet = disabledValidator
+                .flagIfPresent(DisabledFacetForDisabledAnnotationOnAction.create(annotation, holder),
+                        processMethodContext);
 
         // there is no equivalent in @Action(...)
 

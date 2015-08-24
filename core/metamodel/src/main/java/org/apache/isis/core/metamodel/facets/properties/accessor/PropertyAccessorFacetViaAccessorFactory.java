@@ -48,8 +48,10 @@ public class PropertyAccessorFacetViaAccessorFactory extends PropertyOrCollectio
         processMethodContext.removeMethod(accessorMethod);
 
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(
-                                accessorMethod, property, getAdapterManager(), getSpecificationLoader()));
+        FacetUtil.addFacet(
+                new PropertyAccessorFacetViaAccessor(
+                        accessorMethod, property,
+                        getAdapterManager(), getSpecificationLoader(), getConfiguration()));
     }
 
     // ///////////////////////////////////////////////////////

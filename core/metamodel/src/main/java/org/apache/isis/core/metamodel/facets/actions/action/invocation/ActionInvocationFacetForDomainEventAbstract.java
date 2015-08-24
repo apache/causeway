@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -83,11 +84,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private final ObjectSpecification returnType;
 
     private final AdapterManager adapterManager;
-    private final ActionDomainEventFacetAbstract actionInteractionFacet;
     private final RuntimeContext runtimeContext;
 
     private final ServicesInjector servicesInjector;
-    final Class<? extends ActionDomainEvent<?>> eventType;
+    private final IsisConfiguration configuration;
+    private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
     public ActionInvocationFacetForDomainEventAbstract(
@@ -95,21 +96,22 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final Method method,
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
-            final ActionDomainEventFacetAbstract actionInteractionFacet,
             final FacetHolder holder,
             final RuntimeContext runtimeContext,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
+            final ServicesInjector servicesInjector,
+            final IsisConfiguration configuration) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
-        this.actionInteractionFacet = actionInteractionFacet;
         this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
-        this.domainEventHelper = new DomainEventHelper(servicesInjector);
+        this.configuration = configuration;
+        this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
+
     }
 
     /**
@@ -135,6 +137,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     public ObjectSpecification getOnType() {
         return onType;
     }
+
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
@@ -219,14 +222,18 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     invocationResultAdapter);
         }
 
-        if (invocationResultAdapter != null) {
-            // filter for visibility
-            final Object result = invocationResultAdapter.getObject();
-            final ObjectAdapter resultAdapter = getAdapterManager().adapterFor(result);
-            if(result instanceof Collection || result.getClass().isArray()) {
-                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
+        if (invocationResultAdapter == null) {
+            return null;
+        }
 
-                final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+        boolean filterForVisibility = getConfiguration()
+                .getBoolean("isis.reflector.facet.actionInvocation.filterVisibility", true);
+        if(filterForVisibility) {
+            final Object result = invocationResultAdapter.getObject();
+            if(result instanceof Collection || result.getClass().isArray()) {
+                final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(invocationResultAdapter);
+
+                final Iterable<ObjectAdapter> adapterList = facet.iterable(invocationResultAdapter);
                 final List<ObjectAdapter> visibleAdapters =
                         ObjectAdapter.Util.visibleAdapters(
                                 adapterList,
@@ -235,24 +242,24 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                         CollectionUtils.copyOf(
                                 Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
                                 method.getReturnType());
-                if(visibleObjects == null) {
-                    // unable to take a copy (unrecognized return type), so fall back to returning unfiltered.
-                    return invocationResultAdapter;
+                if (visibleObjects != null) {
+                    return getAdapterManager().adapterFor(visibleObjects);
                 }
+                // would be null if unable to take a copy (unrecognized return type)
+                // fallback to returning the original adapter, without filtering for visibility
 
-                final ObjectAdapter visibleObjectsAsAdapter = getAdapterManager().adapterFor(visibleObjects);
-
-                return visibleObjectsAsAdapter;
             } else {
                 boolean visible =
                         ObjectAdapter.Util.isVisible(
-                                resultAdapter, authenticationSession,
+                                invocationResultAdapter, authenticationSession,
                                 deploymentCategory);
-                return visible?resultAdapter:null;
+                if(!visible) {
+                    return null;
+                }
             }
         }
-        return null;
 
+        return invocationResultAdapter;
     }
 
     /**
@@ -514,4 +521,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
+
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
 }

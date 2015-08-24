@@ -25,17 +25,18 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class PropertyAccessorFacetViaAccessor extends PropertyOrCollectionAccessorFacetAbstract implements ImperativeFacet {
+public class PropertyAccessorFacetViaAccessor
+        extends PropertyOrCollectionAccessorFacetAbstract
+        implements ImperativeFacet {
 
     private final Method method;
 
@@ -43,8 +44,8 @@ public class PropertyAccessorFacetViaAccessor extends PropertyOrCollectionAccess
             final Method method,
             final FacetHolder holder,
             final AdapterManager adapterManager,
-            final SpecificationLoader specificationLoader) {
-        super(holder, adapterManager, specificationLoader);
+            final SpecificationLoader specificationLoader, final IsisConfiguration isisConfiguration) {
+        super(holder, adapterManager, specificationLoader, isisConfiguration);
         this.method = method;
     }
 
@@ -89,15 +90,17 @@ public class PropertyAccessorFacetViaAccessor extends PropertyOrCollectionAccess
             return null;
         }
 
-        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedObject);
-        final FacetedMethod facetedMethod = (FacetedMethod) getFacetHolder();
-        final Class<?> type = facetedMethod.getType();
-        final ObjectSpecification objectSpec = getSpecification(type);
-        final boolean visible = ObjectAdapter.Util
-                .isVisible(referencedAdapter, authenticationSession, deploymentCategory);
-        return visible
-                ? referencedObject
-                : null;
+        boolean filterForVisibility = getConfiguration()
+                .getBoolean("isis.reflector.facet.propertyAccessor.filterVisibility", true);
+        if(filterForVisibility) {
+            final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedObject);
+            final boolean visible = ObjectAdapter.Util
+                    .isVisible(referencedAdapter, authenticationSession, deploymentCategory);
+            if (!visible) {
+                return null;
+            }
+        }
+        return referencedObject;
     }
 
     @Override
