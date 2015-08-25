@@ -390,6 +390,9 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
                 final ObjectAdapter adapter,
                 final AuthenticationSession authenticationSession,
                 final DeploymentCategory deploymentCategory) {
+            if(adapter.isDestroyed()) {
+                return false;
+            }
             if(authenticationSession == null) {
                 return true;
             }
