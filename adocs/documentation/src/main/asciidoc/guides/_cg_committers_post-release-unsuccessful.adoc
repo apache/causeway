@@ -8,13 +8,13 @@
 
 The release process consists of:
 
-* the release manager cutting the release (documented xref:cg.adoc#_cg_committers_cutting-a-release[here])
-* members of the Apache Isis PMC voting on the release (documented xref:cg.adoc#_cg_committers_verifying-releases[here])
-* the release manager performing post-release tasks (documented below for if vote was unsuccessful, else xref:cg.adoc#_cg_committers_post-release-successful[here if successful]).
+* the release manager xref:cg.adoc#_cg_committers_cutting-a-release[cutting the release]
+* members of the Apache Isis PMC xref:cg.adoc#_cg_committers_verifying-releases[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:cg.adoc#_cg_committers_post-release-successful[successful] or an unsuccessful vote (latter documented below).
 
 If the vote did not succeed (did not achieve +3 votes after 72 hours and/or is unlikely to do so), then the vote should be closed and the following steps performed.
 
-Note that a release manager may also decide to cancel a vote before 72 hours has elapsed (for example if an error is quicly discovered).
+Note that a release manager may also decide to cancel a vote before 72 hours has elapsed (for example if an error is quickly discovered).
 
 
 == Inform dev ML
