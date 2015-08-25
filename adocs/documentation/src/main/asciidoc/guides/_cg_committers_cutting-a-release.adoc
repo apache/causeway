@@ -410,8 +410,9 @@ Check for and fix any missing license header notices:
 
 [source,bash]
 ----
-mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
+mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
 ----
 
 
@@ -421,11 +422,11 @@ Finally, double check that the app is running satisfactorily:
 +
 [source,bash]
 ----
-mvn clean install
+mvn clean install && \
 mvn antrun:run -P self-host
 ----
 
-* then using mvn jetty plugin (browse to http://localhost:8080/simpleapp-webapp/[http://localhost:8080/simpleapp-webapp/]): +
+* then using mvn jetty plugin (browse to http://localhost:8080[http://localhost:8080]): +
 +
 [source,bash]
 ----
