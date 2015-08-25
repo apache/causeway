@@ -257,7 +257,7 @@ Assuming this completes successfully, re-run the command, but without the `dryRu
 
 [source,bash]
 ----
-mvn release:prepare -P apache-release -D resume=false -DskipTests=true
+mvn release:prepare -P apache-release -D resume=false -DskipTests=true \
         -DreleaseVersion=$ISISREL \
         -Dtag=$ISISART-$ISISREL \
         -DdevelopmentVersion=$ISISDEV
