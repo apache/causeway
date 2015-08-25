@@ -65,7 +65,7 @@ Also, check that there are no snapshot dependencies:
 
 [source,bash]
 ----
-grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | sort`
+grep SNAPSHOT `/bin/find . -name pom.xml | grep -v target | grep -v mothball | sort`
 ----
 
 The only mention of `SNAPSHOT` should be for the Isis modules about to be released.
@@ -117,7 +117,8 @@ To run the RAT tool, use:
 [source,bash]
 ----
 mvn org.apache.rat:apache-rat-plugin:check -D rat.numUnapprovedLicenses=50 -o && \
-for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done
+for a in `/bin/find . -name rat.txt -print`; do grep '!???' $a; done || \
+for a in `/bin/find . -name rat.txt -print`; do grep '!AL' $a; done
 ----
 
 where `rat.numUnapprovedLicenses` property is set to a high figure, temporarily overriding the default value of 0. This will allow the command to run over all submodules, rather than failing after the first one.   The command writes out a `target\rat.txt` for each submodule.  missing license notes are indicated using the key `!???`.  The `for` command collates all the errors.
@@ -176,11 +177,6 @@ licenses to remove from supplemental-models.xml (are spurious):
 
 If any missing entries are listed or are spurious, then update `supplemental-models.xml` and try again.
 
-
-[NOTE]
-====
-Ignore any missing license warnings for the TCK modules; this is a result of the TCK modules for the viewers (eg `isis-viewer-bdd-concordion-tck`) depending on the TCK dom, fixtures etc.
-====
 
 
 

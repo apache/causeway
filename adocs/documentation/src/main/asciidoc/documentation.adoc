@@ -97,7 +97,7 @@ including:
 * Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
 * link:./guides/cg.html#_cg_ide-templates[*IDE templates*] (IntelliJ and Eclipse)
 * link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
-* link:./guides/cg.html#_cg_committers_release-process[Cutting a release]
+* link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release]
 * link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
 
 
