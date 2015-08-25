@@ -474,8 +474,6 @@ mvn release:prepare -P apache-release \
                 -DreleaseVersion=$ISISREL \
                 -DdevelopmentVersion=$ISISDEV \
                 -Dtag=$ISISART-$ISISREL
-mvn release:perform -P apache-release \
-                -DworkingDirectory=$ISISTMP/checkout
 ----
 
 
@@ -484,20 +482,8 @@ mvn release:perform -P apache-release \
 === Post-prepare sanity check
 
 This is a good point to test the archetype; nothing has yet been uploaded.
-First, build the archetype:
 
-[source,bash]
-----
-cd target/generated-sources/archetype
-mvn clean install
-cd ../../..
-----
-
-Then, _in a different session_, create a new app from the archetype:
-
-Set up environment variables:
-
-To test the *simpleapp* archetype:
+_In a different session_, create a new app from the archetype.  First set up environment variables:
 
 [source,bash]
 ----
@@ -506,7 +492,7 @@ export ISISCPN=simpleapp
 env | grep ISIS | sort
 ----
 
-Then recreate:
+Then generate a new app from the archetype:
 
 [source,bash]
 ----
@@ -538,21 +524,15 @@ mvn jetty:run                  # runs as mvn jetty plugin
 
 === Release Perform (upload)
 
-Still in the *archetype* directory and execute the `release:perform` to upload the artifacts to the ASF Nexus repository:
+Back in the original session (in the *archetype* directory, `example/archetype/$ISISCPN`), execute `release:perform`:
 
 [source]
 ----
-cd ../../../example/archetype/$ISISCPN
-rm -rf $ISISTMP/checkout
-mvn release:prepare -P apache-release \
-                -DreleaseVersion=$ISISREL \
-                -DdevelopmentVersion=$ISISDEV \
-                -Dtag=$ISISART-$ISISREL
 mvn release:perform -P apache-release \
                 -DworkingDirectory=$ISISTMP/checkout
 ----
 
-
+This will upload the artifacts to the ASF Nexus repository.
 
 
 
