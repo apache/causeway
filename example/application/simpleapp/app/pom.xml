@@ -27,7 +27,7 @@
     </parent>
 
     <artifactId>simpleapp-app</artifactId>
-    <name>Simple App Application Services</name>
+    <name>Simple App Application</name>
 
     <build>
         <resources>
