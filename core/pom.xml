@@ -872,15 +872,14 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
-                    <version>2.4.2</version>
+                    <version>2.5.2</version>
                     <configuration>
                         <!-- overriddes the default ('clean verify') as workaround -->
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <tagBase>https://svn.apache.org/repos/asf/incubator/isis/tags/</tagBase>
                         <localCheckout>true</localCheckout>
                         <pushChanges>false</pushChanges>
-                        <waitBeforeTagging>2</waitBeforeTagging>
+                        <waitBeforeTagging>1</waitBeforeTagging>
                     </configuration>
                     <!-- goal:clean (for aggregator modules) has no bindings; 
                         cleans up release.properties and any backup POM files -->
