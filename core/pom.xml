@@ -697,6 +697,8 @@
                     <version>2.9.1</version>
                     <inherited>true</inherited>
                     <configuration>
+                        <!-- as per http://stackoverflow.com/a/16743137/56880 -->
+                        <additionalparam>-Xdoclint:none</additionalparam>
                         <debug>true</debug>
                         <minmemory>128m</minmemory>      
                         <maxmemory>1024m</maxmemory>
@@ -722,7 +724,7 @@
                             and http://jira.codehaus.org/browse/MJAVADOC-284 -->
                         <detectOfflineLinks>false</detectOfflineLinks>
                     </configuration>
-                    <!-- goal:aggregate (for aggregator modules) has no binding; 
+                    <!-- goal:aggregate (for aggregator modules) has no binding;
                         explicitly bound in profiles -->
                     <!-- goal:jar (for non-aggregator modules) binds to phase:package -->
                     <!-- goal:test-jar (for non-aggregator modules) binds 
@@ -829,6 +831,16 @@
                         </jarOutputDirectory>
                         <generateReports>true</generateReports>
                         <generateSitemap>true</generateSitemap>
+                        <reportPlugins>
+                            <!-- as per http://stackoverflow.com/a/22981151/56880 -->
+                            <plugin>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-javadoc-plugin</artifactId>
+                                <configuration>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
+                            </plugin>
+                        </reportPlugins>
                     </configuration>
                     <!-- goal:jar binds to phase:package; override to bind 
                         to (site lifecycle) phase:site -->
@@ -1982,31 +1994,8 @@ ${license.additional-notes}
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.8</version>
                         <configuration>
-                            <debug>true</debug>
-                            <minmemory>128m</minmemory>      
-                            <maxmemory>1024m</maxmemory>
-                            <quiet>true</quiet>
-                            <doctitle>${project.name} ${project.version}</doctitle>
-                            <windowtitle>${project.name} ${project.version}</windowtitle>
-                            <testDoctitle>${project.name} ${project.version}
-                                (TEST API)</testDoctitle>
-                            <testWindowtitle>${project.name} ${project.version}
-                                (TEST API)</testWindowtitle>
-                            <splitindex>true</splitindex>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                            <links>
-                                <link>http://docs.oracle.com/javase/7/docs/api/</link>
-                                <link>http://docs.oracle.com/javase/6/docs/api/</link>
-                                <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                                <link>http://docs.oracle.com/javase/1.4.2/docs/api/</link>
-                            </links>
-                            <linksource>true</linksource>
-                            <!-- http://jira.codehaus.org/browse/MJAVADOC-268 
-                                and http://jira.codehaus.org/browse/MJAVADOC-284 -->
-                            <detectOfflineLinks>false</detectOfflineLinks>
-                            <!-- default value is as given; referenced by 
+                            <!-- default value is as given; referenced by
                                 other plugins so specified explicitly -->
                             <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
                         </configuration>
