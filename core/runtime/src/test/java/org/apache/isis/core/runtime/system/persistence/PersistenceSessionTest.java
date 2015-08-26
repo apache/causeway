@@ -86,8 +86,6 @@ public class PersistenceSessionTest {
     @Mock
     private CreateObjectCommand createObjectCommand;
     @Mock
-    private SaveObjectCommand saveObjectCommand;
-    @Mock
     private DestroyObjectCommand destroyObjectCommand;
 
     @Mock
@@ -133,7 +131,6 @@ public class PersistenceSessionTest {
                 ignoring(mockConfiguration);
 
                 ignoring(createObjectCommand);
-                ignoring(saveObjectCommand);
                 ignoring(destroyObjectCommand);
                 ignoring(mockVersion);
                 

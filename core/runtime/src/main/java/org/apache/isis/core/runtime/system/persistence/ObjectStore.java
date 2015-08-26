@@ -83,17 +83,6 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
     CreateObjectCommand createCreateObjectCommand(ObjectAdapter object);
 
     /**
-     * Persists the specified object's state. Essentially the data held by the
-     * persistence mechanism should be updated to reflect the state of the
-     * specified objects. Once updated, the object store should issue a
-     * notification to all of the object's users via the <class>UpdateNotifier
-     * </class> object. This can be achieved simply, if extending the <class>
-     * AbstractObjectStore </class> by calling its <method>broadcastObjectUpdate
-     * </method> method.
-     */
-    SaveObjectCommand createSaveObjectCommand(ObjectAdapter object);
-
-    /**
      * Removes the specified object from the object store. The specified
      * object's data should be removed from the persistence mechanism and, if it
      * is cached (which it probably is), removed from the cache also.

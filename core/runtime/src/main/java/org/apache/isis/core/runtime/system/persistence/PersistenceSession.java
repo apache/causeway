@@ -20,10 +20,13 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
 import java.util.Map;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -45,7 +48,11 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.spec.Dirtiable;
+import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
@@ -55,7 +62,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlg
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
@@ -63,7 +69,10 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithR
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements SessionScopedComponent, DebuggableWithTitle {
 
@@ -761,41 +770,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 // apply.
                 return;
             }
-
-            addObjectChangedForPersistenceLayer(adapter);
         }
     }
 
-
-    private void addObjectChangedForPersistenceLayer(final ObjectAdapter adapter) {
-        if(LOG.isDebugEnabled()) {
-            LOG.debug("object change to be persisted " + adapter.getOid());
-        }
-        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-            @Override
-            public void preExecute() {
-                // previously called the UpdatingCallbackFacet here (not sure if actually called though, see ISIS-796);
-                // at any rate, is now done by the object store.
-            }
-
-            @Override
-            public void execute() {
-                final SaveObjectCommand saveObjectCommand = objectStore.createSaveObjectCommand(adapter);
-                getTransactionManager().addCommand(saveObjectCommand);
-            }
-
-            @Override
-            public void onSuccess() {
-                // previously called the UpdatedCallbackFacet here (though not sure if actually called though, see in part ISIS-796);
-                // at any rate, is now done by the object store.
-            }
-
-            @Override
-            public void onFailure() {
-                // should we do something here?
-            }
-        });
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // destroyObject
