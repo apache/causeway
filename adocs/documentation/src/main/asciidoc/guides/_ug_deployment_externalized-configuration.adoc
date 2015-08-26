@@ -61,7 +61,7 @@ For example, if using Tomcat 7.0, you would typically copy the empty `$TOMCAT_HO
 
 [IMPORTANT]
 ====
-Note that the `override` key should be set to "false"; not "true"; it indicates whether this parameter is overridable by the application's own `web.xml`. In most cases, you probably want to disallow that.
+Note that the `override` key should be set to "false", not "true".  It indicates whether the application's own `web.xml` can override the setting.  In most cases, you probably want to disallow that.
 ====
 
 
@@ -90,7 +90,7 @@ You can therefore override the default location using the same technique as desc
 ----
 <Parameter name="shiroConfigLocations"
            value="file:/usr/local/myapp/conf/shiro.ini"
-           override="true" />
+           override="false" />
 ----
 
 [TIP]
@@ -191,7 +191,7 @@ To use some other externalized configuration, override the `spring.config.file` 
 ----
 <Parameter name="spring.config.dir"
            value="file:/usr/local/myapp/conf/spring.properties"
-           override="true" />
+           override="false" />
 ----
 
 

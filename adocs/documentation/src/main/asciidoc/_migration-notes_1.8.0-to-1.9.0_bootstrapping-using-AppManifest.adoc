@@ -101,7 +101,7 @@ public class MyAppAppManifest implements AppManifest {
     @Override
     public List<Class<?>> getModules() {                             // <1>
         return Arrays.asList(
-                MyAppDomainModule.class
+                MyAppDomainModule.class,
                 MyAppFixtureModule.class,
                 MyAppAppModule.class
         );
@@ -161,8 +161,6 @@ in the parent `pom.xml`, declare and reference the new `myapp-app` module:
 
 
 == Update `myapp-integtests`
-
-In its `pom.xml`:
 
 In its `pom.xml`:
 
