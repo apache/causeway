@@ -73,16 +73,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object[][] getChoices(
             final ObjectAdapter owningAdapter,
             final AuthenticationSession authenticationSession,

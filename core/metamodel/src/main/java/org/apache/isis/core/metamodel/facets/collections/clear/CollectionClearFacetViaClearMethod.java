@@ -52,16 +52,6 @@ public class CollectionClearFacetViaClearMethod extends CollectionClearFacetAbst
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void clear(final ObjectAdapter owningAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }

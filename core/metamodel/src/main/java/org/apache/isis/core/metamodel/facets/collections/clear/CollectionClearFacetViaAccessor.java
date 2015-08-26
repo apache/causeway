@@ -60,22 +60,6 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    /**
-     * Bytecode cannot automatically call
-     * {@link DomainObjectContainer#objectChanged(Object)} because cannot
-     * distinguish whether interacting with accessor to read it or to modify its
-     * contents.
-     */
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void clear(final ObjectAdapter owningAdapter) {
         final Collection<?> collection = (Collection<?>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.clear();

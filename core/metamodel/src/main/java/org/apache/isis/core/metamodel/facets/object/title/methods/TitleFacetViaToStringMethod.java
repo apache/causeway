@@ -54,16 +54,6 @@ public class TitleFacetViaToStringMethod extends TitleFacetAbstract implements I
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String title(final ObjectAdapter object, final Localization localization) {
         return object.getObject().toString();
     }

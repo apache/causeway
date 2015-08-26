@@ -56,22 +56,6 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    /**
-     * Bytecode cannot automatically call
-     * {@link DomainObjectContainer#objectChanged(Object)} because cannot
-     * distinguish whether interacting with accessor to read it or to modify its
-     * contents.
-     */
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);

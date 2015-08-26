@@ -64,16 +64,6 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
         final Object result = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (result == null) {

@@ -68,22 +68,6 @@ public class CollectionAccessorFacetViaAccessor
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    /**
-     * Bytecode cannot automatically call
-     * {@link DomainObjectContainer#objectChanged(Object)} because cannot
-     * distinguish whether interacting with accessor to read it or to modify its
-     * contents.
-     */
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object getProperty(
             final ObjectAdapter owningAdapter,
             final AuthenticationSession authenticationSession,

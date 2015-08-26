@@ -53,16 +53,6 @@ public class ClearDirtyObjectFacetViaMethod extends ClearDirtyObjectFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void invoke(final ObjectAdapter object) {
         MethodExtensions.invokeStatic(method);
     }

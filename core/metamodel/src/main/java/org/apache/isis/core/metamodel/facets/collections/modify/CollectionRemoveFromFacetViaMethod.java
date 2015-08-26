@@ -51,16 +51,6 @@ public class CollectionRemoveFromFacetViaMethod extends CollectionRemoveFromFace
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }

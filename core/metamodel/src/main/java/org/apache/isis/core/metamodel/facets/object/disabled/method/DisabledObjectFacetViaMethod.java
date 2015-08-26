@@ -61,16 +61,6 @@ public class DisabledObjectFacetViaMethod extends DisabledObjectFacetAbstract im
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String disabledReason(final ObjectAdapter owningAdapter, final Identifier identifier) {
         final Type type = identifier.getType();
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, type);

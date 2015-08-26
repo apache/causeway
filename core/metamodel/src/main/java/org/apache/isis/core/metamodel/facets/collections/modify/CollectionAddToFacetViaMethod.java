@@ -51,16 +51,6 @@ public class CollectionAddToFacetViaMethod extends CollectionAddToFacetAbstract 
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, elementAdapter);
     }

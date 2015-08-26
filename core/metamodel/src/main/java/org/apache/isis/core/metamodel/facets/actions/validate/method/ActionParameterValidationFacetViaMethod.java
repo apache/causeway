@@ -57,16 +57,6 @@ public class ActionParameterValidationFacetViaMethod extends ActionParameterVali
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedArgumentAdapter) {
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedArgumentAdapter);
         if(returnValue instanceof String) {

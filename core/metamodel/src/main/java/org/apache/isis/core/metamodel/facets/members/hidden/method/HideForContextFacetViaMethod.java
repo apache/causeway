@@ -53,16 +53,6 @@ public class HideForContextFacetViaMethod extends HideForContextFacetAbstract im
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         final ObjectAdapter target = ic.getTarget();
         if (target == null) {

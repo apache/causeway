@@ -70,16 +70,6 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object[] getDefaults(final ObjectAdapter owningAdapter) {
         return (Object[]) ObjectAdapter.InvokeUtils.invoke(defaultMethod, owningAdapter);
     }

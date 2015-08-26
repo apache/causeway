@@ -64,16 +64,6 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String title(final ObjectAdapter owningAdapter, final Localization localization) {
         try {
             final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);

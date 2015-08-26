@@ -50,14 +50,4 @@ public class DescribedAsFacetStaticMethod extends DescribedAsFacetAbstract imple
         return Intent.UI_HINT;
     }
 
-    @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
 }

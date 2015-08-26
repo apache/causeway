@@ -53,16 +53,6 @@ public class PropertyInitializationFacetViaSetterMethod extends PropertyInitiali
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void initProperty(final ObjectAdapter owningAdapter, final ObjectAdapter initialAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, initialAdapter);
     }

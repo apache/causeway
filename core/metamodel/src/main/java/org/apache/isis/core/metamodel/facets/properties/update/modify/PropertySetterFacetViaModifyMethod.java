@@ -57,16 +57,6 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void setProperty(final ObjectAdapter targetAdapter, final ObjectAdapter valueAdapter) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
