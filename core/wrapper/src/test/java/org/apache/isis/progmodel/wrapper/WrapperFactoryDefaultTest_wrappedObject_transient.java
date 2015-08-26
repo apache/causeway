@@ -23,12 +23,14 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.PropertyModifyEvent;
@@ -56,7 +58,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -65,7 +67,7 @@ import static org.junit.Assert.assertThat;
 /**
  * Contract test.
  */
-public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
+public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
     @Rule
     public final JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -103,7 +105,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     private Method getPasswordMethod;
     private Method setPasswordMethod;
 
-    private WrapperFactoryAbstract wrapperFactory;
+    private WrapperFactoryDefault wrapperFactory;
     private Employee employeeWO;
 
     @Before
@@ -170,7 +172,9 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject_transient {
     /**
      * Mandatory hook.
      */
-    protected abstract WrapperFactoryAbstract createWrapperFactory();
+    protected WrapperFactoryDefault createWrapperFactory() {
+        return new WrapperFactoryDefault();
+    }
 
     @Test(expected = DisabledException.class)
     public void shouldNotBeAbleToModifyProperty() {
