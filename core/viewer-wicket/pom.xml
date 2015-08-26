@@ -53,31 +53,6 @@
     <build>
         <pluginManagement>
             <plugins>
- 				<plugin>
-					<groupId>net.alchim31.maven</groupId>
-					<artifactId>yuicompressor-maven-plugin</artifactId>
-					<version>1.5.1</version>
-					<configuration>
-						<statistics>true</statistics>
-						<jswarn>false</jswarn>
-						<suffix>.min</suffix>
-						<excludes>
-							<exclude>**/moment.js</exclude>
-							<exclude>**/moment.min.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.js</exclude>
-							<exclude>**/bootstrap-datetimepicker.min.js</exclude>
-							<exclude>**/bootstrap-growl.js</exclude>
-							<exclude>**/bootstrap-growl.min.js</exclude>
-						</excludes>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compress</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 	</build>

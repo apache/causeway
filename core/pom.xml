@@ -965,6 +965,32 @@
                     <version>2.5.1</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>yuicompressor-maven-plugin</artifactId>
+                    <version>1.5.1</version>
+                    <configuration>
+                        <statistics>true</statistics>
+                        <jswarn>false</jswarn>
+                        <suffix>.min</suffix>
+                        <excludes>
+                            <exclude>**/moment.js</exclude>
+                            <exclude>**/moment.min.js</exclude>
+                            <exclude>**/bootstrap-datetimepicker.js</exclude>
+                            <exclude>**/bootstrap-datetimepicker.min.js</exclude>
+                            <exclude>**/bootstrap-growl.js</exclude>
+                            <exclude>**/bootstrap-growl.min.js</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>compress</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
@@ -2236,7 +2262,7 @@ ${license.additional-notes}
         <module>wrapper</module>
         <module>webserver</module>
 
-        <module>security-noop</module>
+        <module>security</module>
         <module>security-shiro</module>
 
         <module>unittestsupport</module>
@@ -2247,7 +2273,10 @@ ${license.additional-notes}
         <module>viewer-restfulobjects-rendering</module>
         <module>viewer-restfulobjects-server</module>
 
-        <module>viewer-wicket</module>
+        <module>viewer-wicket/applib</module>
+        <module>viewer-wicket/model</module>
+        <module>viewer-wicket/ui</module>
+        <module>viewer-wicket/impl</module>
 
         <module>maven-plugin</module>
     </modules>
