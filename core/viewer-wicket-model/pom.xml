@@ -25,67 +25,52 @@
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
 		<version>1.10.0-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>isis-viewer-wicket-applib</artifactId>
-	<name>Isis Wicket Viewer Applib</name>
+	<artifactId>isis-viewer-wicket-model</artifactId>
+	<name>Isis Wicket Viewer Model</name>
 
-    <properties>
+	<properties>
 		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>applib/</relativeUrl>
+		<relativeUrl>model/</relativeUrl>
 	</properties>
 
     <!-- used in Site generation for relative references. -->
     <url>http://isis.apache.org/${relativeUrl}</url>
 
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-	</build>
-
 	<dependencies>
 
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>isis-core-applib</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-wicket-applib</artifactId>
         </dependency>
 
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-core</artifactId>
+		</dependency>
         <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-metamodel</artifactId>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>isis-core-runtime</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-unittestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-
-		<!-- LOGGING DEPENDENCIES - LOG4J -->
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
-
 	</dependencies>
+
 </project>
