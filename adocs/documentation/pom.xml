@@ -154,9 +154,6 @@
                 </executions>
                 <configuration>
                     <attributes>
-                        <!--
-                        <sitebasedir>..</sitebasedir>
-                        -->
                     </attributes>
                 </configuration>
             </plugin>

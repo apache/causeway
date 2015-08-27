@@ -21,14 +21,6 @@
     <artifactId>isis-core-specsupport</artifactId>
     <name>Isis Spec Support</name>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>specsupport/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>

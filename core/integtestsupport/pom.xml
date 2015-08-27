@@ -29,14 +29,6 @@
 	<artifactId>isis-core-integtestsupport</artifactId>
 	<name>Isis Integration Testing Support</name>
 
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>integtestsupport/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>

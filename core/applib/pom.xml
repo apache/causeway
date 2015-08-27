@@ -34,14 +34,6 @@
         default (Java) programming model.
     </description>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>applib/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>

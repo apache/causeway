@@ -30,14 +30,6 @@
 	<artifactId>isis-viewer-wicket-ui</artifactId>
 	<name>Isis Wicket Viewer UI Components</name>
 
-    <properties>
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>ui/</relativeUrl>
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
 	<build>
 		<resources>
 			<resource>

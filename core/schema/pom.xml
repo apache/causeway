@@ -34,13 +34,6 @@
         Apache Isis schemas, for conversion into canonical DTOs (for use in integration scenarios).
     </description>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>canonical/</relativeUrl>
-    </properties>
-
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>

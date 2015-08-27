@@ -30,14 +30,6 @@
 	<artifactId>isis-viewer-wicket-model</artifactId>
 	<name>Isis Wicket Viewer Model</name>
 
-	<properties>
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>model/</relativeUrl>
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
 	<dependencies>
 
         <dependency>

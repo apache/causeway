@@ -29,14 +29,6 @@
 	<artifactId>isis-core-runtime</artifactId>
 	<name>Isis Runtime</name>
 
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>runtime/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
 	<build>
 		<resources>
             <resource>

@@ -34,14 +34,6 @@
 		with scope=test only
 	</description>
 
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>unittestsupport/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>

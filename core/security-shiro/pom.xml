@@ -32,19 +32,6 @@
 
 	<name>Isis Security Shiro</name>
 
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>security-shiro</relativeUrl>
-
-        <!--
-        staying with 1.2.1 for now; see ISIS-574
-		<shiro.version>1.2.2</shiro.version>
-         -->
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
 	<build>
 		<pluginManagement>
 			<plugins>

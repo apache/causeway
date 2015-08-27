@@ -30,14 +30,6 @@
 
 	<name>Isis RestfulObjects Viewer Rendering</name>
 
-	<properties>
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>viewer-restfulobjects-rendering/</relativeUrl>
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
 	<dependencies>
 
         <dependency>

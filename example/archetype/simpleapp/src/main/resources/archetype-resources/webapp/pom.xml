@@ -32,10 +32,6 @@
 
     <packaging>war</packaging>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-    </properties>
-    
     <build>
         <plugins>
             <plugin>

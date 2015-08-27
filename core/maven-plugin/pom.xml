@@ -36,14 +36,6 @@
         Maven plugin for Apache Isis, allowing the metamodel to be validated as part of the build process.
     </description>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>maven-plugin/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <prerequisites>
         <maven>3.0.4</maven>
     </prerequisites>

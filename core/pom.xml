@@ -53,15 +53,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- override in each module (used by locate global resources) -->
-
-        <!-- relative to root of mvn site -->
-        <siteBaseDir>.</siteBaseDir>
-        <relativeUrl />
-
-        <!-- relative to core/pom.xml -->
-        <coreBaseRelDir>.</coreBaseRelDir>
-        
         <testsToInclude>**/*Test_*.java</testsToInclude>
         <testsToExclude>**/*IntegrationTest.java</testsToExclude>
 
@@ -71,7 +62,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <dependency.locations.enabled>false</dependency.locations.enabled>
-        <coreBaseDir>${project.build.directory}/../${coreBaseRelDir}</coreBaseDir>
+        <coreBaseDir>${project.build.directory}/..</coreBaseDir>
         <checkstyle.configLocation>${coreBaseDir}/src/site/resources/codequality/checkstyle.xml</checkstyle.configLocation>
         <pmd.ruleset>${coreBaseDir}/src/site/resources/codequality/pmd.xml</pmd.ruleset>
 
@@ -174,8 +165,7 @@
       <tag>HEAD</tag>
   </scm>
 
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
+    <url>http://isis.apache.org</url>
 
     <mailingLists>
         <mailingList>
@@ -308,8 +298,6 @@
         </developer>
     </developers>
 
-
-
     <issueManagement>
         <system>Jira</system>
         <url>https://issues.apache.org/jira/browse/ISIS</url>
@@ -342,7 +330,6 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
 
     <repositories>
         <repository>
@@ -399,10 +386,8 @@
               <enabled>false</enabled>
             </snapshots>
         </repository>
-
     </repositories>
 
-    
 
     <build>
         <outputDirectory>${project.build.directory}/classes</outputDirectory>
@@ -501,28 +486,6 @@
                               <pattern>Copyright (c) 2000-2007, jMock.org</pattern>
                             </patterns>
                           </license>
-                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                            <licenseFamilyCategory>DOCBK</licenseFamilyCategory>
-                            <licenseFamilyName>DocBook 4.5</licenseFamilyName>
-                            <notes />
-                            <patterns>
-                              <pattern>Permission to copy in any form is granted for use</pattern>
-                              <pattern>Permission to use, copy, modify and distribute the DocBook DTD</pattern>
-                              <pattern>is hereby granted in perpetuity, provided that the above copyright</pattern>
-                              <pattern>This is the catalog data file for DocBook XML V4.5. It is provided as</pattern>
-                              <pattern>XML Catalog data for DocBook XML V4.5</pattern>
-                              <pattern>DocBook additional general entities V4.5</pattern>
-                              <pattern>XML EXCHANGE TABLE MODEL DECLARATION MODULE</pattern>
-                            </patterns>
-                          </license>
-                          <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
-                            <licenseFamilyCategory>W3C  </licenseFamilyCategory>
-                            <licenseFamilyName>XHTML</licenseFamilyName>
-                            <notes />
-                            <patterns>
-                              <pattern>Copyright (c) 1998-2002 W3C (MIT, INRIA, Keio),</pattern>
-                            </patterns>
-                          </license>
                         </licenses>
                         <licenseFamilies>
                           <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
@@ -533,9 +496,6 @@
                           </licenseFamily>
                           <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
                             <familyName>JMock</familyName>
-                          </licenseFamily>
-                          <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
-                            <familyName>DocBook 4.5</familyName>
                           </licenseFamily>
                           <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
                             <familyName>XHTML</familyName>
@@ -551,8 +511,9 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
-                    <version>2.5.1</version> <!-- version 2.7 & 2.8 presently have a bug that prevents multiple-resources; 
+                    <!-- version 2.7 & 2.8 presently have a bug that prevents multiple-resources;
                         while 2.6 fails to use projectNameTemplate properly from being filtered -->
+                    <version>2.5.1</version>
                     <configuration>
                         <downloadSources>true</downloadSources>
                         <downloadJavadocs>true</downloadJavadocs>
@@ -717,7 +678,6 @@
                             <link>http://docs.oracle.com/javase/7/docs/api/</link>
                             <link>http://docs.oracle.com/javase/6/docs/api/</link>
                             <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                            <link>http://docs.oracle.com/javase/1.4.2/docs/api/</link>
                         </links>
                         <linksource>true</linksource>
                         <!-- http://jira.codehaus.org/browse/MJAVADOC-268 
@@ -732,7 +692,6 @@
                     <!-- goal:javadoc is a report so is configured in the 
                         reporting section -->
                 </plugin>
-
 
                 <!-- Artifacts derived from code: Java source x-ref -->
                 <plugin>
@@ -813,13 +772,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>3.3</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.apache.maven.doxia</groupId>
-                            <artifactId>doxia-module-docbook-simple</artifactId>
-                            <version>1.1.3</version>
-                        </dependency>
-                    </dependencies>
                     <configuration>
                         <locales>en</locales>
                         <jarOutputDirectory>
@@ -831,18 +783,8 @@
                         </jarOutputDirectory>
                         <generateReports>true</generateReports>
                         <generateSitemap>true</generateSitemap>
-                        <reportPlugins>
-                            <!-- as per http://stackoverflow.com/a/22981151/56880 -->
-                            <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-javadoc-plugin</artifactId>
-                                <configuration>
-                                    <additionalparam>-Xdoclint:none</additionalparam>
-                                </configuration>
-                            </plugin>
-                        </reportPlugins>
                     </configuration>
-                    <!-- goal:jar binds to phase:package; override to bind 
+                    <!-- goal:jar binds to phase:package; override to bind
                         to (site lifecycle) phase:site -->
                     <executions>
                         <execution>
@@ -1021,7 +963,7 @@
                         </goals>
                         <configuration>
                             <runOnlyAtExecutionRoot>true</runOnlyAtExecutionRoot>
-                            <appendedResourcesDirectory>${basedir}/${siteBaseDir}/src/main/appended-resources</appendedResourcesDirectory>
+                            <appendedResourcesDirectory>${basedir}/src/main/appended-resources</appendedResourcesDirectory>
                             <supplementalModels>
                                 <supplementalModel>supplemental-models.xml</supplementalModel>
                             </supplementalModels>
@@ -1977,15 +1919,6 @@ ${license.additional-notes}
         </dependency>
     </dependencies>
 
-    <!--
-    <distributionManagement>
-        <site>
-            <id>isis-site</id>
-            <name>Apache Isis Site</name>
-            <url>${distMgmtSiteUrl}</url>
-        </site>
-    </distributionManagement>
-    -->
     <profiles>
         <profile>
             <id>m2e</id>

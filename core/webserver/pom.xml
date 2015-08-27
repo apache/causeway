@@ -29,14 +29,6 @@
 	<artifactId>isis-core-webserver</artifactId>
 	<name>Isis WebServer</name>
 
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>webserver/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>
