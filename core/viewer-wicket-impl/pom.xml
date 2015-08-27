@@ -76,11 +76,6 @@
 			<artifactId>wicket-auth-roles</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-		</dependency>
-
         <dependency>
             <groupId>net.ftlines.wicket-source</groupId>
             <artifactId>wicket-source</artifactId>
