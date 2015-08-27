@@ -28,6 +28,8 @@
 	</parent>
 
 	<name>Isis Wicket Viewer Implementation</name>
+
+    <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>isis-viewer-wicket-impl</artifactId>
 
 	<build>
