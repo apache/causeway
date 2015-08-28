@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -36,6 +38,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -102,7 +105,14 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
                 final ObjectAdapter adapter = entityCollectionModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
-                final ObjectAdapter collectionAsAdapter = collection.get(adapter);
+                final ObjectAdapter collectionAsAdapter =
+                        InteractionUtils.withFiltering(
+                                new Callable<ObjectAdapter>() {
+                                    @Override
+                                    public ObjectAdapter call() throws Exception {
+                                        return collection.get(adapter);
+                                   }
+                                });
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
 
@@ -240,13 +250,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return new EntityCollectionModel(model, collection);
     }
 
-    /**
-     * Factory.
-     */
-    public static EntityCollectionModel createParented(final ObjectAdapter adapter, final OneToManyAssociation collection) {
-        return new EntityCollectionModel(adapter, collection);
-    }
-
     private final Type type;
 
     private final Class<?> typeOf;
@@ -295,10 +298,6 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.mementoList = mementoList;
         this.pageSize = pageSize;
         this.toggledMementosList = Lists.newArrayList();
-    }
-
-    private EntityCollectionModel(final ObjectAdapter adapter, final OneToManyAssociation collection) {
-        this(ObjectAdapterMemento.createOrNull(adapter), collection);
     }
 
     private EntityCollectionModel(final EntityModel model, final OneToManyAssociation collection) {

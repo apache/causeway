@@ -22,6 +22,8 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
+
 import com.google.common.collect.Maps;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -36,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
@@ -183,15 +186,9 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return pageParameters;
     }
 
-    @Deprecated
-    public PageParameters asPageParameters() {
-        return getPageParameters();
-    }
-
     public PageParameters getPageParametersWithoutUiHints() {
         return createPageParameters(getObject());
     }
-
 
     static interface HintPageParameterSerializer {
         public void hintsToPageParameters(Map<String,String> hints, PageParameters pageParameters);
@@ -260,8 +257,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             }
         }
     }
-    
-
 
 
     @Override
@@ -384,7 +379,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         adapterMemento.resetVersion();
         for (final PropertyMemento pm : propertyScalarModels.keySet()) {
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
-            final ObjectAdapter associatedAdapter = pm.getProperty().get(getObject());
+            final ObjectAdapter adapter = getObject();
+            final ObjectAdapter associatedAdapter =
+                    InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                        @Override public ObjectAdapter call() throws Exception {
+                            return  pm.getProperty().get(adapter);
+                        }
+                    });
             scalarModel.setObject(associatedAdapter);
         }
     }

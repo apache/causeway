@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,6 +61,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -464,7 +466,16 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAction action = getActionMemento().getAction();
 
         final AuthenticationSession session = getAuthenticationSession();
-        return action.executeWithRuleChecking(targetAdapter, arguments, session, WHERE_FOR_ACTION_INVOCATION);
+        final ObjectAdapter resultAdapter =
+                InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                    @Override public ObjectAdapter call() throws Exception {
+                        return action
+                                .executeWithRuleChecking(
+                                        targetAdapter, arguments, session,
+                                        WHERE_FOR_ACTION_INVOCATION);
+                    }
+                });
+        return resultAdapter;
     }
 
     public String getReasonInvalidIfAny() {

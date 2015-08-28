@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -226,8 +227,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             return null;
         }
 
-        boolean filterForVisibility = getConfiguration()
-                .getBoolean("isis.reflector.facet.actionInvocation.filterVisibility", true);
+        boolean filterForVisibility = InteractionUtils.FILTERING.get() && getConfiguration()
+                .getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final Object result = invocationResultAdapter.getObject();
             if(result instanceof Collection || result.getClass().isArray()) {
@@ -258,7 +259,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 }
             }
         }
-
         return invocationResultAdapter;
     }
 

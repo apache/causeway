@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import com.google.common.collect.Lists;
 
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -116,7 +118,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                     final ObjectAdapter currentValue = property.get(parentAdapter);
-                    Localization localization = IsisContext.getLocalization(); 
+                    final Localization localization = IsisContext.getLocalization();
                     final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, localization);
                     final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter);
                     return valid.isAllowed() ? null : valid.getReason();
@@ -168,8 +170,18 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices = property.getChoices(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK),
-                        authenticationSession, deploymentCategory);
+                final ObjectAdapter[] choices =
+                        InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
+                            @Override
+                            public ObjectAdapter[] call() throws Exception {
+                                ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento
+                                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                                return property.getChoices(
+                                        parentAdapter,
+                                        authenticationSession, deploymentCategory);
+                            }
+                        });
+
                 return choicesAsList(choices);
             }
 
@@ -190,9 +202,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final OneToOneAssociation property = propertyMemento.getProperty();
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter[] choices = property.getAutoComplete(
-                        parentAdapter, searchArg,
-                        authenticationSession, deploymentCategory);
+                final ObjectAdapter[] choices =
+                        InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
+                            @Override
+                            public ObjectAdapter[] call() throws Exception {
+                                return property.getAutoComplete(
+                                        parentAdapter, searchArg,
+                                        authenticationSession, deploymentCategory);
+                            }
+                        });
                 return choicesAsList(choices);
             }
 
@@ -253,9 +271,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public void reset(ScalarModel scalarModel) {
                 final OneToOneAssociation property = scalarModel.propertyMemento.getProperty();
-                final ObjectAdapter associatedAdapter = property.get(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK)
-                );
-
+                final ObjectAdapter parentAdapter =
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                final ObjectAdapter associatedAdapter =
+                        InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                            @Override
+                            public ObjectAdapter call() throws Exception {
+                                return property.get(parentAdapter);
+                            }
+                        });
                 scalarModel.setObject(associatedAdapter);
             }
         },
@@ -348,9 +372,15 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectActionParameter actionParameter = parameterMemento.getActionParameter();
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                final ObjectAdapter[] choices = actionParameter.getChoices(
-                        parentAdapter, argumentsIfAvailable,
-                        authenticationSession, deploymentCategory);
+                final ObjectAdapter[] choices =
+                    InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
+                        @Override
+                        public ObjectAdapter[] call() throws Exception {
+                            return actionParameter.getChoices(
+                                    parentAdapter, argumentsIfAvailable,
+                                    authenticationSession, deploymentCategory);
+                        }
+                    });
                 return choicesAsList(choices);
             }
 
@@ -371,9 +401,14 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter[] choices = actionParameter.getAutoComplete(
-                        parentAdapter, searchArg,
-                        authenticationSession, deploymentCategory);
+                final ObjectAdapter[] choices =
+                    InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
+                        @Override public ObjectAdapter[] call() throws Exception {
+                            return actionParameter.getAutoComplete(
+                                    parentAdapter, searchArg,
+                                    authenticationSession, deploymentCategory);
+                        }
+                    });
                 return choicesAsList(choices);
             }
 
@@ -431,7 +466,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             @Override
             public void reset(ScalarModel scalarModel) {
                 final ObjectActionParameter actionParameter = scalarModel.parameterMemento.getActionParameter();
-                final ObjectAdapter defaultAdapter = actionParameter.getDefault(scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK));
+                final ObjectAdapter parentAdapter =
+                        scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                final ObjectAdapter defaultAdapter = actionParameter.getDefault(parentAdapter);
                 scalarModel.setObject(defaultAdapter);
             }
         };
@@ -479,12 +516,12 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 ScalarModel scalarModel,
                 String searchArg,
                 final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory);
+
         public abstract int getAutoCompleteOrChoicesMinLength(ScalarModel scalarModel);
         
         public abstract void resetVersion(ScalarModel scalarModel);
 
         public abstract String getDescribedAs(ScalarModel scalarModel);
-
 
         public abstract Integer getLength(ScalarModel scalarModel);
         public abstract Integer getScale(ScalarModel scalarModel);
@@ -493,7 +530,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         
         public abstract void init(ScalarModel scalarModel);
         public abstract void reset(ScalarModel scalarModel);
-
 
     }
 
@@ -537,7 +573,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         this.propertyMemento = pm;
 
         init();
-        setObject(parentObjectAdapterMemento);
+        getAndStore(parentObjectAdapterMemento);
         setMode(Mode.VIEW);
     }
 
@@ -553,11 +589,16 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return parentObjectAdapterMemento;
     }
 
-    protected void setObject(final ObjectAdapterMemento parentObjectAdapterMemento) {
+    private void getAndStore(final ObjectAdapterMemento parentAdapterMemento) {
         final OneToOneAssociation property = propertyMemento.getProperty();
-        final ObjectAdapter associatedAdapter = property.get(parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK)
-        );
-
+        final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+        final ObjectAdapter associatedAdapter =
+                InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                    @Override
+                    public ObjectAdapter call() throws Exception {
+                        return property.get(parentAdapter);
+                    }
+                });
         setObject(associatedAdapter);
     }
 
@@ -637,10 +678,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.disable(this, where);
     }
 
-    public String parseAndValidate(final String proposedPojoAsStr) {
-        return kind.parseAndValidate(this, proposedPojoAsStr);
-    }
-
     public String validate(final ObjectAdapter proposedAdapter) {
         return kind.validate(this, proposedAdapter);
     }
@@ -663,10 +700,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
     public <T extends Facet> T getFacet(final Class<T> facetType) {
         return kind.getFacet(this, facetType);
-    }
-
-    public void resetVersion() {
-        kind.resetVersion(this);
     }
 
     public String getDescribedAs() {
@@ -713,19 +746,10 @@ public class ScalarModel extends EntityModel implements LinksProvider {
         return kind.getScale(this);
     }
 
-    public int getTypicalLength() {
-        return kind.getTypicalLength(this);
-    }
-
     /**
      * Additional links to render (if any)
      */
     private List<LinkAndLabel> entityActions = Lists.newArrayList();
-
-    
-    public void addEntityActions(List<LinkAndLabel> entityActions) {
-        this.entityActions.addAll(entityActions);
-    }
 
     @Override
     public List<LinkAndLabel> getLinks() {

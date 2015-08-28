@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.interactions;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
@@ -28,6 +29,30 @@ import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public final class InteractionUtils {
+
+    /**
+     * Do NOT call directly, instead use {@link #withFiltering(Callable)}.
+     */
+    public static ThreadLocal<Boolean> FILTERING = new ThreadLocal() {
+        @Override
+        protected Boolean initialValue() {
+            return false;
+        }
+    };
+
+    public static <T> T withFiltering(Callable<T> callable)  {
+        try {
+            FILTERING.set(true);
+            return callable.call();
+        } catch (Exception e) {
+            if(e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
+            throw new RuntimeException(e);
+        } finally {
+            FILTERING.set(false);
+        }
+    }
 
     private InteractionUtils() {
     }

@@ -46,6 +46,16 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     /**
+     * Returns the referenced {@link ObjectAdapter} for the owning
+     * {@link ObjectAdapter}.
+     *
+     * <p>
+     * For example, if this is an {@link OneToOneAssociation}, then returns the
+     * referenced object.
+     */
+    ObjectAdapter get(final ObjectAdapter owner);
+
+    /**
      * Get the name for the business key, if one has been specified.
      */
     String getBusinessKeyName();

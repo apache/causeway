@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class CollectionAccessorFacetViaAccessor
@@ -76,8 +77,8 @@ public class CollectionAccessorFacetViaAccessor
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
-        boolean filterForVisibility = getConfiguration()
-                .getBoolean("isis.reflector.facet.collectionAccessor.filterVisibility", true);
+        boolean filterForVisibility = InteractionUtils.FILTERING.get() && getConfiguration()
+                .getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final List<ObjectAdapter> visibleAdapters =
                     ObjectAdapter.Util.visibleAdapters(

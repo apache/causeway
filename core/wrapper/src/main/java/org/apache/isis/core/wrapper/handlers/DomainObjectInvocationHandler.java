@@ -26,6 +26,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -60,6 +61,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -380,13 +382,23 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         resolveIfRequired(targetAdapter);
 
-        final ObjectAdapter currentReferencedAdapter = otoa.get(targetAdapter);
+        final ObjectAdapter currentReferencedAdapter =
+                executionMode.shouldEnforceRules()
+                        ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                                @Override
+                                public ObjectAdapter call() throws Exception {
+                                    return otoa.get(targetAdapter);
+                                }
+                            })
+                        : otoa.get(targetAdapter);
+
         final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
         final PropertyAccessEvent ev = new PropertyAccessEvent(getDelegate(), otoa.getIdentifier(), currentReferencedObj);
         notifyListeners(ev);
         return currentReferencedObj;
     }
+
 
     // /////////////////////////////////////////////////////////////////
     // property - modify
@@ -447,34 +459,49 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         resolveIfRequired(targetAdapter);
 
-        final ObjectAdapter currentReferencedAdapter = otma.get(targetAdapter);
+        final ObjectAdapter currentReferencedAdapter =
+                executionMode.shouldEnforceRules()
+                        ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                                @Override
+                                public ObjectAdapter call() throws Exception {
+                                    return otma.get(targetAdapter);
+                                }
+                            })
+                        : otma.get(targetAdapter);
+
         final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
         final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), otma.getIdentifier());
 
         if (currentReferencedObj instanceof Collection) {
-            final Collection<?> collectionViewObject = lookupViewObject(method, memberName, (Collection<?>) currentReferencedObj, otma);
+            final Collection<?> collectionViewObject = lookupWrappingObject(method, memberName,
+                    (Collection<?>) currentReferencedObj, otma);
             notifyListeners(ev);
             return collectionViewObject;
         } else if (currentReferencedObj instanceof Map) {
-            final Map<?, ?> mapViewObject = lookupViewObject(method, memberName, (Map<?, ?>) currentReferencedObj, otma);
+            final Map<?, ?> mapViewObject = lookupWrappingObject(memberName, (Map<?, ?>) currentReferencedObj,
+                    otma);
             notifyListeners(ev);
             return mapViewObject;
         }
         throw new IllegalArgumentException(String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName()));
     }
 
-    /**
-     * Looks up (or creates) a proxy for this object.
-     */
-    private Collection<?> lookupViewObject(final Method method, final String memberName, final Collection<?> collectionToLookup, final OneToManyAssociation otma) {
-        return collectionToLookup instanceof WrapperObject
+    private Collection<?> lookupWrappingObject(
+            final Method method,
+            final String memberName,
+            final Collection<?> collectionToLookup,
+            final OneToManyAssociation otma) {
+        return collectionToLookup instanceof WrappingObject
                 ? collectionToLookup
                 : proxy.proxy(collectionToLookup, memberName, this, otma);
     }
 
-    private Map<?, ?> lookupViewObject(final Method method, final String memberName, final Map<?, ?> mapToLookup, final OneToManyAssociation otma) {
-        return mapToLookup instanceof WrapperObject
+    private Map<?, ?> lookupWrappingObject(
+            final String memberName,
+            final Map<?, ?> mapToLookup,
+            final OneToManyAssociation otma) {
+        return mapToLookup instanceof WrappingObject
                 ? mapToLookup
                 : proxy.proxy(mapToLookup, memberName, this, otma);
     }
@@ -611,7 +638,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
 
         if (getExecutionMode().shouldExecute()) {
-            final ObjectAdapter actionReturnNO = objectAction.execute(targetAdapter, argAdapters);
+            final ObjectAdapter actionReturnNO =
+                    executionMode.shouldEnforceRules()
+                            ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
+                                    @Override
+                                    public ObjectAdapter call() throws Exception {
+                                        return objectAction.execute(targetAdapter, argAdapters);
+                                    }
+                                })
+                            : objectAction.execute(targetAdapter, argAdapters);;
+
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }
 

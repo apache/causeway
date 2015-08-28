@@ -39,8 +39,7 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)} or
-     * {@link #isValidToAddResult(ObjectAdapter, ObjectAdapter)}; this is
+     * {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
@@ -49,17 +48,24 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
     /**
      * Determines if the specified element can be added to the collection field,
      * represented as a {@link Consent}.
-     * 
+     *
      * <p>
      * If allowed the {@link #addElement(ObjectAdapter, ObjectAdapter) add}
-     * method can be called with the same parameters, .
-     * @see #isValidToAddResult(ObjectAdapter, ObjectAdapter)
+     * method can be called with the same parameters.
+     *
+     * @see #addElement(ObjectAdapter, ObjectAdapter)
      */
     Consent isValidToAdd(ObjectAdapter owningObjectAdapter, ObjectAdapter proposedObjectToAdd);
 
     /**
      * Add the specified element to this collection field in the specified
      * object.
+     *
+     * <p>
+     *     Should be preceded by call to {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)}.
+     * </p>
+     *
+     * @see #isValidToAdd(ObjectAdapter, ObjectAdapter)
      */
     void addElement(ObjectAdapter owningObjectAdapter, ObjectAdapter objectToAdd);
 
@@ -73,8 +79,7 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * 
      * <p>
      * Typically it is easier to just call
-     * {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)} or
-     * {@link #isValidToAddResult(ObjectAdapter, ObjectAdapter)}; this is
+     * {@link #isValidToAdd(ObjectAdapter, ObjectAdapter)}; this is
      * provided as API for symmetry with interactions (such as
      * {@link AccessContext} accesses) have no corresponding vetoing methods.
      */
@@ -86,16 +91,21 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
      * 
      * <p>
      * If allowed the {@link #removeElement(ObjectAdapter, ObjectAdapter)
-     * remove} method can be called with the same parameters, .
+     * remove} method can be called with the same parameters.
      * 
      * @see #removeElement(ObjectAdapter, ObjectAdapter)
-     * @see #isValidToAddResult(ObjectAdapter, ObjectAdapter)
      */
     Consent isValidToRemove(ObjectAdapter owningObjectAdapter, ObjectAdapter proposedObjectToRemove);
 
     /**
      * Remove the specified element from this collection field in the specified
      * object.
+     *
+     * <p>
+     *     Should be preceded by call to {@link #isValidToRemove(ObjectAdapter, ObjectAdapter)}.
+     * </p>
+     *
+     * @see #isValidToRemove(ObjectAdapter, ObjectAdapter)
      */
     void removeElement(ObjectAdapter owningObjectAdapter, ObjectAdapter oObjectToRemove);
 
@@ -105,7 +115,10 @@ public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeatur
 
     /**
      * Remove all elements from this collection field in the specified object.
+     *
+     * @deprecated - seemingly unused by any code?
      */
+    @Deprecated
     void clearCollection(ObjectAdapter inObject);
 
 }

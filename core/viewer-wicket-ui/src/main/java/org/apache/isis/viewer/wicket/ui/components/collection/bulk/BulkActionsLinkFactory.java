@@ -134,9 +134,9 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     model.clearToggleMementosList();
                     toggleboxColumn.clearToggles();
-                    final ActionModel actionModelHint = model.getActionModelHint();
-                    if(actionModelHint != null && actionModelHint.getActionMemento().getAction().getSemantics().isIdempotentInNature()) {
-                        ObjectAdapter resultAdapter = actionModelHint.getObject();
+                    final ActionModel actionModel = model.getActionModelHint();
+                    if(actionModel != null && actionModel.getActionMemento().getAction().getSemantics().isIdempotentInNature()) {
+                        ObjectAdapter resultAdapter = actionModel.getObject();
                         model.setObjectList(resultAdapter);
                     } else {
                         model.setObject(persistentAdaptersWithin(model.getObject()));
@@ -144,7 +144,7 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
                     if(lastReturnedAdapter != null) {
                         final ActionResultResponse resultResponse =
-                                ActionResultResponseType.determineAndInterpretResult(actionModelHint, null, lastReturnedAdapter);
+                                ActionResultResponseType.determineAndInterpretResult(actionModel, null, lastReturnedAdapter);
                         resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
                     }
 
