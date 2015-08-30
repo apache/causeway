@@ -8,7 +8,7 @@
 
 The JDO Objectstore (or rather, the underlying DataNucleus implementation) builds its own persistence metamodel by reading both annotations on the class and also by searching for metadata in XML files. The metadata in the XML files takes precedence over the annotations, and so can be used to override metadata that is "hard-coded" in annotations.
 
-For example, as of 1.9.0-SNAPSHOT the various http://www.isisaddons.org[Isis addons] modules (not ASF) use schemas for each entity. For example, the `AuditEntry` entity in the http://github.com/isisaddons/isis-module-audit[audit module] is annotated as:
+For example, as of 1.9.0 the various http://www.isisaddons.org[Isis addons] modules (not ASF) use schemas for each entity. For example, the `AuditEntry` entity in the http://github.com/isisaddons/isis-module-audit[audit module] is annotated as:
 
 [source,java]
 ----
@@ -49,7 +49,7 @@ For example, in writing up the above example we found that writing `schema=&quot
 
 * Forcing the schema to "PUBLIC" (as in the above example) works, but it isn't ideal because the name "PUBLIC" is not vendor-neutral (it works for HSQLDB, but MS SQL Server uses "dbo" as its default).
 
-* As of 1.9.0-SNAPSHOT Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ug_more-advanced_decoupling_db-schemas[using modules].
+* As of 1.9.0 Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ug_more-advanced_decoupling_db-schemas[using modules].
 ====
 
 

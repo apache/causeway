@@ -53,8 +53,8 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag isis-1.9.0 RC1
-sh scripts/promoterctag simpleapp-archetype-1.9.0 RC1
+sh scripts/promoterctag.sh isis-1.9.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.9.0 RC1
 ----
 
 
@@ -97,7 +97,72 @@ If necessary, checkout this directory structure:
 svn co https://dist.apache.org/repos/dist/release/isis isis-dist
 ----
 
-Next, add the new release into the appropriate directory, and delete any previous release. You can use link:upd_sh[the upd.sh script] to help; this downloads the artefacts from the Nexus release repository, adds the artefacts to subsversion and deletes the previous version.
+Next, add the new release into the appropriate directory, and delete any previous release.  The `upd.sh` script can be used to automate this:
+
+[source,bash]
+----
+old_ver=$1
+new_ver=$2
+
+
+# constants
+repo_root=https://repository.apache.org/content/repositories/releases/org/apache/isis
+
+zip="source-release.zip"
+asc="$zip.asc"
+md5="$zip.md5"
+
+
+#
+# isis-core
+#
+type="core"
+fullname="isis"
+pushd isis-core
+
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+svn add $fullname-$new_ver-$asc
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+svn add $fullname-$new_ver-$md5
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$zip
+
+svn delete $fullname-$old_ver-$asc
+svn delete $fullname-$old_ver-$md5
+svn delete $fullname-$old_ver-$zip
+
+popd
+
+
+#
+# simpleapp-archetype
+#
+type="archetype"
+fullname="simpleapp-archetype"
+pushd $type/$fullname
+
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$md5
+svn add $fullname-$new_ver-$md5
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$asc
+svn add $fullname-$new_ver-$asc
+curl -O $repo_root/$type/$fullname/$new_ver/$fullname-$new_ver-$zip
+svn add $fullname-$new_ver-$zip
+
+svn delete $fullname-$old_ver-$md5
+svn delete $fullname-$old_ver-$asc
+svn delete $fullname-$old_ver-$zip
+
+popd
+----
+
+For example:
+
+[source,bash]
+----
+sh upd.sh 1.8.0 1.9.0
+----
+
+The script downloads the artefacts from the Nexus release repository, adds the artefacts to subsversion and deletes the previous version.
 
 At the end, commit the changes:
 
@@ -147,7 +212,7 @@ Update the Apache Isis (asciidoc) website:
 
 * Search for any `-SNAPSHOT` suffices, and remove
 
-* Update the link:../download.html[download page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
+* Update the link:../downloads.html[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
 
 * update the link:../doap_isis.rdf[DOAP RDF] file (which provides a machine-parseable description of the project) should also be updated with details of the new release. Validate using the http://www.w3.org/RDF/Validator/[W3C RDF Validator] service. +
 +

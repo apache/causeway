@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 In the same way that Java packages act as a namespace for domain objects, it's good practice to map domain entities to
-their own (database) schemas. As of 1.9.0-SNAPSHOT, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
+their own (database) schemas. As of 1.9.0, all the link:http://www.isisaddons.org[Isis Addons] (non-ASF) modules do this, for example:
 
 
 
@@ -62,7 +62,7 @@ on the initialization of each class into the JDO metamodel.
 
 [TIP]
 ====
-Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Apache Isis up to v1.8.0) there was no support for schemas.  As of Apache Isis 1.9.0-SNAPSHOT and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
+Actually, the above statement isn't quite true.  In DN 3.2.x (as used by Apache Isis up to v1.8.0) there was no support for schemas.  As of Apache Isis 1.9.0 and DN 4.0 there is now support.  But we implemented this feature initially against DN 3.2.x, and it still works, so for now we've decided to leave it in.
 ====
 
 Therefore Apache Isis attaches a listener, `CreateSchemaObjectFromClassMetadata`, that checks for the schema's existence, and creates the schema if required.

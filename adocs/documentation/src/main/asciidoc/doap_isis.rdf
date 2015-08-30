@@ -36,6 +36,23 @@
     <category rdf:resource="http://projects.apache.org/category/web-framework" />
 
     
+    <!-- 2015-09-01 releases -->
+    <release>
+      <Version>
+        <name>isis</name>
+        <created>2015-09-01</created>
+        <revision>1.9.0</revision>
+      </Version>
+    </release>
+    <release>
+      <Version>
+        <name>simpleapp-archetype</name>
+        <created>2015-09-01</created>
+        <revision>1.9.0</revision>
+      </Version>
+    </release>
+    
+
     <!-- 2015-02-23 releases -->
     <release>
       <Version>
@@ -51,8 +68,8 @@
         <revision>1.8.0</revision>
       </Version>
     </release>
-    
-    
+
+
     <!-- 2014-10-18 releases -->
     <release>
       <Version>

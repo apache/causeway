@@ -164,7 +164,13 @@ mvn clean install
 
 The first time you do this, you'll find it takes a while since Maven needs to download all of the Apache Isis prerequisites.
 
-Thereafter you can speed up the build by adding the `-o` (offline flag):
+Thereafter you can speed up the build by adding the `-o` (offline flag).  To save more time still, we also recommend that you build in parallel.  (Per this link:http://zeroturnaround.com/rebellabs/your-maven-build-is-slow-speed-it-up/[blog post]), you could also experiment with a number of JDK parameters that we've found also speed up Maven:
+
+[source,bash]
+----
+export MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+mvn clean install -o -T1C
+----
 
 For the most part, though, you may want to rely on an IDE such as Eclipse to build the codebase for you. Both Eclipse and Idea (12.0+) support incremental background compilation.
 
