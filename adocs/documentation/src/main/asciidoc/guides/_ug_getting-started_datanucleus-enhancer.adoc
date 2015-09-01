@@ -17,7 +17,7 @@ Bytecode enhancement is actually a requirement of the JDO spec; the process is d
 
 What this means is that the enhancer -- available as both a Maven plugin and as an Eclipse plugin -- must, one way or another, be integrated into your development environment.
 
-If working from the Maven command line, JDO enhancement is done using the `maven-datanucleus-plugin`.  As of 1.9.0-SNAPSHOT, we put all the configuration into an (always active) profile:
+If working from the Maven command line, JDO enhancement is done using the `maven-datanucleus-plugin`.  As of 1.9.0, we put all the configuration into an (always active) profile:
 
 [TIP]
 ====

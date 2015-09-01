@@ -37,12 +37,12 @@ Add the following dependency to the `webapp` project's `pom.xml`:
     <dependency>
         <groupId>org.datanucleus</groupId>
         <artifactId>datanucleus-neo4j</artifactId>
-        <version>3.2.3</version> <!--1-->
+        <version>4.0.5</version> <!--1-->
     </dependency>
     ...
 </dependencies>
 ----
-<1> for 1.8.0, use the value shown.  for 1.9.0-SNAPSHOT, use 4.0.5.
+<1> for Isis v1.9.0, use the value shown.  for Isis v1.8.0, use 3.2.3.
 
 In the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype] this is defined under the "neo4j" profile so can be activated using `-P neo4j`.
 
