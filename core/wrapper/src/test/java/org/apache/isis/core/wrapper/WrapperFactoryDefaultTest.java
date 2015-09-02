@@ -22,17 +22,18 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.core.wrapper.proxy.ProxyInstantiator;
+import org.apache.isis.core.wrapper.proxy.ProxyCreator;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class WrapperFactoryAbstractTest {
+public class WrapperFactoryDefaultTest {
 
     private static class DomainObject {
     }
@@ -66,20 +67,20 @@ public class WrapperFactoryAbstractTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     @Mock
-    private ProxyInstantiator mockProxyInstantiator;
-    private WrapperFactoryAbstract wrapperFactory;
+    private ProxyCreator mockProxyCreator;
+    private WrapperFactoryDefault wrapperFactory;
 
     private DomainObject createProxyCalledWithDomainObject;
     private WrapperFactory.ExecutionMode createProxyCalledWithMode;
 
     @Before
     public void setUp() throws Exception {
-        wrapperFactory = new WrapperFactoryAbstract(mockProxyInstantiator) {
+        wrapperFactory = new WrapperFactoryDefault(mockProxyCreator) {
 
             @Override
             protected <T> T createProxy(T domainObject, ExecutionMode mode) {
-                WrapperFactoryAbstractTest.this.createProxyCalledWithMode = mode;
-                WrapperFactoryAbstractTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
+                WrapperFactoryDefaultTest.this.createProxyCalledWithMode = mode;
+                WrapperFactoryDefaultTest.this.createProxyCalledWithDomainObject = (DomainObject) domainObject;
                 return domainObject;
             }
         };

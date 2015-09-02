@@ -58,16 +58,6 @@ public class PropertyValidateFacetViaMethod extends PropertyValidateFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedAdapter) {
         final Object returnValue = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, proposedAdapter);
         if(returnValue instanceof String) {

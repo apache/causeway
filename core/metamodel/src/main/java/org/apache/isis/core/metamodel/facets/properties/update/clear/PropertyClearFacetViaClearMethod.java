@@ -51,16 +51,6 @@ public class PropertyClearFacetViaClearMethod extends PropertyClearFacetAbstract
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void clearProperty(final ObjectAdapter owningAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
     }

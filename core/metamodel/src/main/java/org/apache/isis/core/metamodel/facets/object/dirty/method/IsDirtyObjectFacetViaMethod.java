@@ -53,16 +53,6 @@ public class IsDirtyObjectFacetViaMethod extends IsDirtyObjectFacetAbstract impl
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public boolean invoke(final ObjectAdapter object) {
         return ((Boolean) MethodExtensions.invokeStatic(method)).booleanValue();
     }

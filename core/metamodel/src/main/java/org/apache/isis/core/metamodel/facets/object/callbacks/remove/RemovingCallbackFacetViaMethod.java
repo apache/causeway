@@ -43,18 +43,8 @@ public class RemovingCallbackFacetViaMethod extends RemovingCallbackFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
     public Intent getIntent(final Method method) {
         return Intent.LIFECYCLE;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
     }
 
     @Override

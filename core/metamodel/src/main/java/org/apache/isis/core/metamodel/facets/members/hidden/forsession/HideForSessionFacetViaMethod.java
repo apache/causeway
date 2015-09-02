@@ -52,16 +52,6 @@ public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract im
         return Intent.CHECK_IF_HIDDEN;
     }
 
-    @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
     /**
      * Will only check provided that a {@link AuthenticationSession} has been
      * provided.

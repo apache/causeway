@@ -495,16 +495,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     protected String toStringValues() {
         return "method=" + method;
     }

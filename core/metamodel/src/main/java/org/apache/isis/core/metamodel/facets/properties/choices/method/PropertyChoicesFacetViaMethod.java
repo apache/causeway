@@ -64,16 +64,6 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object[] getChoices(
             final ObjectAdapter owningAdapter,
             final SpecificationLoader specificationLookup,

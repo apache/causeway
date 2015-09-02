@@ -36,18 +36,18 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.Proxy;
 import javassist.util.proxy.ProxyFactory;
 
-public class ProxyInstantiatorForJavassist implements ProxyInstantiator {
+public class ProxyCreator {
 
     /**
      * Lazily constructed cache.
      */
     private final Map<Class, ProxyFactory> proxyFactoryByClass;
 
-    public ProxyInstantiatorForJavassist() {
+    public ProxyCreator() {
         this(new MapMaker().weakKeys().concurrencyLevel(10).<Class, ProxyFactory>makeMap());
     }
 
-    public ProxyInstantiatorForJavassist(Map<Class, ProxyFactory> proxyFactoryByClass) {
+    public ProxyCreator(Map<Class, ProxyFactory> proxyFactoryByClass) {
         this.proxyFactoryByClass = proxyFactoryByClass;
     }
 

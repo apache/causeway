@@ -69,16 +69,6 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object[] getChoices(
             final ObjectAdapter adapter,
             final List<ObjectAdapter> argumentsIfAvailable,

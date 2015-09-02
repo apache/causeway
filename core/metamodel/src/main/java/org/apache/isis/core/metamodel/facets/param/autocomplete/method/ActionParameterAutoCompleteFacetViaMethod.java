@@ -72,16 +72,6 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object[] autoComplete(
             final ObjectAdapter owningAdapter,
             final String searchArg,

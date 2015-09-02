@@ -60,7 +60,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
@@ -76,7 +75,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusUpdateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByPatternProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByTitleProcessor;
@@ -318,18 +316,6 @@ public class DataNucleusObjectStore implements ObjectStore {
         return new DataNucleusCreateObjectCommand(adapter, getPersistenceManager());
     }
 
-    public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
-        ensureOpened();
-        ensureInSession();
-
-        if (!adapter.representsPersistent()) {
-            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("save object - creating command for: " + adapter);
-        }
-        return new DataNucleusUpdateObjectCommand(adapter, getPersistenceManager());
-    }
 
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();

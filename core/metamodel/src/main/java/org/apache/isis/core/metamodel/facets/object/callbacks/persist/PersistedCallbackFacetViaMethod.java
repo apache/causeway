@@ -53,16 +53,6 @@ public class PersistedCallbackFacetViaMethod extends PersistedCallbackFacetAbstr
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void invoke(final ObjectAdapter adapter) {
         ObjectAdapter.InvokeUtils.invokeAll(methods, adapter);
     }

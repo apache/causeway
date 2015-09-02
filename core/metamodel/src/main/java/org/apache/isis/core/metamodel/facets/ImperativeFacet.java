@@ -24,14 +24,12 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
@@ -101,30 +99,12 @@ public interface ImperativeFacet extends Facet {
     public Intent getIntent(Method method);
 
 
-    /**
-     * For use by
-     * {@link FacetHolder#getFacets(org.apache.isis.core.metamodel.facetapi.progmodel.facets.org.apache.isis.nof.arch.facets.Facet.Filter)}
-     */
     public static Filter<Facet> FILTER = new Filter<Facet>() {
         @Override
         public boolean accept(final Facet facet) {
             return ImperativeFacet.Util.isImperativeFacet(facet);
         }
     };
-
-    /**
-     * Whether invoking this requires a
-     * {@link DomainObjectContainer#resolve(Object)} to occur first.
-     */
-    public boolean impliesResolve();
-
-    /**
-     * Whether invoking this method requires an
-     * {@link DomainObjectContainer#objectChanged(Object)} to occur afterwards.
-     * 
-     * @return
-     */
-    public boolean impliesObjectChanged();
 
 
     // //////////////////////////////////////
@@ -158,31 +138,6 @@ public interface ImperativeFacet extends Facet {
             return getImperativeFacet(facet) != null;
         }
 
-        public static Flags getFlags(final ObjectMember member, final Method method) {
-            final Flags flags = new Flags();
-            if (member == null) {
-                return flags;
-            }
-            final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
-            for (final Facet facet : allFacets) {
-                final ImperativeFacet imperativeFacet = ImperativeFacet.Util.getImperativeFacet(facet);
-                if (imperativeFacet == null) {
-                    continue;
-                }
-                final List<Method> methods = imperativeFacet.getMethods();
-                if (!methods.contains(method)) {
-                    continue;
-                }
-                flags.apply(imperativeFacet);
-
-                // no need to search further
-                if (flags.bothSet()) {
-                    break;
-                }
-            }
-            return flags;
-        }
-        
         public static Intent getIntent(final ObjectMember member, final Method method) {
             final List<Facet> allFacets = member.getFacets(Filters.anyOfType(Facet.class));
             final List<ImperativeFacet> imperativeFacets = Lists.newArrayList();
@@ -215,28 +170,6 @@ public interface ImperativeFacet extends Facet {
                     return intentToReturn;
             }
             throw new IllegalArgumentException(member.getIdentifier().toClassAndNameIdentityString() +  ": unable to determine intent of " + method.getName());
-        }
-    }
-
-    public static class Flags {
-        private boolean impliesResolve;
-        private boolean impliesObjectChanged;
-
-        public void apply(final ImperativeFacet imperativeFacet) {
-            this.impliesResolve |= imperativeFacet.impliesResolve();
-            this.impliesObjectChanged |= imperativeFacet.impliesObjectChanged();
-        }
-
-        public boolean bothSet() {
-            return impliesResolve && impliesObjectChanged;
-        }
-
-        public boolean impliesResolve() {
-            return impliesResolve;
-        }
-
-        public boolean impliesObjectChanged() {
-            return impliesObjectChanged;
         }
     }
 

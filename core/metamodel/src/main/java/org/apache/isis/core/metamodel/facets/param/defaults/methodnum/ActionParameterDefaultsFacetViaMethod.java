@@ -55,16 +55,6 @@ public class ActionParameterDefaultsFacetViaMethod extends ActionParameterDefaul
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public Object getDefault(final ObjectAdapter target, List<ObjectAdapter> argumentsIfAvailable) {
         return ObjectAdapter.InvokeUtils.invokeAutofit(method, target, argumentsIfAvailable, getAdapterManager());
     }

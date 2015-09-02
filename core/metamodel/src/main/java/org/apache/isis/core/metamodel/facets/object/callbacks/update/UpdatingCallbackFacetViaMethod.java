@@ -52,16 +52,6 @@ public class UpdatingCallbackFacetViaMethod extends UpdatingCallbackFacetAbstrac
     }
 
     @Override
-    public boolean impliesResolve() {
-        return false;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
-    @Override
     public void invoke(final ObjectAdapter adapter) {
         Wormhole.invoke(new Runnable() {
             @Override

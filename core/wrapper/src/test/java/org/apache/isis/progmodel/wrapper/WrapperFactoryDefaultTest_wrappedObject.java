@@ -53,7 +53,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificati
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.core.wrapper.WrapperFactoryAbstract;
+import org.apache.isis.core.wrapper.WrapperFactoryDefault;
 import org.apache.isis.progmodel.wrapper.dom.employees.Employee;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepository;
 import org.apache.isis.progmodel.wrapper.dom.employees.EmployeeRepositoryImpl;
@@ -62,7 +62,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public abstract class WrapperFactoryAbstractTest_wrappedObject {
+public class WrapperFactoryDefaultTest_wrappedObject {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
@@ -110,7 +110,7 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
     private Employee employeeDO;
     private Employee employeeWO;
 
-    private WrapperFactoryAbstract wrapperFactory;
+    private WrapperFactoryDefault wrapperFactory;
 
     @Before
     public void setUp() {
@@ -193,10 +193,9 @@ public abstract class WrapperFactoryAbstractTest_wrappedObject {
         employeeWO = wrapperFactory.wrap(employeeDO);
     }
 
-    /**
-     * Mandatory hook.
-     */
-    protected abstract WrapperFactoryAbstract createWrapperFactory();
+    protected WrapperFactoryDefault createWrapperFactory() {
+        return new WrapperFactoryDefault();
+    }
 
     @Test
     public void shouldWrapDomainObject() {

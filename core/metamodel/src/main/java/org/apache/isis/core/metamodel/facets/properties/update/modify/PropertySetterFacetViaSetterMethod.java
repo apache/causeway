@@ -51,16 +51,6 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
     }
 
     @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return true;
-    }
-
-    @Override
     public void setProperty(final ObjectAdapter adapter, final ObjectAdapter valueAdapter) {
         ObjectAdapter.InvokeUtils.invoke(method, adapter, valueAdapter);
     }

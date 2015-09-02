@@ -54,14 +54,4 @@ public class NamedFacetStaticMethod extends NamedFacetAbstract implements Impera
         return Intent.UI_HINT;
     }
 
-    @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
 }

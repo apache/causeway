@@ -61,16 +61,6 @@ public class DisableForContextFacetViaMethod extends DisableForContextFacetAbstr
         return Intent.CHECK_IF_DISABLED;
     }
 
-    @Override
-    public boolean impliesResolve() {
-        return true;
-    }
-
-    @Override
-    public boolean impliesObjectChanged() {
-        return false;
-    }
-
     /**
      * The reason this object is disabled, or <tt>null</tt> otherwise.
      */

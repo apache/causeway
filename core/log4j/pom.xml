@@ -21,14 +21,6 @@
     <artifactId>isis-core-log4j</artifactId>
     <name>Isis Log4j Impls</name>
 
-    <properties>
-        <siteBaseDir>..</siteBaseDir>
-        <relativeUrl>log4j/</relativeUrl>
-    </properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>

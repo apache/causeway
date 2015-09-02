@@ -1,5 +1,5 @@
-<!--
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
   Licensed to the Apache Software Foundation (ASF) under one
   or more contributor license agreements.  See the NOTICE file
   distributed with this work for additional information
@@ -22,21 +22,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>isis-viewer-wicket</artifactId>
-        <version>1.10.0-SNAPSHOT</version>
-	</parent>
+		<groupId>org.apache.isis.core</groupId>
+		<artifactId>isis</artifactId>
+		<version>1.10.0-SNAPSHOT</version>
+    </parent>
 
-	<name>Isis Wicket Viewer Implementation</name>
-	<artifactId>isis-viewer-wicket-impl</artifactId>
-
-	<properties>
-		<siteBaseDir>..</siteBaseDir>
-		<relativeUrl>viewer/</relativeUrl>
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
+    <groupId>org.apache.isis.viewer</groupId>
+	<artifactId>isis-viewer-wicket-applib</artifactId>
+	<name>Isis Wicket Viewer Applib</name>
 
 	<build>
 		<resources>
@@ -58,53 +51,33 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>isis-viewer-wicket-ui</artifactId>
-		</dependency>
 
-		<dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>isis-core-applib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+        </dependency>
+
+        <dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>isis-core-unittestsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>isis-core-runtime</artifactId>
-		</dependency>
+
+
+		<!-- LOGGING DEPENDENCIES - LOG4J -->
 
 		<dependency>
-			<groupId>org.apache.geronimo.specs</groupId>
-			<artifactId>geronimo-servlet_3.0_spec</artifactId>
-			<scope>provided</scope>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-auth-roles</artifactId>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-		</dependency>
-
-        <dependency>
-            <groupId>net.ftlines.wicket-source</groupId>
-            <artifactId>wicket-source</artifactId>
-        </dependency>
-
-		<dependency>
-			<groupId>com.google.inject</groupId>
-			<artifactId>guice-parent</artifactId>
-			<version>${guice.version}</version>
-			<type>pom</type>
-		</dependency>
-
-		<dependency>
-			<groupId>de.agilecoders.wicket</groupId>
-			<artifactId>wicket-bootstrap-core</artifactId>
-		</dependency>
 	</dependencies>
-
 </project>

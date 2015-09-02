@@ -31,15 +31,6 @@
 	<name>Isis Core Wrapper Service</name>
 	<description>Isis Wrapper Service</description>
 
-
-	<properties>
-        <siteBaseDir>..</siteBaseDir>
-		<relativeUrl>wrapper/</relativeUrl>
-	</properties>
-
-    <!-- used in Site generation for relative references. -->
-    <url>http://isis.apache.org/${relativeUrl}</url>
-
     <reporting>
         <plugins>
             <plugin>

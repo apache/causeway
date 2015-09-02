@@ -95,7 +95,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateOb
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
@@ -402,23 +401,6 @@ public class IsisTransaction implements TransactionScopedComponent {
 
         final ObjectAdapter onObject = command.onAdapter();
 
-        // Saves are ignored when preceded by another save, or a delete
-        if (command instanceof SaveObjectCommand) {
-            if (alreadyHasCreate(onObject) || alreadyHasSave(onObject)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("ignored command as object already created/saved" + command);
-                }
-                return;
-            }
-
-            if (alreadyHasDestroy(onObject)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("ignored command " + command + " as object no longer exists");
-                }
-                return;
-            }
-        }
-
         // Destroys are ignored when preceded by a create, or another destroy
         if (command instanceof DestroyObjectCommand) {
             if (alreadyHasCreate(onObject)) {
@@ -427,13 +409,6 @@ public class IsisTransaction implements TransactionScopedComponent {
                     LOG.debug("ignored both create and destroy command " + command);
                 }
                 return;
-            }
-
-            if (alreadyHasSave(onObject)) {
-                removeSave(onObject);
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("removed prior save command " + command);
-                }
             }
 
             if (alreadyHasDestroy(onObject)) {
@@ -1071,10 +1046,6 @@ public class IsisTransaction implements TransactionScopedComponent {
         return alreadyHasCommand(DestroyObjectCommand.class, onObject);
     }
 
-    private boolean alreadyHasSave(final ObjectAdapter onObject) {
-        return alreadyHasCommand(SaveObjectCommand.class, onObject);
-    }
-
     private PersistenceCommand getCommand(final Class<?> commandClass, final ObjectAdapter onObject) {
         for (final PersistenceCommand command : persistenceCommands) {
             if (command.onAdapter().equals(onObject)) {
@@ -1093,10 +1064,6 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private void removeCreate(final ObjectAdapter onObject) {
         removeCommand(CreateObjectCommand.class, onObject);
-    }
-
-    private void removeSave(final ObjectAdapter onObject) {
-        removeCommand(SaveObjectCommand.class, onObject);
     }
 
     // ////////////////////////////////////////////////////////////////
