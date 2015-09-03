@@ -41,8 +41,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -81,7 +79,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final ObjectDirtier objectDirtier;
     private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
-    private final ServicesProvider servicesProvider;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -189,17 +186,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public void remove(final ObjectAdapter adapter) {
                 getPersistenceSession().destroyObject(adapter);
-            }
-        };
-        this.servicesProvider = new ServicesProviderAbstract() {
-            @Override
-            public List<ObjectAdapter> getServices() {
-                return getPersistenceSession().getServices();
-            }
-
-            @Override
-            public <T> T lookupService(Class<T> cls) {
-                return servicesInjectorDelegator.lookupService(cls);
             }
         };
         this.domainObjectServices = new DomainObjectServicesAbstract() {
@@ -355,11 +341,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     @Override
     public DomainObjectServices getDomainObjectServices() {
         return domainObjectServices;
-    }
-
-    @Override
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
     }
 
     @Override

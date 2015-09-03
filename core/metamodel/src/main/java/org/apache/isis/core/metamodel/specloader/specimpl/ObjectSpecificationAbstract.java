@@ -46,7 +46,7 @@ import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -82,6 +82,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
@@ -124,12 +125,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private final DeploymentCategory deploymentCategory;
-    private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
-    
     private final FacetProcessor facetProcessor;
-    
+    private final AdapterManager adapterManager;
+
     /**
      * Only populated once {@link #introspectTypeHierarchyAndMembers()} is called.
      */
@@ -198,11 +199,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         this.deploymentCategory = objectSpecificationDependencies.getDeploymentCategory();
-        this.servicesProvider = objectSpecificationDependencies.getServicesProvider();
+        this.servicesInjector = objectSpecificationDependencies.getServicesInjector();
         this.objectInstantiator = objectSpecificationDependencies.getObjectInstantiator();
         this.specificationLoader = objectSpecificationDependencies.getSpecificationLoader();
         this.facetProcessor = objectSpecificationDependencies.getFacetProcessor();
-        
+        this.adapterManager = objectSpecificationDependencies.getAdapterManager();
+
         this.objectMemberDependencies = objectMemberDependencies;
     }
 
@@ -899,11 +901,16 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
         final List<ObjectAction> serviceActions = Lists.newArrayList();
-        final List<ObjectAdapter> services = getServicesProvider().getServices();
-        for (final ObjectAdapter serviceAdapter : services) {
+        final Iterable<ObjectAdapter> serviceAdapters = getServiceAdapters();
+        for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             appendServiceActionsReturning(serviceAdapter, types, serviceActions);
         }
         return serviceActions;
+    }
+
+    private Iterable<ObjectAdapter> getServiceAdapters() {
+        final List<Object> servicePojos = getServicesInjector().getRegisteredServices();
+        return Iterables.transform(servicePojos, ObjectAdapter.Functions.adapterForUsing(adapterManager));
     }
 
     private void appendServiceActionsReturning(final ObjectAdapter serviceAdapter, final List<ActionType> types, final List<ObjectAction> relatedActionsToAppendTo) {
@@ -950,8 +957,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         
         final List<ObjectAssociation> contributeeAssociations = Lists.newArrayList();
-        final List<ObjectAdapter> services = getServicesProvider().getServices();
-        for (final ObjectAdapter serviceAdapter : services) {
+        for (final ObjectAdapter serviceAdapter : getServiceAdapters()) {
             addContributeeAssociationsIfAny(serviceAdapter, contributeeAssociations);
         }
         return contributeeAssociations;
@@ -1040,8 +1046,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         final List<ObjectAction> contributeeActions = Lists.newArrayList();
             
-        final List<ObjectAdapter> services = getServicesProvider().getServices();
-        for (final ObjectAdapter serviceAdapter : services) {
+        for (final ObjectAdapter serviceAdapter : getServiceAdapters()) {
             addContributeeActionsIfAny(serviceAdapter, contributeeActions);
         }
         return contributeeActions;
@@ -1209,15 +1214,15 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // Dependencies (injected in constructor)
     // //////////////////////////////////////////////////////////////////////
 
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
+    private ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
-    public ObjectInstantiator getObjectInstantiator() {
+    protected ObjectInstantiator getObjectInstantiator() {
         return objectInstantiator;
     }
 
-    public SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
 

@@ -213,7 +213,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         final BulkFacet bulkFacet = getFacet(BulkFacet.class);
         if (bulkFacet != null) {
 
-            final ActionInvocationContext actionInvocationContext = getServicesProvider().lookupService(ActionInvocationContext.class);
+            final ActionInvocationContext actionInvocationContext = getServicesInjector().lookupService(ActionInvocationContext.class);
             if (actionInvocationContext != null &&
                     actionInvocationContext.getInvokedOn() == null) {
 
@@ -221,7 +221,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
                 actionInvocationContext.setDomainObjects(Collections.singletonList(contributee.getObject()));
             }
 
-            final Bulk.InteractionContext bulkInteractionContext = getServicesProvider().lookupService(Bulk.InteractionContext.class);
+            final Bulk.InteractionContext bulkInteractionContext = getServicesInjector().lookupService(Bulk.InteractionContext.class);
             if (bulkInteractionContext != null &&
                     bulkInteractionContext.getInvokedAs() == null) {
 
@@ -232,7 +232,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
         }
 
-        final CommandContext commandContext = getServicesProvider().lookupService(CommandContext.class);
+        final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
 
         if(command != null && command.getExecutor() == Executor.USER) {

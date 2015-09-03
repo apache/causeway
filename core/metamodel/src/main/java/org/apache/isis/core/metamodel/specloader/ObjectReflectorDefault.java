@@ -20,13 +20,19 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -35,7 +41,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -51,7 +56,16 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -433,26 +447,28 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        final AuthenticationSessionProvider authenticationSessionProvider = getRuntimeContext().getAuthenticationSessionProvider();
         final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
-        final ServicesProvider servicesProvider = getRuntimeContext().getServicesProvider();
+        final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
         final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
+        final AdapterManager adapterManager = getRuntimeContext().getAdapterManager();
 
-        // create contexts as inputs ...
-        final ObjectSpecificationDependencies specContext = new ObjectSpecificationDependencies(getDeploymentCategory(), servicesProvider, objectInstantiator, specificationLookup, facetProcessor);
+        final ObjectSpecificationDependencies specContext =
+                new ObjectSpecificationDependencies(
+                        getDeploymentCategory(), servicesInjector, objectInstantiator, specificationLookup,
+                        facetProcessor, adapterManager);
 
-        final AdapterManager adapterMap = getRuntimeContext().getAdapterManager();
         final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(
-                specificationLookup, adapterMap, getRuntimeContext().getQuerySubmitter(), servicesProvider);
+                specificationLookup, adapterManager, getRuntimeContext().getQuerySubmitter(), servicesInjector);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationOnStandaloneList(specContext, objectMemberDependencies);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final ServicesInjector dependencyInjector = getRuntimeContext().getServicesInjector();
-            final CreateObjectContext createObjectContext = new CreateObjectContext(adapterMap, dependencyInjector);
-            final FacetedMethodsBuilderContext facetedMethodsBuilderContext = new FacetedMethodsBuilderContext(specificationLoader, facetProcessor, layoutMetadataReaders);
+            final CreateObjectContext createObjectContext = new CreateObjectContext(adapterManager, servicesInjector);
+            final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
+                    new FacetedMethodsBuilderContext(
+                            specificationLoader, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext,
                     objectMemberDependencies, createObjectContext);
         }

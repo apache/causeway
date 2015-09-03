@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.runtime.system;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -33,16 +28,21 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ObjectActionImplTest {
 
@@ -62,7 +62,7 @@ public class ObjectActionImplTest {
     @Mock
     private AdapterManager mockAdapterManager;
     @Mock
-    private ServicesProvider mockServicesProvider;
+    private ServicesInjector mockServicesInjector;
     @Mock
     private QuerySubmitter mockQuerySubmitter;
 
@@ -77,7 +77,7 @@ public class ObjectActionImplTest {
         });
 
         action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberDependencies(
-                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider));
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesInjector));
     }
 
 

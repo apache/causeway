@@ -16,37 +16,41 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 public class ObjectSpecificationDependencies {
 
     private final DeploymentCategory deploymentCategory;
-    private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
+    private final AdapterManager adapterManager;
 
     public ObjectSpecificationDependencies(
             final DeploymentCategory deploymentCategory,
-            final ServicesProvider servicesProvider,
+            final ServicesInjector servicesInjector,
             final ObjectInstantiator objectInstantiator,
             final SpecificationLoader specificationLoader,
-            final FacetProcessor facetProcessor) {
+            final FacetProcessor facetProcessor,
+            final AdapterManager adapterManager) {
         this.deploymentCategory = deploymentCategory;
-        this.servicesProvider = servicesProvider;
+        this.servicesInjector = servicesInjector;
         this.objectInstantiator = objectInstantiator;
         this.specificationLoader = specificationLoader;
         this.facetProcessor = facetProcessor;
+        this.adapterManager = adapterManager;
     }
 
     public DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }
     
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
     public ObjectInstantiator getObjectInstantiator() {
@@ -59,5 +63,9 @@ public class ObjectSpecificationDependencies {
 
     public FacetProcessor getFacetProcessor() {
         return facetProcessor;
+    }
+
+    public AdapterManager getAdapterManager() {
+        return adapterManager;
     }
 }

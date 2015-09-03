@@ -31,7 +31,6 @@ import org.junit.Test;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
@@ -58,8 +57,6 @@ public class IsisMetaModelTest_init {
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private ServicesProvider mockServicesProvider;
     @Mock
     private ObjectInstantiator mockObjectInstantiator;
     @Mock
@@ -102,9 +99,6 @@ public class IsisMetaModelTest_init {
 
                 allowing(mockRuntimeContext).getServicesInjector();
                 will(returnValue(mockDependencyInjector));
-
-                allowing(mockRuntimeContext).getServicesProvider();
-                will(returnValue(mockServicesProvider));
 
                 allowing(mockRuntimeContext).getObjectInstantiator();
                 will(returnValue(mockObjectInstantiator));

@@ -371,36 +371,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         return servicesInjector;
     }
 
-    // ///////////////////////////////////////////
-    // allInstances, allMatching*
-    // ///////////////////////////////////////////
-
-    public List<ObjectAdapter> allInstances(final ObjectSpecification noSpec) {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-    }
-
-    // ///////////////////////////////////////////
-    // getServices, injectDependenciesInto
-    // ///////////////////////////////////////////
-
-    @Override
-    public ServicesProvider getServicesProvider() {
-        return new ServicesProviderAbstract() {
-            /**
-             * Just returns an empty array.
-             */
-            @Override
-            public List<ObjectAdapter> getServices() {
-                return Collections.emptyList();
-            }
-
-            @Override
-            public <T> T lookupService(Class<T> cls) {
-                return null;
-            }
-        };
-    }
-
     @Override
     public LocalizationProvider getLocalizationProvider() {
         return localizationProvider;

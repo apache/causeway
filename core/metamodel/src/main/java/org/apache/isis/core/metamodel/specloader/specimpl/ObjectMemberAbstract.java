@@ -28,7 +28,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -48,6 +47,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -68,7 +68,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FeatureType featureType;
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
-    private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
     private final QuerySubmitter querySubmitter;
 
     protected ObjectMemberAbstract(
@@ -86,7 +86,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
         this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
         this.adapterManager = objectMemberDependencies.getAdapterManager();
-        this.servicesProvider = objectMemberDependencies.getServicesProvider();
+        this.servicesInjector = objectMemberDependencies.getServicesInjector();
         this.querySubmitter = objectMemberDependencies.getQuerySubmitter();
     }
 
@@ -339,8 +339,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return adapterManager;
     }
 
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
     public QuerySubmitter getQuerySubmitter() {

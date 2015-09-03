@@ -24,17 +24,18 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
@@ -79,7 +80,7 @@ public class OneToManyAssociationImplTest {
     @Mock
     private NamedFacet mockNamedFacet;
     @Mock
-    private ServicesProvider mockServicesProvider;
+    private ServicesInjector mockServicesInjector;
     @Mock
     private CollectionAddToFacet mockCollectionAddToFacet;
 
@@ -91,7 +92,7 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
         association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberDependencies(
-                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesProvider));
+                mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter, mockServicesInjector));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {

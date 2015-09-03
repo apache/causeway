@@ -17,8 +17,8 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class ObjectMemberDependencies {
@@ -26,19 +26,19 @@ public class ObjectMemberDependencies {
     private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
-    private final ServicesProvider servicesProvider;
+    private final ServicesInjector servicesInjector;
 
     public ObjectMemberDependencies(
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final QuerySubmitter querySubmitter,
-            final ServicesProvider servicesProvider) {
+            final ServicesInjector servicesInjector) {
 
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
 
-        this.servicesProvider = servicesProvider;
+        this.servicesInjector = servicesInjector;
     }
 
     public SpecificationLoader getSpecificationLoader() {
@@ -49,8 +49,8 @@ public class ObjectMemberDependencies {
         return adapterManager;
     }
 
-    public ServicesProvider getServicesProvider() {
-        return servicesProvider;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
     
     public QuerySubmitter getQuerySubmitter() {

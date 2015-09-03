@@ -21,18 +21,23 @@ package org.apache.isis.progmodel.wrapper;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.applib.services.wrapper.HiddenException;
 import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.*;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -46,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.metamodel.facets.properties.update.init.PropertyInitializationFacetViaSetterMethod;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
@@ -80,7 +86,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private QuerySubmitter mockQuerySubmitter;
     @Mock
-    private ServicesProvider mockServicesProvider;
+    private ServicesInjector mockServicesInjector;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
     @Mock
@@ -119,7 +125,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         objectMemberDependencies = new ObjectMemberDependencies(
-                mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter, mockServicesProvider);
+                mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter, mockServicesInjector);
         
         employeeRepository = new EmployeeRepositoryImpl();
 
