@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
@@ -304,9 +306,15 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     // Components
     // ///////////////////////////////////////////
 
+
     @Override
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return new DeploymentCategoryProviderAbstract() {
+            @Override
+            public DeploymentCategory getDeploymentCategory() {
+                return deploymentCategory;
+            }
+        };
     }
 
 

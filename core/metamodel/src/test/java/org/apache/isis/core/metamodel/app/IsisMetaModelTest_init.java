@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -108,8 +109,13 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).getObjectInstantiator();
                 will(returnValue(mockObjectInstantiator));
 
-                allowing(mockRuntimeContext).getDeploymentCategory();
-                will(returnValue(DeploymentCategory.PRODUCTION));
+                allowing(mockRuntimeContext).getDeploymentCategoryProvider();
+                will(returnValue(new DeploymentCategoryProviderAbstract() {
+                    @Override
+                    public DeploymentCategory getDeploymentCategory() {
+                        return DeploymentCategory.PRODUCTION;
+                    }
+                }));
 
                 oneOf(mockProgrammingModelFacets).init();
                 inSequence(initSequence);

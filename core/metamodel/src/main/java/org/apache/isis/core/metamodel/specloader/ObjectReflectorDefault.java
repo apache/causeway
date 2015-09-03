@@ -460,7 +460,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         if(runtimeContext == null) {
             throw new IllegalStateException("Runtime context has not been injected.");
         }
-        return runtimeContext.getDeploymentCategory();
+        return runtimeContext.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {

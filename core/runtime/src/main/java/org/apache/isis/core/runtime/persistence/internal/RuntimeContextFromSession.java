@@ -48,6 +48,8 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -387,9 +389,15 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     // ///////////////////////////////////////////
 
     @Override
-    public DeploymentCategory getDeploymentCategory() {
-        return IsisContext.getDeploymentType().getDeploymentCategory();
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return new DeploymentCategoryProviderAbstract() {
+            @Override
+            public DeploymentCategory getDeploymentCategory() {
+                return IsisContext.getDeploymentType().getDeploymentCategory();
+            }
+        };
     }
+
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

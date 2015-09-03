@@ -26,9 +26,6 @@ import java.util.Properties;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpiDelegator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -77,17 +74,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getServicesProvider().injectInto(candidate);
         getSpecificationLoader().injectInto(candidate);
     }
-
-    @Override
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return new DeploymentCategoryProviderAbstract() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return RuntimeContextAbstract.this.getDeploymentCategory();
-            }
-        };
-    }
-
 
     @Override
     public SpecificationLoader getSpecificationLoader() {
