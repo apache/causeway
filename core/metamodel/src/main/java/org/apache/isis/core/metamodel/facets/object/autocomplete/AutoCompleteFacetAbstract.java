@@ -108,7 +108,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         final AuthenticationSession authenticationSession = getAuthenticationSession();
         final DeploymentCategory deploymentCategory = getDeploymentCategory();
         return ObjectAdapter.Util.visibleAdapters(
-                        adapterList, authenticationSession, deploymentCategory, interactionInitiatedBy);
+                        adapterList, interactionInitiatedBy);
     }
 
 

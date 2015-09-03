@@ -20,12 +20,15 @@
 package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 public class HideForSessionFacetNone extends HideForSessionFacetAbstract {
 
-    public HideForSessionFacetNone(final FacetHolder holder) {
-        super(holder);
+    public HideForSessionFacetNone(
+            final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
+        super(holder, authenticationSessionProvider);
     }
 
     /**

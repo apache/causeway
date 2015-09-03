@@ -78,8 +78,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     public VisibilityContext<?> createVisibleInteractionContext(
             final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new PropertyVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
+        return new PropertyVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -90,8 +89,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new PropertyUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
+        return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -102,8 +100,8 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new PropertyModifyContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), proposedToReferenceAdapter);
+        return new PropertyModifyContext(ownerAdapter, getIdentifier(), proposedToReferenceAdapter,
+                interactionInitiatedBy);
     }
 
     @Override
@@ -118,7 +116,6 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToReferenceAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final AuthenticationSession session = getAuthenticationSession();
         final ValidityContext<?> validityContext =
                 createValidateInteractionContext(
                         ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy
@@ -163,12 +160,8 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
         return new PropertyAccessContext(
-                getDeploymentCategory(),
-                getAuthenticationSession(),
-                interactionInitiatedBy,
-                ownerAdapter,
-                getIdentifier(),
-                referencedAdapter);
+                ownerAdapter, getIdentifier(), referencedAdapter, interactionInitiatedBy
+        );
     }
 
     @Override

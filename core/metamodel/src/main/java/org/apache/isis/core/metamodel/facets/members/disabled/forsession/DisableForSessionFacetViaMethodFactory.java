@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 
 import java.lang.reflect.Method;
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -50,10 +51,12 @@ public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFac
 
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
-        attachDisableFacetIfDisableMethodForSessionIsFound(processMethodContext);
+        attachDisableFacetIfDisableMethodForSessionIsFound(processMethodContext, getAuthenticationSessionProvider());
     }
 
-    public static void attachDisableFacetIfDisableMethodForSessionIsFound(final ProcessMethodContext processMethodContext) {
+    public static void attachDisableFacetIfDisableMethodForSessionIsFound(
+            final ProcessMethodContext processMethodContext,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
@@ -68,7 +71,8 @@ public class DisableForSessionFacetViaMethodFactory extends MethodPrefixBasedFac
         processMethodContext.removeMethod(disableForSessionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new DisableForSessionFacetViaMethod(disableForSessionMethod, facetedMethod));
+        FacetUtil.addFacet(new DisableForSessionFacetViaMethod(disableForSessionMethod, facetedMethod,
+                authenticationSessionProvider));
     }
 
 }

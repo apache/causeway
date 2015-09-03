@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -38,13 +36,11 @@ public abstract class VisibilityContext<T extends VisibilityEvent> extends Inter
 
     public VisibilityContext(
             final InteractionContextType interactionType,
-            final DeploymentCategory deploymentCategory,
-            final AuthenticationSession session,
-            final InteractionInitiatedBy invocationMethod,
+            final ObjectAdapter targetAdapter,
             final Identifier identifier,
-            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
+        super(interactionType, interactionInitiatedBy, identifier, targetAdapter);
         this.where = where;
     }
 

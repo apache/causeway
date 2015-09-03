@@ -85,7 +85,7 @@ public class PropertyAccessorFacetViaAccessor
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedObject);
             final boolean visible = ObjectAdapter.Util
-                    .isVisible(referencedAdapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
+                    .isVisible(referencedAdapter, interactionInitiatedBy);
             if (!visible) {
                 return null;
             }

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.members.disabled.forsession;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -28,18 +29,26 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public abstract class DisableForSessionFacetAbstract extends FacetAbstract implements DisableForSessionFacet {
 
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+
     public static Class<? extends Facet> type() {
         return DisableForSessionFacet.class;
     }
 
-    public DisableForSessionFacetAbstract(final FacetHolder holder) {
+    public DisableForSessionFacetAbstract(
+            final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        final AuthenticationSession session = ic.getSession();
-        return disabledReason(session);
+        return disabledReason(getAuthenticationSession());
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
     }
 
 }

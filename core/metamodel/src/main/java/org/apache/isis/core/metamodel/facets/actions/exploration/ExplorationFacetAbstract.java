@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.exploration;
 
 import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
@@ -31,19 +32,24 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 @Deprecated
 public abstract class ExplorationFacetAbstract extends MarkerFacetAbstract implements ExplorationFacet {
 
+    private final DeploymentCategory deploymentCategory;
+
     public static Class<? extends Facet> type() {
         return ExplorationFacet.class;
     }
 
-    public ExplorationFacetAbstract(final FacetHolder holder) {
+    public ExplorationFacetAbstract(final FacetHolder holder, final DeploymentCategory deploymentCategory) {
         super(type(), holder);
+        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
     public String hides(
         VisibilityContext<? extends VisibilityEvent> ic) {
-        return ic.getDeploymentCategory().isExploring()? null: "Not visible";
+        return getDeploymentCategory().isExploring()? null: "Not visible";
     }
 
-
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
 }

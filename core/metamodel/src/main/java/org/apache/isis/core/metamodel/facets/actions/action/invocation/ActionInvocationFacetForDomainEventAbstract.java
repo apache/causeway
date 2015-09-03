@@ -247,7 +247,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 final List<ObjectAdapter> visibleAdapters =
                         ObjectAdapter.Util.visibleAdapters(
                                 adapterList,
-                                session, deploymentCategory, interactionInitiatedBy);
+                                interactionInitiatedBy);
                 final Object visibleObjects =
                         CollectionUtils.copyOf(
                                 Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
@@ -261,8 +261,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             } else {
                 boolean visible =
                         ObjectAdapter.Util.isVisible(
-                                invocationResultAdapter, session,
-                                deploymentCategory, interactionInitiatedBy);
+                                invocationResultAdapter,
+                                interactionInitiatedBy);
                 if(!visible) {
                     return null;
                 }

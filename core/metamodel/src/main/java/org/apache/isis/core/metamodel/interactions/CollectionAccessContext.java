@@ -19,16 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
-
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionAccessEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,8 +33,11 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public class CollectionAccessContext extends AccessContext<CollectionAccessEvent> {
 
-    public CollectionAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier) {
-        super(InteractionContextType.COLLECTION_READ, deploymentCategory, session, invocationMethod, identifier, target);
+    public CollectionAccessContext(
+            final ObjectAdapter target,
+            final Identifier identifier,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.COLLECTION_READ, identifier, target, interactionInitiatedBy);
     }
 
     @Override

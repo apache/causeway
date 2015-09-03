@@ -19,12 +19,15 @@
 
 package org.apache.isis.core.runtime.system;
 
+import org.jmock.Expectations;
+import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -70,11 +73,20 @@ public class ObjectMemberAbstractTest {
     
     private ObjectAdapter persistentAdapter;
     private ObjectAdapter transientAdapter;
-    
+
+    @Mock
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
+
     @Before
     public void setUp() throws Exception {
         org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 
+        context.checking(new Expectations() {{
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+            will(returnValue(mockAuthenticationSession));
+        }});
         persistentAdapter = PojoAdapterBuilder.create().build();
         transientAdapter = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).build();
 
@@ -89,7 +101,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testAvailableForUser() throws Exception {
-        testMember.addFacet(new DisableForSessionFacetAbstract(testMember) {
+        testMember.addFacet(new DisableForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
             @Override
             public String disabledReason(final AuthenticationSession session) {
                 return null;
@@ -151,7 +163,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleForSession() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
+        testMember.addFacet(new HideForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
             @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "Hidden";
@@ -162,7 +174,7 @@ public class ObjectMemberAbstractTest {
 
     @Test
     public void testVisibleForSessionFails() {
-        testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
+        testMember.addFacet(new HideForSessionFacetAbstract(testMember, mockAuthenticationSessionProvider) {
             @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "hidden";
@@ -221,7 +233,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
             final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         final AuthenticationSession session = getAuthenticationSession();
-        return new PropertyUsabilityContext(DeploymentCategory.PRODUCTION, session, interactionInitiatedBy, target, getIdentifier(), where);
+        return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
     }
 
     @Override
@@ -229,7 +241,8 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         final AuthenticationSession session = getAuthenticationSession();
-        return new PropertyVisibilityContext(DeploymentCategory.PRODUCTION, session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
+        return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,
+                where);
     }
 
     // /////////////////////////////////////////////////////////////

@@ -19,16 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
-
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.PropertyAccessEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -38,8 +35,12 @@ public class PropertyAccessContext extends AccessContext<PropertyAccessEvent> {
 
     private final ObjectAdapter value;
 
-    public PropertyAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter value) {
-        super(InteractionContextType.PROPERTY_READ, deploymentCategory, session, invocationMethod, id, target);
+    public PropertyAccessContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier id,
+            final ObjectAdapter value,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.PROPERTY_READ, id, targetAdapter, interactionInitiatedBy);
 
         this.value = value;
     }

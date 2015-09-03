@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ObjectVisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
@@ -37,13 +35,11 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityEvent> implements ProposedHolder {
 
     public ObjectVisibilityContext(
-            final DeploymentCategory deploymentCategory,
-            final AuthenticationSession session,
-            final InteractionInitiatedBy invocationMethod,
-            final ObjectAdapter target,
+            final ObjectAdapter targetAdapter,
             final Identifier identifier,
+            final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
-        super(InteractionContextType.OBJECT_VISIBILITY, deploymentCategory, session, invocationMethod, identifier, target, where);
+        super(InteractionContextType.OBJECT_VISIBILITY, targetAdapter, identifier, interactionInitiatedBy, where);
     }
 
     @Override

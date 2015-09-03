@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.exploration.annotation;
 
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacetAbstract;
 
@@ -28,8 +29,8 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 @Deprecated
 public class ExplorationFacetAnnotation extends ExplorationFacetAbstract {
 
-    public ExplorationFacetAnnotation(final FacetHolder holder) {
-        super(holder);
+    public ExplorationFacetAnnotation(final FacetHolder holder, final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
     }
 
 }

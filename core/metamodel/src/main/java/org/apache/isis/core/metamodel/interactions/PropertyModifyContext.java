@@ -19,16 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
-
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.PropertyModifyEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -38,8 +35,12 @@ public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> 
 
     private final ObjectAdapter proposed;
 
-    public PropertyModifyContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
-        super(InteractionContextType.PROPERTY_MODIFY, deploymentCategory, session, invocationMethod, id, target);
+    public PropertyModifyContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier id,
+            final ObjectAdapter proposed,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.PROPERTY_MODIFY, targetAdapter, id, interactionInitiatedBy);
 
         this.proposed = proposed;
     }

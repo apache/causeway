@@ -19,16 +19,13 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
-
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.ParseValueEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
+import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -38,8 +35,12 @@ public class ParseValueContext extends ValidityContext<ParseValueEvent> implemen
 
     private final ObjectAdapter proposed;
 
-    public ParseValueContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
-        super(InteractionContextType.PARSE_VALUE, deploymentCategory, session, invocationMethod, identifier, target);
+    public ParseValueContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier identifier,
+            final ObjectAdapter proposed,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.PARSE_VALUE, targetAdapter, identifier, interactionInitiatedBy);
         this.proposed = proposed;
     }
 

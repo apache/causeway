@@ -100,7 +100,7 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
-                        authenticationSession, deploymentCategory, interactionInitiatedBy);
+                        interactionInitiatedBy);
         final List<Object> visibleObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 

@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 
 import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -34,16 +36,25 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
  */
 public abstract class HideForSessionFacetAbstract extends FacetAbstract implements HideForSessionFacet {
 
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+
     public static Class<? extends Facet> type() {
         return HideForSessionFacet.class;
     }
 
-    public HideForSessionFacetAbstract(final FacetHolder holder) {
+    public HideForSessionFacetAbstract(
+            final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return hiddenReason(ic.getSession());
+        return hiddenReason(getAuthenticationSession());
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
     }
 }

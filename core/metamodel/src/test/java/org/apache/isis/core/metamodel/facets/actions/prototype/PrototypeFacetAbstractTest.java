@@ -18,10 +18,10 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.prototype;
 
-import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -48,13 +48,7 @@ public class PrototypeFacetAbstractTest {
 
     protected void givenWhenThen(final DeploymentCategory deploymentCategory, final String expected) {
         // given
-        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder){};
-
-        // expect
-        context.checking(new Expectations() {{
-            oneOf(mockVisibilityContext).getDeploymentCategory();
-            will(returnValue(deploymentCategory));
-        }});
+        final PrototypeFacetAbstract facet = new PrototypeFacetAbstract(mockFacetHolder, deploymentCategory){};
 
         // when
         final String reason = facet.hides(mockVisibilityContext);

@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -33,8 +31,12 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public abstract class ValidityContext<T extends ValidityEvent> extends InteractionContext<T> {
 
-    public ValidityContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final Identifier identifier, final ObjectAdapter target) {
-        super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
+    public ValidityContext(
+            final InteractionContextType interactionType,
+            final ObjectAdapter target,
+            final Identifier identifier,
+            final InteractionInitiatedBy invocationMethod) {
+        super(interactionType, invocationMethod, identifier, target);
     }
 
 }

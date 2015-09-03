@@ -206,11 +206,7 @@ public class EntityPage extends PageAbstract {
             final ObjectAdapter objectAdapter) {
         final Identifier identifier = objectAdapter.getSpecification().getIdentifier();
         return new ObjectVisibilityContext(
-                getDeploymentCategory(),
-                getAuthenticationSession(),
-                InteractionInitiatedBy.USER,
-                objectAdapter,
-                identifier,
+                objectAdapter, identifier, InteractionInitiatedBy.USER,
                 Where.OBJECT_FORMS);
     }
 

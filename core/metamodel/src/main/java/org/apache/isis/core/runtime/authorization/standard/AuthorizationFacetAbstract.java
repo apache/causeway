@@ -21,6 +21,8 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -35,20 +37,29 @@ public abstract class AuthorizationFacetAbstract extends FacetAbstract implement
     }
 
     private final AuthorizationManager authorizationManager;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
 
-    public AuthorizationFacetAbstract(final FacetHolder holder, final AuthorizationManager authorizationManager) {
+    public AuthorizationFacetAbstract(
+            final FacetHolder holder,
+            final AuthorizationManager authorizationManager,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.authorizationManager = authorizationManager;
+        this.authenticationSessionProvider = authenticationSessionProvider;
     }
 
     @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
-        return authorizationManager.isVisible(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to view";
+        return authorizationManager.isVisible(getAuthenticationSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to view";
     }
 
     @Override
     public String disables(final UsabilityContext<? extends UsabilityEvent> ic) {
-        return authorizationManager.isUsable(ic.getSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to edit";
+        return authorizationManager.isUsable(getAuthenticationSession(), ic.getTarget(), ic.getIdentifier()) ? null : "Not authorized to edit";
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
     }
 
 }

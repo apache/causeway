@@ -27,7 +27,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
@@ -40,7 +39,6 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -351,18 +349,16 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final ObjectAdapter collectionAdapter,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
                 final InteractionInitiatedBy interactionInitiatedBy) {
 
             final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collectionAdapter);
             Iterable<ObjectAdapter> objectAdapters = facet.iterable(collectionAdapter);
 
-            return visibleAdapters(objectAdapters, authenticationSession, deploymentCategory, interactionInitiatedBy);
+            return visibleAdapters(objectAdapters, interactionInitiatedBy);
         }
 
         /**
-         * as per {@link #visibleAdapters(ObjectAdapter, AuthenticationSession, DeploymentCategory, InteractionInitiatedBy)}.
+         * as per {@link #visibleAdapters(ObjectAdapter, InteractionInitiatedBy)}.
          *  @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
          * @param deploymentCategory - whether prototyping etc; may influence visibility
@@ -370,12 +366,10 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final Iterable<ObjectAdapter> objectAdapters,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             final List<ObjectAdapter> adapters = Lists.newArrayList();
             for (final ObjectAdapter adapter : objectAdapters) {
-                final boolean visible = isVisible(adapter, authenticationSession, deploymentCategory,
+                final boolean visible = isVisible(adapter,
                         interactionInitiatedBy);
                 if(visible) {
                     adapters.add(adapter);
@@ -386,40 +380,27 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
         /**
          * @param adapter - an adapter around the domain object whose visibility is being checked
-         * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
-         * @param deploymentCategory - whether prototyping etc; may influence visibility
          * @param interactionInitiatedBy
          */
         public static boolean isVisible(
                 final ObjectAdapter adapter,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             if(adapter.isDestroyed()) {
                 return false;
             }
             if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { return true; }
-            if(authenticationSession == null) {
-                return true;
-            }
             final ObjectSpecification objectSpecification = adapter.getSpecification();
-            final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
-                    deploymentCategory, interactionInitiatedBy);
+            final VisibilityContext<?> context = createVisibleInteractionContext(adapter,
+                    interactionInitiatedBy);
             InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
             return visibleResult.isNotVetoing();
         }
 
         private static VisibilityContext<?> createVisibleInteractionContext(
                 final ObjectAdapter objectAdapter,
-                final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory,
                 final InteractionInitiatedBy interactionInitiatedBy) {
             return new ObjectVisibilityContext(
-                    deploymentCategory,
-                    authenticationSession,
-                    interactionInitiatedBy,
-                    objectAdapter,
-                    objectAdapter.getSpecification().getIdentifier(),
+                    objectAdapter, objectAdapter.getSpecification().getIdentifier(), interactionInitiatedBy,
                     Where.OBJECT_FORMS);
         }
     }

@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.interaction;
 
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacetAbstract;
 
@@ -28,8 +29,9 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 @Deprecated
 public class ExplorationFacetViaNamingConvention extends ExplorationFacetAbstract {
 
-    public ExplorationFacetViaNamingConvention(final FacetHolder holder) {
-        super(holder);
+    public ExplorationFacetViaNamingConvention(
+            final FacetHolder holder, final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
     }
 
 }

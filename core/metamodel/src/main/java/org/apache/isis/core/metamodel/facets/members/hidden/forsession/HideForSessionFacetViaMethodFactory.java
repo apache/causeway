@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.members.hidden.forsession;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -51,11 +52,13 @@ public class HideForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetF
     @Override
     public void process(final ProcessMethodContext processMethodContext) {
         // hideXxx(UserMemento)
-        attachHideFacetIfHideMethodForSessionIsFound(processMethodContext);
+        attachHideFacetIfHideMethodForSessionIsFound(processMethodContext, getAuthenticationSessionProvider());
 
     }
 
-    public static void attachHideFacetIfHideMethodForSessionIsFound(final ProcessMethodContext processMethodContext) {
+    public static void attachHideFacetIfHideMethodForSessionIsFound(
+            final ProcessMethodContext processMethodContext,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
 
         final Method method = processMethodContext.getMethod();
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
@@ -70,7 +73,8 @@ public class HideForSessionFacetViaMethodFactory extends MethodPrefixBasedFacetF
         processMethodContext.removeMethod(hideForSessionMethod);
 
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new HideForSessionFacetViaMethod(hideForSessionMethod, facetedMethod));
+        FacetUtil.addFacet(new HideForSessionFacetViaMethod(hideForSessionMethod, facetedMethod,
+                authenticationSessionProvider));
     }
 
 }

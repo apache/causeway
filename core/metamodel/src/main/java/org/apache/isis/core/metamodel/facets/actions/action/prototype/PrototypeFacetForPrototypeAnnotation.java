@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.action.prototype;
 
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
@@ -30,12 +31,17 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbs
 @Deprecated
 public class PrototypeFacetForPrototypeAnnotation extends PrototypeFacetAbstract {
 
-    public PrototypeFacetForPrototypeAnnotation(final FacetHolder holder) {
-        super(holder);
+    public PrototypeFacetForPrototypeAnnotation(
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
     }
 
 
-    public static PrototypeFacet create(final Prototype annotation, final FacetHolder holder) {
-        return annotation == null ? null : new PrototypeFacetForPrototypeAnnotation(holder);
+    public static PrototypeFacet create(
+            final Prototype annotation,
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory) {
+        return annotation == null ? null : new PrototypeFacetForPrototypeAnnotation(holder, deploymentCategory);
     }
 }

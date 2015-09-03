@@ -45,8 +45,7 @@ public class AuthorizationFacetFactory extends FacetFactoryAbstract {
     }
 
     private AuthorizationFacetImpl createFacet(final FacetHolder holder) {
-        final AuthorizationManager authorizationManager = getAuthorizationManager();
-        return new AuthorizationFacetImpl(holder, authorizationManager);
+        return new AuthorizationFacetImpl(holder, getAuthorizationManager(), getAuthenticationSessionProvider());
     }
 
     // //////////////////////////////////////////////////////////////////

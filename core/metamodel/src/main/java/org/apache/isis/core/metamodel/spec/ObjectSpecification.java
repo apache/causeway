@@ -224,24 +224,26 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // ValidityContext, Validity
     // //////////////////////////////////////////////////////////////
 
-    /**
-     * Create an {@link InteractionContext} representing an attempt to save the
-     * object.
-     * @param deploymentCategory TODO
-     */
-    ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, AuthenticationSession session, InteractionInitiatedBy invocationMethod, ObjectAdapter targetObjectAdapter);
+    // internal API
+    ObjectValidityContext createValidityInteractionContext(
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
-    Consent isValid(ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
+    Consent isValid(
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
-    InteractionResult isValidResult(ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
+    InteractionResult isValidResult(
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////////////
     // Facets

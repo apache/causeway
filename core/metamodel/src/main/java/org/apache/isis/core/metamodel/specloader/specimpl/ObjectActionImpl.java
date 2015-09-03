@@ -284,8 +284,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public VisibilityContext<?> createVisibleInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new ActionVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
+        return new ActionVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -296,8 +295,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new ActionUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
+        return new ActionUsabilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -341,7 +339,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final ObjectAdapter targetObject,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ActionInvocationContext(getDeploymentCategory(), getAuthenticationSession(), interactionInitiatedBy, targetObject, getIdentifier(), proposedArguments);
+        return new ActionInvocationContext(targetObject, getIdentifier(), proposedArguments,
+                interactionInitiatedBy);
     }
 
     // //////////////////////////////////////////////////////////////////

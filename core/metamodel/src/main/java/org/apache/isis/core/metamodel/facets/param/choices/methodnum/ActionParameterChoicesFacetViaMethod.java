@@ -92,7 +92,6 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         objectAdapter,
-                        authenticationSession, deploymentCategory,
                         interactionInitiatedBy);
         final List<Object> visibleObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));

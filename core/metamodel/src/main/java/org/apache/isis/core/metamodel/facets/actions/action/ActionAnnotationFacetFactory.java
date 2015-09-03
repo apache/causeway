@@ -286,14 +286,16 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
 
         // check for deprecated @Prototype
         final Prototype annotation = Annotations.getAnnotation(method, Prototype.class);
-        final PrototypeFacet facet1 = PrototypeFacetForPrototypeAnnotation.create(annotation, holder);
+        final PrototypeFacet facet1 = PrototypeFacetForPrototypeAnnotation.create(annotation, holder,
+                getDeploymentCategory());
         FacetUtil.addFacet(prototypeValidator.flagIfPresent(facet1, processMethodContext));
         PrototypeFacet facet = facet1;
 
         // else search for @Action(restrictTo=...)
         final Action action = Annotations.getAnnotation(method, Action.class);
         if(facet == null) {
-            facet = PrototypeFacetForActionAnnotation.create(action, holder);
+            facet = PrototypeFacetForActionAnnotation.create(action, holder,
+                    getDeploymentCategory());
         }
         FacetUtil.addFacet(facet);
     }

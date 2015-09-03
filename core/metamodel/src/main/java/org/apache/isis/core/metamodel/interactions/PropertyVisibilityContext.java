@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
@@ -36,8 +34,12 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
  */
 public class PropertyVisibilityContext extends VisibilityContext<PropertyVisibilityEvent> {
 
-    public PropertyVisibilityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
-        super(InteractionContextType.PROPERTY_VISIBLE, deploymentCategory, session, invocationMethod, identifier, target, where);
+    public PropertyVisibilityContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier identifier,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        super(InteractionContextType.PROPERTY_VISIBLE, targetAdapter, identifier, interactionInitiatedBy, where);
     }
 
     @Override

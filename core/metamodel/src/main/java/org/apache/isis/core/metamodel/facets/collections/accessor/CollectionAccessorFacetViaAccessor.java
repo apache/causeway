@@ -87,7 +87,7 @@ public class CollectionAccessorFacetViaAccessor
             final List<ObjectAdapter> visibleAdapters =
                     ObjectAdapter.Util.visibleAdapters(
                             collectionAdapter,
-                            authenticationSession, deploymentCategory, interactionInitiatedBy);
+                            interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),

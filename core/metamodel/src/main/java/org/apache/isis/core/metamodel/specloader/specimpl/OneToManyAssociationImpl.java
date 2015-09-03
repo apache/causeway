@@ -78,8 +78,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public VisibilityContext<?> createVisibleInteractionContext(
             final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new CollectionVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
+        return new CollectionVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -90,8 +89,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
-        return new CollectionUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
+        return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -103,8 +101,8 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
             final InteractionInitiatedBy interactionInitiatedBy,
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToAddAdapter) {
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        return new CollectionAddToContext(getDeploymentCategory(), authenticationSession, interactionInitiatedBy, ownerAdapter, getIdentifier(), proposedToAddAdapter);
+        return new CollectionAddToContext(ownerAdapter, getIdentifier(), proposedToAddAdapter,
+                interactionInitiatedBy);
     }
 
     @Override
@@ -133,11 +131,8 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
             final ObjectAdapter proposedToRemoveAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new CollectionRemoveFromContext(
-                getDeploymentCategory(), getAuthenticationSession(),
-                interactionInitiatedBy,
-                ownerAdapter,
-                getIdentifier(),
-                proposedToRemoveAdapter);
+                ownerAdapter, getIdentifier(), proposedToRemoveAdapter, interactionInitiatedBy
+        );
     }
 
     @Override

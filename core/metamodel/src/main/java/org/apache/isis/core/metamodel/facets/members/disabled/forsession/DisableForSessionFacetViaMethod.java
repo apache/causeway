@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionUtils;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,8 +34,11 @@ public class DisableForSessionFacetViaMethod extends DisableForSessionFacetAbstr
 
     private final Method method;
 
-    public DisableForSessionFacetViaMethod(final Method method, final FacetHolder holder) {
-        super(holder);
+    public DisableForSessionFacetViaMethod(
+            final Method method,
+            final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
+        super(holder, authenticationSessionProvider);
         this.method = method;
     }
 

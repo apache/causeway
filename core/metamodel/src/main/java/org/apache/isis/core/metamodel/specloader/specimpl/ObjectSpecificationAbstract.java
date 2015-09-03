@@ -623,7 +623,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     @Override
     public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ObjectTitleContext(getDeploymentCategory(), session, interactionMethod, targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString());
+        return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
+                interactionMethod);
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -1085,17 +1086,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public Consent isValid(final ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy) {
-        return isValidResult(inObject, interactionInitiatedBy).createConsent();
+    public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+        return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
     }
 
     @Override
     public InteractionResult isValidResult(
-            final ObjectAdapter targetObjectAdapter,
+            final ObjectAdapter targetAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectValidityContext validityContext =
-                createValidityInteractionContext(deploymentCategory, getAuthenticationSession(),
-                interactionInitiatedBy, targetObjectAdapter);
+                createValidityInteractionContext(
+                        targetAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -1104,8 +1105,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * object.
      */
     @Override
-    public ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
-        return new ObjectValidityContext(deploymentCategory, session, interactionMethod, targetObjectAdapter, getIdentifier());
+    public ObjectValidityContext createValidityInteractionContext(
+            final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
 
     // //////////////////////////////////////////////////////////////////////

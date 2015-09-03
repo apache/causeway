@@ -55,7 +55,7 @@ public class ExplorationFacetAnnotationFactory extends FacetFactoryAbstract impl
     }
 
     private ExplorationFacet create(final Exploration annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ExplorationFacetAnnotation(holder);
+        return annotation == null ? null : new ExplorationFacetAnnotation(holder, getDeploymentCategory());
     }
 
     @Override

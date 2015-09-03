@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -36,8 +34,13 @@ public abstract class UsabilityContext<T extends UsabilityEvent> extends Interac
 
     private final Where where;
 
-    public UsabilityContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final Identifier identifier, final ObjectAdapter target, final Where where) {
-        super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
+    public UsabilityContext(
+            final InteractionContextType interactionType,
+            final ObjectAdapter targetAdapter,
+            final Identifier identifier,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        super(interactionType, interactionInitiatedBy, identifier, targetAdapter);
         this.where = where;
     }
 

@@ -145,11 +145,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
 
     private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
         return new ObjectVisibilityContext(
-                getDeploymentCategory(),
-                getAuthenticationSession(),
-                InteractionInitiatedBy.USER,
-                objectAdapter,
-                objectAdapter.getSpecification().getIdentifier(),
+                objectAdapter, objectAdapter.getSpecification().getIdentifier(), InteractionInitiatedBy.USER,
                 Where.ALL_TABLES);
     }
 

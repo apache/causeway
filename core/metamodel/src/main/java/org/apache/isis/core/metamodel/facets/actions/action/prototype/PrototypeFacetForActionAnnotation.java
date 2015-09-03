@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.action.prototype;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.RestrictTo;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacetAbstract;
@@ -29,16 +30,17 @@ public class PrototypeFacetForActionAnnotation extends PrototypeFacetAbstract {
 
     public static PrototypeFacet create(
             final Action action,
-            final FacetHolder holder) {
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory) {
 
         return action == null || action.restrictTo() == RestrictTo.NO_RESTRICTIONS
                 ? null
-                : new PrototypeFacetForActionAnnotation(holder);
+                : new PrototypeFacetForActionAnnotation(holder, deploymentCategory);
 
     }
 
-    private PrototypeFacetForActionAnnotation(FacetHolder holder) {
-        super(holder);
+    private PrototypeFacetForActionAnnotation(FacetHolder holder, final DeploymentCategory deploymentCategory) {
+        super(holder, deploymentCategory);
     }
 
 }

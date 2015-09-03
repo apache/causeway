@@ -28,21 +28,26 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 public abstract class PrototypeFacetAbstract extends MarkerFacetAbstract implements PrototypeFacet {
 
+    private final DeploymentCategory deploymentCategory;
+
     public static Class<? extends Facet> type() {
         return PrototypeFacet.class;
     }
 
-    public PrototypeFacetAbstract(final FacetHolder holder) {
+    public PrototypeFacetAbstract(final FacetHolder holder, final DeploymentCategory deploymentCategory) {
         super(type(), holder);
+        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
     public String hides(
         final VisibilityContext<? extends VisibilityEvent> ic) {
-        final DeploymentCategory deploymentCategory = ic.getDeploymentCategory();
-        return deploymentCategory.isProduction()
+        return getDeploymentCategory().isProduction()
                 ? "Prototyping action not visible in production mode"
                 : null;
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
 }

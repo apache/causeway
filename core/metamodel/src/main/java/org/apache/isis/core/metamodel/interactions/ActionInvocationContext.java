@@ -21,11 +21,10 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.ActionInvocationEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
@@ -36,8 +35,12 @@ public class ActionInvocationContext extends ValidityContext<ActionInvocationEve
 
     private final ObjectAdapter[] args;
 
-    public ActionInvocationContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter[] args) {
-        super(InteractionContextType.ACTION_INVOKE, deploymentCategory, session, invocationMethod, id, target);
+    public ActionInvocationContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier id,
+            final ObjectAdapter[] args,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.ACTION_INVOKE, targetAdapter, id, interactionInitiatedBy);
         this.args = args;
     }
 

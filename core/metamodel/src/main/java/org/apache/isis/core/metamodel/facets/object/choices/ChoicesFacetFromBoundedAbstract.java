@@ -133,7 +133,7 @@ public abstract class ChoicesFacetFromBoundedAbstract
         final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
-                    allInstancesAdapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
+                    allInstancesAdapter, interactionInitiatedBy);
 
         final List<Object> pojos = Lists.transform(adapters, ObjectAdapter.Functions.getObject());
         return Lists.newArrayList(pojos).toArray();

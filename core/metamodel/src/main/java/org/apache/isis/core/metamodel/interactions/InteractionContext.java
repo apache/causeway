@@ -29,7 +29,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -63,25 +62,22 @@ public abstract class InteractionContext<T extends InteractionEvent> {
     private final InteractionContextType interactionType;
     private final Identifier identifier;
     private final InteractionInitiatedBy interactionInitiatedBy;
-    private final AuthenticationSession session;
     private final ObjectAdapter target;
-    private final DeploymentCategory deploymentCategory;
-    
+
     private int contributeeParam = -1; // no contributee
     private ObjectAdapter contributee = null;
 
-    public InteractionContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    public InteractionContext(
+            final InteractionContextType interactionType,
+            final InteractionInitiatedBy invocationMethod,
+            final Identifier identifier,
+            final ObjectAdapter target) {
         this.interactionType = interactionType;
         this.interactionInitiatedBy = invocationMethod;
         this.identifier = identifier;
-        this.session = session;
         this.target = target;
-        this.deploymentCategory = deploymentCategory;
     }
 
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
 
     /**
      * The type of interaction.
@@ -112,13 +108,6 @@ public abstract class InteractionContext<T extends InteractionEvent> {
         return identifier;
     }
 
-    /**
-     * The {@link AuthenticationSession user or role} that is performing this
-     * interaction.
-     */
-    public AuthenticationSession getSession() {
-        return session;
-    }
 
     /**
      * How the interaction was initiated.

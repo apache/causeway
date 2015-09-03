@@ -98,7 +98,7 @@ public class ActionNamedDebugExplorationFacetFactory extends MethodPrefixBasedFa
             return;
         }
         final FacetHolder facetedMethod = processMethodContext.getFacetHolder();
-        final Facet facet = new ExplorationFacetViaNamingConvention(facetedMethod);
+        final Facet facet = new ExplorationFacetViaNamingConvention(facetedMethod, getDeploymentCategory());
         FacetUtil.addFacet(explorationValidator.flagIfPresent(facet, processMethodContext));
     }
 

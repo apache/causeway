@@ -22,11 +22,10 @@ package org.apache.isis.core.metamodel.interactions;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.events.ActionUsabilityEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
 
 /**
@@ -35,8 +34,12 @@ import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
  */
 public class ActionUsabilityContext extends UsabilityContext<ActionUsabilityEvent> {
 
-    public ActionUsabilityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, Where where) {
-        super(InteractionContextType.ACTION_USABLE, deploymentCategory, session, invocationMethod, id, target, where);
+    public ActionUsabilityContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier id,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        super(InteractionContextType.ACTION_USABLE, targetAdapter, id, interactionInitiatedBy, where);
     }
 
     @Override

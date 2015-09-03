@@ -82,15 +82,11 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
             final ObjectAdapter entryAdapter = getAdapterManager().adapterFor(entry);
-            final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
             final Identifier identifier = getIdentified().getIdentifier();
             final ParseValueContext parseValueContext =
                     new ParseValueContext(
-                            deploymentCategory, session,
-                            interactionInitiatedBy,
-                            contextAdapter,
-                            identifier,
-                            entryAdapter);
+                            contextAdapter, identifier, entryAdapter, interactionInitiatedBy
+                    );
             validate(parseValueContext);
         }
 
@@ -108,12 +104,10 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             // (eg pick up any validate() methods on it)
             final ObjectAdapter adapter = getAdapterManager().adapterFor(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
-            final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
             final ObjectValidityContext validateContext =
                     specification.createValidityInteractionContext(
-                            deploymentCategory, session,
-                            interactionInitiatedBy,
-                            adapter);
+                            adapter, interactionInitiatedBy
+                    );
             validate(validateContext);
 
             return adapter;

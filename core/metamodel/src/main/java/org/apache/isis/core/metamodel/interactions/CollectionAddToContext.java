@@ -21,11 +21,9 @@ package org.apache.isis.core.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionAddToEvent;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
  * See {@link InteractionContext} for overview; analogous to
@@ -35,8 +33,12 @@ public class CollectionAddToContext extends ValidityContext<CollectionAddToEvent
 
     private final ObjectAdapter proposed;
 
-    public CollectionAddToContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
-        super(InteractionContextType.COLLECTION_ADD_TO, deploymentCategory, session, invocationMethod, id, target);
+    public CollectionAddToContext(
+            final ObjectAdapter targetAdapter,
+            final Identifier id,
+            final ObjectAdapter proposed,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        super(InteractionContextType.COLLECTION_ADD_TO, targetAdapter, id, interactionInitiatedBy);
 
         this.proposed = proposed;
     }

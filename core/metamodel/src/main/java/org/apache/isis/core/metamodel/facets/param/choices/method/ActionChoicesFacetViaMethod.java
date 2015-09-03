@@ -117,7 +117,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
-                        authenticationSession, deploymentCategory,
                         interactionInitiatedBy);
         final List<Object> filteredObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
