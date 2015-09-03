@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets.object.notpersistable;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 public class NotPersistableFacetImpl extends NotPersistableFacetAbstract {
@@ -38,7 +37,7 @@ public class NotPersistableFacetImpl extends NotPersistableFacetAbstract {
             // never persistable
             return "Not persistable";
         } else {
-            if (ic.isProgrammatic()) {
+            if (ic.isFrameworkInitiated()) {
                 // enabled only in this case
                 return null;
             } else {

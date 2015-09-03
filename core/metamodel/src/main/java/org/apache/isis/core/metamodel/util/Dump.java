@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -44,6 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
+// REVIEW: UNUSED?
 public final class Dump {
 
     private static DebugBuilder debugBuilder;
@@ -418,7 +420,7 @@ public final class Dump {
                 final List<ObjectAssociation> fields = objectSpec.getAssociations(Contributed.EXCLUDED);
                 for (int i = 0; i < fields.size(); i++) {
                     final ObjectAssociation field = fields.get(i);
-                    final ObjectAdapter obj = field.get(collectionAdapter);
+                    final ObjectAdapter obj = field.get(collectionAdapter, InteractionInitiatedBy.FRAMEWORK);
 
                     final String name = field.getId();
                     if (obj == null) {
@@ -482,11 +484,11 @@ public final class Dump {
             final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
             for (int i = 0; i < fields.size(); i++) {
                 final ObjectAssociation field = fields.get(i);
-                final ObjectAdapter obj = field.get(adapter);
+                final ObjectAdapter obj = field.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                 final String name = field.getId();
                 graphIndent(level, s);
 
-                if (field.isVisible(authenticationSession, adapter, where).isVetoed()) {
+                if (field.isVisible(adapter, InteractionInitiatedBy.FRAMEWORK, where).isVetoed()) {
                     s.append(name + ": (not visible)");
                     s.append("\n");
                 } else {

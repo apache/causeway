@@ -25,6 +25,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -72,8 +73,11 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     }
 
     @Override
-    public ObjectAdapter parseTextEntry(final ObjectAdapter original, final String entryText, final Localization localization) {
-        return parseableFacetUsingParser.parseTextEntry(original, entryText, localization);
+    public ObjectAdapter parseTextEntry(
+            final ObjectAdapter original,
+            final String entryText,
+            final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
+        return parseableFacetUsingParser.parseTextEntry(original, entryText, interactionInitiatedBy, localization);
     }
 
     @Override

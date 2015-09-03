@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
@@ -56,12 +57,14 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters,
-            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
                 return underlyingFacet.invoke(owningAction, targetAdapter, argumentAdapters, authenticationSession,
-                        deploymentCategory);
+                        deploymentCategory, interactionInitiatedBy);
             }
         });
         return result;
@@ -71,12 +74,14 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
     public ObjectAdapter invoke(
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters,
-            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
                 return underlyingFacet.invoke(targetAdapter, argumentAdapters, authenticationSession,
-                        deploymentCategory);
+                        deploymentCategory, interactionInitiatedBy);
             }
         });
         return result;

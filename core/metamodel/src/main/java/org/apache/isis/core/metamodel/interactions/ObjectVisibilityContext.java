@@ -25,7 +25,7 @@ import org.apache.isis.applib.events.ObjectVisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
@@ -39,7 +39,7 @@ public class ObjectVisibilityContext extends VisibilityContext<ObjectVisibilityE
     public ObjectVisibilityContext(
             final DeploymentCategory deploymentCategory,
             final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
+            final InteractionInitiatedBy invocationMethod,
             final ObjectAdapter target,
             final Identifier identifier,
             final Where where) {

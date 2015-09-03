@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -55,6 +55,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
@@ -74,8 +75,11 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new PropertyVisibilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
+    public VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new PropertyVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -83,30 +87,42 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new PropertyUsabilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
+    public UsabilityContext<?> createUsableInteractionContext(
+            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new PropertyUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
     // Validate
     // /////////////////////////////////////////////////////////////
 
-    @Override
-    public ValidityContext<?> createValidateInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToReferenceAdapter) {
-        return new PropertyModifyContext(getDeploymentCategory(), session, interactionMethod, ownerAdapter, getIdentifier(), proposedToReferenceAdapter);
+    private ValidityContext<?> createValidateInteractionContext(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToReferenceAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new PropertyModifyContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), proposedToReferenceAdapter);
     }
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
     @Override
-    public Consent isAssociationValid(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToReferenceAdapter) {
-        return isAssociationValidResult(ownerAdapter, proposedToReferenceAdapter).createConsent();
+    public Consent isAssociationValid(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return isAssociationValidResult(ownerAdapter, proposedAdapter, interactionInitiatedBy).createConsent();
     }
 
-    private InteractionResult isAssociationValidResult(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToReferenceAdapter) {
-        final ValidityContext<?> validityContext = createValidateInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, ownerAdapter, proposedToReferenceAdapter);
+    private InteractionResult isAssociationValidResult(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToReferenceAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final AuthenticationSession session = getAuthenticationSession();
+        final ValidityContext<?> validityContext =
+                createValidateInteractionContext(
+                        ownerAdapter, proposedToReferenceAdapter, interactionInitiatedBy
+                );
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -127,9 +143,12 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
+    public ObjectAdapter get(
+            final ObjectAdapter ownerAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object referencedPojo = facet.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory());
+        final Object referencedPojo =
+                facet.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory(), interactionInitiatedBy);
 
         if (referencedPojo == null) {
             return null;
@@ -138,19 +157,23 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return getAdapterManager().adapterFor(referencedPojo, ownerAdapter);
     }
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
-    @Override
-    public PropertyAccessContext createAccessInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter ownerAdapter) {
-        return new PropertyAccessContext(getDeploymentCategory(), session, InteractionInvocationMethod.BY_USER, ownerAdapter, getIdentifier(), get(ownerAdapter
-        ));
+    // UNUSED
+    private PropertyAccessContext createAccessInteractionContext(
+            final ObjectAdapter ownerAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectAdapter referencedAdapter = get(ownerAdapter, interactionInitiatedBy);
+        return new PropertyAccessContext(
+                getDeploymentCategory(),
+                getAuthenticationSession(),
+                interactionInitiatedBy,
+                ownerAdapter,
+                getIdentifier(),
+                referencedAdapter);
     }
 
     @Override
-    public boolean isEmpty(final ObjectAdapter ownerAdapter) {
-        return get(ownerAdapter) == null;
+    public boolean isEmpty(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+        return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
     // /////////////////////////////////////////////////////////////
@@ -158,47 +181,60 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void set(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
+    public void set(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter newReferencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (newReferencedAdapter != null) {
-            setValue(ownerAdapter, newReferencedAdapter);
+            setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
         } else {
-            clearValue(ownerAdapter);
+            clearValue(ownerAdapter, interactionInitiatedBy);
         }
     }
 
     /**
-     * @see #set(ObjectAdapter, ObjectAdapter)
+     * @see MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      */
     @Deprecated
     @Override
-    public void setAssociation(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
-        setValue(ownerAdapter, newReferencedAdapter);
+    public void setAssociation(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter newReferencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        setValue(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
-    private void setValue(final ObjectAdapter ownerAdapter, final ObjectAdapter newReferencedAdapter) {
+    private void setValue(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter newReferencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertySetterFacet setterFacet = getFacet(PropertySetterFacet.class);
         if (setterFacet == null) {
             return;
         }
         if (ownerAdapter.representsPersistent() && newReferencedAdapter != null && newReferencedAdapter.isTransient() && !newReferencedAdapter.getSpecification().isParented()) {
             // TODO: move to facet ?
-            throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString() + " (transient)");
+            throw new IsisException("can't set a reference to a transient object from a persistent one: " + newReferencedAdapter.titleString(null) + " (transient)");
         }
-        setterFacet.setProperty(ownerAdapter, newReferencedAdapter);
+        setterFacet.setProperty(ownerAdapter, newReferencedAdapter, interactionInitiatedBy);
     }
 
     /**
-     * @see #set(ObjectAdapter, ObjectAdapter)
+     * @see MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
      */
     @Deprecated
     @Override
-    public void clearAssociation(final ObjectAdapter ownerAdapter) {
-        clearValue(ownerAdapter);
+    public void clearAssociation(
+            final ObjectAdapter ownerAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        clearValue(ownerAdapter, interactionInitiatedBy);
     }
 
-    private void clearValue(final ObjectAdapter ownerAdapter) {
+    private void clearValue(
+            final ObjectAdapter ownerAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyClearFacet facet = getFacet(PropertyClearFacet.class);
-        facet.clearProperty(ownerAdapter);
+        facet.clearProperty(ownerAdapter, interactionInitiatedBy);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -246,23 +282,23 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public ObjectAdapter[] getChoices(
             final ObjectAdapter ownerAdapter,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLoader(),
-                authenticationSession, deploymentCategory);
-        if (pojoOptions != null) {
-            List<ObjectAdapter> adapters = Lists.transform(
-                    Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
-            return adapters.toArray(new ObjectAdapter[]{});
-        } 
-        // // now incorporated into above choices processing (BoundedFacet is no more)
-        /* else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {
-            return options();
-        } */
-        return null;
+        if (propertyChoicesFacet == null) {
+            return null;
+        }
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+        final Object[] pojoOptions = propertyChoicesFacet.getChoices(
+                ownerAdapter,
+                getSpecificationLoader(), authenticationSession, deploymentCategory,
+                interactionInitiatedBy);
+        List<ObjectAdapter> adapters = Lists.transform(
+                Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
+        return adapters.toArray(new ObjectAdapter[]{});
     }
 
+    // seems to be UNUSED?
     private <T> ObjectAdapter[] options() {
         final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
@@ -286,10 +322,13 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final ObjectAdapter ownerAdapter,
             final String searchArg,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory1,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+        final AuthenticationSession session = getAuthenticationSession();
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
-                authenticationSession, deploymentCategory);
+                session, deploymentCategory, interactionInitiatedBy);
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {

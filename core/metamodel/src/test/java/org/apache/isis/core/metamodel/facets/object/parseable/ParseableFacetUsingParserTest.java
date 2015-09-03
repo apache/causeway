@@ -32,6 +32,7 @@ import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.parser.ParseableFacetUsingParser;
@@ -128,7 +129,7 @@ public class ParseableFacetUsingParserTest {
          * will(returnValue(session));
          * 
          * allowing(mockSpecification).createValidityInteractionContext(session,
-         * InteractionInvocationMethod.BY_USER, mockAdapter); }}); ObjectAdapter
+         * InteractionInvocationMethod.USER, mockAdapter); }}); ObjectAdapter
          * adapter = parseableFacetUsingParser.parseTextEntry(null, "xxx");
          * 
          * adapter.getObject();
@@ -137,16 +138,16 @@ public class ParseableFacetUsingParserTest {
 
     @Test(expected = TextEntryParseException.class)
     public void parsingExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "invalid", null);
+        parseableFacetUsingParser.parseTextEntry(null, "invalid", InteractionInitiatedBy.USER, null);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void numberFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "number", null);
+        parseableFacetUsingParser.parseTextEntry(null, "number", InteractionInitiatedBy.USER, null);
     }
 
     @Test(expected = TextEntryParseException.class)
     public void illegalFormatExceptionRethrown() throws Exception {
-        parseableFacetUsingParser.parseTextEntry(null, "format", null);
+        parseableFacetUsingParser.parseTextEntry(null, "format", InteractionInitiatedBy.USER, null);
     }
 }

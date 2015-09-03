@@ -27,7 +27,7 @@ import org.apache.isis.applib.events.ObjectValidityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public class ObjectValidityContext extends ValidityContext<ObjectValidityEvent> implements ProposedHolder {
 
-    public ObjectValidityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public ObjectValidityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.OBJECT_VALIDATE, deploymentCategory, session, invocationMethod, identifier, target);
     }
 

@@ -80,7 +80,7 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     // ///////////////////////////////////////////////////
 
     private void addValue() {
-        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         if (valueAdapter == null) {
             return;
         }

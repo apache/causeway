@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -132,7 +133,7 @@ public final class EntityActionUtil {
         @SuppressWarnings({ "unchecked", "deprecation" })
         Filter<ObjectAction> filter = Filters.and(
                     ObjectAction.Filters.memberOrderOf(association),
-                    ObjectAction.Filters.dynamicallyVisible(authSession, adapter, Where.ANYWHERE),
+                    ObjectAction.Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                     ObjectAction.Filters.notBulkOnly(),
                     ObjectAction.Filters.excludeWizardActions(objectSpecification));
 
@@ -145,15 +146,14 @@ public final class EntityActionUtil {
     public static void addTopLevelActions(
             final ObjectAdapter adapter,
             final ActionType actionType,
-            final List<ObjectAction> topLevelActions,
-            final AuthenticationSession authenticationSession) {
+            final List<ObjectAction> topLevelActions) {
 
         final ObjectSpecification adapterSpec = adapter.getSpecification();
 
         @SuppressWarnings({ "unchecked", "deprecation" })
         Filter<ObjectAction> filter = Filters.and(
                 ObjectAction.Filters.memberOrderNotAssociationOf(adapterSpec),
-                ObjectAction.Filters.dynamicallyVisible(authenticationSession, adapter, Where.ANYWHERE),
+                ObjectAction.Filters.dynamicallyVisible(adapter, InteractionInitiatedBy.USER, Where.ANYWHERE),
                 ObjectAction.Filters.notBulkOnly(),
                 ObjectAction.Filters.excludeWizardActions(adapterSpec));
 
@@ -161,13 +161,15 @@ public final class EntityActionUtil {
         topLevelActions.addAll(userActions);
     }
 
-    public static List<ObjectAction> getTopLevelActions(final ObjectAdapter adapter, final DeploymentType deploymentType, final AuthenticationSession authenticationSession) {
+    public static List<ObjectAction> getTopLevelActions(
+            final ObjectAdapter adapter,
+            final DeploymentType deploymentType) {
         final List<ObjectAction> topLevelActions = Lists.newArrayList();
 
-        addTopLevelActions(adapter, ActionType.USER, topLevelActions, authenticationSession);
+        addTopLevelActions(adapter, ActionType.USER, topLevelActions);
         if(deploymentType.isPrototyping()) {
-            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions, authenticationSession);
-            addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions, authenticationSession);
+            addTopLevelActions(adapter, ActionType.EXPLORATION, topLevelActions);
+            addTopLevelActions(adapter, ActionType.PROTOTYPE, topLevelActions);
         }
         return topLevelActions;
     }

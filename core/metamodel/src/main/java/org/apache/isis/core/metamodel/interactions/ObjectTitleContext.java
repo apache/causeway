@@ -27,7 +27,7 @@ import org.apache.isis.applib.events.ObjectTitleEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -38,7 +38,7 @@ public class ObjectTitleContext extends AccessContext<ObjectTitleEvent> {
 
     private final String title;
 
-    public ObjectTitleContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, final String title) {
+    public ObjectTitleContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier, final String title) {
         super(InteractionContextType.OBJECT_TITLE, deploymentCategory, session, invocationMethod, identifier, target);
         this.title = title;
     }

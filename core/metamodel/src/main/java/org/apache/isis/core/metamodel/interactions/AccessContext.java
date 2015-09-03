@@ -24,7 +24,7 @@ import org.apache.isis.applib.events.AccessEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public abstract class AccessContext<T extends AccessEvent> extends InteractionContext<T> {
 
-    public AccessContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target) {
+    public AccessContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final Identifier identifier, final ObjectAdapter target) {
         super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
     }
 

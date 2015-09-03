@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
@@ -63,7 +64,11 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         return facet.value();
     }
     
-    protected ObjectAdapter doCoerceProposedValue(ObjectAdapter adapter, Object proposedValue, final Localization localization) {
+    protected ObjectAdapter doCoerceProposedValue(
+            final ObjectAdapter adapter,
+            final Object proposedValue,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Localization localization) {
         // try to parse
         if (!(proposedValue instanceof String)) {
             return null;
@@ -73,7 +78,9 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         final ObjectSpecification parameterSpecification = getSpecification();
         final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
         try {
-            final ObjectAdapter parsedAdapter = p.parseTextEntry(null, proposedString, localization);
+            final ObjectAdapter parsedAdapter = p.parseTextEntry(null, proposedString, interactionInitiatedBy,
+                    localization
+            );
             return parsedAdapter;
         } catch(Exception ex) {
             return null;
@@ -101,7 +108,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
      * {@link ObjectAdapter}.
      */
     @Override
-    public ObjectAdapter get(final ObjectAdapter owner) {
+    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
         final MutableProposedHolder proposedHolder = getProposedHolder(owner);
         final Object proposed = proposedHolder.getProposed();
         return getAdapterMap().adapterFor(proposed);

@@ -17,8 +17,10 @@
 package org.apache.isis.viewer.restfulobjects.server.resources;
 
 import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -68,8 +70,15 @@ public class ObjectAdapterUpdateHelper {
             final ObjectSpecification propertySpec = property.getSpecification();
             final String id = property.getId();
             final JsonRepresentation propertyRepr = propertiesMap.getRepresentation(id);
-            final Consent visibility = property.isVisible(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
-            final Consent usability = property.isUsable(resourceContext.getAuthenticationSession() , objectAdapter, resourceContext.getWhere());
+            final Consent visibility = property.isVisible(
+                    objectAdapter,
+                    resourceContext.getInteractionInitiatedBy(),
+                    resourceContext.getWhere());
+            final Consent usability = property.isUsable(
+                    objectAdapter,
+                    resourceContext.getInteractionInitiatedBy(),
+                    resourceContext.getWhere()
+            );
 
             final boolean invisible = visibility.isVetoed();
             final boolean disabled = usability.isVetoed();
@@ -127,10 +136,13 @@ public class ObjectAdapterUpdateHelper {
                     continue;
                 }
                 // check if the proposed value is valid
-                final Consent validity = property.isAssociationValid(objectAdapter, valueAdapter);
+                final Consent validity = property.isAssociationValid(objectAdapter, valueAdapter,
+                        InteractionInitiatedBy.USER);
                 if (validity.isAllowed()) {
                     try {
-                        property.set(objectAdapter, valueAdapter);
+                        property.set(
+                                objectAdapter, valueAdapter,
+                                resourceContext.getInteractionInitiatedBy());
                     } catch (final IllegalArgumentException ex) {
                         propertyRepr.mapPut("invalidReason", ex.getMessage());
                         allOk = false;

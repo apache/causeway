@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -72,20 +72,21 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                 new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
 
             @Override
-            public ObjectAdapter get(final ObjectAdapter fromObject) {
+            public ObjectAdapter get(
+                    final ObjectAdapter fromObject,
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
             @Override
-            public boolean isEmpty(final ObjectAdapter adapter) {
+            public boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy) {
                 return false;
             }
 
             @Override
             public ObjectAdapter[] getChoices(
                     final ObjectAdapter object,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
@@ -100,18 +101,14 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
 
             @Override
             public UsabilityContext<?> createUsableInteractionContext(
-                    final AuthenticationSession session,
-                    final InteractionInvocationMethod invocationMethod,
-                    final ObjectAdapter target,
+                    final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
                     final Where where) {
                 return null;
             }
 
             @Override
             public VisibilityContext<?> createVisibleInteractionContext(
-                    final AuthenticationSession session,
-                    final InteractionInvocationMethod invocationMethod,
-                    final ObjectAdapter targetObjectAdapter,
+                    final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
                     final Where where) {
                 return null;
             }
@@ -141,7 +138,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
                     final ObjectAdapter object,
                     final String searchArg,
                     final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory) {
+                    final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
             @Override

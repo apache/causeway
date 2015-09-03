@@ -23,6 +23,7 @@ import java.util.Set;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -63,19 +64,19 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
     @Override
     public void add(
             final ObjectAdapter targetAdapter,
-            final ObjectAdapter referencedObjectAdapter) {
+            final ObjectAdapter referencedObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         if (this.collectionAddToFacet == null) {
             return;
         }
         if(!domainEventHelper.hasEventBusService()) {
-            collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
+            collectionAddToFacet.add(targetAdapter, referencedObjectAdapter, interactionInitiatedBy);
             return;
         }
 
         final Object referencedObject = ObjectAdapter.Util.unwrap(referencedObjectAdapter);
 
         // get hold of underlying collection
-        final Object collection = getterFacet.getProperty(targetAdapter, null, null);
+        final Object collection = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
 
         // don't post event if has set semantics and already contains object
         if(collection instanceof Set) {
@@ -99,7 +100,7 @@ public abstract class CollectionAddToFacetForDomainEventFromAbstract
                         referencedObject);
 
         // ... perform add
-        collectionAddToFacet.add(targetAdapter, referencedObjectAdapter);
+        collectionAddToFacet.add(targetAdapter, referencedObjectAdapter, interactionInitiatedBy);
 
         // ... post the executed event
         domainEventHelper.postEventForCollection(

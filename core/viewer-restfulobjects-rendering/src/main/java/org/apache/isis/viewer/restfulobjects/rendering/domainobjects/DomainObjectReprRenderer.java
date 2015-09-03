@@ -245,7 +245,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), rendererContext.getWhere());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -278,7 +278,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
-                final Consent visibility = assoc.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
+                final Consent visibility = assoc.isVisible(objectAdapter, getInteractionInitiatedBy(), rendererContext.getWhere());
                 if (!visibility.isAllowed()) {
                     continue;
                 }
@@ -303,7 +303,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
     private void addActions(final ObjectAdapter objectAdapter, final List<ObjectAction> actions, final JsonRepresentation members) {
         for (final ObjectAction action : actions) {
-            final Consent visibility = action.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, rendererContext.getWhere());
+            final Consent visibility = action.isVisible(objectAdapter, getInteractionInitiatedBy(), rendererContext.getWhere());
             if (!visibility.isAllowed()) {
                 continue;
             }

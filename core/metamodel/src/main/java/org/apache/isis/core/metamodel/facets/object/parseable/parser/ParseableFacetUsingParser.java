@@ -20,13 +20,16 @@
 package org.apache.isis.core.metamodel.facets.object.parseable.parser;
 
 import java.util.IllegalFormatException;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -67,7 +70,10 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     }
 
     @Override
-    public ObjectAdapter parseTextEntry(final ObjectAdapter contextAdapter, final String entry, Localization localization) {
+    public ObjectAdapter parseTextEntry(
+            final ObjectAdapter contextAdapter,
+            final String entry,
+            final InteractionInitiatedBy interactionInitiatedBy, Localization localization) {
         if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
         }
@@ -76,7 +82,15 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         // (eg pick up any @RegEx on value type)
         if (getFacetHolder().containsFacet(ValueFacet.class)) {
             final ObjectAdapter entryAdapter = getAdapterManager().adapterFor(entry);
-            final ParseValueContext parseValueContext = new ParseValueContext(deploymentCategory, getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
+            final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
+            final Identifier identifier = getIdentified().getIdentifier();
+            final ParseValueContext parseValueContext =
+                    new ParseValueContext(
+                            deploymentCategory, session,
+                            interactionInitiatedBy,
+                            contextAdapter,
+                            identifier,
+                            entryAdapter);
             validate(parseValueContext);
         }
 
@@ -94,15 +108,16 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
             // (eg pick up any validate() methods on it)
             final ObjectAdapter adapter = getAdapterManager().adapterFor(parsed);
             final ObjectSpecification specification = adapter.getSpecification();
-            final ObjectValidityContext validateContext = specification.createValidityInteractionContext(deploymentCategory, getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+            final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
+            final ObjectValidityContext validateContext =
+                    specification.createValidityInteractionContext(
+                            deploymentCategory, session,
+                            interactionInitiatedBy,
+                            adapter);
             validate(validateContext);
 
             return adapter;
-        } catch (final NumberFormatException e) {
-            throw new TextEntryParseException(e.getMessage(), e);
-        } catch (final IllegalFormatException e) {
-            throw new TextEntryParseException(e.getMessage(), e);
-        } catch (final ParsingException e) {
+        } catch (final NumberFormatException | IllegalFormatException | ParsingException e) {
             throw new TextEntryParseException(e.getMessage(), e);
         }
     }

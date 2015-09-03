@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -76,7 +77,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     public Object[][] getChoices(
             final ObjectAdapter owningAdapter,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final Object objectOrCollection = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
             throw new DomainModelException(String.format(
@@ -88,7 +90,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         final Object[][] results = new Object[options.length][];
         for (int i = 0; i < results.length; i++) {
             final Class<?> parameterType = method.getParameterTypes()[i];
-            results[i] = handleResults(options[i], parameterType, authenticationSession, deploymentCategory);
+            results[i] = handleResults(options[i], parameterType, authenticationSession, deploymentCategory,
+                    interactionInitiatedBy);
         }
         return results;
     }
@@ -97,7 +100,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             final Object collectionOrArray,
             final Class<?> parameterType,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (collectionOrArray == null) {
             return null;
         }
@@ -107,8 +111,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
-                        authenticationSession, deploymentCategory
-                );
+                        authenticationSession, deploymentCategory,
+                        interactionInitiatedBy);
         final List<Object> filteredObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 

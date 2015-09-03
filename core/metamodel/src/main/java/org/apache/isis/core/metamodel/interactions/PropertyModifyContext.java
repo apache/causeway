@@ -27,7 +27,7 @@ import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -38,7 +38,7 @@ public class PropertyModifyContext extends ValidityContext<PropertyModifyEvent> 
 
     private final ObjectAdapter proposed;
 
-    public PropertyModifyContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
+    public PropertyModifyContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier id, final ObjectAdapter proposed) {
         super(InteractionContextType.PROPERTY_MODIFY, deploymentCategory, session, invocationMethod, id, target);
 
         this.proposed = proposed;

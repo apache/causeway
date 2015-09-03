@@ -25,7 +25,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
@@ -40,7 +40,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * 
      * <p>
      * Either this or {@link #isCollection()} will be true.
-     * 
+     *
      * <p>
      * Design note: modelled after {@link ObjectAssociation#isNotCollection()}
      */
@@ -88,7 +88,12 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     @Override
     String getName();
 
-    ActionArgumentContext createProposedArgumentInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] args, int position);
+    // internal API
+    ActionArgumentContext createProposedArgumentInteractionContext(
+            final ObjectAdapter targetObject,
+            final ObjectAdapter[] args,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
 
     /**
@@ -104,8 +109,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAdapter[] getAutoComplete(
             final ObjectAdapter adapter,
             final String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     
     
@@ -123,8 +127,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
     ObjectAdapter[] getChoices(
             final ObjectAdapter adapter,
             final ObjectAdapter[] argumentsIfAvailable,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final InteractionInitiatedBy interactionInitiatedBy);
 
 
     ObjectAdapter getDefault(ObjectAdapter adapter);
@@ -135,9 +138,13 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * 
      * @param adapter
      * @param proposedValue
+     * @param interactionInitiatedBy
      * @return
      */
-    String isValid(ObjectAdapter adapter, Object proposedValue, Localization localization);
+    String isValid(
+            ObjectAdapter adapter,
+            Object proposedValue,
+            final InteractionInitiatedBy interactionInitiatedBy, Localization localization);
  
 
     

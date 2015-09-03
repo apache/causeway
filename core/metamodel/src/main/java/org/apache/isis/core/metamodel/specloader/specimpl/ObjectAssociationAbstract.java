@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
@@ -44,7 +45,9 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     }
 
     @Override
-    public abstract ObjectAdapter get(final ObjectAdapter fromObject);
+    public abstract ObjectAdapter get(
+            final ObjectAdapter fromObject,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Return the specification of the object (or objects) that this field
@@ -74,7 +77,7 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     }
 
     @Override
-    public abstract boolean isEmpty(final ObjectAdapter adapter);
+    public abstract boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
     @Override
     public boolean isOneToOneAssociation() {

@@ -21,14 +21,9 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import com.google.common.base.Function;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.interactions.AccessContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -46,30 +41,16 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      */
     void initAssociation(ObjectAdapter inObject, ObjectAdapter associate);
 
-    /**
-     * Creates an {@link InteractionContext} that represents access to this
-     * property.
-     */
-    public PropertyAccessContext createAccessInteractionContext(AuthenticationSession session, InteractionInvocationMethod interactionMethod, ObjectAdapter targetObjectAdapter);
 
-    /**
-     * Creates an {@link InteractionContext} that represents validation of a
-     * proposed new value for the property.
-     * 
-     * <p>
-     * Typically it is easier to just call
-     * {@link #isAssociationValid(ObjectAdapter, ObjectAdapter)} or
-     * {@link #isAssociationValidResult(ObjectAdapter, ObjectAdapter)}; this is
-     * provided as API for symmetry with interactions (such as
-     * {@link AccessContext} accesses) have no corresponding vetoing methods.
-     */
-    public ValidityContext<?> createValidateInteractionContext(AuthenticationSession session, InteractionInvocationMethod interactionMethod, ObjectAdapter targetObjectAdapter, ObjectAdapter proposedValue);
 
     /**
      * Determines if the specified reference is valid for setting this field in
      * the specified object, represented as a {@link Consent}.
      */
-    Consent isAssociationValid(ObjectAdapter inObject, ObjectAdapter associate);
+    public Consent isAssociationValid(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter proposedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Set up the association represented by this field in the specified object
@@ -79,21 +60,24 @@ public interface OneToOneAssociation extends ObjectAssociation, OneToOneFeature,
      * object to this logical state the <code>initAssociation</code> method
      * should be used on each of the objects.
      * 
-     * @deprecated - see {@link #set(ObjectAdapter, ObjectAdapter)}
+     * @deprecated - see {@link MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}
      * @see #initAssociation(ObjectAdapter, ObjectAdapter)
      */
     @Deprecated
-    void setAssociation(ObjectAdapter inObject, ObjectAdapter associate);
+    void setAssociation(
+            ObjectAdapter inObject,
+            ObjectAdapter associate,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Clear this reference field (make it <code>null</code>) in the specified
      * object, and remove any association back-link.
      * 
-     * @see #setAssociation(ObjectAdapter, ObjectAdapter)
-     * @deprecated - see {@link #set(ObjectAdapter, ObjectAdapter)}
+     * @see #setAssociation(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)
+     * @deprecated - see {@link MutableCurrentHolder#set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}
      */
     @Deprecated
-    void clearAssociation(ObjectAdapter inObject);
+    void clearAssociation(ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy);
 
     
     // //////////////////////////////////////////////////////

@@ -25,7 +25,7 @@ import org.apache.isis.applib.events.CollectionUsabilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public class CollectionUsabilityContext extends UsabilityContext<CollectionUsabilityEvent> {
 
-    public CollectionUsabilityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
+    public CollectionUsabilityContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier, Where where) {
         super(InteractionContextType.COLLECTION_USABLE, deploymentCategory, session, invocationMethod, identifier, target, where);
     }
 

@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
@@ -40,5 +41,5 @@ public interface ActionParameterChoicesFacet extends Facet {
             final ObjectAdapter target,
             final List<ObjectAdapter> arguments,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
 }

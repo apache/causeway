@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.collections.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -31,6 +32,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface CollectionAddToFacet extends Facet {
 
-    public void add(ObjectAdapter inObject, ObjectAdapter value);
+    public void add(ObjectAdapter inObject, ObjectAdapter value, final InteractionInitiatedBy interactionInitiatedBy);
 
 }

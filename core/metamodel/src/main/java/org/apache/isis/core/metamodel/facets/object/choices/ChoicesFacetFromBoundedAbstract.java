@@ -31,6 +31,7 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -114,13 +115,14 @@ public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract impl
     public Object[] getChoices(
             ObjectAdapter adapter,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final Query query = new QueryFindAllInstances(getObjectSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
 
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
-                    allInstancesAdapter, authenticationSession, deploymentCategory);
+                    allInstancesAdapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
 
         final List<Object> pojos = Lists.transform(adapters, ObjectAdapter.Functions.getObject());
         return Lists.newArrayList(pojos).toArray();

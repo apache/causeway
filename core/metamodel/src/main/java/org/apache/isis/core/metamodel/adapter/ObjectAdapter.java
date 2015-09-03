@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -344,36 +344,39 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          * Filters a collection (an adapter around either a Collection or an Object[]) and returns a list of
          * {@link ObjectAdapter}s of those that are visible (as per any facet(s) installed on the element class
          * of the collection).
-         *
-         * @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param authenticationSession - the user requesting the collection; if null then no filtering will be performed
          * @param deploymentCategory - whether prototyping etc
+         * @param interactionInitiatedBy
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final ObjectAdapter collectionAdapter,
                 final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory) {
+                final DeploymentCategory deploymentCategory,
+                final InteractionInitiatedBy interactionInitiatedBy) {
 
             final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collectionAdapter);
             Iterable<ObjectAdapter> objectAdapters = facet.iterable(collectionAdapter);
 
-            return visibleAdapters(objectAdapters, authenticationSession, deploymentCategory);
+            return visibleAdapters(objectAdapters, authenticationSession, deploymentCategory, interactionInitiatedBy);
         }
 
         /**
-         * as per {@link #visibleAdapters(ObjectAdapter, AuthenticationSession, DeploymentCategory)}.
-         *
-         * @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
+         * as per {@link #visibleAdapters(ObjectAdapter, AuthenticationSession, DeploymentCategory, InteractionInitiatedBy)}.
+         *  @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
          * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
          * @param deploymentCategory - whether prototyping etc; may influence visibility
+         * @param interactionInitiatedBy
          */
         public static List<ObjectAdapter> visibleAdapters(
                 final Iterable<ObjectAdapter> objectAdapters,
                 final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory) {
+                final DeploymentCategory deploymentCategory,
+                final InteractionInitiatedBy interactionInitiatedBy) {
             final List<ObjectAdapter> adapters = Lists.newArrayList();
             for (final ObjectAdapter adapter : objectAdapters) {
-                final boolean visible = isVisible(adapter, authenticationSession, deploymentCategory);
+                final boolean visible = isVisible(adapter, authenticationSession, deploymentCategory,
+                        interactionInitiatedBy);
                 if(visible) {
                     adapters.add(adapter);
                 }
@@ -385,20 +388,23 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          * @param adapter - an adapter around the domain object whose visibility is being checked
          * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
          * @param deploymentCategory - whether prototyping etc; may influence visibility
+         * @param interactionInitiatedBy
          */
         public static boolean isVisible(
                 final ObjectAdapter adapter,
                 final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory) {
+                final DeploymentCategory deploymentCategory,
+                final InteractionInitiatedBy interactionInitiatedBy) {
             if(adapter.isDestroyed()) {
                 return false;
             }
+            if(interactionInitiatedBy == InteractionInitiatedBy.FRAMEWORK) { return true; }
             if(authenticationSession == null) {
                 return true;
             }
             final ObjectSpecification objectSpecification = adapter.getSpecification();
             final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
-                    deploymentCategory);
+                    deploymentCategory, interactionInitiatedBy);
             InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
             return true || visibleResult.isNotVetoing();
         }
@@ -406,11 +412,12 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
         private static VisibilityContext<?> createVisibleInteractionContext(
                 final ObjectAdapter objectAdapter,
                 final AuthenticationSession authenticationSession,
-                final DeploymentCategory deploymentCategory) {
+                final DeploymentCategory deploymentCategory,
+                final InteractionInitiatedBy interactionInitiatedBy) {
             return new ObjectVisibilityContext(
                     deploymentCategory,
                     authenticationSession,
-                    InteractionInvocationMethod.BY_USER,
+                    interactionInitiatedBy,
                     objectAdapter,
                     objectAdapter.getSpecification().getIdentifier(),
                     Where.OBJECT_FORMS);

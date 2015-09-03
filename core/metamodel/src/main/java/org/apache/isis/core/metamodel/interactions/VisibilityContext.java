@@ -25,7 +25,7 @@ import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -40,7 +40,7 @@ public abstract class VisibilityContext<T extends VisibilityEvent> extends Inter
             final InteractionContextType interactionType,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSession session,
-            final InteractionInvocationMethod invocationMethod,
+            final InteractionInitiatedBy invocationMethod,
             final Identifier identifier,
             final ObjectAdapter target,
             final Where where) {

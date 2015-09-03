@@ -30,13 +30,14 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -142,7 +143,8 @@ public class EntityPage extends PageAbstract {
         // belt-n-braces: check that at least one property of the entity can be viewed.
         final AuthenticationSession session = getAuthenticationSession();
         final ObjectSpecification specification = objectAdapter.getSpecification();
-        final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(session, objectAdapter, Where.NOWHERE));
+        final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(
+                objectAdapter, InteractionInitiatedBy.USER, Where.NOWHERE));
 
         if(visibleAssociation.isEmpty()) {
             final List<ObjectAssociation> anyAssociations = specification.getAssociations(Contributed.INCLUDED);
@@ -194,17 +196,21 @@ public class EntityPage extends PageAbstract {
     }
 
     private boolean isVisible(final ObjectAdapter input) {
-        final InteractionResult visibleResult = InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input));
+        final InteractionResult visibleResult =
+                InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input
+        ));
         return visibleResult.isNotVetoing();
     }
 
-    private VisibilityContext<?> createVisibleInteractionContext(final ObjectAdapter objectAdapter) {
+    private VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter objectAdapter) {
+        final Identifier identifier = objectAdapter.getSpecification().getIdentifier();
         return new ObjectVisibilityContext(
                 getDeploymentCategory(),
                 getAuthenticationSession(),
-                InteractionInvocationMethod.BY_USER,
+                InteractionInitiatedBy.USER,
                 objectAdapter,
-                objectAdapter.getSpecification().getIdentifier(),
+                identifier,
                 Where.OBJECT_FORMS);
     }
 

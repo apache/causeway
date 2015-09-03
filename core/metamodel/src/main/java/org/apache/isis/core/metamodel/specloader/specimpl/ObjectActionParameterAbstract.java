@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -259,16 +259,20 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectAdapter[] getAutoComplete(
-            ObjectAdapter adapter,
-            String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final ObjectAdapter adapter,
+            final String searchArg,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
         if (facet != null) {
 
-            final Object[] choices = facet.autoComplete(adapter, searchArg, authenticationSession, deploymentCategory);
+            final Object[] choices = facet.autoComplete(adapter, searchArg, authenticationSession, deploymentCategory,
+                    interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 adapters.add(getAdapterMap().adapterFor(choice));
@@ -303,25 +307,27 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public ObjectAdapter[] getChoices(
             final ObjectAdapter adapter,
             final ObjectAdapter[] argumentsIfAvailable,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
         
         final ObjectAdapter target = targetForDefaultOrChoices(adapter, argListIfAvailable);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
         
-        return findChoices(target, args, authenticationSession, deploymentCategory);
+        return findChoices(target, args, interactionInitiatedBy);
     }
 
     private ObjectAdapter[] findChoices(
             final ObjectAdapter target,
             final List<ObjectAdapter> args,
-            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final AuthenticationSession session = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, args, authenticationSession, deploymentCategory);
+            final Object[] choices = facet.getChoices(target, args, session, deploymentCategory,
+                    interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
                 ObjectAdapter adapter = choice != null? getAdapterMap().adapterFor(choice) : null;
@@ -369,21 +375,27 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoices(ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
+    protected ObjectAdapter targetForDefaultOrChoices(
+            final ObjectAdapter adapter,
+            final List<ObjectAdapter> argumentsIfAvailable) {
         return adapter;
     }
 
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected List<ObjectAdapter> argsForDefaultOrChoices(final ObjectAdapter adapter, final List<ObjectAdapter> argumentsIfAvailable) {
+    protected List<ObjectAdapter> argsForDefaultOrChoices(
+            final ObjectAdapter adapter,
+            final List<ObjectAdapter> argumentsIfAvailable) {
         return argumentsIfAvailable;
     }
 
     
     // helpers
-
-    static void checkChoicesOrAutoCompleteType(final SpecificationLoader specificationLookup, final Object[] objects, final ObjectSpecification paramSpec) {
+    static void checkChoicesOrAutoCompleteType(
+            final SpecificationLoader specificationLookup,
+            final Object[] objects,
+            final ObjectSpecification paramSpec) {
         for (final Object object : objects) {
 
             if(object == null) {
@@ -425,12 +437,20 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ActionArgumentContext createProposedArgumentInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments, final int position) {
-        return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments, position);
+    public ActionArgumentContext createProposedArgumentInteractionContext(
+            final ObjectAdapter targetObject,
+            final ObjectAdapter[] proposedArguments,
+            final int position,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionArgumentContext(getDeploymentCategory(), getAuthenticationSession(), interactionInitiatedBy, targetObject, getIdentifier(), proposedArguments, position);
     }
 
     @Override
-    public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
+    public String isValid(
+            final ObjectAdapter adapter,
+            final Object proposedValue,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Localization localization) {
         
         ObjectAdapter proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;
@@ -438,7 +458,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
             proposedValueSpec = proposedValueAdapter.getSpecification();
             if(!proposedValueSpec.isOfType(proposedValueSpec)) {
-                proposedValueAdapter = doCoerceProposedValue(adapter, proposedValue, localization);
+                proposedValueAdapter = doCoerceProposedValue(adapter, proposedValue, interactionInitiatedBy,
+                        localization
+                );
             }
             
             // check has been coerced into correct type; otherwise give up
@@ -450,9 +472,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 return null;
             }
         }
-        
 
-        final ValidityContext<?> ic = createProposedArgumentInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter, arguments(proposedValueAdapter), getNumber());
+        final ObjectAdapter[] argumentAdapters = arguments(proposedValueAdapter);
+        final ValidityContext<?> ic = createProposedArgumentInteractionContext(
+                adapter, argumentAdapters, getNumber(), interactionInitiatedBy
+        );
 
         final InteractionResultSet buf = new InteractionResultSet();
         InteractionUtils.isValidResultSet(this, ic, buf);
@@ -466,7 +490,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Optional hook for parsing.
      */
-    protected ObjectAdapter doCoerceProposedValue(ObjectAdapter adapter, Object proposedValue, final Localization localization) {
+    protected ObjectAdapter doCoerceProposedValue(
+            final ObjectAdapter adapter,
+            final Object proposedValue,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Localization localization) {
         return null;
     }
 

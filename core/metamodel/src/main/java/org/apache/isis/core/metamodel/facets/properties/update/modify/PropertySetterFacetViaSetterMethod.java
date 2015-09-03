@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
@@ -51,7 +52,10 @@ public class PropertySetterFacetViaSetterMethod extends PropertySetterFacetAbstr
     }
 
     @Override
-    public void setProperty(final ObjectAdapter adapter, final ObjectAdapter valueAdapter) {
+    public void setProperty(
+            final ObjectAdapter adapter,
+            final ObjectAdapter valueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         ObjectAdapter.InvokeUtils.invoke(method, adapter, valueAdapter);
     }
 

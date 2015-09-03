@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
@@ -42,13 +43,13 @@ public interface PropertyOrCollectionAccessorFacet extends Facet {
      *     omitted from that collection, while for a property if the referenced object is invisible then null will be
      *     returned.
      * </p>
-     *
-     * @param inObject
+     *  @param inObject
      * @param authenticationSession - if null, then does _not_ filter out any objects that would otherwise be invisible to the current user
      * @param deploymentCategory
+     * @param interactionInitiatedBy
      */
     public Object getProperty(
             final ObjectAdapter inObject,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
 }

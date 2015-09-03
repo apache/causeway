@@ -42,21 +42,22 @@ public class ObjectValidPropertiesFacetImpl extends ObjectValidPropertiesFacetAb
     }
 
     @Override
-    public String invalidReason(final ObjectValidityContext context) {
+    public String invalidReason(
+            final ObjectValidityContext context) {
         final StringBuilder buf = new StringBuilder();
         final ObjectAdapter adapter = context.getTarget();
         for (final ObjectAssociation property : adapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.PROPERTIES)) {
             // ignore hidden properties
-            if (property.isVisible(context.getSession(), adapter, where).isVetoed()) {
+            if (property.isVisible(adapter, context.getInitiatedBy(), where).isVetoed()) {
                 continue;
             }
             // ignore disabled properties
-            if (property.isUsable(context.getSession(), adapter, where).isVetoed()) {
+            if (property.isUsable(adapter, context.getInitiatedBy(), where).isVetoed()) {
                 continue;
             }
             final OneToOneAssociation otoa = (OneToOneAssociation) property;
-            final ObjectAdapter value = otoa.get(adapter);
-            if (otoa.isAssociationValid(adapter, value).isVetoed()) {
+            final ObjectAdapter value = otoa.get(adapter, context.getInitiatedBy());
+            if (otoa.isAssociationValid(adapter, value, context.getInitiatedBy()).isVetoed()) {
                 if (buf.length() > 0) {
                     buf.append(", ");
                 }

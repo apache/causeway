@@ -32,7 +32,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -147,7 +147,7 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
         return new ObjectVisibilityContext(
                 getDeploymentCategory(),
                 getAuthenticationSession(),
-                InteractionInvocationMethod.BY_USER,
+                InteractionInitiatedBy.USER,
                 objectAdapter,
                 objectAdapter.getSpecification().getIdentifier(),
                 Where.ALL_TABLES);
@@ -158,8 +158,8 @@ public class CollectionContentsSortableDataProvider extends SortableDataProvider
     
             @Override
             public int compare(final ObjectAdapter p, final ObjectAdapter q) {
-                final ObjectAdapter pSort = sortProperty.get(p);
-                final ObjectAdapter qSort = sortProperty.get(q);
+                final ObjectAdapter pSort = sortProperty.get(p, InteractionInitiatedBy.FRAMEWORK);
+                final ObjectAdapter qSort = sortProperty.get(q, InteractionInitiatedBy.FRAMEWORK);
                 Ordering<ObjectAdapter> naturalOrdering = 
                         ascending 
                             ? ORDERING_BY_NATURAL.nullsFirst() 

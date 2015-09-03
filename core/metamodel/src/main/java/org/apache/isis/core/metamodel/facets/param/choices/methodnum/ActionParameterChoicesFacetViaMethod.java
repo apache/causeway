@@ -29,6 +29,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -73,7 +74,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             final ObjectAdapter adapter,
             final List<ObjectAdapter> argumentsIfAvailable,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
         final Object choices =
                 ObjectAdapter.InvokeUtils.invokeAutofit(
                     method, adapter, argumentsIfAvailable, getAdapterManager());
@@ -86,8 +87,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         objectAdapter,
-                        authenticationSession, deploymentCategory
-                );
+                        authenticationSession, deploymentCategory,
+                        interactionInitiatedBy);
         final List<Object> visibleObjects = Lists.newArrayList(
                 Iterables.transform(visibleAdapters, ObjectAdapter.Functions.getObject()));
 

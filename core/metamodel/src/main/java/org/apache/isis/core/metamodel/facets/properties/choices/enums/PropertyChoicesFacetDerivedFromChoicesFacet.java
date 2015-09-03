@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -38,10 +39,11 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
     @Override
     public Object[] getChoices(
             final ObjectAdapter adapter,
-            final SpecificationLoader specificationLookup,
+            final SpecificationLoader specificationLookupUNUSED,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
-        
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+
         final FacetHolder facetHolder = getFacetHolder();
         final FacetedMethod facetedMethod = (FacetedMethod) facetHolder;
         final ObjectSpecification noSpec = getSpecification(facetedMethod.getType());
@@ -49,7 +51,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
         if (choicesFacet == null) {
             return new Object[0];
         }
-        return choicesFacet.getChoices(adapter, authenticationSession, deploymentCategory);
+        return choicesFacet.getChoices(adapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
     }
 
     public ObjectSpecification getSpecification(final Class<?> type) {

@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -168,7 +169,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
     @SuppressWarnings("unchecked")
     private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociation.Filters.COLLECTIONS, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, Where.PARENTED_TABLES));
+        return Filters.and(ObjectAssociation.Filters.COLLECTIONS, ObjectAssociation.Filters.dynamicallyVisible(adapter,
+                InteractionInitiatedBy.USER, Where.PARENTED_TABLES
+        ));
     }
 
 }

@@ -17,19 +17,18 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import com.fasterxml.jackson.databind.node.NullNode;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkFollowSpecs;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
 import org.apache.isis.viewer.restfulobjects.rendering.ReprRendererAbstract;
 
 public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbstract<R, ObjectAndMember<T>>, T extends ObjectMember> extends ReprRendererAbstract<R, ObjectAndMember<T>> {
@@ -82,8 +81,14 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     private final String memberId;
     private final Where where;
 
-    public AbstractObjectMemberReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, String memberId, final RepresentationType representationType, final JsonRepresentation representation, Where where) {
-        super(resourceContext, linkFollower, representationType, representation);
+    public AbstractObjectMemberReprRenderer(
+            final RendererContext rendererContext,
+            final LinkFollowSpecs linkFollower,
+            final String memberId,
+            final RepresentationType representationType,
+            final JsonRepresentation representation,
+            final Where where) {
+        super(rendererContext, linkFollower, representationType, representation);
         this.memberId = memberId;
         this.where = where;
     }
@@ -91,6 +96,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     protected String getMemberId() {
         return memberId;
     }
+
 
     @Override
     public R with(final ObjectAndMember<T> objectAndMember) {
@@ -286,17 +292,12 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         return visibility().isAllowed();
     }
 
-    protected DeploymentType determineDeploymentTypeFrom(final RendererContext rendererContext) {
-        if(rendererContext instanceof RendererContext3) {
-            return ((RendererContext3) rendererContext).getDeploymentType();
-        } else {
-            return DeploymentType.SERVER; // fallback
-        }
-    }
-
+    /**
+     * Convenience method.
+     */
     protected <F extends Facet> F getMemberSpecFacet(final Class<F> facetType) {
-        final ObjectSpecification otoaSpec = objectMember.getSpecification();
-        return otoaSpec.getFacet(facetType);
+        final ObjectSpecification objetMemberSpec = objectMember.getSpecification();
+        return objetMemberSpec.getFacet(facetType);
     }
 
     protected boolean hasMemberFacet(final Class<? extends Facet> facetType) {
@@ -304,11 +305,11 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
     }
 
     protected Consent usability() {
-        return objectMember.isUsable(getRendererContext().getAuthenticationSession(), objectAdapter, where);
+        return objectMember.isUsable(objectAdapter, getInteractionInitiatedBy(), where);
     }
 
     protected Consent visibility() {
-        return objectMember.isVisible(getRendererContext().getAuthenticationSession(), objectAdapter, where);
+        return objectMember.isVisible(objectAdapter, getInteractionInitiatedBy(), where);
     }
 
 }

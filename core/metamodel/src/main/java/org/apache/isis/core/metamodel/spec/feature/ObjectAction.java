@@ -19,12 +19,15 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.List;
 
+import com.google.common.base.Functions;
+import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Bulk;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
@@ -33,7 +36,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.StringFunctions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -41,18 +45,12 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.interactions.AccessContext;
-import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-
-import com.google.common.base.Functions;
-import com.google.common.base.Predicate;
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 
 public interface ObjectAction extends ObjectMember {
 
@@ -106,38 +104,29 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final ObjectAdapter[] parameters,
             final AuthenticationSession authenticationSession,
-            final Where where) throws AuthorizationException;
+            final Where where, final InteractionInitiatedBy interactionInitiatedBy) throws AuthorizationException;
 
     /**
      * Invokes the action's method on the target object given the specified set
      * of parameters.
      */
-    ObjectAdapter execute(ObjectAdapter target, ObjectAdapter[] parameters);
+    ObjectAdapter execute(
+            ObjectAdapter target,
+            ObjectAdapter[] parameters,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////////////////
     // valid
     // //////////////////////////////////////////////////////////////////
 
-/**
-     * Creates an {@link ActionInvocationContext interaction context}
-     * representing an attempt to invoke this action.
-     *
-     * <p>
-     * Typically it is easier to just call
-     * {@link #isProposedArgumentSetValid(ObjectAdapter, ObjectAdapter[])
-     *
-     * @link #isProposedArgumentSetValidResultSet(ObjectAdapter,
-     *       ObjectAdapter[])}; this is provided as API for symmetry with
-     *       interactions (such as {@link AccessContext} accesses) have no
-     *       corresponding vetoing methods.
-     */
-    public ActionInvocationContext createActionInvocationInteractionContext(AuthenticationSession session,
-            InteractionInvocationMethod invocationMethod, ObjectAdapter targetObject, ObjectAdapter[] proposedArguments);
 
     /**
      * Whether the provided argument set is valid, represented as a {@link Consent}.
      */
-    Consent isProposedArgumentSetValid(ObjectAdapter object, ObjectAdapter[] proposedArguments);
+    Consent isProposedArgumentSetValid(
+            ObjectAdapter object,
+            ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////
     // Parameters (declarative)
@@ -197,7 +186,7 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter[][] getChoices(
             ObjectAdapter target,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////
     // Utils
@@ -280,16 +269,21 @@ public interface ObjectAction extends ObjectMember {
         private Predicates() {
         }
 
-        public static Predicate<ObjectAction> dynamicallyVisible(final AuthenticationSession session,
-                final ObjectAdapter target, final Where where) {
+        // UNUSED?
+        public static Predicate<ObjectAction> dynamicallyVisible(
+                final ObjectAdapter target,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
             return org.apache.isis.applib.filter.Filters
-                    .asPredicate(Filters.dynamicallyVisible(session, target, where));
+                    .asPredicate(Filters.dynamicallyVisible(target, interactionInitiatedBy, where));
         }
 
+        // UNUSED?
         public static Predicate<ObjectAction> withId(final String actionId) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withId(actionId));
         }
 
+        // UNUSED?
         public static Predicate<ObjectAction> withNoValidationRules() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withNoValidationRules());
         }
@@ -302,10 +296,12 @@ public interface ObjectAction extends ObjectMember {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.bulk());
         }
 
+        // UNUSED?
         public static Predicate<ObjectAction> notBulkOnly() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.notBulkOnly());
         }
 
+        // UNUSED?
         public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
         }
@@ -324,12 +320,14 @@ public interface ObjectAction extends ObjectMember {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAction> dynamicallyVisible(final AuthenticationSession session,
-                final ObjectAdapter target, final Where where) {
+        public static Filter<ObjectAction> dynamicallyVisible(
+                final ObjectAdapter target,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
             return new Filter<ObjectAction>() {
                 @Override
                 public boolean accept(final ObjectAction objectAction) {
-                    final Consent visible = objectAction.isVisible(session, target, where);
+                    final Consent visible = objectAction.isVisible(target, interactionInitiatedBy, where);
                     return visible.isAllowed();
                 }
             };

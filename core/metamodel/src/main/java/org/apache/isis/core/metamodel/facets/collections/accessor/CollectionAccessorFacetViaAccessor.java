@@ -25,11 +25,11 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -72,7 +72,8 @@ public class CollectionAccessorFacetViaAccessor
     public Object getProperty(
             final ObjectAdapter owningAdapter,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
@@ -83,7 +84,7 @@ public class CollectionAccessorFacetViaAccessor
             final List<ObjectAdapter> visibleAdapters =
                     ObjectAdapter.Util.visibleAdapters(
                             collectionAdapter,
-                            authenticationSession, deploymentCategory);
+                            authenticationSession, deploymentCategory, interactionInitiatedBy);
             final Object visibleObjects =
                     CollectionUtils.copyOf(
                             Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),

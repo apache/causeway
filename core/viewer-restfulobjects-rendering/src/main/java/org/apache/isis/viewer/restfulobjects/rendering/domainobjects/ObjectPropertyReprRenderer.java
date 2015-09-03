@@ -24,9 +24,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
@@ -36,7 +34,6 @@ import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFac
 import org.apache.isis.core.metamodel.facets.value.biginteger.BigIntegerValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -81,7 +78,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // ///////////////////////////////////////////////////
 
     private Object addValue() {
-        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter);
+        final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         
         // use the runtime type if we have a value, else the compile time type of the member otherwise
         final ObjectSpecification spec = valueAdapter != null? valueAdapter.getSpecification(): objectMember.getSpecification();
@@ -201,11 +198,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     }
 
     private Object propertyChoices() {
-        final AuthenticationSession authenticationSession = rendererContext.getAuthenticationSession();
-        final DeploymentType deploymentType = determineDeploymentTypeFrom(rendererContext);
-        final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
         final ObjectAdapter[] choiceAdapters =
-                objectMember.getChoices(objectAdapter, authenticationSession, deploymentCategory);
+                objectMember.getChoices(
+                        objectAdapter,
+                        getInteractionInitiatedBy());
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }

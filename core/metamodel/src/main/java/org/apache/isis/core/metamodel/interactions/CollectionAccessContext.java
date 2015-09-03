@@ -27,7 +27,7 @@ import org.apache.isis.applib.events.CollectionAccessEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
  */
 public class CollectionAccessContext extends AccessContext<CollectionAccessEvent> {
 
-    public CollectionAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier) {
+    public CollectionAccessContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier) {
         super(InteractionContextType.COLLECTION_READ, deploymentCategory, session, invocationMethod, identifier, target);
     }
 

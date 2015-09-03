@@ -23,6 +23,7 @@ import com.google.common.base.Objects;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -61,19 +62,21 @@ public abstract class PropertyClearFacetForDomainEventAbstract
     }
 
     @Override
-    public void clearProperty(ObjectAdapter targetAdapter) {
+    public void clearProperty(
+            final ObjectAdapter targetAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if(clearFacet == null) {
             return;
         }
 
         if(!domainEventHelper.hasEventBusService()) {
-            clearFacet.clearProperty(targetAdapter);
+            clearFacet.clearProperty(targetAdapter, interactionInitiatedBy);
             return;
         }
 
 
         // ... post the executing event
-        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null);
+        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
         final PropertyDomainEvent<?, ?> event =
                 domainEventHelper.postEventForProperty(
                         AbstractDomainEvent.Phase.EXECUTING,
@@ -82,10 +85,10 @@ public abstract class PropertyClearFacetForDomainEventAbstract
                         oldValue, null);
 
         // ... perform the property clear
-        clearFacet.clearProperty(targetAdapter);
+        clearFacet.clearProperty(targetAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
-        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null);
+        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
         if(Objects.equal(oldValue, actualNewValue)) {
             // do nothing.
             return;

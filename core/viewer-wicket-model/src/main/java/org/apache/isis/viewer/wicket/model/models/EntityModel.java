@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -383,7 +384,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             final ObjectAdapter associatedAdapter =
                     InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
                         @Override public ObjectAdapter call() throws Exception {
-                            return  pm.getProperty().get(adapter);
+                            return  pm.getProperty().get(adapter, InteractionInitiatedBy.USER);
                         }
                     });
             scalarModel.setObject(associatedAdapter);
@@ -488,7 +489,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public String getReasonInvalidIfAny() {
         final ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent validity = adapter.getSpecification().isValid(adapter);
+        final Consent validity = adapter.getSpecification().isValid(adapter, InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
     }
 
@@ -529,7 +530,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             }
 
             final ObjectAdapter associate = scalarModel.getObject();
-            property.set(adapter, associate);
+            property.set(adapter, associate, InteractionInitiatedBy.USER);
         }
 
         final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);

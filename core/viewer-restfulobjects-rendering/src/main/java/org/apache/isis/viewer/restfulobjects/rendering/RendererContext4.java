@@ -16,28 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-package org.apache.isis.core.metamodel.facets.object.objectvalidprops;
+package org.apache.isis.viewer.restfulobjects.rendering;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
- * Object-level {@link ValidatingInteractionAdvisor validator} that ensures that
- * all {@link MandatoryFacet mandatory} properties are entered prior to
- * persisting the object.
+ * TODO: roll-up in the future (introduced only so that API does not break)
  */
-public interface ObjectValidPropertiesFacet extends Facet, ValidatingInteractionAdvisor {
+public interface RendererContext4 extends RendererContext3 {
 
-    /**
-     * The reason the object is invalid.
-     * 
-     * <p>
-     * . If the object is actually valid, should return <tt>null</tt>.
-     */
-    public String invalidReason(ObjectValidityContext context);
+    public InteractionInitiatedBy getInteractionInitiatedBy();
 
 }

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -201,7 +202,7 @@ public class BookmarkTreeNode implements Serializable {
             final ObjectAdapter candidateAdapter = entityModel.getObject();
             final List<ObjectAssociation> properties = candidateAdapter.getSpecification().getAssociations(Contributed.EXCLUDED, ObjectAssociation.Filters.REFERENCE_PROPERTIES);
             for (ObjectAssociation objectAssoc : properties) {
-                final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter);
+                final ObjectAdapter possibleParentAdapter = objectAssoc.get(candidateAdapter, InteractionInitiatedBy.USER);
                 if(possibleParentAdapter == null) {
                     continue;
                 } 

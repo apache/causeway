@@ -28,6 +28,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -37,6 +38,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext4;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -51,12 +53,14 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context3 {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context4 {
 
-        private final RendererContext3 rendererContext;
+        private final RendererContext4 rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
 
-        RepresentationServiceContextAdapter(final RendererContext3 rendererContext, final ObjectAdapterLinkTo adapterLinkTo) {
+        RepresentationServiceContextAdapter(
+                final RendererContext4 rendererContext,
+                final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
         }
@@ -159,6 +163,11 @@ public class DomainResourceHelper {
         @Override
         public boolean suppressMemberDisabledReason() {
             return rendererContext.suppressMemberDisabledReason();
+        }
+
+        @Override
+        public InteractionInitiatedBy getInteractionInitiatedBy() {
+            return rendererContext.getInteractionInitiatedBy();
         }
     }
 
@@ -324,7 +333,7 @@ public class DomainResourceHelper {
 
         // invoke
         final ObjectAdapter[] argArray2 = argAdapters.toArray(new ObjectAdapter[0]);
-        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2);
+        final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2, InteractionInitiatedBy.USER);
 
         final ObjectAndActionInvocation objectAndActionInvocation =
                 new ObjectAndActionInvocation(this.objectAdapter, action, arguments, returnedAdapter);

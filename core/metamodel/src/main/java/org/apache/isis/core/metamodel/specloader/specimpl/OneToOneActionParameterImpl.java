@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.Instance;
@@ -63,7 +64,7 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
      * {@link ObjectAdapter}.
      */
     @Override
-    public ObjectAdapter get(final ObjectAdapter owner) {
+    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
         final MutableProposedHolder proposedHolder = getProposedHolder(owner);
         final Object proposed = proposedHolder.getProposed();
         return getAdapterMap().adapterFor(proposed);

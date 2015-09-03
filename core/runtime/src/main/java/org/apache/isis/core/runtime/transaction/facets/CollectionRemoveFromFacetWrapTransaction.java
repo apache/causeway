@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
@@ -43,16 +44,19 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
     }
 
     @Override
-    public void remove(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
+    public void remove(
+            final ObjectAdapter adapter,
+            final ObjectAdapter referencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
-            underlyingFacet.remove(adapter, referencedAdapter);
+            underlyingFacet.remove(adapter, referencedAdapter, interactionInitiatedBy);
         } else {
             getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
                 @Override
                 public void execute() {
-                    underlyingFacet.remove(adapter, referencedAdapter);
+                    underlyingFacet.remove(adapter, referencedAdapter, interactionInitiatedBy);
                 }
             });
         }

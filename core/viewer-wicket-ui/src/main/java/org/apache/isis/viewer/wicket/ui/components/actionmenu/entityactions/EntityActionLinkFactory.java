@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -59,9 +60,11 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         }
 
         // check visibility and whether enabled
-        final AuthenticationSession session = getAuthenticationSession();
-        
-        final Consent visibility = action.isVisible(session, objectAdapter, Where.OBJECT_FORMS);
+        final Consent visibility =
+                action.isVisible(
+                        objectAdapter,
+                        InteractionInitiatedBy.USER,
+                        Where.OBJECT_FORMS);
         if (visibility.isVetoed()) {
             return null;
         }
@@ -69,7 +72,11 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
         
         final AbstractLink link = newLink(linkId, objectAdapter, action);
         
-        final Consent usability = action.isUsable(session, objectAdapter, Where.OBJECT_FORMS);
+        final Consent usability =
+                action.isUsable(
+                        objectAdapter,
+                        InteractionInitiatedBy.USER,
+                        Where.OBJECT_FORMS);
         final String disabledReasonIfAny = usability.getReason();
         if(disabledReasonIfAny != null) {
             link.setEnabled(false);

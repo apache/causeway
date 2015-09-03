@@ -23,11 +23,11 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -69,7 +69,7 @@ public class PropertyAccessorFacetViaAccessor
     public Object getProperty(
             final ObjectAdapter owningAdapter,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
         final Object referencedObject = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
 
         if(referencedObject == null) {
@@ -81,7 +81,7 @@ public class PropertyAccessorFacetViaAccessor
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedObject);
             final boolean visible = ObjectAdapter.Util
-                    .isVisible(referencedAdapter, authenticationSession, deploymentCategory);
+                    .isVisible(referencedAdapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
             if (!visible) {
                 return null;
             }

@@ -55,6 +55,7 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -300,7 +301,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     @SuppressWarnings("unchecked")
     private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter, Where where) {
-        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(getAuthenticationSession(), adapter, where));
+        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(adapter,
+                InteractionInitiatedBy.USER, where
+        ));
     }
 
     @Override
@@ -711,7 +714,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     @SuppressWarnings("unchecked")
     private Filter<ObjectAssociation> enabledAssociationFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.enabled(getAuthenticationSession(), adapter, Where.OBJECT_FORMS));
+        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.enabled(adapter,
+                InteractionInitiatedBy.USER, Where.OBJECT_FORMS
+        ));
     }
 
     private void toEditMode(final AjaxRequestTarget target) {

@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -133,20 +134,20 @@ public class OneToManyAssociationImplTest {
                 one(mockPeer).getFacet(CollectionAddToFacet.class);
                 will(returnValue(mockCollectionAddToFacet));
 
-                one(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter);
+                one(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
             }
         });
-        association.addElement(mockOwnerAdapter, mockAssociatedAdapter);
+        association.addElement(mockOwnerAdapter, mockAssociatedAdapter, InteractionInitiatedBy.USER);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotRemoveNull() {
-        association.removeElement(mockOwnerAdapter, null);
+        association.removeElement(mockOwnerAdapter, null, InteractionInitiatedBy.USER);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void cannotAddNull() {
-        association.addElement(mockOwnerAdapter, null);
+        association.addElement(mockOwnerAdapter, null, InteractionInitiatedBy.USER);
     }
 
     private void allowingPeerToReturnCollectionType() {

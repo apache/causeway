@@ -83,7 +83,7 @@ public class EntityHeaderPanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentType(), getAuthenticationSession());
+            final List<ObjectAction> topLevelActions = EntityActionUtil.getTopLevelActions(adapter, getDeploymentType());
 
             final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(model, topLevelActions);
 

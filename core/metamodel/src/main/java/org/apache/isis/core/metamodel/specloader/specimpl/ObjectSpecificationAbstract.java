@@ -42,7 +42,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -622,7 +622,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return new ObjectTitleContext(getDeploymentCategory(), session, interactionMethod, targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString());
     }
 
@@ -1085,17 +1085,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public Consent isValid(final ObjectAdapter inObject) {
-        return isValidResult(inObject).createConsent();
+    public Consent isValid(final ObjectAdapter inObject, final InteractionInitiatedBy interactionInitiatedBy) {
+        return isValidResult(inObject, interactionInitiatedBy).createConsent();
     }
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
     @Override
-    public InteractionResult isValidResult(final ObjectAdapter targetObjectAdapter) {
-        final ObjectValidityContext validityContext = createValidityInteractionContext(deploymentCategory, getAuthenticationSession(), InteractionInvocationMethod.BY_USER, targetObjectAdapter);
+    public InteractionResult isValidResult(
+            final ObjectAdapter targetObjectAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectValidityContext validityContext =
+                createValidityInteractionContext(deploymentCategory, getAuthenticationSession(),
+                interactionInitiatedBy, targetObjectAdapter);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -1104,7 +1104,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * object.
      */
     @Override
-    public ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod interactionMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return new ObjectValidityContext(deploymentCategory, session, interactionMethod, targetObjectAdapter, getIdentifier());
     }
 

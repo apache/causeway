@@ -42,6 +42,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -50,11 +51,11 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext4;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext3 {
+public class ResourceContext implements RendererContext4 {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -75,6 +76,7 @@ public class ResourceContext implements RendererContext3 {
 
     private final Where where;
     private final DeploymentType deploymentType;
+    private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
 
     private JsonRepresentation readQueryStringAsMap;
@@ -98,7 +100,8 @@ public class ResourceContext implements RendererContext3 {
             final AdapterManager objectAdapterLookup,
             final SpecificationLoader specificationLoader,
             final IsisConfiguration configuration,
-            final DeploymentType deploymentType) {
+            final DeploymentType deploymentType,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
         this.providers = providers;
@@ -116,6 +119,7 @@ public class ResourceContext implements RendererContext3 {
         this.specificationLoader = specificationLoader;
         this.where = where;
         this.deploymentType = deploymentType;
+        this.interactionInitiatedBy = interactionInitiatedBy;
 
         init(representationType);
     }
@@ -262,6 +266,11 @@ public class ResourceContext implements RendererContext3 {
 
     public DeploymentType getDeploymentType() {
         return deploymentType;
+    }
+
+    @Override
+    public InteractionInitiatedBy getInteractionInitiatedBy() {
+        return interactionInitiatedBy;
     }
 
     @Override

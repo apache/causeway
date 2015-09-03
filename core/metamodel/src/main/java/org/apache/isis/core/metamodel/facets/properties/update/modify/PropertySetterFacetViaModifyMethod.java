@@ -26,6 +26,7 @@ import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
@@ -57,7 +58,10 @@ public class PropertySetterFacetViaModifyMethod extends PropertySetterFacetAbstr
     }
 
     @Override
-    public void setProperty(final ObjectAdapter targetAdapter, final ObjectAdapter valueAdapter) {
+    public void setProperty(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter valueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command;

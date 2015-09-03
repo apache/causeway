@@ -76,6 +76,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
@@ -1182,7 +1183,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         }
 
         private Object getPropertyValue() {
-            ObjectAdapter referencedAdapter = property.get(objectAdapter);
+            ObjectAdapter referencedAdapter = property.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
             return referencedAdapter == null ? null : referencedAdapter.getObject();
         }
 

@@ -29,6 +29,7 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -110,7 +111,8 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
                     }
 
                     final ObjectAdapter[] argAdapters = argAdaptersFor(aim);
-                    final ObjectAdapter resultAdapter = objectAction.execute(targetAdapter, argAdapters);
+                    final ObjectAdapter resultAdapter = objectAction.execute(
+                            targetAdapter, argAdapters, InteractionInitiatedBy.FRAMEWORK);
                     if(resultAdapter != null) {
                         Bookmark resultBookmark = CommandUtil.bookmarkFor(resultAdapter);
                         command.setResult(resultBookmark);

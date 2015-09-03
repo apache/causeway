@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -374,7 +374,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Consent isValid(final ObjectAdapter transientObject) {
+    public Consent isValid(final ObjectAdapter transientObject, final InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 
@@ -432,17 +432,19 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public ObjectValidityContext createValidityInteractionContext(final DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectValidityContext createValidityInteractionContext(final DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter) {
+    public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 
     @Override
-    public InteractionResult isValidResult(final ObjectAdapter transientObject) {
+    public InteractionResult isValidResult(
+            final ObjectAdapter transientObject,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return null;
     }
 

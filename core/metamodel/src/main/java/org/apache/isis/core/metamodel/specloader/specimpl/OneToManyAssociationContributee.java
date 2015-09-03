@@ -24,7 +24,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -117,8 +117,8 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     }
 
     @Override
-    public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
-        return serviceAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter});
+    public ObjectAdapter get(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
+        return serviceAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
     }
 
     @Override
@@ -138,15 +138,24 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     }
 
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
-        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+    public Consent isVisible(
+            final ObjectAdapter contributee,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        final VisibilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createVisibleInteractionContext(
+                serviceAdapter, interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
-        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+    public Consent isUsable(
+            final ObjectAdapter contributee,
+            final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
+        final ObjectMemberAbstract serviceAction = (ObjectMemberAbstract) this.serviceAction;
+        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(
+                serviceAdapter, interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }

@@ -29,6 +29,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bulk;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.command.Command;
@@ -127,7 +128,8 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             bulkInteractionContext.setIndex(i++);
                         }
 
-                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{}, getAuthenticationSession(), ActionModel.WHERE_FOR_ACTION_INVOCATION);
+                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{}, getAuthenticationSession(), ActionModel.WHERE_FOR_ACTION_INVOCATION,
+                                InteractionInitiatedBy.USER);
                     }
 
 

@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 
 /**
  * Mix-in interface for {@link ObjectAction}s that reference or otherwise
@@ -41,11 +42,13 @@ public interface MutableCurrentHolder extends CurrentHolder {
      * <p>
      * For example, if this is a {@link OneToOneAssociation}, then updates the
      * object referenced .
-     * 
-     * @param owner
+     *  @param owner
      * @param newValue
-     *            - the new value, or <tt>null</tt>
+     * @param interactionInitiatedBy
      */
-    void set(final ObjectAdapter owner, final ObjectAdapter newValue);
+    void set(
+            final ObjectAdapter owner,
+            final ObjectAdapter newValue,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
 }

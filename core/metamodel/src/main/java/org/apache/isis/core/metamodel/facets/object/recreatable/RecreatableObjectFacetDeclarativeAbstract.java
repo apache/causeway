@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -57,7 +58,9 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
     }
 
     @Override
-    public void initialize(Object viewModelPojo, String mementoStr) {
+    public void initialize(
+            final Object viewModelPojo,
+            final String mementoStr) {
 
         final MementoService mementoService = servicesInjector.lookupService(MementoService.class);
         final BookmarkService bookmarkService = servicesInjector.lookupService(BookmarkService.class);
@@ -90,7 +93,7 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
             }
 
             if(propertyValue != null) {
-                property.set(viewModelAdapter, adapterManager.adapterFor(propertyValue));
+                property.set(viewModelAdapter, adapterManager.adapterFor(propertyValue), InteractionInitiatedBy.FRAMEWORK);
             }
         }
     }
@@ -132,8 +135,8 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
                 }
 
                 // otherwise, include
-                final ObjectAdapter propertyValueAdapter = property.get(adapterManager.adapterFor(viewModelPojo)
-                );
+                final ObjectAdapter propertyValueAdapter = property.get(adapterManager.adapterFor(viewModelPojo),
+                        InteractionInitiatedBy.FRAMEWORK);
                 if(propertyValueAdapter != null) {
                     final Object propertyValue = propertyValueAdapter.getObject();
                     if(mementoService.canSet(propertyValue)) {

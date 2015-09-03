@@ -23,19 +23,11 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
  * Whether an {@link InteractionContext} was invoked by the user, or is
- * programmatic.
+ * by the framework/programmatic.
  */
-public enum InteractionInvocationMethod {
+public enum InteractionInitiatedBy {
 
-    BY_USER("By user"), PROGRAMMATIC("Programmatic");
+    USER,
+    FRAMEWORK;
 
-    private final String description;
-
-    private InteractionInvocationMethod(final String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

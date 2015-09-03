@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -129,7 +130,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
                 @Override
                 public Object getProperty(
                         final ObjectAdapter inObject,
-                        final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+                        final AuthenticationSession authenticationSession,
+                        final DeploymentCategory deploymentCategory,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }
             });
@@ -138,7 +141,10 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addSetterFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertySetterFacetAbstract(holder) {
                 @Override
-                public void setProperty(final ObjectAdapter inObject, final ObjectAdapter value) {
+                public void setProperty(
+                        final ObjectAdapter inObject,
+                        final ObjectAdapter value,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
         }
@@ -146,7 +152,9 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         private void addClearFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new PropertyClearFacetAbstract(holder) {
                 @Override
-                public void clearProperty(final ObjectAdapter inObject) {
+                public void clearProperty(
+                        final ObjectAdapter inObject,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
         }

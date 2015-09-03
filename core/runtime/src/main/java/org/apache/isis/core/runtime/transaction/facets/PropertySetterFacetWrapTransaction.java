@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacetAbstract;
@@ -43,16 +44,19 @@ public class PropertySetterFacetWrapTransaction extends PropertySetterFacetAbstr
     }
 
     @Override
-    public void setProperty(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
+    public void setProperty(
+            final ObjectAdapter adapter,
+            final ObjectAdapter referencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
-            underlyingFacet.setProperty(adapter, referencedAdapter);
+            underlyingFacet.setProperty(adapter, referencedAdapter, interactionInitiatedBy);
         } else {
             getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
                 @Override
                 public void execute() {
-                    underlyingFacet.setProperty(adapter, referencedAdapter);
+                    underlyingFacet.setProperty(adapter, referencedAdapter, interactionInitiatedBy);
                 }
             });
         }

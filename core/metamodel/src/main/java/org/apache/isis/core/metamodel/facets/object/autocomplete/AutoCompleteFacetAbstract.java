@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -73,7 +74,8 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     public List<ObjectAdapter> execute(
             final String search,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         cacheRepositoryAndRepositoryActionIfRequired();
         if(repositoryAction == null || repository == null) {
@@ -82,7 +84,8 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         
         final ObjectAdapter repositoryAdapter = adapterManager.getAdapterFor(repository);
         final ObjectAdapter searchAdapter = adapterManager.adapterFor(search);
-        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter} );
+        final ObjectAdapter resultAdapter = repositoryAction.execute(repositoryAdapter, new ObjectAdapter[] { searchAdapter},
+                interactionInitiatedBy);
         // check a collection was returned
         if(CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter) == null) {
             return Collections.emptyList();
@@ -93,7 +96,7 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
 
         final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
         return ObjectAdapter.Util.visibleAdapters(
-                        adapterList, authenticationSession, deploymentCategory);
+                        adapterList, authenticationSession, deploymentCategory, interactionInitiatedBy);
     }
 
 

@@ -110,7 +110,8 @@ public abstract class PropertyDomainEventFacetAbstract
             return null;
         }
 
-        final Object oldValue = getterFacet.getProperty(ic.getTarget(), ic.getSession(), ic.getDeploymentCategory());
+        final Object oldValue = getterFacet.getProperty(ic.getTarget(), ic.getSession(), ic.getDeploymentCategory(),
+                ic.getInitiatedBy());
         final Object proposedValue = proposedFrom(ic);
 
         final PropertyDomainEvent<?, ?> event =

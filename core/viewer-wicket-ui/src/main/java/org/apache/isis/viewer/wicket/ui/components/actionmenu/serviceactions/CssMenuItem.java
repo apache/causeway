@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -314,7 +315,7 @@ class CssMenuItem implements Serializable {
         // check visibility
         final AuthenticationSession session = getAuthenticationSession();
         final ObjectAdapter adapter = targetAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-        final Consent visibility = objectAction.isVisible(session, adapter, ActionModel.WHERE_FOR_ACTION_INVOCATION);
+        final Consent visibility = objectAction.isVisible(adapter, InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION);
         if (visibility.isVetoed()) {
             return null;
         }
@@ -330,7 +331,10 @@ class CssMenuItem implements Serializable {
         final AbstractLink link = linkAndLabel.getLink();
         final String actionLabel = linkAndLabel.getLabel();
 
-        final Consent usability = objectAction.isUsable(session, adapter, ActionModel.WHERE_FOR_ACTION_INVOCATION);
+        final Consent usability = objectAction.isUsable(
+                adapter, InteractionInitiatedBy.USER,
+                ActionModel.WHERE_FOR_ACTION_INVOCATION
+        );
         final String reasonDisabledIfAny = usability.getReason();
 
         final DescribedAsFacet describedAsFacet = objectAction.getFacet(DescribedAsFacet.class);

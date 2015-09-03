@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -92,7 +93,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, "Illegal property value");
         }
 
-        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
+        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
@@ -152,7 +153,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, "Illegal property value");
         }
 
-        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter);
+        final Consent validity = objectAdapter.getSpecification().isValid(objectAdapter, InteractionInitiatedBy.USER);
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, argRepr, validity.getReason());
         }
@@ -210,19 +211,21 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
         final ObjectAdapterAccessHelper accessHelper = new ObjectAdapterAccessHelper(getResourceContext(), objectAdapter);
 
-        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
+        final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId,
+                ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification propertySpec = property.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
 
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(bodyAsString);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), propertySpec).parseAsMapWithSingleValue(
+                bodyAsString);
 
-        final Consent consent = property.isAssociationValid(objectAdapter, argAdapter);
+        final Consent consent = property.isAssociationValid(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
-        property.set(objectAdapter, argAdapter);
+        property.set(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
         return helper.propertyDetails(
                 propertyId,
@@ -248,12 +251,12 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(
                 propertyId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
-        final Consent consent = property.isAssociationValid(objectAdapter, null);
+        final Consent consent = property.isAssociationValid(objectAdapter, null, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
-        property.set(objectAdapter, null);
+        property.set(objectAdapter, null, InteractionInitiatedBy.USER);
 
         return helper.propertyDetails(
                 propertyId,
@@ -311,14 +314,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(bodyAsString);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+                bodyAsString);
 
-        final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
+        final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
-        collection.addElement(objectAdapter, argAdapter);
+        collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
         return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
@@ -347,14 +351,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
         final String bodyAsString = Util.asStringUtf8(body);
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(bodyAsString);
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+                bodyAsString);
 
-        final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter);
+        final Consent consent = collection.isValidToAdd(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
-        collection.addElement(objectAdapter, argAdapter);
+        collection.addElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
         return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
@@ -378,14 +383,15 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
                 collectionId, ObjectAdapterAccessHelper.Intent.MUTATE);
 
         final ObjectSpecification collectionSpec = collection.getSpecification();
-        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(getResourceContext().getUrlUnencodedQueryString());
+        final ObjectAdapter argAdapter = new JsonParserHelper(getResourceContext(), collectionSpec).parseAsMapWithSingleValue(
+                getResourceContext().getUrlUnencodedQueryString());
 
-        final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter);
+        final Consent consent = collection.isValidToRemove(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.UNAUTHORIZED, consent.getReason());
         }
 
-        collection.removeElement(objectAdapter, argAdapter);
+        collection.removeElement(objectAdapter, argAdapter, InteractionInitiatedBy.USER);
 
         return helper.collectionDetails(collectionId, MemberReprMode.WRITE);
     }
@@ -499,7 +505,6 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         final ObjectAdapter objectAdapter = getObjectAdapterElseThrowNotFound(domainType, instanceId);
         final DomainResourceHelper helper = getDomainResourceHelper(objectAdapter);
 
-        Where where = getResourceContext().getWhere();
         return helper.invokeAction(actionId, arguments);
     }
 

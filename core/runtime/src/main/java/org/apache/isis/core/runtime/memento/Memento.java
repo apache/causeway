@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -132,15 +133,14 @@ public class Memento implements Serializable {
     private void createAssociationData(final ObjectAdapter adapter, final ObjectData data, final ObjectAssociation objectAssoc) {
         Object assocData;
         if (objectAssoc.isOneToManyAssociation()) {
-            final ObjectAdapter collAdapter = objectAssoc.get(adapter);
+            final ObjectAdapter collAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
             assocData = createCollectionData(collAdapter);
         } else if (objectAssoc.getSpecification().isEncodeable()) {
             final EncodableFacet facet = objectAssoc.getSpecification().getFacet(EncodableFacet.class);
-            final ObjectAdapter value = objectAssoc.get(adapter);
+            final ObjectAdapter value = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
             assocData = facet.toEncodedString(value);
         } else if (objectAssoc.isOneToOneAssociation()) {
-            final ObjectAdapter referencedAdapter = ((OneToOneAssociation) objectAssoc).get(adapter
-            );
+            final ObjectAdapter referencedAdapter = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
             assocData = createReferenceData(referencedAdapter);
         } else {
             throw new UnknownTypeException(objectAssoc);
@@ -369,7 +369,7 @@ public class Memento implements Serializable {
     }
 
     private void updateOneToManyAssociation(final ObjectAdapter objectAdapter, final OneToManyAssociation otma, final CollectionData collectionData) {
-        final ObjectAdapter collection = otma.get(objectAdapter);
+        final ObjectAdapter collection = otma.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> original = Lists.newArrayList();
         for (final ObjectAdapter adapter : facet.iterable(collection)) {
@@ -383,9 +383,9 @@ public class Memento implements Serializable {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("  association " + otma + " changed, added " + elementAdapter.getOid());
                 }
-                otma.addElement(objectAdapter, elementAdapter);
+                otma.addElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
             } else {
-                otma.removeElement(objectAdapter, elementAdapter);
+                otma.removeElement(objectAdapter, elementAdapter, InteractionInitiatedBy.FRAMEWORK);
             }
         }
 
@@ -393,7 +393,7 @@ public class Memento implements Serializable {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("  association " + otma + " changed, removed " + element.getOid());
             }
-            otma.removeElement(objectAdapter, element);
+            otma.removeElement(objectAdapter, element, InteractionInitiatedBy.FRAMEWORK);
         }
     }
 
@@ -402,7 +402,7 @@ public class Memento implements Serializable {
             otoa.initAssociation(objectAdapter, null);
         } else {
             final ObjectAdapter ref = recreateReference(assocData);
-            if (otoa.get(objectAdapter) != ref) {
+            if (otoa.get(objectAdapter, InteractionInitiatedBy.FRAMEWORK) != ref) {
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("  association " + otoa + " changed to " + ref.getOid());
                 }
@@ -415,6 +415,7 @@ public class Memento implements Serializable {
     // encode, restore
     ////////////////////////////////////////////////
 
+    // UNUSED?
     public void encodedData(final DataOutputStreamExtended outputImpl) throws IOException {
         outputImpl.writeEncodable(data);
     }

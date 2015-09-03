@@ -25,13 +25,11 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.Rel;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
@@ -45,8 +43,8 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         this(rendererContext, null, null, JsonRepresentation.newMap());
     }
 
-    public ObjectActionReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollowSpecs, String actionId, final JsonRepresentation representation) {
-        super(resourceContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
+    public ObjectActionReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollowSpecs, String actionId, final JsonRepresentation representation) {
+        super(rendererContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
     }
 
     @Override
@@ -140,7 +138,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final List<Object> parameters = Lists.newArrayList();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
                 final ObjectActionParameter param = objectMember.getParameters().get(i);
-                final Object paramDetails = paramDetails(param);
+                final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.add(paramDetails);
             }
             representation.mapPut("parameters", parameters);
@@ -148,7 +146,7 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
             final Map<String,Object> parameters = Maps.newLinkedHashMap();
             for (int i = 0; i < objectMember.getParameterCount(); i++) {
                 final ObjectActionParameter param = objectMember.getParameters().get(i);
-                final Object paramDetails = paramDetails(param);
+                final Object paramDetails = paramDetails(param, getInteractionInitiatedBy());
                 parameters.put(param.getId(), paramDetails);
             }
             representation.mapPut("parameters", parameters);
@@ -156,13 +154,13 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return this;
     }
 
-    private Object paramDetails(final ObjectActionParameter param) {
+    private Object paramDetails(final ObjectActionParameter param, final InteractionInitiatedBy interactionInitiatedBy) {
         final JsonRepresentation paramRep = JsonRepresentation.newMap();
         paramRep.mapPut("num", param.getNumber());
         paramRep.mapPut("id", param.getId());
         paramRep.mapPut("name", param.getName());
         paramRep.mapPut("description", param.getDescription());
-        final Object paramChoices = choicesFor(param);
+        final Object paramChoices = choicesFor(param, interactionInitiatedBy);
         if (paramChoices != null) {
             paramRep.mapPut("choices", paramChoices);
         }
@@ -173,12 +171,10 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         return paramRep;
     }
 
-    private Object choicesFor(final ObjectActionParameter param) {
-        final AuthenticationSession authenticationSession = rendererContext.getAuthenticationSession();
-        final DeploymentType deploymentType = determineDeploymentTypeFrom(rendererContext);
-        final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
-        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter, null, authenticationSession,
-                deploymentCategory);
+    private Object choicesFor(
+            final ObjectActionParameter param,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectAdapter[] choiceAdapters = param.getChoices(objectAdapter, null, interactionInitiatedBy);
         if (choiceAdapters == null || choiceAdapters.length == 0) {
             return null;
         }

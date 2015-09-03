@@ -21,6 +21,7 @@ import java.util.Map;
 import com.google.common.collect.Lists;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -64,7 +65,9 @@ public class ObjectActionArgHelper {
                 // validate individual arg
                 final ObjectActionParameter parameter = parameters.get(i);
                 final Object argPojo = argAdapter!=null?argAdapter.getObject():null;
-                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, null);
+                final String reasonNotValid = parameter.isValid(objectAdapter, argPojo, InteractionInitiatedBy.USER,
+                        null
+                );
                 if (reasonNotValid != null) {
                     argRepr.mapPut("invalidReason", reasonNotValid);
                     valid = false;
@@ -77,7 +80,7 @@ public class ObjectActionArgHelper {
 
         // validate all args
         final ObjectAdapter[] argArray = argAdapters.toArray(new ObjectAdapter[0]);
-        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray);
+        final Consent consent = action.isProposedArgumentSetValid(objectAdapter, argArray, InteractionInitiatedBy.USER);
         if (consent.isVetoed()) {
             arguments.mapPut("x-ro-invalidReason", consent.getReason());
             valid = false;

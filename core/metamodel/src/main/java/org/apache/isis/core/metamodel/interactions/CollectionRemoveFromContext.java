@@ -24,7 +24,7 @@ import org.apache.isis.applib.events.CollectionRemoveFromEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 import static org.apache.isis.core.metamodel.adapter.ObjectAdapter.Util.unwrap;
@@ -37,7 +37,7 @@ public class CollectionRemoveFromContext extends ValidityContext<CollectionRemov
 
     private final ObjectAdapter proposed;
 
-    public CollectionRemoveFromContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
+    public CollectionRemoveFromContext(DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final ObjectAdapter target, final Identifier identifier, final ObjectAdapter proposed) {
         super(InteractionContextType.COLLECTION_REMOVE_FROM, deploymentCategory, session, invocationMethod, identifier, target);
 
         this.proposed = proposed;

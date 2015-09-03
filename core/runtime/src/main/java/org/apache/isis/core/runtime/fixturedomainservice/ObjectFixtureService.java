@@ -42,6 +42,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
@@ -100,8 +101,8 @@ public class ObjectFixtureService {
                 continue;
             }
 
-            final ObjectAdapter associatedObject = association.get(adapter);
-            final boolean isEmpty = association.isEmpty(adapter);
+            final ObjectAdapter associatedObject = association.get(adapter, InteractionInitiatedBy.FRAMEWORK);
+            final boolean isEmpty = association.isEmpty(adapter, InteractionInitiatedBy.FRAMEWORK);
             if (isEmpty) {
                 continue;
             }

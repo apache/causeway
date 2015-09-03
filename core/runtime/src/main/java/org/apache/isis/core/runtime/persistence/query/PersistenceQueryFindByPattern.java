@@ -22,6 +22,7 @@ package org.apache.isis.core.runtime.persistence.query;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -70,18 +71,18 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
             } 
 
             // if pattern contains empty value then it matches anything
-            if (fld.isEmpty(pattern)) {
+            if (fld.isEmpty(pattern, InteractionInitiatedBy.FRAMEWORK)) {
                 continue;
             }
 
             // find the object to match against, if any
-            final ObjectAdapter reqd = fld.get(pattern);
+            final ObjectAdapter reqd = fld.get(pattern, InteractionInitiatedBy.FRAMEWORK);
             if (reqd == null) {
                 continue;
             }
 
             // find the object; it's a bust if nothing
-            final ObjectAdapter search = fld.get(object);
+            final ObjectAdapter search = fld.get(object, InteractionInitiatedBy.FRAMEWORK);
             if (search == null) {
                 return false;
             }
@@ -95,8 +96,8 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
             } else {
 
                 // compare the titles
-                final String r = reqd.titleString().toLowerCase();
-                final String s = search.titleString().toLowerCase();
+                final String r = reqd.titleString(null).toLowerCase();
+                final String s = search.titleString(null).toLowerCase();
 
                 // if the pattern does not occur in the object, then it's a bust
                 if (s.indexOf(r) == -1) {

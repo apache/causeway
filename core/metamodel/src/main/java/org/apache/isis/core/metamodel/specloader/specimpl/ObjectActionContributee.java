@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -160,15 +160,22 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
     
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
-        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+    public Consent isVisible(
+            final ObjectAdapter contributee,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(serviceAdapter,
+                interactionInitiatedBy, where);
         ic.putContributee(this.contributeeParam, contributee);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter contributee, Where where) {
-        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, serviceAdapter, where);
+    public Consent isUsable(
+            final ObjectAdapter contributee,
+            final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
+        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(serviceAdapter,
+                interactionInitiatedBy, where);
         ic.putContributee(this.contributeeParam, contributee);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
@@ -183,19 +190,25 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
         final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter, authenticationSession,
-                deploymentCategory);
+                deploymentCategory, interactionInitiatedBy);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
         
-    public Consent isProposedArgumentSetValid(final ObjectAdapter contributee, final ObjectAdapter[] proposedArguments) {
+    public Consent isProposedArgumentSetValid(
+            final ObjectAdapter contributee,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
-        return serviceAction.isProposedArgumentSetValid(serviceAdapter, serviceArguments);
+        return serviceAction.isProposedArgumentSetValid(serviceAdapter, serviceArguments, interactionInitiatedBy);
     }
 
     @Override
-    public ObjectAdapter execute(final ObjectAdapter contributee, final ObjectAdapter[] arguments) {
+    public ObjectAdapter execute(
+            final ObjectAdapter contributee,
+            final ObjectAdapter[] arguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         
         // this code also exists in ActionInvocationFacetViaMethod
         // we need to repeat it here because the target adapter should be the contributee, not the contributing service.
@@ -240,7 +253,8 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             }
         }
         
-        return serviceAction.execute(serviceAdapter, argsPlusContributee(contributee, arguments));
+        return serviceAction.execute(serviceAdapter, argsPlusContributee(contributee, arguments),
+                interactionInitiatedBy);
     }
 
     private ObjectAdapter[] argsPlusContributee(final ObjectAdapter contributee, final ObjectAdapter[] arguments) {

@@ -20,6 +20,7 @@
 package org.apache.isis.core.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
@@ -43,16 +44,19 @@ public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbs
     }
 
     @Override
-    public void add(final ObjectAdapter adapter, final ObjectAdapter referencedAdapter) {
+    public void add(
+            final ObjectAdapter adapter,
+            final ObjectAdapter referencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (adapter.isTransient()) {
             // NOT !adapter.isPersistent();
             // (value adapters are neither persistent or transient)
-            underlyingFacet.add(adapter, referencedAdapter);
+            underlyingFacet.add(adapter, referencedAdapter, interactionInitiatedBy);
         } else {
             getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
                 @Override
                 public void execute() {
-                    underlyingFacet.add(adapter, referencedAdapter);
+                    underlyingFacet.add(adapter, referencedAdapter, interactionInitiatedBy);
                 }
             });
         }

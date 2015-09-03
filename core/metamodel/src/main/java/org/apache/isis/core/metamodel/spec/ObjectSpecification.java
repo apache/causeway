@@ -30,7 +30,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -218,7 +218,7 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * Create an {@link InteractionContext} representing an attempt to read the
      * object's title.
      */
-    ObjectTitleContext createTitleInteractionContext(AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    ObjectTitleContext createTitleInteractionContext(AuthenticationSession session, InteractionInitiatedBy invocationMethod, ObjectAdapter targetObjectAdapter);
 
     // //////////////////////////////////////////////////////////////
     // ValidityContext, Validity
@@ -229,19 +229,19 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      * object.
      * @param deploymentCategory TODO
      */
-    ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, AuthenticationSession session, InteractionInvocationMethod invocationMethod, ObjectAdapter targetObjectAdapter);
+    ObjectValidityContext createValidityInteractionContext(DeploymentCategory deploymentCategory, AuthenticationSession session, InteractionInitiatedBy invocationMethod, ObjectAdapter targetObjectAdapter);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link Consent}.
      */
-    Consent isValid(ObjectAdapter adapter);
+    Consent isValid(ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines whether the specified object is in a valid state (for example,
      * so can be persisted); represented as a {@link InteractionResult}.
      */
-    InteractionResult isValidResult(ObjectAdapter adapter);
+    InteractionResult isValidResult(ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////////////
     // Facets

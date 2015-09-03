@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.url.UrlEncodingUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -113,7 +114,7 @@ public abstract class ResourceAbstract {
         this.resourceContext = new ResourceContext(
                 representationType, httpHeaders, providers, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext, getLocalization(), getAuthenticationSession(), getPersistenceSession(), getAdapterManager(), getSpecificationLoader(), getConfiguration(),
-                getDeploymentType());
+                getDeploymentType(), InteractionInitiatedBy.USER);
     }
 
     protected ResourceContext getResourceContext() {

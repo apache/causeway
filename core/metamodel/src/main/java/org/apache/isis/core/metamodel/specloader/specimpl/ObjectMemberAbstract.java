@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -209,6 +209,23 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // Hidden (or visible)
     // /////////////////////////////////////////////////////////////
 
+    /**
+     * Create an {@link InteractionContext} to represent an attempt to view this
+     * member (that is, to check if it is visible or not).
+     *
+     * <p>
+     * Typically it is easier to just call
+     * {@link ObjectMember#isVisible(ObjectAdapter, InteractionInitiatedBy, Where)}; this is
+     * provided as API for symmetry with interactions (such as
+     * {@link AccessContext} accesses) have no corresponding vetoing methods.
+     */
+     protected abstract VisibilityContext<?> createVisibleInteractionContext(
+             final ObjectAdapter targetObjectAdapter,
+             final InteractionInitiatedBy interactionInitiatedBy,
+             final Where where);
+
+
+
     @Override
     public boolean isAlwaysHidden() {
         final HiddenFacet facet = getFacet(HiddenFacet.class);
@@ -223,18 +240,20 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     /**
      * Loops over all {@link HidingInteractionAdvisor} {@link Facet}s and
      * returns <tt>true</tt> only if none hide the member.
-     * 
-     * <p>
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return isVisibleResult(session, target, where).createConsent();
+    public Consent isVisible(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return isVisibleResult(target, interactionInitiatedBy, where).createConsent();
     }
 
-    private InteractionResult isVisibleResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        final VisibilityContext<?> ic = createVisibleInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
+    private InteractionResult isVisibleResult(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
 
@@ -243,20 +262,37 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // /////////////////////////////////////////////////////////////
 
     /**
+     * Create an {@link InteractionContext} to represent an attempt to
+     * use this member (that is, to check if it is usable or not).
+     *
+     * <p>
+     * Typically it is easier to just call
+     * {@link ObjectMember#isUsable(ObjectAdapter, InteractionInitiatedBy, Where)}; this is
+     * provided as API for symmetry with interactions (such as
+     * {@link AccessContext} accesses) have no corresponding vetoing methods.
+     */
+    protected abstract UsabilityContext<?> createUsableInteractionContext(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where);
+
+    /**
      * Loops over all {@link DisablingInteractionAdvisor} {@link Facet}s and
      * returns <tt>true</tt> only if none disables the member.
-     * 
-     * <p>
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
      */
     @Override
-    public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        return isUsableResult(session, target, where).createConsent();
+    public Consent isUsable(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return isUsableResult(target, interactionInitiatedBy, where).createConsent();
     }
 
-    private InteractionResult isUsableResult(final AuthenticationSession session, final ObjectAdapter target, Where where) {
-        final UsabilityContext<?> ic = createUsableInteractionContext(session, InteractionInvocationMethod.BY_USER, target, where);
+    private InteractionResult isUsableResult(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        final UsabilityContext<?> ic = createUsableInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, ic);
     }
 

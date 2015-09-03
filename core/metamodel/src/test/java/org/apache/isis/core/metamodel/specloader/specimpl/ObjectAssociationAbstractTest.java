@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -76,19 +76,21 @@ public class ObjectAssociationAbstractTest {
         objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
 
             @Override
-            public ObjectAdapter get(final ObjectAdapter fromObject) {
+            public ObjectAdapter get(
+                    final ObjectAdapter fromObject,
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
             @Override
-            public boolean isEmpty(final ObjectAdapter adapter) {
+            public boolean isEmpty(final ObjectAdapter adapter, final InteractionInitiatedBy interactionInitiatedBy) {
                 return false;
             }
 
             @Override
             public ObjectAdapter[] getChoices(
                     final ObjectAdapter object,
-                    final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
 
@@ -102,12 +104,16 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
+            public UsabilityContext<?> createUsableInteractionContext(
+                    final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
+                    Where where) {
                 return null;
             }
 
             @Override
-            public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
+            public VisibilityContext<?> createVisibleInteractionContext(
+                    final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+                    Where where) {
                 return null;
             }
 
@@ -135,7 +141,9 @@ public class ObjectAssociationAbstractTest {
             public ObjectAdapter[] getAutoComplete(
                     ObjectAdapter object,
                     String searchArg,
-                    final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+                    final AuthenticationSession authenticationSession,
+                    final DeploymentCategory deploymentCategory,
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
             @Override

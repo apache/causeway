@@ -18,8 +18,8 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 
 @Deprecated
 public class ObjectAssociationFilters {
@@ -28,66 +28,81 @@ public class ObjectAssociationFilters {
      * @deprecated - use {@link ObjectAssociation.Filters#PROPERTIES}
      */
     @Deprecated
+    // UNUSED?
     public final static Filter<ObjectAssociation> PROPERTIES = ObjectAssociation.Filters.PROPERTIES;
 
     /**
      * @deprecated - use {@link ObjectAssociation.Filters#REFERENCE_PROPERTIES}
      */
     @Deprecated
+    // UNUSED?
     public final static Filter<ObjectAssociation> REFERENCE_PROPERTIES = ObjectAssociation.Filters.REFERENCE_PROPERTIES;
 
     /**
      * @deprecated - use {@link ObjectAssociation.Filters#WHERE_VISIBLE_IN_COLLECTION_TABLE}
      */
     @Deprecated
+    // UNUSED?
     public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE = ObjectAssociation.Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE;
 
     /**
      * @deprecated - use {@link ObjectAssociation.Filters#WHERE_VISIBLE_IN_STANDALONE_TABLE}
      */
     @Deprecated
+    // UNUSED?
     public final static Filter<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE = ObjectAssociation.Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE;
 
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#ALL}
+     * @deprecated
      */
     @Deprecated
+    // UNUSED ?
     public final static Filter<ObjectAssociation> ALL = ObjectAssociation.Filters.ALL;
 
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#COLLECTIONS}
+     * @deprecated
      */
     @Deprecated
+    // UNUSED ?
     public final static Filter<ObjectAssociation> COLLECTIONS = ObjectAssociation.Filters.COLLECTIONS;
 
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#VISIBLE_AT_LEAST_SOMETIMES}
+     * @deprecated
      */
     @Deprecated
+    // UNUSED ?
     public static final Filter<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES = ObjectAssociation.Filters.VISIBLE_AT_LEAST_SOMETIMES;
 
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#dynamicallyVisible(AuthenticationSession, ObjectAdapter, Where)}
+     * @deprecated
      */
     @Deprecated
+    // UNUSED ?
     public static final Filter<ObjectAssociation> staticallyVisible(final Where context) {
         return ObjectAssociation.Filters.staticallyVisible(context);
     }
     
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#dynamicallyVisible(AuthenticationSession, ObjectAdapter, Where)}
+     * @deprecated
      */
+    // UNUSED ?
     @Deprecated
-    public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
-        return ObjectAssociation.Filters.dynamicallyVisible(session, target, where);
+    public static Filter<ObjectAssociation> dynamicallyVisible(
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return ObjectAssociation.Filters.dynamicallyVisible(target, interactionInitiatedBy, where);
     }
 
     /**
-     * @deprecated - use {@link ObjectAssociation.Filters#enabled(AuthenticationSession, ObjectAdapter, Where)}
+     * @deprecated
      */
     @Deprecated
-    public static Filter<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
-        return ObjectAssociation.Filters.enabled(session, adapter, where);
+    public static Filter<ObjectAssociation> enabled(
+            final ObjectAdapter adapter,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
+        return ObjectAssociation.Filters.enabled(adapter, interactionInitiatedBy, where);
     }
     
 }

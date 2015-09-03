@@ -54,6 +54,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.CollectionUtils;
@@ -142,7 +143,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], AuthenticationSession, DeploymentCategory)}
+     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], AuthenticationSession, DeploymentCategory, InteractionInitiatedBy)}
      */
     public static class InvocationResult {
 
@@ -183,8 +184,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
-        return invoke(null, targetAdapter, argumentAdapters, authenticationSession, deploymentCategory);
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
+        return invoke(null, targetAdapter, argumentAdapters, authenticationSession, deploymentCategory,
+                interactionInitiatedBy);
     }
 
     @Override
@@ -192,8 +194,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final AuthenticationSession session,
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
@@ -238,7 +241,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 final List<ObjectAdapter> visibleAdapters =
                         ObjectAdapter.Util.visibleAdapters(
                                 adapterList,
-                                authenticationSession, deploymentCategory);
+                                session, deploymentCategory, interactionInitiatedBy);
                 final Object visibleObjects =
                         CollectionUtils.copyOf(
                                 Lists.transform(visibleAdapters, ObjectAdapter.Functions.getObject()),
@@ -252,8 +255,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             } else {
                 boolean visible =
                         ObjectAdapter.Util.isVisible(
-                                invocationResultAdapter, authenticationSession,
-                                deploymentCategory);
+                                invocationResultAdapter, session,
+                                deploymentCategory, interactionInitiatedBy);
                 if(!visible) {
                     return null;
                 }

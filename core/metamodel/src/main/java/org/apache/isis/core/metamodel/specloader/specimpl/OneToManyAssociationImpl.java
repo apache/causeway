@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -75,8 +75,11 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new CollectionVisibilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
+    public VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new CollectionVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -84,30 +87,40 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, Where where) {
-        return new CollectionUsabilityContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), where);
+    public UsabilityContext<?> createUsableInteractionContext(
+            final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new CollectionUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, ownerAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
     // Validate Add
     // /////////////////////////////////////////////////////////////
 
-    @Override
-    public ValidityContext<?> createValidateAddInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToAddAdapter) {
-        return new CollectionAddToContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), proposedToAddAdapter);
+    // Not API
+    private ValidityContext<?> createValidateAddInteractionContext(
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToAddAdapter) {
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        return new CollectionAddToContext(getDeploymentCategory(), authenticationSession, interactionInitiatedBy, ownerAdapter, getIdentifier(), proposedToAddAdapter);
     }
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
     @Override
-    public Consent isValidToAdd(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToAddAdapter) {
-        return isValidToAddResult(ownerAdapter, proposedToAddAdapter).createConsent();
+    public Consent isValidToAdd(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToAddAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return isValidToAddResult(ownerAdapter, proposedToAddAdapter, interactionInitiatedBy).createConsent();
     }
 
-    private InteractionResult isValidToAddResult(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToAddAdapter) {
-        final ValidityContext<?> validityContext = createValidateAddInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, ownerAdapter, proposedToAddAdapter);
+    private InteractionResult isValidToAddResult(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToAddAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ValidityContext<?> validityContext = createValidateAddInteractionContext(
+                interactionInitiatedBy, ownerAdapter, proposedToAddAdapter);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -115,22 +128,33 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // Validate Remove
     // /////////////////////////////////////////////////////////////
 
-    @Override
-    public ValidityContext<?> createValidateRemoveInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToRemoveAdapter) {
-        return new CollectionRemoveFromContext(getDeploymentCategory(), session, invocationMethod, ownerAdapter, getIdentifier(), proposedToRemoveAdapter);
+    private ValidityContext<?> createValidateRemoveInteractionContext(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToRemoveAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new CollectionRemoveFromContext(
+                getDeploymentCategory(), getAuthenticationSession(),
+                interactionInitiatedBy,
+                ownerAdapter,
+                getIdentifier(),
+                proposedToRemoveAdapter);
     }
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
     @Override
-    public Consent isValidToRemove(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToRemoveAdapter) {
-        return isValidToRemoveResult(ownerAdapter, proposedToRemoveAdapter).createConsent();
+    public Consent isValidToRemove(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToRemoveAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return isValidToRemoveResult(
+                ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy).createConsent();
     }
 
-    private InteractionResult isValidToRemoveResult(final ObjectAdapter ownerAdapter, final ObjectAdapter proposedToRemoveAdapter) {
-        final ValidityContext<?> validityContext = createValidateRemoveInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER, ownerAdapter, proposedToRemoveAdapter);
+    private InteractionResult isValidToRemoveResult(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter proposedToRemoveAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ValidityContext<?> validityContext = createValidateRemoveInteractionContext(
+                ownerAdapter, proposedToRemoveAdapter, interactionInitiatedBy);
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
@@ -143,10 +167,13 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
+    public ObjectAdapter get(
+            final ObjectAdapter ownerAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory());
+        final Object collection = accessor.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory(),
+                interactionInitiatedBy);
         if (collection == null) {
             return null;
         }
@@ -154,10 +181,10 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     }
 
     @Override
-    public boolean isEmpty(final ObjectAdapter parentAdapter) {
+    public boolean isEmpty(final ObjectAdapter parentAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         // REVIEW should we be able to determine if a collection is empty
         // without loading it?
-        final ObjectAdapter collection = get(parentAdapter);
+        final ObjectAdapter collection = get(parentAdapter, interactionInitiatedBy);
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(collection);
         return facet.size(collection) == 0;
     }
@@ -167,27 +194,33 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public void addElement(final ObjectAdapter ownerAdapter, final ObjectAdapter referencedAdapter) {
+    public void addElement(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter referencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
         if (readWrite()) {
             if (ownerAdapter.representsPersistent() && referencedAdapter.isTransient()) {
-                throw new IsisException("can't set a reference to a transient object from a persistent one: " + ownerAdapter.titleString() + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
+                throw new IsisException("can't set a reference to a transient object from a persistent one: " + ownerAdapter.titleString(null) + " (persistent) -> " + referencedAdapter.titleString() + " (transient)");
             }
             final CollectionAddToFacet facet = getFacet(CollectionAddToFacet.class);
-            facet.add(ownerAdapter, referencedAdapter);
+            facet.add(ownerAdapter, referencedAdapter, interactionInitiatedBy);
         }
     }
 
     @Override
-    public void removeElement(final ObjectAdapter ownerAdapter, final ObjectAdapter referencedAdapter) {
+    public void removeElement(
+            final ObjectAdapter ownerAdapter,
+            final ObjectAdapter referencedAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if (referencedAdapter == null) {
             throw new IllegalArgumentException("element should not be null");
         }
         if (readWrite()) {
             final CollectionRemoveFromFacet facet = getFacet(CollectionRemoveFromFacet.class);
-            facet.remove(ownerAdapter, referencedAdapter);
+            facet.remove(ownerAdapter, referencedAdapter, interactionInitiatedBy);
         }
     }
 
@@ -224,8 +257,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     @Override
     public ObjectAdapter[] getChoices(
             final ObjectAdapter ownerAdapter,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectAdapter[0];
     }
 
@@ -244,7 +276,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public ObjectAdapter[] getAutoComplete(
             ObjectAdapter object,
             String searchArg,
-            final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+            final AuthenticationSession authenticationSession,
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectAdapter[0];
     }
     

@@ -34,6 +34,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -53,7 +54,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * For example, if this is an {@link OneToOneAssociation}, then returns the
      * referenced object.
      */
-    ObjectAdapter get(final ObjectAdapter owner);
+    ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Get the name for the business key, if one has been specified.
@@ -80,9 +81,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * user can choose from.
      */
     public ObjectAdapter[] getChoices(
-            ObjectAdapter object,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final ObjectAdapter object,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
 
     /**
@@ -98,7 +98,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             final ObjectAdapter object,
             final String searchArg,
             final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory);
+            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
 
     int getAutoCompleteMinLength();
 
@@ -112,7 +112,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
      * Returns <code>true</code> if this field on the specified object is deemed
      * to be empty, or has no content.
      */
-    boolean isEmpty(ObjectAdapter target);
+    boolean isEmpty(ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy);
 
     /**
      * Determines if this field must be complete before the object is in a valid
@@ -173,30 +173,35 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         /**
          * Only fields that are for reference properties (ie 1:1 associations)
          */
+        // UNUSED ?
         public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.REFERENCE_PROPERTIES);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
+        // UNUSED ?
         public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
+        // UNUSED ?
         public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE);
 
         /**
          * All fields (that is, excludes out nothing).
          */
+        // UNUSED ?
         public final static Predicate<ObjectAssociation> ALL =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.ALL);
 
         /**
          * Only fields that are for collections (ie 1:m associations)
          */
+        // UNUSED ?
         public final static Predicate<ObjectAssociation> COLLECTIONS =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.COLLECTIONS);
 
@@ -207,16 +212,28 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
 
+        // UNUSED ?
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.staticallyVisible(context));
         }
 
-        public static final Predicate<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(session, target, where));
+        // UNUSED ?
+        public static final Predicate<ObjectAssociation> dynamicallyVisible(
+                final ObjectAdapter target,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.dynamicallyVisible(target,
+                    interactionInitiatedBy, where
+            ));
         }
 
-        public static final Predicate<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
-            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.enabled(session, adapter, where));
+        public static final Predicate<ObjectAssociation> enabled(
+                final ObjectAdapter adapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
+            return org.apache.isis.applib.filter.Filters.asPredicate(Filters.enabled(adapter,
+                    interactionInitiatedBy, where
+            ));
         }
 
     }
@@ -347,11 +364,14 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target, final Where where) {
+        public static Filter<ObjectAssociation> dynamicallyVisible(
+                final ObjectAdapter target,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override
                 public boolean accept(final ObjectAssociation objectAssociation) {
-                    final Consent visible = objectAssociation.isVisible(session, target, where);
+                    final Consent visible = objectAssociation.isVisible(target, interactionInitiatedBy, where);
                     return visible.isAllowed();
                 }
             };
@@ -361,11 +381,14 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
          * @deprecated -use {@link com.google.common.base.Predicate equivalent}
          */
         @Deprecated
-        public static Filter<ObjectAssociation> enabled(final AuthenticationSession session, final ObjectAdapter adapter, final Where where) {
+        public static Filter<ObjectAssociation> enabled(
+                final ObjectAdapter adapter,
+                final InteractionInitiatedBy interactionInitiatedBy,
+                final Where where) {
             return new Filter<ObjectAssociation>() {
                 @Override
                 public boolean accept(final ObjectAssociation objectAssociation) {
-                    final Consent usable = objectAssociation.isUsable(session, adapter, where);
+                    final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);
                     return usable.isAllowed();
                 }
             };

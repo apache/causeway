@@ -23,6 +23,7 @@ import com.google.common.base.Objects;
 import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.DomainEventHelper;
@@ -60,18 +61,21 @@ public abstract class PropertySetterFacetForDomainEventAbstract
     }
 
     @Override
-    public void setProperty(ObjectAdapter targetAdapter, ObjectAdapter newValueAdapter) {
+    public void setProperty(
+            final ObjectAdapter targetAdapter,
+            final ObjectAdapter newValueAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if(setterFacet == null) {
             return;
         }
         if(!domainEventHelper.hasEventBusService()) {
-            setterFacet.setProperty(targetAdapter, newValueAdapter);
+            setterFacet.setProperty(targetAdapter, newValueAdapter, interactionInitiatedBy);
             return;
         }
 
 
         // ... post the executing event
-        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null);
+        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
         final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
         final PropertyDomainEvent<?, ?> event =
@@ -82,10 +86,10 @@ public abstract class PropertySetterFacetForDomainEventAbstract
                         oldValue, newValue);
 
         // ... perform the property modification
-        setterFacet.setProperty(targetAdapter, newValueAdapter);
+        setterFacet.setProperty(targetAdapter, newValueAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
-        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null);
+        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
         if(Objects.equal(oldValue, actualNewValue)) {
             // do nothing
             return;

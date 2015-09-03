@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Rule;
@@ -30,9 +28,12 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 
 public class ObjectAssociationFiltersTests {
 
@@ -51,10 +52,12 @@ public class ObjectAssociationFiltersTests {
         context.checking(new Expectations() {
             {
                 never(mockAssociation).containsFacet(HiddenFacet.class);
-                allowing(mockAssociation).isVisible(with(any(AuthenticationSession.class)), with(any(ObjectAdapter.class)), with(equalTo(Where.ANYWHERE)));
+                allowing(mockAssociation).isVisible(with(any(ObjectAdapter.class)), InteractionInitiatedBy.USER, with(equalTo(Where.ANYWHERE)));
             }
         });
-        final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.dynamicallyVisible(mockSession, mockTarget, Where.ANYWHERE);
+        final Filter<ObjectAssociation> filter = ObjectAssociation.Filters.dynamicallyVisible(mockTarget,
+                InteractionInitiatedBy.USER, Where.ANYWHERE
+        );
         filter.accept(mockAssociation);
     }
 

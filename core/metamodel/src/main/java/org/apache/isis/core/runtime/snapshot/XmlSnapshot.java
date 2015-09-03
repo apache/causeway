@@ -54,6 +54,7 @@ import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -200,7 +201,7 @@ public class XmlSnapshot implements Snapshot {
      * schemaManager must be populated with any application-level namespaces
      * referenced in the document that the parentElement resides within.
      * (Normally this is achieved simply by using appendXml passing in a new
-     * schemaManager - see {@link #toXml()}or {@link XmlSnapshot}).
+     * schemaManager - see {@link XmlSnapshot}).
      */
     private Place appendXml(final ObjectAdapter object) {
 
@@ -266,7 +267,7 @@ public class XmlSnapshot implements Snapshot {
      * with any application-level namespaces referenced in the document that the
      * parentElement resides within. (Normally this is achieved simply by using
      * appendXml passing in a rootElement and a new schemaManager - see
-     * {@link #toXml()}or {@link XmlSnapshot}).
+     * {@link XmlSnapshot}).
      */
     private Element appendXml(final Place parentPlace, final ObjectAdapter childObject) {
 
@@ -492,8 +493,8 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-            final ObjectAdapter referencedObject = oneToOneAssociation.get(fieldPlace.getObject()
-            );
+            final ObjectAdapter referencedObject = oneToOneAssociation.get(fieldPlace.getObject(),
+                    InteractionInitiatedBy.FRAMEWORK);
 
             if (referencedObject == null) {
                 return true; // not a failure if the reference was null
@@ -512,7 +513,7 @@ public class XmlSnapshot implements Snapshot {
             }
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
-            final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject());
+            final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject(), InteractionInitiatedBy.FRAMEWORK);
             final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
             if (LOG.isDebugEnabled()) {
@@ -697,7 +698,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ObjectAdapter value;
                 try {
-                    value = valueAssociation.get(adapter);
+                    value = valueAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
 
                     final ObjectSpecification valueNos = value.getSpecification();
 
@@ -747,7 +748,7 @@ public class XmlSnapshot implements Snapshot {
                 ObjectAdapter referencedObjectAdapter;
 
                 try {
-                    referencedObjectAdapter = oneToOneAssociation.get(adapter);
+                    referencedObjectAdapter = oneToOneAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
 
                     // XML
                     isisMetaModel.setAttributesForReference(xmlReferenceElement, schema.getPrefix(), fullyQualifiedClassName);
@@ -780,7 +781,7 @@ public class XmlSnapshot implements Snapshot {
 
                 ObjectAdapter collection;
                 try {
-                    collection = oneToManyAssociation.get(adapter);
+                    collection = oneToManyAssociation.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getSpecification();
                     final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 

@@ -20,10 +20,12 @@ import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext2;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext3;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext4;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
@@ -78,5 +80,8 @@ public interface RepresentationService {
     }
     public static interface Context3 extends Context2, RendererContext3 {
         DeploymentType getDeploymentType();
+    }
+    public static interface Context4 extends Context3, RendererContext4 {
+        InteractionInitiatedBy getInteractionInitiatedBy();
     }
 }

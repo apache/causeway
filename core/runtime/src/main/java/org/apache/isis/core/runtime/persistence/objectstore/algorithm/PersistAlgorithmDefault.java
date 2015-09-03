@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -90,13 +91,13 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
                     continue;
                 }
                 if (objectAssoc.isOneToManyAssociation()) {
-                    final ObjectAdapter collection = objectAssoc.get(adapter);
+                    final ObjectAdapter collection = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                     if (collection == null) {
                         throw new ObjectPersistenceException("Collection " + objectAssoc.getName() + " does not exist in " + adapter.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {
-                    final ObjectAdapter fieldValue = objectAssoc.get(adapter);
+                    final ObjectAdapter fieldValue = objectAssoc.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                     if (fieldValue == null) {
                         continue;
                     }

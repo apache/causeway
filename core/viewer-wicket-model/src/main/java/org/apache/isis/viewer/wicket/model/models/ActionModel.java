@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
@@ -472,7 +473,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
                         return action
                                 .executeWithRuleChecking(
                                         targetAdapter, arguments, session,
-                                        WHERE_FOR_ACTION_INVOCATION);
+                                        WHERE_FOR_ACTION_INVOCATION, InteractionInitiatedBy.USER);
                     }
                 });
         return resultAdapter;
@@ -482,7 +483,8 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter targetAdapter = getTargetAdapter();
         final ObjectAdapter[] proposedArguments = getArgumentsAsArray();
         final ObjectAction objectAction = getActionMemento().getAction();
-        final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments);
+        final Consent validity = objectAction.isProposedArgumentSetValid(targetAdapter, proposedArguments,
+                InteractionInitiatedBy.USER);
         return validity.isAllowed() ? null : validity.getReason();
     }
 

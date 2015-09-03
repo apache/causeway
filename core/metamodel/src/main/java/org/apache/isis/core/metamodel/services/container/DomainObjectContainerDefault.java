@@ -69,6 +69,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -297,7 +298,8 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public String validate(final Object domainObject) {
         final ObjectAdapter adapter = getAdapterManager().adapterFor(unwrapped(domainObject));
-        final InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
+        final InteractionResult validityResult =
+                adapter.getSpecification().isValidResult(adapter, InteractionInitiatedBy.FRAMEWORK);
         return validityResult.getReason();
     }
 

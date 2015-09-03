@@ -39,6 +39,7 @@ import org.apache.isis.applib.services.eventbus.CollectionInteractionEvent;
 import org.apache.isis.applib.services.eventbus.CollectionRemovedFromEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -126,7 +127,9 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
                 @Override
                 public Object getProperty(
                         final ObjectAdapter inObject,
-                        final AuthenticationSession authenticationSession, final DeploymentCategory deploymentCategory) {
+                        final AuthenticationSession authenticationSession,
+                        final DeploymentCategory deploymentCategory,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }
             });
@@ -135,7 +138,10 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         private void addAddToFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new CollectionAddToFacetAbstract(holder) {
                 @Override
-                public void add(final ObjectAdapter inObject, final ObjectAdapter value) {
+                public void add(
+                        final ObjectAdapter inObject,
+                        final ObjectAdapter value,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
         }
@@ -143,7 +149,10 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
         private void addRemoveFromFacet(final FacetHolder holder) {
             FacetUtil.addFacet(new CollectionRemoveFromFacetAbstract(holder) {
                 @Override
-                public void remove(final ObjectAdapter inObject, final ObjectAdapter element) {
+                public void remove(
+                        final ObjectAdapter inObject,
+                        final ObjectAdapter element,
+                        final InteractionInitiatedBy interactionInitiatedBy) {
                 }
             });
         }

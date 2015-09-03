@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -95,7 +95,7 @@ public class ObjectMemberAbstractTest {
                 return null;
             }
         });
-        final Consent usable = testMember.isUsable(null, persistentAdapter, Where.ANYWHERE);
+        final Consent usable = testMember.isUsable(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         final boolean allowed = usable.isAllowed();
         assertTrue(allowed);
     }
@@ -109,7 +109,7 @@ public class ObjectMemberAbstractTest {
                 return null;
             }
         });
-        final Consent visible = testMember.isVisible(null, persistentAdapter, Where.ANYWHERE);
+        final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertTrue(visible.isAllowed());
     }
 
@@ -117,14 +117,14 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.ONCE_PERSISTED, Where.ANYWHERE, testMember){});
-        assertFalse(testMember.isVisible(null, persistentAdapter, Where.ANYWHERE).isAllowed());
+        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
     @Test
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
-        final Consent visible = testMember.isVisible(null, persistentAdapter, Where.ANYWHERE);
+        final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertTrue(visible.isAllowed());
     }
 
@@ -133,19 +133,19 @@ public class ObjectMemberAbstractTest {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
         
-        final Consent visible = testMember.isVisible(null, transientAdapter, Where.ANYWHERE);
+        final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());
     }
 
     @Test
     public void testVisibleDeclaratively() {
         testMember.addFacet(new HiddenFacetAbstractAlwaysEverywhere(testMember) {});
-        assertFalse(testMember.isVisible(null, persistentAdapter, Where.ANYWHERE).isAllowed());
+        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
     @Test
     public void testVisibleForSessionByDefault() {
-        final Consent visible = testMember.isVisible(null, persistentAdapter, Where.ANYWHERE);
+        final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertTrue(visible.isAllowed());
     }
 
@@ -157,7 +157,7 @@ public class ObjectMemberAbstractTest {
                 return "Hidden";
             }
         });
-        assertFalse(testMember.isVisible(null, persistentAdapter, Where.ANYWHERE).isAllowed());
+        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
     @Test
@@ -168,7 +168,7 @@ public class ObjectMemberAbstractTest {
                 return "hidden";
             }
         });
-        assertFalse(testMember.isVisible(null, persistentAdapter, Where.ANYWHERE).isAllowed());
+        assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
     @Test
@@ -217,13 +217,19 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter target, Where where) {
-        return new PropertyUsabilityContext(DeploymentCategory.PRODUCTION, session, invocationMethod, target, getIdentifier(), where);
+    public UsabilityContext<?> createUsableInteractionContext(
+            final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new PropertyUsabilityContext(DeploymentCategory.PRODUCTION, session, interactionInitiatedBy, target, getIdentifier(), where);
     }
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new PropertyVisibilityContext(DeploymentCategory.PRODUCTION, session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+    public VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new PropertyVisibilityContext(DeploymentCategory.PRODUCTION, session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////

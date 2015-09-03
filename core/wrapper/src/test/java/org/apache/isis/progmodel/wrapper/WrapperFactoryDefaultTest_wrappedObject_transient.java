@@ -45,6 +45,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -194,10 +195,11 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
                 
-                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter, Where.ANYWHERE);
+                allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
                 
-                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter, Where.ANYWHERE);
+                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
+                );
                 will(returnValue(usabilityConsent));
             }
         });
@@ -219,13 +221,15 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         context.checking(new Expectations() {
             {
-                allowing(mockPasswordMember).isVisible(session, mockEmployeeAdapter, Where.ANYWHERE);
+                allowing(mockPasswordMember).isVisible(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
                 will(returnValue(visibilityConsent));
                 
-                allowing(mockPasswordMember).isUsable(session, mockEmployeeAdapter, Where.ANYWHERE);
+                allowing(mockPasswordMember).isUsable(mockEmployeeAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE
+                );
                 will(returnValue(usabilityConsent));
                 
-                allowing(mockPasswordMember).isAssociationValid(mockEmployeeAdapter, mockPasswordAdapter);
+                allowing(mockPasswordMember).isAssociationValid(mockEmployeeAdapter, mockPasswordAdapter,
+                        InteractionInitiatedBy.USER);
                 will(returnValue(validityConsent));
             }
         });
@@ -236,7 +240,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
 
-                oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter);
+                oneOf(mockPasswordMember).set(mockEmployeeAdapter, mockPasswordAdapter, InteractionInitiatedBy.USER);
             }
         });
 
@@ -252,7 +256,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));
                 will(returnValue(facets));
                 
-                oneOf(mockPasswordMember).get(mockEmployeeAdapter);
+                oneOf(mockPasswordMember).get(mockEmployeeAdapter, InteractionInitiatedBy.USER);
                 will(returnValue(mockPasswordAdapter));
             }
         });

@@ -25,7 +25,7 @@ import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 
 /**
@@ -36,7 +36,7 @@ public abstract class UsabilityContext<T extends UsabilityEvent> extends Interac
 
     private final Where where;
 
-    public UsabilityContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final Identifier identifier, final ObjectAdapter target, final Where where) {
+    public UsabilityContext(final InteractionContextType interactionType, DeploymentCategory deploymentCategory, final AuthenticationSession session, final InteractionInitiatedBy invocationMethod, final Identifier identifier, final ObjectAdapter target, final Where where) {
         super(interactionType, deploymentCategory, session, invocationMethod, identifier, target);
         this.where = where;
     }

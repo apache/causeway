@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -70,7 +71,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         private ObjectSpecification objectSpec;
 
         @Override
-        public ObjectAdapter get(final ObjectAdapter owner) {
+        public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
             return null;
         }
 
@@ -85,7 +86,10 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public String isValid(final ObjectAdapter adapter, final Object proposedValue, final Localization localization) {
+        public String isValid(
+                final ObjectAdapter adapter,
+                final Object proposedValue,
+                final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
             return null;
         }
 

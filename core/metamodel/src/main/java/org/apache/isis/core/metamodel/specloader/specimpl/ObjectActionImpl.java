@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -281,8 +281,11 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public VisibilityContext<?> createVisibleInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new ActionVisibilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+    public VisibilityContext<?> createVisibleInteractionContext(
+            final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new ActionVisibilityContext(getDeploymentCategory(), session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -290,45 +293,55 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public UsabilityContext<?> createUsableInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObjectAdapter, Where where) {
-        return new ActionUsabilityContext(getDeploymentCategory(), session, invocationMethod, targetObjectAdapter, getIdentifier(), where);
+    public UsabilityContext<?> createUsableInteractionContext(
+            final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
+            Where where) {
+        final AuthenticationSession session = getAuthenticationSession();
+        return new ActionUsabilityContext(getDeploymentCategory(), session, interactionInitiatedBy, targetObjectAdapter, getIdentifier(), where);
     }
 
     // //////////////////////////////////////////////////////////////////
     // validate
     // //////////////////////////////////////////////////////////////////
 
-    /**
-     * TODO: currently this method is hard-coded to assume all interactions are
-     * initiated {@link InteractionInvocationMethod#BY_USER by user}.
-     */
     @Override
-    public Consent isProposedArgumentSetValid(final ObjectAdapter target, final ObjectAdapter[] proposedArguments) {
-        return isProposedArgumentSetValidResultSet(target, proposedArguments).createConsent();
+    public Consent isProposedArgumentSetValid(
+            final ObjectAdapter target,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return isProposedArgumentSetValidResultSet(target, proposedArguments, interactionInitiatedBy).createConsent();
     }
 
-    private InteractionResultSet isProposedArgumentSetValidResultSet(final ObjectAdapter object, final ObjectAdapter[] proposedArguments) {
-        final InteractionInvocationMethod invocationMethod = InteractionInvocationMethod.BY_USER;
+    private InteractionResultSet isProposedArgumentSetValidResultSet(
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
         final InteractionResultSet resultSet = new InteractionResultSet();
         final List<ObjectActionParameter> actionParameters = getParameters();
         if (proposedArguments != null) {
             for (int i = 0; i < proposedArguments.length; i++) {
-                final ValidityContext<?> ic = actionParameters.get(i).createProposedArgumentInteractionContext(getAuthenticationSession(), invocationMethod, object, proposedArguments, i);
+                final ValidityContext<?> ic =
+                        actionParameters.get(i).createProposedArgumentInteractionContext(
+                                objectAdapter, proposedArguments, i, interactionInitiatedBy
+                        );
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
             }
         }
         // only check the action's own validity if all the arguments are OK.
         if (resultSet.isAllowed()) {
-            final ValidityContext<?> ic = createActionInvocationInteractionContext(getAuthenticationSession(), invocationMethod, object, proposedArguments);
+            final ValidityContext<?> ic = createActionInvocationInteractionContext(
+                    objectAdapter, proposedArguments, interactionInitiatedBy);
             InteractionUtils.isValidResultSet(this, ic, resultSet);
         }
         return resultSet;
     }
 
-    @Override
-    public ActionInvocationContext createActionInvocationInteractionContext(final AuthenticationSession session, final InteractionInvocationMethod invocationMethod, final ObjectAdapter targetObject, final ObjectAdapter[] proposedArguments) {
-        return new ActionInvocationContext(getDeploymentCategory(), getAuthenticationSession(), invocationMethod, targetObject, getIdentifier(), proposedArguments);
+    private ActionInvocationContext createActionInvocationInteractionContext(
+            final ObjectAdapter targetObject,
+            final ObjectAdapter[] proposedArguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        return new ActionInvocationContext(getDeploymentCategory(), getAuthenticationSession(), interactionInitiatedBy, targetObject, getIdentifier(), proposedArguments);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -336,36 +349,44 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter executeWithRuleChecking(final ObjectAdapter target, final ObjectAdapter[] arguments, final AuthenticationSession authenticationSession, final Where where) {
+    public ObjectAdapter executeWithRuleChecking(
+            final ObjectAdapter target,
+            final ObjectAdapter[] arguments,
+            final AuthenticationSession authenticationSession,
+            final Where where, final InteractionInitiatedBy interactionInitiatedBy) {
 
         // see it?
-        final Consent visibility = isVisible(authenticationSession, target, where);
+        final Consent visibility = isVisible(target, interactionInitiatedBy, where);
         if (visibility.isVetoed()) {
             throw new AuthorizationException();
         }
 
         // use it?
-        final Consent usability = isUsable(authenticationSession, target, where);
+        final Consent usability = isUsable(target, interactionInitiatedBy, where);
         if(usability.isVetoed()) {
             throw new AuthorizationException();
         }
 
         // do it?
-        final Consent validity = isProposedArgumentSetValid(target, arguments);
+        final Consent validity = isProposedArgumentSetValid(target, arguments, interactionInitiatedBy);
         if(validity.isVetoed()) {
             throw new RecoverableException(validity.getReason());
         }
 
-        return execute(target, arguments);
+        return execute(target, arguments, interactionInitiatedBy);
     }
 
     @Override
-    public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] arguments) {
+    public ObjectAdapter execute(
+            final ObjectAdapter target,
+            final ObjectAdapter[] arguments,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         if(LOG.isDebugEnabled()) {
             LOG.debug("execute action " + target + "." + getId());
         }
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(this, target, arguments, getAuthenticationSession(), getDeploymentCategory());
+        return facet.invoke(this, target, arguments, getAuthenticationSession(), getDeploymentCategory(),
+                interactionInitiatedBy);
     }
 
     protected ActionInvocationFacet getActionInvocationFacet() {
@@ -436,9 +457,11 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory) {
+            final AuthenticationSession authenticationSessionUNUSED,
+            final DeploymentCategory deploymentCategory,
+            final InteractionInitiatedBy interactionInitiatedBy) {
 
+        final AuthenticationSession session = getAuthenticationSession();
         final int parameterCount = getParameterCount();
         Object[][] parameterChoicesPojos;
 
@@ -447,7 +470,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         if (!facet.isNoop()) {
             // using the old choicesXxx() approach
-            parameterChoicesPojos = facet.getChoices(target, authenticationSession, deploymentCategory);
+            parameterChoicesPojos = facet.getChoices(target, session, deploymentCategory,
+                    interactionInitiatedBy);
 
             // if no options, or not the right number of pojos, then default
             if (parameterChoicesPojos == null) {
@@ -465,8 +489,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null, authenticationSession,
-                            deploymentCategory);
+                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null, session,
+                            deploymentCategory, interactionInitiatedBy);
                 } else {
                     parameterChoicesPojos[i] = new Object[0];
                 }

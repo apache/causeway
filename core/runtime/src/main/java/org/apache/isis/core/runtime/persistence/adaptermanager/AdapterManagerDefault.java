@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.*;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -590,14 +591,14 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     private void remapContainedAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
         for (final ObjectAssociation association: adapter.getSpecification().getAssociations(Contributed.EXCLUDED)) {
             if (association.isOneToManyAssociation() && !association.isNotPersisted()) {
-                final ObjectAdapter collection = association.get(adapter);
+                final ObjectAdapter collection = association.get(adapter, InteractionInitiatedBy.FRAMEWORK);
                 final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
                 for (final ObjectAdapter element : facet.iterable(collection)) {
                    remapAggregatedObject(element, persistedRootOid);
                 }
                 
             } else if (association.getSpecification().isParented()) {
-                final ObjectAdapter referencedAdapter = association.get(adapter);
+                final ObjectAdapter referencedAdapter = association.get(adapter, InteractionInitiatedBy.FRAMEWORK);
     
                 if(referencedAdapter == null) {
                     continue;
@@ -621,7 +622,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
 	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
-        return accessor.getProperty(ownerAdapter, null, null);
+        return accessor.getProperty(ownerAdapter, null, null, InteractionInitiatedBy.FRAMEWORK);
     }
 
 

@@ -43,6 +43,7 @@ import org.apache.wicket.validation.ValidationError;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
@@ -401,7 +402,8 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
                 final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
                 final List<ObjectAdapter> autoCompleteAdapters =
-                        autoCompleteFacet.execute(term, getAuthenticationSession(), getDeploymentCategory());
+                        autoCompleteFacet.execute(term, getAuthenticationSession(), getDeploymentCategory(),
+                                InteractionInitiatedBy.USER);
                 // take a copy otherwise so is eagerly evaluated and memento objects correctly built
                 return Lists.newArrayList(
                         Lists.transform(autoCompleteAdapters, ObjectAdapterMemento.Functions.fromAdapter()));

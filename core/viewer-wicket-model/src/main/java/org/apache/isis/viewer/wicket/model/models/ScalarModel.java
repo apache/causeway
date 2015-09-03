@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -101,7 +102,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
                 try {
                     final AuthenticationSession session = scalarModel.getAuthenticationSession();
-                    final Consent usable = property.isUsable(session, parentAdapter, where);
+                    final Consent usable = property.isUsable(parentAdapter, InteractionInitiatedBy.USER, where);
                     return usable.isAllowed() ? null : usable.getReason();
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -117,10 +118,13 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 }
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-                    final ObjectAdapter currentValue = property.get(parentAdapter);
+                    final ObjectAdapter currentValue = property.get(parentAdapter, InteractionInitiatedBy.USER);
                     final Localization localization = IsisContext.getLocalization();
-                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr, localization);
-                    final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter);
+                    final ObjectAdapter proposedAdapter = parseableFacet.parseTextEntry(currentValue, proposedPojoAsStr,
+                            InteractionInitiatedBy.USER, localization
+                    );
+                    final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
+                            InteractionInitiatedBy.USER);
                     return valid.isAllowed() ? null : valid.getReason();
                 } catch (final ConcurrencyException ex) {
                     // disregard concurrency exceptions because will pick up at the IFormValidator level rather
@@ -136,7 +140,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
                 try {
-                    final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter);
+                    final Consent valid = property.isAssociationValid(parentAdapter, proposedAdapter,
+                            InteractionInitiatedBy.USER);
                     return valid.isAllowed() ? null : valid.getReason();
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -178,7 +183,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                                         .getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                                 return property.getChoices(
                                         parentAdapter,
-                                        authenticationSession, deploymentCategory);
+                                        InteractionInitiatedBy.USER);
                             }
                         });
 
@@ -208,7 +213,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                             public ObjectAdapter[] call() throws Exception {
                                 return property.getAutoComplete(
                                         parentAdapter, searchArg,
-                                        authenticationSession, deploymentCategory);
+                                        authenticationSession, deploymentCategory, InteractionInitiatedBy.USER);
                             }
                         });
                 return choicesAsList(choices);
@@ -277,7 +282,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                         InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
                             @Override
                             public ObjectAdapter call() throws Exception {
-                                return property.get(parentAdapter);
+                                return property.get(parentAdapter, InteractionInitiatedBy.USER);
                             }
                         });
                 scalarModel.setObject(associatedAdapter);
@@ -324,7 +329,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                     Localization localization = IsisContext.getLocalization(); 
-                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr, localization);
+                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedPojoAsStr,
+                            InteractionInitiatedBy.USER, localization
+                    );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -337,7 +344,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 try {
                     final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                     Localization localization = IsisContext.getLocalization();
-                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(), localization);
+                    final String invalidReasonIfAny = parameter.isValid(parentAdapter, proposedAdapter.getObject(),
+                            InteractionInitiatedBy.USER, localization
+                    );
                     return invalidReasonIfAny;
                 } catch (final Exception ex) {
                     return ex.getLocalizedMessage();
@@ -378,7 +387,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                         public ObjectAdapter[] call() throws Exception {
                             return actionParameter.getChoices(
                                     parentAdapter, argumentsIfAvailable,
-                                    authenticationSession, deploymentCategory);
+                                    InteractionInitiatedBy.USER);
                         }
                     });
                 return choicesAsList(choices);
@@ -406,7 +415,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                         @Override public ObjectAdapter[] call() throws Exception {
                             return actionParameter.getAutoComplete(
                                     parentAdapter, searchArg,
-                                    authenticationSession, deploymentCategory);
+                                    InteractionInitiatedBy.USER);
                         }
                     });
                 return choicesAsList(choices);
@@ -596,7 +605,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
                     @Override
                     public ObjectAdapter call() throws Exception {
-                        return property.get(parentAdapter);
+                        return property.get(parentAdapter, InteractionInitiatedBy.USER);
                     }
                 });
         setObject(associatedAdapter);
@@ -669,7 +678,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             throw new RuntimeException("unable to parse string for " + getTypeOfSpecification().getFullIdentifier());
         }
         Localization localization = IsisContext.getLocalization(); 
-        final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText, localization);
+        final ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(), enteredText,
+                InteractionInitiatedBy.USER, localization
+        );
 
         setObject(adapter);
     }

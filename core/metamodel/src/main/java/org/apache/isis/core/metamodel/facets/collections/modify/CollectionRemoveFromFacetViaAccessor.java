@@ -24,9 +24,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
@@ -56,7 +56,10 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
     }
 
     @Override
-    public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
+    public void remove(
+            final ObjectAdapter owningAdapter,
+            final ObjectAdapter elementAdapter,
+            final InteractionInitiatedBy interactionInitiatedBy) {
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.remove(ObjectAdapter.Util.unwrap(elementAdapter));
