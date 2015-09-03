@@ -30,14 +30,11 @@ import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.applib.util.Enums;
 
 /**
- * Indicates that an instance cannot be persisted by a user, but only
- * programmatically.
+ * No longer supported - the MetaModel validator will reject any domain classes annotated with this annotation.
  *
- * <p>
- *     This annotation is only partly supported by the framework, and may be deprecated
- *     in the future.
- * </p>
+ * @deprecated
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
@@ -48,6 +45,9 @@ public @interface NotPersistable {
         USER_OR_PROGRAM;
         
         public static By lookupForMarkerInterface(final Class<?> cls) {
+            if(cls.isInterface()) {
+                return null;
+            }
             if (ProgramPersistable.class.isAssignableFrom(cls)) {
                 return USER;
             } else if (NonPersistable.class.isAssignableFrom(cls)) {

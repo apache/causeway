@@ -19,33 +19,67 @@
 
 package org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistablemarkerifc;
 
-import java.lang.reflect.Method;
-
 import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.marker.NonPersistable;
+import org.apache.isis.applib.marker.ProgramPersistable;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class NotPersistableFacetMarkerInterfaceFactory extends FacetFactoryAbstract {
+public class NotPersistableFacetMarkerInterfaceFactory extends FacetFactoryAbstract implements
+        MetaModelValidatorRefiner {
 
     public NotPersistableFacetMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
-    public boolean recognizes(final Method method) {
-        return false;
-    }
-
     @Override
-    public void process(final ProcessClassContext processClassContaxt) {
-        final NotPersistable.By initiatedBy = NotPersistable.By.lookupForMarkerInterface(processClassContaxt.getCls());
-        FacetUtil.addFacet(create(initiatedBy, processClassContaxt.getFacetHolder()));
+    public void process(final ProcessClassContext processClassContext) {
+        final NotPersistable.By initiatedBy = NotPersistable.By.lookupForMarkerInterface(processClassContext.getCls());
+        FacetUtil.addFacet(create(initiatedBy, processClassContext.getFacetHolder()));
     }
 
     private NotPersistableFacet create(final NotPersistable.By initiatedBy, final FacetHolder holder) {
         return initiatedBy != null ? new NotPersistableFacetMarkerInterface(initiatedBy, holder) : null;
+    }
+
+    @Override
+    public void refineMetaModelValidator(
+            final MetaModelValidatorComposite metaModelValidator, final IsisConfiguration configuration) {
+        metaModelValidator.add(new MetaModelValidatorVisiting(newValidatorVisitor()));
+    }
+
+    private MetaModelValidatorVisiting.Visitor newValidatorVisitor() {
+        return new MetaModelValidatorVisiting.Visitor() {
+            @Override
+            public boolean visit(
+                    final ObjectSpecification objectSpec,
+                    final ValidationFailures validationFailures) {
+
+                if (objectSpec.containsDoOpFacet(NotPersistableFacet.class)) {
+                    final NotPersistableFacet notPersistableFacet = objectSpec.getFacet(NotPersistableFacet.class);
+                    if(notPersistableFacet instanceof NotPersistableFacetMarkerInterface) {
+                        final NotPersistable.By by = ((NotPersistableFacetMarkerInterface) notPersistableFacet).value();
+                        final Class<?> type =
+                                by == NotPersistable.By.USER
+                                    ? ProgramPersistable.class
+                                    : NonPersistable.class;
+                        validationFailures.add(String.format(
+                                "%s implements %s; this interface is no longer supported",
+                                objectSpec.getFullIdentifier(), type.getSimpleName()));
+                    }
+                }
+                return true;
+            }
+        };
     }
 
 }

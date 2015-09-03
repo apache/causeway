@@ -39,9 +39,7 @@ public interface DisablingInteractionAdvisor extends InteractionAdvisorFacet, Di
      * Implementations should use the provided {@link InteractionContext} to
      * determine whether they disable the member from being modified or used.
      * They must however guard against a <tt>null</tt>
-     * {@link InteractionContext#getTarget() target} and
-     * {@link InteractionContext#getSession() session} - neither are guaranteed
-     * to be populated.
+     * {@link InteractionContext#getTarget() target} - this is not guaranteed to be populated.
      */
     String disables(final UsabilityContext<? extends UsabilityEvent> ic);
 

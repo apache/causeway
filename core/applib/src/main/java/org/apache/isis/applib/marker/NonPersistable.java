@@ -19,13 +19,12 @@
 
 package org.apache.isis.applib.marker;
 
-import org.apache.isis.applib.annotation.NotPersisted;
-
 /**
- * Marker interface to show that an object cannot be persisted.
- * 
- * Use {@link NotPersisted} annotation in preference to this marker interface.
+ * No longer supported - the MetaModel validator will reject any domain classes that implement this marker interface.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface NonPersistable {
 
 }
