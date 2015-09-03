@@ -23,7 +23,12 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+
 import com.google.common.collect.Lists;
+
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpiDelegator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,6 +66,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
     protected void injectSubcomponentsInto(final Object candidate) {
         getAdapterManager().injectInto(candidate);
         getAuthenticationSessionProvider().injectInto(candidate);
+        getDeploymentCategoryProvider().injectInto(candidate);
         getServicesInjector().injectInto(candidate);
         getDomainObjectServices().injectInto(candidate);
         getLocalizationProvider().injectInto(candidate);
@@ -71,6 +77,17 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getServicesProvider().injectInto(candidate);
         getSpecificationLoader().injectInto(candidate);
     }
+
+    @Override
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return new DeploymentCategoryProviderAbstract() {
+            @Override
+            public DeploymentCategory getDeploymentCategory() {
+                return RuntimeContextAbstract.this.getDeploymentCategory();
+            }
+        };
+    }
+
 
     @Override
     public SpecificationLoader getSpecificationLoader() {

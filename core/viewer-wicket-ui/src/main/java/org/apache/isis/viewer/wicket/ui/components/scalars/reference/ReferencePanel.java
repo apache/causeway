@@ -44,7 +44,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -527,10 +526,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return autoCompleteFacet != null;
     }
 
-
-    private DeploymentCategory getDeploymentCategory() {
-        return getDeploymentType().getDeploymentCategory();
-    }
 
     @Inject
     private WicketViewerSettings wicketViewerSettings;

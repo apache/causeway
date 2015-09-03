@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class PropertyAccessorFacetViaAccessor
@@ -76,8 +75,7 @@ public class PropertyAccessorFacetViaAccessor
             return null;
         }
 
-        boolean filterForVisibility = InteractionUtils.FILTERING.get() && getConfiguration()
-                .getBoolean("isis.reflector.facet.filterVisibility", true);
+        boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(referencedObject);
             final boolean visible = ObjectAdapter.Util

@@ -19,8 +19,11 @@
 
 package org.apache.isis.core.metamodel.deployment;
 
-import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.applib.annotation.Programmatic;
 
-public interface DeploymentCategoryProvider extends Injectable {
-    public DeploymentCategory getDeploymentCategory();
+public interface DeploymentCategoryProviderAware {
+
+    @Programmatic
+    public void setDeploymentCategoryProvider(DeploymentCategoryProvider deploymentCategoryProvider);
+
 }

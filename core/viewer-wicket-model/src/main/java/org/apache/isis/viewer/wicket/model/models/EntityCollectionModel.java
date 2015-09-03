@@ -107,14 +107,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
                 final ObjectAdapter adapter = entityCollectionModel.parentObjectAdapterMemento.getObjectAdapter(
                         ConcurrencyChecking.NO_CHECK);
                 final OneToManyAssociation collection = entityCollectionModel.collectionMemento.getCollection();
-                final ObjectAdapter collectionAsAdapter =
-                        InteractionUtils.withFiltering(
-                                new Callable<ObjectAdapter>() {
-                                    @Override
-                                    public ObjectAdapter call() throws Exception {
-                                        return collection.get(adapter, InteractionInitiatedBy.USER);
-                                   }
-                                });
+                final ObjectAdapter collectionAsAdapter = collection.get(adapter, InteractionInitiatedBy.USER);
 
                 final List<Object> objectList = asIterable(collectionAsAdapter);
 

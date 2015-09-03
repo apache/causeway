@@ -20,18 +20,20 @@
 package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
+
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IFormSubmitter;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.CssResourceReference;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.isis.PersistenceSessionProvider;
@@ -40,7 +42,9 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistryAcc
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 
-public abstract class FormAbstract<T> extends Form<T> implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider, PersistenceSessionProvider {
+public abstract class FormAbstract<T> extends Form<T>
+        implements IHeaderContributor, ComponentFactoryRegistryAccessor, PageClassRegistryAccessor,
+        AuthenticationSessionProvider, DeploymentCategoryProvider, PersistenceSessionProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -121,6 +125,12 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
         return IsisContext.getAuthenticationSession();
     }
 
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
+    // UNUSED ?
     protected List<ObjectAdapter> getServiceAdapters() {
         return IsisContext.getPersistenceSession().getServices();
     }
@@ -134,6 +144,10 @@ public abstract class FormAbstract<T> extends Form<T> implements IHeaderContribu
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
+        }
+        if (DeploymentCategoryProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final DeploymentCategoryProviderAware cast = DeploymentCategoryProviderAware.class.cast(candidate);
+            cast.setDeploymentCategoryProvider(this);
         }
     }
 

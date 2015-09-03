@@ -175,17 +175,11 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                     final DeploymentCategory deploymentCategory) {
                 final PropertyMemento propertyMemento = scalarModel.getPropertyMemento();
                 final OneToOneAssociation property = propertyMemento.getProperty();
-                final ObjectAdapter[] choices =
-                        InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
-                            @Override
-                            public ObjectAdapter[] call() throws Exception {
-                                ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento
-                                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                                return property.getChoices(
-                                        parentAdapter,
-                                        InteractionInitiatedBy.USER);
-                            }
-                        });
+                ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento
+                        .getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+                final ObjectAdapter[] choices = property.getChoices(
+                        parentAdapter,
+                        InteractionInitiatedBy.USER);
 
                 return choicesAsList(choices);
             }
@@ -208,14 +202,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
                 final ObjectAdapter[] choices =
-                        InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
-                            @Override
-                            public ObjectAdapter[] call() throws Exception {
-                                return property.getAutoComplete(
-                                        parentAdapter, searchArg,
-                                        authenticationSession, deploymentCategory, InteractionInitiatedBy.USER);
-                            }
-                        });
+                        property.getAutoComplete(
+                                parentAdapter, searchArg,
+                                authenticationSession, deploymentCategory, InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
 
@@ -279,12 +268,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                 final ObjectAdapter associatedAdapter =
-                        InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                            @Override
-                            public ObjectAdapter call() throws Exception {
-                                return property.get(parentAdapter, InteractionInitiatedBy.USER);
-                            }
-                        });
+                        property.get(parentAdapter, InteractionInitiatedBy.USER);
                 scalarModel.setObject(associatedAdapter);
             }
         },
@@ -382,14 +366,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
                 final ObjectAdapter[] choices =
-                    InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
-                        @Override
-                        public ObjectAdapter[] call() throws Exception {
-                            return actionParameter.getChoices(
-                                    parentAdapter, argumentsIfAvailable,
-                                    InteractionInitiatedBy.USER);
-                        }
-                    });
+                        actionParameter.getChoices(
+                                parentAdapter, argumentsIfAvailable,
+                                InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
 
@@ -410,14 +389,9 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
                 final ObjectAdapter parentAdapter =
                         scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
-                final ObjectAdapter[] choices =
-                    InteractionUtils.withFiltering(new Callable<ObjectAdapter[]>() {
-                        @Override public ObjectAdapter[] call() throws Exception {
-                            return actionParameter.getAutoComplete(
-                                    parentAdapter, searchArg,
-                                    InteractionInitiatedBy.USER);
-                        }
-                    });
+                final ObjectAdapter[] choices = actionParameter.getAutoComplete(
+                        parentAdapter, searchArg,
+                        InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
 
@@ -601,13 +575,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     private void getAndStore(final ObjectAdapterMemento parentAdapterMemento) {
         final OneToOneAssociation property = propertyMemento.getProperty();
         final ObjectAdapter parentAdapter = parentAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
-        final ObjectAdapter associatedAdapter =
-                InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                    @Override
-                    public ObjectAdapter call() throws Exception {
-                        return property.get(parentAdapter, InteractionInitiatedBy.USER);
-                    }
-                });
+        final ObjectAdapter associatedAdapter = property.get(parentAdapter, InteractionInitiatedBy.USER);
         setObject(associatedAdapter);
     }
 

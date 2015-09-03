@@ -28,6 +28,9 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -41,7 +44,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider {
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider,
+        DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -114,7 +118,7 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     }
 
 
-        // ///////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////////
     // Convenience
     // ///////////////////////////////////////////////////////////////////
 
@@ -129,6 +133,12 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         final AuthenticationSessionProvider asa = (AuthenticationSessionProvider) Session.get();
         return asa.getAuthenticationSession();
     }
+
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
 
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)
@@ -162,6 +172,10 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
+        }
+        if (DeploymentCategoryProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final DeploymentCategoryProviderAware cast = DeploymentCategoryProviderAware.class.cast(candidate);
+            cast.setDeploymentCategoryProvider(this);
         }
     }
 

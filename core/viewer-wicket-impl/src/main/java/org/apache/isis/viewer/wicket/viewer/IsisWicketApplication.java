@@ -19,20 +19,13 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
-import de.agilecoders.wicket.core.settings.BootstrapSettings;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.webjars.WicketWebjars;
-import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
-import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
-import net.ftlines.wicketsource.WicketSource;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
+
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
@@ -43,6 +36,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.vaynberg.wicket.select2.ApplicationSettings;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
 import org.apache.wicket.IConverterLocator;
@@ -66,6 +60,7 @@ import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
@@ -78,6 +73,8 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderCl
 import org.apache.isis.core.commons.resource.ResourceStreamSourceCurrentClassClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelInvalidException;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisInjectModule;
@@ -112,6 +109,15 @@ import org.apache.isis.viewer.wicket.viewer.integration.wicket.ConverterForObjec
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
 
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapBaseBehavior;
+import de.agilecoders.wicket.core.settings.BootstrapSettings;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.webjars.WicketWebjars;
+import de.agilecoders.wicket.webjars.settings.IWebjarsSettings;
+import de.agilecoders.wicket.webjars.settings.WebjarsSettings;
+import net.ftlines.wicketsource.WicketSource;
+
 /**
  * Main application, subclassing the Wicket {@link Application} and
  * bootstrapping Isis.
@@ -135,7 +141,10 @@ import org.apache.isis.viewer.wicket.viewer.settings.IsisResourceSettings;
  * Alternatively, {@link ComponentFactory}s can be specified by overridding {@link #newIsisWicketModule()}.
  * This mechanism allows a number of other aspects to be customized.
  */
-public class IsisWicketApplication extends AuthenticatedWebApplication implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider {
+public class IsisWicketApplication
+        extends AuthenticatedWebApplication
+        implements ComponentFactoryRegistryAccessor, PageClassRegistryAccessor, AuthenticationSessionProvider,
+        DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
     
@@ -802,5 +811,10 @@ public class IsisWicketApplication extends AuthenticatedWebApplication implement
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
+    }
+
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentType.getDeploymentCategory();
     }
 }

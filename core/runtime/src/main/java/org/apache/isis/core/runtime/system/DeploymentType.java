@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 
 /**
@@ -54,7 +54,7 @@ import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
  * {@link DeploymentType}, eg using the <tt>--type</tt> command line arg</li>
  * </ul>
  */
-public class DeploymentType implements DeploymentCategoryProvider {
+public class DeploymentType extends DeploymentCategoryProviderAbstract {
 
     private static List<DeploymentType> deploymentTypes = Lists.newArrayList();
 

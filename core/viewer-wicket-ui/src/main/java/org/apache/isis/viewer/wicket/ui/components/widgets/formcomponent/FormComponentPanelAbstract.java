@@ -20,16 +20,21 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent;
 
 import java.util.List;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -44,7 +49,8 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Wicket {@link FormComponentPanel}, providing the ability to build up the
  * panel using other {@link ComponentType}s.
  */
-public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T> implements PersistenceSessionProvider, AuthenticationSessionProvider {
+public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T>
+        implements PersistenceSessionProvider, AuthenticationSessionProvider, DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -137,6 +143,11 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         return ((AuthenticationSessionProvider) Session.get()).getAuthenticationSession();
     }
 
+    @Override
+    public DeploymentCategory getDeploymentCategory() {
+        return IsisContext.getDeploymentType().getDeploymentCategory();
+    }
+
     // ///////////////////////////////////////////////////////////////////
     // Dependencies (from IsisContext)
     // ///////////////////////////////////////////////////////////////////
@@ -160,6 +171,10 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
         if (AuthenticationSessionProviderAware.class.isAssignableFrom(candidate.getClass())) {
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
+        }
+        if (DeploymentCategoryProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final DeploymentCategoryProviderAware cast = DeploymentCategoryProviderAware.class.cast(candidate);
+            cast.setDeploymentCategoryProvider(this);
         }
     }
 

@@ -406,7 +406,7 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
             final VisibilityContext<?> context = createVisibleInteractionContext(adapter, authenticationSession,
                     deploymentCategory, interactionInitiatedBy);
             InteractionResult visibleResult = InteractionUtils.isVisibleResult(objectSpecification, context);
-            return true || visibleResult.isNotVetoing();
+            return visibleResult.isNotVetoing();
         }
 
         private static VisibilityContext<?> createVisibleInteractionContext(

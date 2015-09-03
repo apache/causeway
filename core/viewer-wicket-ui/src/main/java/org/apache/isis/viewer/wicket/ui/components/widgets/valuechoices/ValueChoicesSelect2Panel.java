@@ -38,7 +38,6 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
@@ -284,10 +283,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     public ScalarModel getScalarModel() {
         return scalarModel;
-    }
-
-    private DeploymentCategory getDeploymentCategory() {
-        return getDeploymentType().getDeploymentCategory();
     }
 
     @Inject

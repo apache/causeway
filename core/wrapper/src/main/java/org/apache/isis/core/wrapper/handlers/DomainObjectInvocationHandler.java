@@ -26,7 +26,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -61,7 +60,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet.Intent;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -389,15 +387,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-        final ObjectAdapter currentReferencedAdapter =
-                executionMode.shouldEnforceRules()
-                        ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                                @Override
-                                public ObjectAdapter call() throws Exception {
-                                    return property.get(targetAdapter, interactionInitiatedBy);
-                                }
-                            })
-                        : property.get(targetAdapter, interactionInitiatedBy);
+        final ObjectAdapter currentReferencedAdapter = property.get(targetAdapter, interactionInitiatedBy);
 
         final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
@@ -467,15 +457,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
-        final ObjectAdapter currentReferencedAdapter =
-                executionMode.shouldEnforceRules()
-                        ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                                @Override
-                                public ObjectAdapter call() throws Exception {
-                                    return collection.get(targetAdapter, interactionInitiatedBy);
-                                }
-                            })
-                        : collection.get(targetAdapter, interactionInitiatedBy);
+        final ObjectAdapter currentReferencedAdapter = collection.get(targetAdapter, interactionInitiatedBy);
 
         final Object currentReferencedObj = ObjectAdapter.Util.unwrap(currentReferencedAdapter);
 
@@ -650,15 +632,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (getExecutionMode().shouldExecute()) {
             final InteractionInitiatedBy interactionInitiatedBy = getInteractionInitiatedBy();
             final ObjectAdapter actionReturnNO =
-                    executionMode.shouldEnforceRules()
-                            ? InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                                    @Override
-                                    public ObjectAdapter call() throws Exception {
-                                        return objectAction.execute(targetAdapter, argAdapters,
-                                                interactionInitiatedBy);
-                                    }
-                                })
-                            : objectAction.execute(targetAdapter, argAdapters, interactionInitiatedBy);
+                    objectAction.execute(targetAdapter, argAdapters, interactionInitiatedBy);
 
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }

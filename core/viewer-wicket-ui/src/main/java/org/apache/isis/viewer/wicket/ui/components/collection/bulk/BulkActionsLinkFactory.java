@@ -128,8 +128,9 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
                             bulkInteractionContext.setIndex(i++);
                         }
 
-                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{}, getAuthenticationSession(), ActionModel.WHERE_FOR_ACTION_INVOCATION,
-                                InteractionInitiatedBy.USER);
+                        lastReturnedAdapter = objectAction.executeWithRuleChecking(adapter, new ObjectAdapter[]{}, getAuthenticationSession(),
+                                InteractionInitiatedBy.USER, ActionModel.WHERE_FOR_ACTION_INVOCATION
+                        );
                     }
 
 

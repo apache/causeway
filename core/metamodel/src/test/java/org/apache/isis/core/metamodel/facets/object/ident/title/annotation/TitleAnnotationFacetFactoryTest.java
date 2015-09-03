@@ -31,9 +31,13 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -57,6 +61,12 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
     @Allowing
     @Mock
     private LocalizationProvider mockLocalizationProvider;
+    @Mock
+    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    @Mock
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
+    private AuthenticationSession mockAuthenticationSession;
 
     @Before
     public void setUp() throws Exception {
@@ -66,11 +76,25 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
         facetFactory = context.getClassUnderTest();
         facetFactory.setAdapterManager(mockAdapterManager);
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
 
         context.checking(new Expectations() {
             {
                 allowing(mockLocalizationProvider).getLocalization();
                 will(returnValue(new LocalizationDefault()));
+            }
+        });
+        context.checking(new Expectations() {
+            {
+                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+            }
+        });
+        context.checking(new Expectations() {
+            {
+                allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+                will(returnValue(mockAuthenticationSession));
             }
         });
     }

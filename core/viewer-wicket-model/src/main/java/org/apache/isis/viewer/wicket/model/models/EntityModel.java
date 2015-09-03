@@ -22,11 +22,12 @@ package org.apache.isis.viewer.wicket.model.models;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import com.google.common.collect.Maps;
+
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,7 +40,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
@@ -382,11 +382,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             final ScalarModel scalarModel = propertyScalarModels.get(pm);
             final ObjectAdapter adapter = getObject();
             final ObjectAdapter associatedAdapter =
-                    InteractionUtils.withFiltering(new Callable<ObjectAdapter>() {
-                        @Override public ObjectAdapter call() throws Exception {
-                            return  pm.getProperty().get(adapter, InteractionInitiatedBy.USER);
-                        }
-                    });
+                    pm.getProperty().get(adapter, InteractionInitiatedBy.USER);
             scalarModel.setObject(associatedAdapter);
         }
     }

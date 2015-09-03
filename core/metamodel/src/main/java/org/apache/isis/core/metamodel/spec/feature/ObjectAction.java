@@ -104,7 +104,8 @@ public interface ObjectAction extends ObjectMember {
             final ObjectAdapter target,
             final ObjectAdapter[] parameters,
             final AuthenticationSession authenticationSession,
-            final Where where, final InteractionInitiatedBy interactionInitiatedBy) throws AuthorizationException;
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) throws AuthorizationException;
 
     /**
      * Invokes the action's method on the target object given the specified set

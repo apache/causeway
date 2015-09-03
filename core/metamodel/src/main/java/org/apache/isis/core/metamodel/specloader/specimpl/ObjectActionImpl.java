@@ -353,7 +353,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final ObjectAdapter target,
             final ObjectAdapter[] arguments,
             final AuthenticationSession authenticationSession,
-            final Where where, final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Where where) {
 
         // see it?
         final Consent visibility = isVisible(target, interactionInitiatedBy, where);
