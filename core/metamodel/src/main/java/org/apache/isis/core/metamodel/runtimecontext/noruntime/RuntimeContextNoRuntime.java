@@ -37,11 +37,14 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstract;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
@@ -317,6 +320,16 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         };
     }
 
+    @Override
+    public TransactionStateProvider getTransactionStateProvider() {
+        return new TransactionStateProviderAbstract() {
+            @Override
+            public TransactionState getTransactionState() {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+        };
+    }
+
 
     @Override
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
@@ -393,13 +406,5 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         return localizationProvider;
     }
 
-    
-    // ///////////////////////////////////////////
-    // getTransactionState
-    // ///////////////////////////////////////////
-    
-    @Override
-    public TransactionState getTransactionState() {
-        throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-    }
+
 }

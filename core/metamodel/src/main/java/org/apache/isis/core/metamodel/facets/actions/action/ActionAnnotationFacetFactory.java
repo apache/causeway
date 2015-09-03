@@ -96,8 +96,11 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
 
-public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, RuntimeContextAware, MetaModelValidatorRefiner {
+public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, RuntimeContextAware, MetaModelValidatorRefiner,
+        TransactionStateProviderAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation actionSemanticsValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionSemantics.class);
     private final MetaModelValidatorForDeprecatedAnnotation actionInteractionValidator = new MetaModelValidatorForDeprecatedAnnotation(ActionInteraction.class);
@@ -117,6 +120,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private RuntimeContext runtimeContext;
+    private TransactionStateProvider transactionStateProvider;
 
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
@@ -211,7 +215,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), configuration, getServicesInjector(),
-                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext()
+                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext(),
+                                transactionStateProvider
                         ), processMethodContext);
             } else
             // deprecated (but more recently)
@@ -220,7 +225,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                                 getDeploymentCategory(), configuration, getServicesInjector(),
-                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext()
+                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext(),
+                                transactionStateProvider
                         ), processMethodContext);
             } else
             // current
@@ -229,7 +235,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                         getDeploymentCategory(), configuration, getServicesInjector(),
                         getAuthenticationSessionProvider(),
-                        getAdapterManager(), getRuntimeContext()
+                        getAdapterManager(), getRuntimeContext(), transactionStateProvider
                 );
             } else
             // default
@@ -237,7 +243,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
                         getDeploymentCategory(), configuration, getServicesInjector(), getAuthenticationSessionProvider(),
-                        getAdapterManager(), getRuntimeContext()
+                        getAdapterManager(), getRuntimeContext(), transactionStateProvider
                 );
             }
             FacetUtil.addFacet(actionInvocationFacet);
@@ -580,4 +586,8 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
         this.runtimeContext = runtimeContext;
     }
 
+    @Override
+    public void setTransactionStateProvider(final TransactionStateProvider transactionStateProvider) {
+        this.transactionStateProvider = transactionStateProvider;
+    }
 }

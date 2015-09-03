@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
 /**
  * Decouples the metamodel from a runtime.
@@ -41,6 +42,8 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
     public DeploymentCategoryProvider getDeploymentCategoryProvider();
+
+    public TransactionStateProvider getTransactionStateProvider();
 
     /**
      * A mechanism for returning the <tt>current</tt>
@@ -62,9 +65,6 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
     public ServicesProvider getServicesProvider();
 
-    /**
-     * aka the ServicesInjector...
-     */
     public ServicesInjector getServicesInjector();
 
     public ObjectDirtier getObjectDirtier();
@@ -74,86 +74,5 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
     public DomainObjectServices getDomainObjectServices();
 
     public LocalizationProvider getLocalizationProvider();
-
-
-    // ///////////////////////////////////////////
-    // transaction state
-    // ///////////////////////////////////////////
-
-    public TransactionState getTransactionState();
-
-    public static enum TransactionState {
-        
-        /**
-         * No transaction exists.
-         */
-        NONE,
-        /**
-         * Started, still in progress.
-         * 
-         * <p>
-         * May flush, commit or abort.
-         */
-        IN_PROGRESS,
-        /**
-         * Started, but has hit an exception.
-         * 
-         * <p>
-         * May not flush or commit (will throw an {@link IllegalStateException}),
-         * can only abort.
-         * 
-         * <p>
-         * Similar to <tt>setRollbackOnly</tt> in EJBs.
-         */
-        MUST_ABORT,
-        /**
-         * Completed, having successfully committed.
-         * 
-         * <p>
-         * May not flush or abort or commit (will throw {@link IllegalStateException}).
-         */
-        COMMITTED,
-        /**
-         * Completed, having aborted.
-         * 
-         * <p>
-         * May not flush, commit or abort (will throw {@link IllegalStateException}).
-         */
-        ABORTED;
-
-        private TransactionState(){}
-
-        /**
-         * Whether it is valid to flush the transaction.
-         */
-        public boolean canFlush() {
-            return this == IN_PROGRESS;
-        }
-
-        /**
-         * Whether it is valid to commit the transaction.
-         */
-        public boolean canCommit() {
-            return this == IN_PROGRESS;
-        }
-
-        /**
-         * Whether it is valid to mark as aborted this transaction}.
-         */
-        public boolean canAbort() {
-            return this == IN_PROGRESS || this == MUST_ABORT;
-        }
-
-        /**
-         * Whether the transaction is complete (and so a new one can be started).
-         */
-        public boolean isComplete() {
-            return this == COMMITTED || this == ABORTED;
-        }
-
-        public boolean mustAbort() {
-            return this == MUST_ABORT;
-        }
-    }
 
 }

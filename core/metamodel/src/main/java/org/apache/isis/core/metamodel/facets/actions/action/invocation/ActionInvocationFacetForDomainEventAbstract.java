@@ -74,6 +74,8 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.isis.core.metamodel.transactions.TransactionState;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
 public abstract class ActionInvocationFacetForDomainEventAbstract
         extends ActionInvocationFacetAbstract
@@ -92,6 +94,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
+    private final TransactionStateProvider transactionStateProvider;
     private final Class<? extends ActionDomainEvent<?>> eventType;
     private final DomainEventHelper domainEventHelper;
 
@@ -106,7 +109,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ServicesInjector servicesInjector,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager,
-            final RuntimeContext runtimeContext) {
+            final RuntimeContext runtimeContext,
+            final TransactionStateProvider transactionStateProvider) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
@@ -118,6 +122,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
         this.configuration = configuration;
+        this.transactionStateProvider = transactionStateProvider;
         this.domainEventHelper = new DomainEventHelper(this.servicesInjector);
 
     }
@@ -469,7 +474,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                 throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " " + targetException.getMessage(), targetException);
             }
             if(targetException instanceof RecoverableException) {
-                if (!runtimeContext.getTransactionState().canCommit()) {
+                if (!getTransactionState().canCommit()) {
                     // something severe has happened to the underlying transaction;
                     // so escalate this exception to be non-recoverable
                     final Throwable targetExceptionCause = targetException.getCause();
@@ -531,5 +536,9 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSessionProvider.getAuthenticationSession();
+    }
+
+    public TransactionState getTransactionState() {
+        return transactionStateProvider.getTransactionState();
     }
 }

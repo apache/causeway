@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
 public class ActionInvocationFacetForDomainEventFromDefault
         extends ActionInvocationFacetForDomainEventAbstract {
@@ -45,8 +46,10 @@ public class ActionInvocationFacetForDomainEventFromDefault
             final ServicesInjector servicesInjector,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager,
-            final RuntimeContext runtimeContext) {
+            final RuntimeContext runtimeContext,
+            final TransactionStateProvider transactionStateProvider) {
         super(eventType, method, onType, returnType, holder,
-                deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager, runtimeContext);
+                deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager, runtimeContext,
+                transactionStateProvider);
     }
 }

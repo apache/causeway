@@ -59,6 +59,9 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.transactions.TransactionState;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
+import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstract;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -398,6 +401,21 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         };
     }
 
+    @Override
+    public TransactionStateProvider getTransactionStateProvider() {
+        return new TransactionStateProviderAbstract() {
+            @Override
+            public TransactionState getTransactionState() {
+                final IsisTransaction transaction = getTransactionManager().getTransaction();
+                if(transaction == null) {
+                    return TransactionState.NONE;
+                }
+                IsisTransaction.State state = transaction.getState();
+                return state.getRuntimeContextState();
+            }
+        };
+    }
+
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
@@ -415,14 +433,5 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         return IsisContext.getMessageBroker();
     }
 
-    @Override
-    public TransactionState getTransactionState() {
-        final IsisTransaction transaction = getTransactionManager().getTransaction();
-        if(transaction == null) {
-            return TransactionState.NONE;
-        }
-        IsisTransaction.State state = transaction.getState();
-        return state.getRuntimeContextState();
-    }
 
 }
