@@ -19,15 +19,20 @@
 
 package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 
 public class ChoicesFacetFromBoundedMarkerInterface extends ChoicesFacetFromBoundedAbstract {
 
     public ChoicesFacetFromBoundedMarkerInterface(
-            final FacetHolder holder, final QuerySubmitter querySubmitter) {
-        super(holder, querySubmitter);
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final QuerySubmitter querySubmitter) {
+        super(holder, deploymentCategory, authenticationSessionProvider, querySubmitter);
     }
 
 }

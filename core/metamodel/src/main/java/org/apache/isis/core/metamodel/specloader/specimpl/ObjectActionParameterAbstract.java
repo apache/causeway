@@ -271,7 +271,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         if (facet != null) {
 
-            final Object[] choices = facet.autoComplete(adapter, searchArg, authenticationSession, deploymentCategory,
+            final Object[] choices = facet.autoComplete(adapter, searchArg,
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {
@@ -326,7 +326,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
         if (facet != null) {
-            final Object[] choices = facet.getChoices(target, args, session, deploymentCategory,
+            final Object[] choices = facet.getChoices(target, args,
                     interactionInitiatedBy);
             checkChoicesOrAutoCompleteType(getSpecificationLoader(), choices, getSpecification());
             for (final Object choice : choices) {

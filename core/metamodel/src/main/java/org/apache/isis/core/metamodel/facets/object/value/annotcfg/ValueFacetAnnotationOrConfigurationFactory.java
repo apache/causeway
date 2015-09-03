@@ -129,13 +129,6 @@ public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbst
     // Injected
     // ////////////////////////////////////////////////////////////////////
 
-    /**
-     * Derived from {@link #setRuntimeContext(RuntimeContext)} (since {@link RuntimeContextAware}).
-     */
-    private DeploymentCategory getDeploymentCategory() {
-        return runtimeContext.getDeploymentCategory();
-    }
-
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
     }

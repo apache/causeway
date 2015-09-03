@@ -21,13 +21,18 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.List;
+
+import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -57,6 +62,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
     @Mock
     protected IsisConfiguration mockConfiguration;
+    @Mock
+    protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    @Mock
+    protected AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     protected IdentifiedHolder facetHolder;
 
@@ -87,6 +96,12 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
 
     @Before
     public void setUpFacetedMethodAndParameter() throws Exception {
+
+        context.checking(new Expectations() {{
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+        }});
+
         facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));
         facetedMethod = FacetedMethod.createForProperty(AbstractFacetFactoryTest.Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);

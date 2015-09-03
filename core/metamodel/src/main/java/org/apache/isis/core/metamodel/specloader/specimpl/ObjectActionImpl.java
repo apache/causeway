@@ -386,7 +386,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             LOG.debug("execute action " + target + "." + getId());
         }
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(this, target, arguments, getAuthenticationSession(), getDeploymentCategory(),
+        return facet.invoke(this, target, arguments,
                 interactionInitiatedBy);
     }
 
@@ -471,7 +471,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         if (!facet.isNoop()) {
             // using the old choicesXxx() approach
-            parameterChoicesPojos = facet.getChoices(target, session, deploymentCategory,
+            parameterChoicesPojos = facet.getChoices(target,
                     interactionInitiatedBy);
 
             // if no options, or not the right number of pojos, then default
@@ -490,8 +490,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             for (int i = 0; i < parameterCount; i++) {
                 final ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
                 if (paramFacet != null && !paramFacet.isNoop()) {
-                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null, session,
-                            deploymentCategory, interactionInitiatedBy);
+                    parameterChoicesPojos[i] = paramFacet.getChoices(target, null,
+                            interactionInitiatedBy);
                 } else {
                     parameterChoicesPojos[i] = new Object[0];
                 }

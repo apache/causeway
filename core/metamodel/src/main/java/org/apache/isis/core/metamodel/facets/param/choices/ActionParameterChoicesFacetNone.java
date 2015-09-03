@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.param.choices;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -33,17 +33,18 @@ public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacet
 
     public ActionParameterChoicesFacetNone(
             final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
+            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
-        super(holder, specificationLookup, adapterManager);
+        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterManager);
     }
 
     @Override
     public Object[] getChoices(
             final ObjectAdapter adapter,
             final List<ObjectAdapter> arguments,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectAdapter[0];
     }
 

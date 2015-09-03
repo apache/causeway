@@ -19,7 +19,10 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -32,15 +35,21 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
+    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
 
     public ActionParameterChoicesFacetAbstract(
             final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
+            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterManager = adapterManager;
     }
 
@@ -60,4 +69,11 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return adapterManager;
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }

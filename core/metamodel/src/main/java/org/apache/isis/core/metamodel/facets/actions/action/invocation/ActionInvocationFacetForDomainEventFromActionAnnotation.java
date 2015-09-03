@@ -22,9 +22,11 @@ package org.apache.isis.core.metamodel.facets.actions.action.invocation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -39,11 +41,12 @@ public class ActionInvocationFacetForDomainEventFromActionAnnotation
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final RuntimeContext runtimeContext,
-            final AdapterManager adapterManager,
+            final DeploymentCategory deploymentCategory,
+            final IsisConfiguration isisConfiguration,
             final ServicesInjector servicesInjector,
-            final IsisConfiguration isisConfiguration) {
-        super(eventType, method, onType, returnType, holder,
-                runtimeContext, adapterManager, servicesInjector, isisConfiguration);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager,
+            final RuntimeContext runtimeContext) {
+        super(eventType, method, onType, returnType, holder, deploymentCategory, isisConfiguration, servicesInjector, authenticationSessionProvider, adapterManager, runtimeContext);
     }
 }

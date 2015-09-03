@@ -48,6 +48,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractAlwaysEverywhere;
@@ -77,6 +79,8 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     private AdapterManager mockAdapterManager;
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    @Mock
+    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
     private IsisConfiguration mockConfiguration;
     @Mock
@@ -126,6 +130,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         
         context.checking(new Expectations() {
             {
+                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+
                 allowing(mockAdapterManager).getAdapterFor(employeeDO);
                 will(returnValue(mockEmployeeAdapter));
 
@@ -250,7 +257,9 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
 
         // and given
         facets = Arrays.asList((Facet)new PropertyAccessorFacetViaAccessor(getPasswordMethod, mockPasswordMember,
-                mockAdapterManager, mockSpecificationLoader, mockConfiguration));
+                mockDeploymentCategoryProvider.getDeploymentCategory(), mockConfiguration, mockSpecificationLoader,
+                mockAuthenticationSessionProvider, mockAdapterManager
+        ));
         context.checking(new Expectations() {
             {
                 allowing(mockPasswordMember).getFacets(with(any(Filter.class)));

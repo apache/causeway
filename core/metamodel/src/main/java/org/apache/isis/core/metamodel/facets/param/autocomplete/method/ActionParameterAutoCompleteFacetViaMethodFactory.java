@@ -84,7 +84,11 @@ public class ActionParameterAutoCompleteFacetViaMethodFactory extends MethodPref
 
             // add facets directly to parameters, not to actions
             final FacetedMethodParameter paramAsHolder = parameters.get(i);
-            FacetUtil.addFacet(new ActionParameterAutoCompleteFacetViaMethod(autoCompleteMethod, paramType, paramAsHolder, getSpecificationLoader(), getAdapterManager()));
+            FacetUtil.addFacet(
+                    new ActionParameterAutoCompleteFacetViaMethod(
+                            autoCompleteMethod, paramType, paramAsHolder,
+                            getDeploymentCategory(), getSpecificationLoader(),
+                            getAuthenticationSessionProvider(), getAdapterManager()));
         }
     }
 

@@ -51,7 +51,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
         if (choicesFacet == null) {
             return new Object[0];
         }
-        return choicesFacet.getChoices(adapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
+        return choicesFacet.getChoices(adapter, interactionInitiatedBy);
     }
 
     public ObjectSpecification getSpecification(final Class<?> type) {

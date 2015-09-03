@@ -52,8 +52,11 @@ public class CollectionAccessorFacetViaAccessorFactory
         FacetUtil.addFacet(
                 new CollectionAccessorFacetViaAccessor(
                         accessorMethod, holder,
-                        getAdapterManager(), getSpecificationLoader(), getConfiguration()));
+                        getDeploymentCategory(), getConfiguration(), getSpecificationLoader(),
+                        getAuthenticationSessionProvider(), getAdapterManager()
+                ));
     }
+
 
     // ///////////////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifyingFacetFactory impl.

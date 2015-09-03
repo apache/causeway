@@ -26,6 +26,7 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -46,10 +47,14 @@ public class CollectionAccessorFacetViaAccessor
     public CollectionAccessorFacetViaAccessor(
             final Method method,
             final FacetHolder holder,
-            final AdapterManager adapterManager,
+            final DeploymentCategory deploymentCategory,
+            final IsisConfiguration isisConfiguration,
             final SpecificationLoader specificationLoader,
-            final IsisConfiguration isisConfiguration) {
-        super(holder, adapterManager, specificationLoader, isisConfiguration);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
+        super(holder, deploymentCategory, isisConfiguration, specificationLoader, authenticationSessionProvider,
+                adapterManager
+        );
         this.method = method;
     }
 
@@ -70,13 +75,13 @@ public class CollectionAccessorFacetViaAccessor
     @Override
     public Object getProperty(
             final ObjectAdapter owningAdapter,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final List<ObjectAdapter> visibleAdapters =

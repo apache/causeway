@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.param.choices;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -35,7 +33,6 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 public interface ActionChoicesFacet extends Facet {
 
     public Object[][] getChoices(
-            ObjectAdapter inObject,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
+            final ObjectAdapter inObject,
+            final InteractionInitiatedBy interactionInitiatedBy);
 }

@@ -80,7 +80,7 @@ public abstract class CollectionRemoveFromFacetForDomainEventFromAbstract
 
         // get hold of underlying collection
         // passing null through for authenticationSession/deploymentType means to avoid any visibility filtering.
-        final Object collection = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
+        final Object collection = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
 
         // don't post event if the collections does not contain object
         if (!((Collection<?>) collection).contains(referencedObject)) {

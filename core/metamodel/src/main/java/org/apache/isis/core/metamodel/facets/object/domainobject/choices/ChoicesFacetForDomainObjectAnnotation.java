@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
@@ -29,19 +31,28 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
 
     public static Facet create(
             final DomainObject domainObject,
-            final QuerySubmitter querySubmitter,
-            final FacetHolder facetHolder) {
+            final FacetHolder facetHolder,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final QuerySubmitter querySubmitter) {
 
         if(domainObject == null) {
             return null;
         }
 
         final boolean bounded = domainObject.bounded();
-        return bounded ? new ChoicesFacetForDomainObjectAnnotation(facetHolder, querySubmitter): null;
+        return bounded
+                ? new ChoicesFacetForDomainObjectAnnotation(
+                    facetHolder, querySubmitter, deploymentCategory, authenticationSessionProvider)
+                : null;
     }
 
-    private ChoicesFacetForDomainObjectAnnotation(final FacetHolder holder, final QuerySubmitter querySubmitter) {
-        super(holder, querySubmitter);
+    private ChoicesFacetForDomainObjectAnnotation(
+            final FacetHolder holder,
+            final QuerySubmitter querySubmitter,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider) {
+        super(holder, deploymentCategory, authenticationSessionProvider, querySubmitter);
     }
 
 }

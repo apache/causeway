@@ -50,7 +50,11 @@ public class ActionParameterChoicesFacetDerivedFromChoicesFacetFactory extends F
             return;
         }
         
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(facetHolder, getSpecificationLoader(), getAdapterManager()));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(
+                facetHolder,
+                getDeploymentCategory(), getSpecificationLoader(),
+                getAuthenticationSessionProvider(),
+                getAdapterManager()));
     }
 
     // /////////////////////////////////////////////

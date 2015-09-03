@@ -210,26 +210,35 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForPostsActionInvokedEventAnnotation(
                                 actionInvokedEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration), processMethodContext);
+                                getDeploymentCategory(), configuration, getServicesInjector(),
+                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext()
+                        ), processMethodContext);
             } else
             // deprecated (but more recently)
             if (actionInteraction != null) {
                 actionInvocationFacet = actionInteractionValidator.flagIfPresent(
                         new ActionInvocationFacetForDomainEventFromActionInteractionAnnotation(
                                 actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                                getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration), processMethodContext);
+                                getDeploymentCategory(), configuration, getServicesInjector(),
+                                getAuthenticationSessionProvider(), getAdapterManager(), getRuntimeContext()
+                        ), processMethodContext);
             } else
             // current
             if (action != null) {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromActionAnnotation(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration);
+                        getDeploymentCategory(), configuration, getServicesInjector(),
+                        getAuthenticationSessionProvider(),
+                        getAdapterManager(), getRuntimeContext()
+                );
             } else
             // default
             {
                 actionInvocationFacet = new ActionInvocationFacetForDomainEventFromDefault(
                         actionDomainEventType, actionMethod, typeSpec, returnSpec, holder,
-                        getRuntimeContext(), getAdapterManager(), getServicesInjector(), configuration);
+                        getDeploymentCategory(), configuration, getServicesInjector(), getAuthenticationSessionProvider(),
+                        getAdapterManager(), getRuntimeContext()
+                );
             }
             FacetUtil.addFacet(actionInvocationFacet);
 

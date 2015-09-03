@@ -172,7 +172,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final PropertyOrCollectionAccessorFacet accessor = getFacet(PropertyOrCollectionAccessorFacet.class);
-        final Object collection = accessor.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory(),
+        final Object collection = accessor.getProperty(ownerAdapter,
                 interactionInitiatedBy);
         if (collection == null) {
             return null;

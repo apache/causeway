@@ -622,7 +622,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
 	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
-        return accessor.getProperty(ownerAdapter, null, null, InteractionInitiatedBy.FRAMEWORK);
+        return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
 
 

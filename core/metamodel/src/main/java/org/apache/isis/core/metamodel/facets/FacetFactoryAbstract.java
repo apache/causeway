@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -91,7 +92,12 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
         this.deploymentCategoryProvider = deploymentCategoryProvider;
     }
 
-    protected DeploymentCategoryProvider getDeploymentCategoryProvider() {
+    private DeploymentCategoryProvider getDeploymentCategoryProvider() {
         return deploymentCategoryProvider;
     }
+
+    protected DeploymentCategory getDeploymentCategory() {
+        return getDeploymentCategoryProvider().getDeploymentCategory();
+    }
+
 }

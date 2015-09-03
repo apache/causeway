@@ -75,7 +75,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
 
 
         // ... post the executing event
-        final Object oldValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
+        final Object oldValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
         final Object newValue = ObjectAdapter.Util.unwrap(newValueAdapter);
 
         final PropertyDomainEvent<?, ?> event =
@@ -89,7 +89,7 @@ public abstract class PropertySetterFacetForDomainEventAbstract
         setterFacet.setProperty(targetAdapter, newValueAdapter, interactionInitiatedBy);
 
         // reading the actual value from the target object, playing it safe...
-        final Object actualNewValue = getterFacet.getProperty(targetAdapter, null, null, interactionInitiatedBy);
+        final Object actualNewValue = getterFacet.getProperty(targetAdapter, interactionInitiatedBy);
         if(Objects.equal(oldValue, actualNewValue)) {
             // do nothing
             return;

@@ -55,8 +55,6 @@ public interface ActionInvocationFacet extends Facet {
             ObjectAction owningAction,
             ObjectAdapter targetAdapter,
             ObjectAdapter[] argumentAdapters,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy);
 
     public ObjectSpecification getReturnType();

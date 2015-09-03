@@ -49,6 +49,7 @@ import org.apache.isis.applib.services.eventbus.AbstractDomainEvent;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
@@ -85,6 +86,8 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private final ObjectSpecification returnType;
 
     private final AdapterManager adapterManager;
+    private final DeploymentCategory deploymentCategory;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final RuntimeContext runtimeContext;
 
     private final ServicesInjector servicesInjector;
@@ -98,15 +101,19 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectSpecification onType,
             final ObjectSpecification returnType,
             final FacetHolder holder,
-            final RuntimeContext runtimeContext,
-            final AdapterManager adapterManager,
+            final DeploymentCategory deploymentCategory,
+            final IsisConfiguration configuration,
             final ServicesInjector servicesInjector,
-            final IsisConfiguration configuration) {
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager,
+            final RuntimeContext runtimeContext) {
         super(holder);
         this.eventType = eventType;
         this.method = method;
         this.onType = onType;
         this.returnType = returnType;
+        this.deploymentCategory = deploymentCategory;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
@@ -184,7 +191,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAdapter[] argumentAdapters,
             final AuthenticationSession authenticationSession,
             final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
-        return invoke(null, targetAdapter, argumentAdapters, authenticationSession, deploymentCategory,
+        return invoke(null, targetAdapter, argumentAdapters,
                 interactionInitiatedBy);
     }
 
@@ -193,12 +200,13 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ObjectAction owningAction,
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] arguments,
-            final AuthenticationSession session,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
+
+        final AuthenticationSession session = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
 
         // ... post the executing event
         final ActionDomainEvent<?> event =
@@ -517,4 +525,11 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         return configuration;
     }
 
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    public AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }

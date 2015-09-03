@@ -60,13 +60,6 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
     // Dependencies (injected via setter)
     // ////////////////////////////////////////////////////
 
-    /**
-     * Derived from {@link #setRuntimeContext(RuntimeContext)} (since {@link RuntimeContextAware}).
-     */
-    private DeploymentCategory getDeploymentCategory() {
-        return runtimeContext.getDeploymentCategory();
-    }
-
 
     public IsisConfiguration getConfiguration() {
         return configuration;

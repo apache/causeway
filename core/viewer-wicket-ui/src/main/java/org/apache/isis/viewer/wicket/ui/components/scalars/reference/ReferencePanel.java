@@ -401,7 +401,7 @@ public class ReferencePanel extends ScalarPanelAbstract {
                 final ObjectSpecification typeOfSpecification = getScalarModel().getTypeOfSpecification();
                 final AutoCompleteFacet autoCompleteFacet = typeOfSpecification.getFacet(AutoCompleteFacet.class);
                 final List<ObjectAdapter> autoCompleteAdapters =
-                        autoCompleteFacet.execute(term, getAuthenticationSession(), getDeploymentCategory(),
+                        autoCompleteFacet.execute(term,
                                 InteractionInitiatedBy.USER);
                 // take a copy otherwise so is eagerly evaluated and memento objects correctly built
                 return Lists.newArrayList(

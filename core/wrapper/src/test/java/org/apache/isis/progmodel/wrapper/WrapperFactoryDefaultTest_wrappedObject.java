@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.*;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
@@ -82,6 +83,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private ServicesProvider mockServicesProvider;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
     @Mock
     private IsisConfiguration mockConfiguration;
 
@@ -154,6 +157,9 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         
         context.checking(new Expectations() {
             {
+                allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+                will(returnValue(DeploymentCategory.PRODUCTION));
+
                 allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
                 will(returnValue(session));
 
@@ -316,8 +322,10 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private FacetedMethod facetedMethodForProperty(
             Method init, Method accessor, Method modify, Method clear, Method hide, Method disable, Method validate) {
         FacetedMethod facetedMethod = FacetedMethod.createForProperty(accessor.getDeclaringClass(), accessor);
-        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod, mockAdapterManager,
-                mockSpecificationLoader, mockConfiguration));
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessor, facetedMethod, mockDeploymentCategoryProvider.getDeploymentCategory(),
+                mockConfiguration, mockSpecificationLoader,
+                mockAuthenticationSessionProvider, mockAdapterManager
+        ));
         FacetUtil.addFacet(new PropertyInitializationFacetViaSetterMethod(init, facetedMethod));
         FacetUtil.addFacet(new PropertySetterFacetViaModifyMethod(modify, facetedMethod, null));
         FacetUtil.addFacet(new PropertyClearFacetViaClearMethod(clear, facetedMethod));

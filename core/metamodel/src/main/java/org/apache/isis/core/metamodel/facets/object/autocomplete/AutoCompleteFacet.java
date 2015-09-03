@@ -21,17 +21,14 @@ package org.apache.isis.core.metamodel.facets.object.autocomplete;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 public interface AutoCompleteFacet extends Facet {
 
     public List<ObjectAdapter> execute(
-            String search,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
+            final String search,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
 }

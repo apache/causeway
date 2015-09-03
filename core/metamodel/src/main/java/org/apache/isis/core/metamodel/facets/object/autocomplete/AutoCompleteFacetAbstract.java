@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -47,7 +48,9 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     private final Class<?> repositoryClass;
     private final String actionName;
 
+    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
 
@@ -61,11 +64,20 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     private Object repository;
 
     public AutoCompleteFacetAbstract(
-            final FacetHolder holder, final Class<?> repositoryClass, final String actionName, final SpecificationLoader specificationLoader, final AdapterManager adapterManager, final ServicesInjector servicesInjector) {
+            final FacetHolder holder,
+            final Class<?> repositoryClass,
+            final String actionName,
+            final DeploymentCategory deploymentCategory,
+            final SpecificationLoader specificationLoader,
+            final ServicesInjector servicesInjector,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;
+        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
     }
@@ -73,8 +85,6 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
     @Override
     public List<ObjectAdapter> execute(
             final String search,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         cacheRepositoryAndRepositoryActionIfRequired();
@@ -91,10 +101,12 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
             return Collections.emptyList();
         }
 
-        final ObjectSpecification objectSpecification = (ObjectSpecification) getFacetHolder();
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
 
         final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
+
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         return ObjectAdapter.Util.visibleAdapters(
                         adapterList, authenticationSession, deploymentCategory, interactionInitiatedBy);
     }
@@ -125,4 +137,11 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         cachedRepositoryObject = true;
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }

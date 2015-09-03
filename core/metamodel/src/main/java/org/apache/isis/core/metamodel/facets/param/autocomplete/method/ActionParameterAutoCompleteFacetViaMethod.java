@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -46,8 +47,15 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     private final Class<?> choicesType;
     private final int minLength;
 
-    public ActionParameterAutoCompleteFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder, final SpecificationLoader specificationLookup, final AdapterManager adapterManager) {
-        super(holder, specificationLookup, adapterManager);
+    public ActionParameterAutoCompleteFacetViaMethod(
+            final Method method,
+            final Class<?> choicesType,
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
+            final SpecificationLoader specificationLookup,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
+        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
         this.minLength = MinLengthUtil.determineMinLength(method);
@@ -76,8 +84,6 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
     public Object[] autoComplete(
             final ObjectAdapter owningAdapter,
             final String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
@@ -89,6 +95,8 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,

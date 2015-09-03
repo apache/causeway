@@ -28,7 +28,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -87,12 +86,6 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
     // Dependencies (injected via setters since *Aware)
     // ////////////////////////////////////////////////////////////////////
 
-    /**
-     * Derived from {@link #setRuntimeContext(RuntimeContext)} (since {@link RuntimeContextAware}).
-     */
-    private DeploymentCategory getDeploymentCategory() {
-        return runtimeContext.getDeploymentCategory();
-    }
 
     public IsisConfiguration getIsisConfiguration() {
         return configuration;

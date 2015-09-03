@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
 import org.apache.isis.applib.annotation.Bounded;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -31,16 +33,27 @@ import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 @Deprecated
 public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAbstract {
 
-    private ChoicesFacetFromBoundedAnnotation(final FacetHolder holder, QuerySubmitter querySubmitter) {
-        super(holder, querySubmitter);
+    private ChoicesFacetFromBoundedAnnotation(
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final QuerySubmitter querySubmitter) {
+        super(holder, deploymentCategory, authenticationSessionProvider, querySubmitter);
     }
 
-    public static ChoicesFacet create(final Bounded annotation, final QuerySubmitter querySubmitter, final FacetHolder holder) {
+    public static ChoicesFacet create(
+            final Bounded annotation,
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final QuerySubmitter querySubmitter) {
         if (annotation == null) {
             return null;
         }
 
-        return new ChoicesFacetFromBoundedAnnotation(holder, querySubmitter);
+        return new ChoicesFacetFromBoundedAnnotation(holder, deploymentCategory, authenticationSessionProvider,
+                querySubmitter
+        );
     }
 
 

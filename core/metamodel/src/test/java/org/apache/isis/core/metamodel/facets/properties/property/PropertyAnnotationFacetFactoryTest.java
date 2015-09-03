@@ -38,10 +38,8 @@ import org.apache.isis.applib.services.eventbus.PropertyChangedEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.applib.spec.Specification;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -125,13 +123,14 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public static class Modify extends PropertyAnnotationFacetFactoryTest {
 
         private void addGetterFacet(final FacetHolder holder) {
-            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockAdapterManager,
-                    mockSpecificationLoaderSpi, mockConfiguration) {
+            FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetAbstract(holder, mockDeploymentCategoryProvider.getDeploymentCategory(),
+                    mockConfiguration,
+                    mockSpecificationLoaderSpi, mockAuthenticationSessionProvider,
+                    mockAdapterManager
+            ) {
                 @Override
                 public Object getProperty(
                         final ObjectAdapter inObject,
-                        final AuthenticationSession authenticationSession,
-                        final DeploymentCategory deploymentCategory,
                         final InteractionInitiatedBy interactionInitiatedBy) {
                     return null;
                 }

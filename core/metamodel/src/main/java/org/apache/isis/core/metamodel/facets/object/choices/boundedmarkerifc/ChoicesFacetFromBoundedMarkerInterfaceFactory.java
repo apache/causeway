@@ -44,8 +44,13 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
         FacetUtil.addFacet(create(implementsMarker, processClassContaxt.getFacetHolder()));
     }
 
-    private ChoicesFacet create(final boolean implementsMarker, final FacetHolder holder) {
-        return implementsMarker ? new ChoicesFacetFromBoundedMarkerInterface(holder, querySubmitter) : null;
+    private ChoicesFacet create(
+            final boolean implementsMarker,
+            final FacetHolder holder) {
+        return implementsMarker
+                ? new ChoicesFacetFromBoundedMarkerInterface(
+                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(), querySubmitter)
+                : null;
     }
 
     public boolean recognizes(final Method method) {

@@ -29,6 +29,7 @@ import org.apache.isis.applib.marker.Bounded;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -56,16 +57,26 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
  * member with {@link org.apache.isis.applib.annotation.Bounded Bounded} annotation
  * or implementing the {@link Bounded} marker interface.
  */
-public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
+public abstract class ChoicesFacetFromBoundedAbstract
+        extends FacetAbstract
+        implements ChoicesFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
 
     public static Class<? extends Facet> type() {
         return ChoicesFacet.class;
     }
 
+    private final DeploymentCategory deploymentCategory;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final QuerySubmitter querySubmitter;
     
-    public ChoicesFacetFromBoundedAbstract(final FacetHolder holder, final QuerySubmitter querySubmitter) {
+    public ChoicesFacetFromBoundedAbstract(
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final QuerySubmitter querySubmitter) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        this.deploymentCategory = deploymentCategory;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.querySubmitter = querySubmitter;
     }
 
@@ -114,12 +125,12 @@ public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract impl
     @Override
     public Object[] getChoices(
             ObjectAdapter adapter,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Query query = new QueryFindAllInstances(getObjectSpecification().getFullIdentifier());
         final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
 
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
                     allInstancesAdapter, authenticationSession, deploymentCategory, interactionInitiatedBy);
@@ -128,5 +139,11 @@ public abstract class ChoicesFacetFromBoundedAbstract extends FacetAbstract impl
         return Lists.newArrayList(pojos).toArray();
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
 
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }

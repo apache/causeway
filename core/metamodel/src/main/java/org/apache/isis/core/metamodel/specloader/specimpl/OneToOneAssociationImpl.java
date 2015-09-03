@@ -148,7 +148,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final InteractionInitiatedBy interactionInitiatedBy) {
         final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
         final Object referencedPojo =
-                facet.getProperty(ownerAdapter, getAuthenticationSession(), getDeploymentCategory(), interactionInitiatedBy);
+                facet.getProperty(ownerAdapter, interactionInitiatedBy);
 
         if (referencedPojo == null) {
             return null;
@@ -328,7 +328,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         final AuthenticationSession session = getAuthenticationSession();
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
-                session, deploymentCategory, interactionInitiatedBy);
+                interactionInitiatedBy);
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {

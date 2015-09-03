@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -48,9 +49,11 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLookup,
+            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
-        super(holder, specificationLookup, adapterManager);
+        super(holder, deploymentCategory, specificationLookup, authenticationSessionProvider, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
     }
@@ -73,17 +76,19 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     public Object[] getChoices(
             final ObjectAdapter adapter,
             final List<ObjectAdapter> argumentsIfAvailable,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
+            final InteractionInitiatedBy interactionInitiatedBy) {
         final Object choices =
                 ObjectAdapter.InvokeUtils.invokeAutofit(
-                    method, adapter, argumentsIfAvailable, getAdapterManager());
+                        method, adapter, argumentsIfAvailable, getAdapterManager());
         if (choices == null) {
             return new Object[0];
         }
         final ObjectAdapter objectAdapter = getAdapterManager().adapterFor(choices);
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
+
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         objectAdapter,

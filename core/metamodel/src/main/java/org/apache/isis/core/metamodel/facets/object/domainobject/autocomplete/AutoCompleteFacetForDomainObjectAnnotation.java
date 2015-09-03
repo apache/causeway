@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete;
 
 import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacetAbstract;
@@ -34,10 +36,12 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
 
     public static AutoCompleteFacet create(
             final DomainObject domainObject,
+            final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
-            final FacetHolder holder) {
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
 
         if(domainObject == null) {
             return null;
@@ -48,12 +52,22 @@ public class AutoCompleteFacetForDomainObjectAnnotation extends AutoCompleteFace
             return null;
         }
         final String autoCompleteAction = domainObject.autoCompleteAction();
-        return new AutoCompleteFacetForDomainObjectAnnotation(holder, autoCompleteRepository, autoCompleteAction, specificationLoader, adapterManager, servicesInjector);
+        return new AutoCompleteFacetForDomainObjectAnnotation(holder, autoCompleteRepository, autoCompleteAction, deploymentCategory, specificationLoader, servicesInjector, authenticationSessionProvider, adapterManager
+        );
     }
 
     private AutoCompleteFacetForDomainObjectAnnotation(
-            final FacetHolder holder, final Class<?> repositoryClass, final String actionName, final SpecificationLoader specificationLoader, final AdapterManager adapterManager, final ServicesInjector servicesInjector) {
-        super(holder, repositoryClass, actionName, specificationLoader, adapterManager, servicesInjector);
+            final FacetHolder holder,
+            final Class<?> repositoryClass,
+            final String actionName,
+            final DeploymentCategory deploymentCategory,
+            final SpecificationLoader specificationLoader,
+            final ServicesInjector servicesInjector,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
+        super(holder, repositoryClass, actionName, deploymentCategory, specificationLoader, servicesInjector,
+                authenticationSessionProvider, adapterManager
+        );
         this.repositoryClass = repositoryClass;
         this.actionName = actionName;
     }

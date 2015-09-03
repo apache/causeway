@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -46,19 +47,25 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     private final Class<?> choicesClass;
     private final int minLength;
 
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
+    private final DeploymentCategory deploymentCategory;
     private SpecificationLoader specificationLoader;
 
     public PropertyAutoCompleteFacetMethod(
             final Method method,
             final Class<?> choicesClass,
             final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
+            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
+        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterManager = adapterManager;
         this.minLength = MinLengthUtil.determineMinLength(method);
     }
@@ -86,9 +93,11 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
     public Object[] autoComplete(
             final ObjectAdapter owningAdapter,
             final String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
+
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
+
 
         final Object collectionOrArray = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter, searchArg);
         if (collectionOrArray == null) {
@@ -136,6 +145,11 @@ public class PropertyAutoCompleteFacetMethod extends PropertyAutoCompleteFacetAb
         return specificationLoader;
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
 
-
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }

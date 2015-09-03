@@ -19,29 +19,57 @@
 
 package org.apache.isis.core.metamodel.facets.object.parseable;
 
+import org.jmock.Expectations;
+
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.applib.profiles.Localization;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 public class ParseableFacetAnnotationElseConfigurationFactoryTest extends AbstractFacetFactoryTest {
+    private JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     private ParseableFacetAnnotationElseConfigurationFactory facetFactory;
     private IsisConfigurationDefault isisConfigurationDefault;
+
+    private DeploymentCategoryProvider mockDeploymentCategoryProvider;
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
+        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
+        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
+
+
+        final AuthenticationSession mockAuthenticationSession = context.mock(AuthenticationSession.class);
+        context.checking(new Expectations() {{
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+
+            allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
+
+            will(returnValue(mockAuthenticationSession));
+        }});
+
         facetFactory = new ParseableFacetAnnotationElseConfigurationFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
         facetFactory.setRuntimeContext(new RuntimeContextNoRuntime(DeploymentCategory.PRODUCTION));
+
+        facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+
     }
 
     @Override

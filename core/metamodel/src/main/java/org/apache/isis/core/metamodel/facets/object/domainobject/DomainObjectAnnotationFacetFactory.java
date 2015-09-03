@@ -176,12 +176,19 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         // check for the deprecated @AutoComplete annotation first
         final AutoComplete annotation = Annotations.getAnnotation(processClassContext.getCls(), AutoComplete.class);
         Facet facet = autoCompleteValidator.flagIfPresent(
-                AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder));
+                AutoCompleteFacetForAutoCompleteAnnotation.create(annotation, facetHolder,
+                        getDeploymentCategory(), getSpecificationLoader(),
+                        servicesInjector, getAuthenticationSessionProvider(),
+                        adapterManager
+                ));
 
         // else check from @DomainObject(auditing=...)
         if(facet == null) {
             facet = AutoCompleteFacetForDomainObjectAnnotation.create(
-                    domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+                    domainObject, facetHolder, getDeploymentCategory(),
+                    getSpecificationLoader(), servicesInjector,
+                    getAuthenticationSessionProvider(), adapterManager
+            );
         }
 
         // then add
@@ -196,11 +203,15 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         // check for the deprecated @Bounded annotation first
         final Bounded annotation = Annotations.getAnnotation(processClassContext.getCls(), Bounded.class);
         Facet facet = boundedValidator.flagIfPresent(
-            ChoicesFacetFromBoundedAnnotation.create(annotation, querySubmitter, processClassContext.getFacetHolder()));
+            ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
+                    getDeploymentCategory(),
+                    getAuthenticationSessionProvider(), querySubmitter
+            ));
 
         // else check from @DomainObject(bounded=...)
         if(facet == null) {
-            facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, querySubmitter, facetHolder);
+            facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(),
+                    getAuthenticationSessionProvider(), querySubmitter);
         }
 
         // then add

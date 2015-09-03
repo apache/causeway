@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.propcoll.accessor;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -38,6 +39,8 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
     private final AdapterManager adapterManager;
     private final SpecificationLoader specificationLoader;
     private final IsisConfiguration configuration;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final DeploymentCategory deploymentCategory;
 
     public static Class<? extends Facet> type() {
         return PropertyOrCollectionAccessorFacet.class;
@@ -45,20 +48,23 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
 
     public PropertyOrCollectionAccessorFacetAbstract(
             final FacetHolder holder,
-            final AdapterManager adapterManager,
+            final DeploymentCategory deploymentCategory,
+            final IsisConfiguration configuration,
             final SpecificationLoader specificationLoader,
-            final IsisConfiguration configuration) {
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final AdapterManager adapterManager) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.adapterManager = adapterManager;
         this.specificationLoader = specificationLoader;
         this.configuration = configuration;
+        this.authenticationSessionProvider = authenticationSessionProvider;
+        this.deploymentCategory = deploymentCategory;
     }
 
     @Override
     public abstract Object getProperty(
             ObjectAdapter inObject,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     protected ObjectSpecification getSpecification(final Class<?> type) {
         return type != null ? getSpecificationLoader().loadSpecification(type) : null;
@@ -77,4 +83,13 @@ public abstract class PropertyOrCollectionAccessorFacetAbstract
     protected IsisConfiguration getConfiguration() {
         return configuration;
     }
+
+    public DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    public AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
+
 }

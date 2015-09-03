@@ -27,6 +27,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -43,19 +44,25 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     private final Method method;
     private final Class<?> choicesType;
+    private final DeploymentCategory deploymentCategory;
     private final SpecificationLoader specificationLoader;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
 
     public ActionChoicesFacetViaMethod(
             final Method method,
             final Class<?> choicesType,
             final FacetHolder holder,
+            final DeploymentCategory deploymentCategory,
             final SpecificationLoader specificationLoader,
+            final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
+        this.deploymentCategory = deploymentCategory;
         this.specificationLoader = specificationLoader;
+        this.authenticationSessionProvider = authenticationSessionProvider;
         this.adapterManager = adapterManager;
     }
 
@@ -76,8 +83,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     @Override
     public Object[][] getChoices(
             final ObjectAdapter owningAdapter,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Object objectOrCollection = ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         if (!(objectOrCollection instanceof Object[])) {
@@ -88,9 +93,10 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
         }
         final Object[] options = (Object[]) objectOrCollection;
         final Object[][] results = new Object[options.length][];
+
         for (int i = 0; i < results.length; i++) {
             final Class<?> parameterType = method.getParameterTypes()[i];
-            results[i] = handleResults(options[i], parameterType, authenticationSession, deploymentCategory,
+            results[i] = handleResults(options[i], parameterType,
                     interactionInitiatedBy);
         }
         return results;
@@ -99,8 +105,6 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     private Object[] handleResults(
             final Object collectionOrArray,
             final Class<?> parameterType,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (collectionOrArray == null) {
             return null;
@@ -108,6 +112,8 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
+        final AuthenticationSession authenticationSession = getAuthenticationSession();
+        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,
@@ -133,12 +139,19 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
     // Dependencies
     // ///////////////////////////////////////////////////////
 
-    private SpecificationLoader getSpecificationLoader() {
+    protected SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
 
-    private AdapterManager getAdapterManager() {
+    protected AdapterManager getAdapterManager() {
         return adapterManager;
     }
 
+    protected DeploymentCategory getDeploymentCategory() {
+        return deploymentCategory;
+    }
+
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
 }
