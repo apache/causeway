@@ -77,7 +77,6 @@ public class ValueFacetAnnotationOrConfigurationFactoryTest extends AbstractFace
         facetFactory = new ValueFacetAnnotationOrConfigurationFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
-        facetFactory.setRuntimeContext(new RuntimeContextNoRuntime(DeploymentCategory.PRODUCTION));
 
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);

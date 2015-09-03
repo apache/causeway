@@ -25,19 +25,15 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware, RuntimeContextAware {
+public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
-    private RuntimeContext runtimeContext;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
@@ -90,11 +86,6 @@ public abstract class ValueFacetUsingSemanticsProviderFactory<T> extends FacetFa
     @Override
     public void setServicesInjector(final ServicesInjector dependencyInjector) {
         this.servicesInjector = dependencyInjector;
-    }
-
-    @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
     }
 
 }

@@ -35,20 +35,16 @@ import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParserUtil;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware, RuntimeContextAware {
+public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 
     private IsisConfiguration configuration;
 
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
-
-    private RuntimeContext runtimeContext;
 
     public ParseableFacetAnnotationElseConfigurationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -114,9 +110,5 @@ public class ParseableFacetAnnotationElseConfigurationFactory extends FacetFacto
         this.servicesInjector = dependencyInjector;
     }
 
-    @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
-    }
 
 }

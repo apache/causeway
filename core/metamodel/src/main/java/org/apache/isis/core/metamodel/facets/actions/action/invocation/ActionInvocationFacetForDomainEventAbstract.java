@@ -69,7 +69,6 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -90,7 +89,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
     private final AdapterManager adapterManager;
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final RuntimeContext runtimeContext;
 
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
@@ -109,7 +107,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             final ServicesInjector servicesInjector,
             final AuthenticationSessionProvider authenticationSessionProvider,
             final AdapterManager adapterManager,
-            final RuntimeContext runtimeContext,
             final TransactionStateProvider transactionStateProvider) {
         super(holder);
         this.eventType = eventType;
@@ -118,7 +115,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         this.returnType = returnType;
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.runtimeContext = runtimeContext;
         this.adapterManager = adapterManager;
         this.servicesInjector = servicesInjector;
         this.configuration = configuration;

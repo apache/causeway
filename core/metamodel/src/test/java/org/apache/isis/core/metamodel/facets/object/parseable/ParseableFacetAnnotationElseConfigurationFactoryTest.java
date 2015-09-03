@@ -65,7 +65,6 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
         facetFactory = new ParseableFacetAnnotationElseConfigurationFactory();
         isisConfigurationDefault = new IsisConfigurationDefault();
         facetFactory.setConfiguration(isisConfigurationDefault);
-        facetFactory.setRuntimeContext(new RuntimeContextNoRuntime(DeploymentCategory.PRODUCTION));
 
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
