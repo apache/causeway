@@ -212,9 +212,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             throw new UnsupportedOperationException(String.format("Cannot invoke supporting method '%s'", memberName));
         }
 
-        // UNUSED?
-        final String methodName = method.getName();
-
         if (intent == Intent.DEFAULTS || intent == Intent.CHOICES_OR_AUTOCOMPLETE) {
             return method.invoke(getDelegate(), args);
         }
@@ -281,21 +278,20 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         final ObjectAction objectAction = (ObjectAction) objectMember;
 
-        for (int i = 0; i < args.length; i++) {
-            final Object arg = args[i];
-            if(arg == null) {
+        for (final Object arg : args) {
+            if (arg == null) {
                 continue;
             }
             final ObjectSpecificationDefault objectSpec = getJavaSpecification(arg.getClass());
 
-            if(args.length == 1) {
+            if (args.length == 1) {
                 // is this a contributed property/collection?
                 final List<ObjectAssociation> associations =
                         objectSpec.getAssociations(Contributed.INCLUDED);
                 for (final ObjectAssociation association : associations) {
-                    if(association instanceof ContributeeMember) {
+                    if (association instanceof ContributeeMember) {
                         final ContributeeMember contributeeMember = (ContributeeMember) association;
-                        if(contributeeMember.isContributedBy(objectAction)) {
+                        if (contributeeMember.isContributedBy(objectAction)) {
                             return contributeeMember;
                         }
                     }
@@ -306,9 +302,9 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final List<ObjectAction> actions =
                     objectSpec.getObjectActions(Contributed.INCLUDED);
             for (final ObjectAction action : actions) {
-                if(action instanceof ContributeeMember) {
+                if (action instanceof ContributeeMember) {
                     final ContributeeMember contributeeMember = (ContributeeMember) action;
-                    if(contributeeMember.isContributedBy(objectAction)) {
+                    if (contributeeMember.isContributedBy(objectAction)) {
                         return contributeeMember;
                     }
                 }
@@ -429,8 +425,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             property.set(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
         }
 
-        objectChangedIfRequired(targetAdapter);
-
         return null;
     }
 
@@ -532,8 +526,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             otma.addElement(targetAdapter, argumentNO, getInteractionInitiatedBy());
         }
 
-        objectChangedIfRequired(targetAdapter);
-
         return null;
     }
 
@@ -573,8 +565,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (getExecutionMode().shouldExecute()) {
             collection.removeElement(targetAdapter, argumentAdapter, getInteractionInitiatedBy());
         }
-
-        objectChangedIfRequired(targetAdapter);
 
         return null;
     }
@@ -636,8 +626,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
             return ObjectAdapter.Util.unwrap(actionReturnNO);
         }
-
-        objectChangedIfRequired(targetAdapter);
 
         return null;
     }

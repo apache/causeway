@@ -25,7 +25,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -33,12 +32,12 @@ import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-    private final ObjectDirtier objectDirtier;
 
-    public CollectionRemoveFromFacetViaAccessor(final Method method, final FacetHolder holder, final ObjectDirtier objectDirtier) {
+    public CollectionRemoveFromFacetViaAccessor(
+            final Method method,
+            final FacetHolder holder) {
         super(holder);
         this.method = method;
-        this.objectDirtier = objectDirtier;
     }
 
     /**
@@ -63,7 +62,6 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
         @SuppressWarnings("unchecked")
         final Collection<? super Object> collection = (Collection<? super Object>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.remove(ObjectAdapter.Util.unwrap(elementAdapter));
-        getObjectDirtier().objectChanged(owningAdapter);
     }
 
     @Override
@@ -71,12 +69,5 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
         return "method=" + method;
     }
 
-    // /////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////////////////////
-
-    protected ObjectDirtier getObjectDirtier() {
-        return objectDirtier;
-    }
 
 }

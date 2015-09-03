@@ -77,7 +77,6 @@ import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClass
 import org.apache.isis.core.metamodel.facets.object.cssclass.method.CssClassFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.defaults.annotcfg.DefaultedFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.describedas.annotation.DescribedAsFacetOnTypeAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.disabled.method.DisabledObjectFacetViaMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobject.DomainObjectAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.domainobjectlayout.DomainObjectLayoutFacetFactory;
@@ -305,7 +304,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(UpdateCallbackFacetFactory.class);
         addFactory(RemoveCallbackFacetFactory.class);
 
-        addFactory(DirtyMethodsFacetFactory.class);
         addFactory(ValidateObjectFacetMethodFactory.class);
         addFactory(ObjectValidPropertiesFacetImplFactory.class);
         addFactory(PluralFacetStaticMethodFactory.class);

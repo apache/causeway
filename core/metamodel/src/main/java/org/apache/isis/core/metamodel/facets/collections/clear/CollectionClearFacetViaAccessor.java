@@ -24,9 +24,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
@@ -36,13 +34,14 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 
     private final Method method;
     private final AdapterManager adapterManager;
-    private final ObjectDirtier objectDirtier;
 
-    public CollectionClearFacetViaAccessor(final Method method, final FacetHolder holder, final AdapterManager adapterManager, final ObjectDirtier objectDirtier) {
+    public CollectionClearFacetViaAccessor(
+            final Method method,
+            final FacetHolder holder,
+            final AdapterManager adapterManager) {
         super(holder);
         this.method = method;
         this.adapterManager = adapterManager;
-        this.objectDirtier = objectDirtier;
     }
 
     /**
@@ -63,8 +62,6 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     public void clear(final ObjectAdapter owningAdapter) {
         final Collection<?> collection = (Collection<?>) ObjectAdapter.InvokeUtils.invoke(method, owningAdapter);
         collection.clear();
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(owningAdapter);
-        getObjectDirtier().objectChanged(adapter);
     }
 
     @Override
@@ -78,10 +75,6 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 
     protected AdapterManager getAdapterManager() {
         return adapterManager;
-    }
-
-    protected ObjectDirtier getObjectDirtier() {
-        return objectDirtier;
     }
 
 }

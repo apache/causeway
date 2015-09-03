@@ -35,8 +35,6 @@ import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -60,7 +58,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstract;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -76,7 +73,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final ObjectDirtier objectDirtier;
     private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
     private final QuerySubmitter querySubmitter;
@@ -165,18 +161,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
         };
 
-        this.objectDirtier = new ObjectDirtierAbstract() {
-
-            @Override
-            public void objectChanged(final ObjectAdapter adapter) {
-                getPersistenceSession().objectChanged(adapter);
-            }
-
-            @Override
-            public void objectChanged(final Object object) {
-                new DomainObjectContainerObjectChanged().objectChanged(object);
-            }
-        };
         this.objectPersistor = new ObjectPersistorAbstract() {
             @Override
             public void makePersistent(final ObjectAdapter adapter) {
@@ -346,11 +330,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     @Override
     public LocalizationProviderAbstract getLocalizationProvider() {
         return localizationProvider;
-    }
-
-    @Override
-    public ObjectDirtier getObjectDirtier() {
-        return objectDirtier;
     }
 
     @Override

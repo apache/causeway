@@ -48,7 +48,6 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.Dirtiable;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -424,74 +423,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             @Override
             public void onSuccess() {
-                clearAllDirty();
             }
         });
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Manual dirtying support
-    // ///////////////////////////////////////////////////////////////////////////
-
-    public boolean isCheckObjectsForDirtyFlag() {
-        return dirtiableSupport;
-    }
-
-
-    /**
-     * Mark as {@link #objectChanged(ObjectAdapter) changed } all
-     * {@link Dirtiable} objects that have been
-     * {@link Dirtiable#markDirty(ObjectAdapter) manually marked} as dirty.
-     * 
-     * <p>
-     * If {@link #isCheckObjectsForDirtyFlag() enabled}, will mark as
-     * {@link #objectChanged(ObjectAdapter) changed} any {@link Dirtiable}
-     * objects that have manually been
-     * {@link Dirtiable#markDirty(ObjectAdapter) marked as dirty}.
-     * 
-     * <p>
-     * Called by the {@link IsisTransactionManager}.
-     */
-    public void objectChangedAllDirty() {
-        if (!dirtiableSupport) {
-            return;
-        }
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("marking as changed any objects that have been manually set as dirty");
-        }
-        for (final ObjectAdapter adapter : adapterManager) {
-            if (adapter.getSpecification().isDirty(adapter)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  found dirty object " + adapter);
-                }
-                objectChanged(adapter);
-                adapter.getSpecification().clearDirty(adapter);
-            }
-        }
-    }
-
-    /**
-     * Set as {@link Dirtiable#clearDirty(ObjectAdapter) clean} any
-     * {@link Dirtiable} objects.
-     */
-    public synchronized void clearAllDirty() {
-        if (!isCheckObjectsForDirtyFlag()) {
-            return;
-        }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("cleaning any manually dirtied objects");
-        }
-
-        for (final ObjectAdapter object : adapterManager) {
-            if (object.getSpecification().isDirty(object)) {
-                if (LOG.isDebugEnabled()) {
-                    LOG.debug("  found dirty object " + object);
-                }
-                object.getSpecification().clearDirty(object);
-            }
-        }
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // Services
@@ -745,33 +680,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         });
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // objectChanged
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Mark the {@link ObjectAdapter} as changed, and therefore requiring
-     * flushing to the persistence mechanism.
-     */
-    public void objectChanged(final ObjectAdapter adapter) {
-
-        if (adapter.isTransient() || (adapter.isParented() && adapter.getAggregateRoot().isTransient())) {
-            return;
-        }
-
-        if (adapter.respondToChangesInPersistentObjects()) {
-            if (isImmutable(adapter)) {
-                // previously used to throw
-                // new
-                // ObjectPersistenceException("cannot change immutable object");
-                // however, since the the bytecode enhancers effectively make
-                // calling objectChanged() the responsibility of the framework,
-                // we may as well now do the check here and ignore if doesn't
-                // apply.
-                return;
-            }
-        }
-    }
 
 
     // ///////////////////////////////////////////////////////////////////////////

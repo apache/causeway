@@ -388,7 +388,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
 
         if (getTransaction() != null) {
-            persistenceSession.objectChangedAllDirty();
             getTransaction().flush();
         }
         return false;
@@ -466,17 +465,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
                     LOG.debug("endTransaction: committing");
                 }
 
-                try {
-                    persistenceSession.objectChangedAllDirty();
-                } catch(RuntimeException ex) {
-                    // just in case any new exception was raised...
-                    abortCause = ex;
-                    transactionLevel = 1; // because the transactionLevel was decremented earlier
-                }
-            }
-            
-            if(abortCause == null) {
-                
                 try {
                     getTransaction().preCommit();
                 } catch(RuntimeException ex) {

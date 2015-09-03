@@ -109,11 +109,6 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
         context.ignoring(mockObjectStore);
         transactionManager.startTransaction();
 
-        context.checking(new Expectations() {
-            {
-                oneOf(mockPersistenceSession).objectChangedAllDirty();
-            }
-        });
         assertThat(transactionManager.getTransactionLevel(), is(1));
         transactionManager.endTransaction();
         assertThat(transactionManager.getTransactionLevel(), is(0));

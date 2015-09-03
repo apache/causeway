@@ -59,8 +59,6 @@ import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
-import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -80,7 +78,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware, DomainObjectServicesAware,
+        implements DomainObjectContainer, QuerySubmitterAware, DomainObjectServicesAware,
         ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
         LocalizationProviderAware, ExceptionRecognizer {
 
@@ -262,13 +260,12 @@ public class DomainObjectContainerDefault
     }
 
     /**
-     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     * @deprecated - no-op.
      */
     @Deprecated
     @Programmatic
     @Override
     public void objectChanged(final Object object) {
-        getObjectDirtier().objectChanged(unwrapped(object));
     }
 
     //endregion
@@ -758,7 +755,6 @@ public class DomainObjectContainerDefault
 
     //region > framework dependencies
 
-    private ObjectDirtier objectDirtier;
     private ObjectPersistor objectPersistor;
     private QuerySubmitter querySubmitter;
     private SpecificationLoader specificationLoader;
@@ -815,16 +811,6 @@ public class DomainObjectContainerDefault
     @Override
     public void setAdapterManager(final AdapterManager adapterManager) {
         this.adapterManager = adapterManager;
-    }
-
-    protected ObjectDirtier getObjectDirtier() {
-        return objectDirtier;
-    }
-
-    @Programmatic
-    @Override
-    public void setObjectDirtier(final ObjectDirtier objectDirtier) {
-        this.objectDirtier = objectDirtier;
     }
 
     protected ObjectPersistor getObjectPersistor() {

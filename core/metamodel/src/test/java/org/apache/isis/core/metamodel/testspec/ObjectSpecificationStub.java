@@ -29,9 +29,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -97,36 +95,13 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public void clearDirty(final ObjectAdapter object) {
-    }
-
-    @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
-    }
-
-    public void debugData(final DebugBuilder debug) {
-    }
-
-    public String debugInterface() {
-        return null;
-    }
-
-    public String debugTitle() {
-        return "";
-    }
-
-    public ObjectAction getClassAction(final ActionType type, final String name, final ObjectSpecification[] parameters) {
-        return null;
     }
 
     @Override
     public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
         return null;
-    }
-
-    public int getFeatures() {
-        return 0;
     }
 
     @Override
@@ -288,14 +263,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return Collections.emptyList();
     }
 
-    public void introspect() {
-    }
-
-    @Override
-    public boolean isDirty(final ObjectAdapter object) {
-        return false;
-    }
-
     @Override
     public boolean isOfType(final ObjectSpecification cls) {
         return cls == this;
@@ -327,39 +294,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public void markDirty(final ObjectAdapter object) {
-    }
-
-    public Object newInstance() {
-        return InstanceUtil.createInstance(name);
-    }
-
-    @Override
     public Persistability persistability() {
         return persistable;
-    }
-
-    public void setupAction(final ObjectAction action) {
-        this.action = action;
-    }
-
-    public void setupFields(final List<ObjectAssociation> fields) {
-        this.fields = fields;
-    }
-
-    public void setupIsEncodeable() {
-        isEncodeable = true;
-    }
-
-    public void setupSubclasses(final List<ObjectSpecification> subclasses) {
-        this.subclasses = subclasses;
-    }
-
-    public void setupHasNoIdentity(final boolean hasNoIdentity) {
-    }
-
-    public void setupTitle(final String title) {
-        this.title = title;
     }
 
     @Override
@@ -392,11 +328,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         try {
             final Class<?> cls = Class.forName(name);
             return cls.newInstance();
-        } catch (final ClassNotFoundException e) {
-            throw new IsisException(e);
-        } catch (final InstantiationException e) {
-            throw new IsisException(e);
-        } catch (final IllegalAccessException e) {
+        } catch (final ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new IsisException(e);
         }
     }

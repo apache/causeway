@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
  * first, and then later work out its internals. Hence we create
  * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
+public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical,  DefaultProvider {
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 

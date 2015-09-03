@@ -18,15 +18,14 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 
-import java.util.Date;
-
 import javax.jdo.listener.InstanceLifecycleEvent;
+
+import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.datanucleus.enhancement.Persistable;
 
 public class Utils {
 
@@ -39,10 +38,6 @@ public class Utils {
 
     static Persistable persistenceCapableFor(InstanceLifecycleEvent event) {
         return (Persistable)event.getSource();
-    }
-
-    static void clearDirtyFor(final ObjectAdapter adapter) {
-        adapter.getSpecification().clearDirty(adapter);
     }
 
     static Version getVersionIfAny(final Persistable pojo, final AuthenticationSession authenticationSession) {

@@ -53,7 +53,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ObjectInstantiatorAbstract objectInstantiator;
-    private final ObjectDirtierAbstract objectDirtier;
     private final ObjectPersistorAbstract objectPersistor;
     private final DomainObjectServicesAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -161,18 +160,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
             @Override
             public Object instantiate(final Class<?> cls) throws ObjectInstantiationException {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-        };
-        objectDirtier = new ObjectDirtierAbstract() {
-
-            @Override
-            public void objectChanged(final Object object) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public void objectChanged(final ObjectAdapter adapter) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
@@ -344,11 +331,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     @Override
     public ObjectInstantiator getObjectInstantiator() {
         return objectInstantiator;
-    }
-
-    @Override
-    public ObjectDirtier getObjectDirtier() {
-        return objectDirtier;
     }
 
     @Override

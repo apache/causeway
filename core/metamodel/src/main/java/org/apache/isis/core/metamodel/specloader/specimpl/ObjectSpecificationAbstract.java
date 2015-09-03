@@ -63,9 +63,6 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
-import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -170,10 +167,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private ObjectSpecification superclassSpec;
 
     private Persistability persistability = Persistability.USER_PERSISTABLE;
-
-    private MarkDirtyObjectFacet markDirtyObjectFacet;
-    private ClearDirtyObjectFacet clearDirtyObjectFacet;
-    private IsDirtyObjectFacet isDirtyObjectFacet;
 
     private TitleFacet titleFacet;
     private IconFacet iconFacet;
@@ -375,9 +368,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     public void updateFromFacetValues() {
-        clearDirtyObjectFacet = getFacet(ClearDirtyObjectFacet.class);
-        markDirtyObjectFacet = getFacet(MarkDirtyObjectFacet.class);
-        isDirtyObjectFacet = getFacet(IsDirtyObjectFacet.class);
 
         titleFacet = getFacet(TitleFacet.class);
         iconFacet = getFacet(IconFacet.class);
@@ -401,13 +391,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    /**
-     * Intended to be called (if at all) within {@link #updateFromFacetValues()}
-     * .
-     */
-    protected void setClearDirtyObjectFacet(final ClearDirtyObjectFacet clearDirtyObjectFacet) {
-        this.clearDirtyObjectFacet = clearDirtyObjectFacet;
-    }
 
 
     // //////////////////////////////////////////////////////////////////////
@@ -548,28 +531,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return persistability;
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Dirty object support
-    // //////////////////////////////////////////////////////////////////////
-
-    @Override
-    public boolean isDirty(final ObjectAdapter object) {
-        return isDirtyObjectFacet == null ? false : isDirtyObjectFacet.invoke(object);
-    }
-
-    @Override
-    public void clearDirty(final ObjectAdapter object) {
-        if (clearDirtyObjectFacet != null) {
-            clearDirtyObjectFacet.invoke(object);
-        }
-    }
-
-    @Override
-    public void markDirty(final ObjectAdapter object) {
-        if (markDirtyObjectFacet != null) {
-            markDirtyObjectFacet.invoke(object);
-        }
-    }
 
     // //////////////////////////////////////////////////////////////////////
     // Facet Handling

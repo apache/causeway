@@ -236,8 +236,6 @@ public class FrameworkSynchronizer {
                     CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
                 }
 
-                Utils.clearDirtyFor(adapter);
-
                 Version versionIfAny = getVersionIfAny(pojo);
                 adapter.setVersion(versionIfAny);
 

@@ -26,7 +26,6 @@ import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
@@ -39,7 +38,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected final Method hashCodeMethod;
     protected final Method toStringMethod;
 
-    private final DomainObjectContainerObjectChanged domainObjectContainerObjectChanged;
     private final DomainObjectContainerResolve domainObjectContainerResolve;
 
     private boolean resolveObjectChangedEnabled;
@@ -53,7 +51,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         this.executionMode = executionMode;
 
         this.domainObjectContainerResolve = new DomainObjectContainerResolve();
-        this.domainObjectContainerObjectChanged = new DomainObjectContainerObjectChanged();
 
         try {
             equalsMethod = delegate.getClass().getMethod("equals", new Class[] { Object.class });
@@ -86,15 +83,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-    protected void objectChangedIfRequired(final ObjectAdapter targetAdapter) {
-        objectChangedIfRequired(targetAdapter.getObject());
-    }
-
-    protected void objectChangedIfRequired(final Object domainObject) {
-        if (resolveObjectChangedEnabled) {
-            domainObjectContainerObjectChanged.objectChanged(domainObject);
-        }
-    }
 
     public WrapperFactory getHeadlessViewer() {
         return wrapperFactory;
