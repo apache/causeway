@@ -29,10 +29,10 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultTo
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 
 /**
@@ -50,9 +50,9 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     private static final String ICON_NAME = "instances";
 
     public ObjectSpecificationOnStandaloneList(
-            final SpecificationContext specificationContext,
-            final ObjectMemberContext objectMemberContext) {
-        super(FreeStandingList.class, NAME, specificationContext, objectMemberContext);
+            final ObjectSpecificationDependencies objectSpecificationDependencies,
+            final ObjectMemberDependencies objectMemberDependencies) {
+        super(FreeStandingList.class, NAME, objectSpecificationDependencies, objectMemberDependencies);
     }
 
     // /////////////////////////////////////////////////////////

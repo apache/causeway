@@ -18,11 +18,9 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class OneToOneActionParameterContributee extends OneToOneActionParameterImpl implements ObjectActionParameterContributee{
@@ -58,8 +56,6 @@ public class OneToOneActionParameterContributee extends OneToOneActionParameterI
             final ObjectAdapter adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = serviceAction.getDeploymentCategory();
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg,
                 interactionInitiatedBy);
     }

@@ -20,12 +20,11 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -34,7 +33,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
@@ -43,11 +41,17 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.interactions.*;
+import org.apache.isis.core.metamodel.interactions.AccessContext;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
@@ -62,14 +66,15 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
     private final ServicesProvider servicesProvider;
     private final QuerySubmitter querySubmitter;
-    private final DeploymentCategory deploymentCategory;
 
-    protected ObjectMemberAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectMemberContext objectMemberContext) {
+    protected ObjectMemberAbstract(
+            final FacetedMethod facetedMethod,
+            final FeatureType featureType,
+            final ObjectMemberDependencies objectMemberDependencies) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
@@ -79,22 +84,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = StringExtensions.asNaturalName2(this.id);
 
-        this.deploymentCategory = objectMemberContext.getDeploymentCategory();
-        this.authenticationSessionProvider = objectMemberContext.getAuthenticationSessionProvider();
-        this.specificationLookup = objectMemberContext.getSpecificationLoader();
-        this.adapterManager = objectMemberContext.getAdapterManager();
-        this.servicesProvider = objectMemberContext.getServicesProvider();
-        this.querySubmitter = objectMemberContext.getQuerySubmitter();
+        this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
+        this.adapterManager = objectMemberDependencies.getAdapterManager();
+        this.servicesProvider = objectMemberDependencies.getServicesProvider();
+        this.querySubmitter = objectMemberDependencies.getQuerySubmitter();
     }
 
-    // /////////////////////////////////////////////////////////////
-    // from context
-    // /////////////////////////////////////////////////////////////
 
-    public DeploymentCategory getDeploymentCategory() {
-        return deploymentCategory;
-    }
-    
     // /////////////////////////////////////////////////////////////
     // Identifiers
     // /////////////////////////////////////////////////////////////
@@ -320,17 +316,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return featureType.isProperty();
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Convenience
-    // //////////////////////////////////////////////////////////////////
-
-    /**
-     * The current {@link AuthenticationSession} (can change over time so do not
-     * cache).
-     */
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSessionProvider.getAuthenticationSession();
-    }
 
     // //////////////////////////////////////////////////////////////////
     // toString
@@ -345,9 +330,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // Dependencies
     // //////////////////////////////////////////////////////////////////
 
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
 
     public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;

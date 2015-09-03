@@ -16,29 +16,25 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
-public class SpecificationContext {
+public class ObjectSpecificationDependencies {
 
     private final DeploymentCategory deploymentCategory;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
 
-    public SpecificationContext(
-            final DeploymentCategory deploymentCategory, 
-            final AuthenticationSessionProvider authenticationSessionProvider, 
-            final ServicesProvider servicesProvider, 
-            final ObjectInstantiator objectInstantiator, 
+    public ObjectSpecificationDependencies(
+            final DeploymentCategory deploymentCategory,
+            final ServicesProvider servicesProvider,
+            final ObjectInstantiator objectInstantiator,
             final SpecificationLoader specificationLoader,
             final FacetProcessor facetProcessor) {
         this.deploymentCategory = deploymentCategory;
-        this.authenticationSessionProvider = authenticationSessionProvider;
         this.servicesProvider = servicesProvider;
         this.objectInstantiator = objectInstantiator;
         this.specificationLoader = specificationLoader;
@@ -49,10 +45,6 @@ public class SpecificationContext {
         return deploymentCategory;
     }
     
-    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
-
     public ServicesProvider getServicesProvider() {
         return servicesProvider;
     }

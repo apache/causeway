@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.memento;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -29,8 +28,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
-import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -411,25 +408,6 @@ public class Memento implements Serializable {
         }
     }
     
-    ////////////////////////////////////////////////
-    // encode, restore
-    ////////////////////////////////////////////////
-
-    // UNUSED?
-    public void encodedData(final DataOutputStreamExtended outputImpl) throws IOException {
-        outputImpl.writeEncodable(data);
-    }
-    
-    public void restore(final DataInputStreamExtended input) throws IOException {
-        data = input.readEncodable(Data.class);
-    }
-
-
-    public static Memento recreateFrom(DataInputStreamExtended input) throws IOException {
-        final Memento memento = new Memento(null);
-        memento.restore(input);
-        return memento;
-    }
 
 
     // ///////////////////////////////////////////////////////////////

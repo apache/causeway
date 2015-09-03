@@ -24,10 +24,8 @@ import java.util.List;
 
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -42,14 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
  * a property, a collection or any of the supporting methods).
  */
 public interface ActionInvocationFacet extends Facet {
-
-    @Deprecated
-    public ObjectAdapter invoke(
-            ObjectAdapter targetAdapter,
-            ObjectAdapter[] argumentAdapters,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
-            final InteractionInitiatedBy interactionInitiatedBy);
 
     public ObjectAdapter invoke(
             ObjectAction owningAction,

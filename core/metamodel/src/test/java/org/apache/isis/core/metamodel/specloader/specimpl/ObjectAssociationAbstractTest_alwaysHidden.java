@@ -25,10 +25,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -39,7 +37,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -69,7 +67,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod, FeatureType.PROPERTY, mockObjectSpecification,
-                new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null)) {
+                new ObjectMemberDependencies(null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(
@@ -137,8 +135,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
             public ObjectAdapter[] getAutoComplete(
                     final ObjectAdapter object,
                     final String searchArg,
-                    final AuthenticationSession authenticationSession,
-                    final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
+                    final InteractionInitiatedBy interactionInitiatedBy) {
                 return null;
             }
             @Override

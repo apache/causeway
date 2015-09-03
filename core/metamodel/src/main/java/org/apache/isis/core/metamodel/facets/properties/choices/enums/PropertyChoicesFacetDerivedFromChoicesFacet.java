@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.properties.choices.enums;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
@@ -39,9 +37,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
     @Override
     public Object[] getChoices(
             final ObjectAdapter adapter,
-            final SpecificationLoader specificationLookupUNUSED,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
+            final SpecificationLoader specificationLoader,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         final FacetHolder facetHolder = getFacetHolder();

@@ -59,12 +59,12 @@ import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
-import org.apache.isis.core.metamodel.spec.SpecificationContext;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
@@ -108,10 +108,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     public ObjectSpecificationDefault(
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
-            final SpecificationContext specContext,
-            final ObjectMemberContext objectMemberContext,
+            final ObjectSpecificationDependencies specContext,
+            final ObjectMemberDependencies objectMemberDependencies,
             final CreateObjectContext createObjectContext) {
-        super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberContext);
+        super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberDependencies);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
         this.createObjectContext = createObjectContext;
@@ -231,9 +231,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationImpl(facetMethod, objectMemberContext);
+            return new OneToManyAssociationImpl(facetMethod, objectMemberDependencies);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationImpl(facetMethod, objectMemberContext);
+            return new OneToOneAssociationImpl(facetMethod, objectMemberDependencies);
         } else {
             return null;
         }
@@ -254,7 +254,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionImpl(facetedMethod, objectMemberContext);
+            return new ObjectActionImpl(facetedMethod, objectMemberDependencies);
         } else {
             return null;
         }

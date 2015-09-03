@@ -150,7 +150,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
 
     /**
      * Introduced to disambiguate the meaning of <tt>null</tt> as a return value of
-     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], AuthenticationSession, DeploymentCategory, InteractionInitiatedBy)}
+     * {@link ActionInvocationFacet#invoke(ObjectAdapter, ObjectAdapter[], InteractionInitiatedBy)}
      */
     public static class InvocationResult {
 
@@ -184,16 +184,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         public ObjectAdapter getAdapter() {
             return adapter;
         }
-    }
-
-    @Override
-    public ObjectAdapter invoke(
-            final ObjectAdapter targetAdapter,
-            final ObjectAdapter[] argumentAdapters,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
-        return invoke(null, targetAdapter, argumentAdapters,
-                interactionInitiatedBy);
     }
 
     @Override

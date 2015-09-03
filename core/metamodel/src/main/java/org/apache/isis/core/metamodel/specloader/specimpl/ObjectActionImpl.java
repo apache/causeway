@@ -31,14 +31,12 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
@@ -67,7 +65,7 @@ import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
     private final static Logger LOG = LoggerFactory.getLogger(ObjectActionImpl.class);
@@ -91,8 +89,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Constructors
     // //////////////////////////////////////////////////////////////////
 
-    public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.ACTION, objectMemberContext);
+    public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberDependencies objectMemberDependencies) {
+        super(facetedMethod, FeatureType.ACTION, objectMemberDependencies);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -351,7 +349,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public ObjectAdapter executeWithRuleChecking(
             final ObjectAdapter target,
             final ObjectAdapter[] arguments,
-            final AuthenticationSession authenticationSession,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) {
 
@@ -457,11 +454,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
-            final AuthenticationSession authenticationSessionUNUSED,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final AuthenticationSession session = getAuthenticationSession();
         final int parameterCount = getParameterCount();
         Object[][] parameterChoicesPojos;
 

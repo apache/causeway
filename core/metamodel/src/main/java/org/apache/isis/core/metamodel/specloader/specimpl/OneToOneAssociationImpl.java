@@ -24,9 +24,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -34,11 +31,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.autocomplete.PropertyAutoCompleteFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
@@ -56,18 +53,18 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
-    public OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberContext objectMemberContext) {
-        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLoader(), facetedMethod.getType()), objectMemberContext);
+    public OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberDependencies objectMemberDependencies) {
+        this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
+                objectMemberDependencies);
     }
     
-    protected OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectSpecification objectSpec, final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.PROPERTY, objectSpec, objectMemberContext);
+    protected OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectSpecification objectSpec, final ObjectMemberDependencies objectMemberDependencies) {
+        super(facetedMethod, FeatureType.PROPERTY, objectSpec, objectMemberDependencies);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -280,30 +277,16 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         if (propertyChoicesFacet == null) {
             return null;
         }
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final Object[] pojoOptions = propertyChoicesFacet.getChoices(
                 ownerAdapter,
-                getSpecificationLoader(), authenticationSession, deploymentCategory,
+                getSpecificationLoader(),
                 interactionInitiatedBy);
         List<ObjectAdapter> adapters = Lists.transform(
                 Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
         return adapters.toArray(new ObjectAdapter[]{});
     }
 
-    // seems to be UNUSED?
-    private <T> ObjectAdapter[] options() {
-        final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
-        final ObjectAdapter[] options = new ObjectAdapter[allInstancesAdapter.size()];
-        int j = 0;
-        for (final ObjectAdapter adapter : allInstancesAdapter) {
-            options[j++] = adapter;
-        }
-        return options;
-    }
 
-    
     @Override
     public boolean hasAutoComplete() {
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
@@ -314,11 +297,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     public ObjectAdapter[] getAutoComplete(
             final ObjectAdapter ownerAdapter,
             final String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory1,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
-        final AuthenticationSession session = getAuthenticationSession();
         final PropertyAutoCompleteFacet propertyAutoCompleteFacet = getFacet(PropertyAutoCompleteFacet.class);
         final Object[] pojoOptions = propertyAutoCompleteFacet.autoComplete(ownerAdapter, searchArg,
                 interactionInitiatedBy);

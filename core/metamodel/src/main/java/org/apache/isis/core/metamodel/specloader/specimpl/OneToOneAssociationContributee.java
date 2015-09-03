@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember {
 
@@ -59,8 +59,8 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
             final ObjectAdapter serviceAdapter, 
             final ObjectActionImpl serviceAction, 
             final ObjectSpecification contributeeType,
-            final ObjectMemberContext objectMemberContext) {
-        super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberContext);
+            final ObjectMemberDependencies objectMemberDependencies) {
+        super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberDependencies);
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
 

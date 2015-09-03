@@ -28,8 +28,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
@@ -40,14 +38,15 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.param.autocomplete.ActionParameterAutoCompleteFacet;
+import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
@@ -58,8 +57,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.facets.param.autocomplete.MinLengthUtil;
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
@@ -263,9 +260,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
-
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterAutoCompleteFacet facet = getFacet(ActionParameterAutoCompleteFacet.class);
 
@@ -320,8 +314,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final ObjectAdapter target,
             final List<ObjectAdapter> args,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final AuthenticationSession session = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         final ActionParameterChoicesFacet facet = getFacet(ActionParameterChoicesFacet.class);
 
@@ -516,16 +508,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // Dependencies (from parent)
     // /////////////////////////////////////////////////////////////
 
-    private DeploymentCategory getDeploymentCategory() {
-        return parentAction.getDeploymentCategory();
-    }
-
     protected SpecificationLoader getSpecificationLoader() {
         return parentAction.getSpecificationLoader();
-    }
-
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return parentAction.getAuthenticationSessionProvider();
     }
 
     protected AdapterManager getAdapterMap() {
@@ -534,10 +518,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     protected QuerySubmitter getQuerySubmitter() {
         return parentAction.getQuerySubmitter();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
     }
 
 }

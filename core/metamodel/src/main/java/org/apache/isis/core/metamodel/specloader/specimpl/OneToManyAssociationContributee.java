@@ -17,11 +17,11 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 
@@ -58,9 +58,9 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     
     private final Identifier identifier;
 
-    private static ObjectSpecification typeOfSpec(final ObjectActionImpl objectAction, ObjectMemberContext objectMemberContext) {
+    private static ObjectSpecification typeOfSpec(final ObjectActionImpl objectAction, ObjectMemberDependencies objectMemberDependencies) {
         final TypeOfFacet actionTypeOfFacet = objectAction.getFacet(TypeOfFacet.class);
-        SpecificationLoader specificationLookup = objectMemberContext.getSpecificationLoader();
+        SpecificationLoader specificationLookup = objectMemberDependencies.getSpecificationLoader();
         // TODO: a bit of a hack; ought really to set up a fallback TypeOfFacetDefault which ensures that there is always
         // a TypeOfFacet for any contributee associations created from contributed actions.
         Class<? extends Object> cls = actionTypeOfFacet != null? actionTypeOfFacet.value(): Object.class;
@@ -71,8 +71,9 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             final ObjectAdapter serviceAdapter, 
             final ObjectActionImpl serviceAction,
             final ObjectSpecification contributeeType,
-            final ObjectMemberContext objectMemberContext) {
-        super(serviceAction.getFacetedMethod(), typeOfSpec(serviceAction, objectMemberContext), objectMemberContext);
+            final ObjectMemberDependencies objectMemberDependencies) {
+        super(serviceAction.getFacetedMethod(), typeOfSpec(serviceAction, objectMemberDependencies),
+                objectMemberDependencies);
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
 
@@ -81,7 +82,8 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberContext.getSpecificationLoader()) {};
+        final TypeOfFacet typeOfFacet = new TypeOfFacetAbstract(getSpecification().getCorrespondingClass(), this, objectMemberDependencies
+                .getSpecificationLoader()) {};
 
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
@@ -142,7 +144,6 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             final ObjectAdapter contributee,
             final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
         final VisibilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createVisibleInteractionContext(
                 serviceAdapter, interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action

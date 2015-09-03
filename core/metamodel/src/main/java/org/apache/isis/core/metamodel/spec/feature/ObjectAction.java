@@ -32,12 +32,10 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.StringFunctions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetFilters;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
@@ -103,7 +101,6 @@ public interface ObjectAction extends ObjectMember {
     ObjectAdapter executeWithRuleChecking(
             final ObjectAdapter target,
             final ObjectAdapter[] parameters,
-            final AuthenticationSession authenticationSession,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Where where) throws AuthorizationException;
 
@@ -185,9 +182,8 @@ public interface ObjectAction extends ObjectMember {
      * the user can choose from.
      */
     ObjectAdapter[][] getChoices(
-            ObjectAdapter target,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
+            final ObjectAdapter target,
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     // //////////////////////////////////////////////////////
     // Utils
@@ -270,7 +266,6 @@ public interface ObjectAction extends ObjectMember {
         private Predicates() {
         }
 
-        // UNUSED?
         public static Predicate<ObjectAction> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
@@ -279,12 +274,10 @@ public interface ObjectAction extends ObjectMember {
                     .asPredicate(Filters.dynamicallyVisible(target, interactionInitiatedBy, where));
         }
 
-        // UNUSED?
         public static Predicate<ObjectAction> withId(final String actionId) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withId(actionId));
         }
 
-        // UNUSED?
         public static Predicate<ObjectAction> withNoValidationRules() {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.withNoValidationRules());
         }
@@ -302,7 +295,6 @@ public interface ObjectAction extends ObjectMember {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.notBulkOnly());
         }
 
-        // UNUSED?
         public static Predicate<ObjectAction> memberOrderOf(ObjectAssociation association) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.memberOrderOf(association));
         }

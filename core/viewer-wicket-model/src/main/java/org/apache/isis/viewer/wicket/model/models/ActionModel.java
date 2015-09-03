@@ -467,7 +467,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final AuthenticationSession session = getAuthenticationSession();
         final ObjectAdapter resultAdapter =
                 action.executeWithRuleChecking(
-                        targetAdapter, arguments, session,
+                        targetAdapter, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
         return resultAdapter;

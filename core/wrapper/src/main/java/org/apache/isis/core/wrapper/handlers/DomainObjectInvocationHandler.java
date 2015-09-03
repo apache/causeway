@@ -711,20 +711,6 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
     }
 
-    // UNUSED?
-    private String decode(final ObjectMember objectMember) {
-        if (objectMember instanceof OneToOneAssociation) {
-            return "a property";
-        }
-        if (objectMember instanceof OneToManyAssociation) {
-            return "a collection";
-        }
-        if (objectMember instanceof ObjectAction) {
-            return "an action";
-        }
-        return "an UNKNOWN member type";
-    }
-
     /**
      * Wraps a {@link InteractionEvent#isVeto() vetoing}
      * {@link InteractionEvent} in a corresponding {@link InteractionException},

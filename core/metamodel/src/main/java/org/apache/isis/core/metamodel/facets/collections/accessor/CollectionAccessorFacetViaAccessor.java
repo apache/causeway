@@ -80,8 +80,6 @@ public class CollectionAccessorFacetViaAccessor
 
         final ObjectAdapter collectionAdapter = getAdapterManager().adapterFor(collectionOrArray);
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         boolean filterForVisibility = getConfiguration().getBoolean("isis.reflector.facet.filterVisibility", true);
         if(filterForVisibility) {
             final List<ObjectAdapter> visibleAdapters =

@@ -29,15 +29,19 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 // TODO need to pull up the common methods. like getName(), from subclasses
 public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract implements ObjectAssociation {
 
     private final ObjectSpecification specification;
 
-    public ObjectAssociationAbstract(final FacetedMethod facetedMethod, final FeatureType featureType, final ObjectSpecification specification, final ObjectMemberContext parameterObject) {
-        super(facetedMethod, featureType, parameterObject);
+    public ObjectAssociationAbstract(
+            final FacetedMethod facetedMethod,
+            final FeatureType featureType,
+            final ObjectSpecification specification,
+            final ObjectMemberDependencies dependencies) {
+        super(facetedMethod, featureType, dependencies);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + getId() + "' must exist");
         }

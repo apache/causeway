@@ -23,10 +23,8 @@ import com.google.common.base.Function;
 
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 
@@ -40,9 +38,7 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * 
      * <p>
      * Either this or {@link #isCollection()} will be true.
-     *
-     * <p>
-     * Design note: modelled after {@link ObjectAssociation#isNotCollection()}
+     * </p>
      */
     boolean isObject();
 
@@ -142,9 +138,10 @@ public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
      * @return
      */
     String isValid(
-            ObjectAdapter adapter,
-            Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy, Localization localization);
+            final ObjectAdapter adapter,
+            final Object proposedValue,
+            final InteractionInitiatedBy interactionInitiatedBy,
+            final Localization localization);
  
 
     

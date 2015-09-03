@@ -64,8 +64,6 @@ public class ObjectActionParameterParseableContributee extends ObjectActionParam
             final ObjectAdapter adapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = serviceAction.getDeploymentCategory();
         return serviceActionParameter.getAutoComplete(serviceAdapter, searchArg,
                 interactionInitiatedBy);
     }

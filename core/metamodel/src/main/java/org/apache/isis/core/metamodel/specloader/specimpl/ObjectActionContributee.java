@@ -30,12 +30,10 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
@@ -49,7 +47,7 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 
@@ -80,8 +78,8 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             final ObjectActionImpl serviceAction,
             final int contributeeParam,
             final ObjectSpecification contributeeType,
-            final ObjectMemberContext objectMemberContext) {
-        super(serviceAction.getFacetedMethod(), objectMemberContext);
+            final ObjectMemberDependencies objectMemberDependencies) {
+        super(serviceAction.getFacetedMethod(), objectMemberDependencies);
         
         this.serviceAdapter = serviceAdapter;
         this.serviceAction = serviceAction;
@@ -189,10 +187,9 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter, authenticationSession,
-                deploymentCategory, interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy) {
+        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter,
+                interactionInitiatedBy);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
         

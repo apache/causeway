@@ -19,14 +19,21 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.When;
@@ -35,7 +42,6 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.util.ToString;
@@ -49,13 +55,14 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
@@ -65,20 +72,33 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
-import org.apache.isis.core.metamodel.spec.*;
-import org.apache.isis.core.metamodel.spec.feature.*;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
+import org.apache.isis.core.metamodel.spec.Persistability;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
 
 public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implements ObjectSpecification {
 
@@ -104,7 +124,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private final DeploymentCategory deploymentCategory;
-    private final AuthenticationSessionProvider authenticationSessionProvider;
     private final ServicesProvider servicesProvider;
     private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
@@ -116,7 +135,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      */
     protected Properties metadataProperties;
 
-    protected final ObjectMemberContext objectMemberContext;
+    protected final ObjectMemberDependencies objectMemberDependencies;
 
 
     private final List<ObjectAssociation> associations = Lists.newArrayList();
@@ -168,8 +187,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public ObjectSpecificationAbstract(
             final Class<?> introspectedClass, 
             final String shortName,
-            final SpecificationContext specificationContext, 
-            final ObjectMemberContext objectMemberContext) {
+            final ObjectSpecificationDependencies objectSpecificationDependencies,
+            final ObjectMemberDependencies objectMemberDependencies) {
 
         this.correspondingClass = introspectedClass;
         this.fullName = introspectedClass.getName();
@@ -178,14 +197,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.isAbstract = ClassExtensions.isAbstract(introspectedClass);
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
-        this.deploymentCategory = specificationContext.getDeploymentCategory();
-        this.authenticationSessionProvider = specificationContext.getAuthenticationSessionProvider();
-        this.servicesProvider = specificationContext.getServicesProvider();
-        this.objectInstantiator = specificationContext.getObjectInstantiator();
-        this.specificationLoader = specificationContext.getSpecificationLoader();
-        this.facetProcessor = specificationContext.getFacetProcessor();
+        this.deploymentCategory = objectSpecificationDependencies.getDeploymentCategory();
+        this.servicesProvider = objectSpecificationDependencies.getServicesProvider();
+        this.objectInstantiator = objectSpecificationDependencies.getObjectInstantiator();
+        this.specificationLoader = objectSpecificationDependencies.getSpecificationLoader();
+        this.facetProcessor = objectSpecificationDependencies.getFacetProcessor();
         
-        this.objectMemberContext = objectMemberContext;
+        this.objectMemberDependencies = objectMemberDependencies;
     }
 
     
@@ -218,7 +236,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     
     /**
      * As provided explicitly within the
-     * {@link #ObjectSpecificationAbstract(Class, String, org.apache.isis.core.metamodel.spec.SpecificationContext, org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext)}
+     * {@link #ObjectSpecificationAbstract(Class, String, ObjectSpecificationDependencies, ObjectMemberDependencies)}
      * constructor}.
      * 
      * <p>
@@ -994,8 +1012,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             public ObjectAssociation apply(ObjectActionImpl input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 final ObjectAssociationAbstract association = returnType.isNotCollection() 
-                        ? new OneToOneAssociationContributee(serviceAdapter, input, contributeeType, objectMemberContext) 
-                        : new OneToManyAssociationContributee(serviceAdapter, input, contributeeType, objectMemberContext);
+                        ? new OneToOneAssociationContributee(serviceAdapter, input, contributeeType,
+                        objectMemberDependencies)
+                        : new OneToManyAssociationContributee(serviceAdapter, input, contributeeType,
+                        objectMemberDependencies);
                 facetProcessor.processMemberOrder(metadataProperties, association);
                 return association;
             }
@@ -1053,7 +1073,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final int contributeeParam = contributeeParameterMatchOf(contributedAction);
             if (contributeeParam != -1) {
                 ObjectActionContributee contributeeAction = 
-                        new ObjectActionContributee(serviceAdapter, contributedAction, contributeeParam, this, objectMemberContext);
+                        new ObjectActionContributee(serviceAdapter, contributedAction, contributeeParam, this,
+                                objectMemberDependencies);
                 facetProcessor.processMemberOrder(metadataProperties, contributeeAction);
                 contributeeActions.add(contributeeAction);
             }
@@ -1185,25 +1206,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     // //////////////////////////////////////////////////////////////////////
-    // Convenience
-    // //////////////////////////////////////////////////////////////////////
-
-    /**
-     * convenience method to return the current {@link AuthenticationSession}
-     * from the {@link #getAuthenticationSessionProvider() injected}
-     * {@link AuthenticationSessionProvider}.
-     */
-    protected final AuthenticationSession getAuthenticationSession() {
-        return getAuthenticationSessionProvider().getAuthenticationSession();
-    }
-
-    // //////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor)
     // //////////////////////////////////////////////////////////////////////
-
-    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        return authenticationSessionProvider;
-    }
 
     public ServicesProvider getServicesProvider() {
         return servicesProvider;

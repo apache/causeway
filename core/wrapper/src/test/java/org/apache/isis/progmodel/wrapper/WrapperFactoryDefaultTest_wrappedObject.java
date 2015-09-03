@@ -48,7 +48,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.metamodel.facets.properties.validating.method.PropertyValidateFacetViaMethod;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
@@ -88,7 +88,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private IsisConfiguration mockConfiguration;
 
-    private ObjectMemberContext objectMemberContext;
+    private ObjectMemberDependencies objectMemberDependencies;
 
     @Mock
     private ObjectSpecificationDefault mockEmployeeSpec;
@@ -118,7 +118,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Before
     public void setUp() {
 
-        objectMemberContext = new ObjectMemberContext(DeploymentCategory.PRODUCTION, mockAuthenticationSessionProvider,
+        objectMemberDependencies = new ObjectMemberDependencies(
                 mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter, mockServicesProvider);
         
         employeeRepository = new EmployeeRepositoryImpl();
@@ -153,7 +153,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         final Method employeeClearNameMethod = methodOf(Employee.class, "clearName");
         employeeNameMember = new OneToOneAssociationImpl(
                 facetedMethodForProperty(
-                        employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod), objectMemberContext);
+                        employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod),
+                objectMemberDependencies);
         
         context.checking(new Expectations() {
             {

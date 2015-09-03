@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
@@ -48,7 +47,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
@@ -211,7 +210,8 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     }
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberContext(DeploymentCategory.PRODUCTION, null, null, null, null, null));
+        super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberDependencies(
+                null, null, null, null));
     }
 
     @Override
@@ -232,7 +232,6 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter target, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
         return new PropertyUsabilityContext(target, getIdentifier(), interactionInitiatedBy, where);
     }
 
@@ -240,7 +239,6 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     public VisibilityContext<?> createVisibleInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final AuthenticationSession session = getAuthenticationSession();
         return new PropertyVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy,
                 where);
     }

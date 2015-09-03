@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
@@ -28,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -46,22 +44,23 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     public OneToManyAssociationImpl(
             final FacetedMethod facetedMethod, 
-            final ObjectMemberContext objectMemberContext) {
-        this(facetedMethod, getSpecification(objectMemberContext.getSpecificationLoader(), facetedMethod.getType()), objectMemberContext);
+            final ObjectMemberDependencies objectMemberDependencies) {
+        this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
+                objectMemberDependencies);
     }
 
     protected OneToManyAssociationImpl(
             final FacetedMethod facetedMethod, 
             final ObjectSpecification objectSpec, 
-            final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.COLLECTION, objectSpec, objectMemberContext);
+            final ObjectMemberDependencies objectMemberDependencies) {
+        super(facetedMethod, FeatureType.COLLECTION, objectSpec, objectMemberDependencies);
     }
 
     @Override
@@ -271,8 +270,6 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public ObjectAdapter[] getAutoComplete(
             ObjectAdapter object,
             String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory,
             final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectAdapter[0];
     }

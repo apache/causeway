@@ -23,7 +23,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import com.google.common.collect.Lists;
 
@@ -46,7 +45,6 @@ import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFace
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.value.bigdecimal.BigDecimalValueFacet;
 import org.apache.isis.core.metamodel.facets.value.string.StringValueSemanticsProvider;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -204,7 +202,7 @@ public class ScalarModel extends EntityModel implements LinksProvider {
                 final ObjectAdapter[] choices =
                         property.getAutoComplete(
                                 parentAdapter, searchArg,
-                                authenticationSession, deploymentCategory, InteractionInitiatedBy.USER);
+                                InteractionInitiatedBy.USER);
                 return choicesAsList(choices);
             }
 

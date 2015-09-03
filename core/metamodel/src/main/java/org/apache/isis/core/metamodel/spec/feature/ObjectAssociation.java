@@ -31,11 +31,9 @@ import com.google.common.collect.Maps;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
@@ -97,8 +95,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public ObjectAdapter[] getAutoComplete(
             final ObjectAdapter object,
             final String searchArg,
-            final AuthenticationSession authenticationSession,
-            final DeploymentCategory deploymentCategory, final InteractionInitiatedBy interactionInitiatedBy);
+            final InteractionInitiatedBy interactionInitiatedBy);
 
     int getAutoCompleteMinLength();
 
@@ -173,35 +170,30 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         /**
          * Only fields that are for reference properties (ie 1:1 associations)
          */
-        // UNUSED ?
         public final static Predicate<ObjectAssociation> REFERENCE_PROPERTIES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.REFERENCE_PROPERTIES);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
-        // UNUSED ?
         public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_COLLECTION_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_COLLECTION_TABLE);
 
         /**
          * Only fields that are for properties (ie 1:1 associations)
          */
-        // UNUSED ?
         public final static Predicate<ObjectAssociation> WHERE_VISIBLE_IN_STANDALONE_TABLE =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.WHERE_VISIBLE_IN_STANDALONE_TABLE);
 
         /**
          * All fields (that is, excludes out nothing).
          */
-        // UNUSED ?
         public final static Predicate<ObjectAssociation> ALL =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.ALL);
 
         /**
          * Only fields that are for collections (ie 1:m associations)
          */
-        // UNUSED ?
         public final static Predicate<ObjectAssociation> COLLECTIONS =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.COLLECTIONS);
 
@@ -212,12 +204,10 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         public static final Predicate<ObjectAssociation> VISIBLE_AT_LEAST_SOMETIMES =
                 org.apache.isis.applib.filter.Filters.asPredicate(Filters.VISIBLE_AT_LEAST_SOMETIMES);
 
-        // UNUSED ?
         public static final Predicate<ObjectAssociation> staticallyVisible(final Where context) {
             return org.apache.isis.applib.filter.Filters.asPredicate(Filters.staticallyVisible(context));
         }
 
-        // UNUSED ?
         public static final Predicate<ObjectAssociation> dynamicallyVisible(
                 final ObjectAdapter target,
                 final InteractionInitiatedBy interactionInitiatedBy,
