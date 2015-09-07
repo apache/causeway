@@ -148,13 +148,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
     String getIconName();
 
     /**
-     * Changes the 'lazy loaded' state of the domain object.
-     * 
-     * @see ResolveState
-     */
-    void changeState(ResolveState newState);
-
-    /**
      * Checks the version of this adapter to make sure that it does not differ
      * from the specified version.
      * 
@@ -184,43 +177,11 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
      */
     void replaceOid(Oid persistedOid);
 
-    /**
-     * Determines what 'lazy loaded' state the domain object is in.
-     * 
-     * @see ResolveState
-     */
-    ResolveState getResolveState();
+    ObjectAdapter getAggregateRoot();
 
-
-    /**
-     * Whether the object is persisted.
-     * 
-     * <p>
-     * Note: not necessarily the reciprocal of {@link #isTransient()};
-     * standalone adapters (with {@link ResolveState#VALUE}) report as neither
-     * persistent or transient.
-     */
-    boolean representsPersistent();
-
-    boolean isNew();
-    boolean isTransient();
-
-    boolean isGhost();
-    boolean isResolved();
-
-    boolean isResolving();
-    boolean isUpdating();
-
-    boolean isDestroyed();
-
-
-    boolean canTransitionToResolving();
-    void markAsResolvedIfPossible();
-
-    
     Version getVersion();
-
     void setVersion(Version version);
+
 
     /**
      * Whether this instance belongs to another object (meaning its
@@ -240,18 +201,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
     boolean isValue();
 
 
-    /**
-     * Either the aggregate root (either itself or, if parented, then its parent adapter).
-     * 
-     * TODO: should this be recursive, to support root->aggregate->aggregate etc.
-     */
-    ObjectAdapter getAggregateRoot();
-
-    boolean respondToChangesInPersistentObjects();
-
-
-    
-    
     public final class Util {
 
         private Util() {
@@ -343,8 +292,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
          * {@link ObjectAdapter}s of those that are visible (as per any facet(s) installed on the element class
          * of the collection).
          *  @param collectionAdapter - an adapter around a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
-         * @param authenticationSession - the user requesting the collection; if null then no filtering will be performed
-         * @param deploymentCategory - whether prototyping etc
          * @param interactionInitiatedBy
          */
         public static List<ObjectAdapter> visibleAdapters(
@@ -360,8 +307,6 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
         /**
          * as per {@link #visibleAdapters(ObjectAdapter, InteractionInitiatedBy)}.
          *  @param objectAdapters - iterable over the respective adapters of a collection (as returned by a getter of a collection, or of an autoCompleteNXxx() or choicesNXxx() method, etc
-         * @param authenticationSession - the user requesting the collection; if null then no visibility checking will be performed
-         * @param deploymentCategory - whether prototyping etc; may influence visibility
          * @param interactionInitiatedBy
          */
         public static List<ObjectAdapter> visibleAdapters(
@@ -404,6 +349,10 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
                     Where.OBJECT_FORMS);
         }
     }
+
+    boolean representsPersistent();
+    boolean isDestroyed();
+
 
     public final class InvokeUtils {
 

@@ -33,7 +33,6 @@ import org.junit.Test;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -102,17 +101,6 @@ public class PojoAdapterTest {
     @Test
     public void getObject_initially() {
         assertEquals(domainObject, adapter.getObject());
-    }
-
-    @Test
-    public void getResolveState_initially() {
-        assertEquals(ResolveState.NEW, adapter.getResolveState());
-    }
-
-    @Test
-    public void changeState_newToTransient() {
-        adapter.changeState(ResolveState.TRANSIENT);
-        assertEquals(ResolveState.TRANSIENT, adapter.getResolveState());
     }
 
     @Test

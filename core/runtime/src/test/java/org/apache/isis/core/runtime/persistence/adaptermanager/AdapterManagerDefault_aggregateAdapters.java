@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
@@ -208,8 +207,6 @@ public class AdapterManagerDefault_aggregateAdapters {
     public void getResolveState_isInitiallyGhost() throws Exception {
         allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
         aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
-
-        assertEquals(ResolveState.GHOST, aggregatedAdapter.getResolveState());
     }
 
     @Test

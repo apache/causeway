@@ -31,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -45,7 +44,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallback
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
@@ -136,25 +134,7 @@ public class FrameworkSynchronizer {
                     }
                 }
 
-                if(!adapter.isResolved()) {
-                    // it's possible that the adapter has already been marked as destroyed, eg
-                    // - the object was deleted in an action (ie queued a DestroyCommand
-                    // - subscriber on the action performed a post-execute which ran a query
-                    // - running the query flushed the command, causing the pojo to be deleted and its adapter to be set to destroyed
-                    // - in the commit, DN's clean up of query results causes pending pojos in result set to be resolved,
-                    //   triggering this method for a pojo that was deleted
-                    if(!adapter.isDestroyed()) {
-                        PersistorUtil.startResolving(adapter);
-                        PersistorUtil.toEndState(adapter);
-                    }
-                }
                 adapter.setVersion(datastoreVersion);
-                if(pojo.dnIsDeleted()) {
-                    // for same reason as above
-                    if(!adapter.isDestroyed()) {
-                        adapter.changeState(ResolveState.DESTROYED);
-                    }
-                }
 
                 ensureFrameworksInAgreement(pojo);
             }
@@ -323,9 +303,6 @@ public class FrameworkSynchronizer {
                 if(adapter == null) {
                     return;
                 }
-                if(!adapter.isDestroyed()) {
-                    adapter.changeState(ResolveState.DESTROYED);
-                }
 
 
                 // previously we called the removed callback (if any).
@@ -386,40 +363,13 @@ public class FrameworkSynchronizer {
     // /////////////////////////////////////////////////////////
 
     void ensureFrameworksInAgreement(final Persistable pojo) {
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-        final Oid oid = adapter.getOid();
 
         if(!pojo.dnIsPersistent()) {
-            // make sure the adapter is transient
-            if (!adapter.getResolveState().isTransient()) {
-                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be transient but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
-            }
-
-            // make sure the oid is transient
-            if (!oid.isTransient()) {
-                throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be transient; pojo: {1}", oid, pojo));
-            }
 
         } else if(pojo.dnIsDeleted()) {
             
-            // make sure the adapter is destroyed
-            if (!adapter.getResolveState().isDestroyed()) {
-                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be destroyed but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
-            }
-            
         } else {
-            
-            
-            
-            // make sure the adapter is persistent
-            if (!adapter.getResolveState().representsPersistent()) {
-                throw new IsisException(MessageFormat.format("adapter oid={0} has resolve state in invalid state; should be in a persistent but is {1}; pojo: {2}", oid, adapter.getResolveState(), pojo));
-            }
 
-            // make sure the oid is persistent
-            if (oid.isTransient()) {
-                throw new IsisException(MessageFormat.format("adapter oid={0} has oid in invalid state; should be persistent; pojo: {1}", oid, pojo));
-            }
         }
     }
 

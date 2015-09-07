@@ -25,7 +25,6 @@ import com.google.common.base.Splitter;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
@@ -75,38 +74,20 @@ public class PojoAdapterBuilder {
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
                 return RootOidDefault.createTransient(objectSpecId, identifier);
             }
-
-            @Override
-            void changeStateOn(PojoAdapter pojoAdapter) {
-                pojoAdapter.changeState(ResolveState.TRANSIENT);
-            }
         },
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
                 return RootOidDefault.create(objectSpecId, identifier);
             }
-
-            @Override
-            void changeStateOn(PojoAdapter pojoAdapter) {
-                pojoAdapter.changeState(ResolveState.TRANSIENT);
-                pojoAdapter.changeState(ResolveState.RESOLVED);
-            }
-        }, 
+        },
         VALUE {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
                 return null;
             }
-
-            @Override
-            void changeStateOn(PojoAdapter pojoAdapter) {
-                pojoAdapter.changeState(ResolveState.VALUE);
-            }
         };
         abstract RootOid createOid(ObjectSpecId objectSpecId, String identifier);
-
-        abstract void changeStateOn(PojoAdapter pojoAdapter);
     }
 
     public static enum Type {
@@ -238,7 +219,6 @@ public class PojoAdapterBuilder {
                 return titleString != null? titleString: super.titleString();
             }
         };
-        persistence.changeStateOn(pojoAdapter);
         if(persistence == Persistence.PERSISTENT && version != null) {
             pojoAdapter.setVersion(version);
         }

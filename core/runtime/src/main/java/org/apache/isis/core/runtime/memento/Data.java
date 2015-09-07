@@ -26,7 +26,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 
@@ -64,8 +63,7 @@ public class Data implements Encodable, Serializable {
     // ///////////////////////////////////////////////////////
 
     /**
-     * Note: could be <tt>null</tt> if represents a
-     * {@link ResolveState#isValue() standalone} adapter.
+     * Note: could be <tt>null</tt> if represents a value (standalone adapter).
      */
     public Oid getOid() {
         return oid;

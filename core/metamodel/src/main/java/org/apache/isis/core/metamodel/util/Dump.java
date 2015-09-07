@@ -367,7 +367,6 @@ public final class Dump {
 
             builder.appendln("Icon", adapter.getIconName());
             builder.appendln("OID", adapter.getOid());
-            builder.appendln("State", adapter.getResolveState());
             builder.appendln("Version", adapter.getVersion());
 
         } catch (final RuntimeException e) {

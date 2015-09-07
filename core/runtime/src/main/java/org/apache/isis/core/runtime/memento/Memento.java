@@ -49,7 +49,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -310,13 +309,8 @@ public class Memento implements Serializable {
         boolean dataIsTransient = data.getOid().isTransient();
         
         if (!dataIsTransient) {
-            try {
-                PersistorUtil.startResolvingOrUpdating(objectAdapter);
-                updateFields(objectAdapter, data);
-                objectAdapter.getOid().setVersion(data.getOid().getVersion());
-            } finally {
-                PersistorUtil.toEndState(objectAdapter);
-            }
+            updateFields(objectAdapter, data);
+            objectAdapter.getOid().setVersion(data.getOid().getVersion());
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
             

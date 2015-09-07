@@ -19,16 +19,16 @@
 
 package org.apache.isis.core.runtime.persistence.adapter;
 
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
@@ -38,7 +38,12 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.spec.*;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.InstanceAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Specification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -57,7 +62,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     
     private Object pojo;
     private Oid oid;
-    private ResolveState resolveState;
 
     private ElementSpecificationProvider elementSpecificationProvider;
 
@@ -79,7 +83,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         this.pojo = pojo;
         this.oid = oid;
-        resolveState = ResolveState.NEW;
     }
 
     
@@ -122,127 +125,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
 
-    // ///////////////////////////////////////////////////////////////////
-    // ResolveState, changeState
-    // ///////////////////////////////////////////////////////////////////
-
-    @Override
-    public ResolveState getResolveState() {
-        return aggregateResolveState();
-    }
 
 
-    private ResolveState aggregateResolveState() {
-        return isAggregated() ? 
-                ((PojoAdapter)getAggregateRoot()).aggregateResolveState() : 
-                resolveState;
-    }
-
-
-
-    @Override
-    public void changeState(final ResolveState newState) {
-        if(isAggregated()) {
-            return; // no-op for aggregated objects.
-        }
-
-        final boolean validToChangeTo = resolveState.isValidToChangeTo(newState);
-        // don't call toString() since that could hit titleString() and we might
-        // be in the process of transitioning to ghost
-        Assert.assertTrue("oid= " + this.getOid() + "; can't change from " + resolveState.name() + " to " + newState.name(), validToChangeTo);
-
-        if (LOG.isTraceEnabled()) {
-            String oidString;
-            if (oid == null) {
-                oidString = "";
-            } else {
-                // don't call toString() in case in process of transitioning to
-                // ghost
-                oidString = "for " + this.getOid() + " ";
-            }
-            LOG.trace(oidString + "changing resolved state to " + newState.name());
-        }
-        resolveState = newState;
-    }
-
-    private boolean elementsLoaded() {
-        return isTransient() || this.isResolved();
-    }
-
-    // ///////////////////////////////////////////////////////////////////
-    // ResolveState
-    // ///////////////////////////////////////////////////////////////////
-
-    /**
-     * Just delegates to {@link #aggregateResolveState() resolve state}.
-     * 
-     * @see ResolveState#representsPersistent()
-     * @see #isTransient()
-     */
-    @Override
-    public boolean representsPersistent() {
-        return aggregateResolveState().representsPersistent();
-    }
-
-
-    /**
-     * Just delegates to {@link #aggregateResolveState() resolve state}.
-     * 
-     * @see ResolveState#isTransient()
-     * @see #representsPersistent()
-     */
-    @Override
-    public boolean isTransient() {
-        return aggregateResolveState().isTransient();
-    }
-
-    @Override
-    public boolean isNew() {
-        return aggregateResolveState().isNew();
-    }
-
-    @Override
-    public boolean isResolving() {
-        return aggregateResolveState().isResolving();
-    }
-
-    @Override
-    public boolean isResolved() {
-        return aggregateResolveState().isResolved();
-    }
-
-    @Override
-    public boolean isGhost() {
-        return aggregateResolveState().isGhost();
-    }
-
-    @Override
-    public boolean isUpdating() {
-        return aggregateResolveState().isUpdating();
-    }
-
-    @Override
-    public boolean isDestroyed() {
-        return aggregateResolveState().isDestroyed();
-    }
-
-
-    @Override
-    public boolean canTransitionToResolving() {
-        return aggregateResolveState().canTransitionToResolving();
-    }
-
-    /**
-     * If {@link #isGhost()}, then will become resolved.
-     */
-    @Override
-    public void markAsResolvedIfPossible() {
-        if (!canTransitionToResolving()) {
-            return;
-        } 
-        changeState(ResolveState.RESOLVING);
-        changeState(ResolveState.RESOLVED);
-    }
 
 
     
@@ -273,8 +157,82 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isValue() {
-        // equivalently: aggregateResolveState().isValue();
         return oid == null;
+    }
+
+    @Override
+    public boolean isTransient() {
+        if(getSpecification().isService()) {
+            // view models are treated as persistent objects
+            return false;
+        }
+        if(getSpecification().isViewModel()) {
+            // view models are treated as persistent objects
+            return false;
+        }
+        if (pojo instanceof Persistable) {
+            final Persistable pojo = (Persistable) this.pojo;
+            final boolean isNew = pojo.dnIsNew();
+            final boolean isPersistent = pojo.dnIsPersistent();
+            final boolean isDirty = pojo.dnIsDirty();
+            final boolean isDeleted = pojo.dnIsDeleted();
+            final boolean isDetached = pojo.dnIsDetached();
+            final boolean isTransactional = pojo.dnIsTransactional();
+            if (!isPersistent && !isDeleted) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean representsPersistent() {
+        if(getSpecification().isService()) {
+            // view models are treated as persistent objects
+            return true;
+        }
+        if(getSpecification().isViewModel()) {
+            // view models are treated as persistent objects
+            return true;
+        }
+        if (pojo instanceof Persistable) {
+            final Persistable pojo = (Persistable) this.pojo;
+            final boolean isNew = pojo.dnIsNew();
+            final boolean isPersistent = pojo.dnIsPersistent();
+            final boolean isDirty = pojo.dnIsDirty();
+            final boolean isDeleted = pojo.dnIsDeleted();
+            final boolean isDetached = pojo.dnIsDetached();
+            final boolean isTransactional = pojo.dnIsTransactional();
+            if (isPersistent) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isDestroyed() {
+        if(getSpecification().isService()) {
+            // view models are treated as persistent objects
+            return false;
+        }
+        if(getSpecification().isViewModel()) {
+            // view models are treated as persistent objects
+            return false;
+        }
+        if (pojo instanceof Persistable) {
+            final Persistable pojo = (Persistable) this.pojo;
+            final boolean isNew = pojo.dnIsNew();
+            final boolean isPersistent = pojo.dnIsPersistent();
+            final boolean isDirty = pojo.dnIsDirty();
+            final boolean isDeleted = pojo.dnIsDeleted();
+            final boolean isDetached = pojo.dnIsDetached();
+            final boolean isTransactional = pojo.dnIsTransactional();
+            if (isDeleted) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -383,9 +341,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     private String objectTitleString(ObjectAdapter contextAdapterIfAny) {
-        if (isNew()) {
-            return "";
-        } 
         if (getObject() instanceof String) {
             return (String) getObject();
         }
@@ -399,7 +354,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     private String collectionTitleString(final CollectionFacet facet) {
-        final int size = elementsLoaded() ? facet.size(this) : INCOMPLETE_COLLECTION;
+        final int size = facet.size(this);
         final ObjectSpecification elementSpecification = getElementSpecification();
         if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
             switch (size) {
@@ -445,7 +400,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     protected void toString(final ToString str) {
-        str.append(aggregateResolveState().code());
+        str.append(aggregateResolveStateCode());
         final Oid oid = getOid();
         if (oid != null) {
             str.append(":");
@@ -463,6 +418,18 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final Version version = getOid().getVersion();
             str.append("version", version != null ? version.sequence() : null);
         }
+    }
+
+    private String aggregateResolveStateCode() {
+
+        // this is an approximate re-implementation...
+        final Oid oid = getOid();
+        if(oid != null) {
+            if(oid.isPersistent()) return "P";
+            if(oid.isTransient()) return "T";
+            if(oid.isViewModel()) return "V";
+        }
+        return "S"; // standalone adapter (value)
     }
 
     // ///////////////////////////////////////////////////////////////////
@@ -506,17 +473,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Fire Changes
-    // ///////////////////////////////////////////////////////////////////
-
-
-    @Override
-    public boolean respondToChangesInPersistentObjects() {
-        return aggregateResolveState().respondToChangesInPersistentObjects();
-    }
-
-
 
     
     ////////////////////////////////////////////////////////////////////
@@ -530,7 +486,5 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-
-
 
 }

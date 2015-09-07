@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 
@@ -49,7 +48,6 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
      * <li>it is already persisted
      * <li>its {@link ObjectSpecification specification} indicates instances of
      * its type should not be persisted.
-     * <li>it is {@link ResolveState#VALUE standalone}
      * <li>it is a {@link ObjectSpecification#isService() service}.
      * </ul>
      * 
@@ -65,7 +63,7 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
     }
 
     /**
-     * If has a {@link ResolveState} that is already persisted or has a
+     * If it is already persisted or has a
      * {@link ObjectSpecification specification} that indicates instances of its
      * type should not be persisted.
      * 

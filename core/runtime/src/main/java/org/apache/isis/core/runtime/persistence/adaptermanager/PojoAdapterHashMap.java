@@ -31,9 +31,7 @@ import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.services.RequestScopedService;
 
 public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
 
@@ -119,15 +117,7 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         if(LOG.isDebugEnabled()) {
             LOG.debug("add adapter: #" + key(pojo) + " -> #" + Long.toHexString(adapter.hashCode()));
 
-            if (adapter.isResolved()) {
-                if (pojo instanceof RequestScopedService) {
-                    // avoid touching the service
-                } else {
-                    LOG.debug("add " + new ToString(pojo) + " as " + adapter);
-                }
-            }
         }
-
     }
 
     public void remove(final ObjectAdapter object) {

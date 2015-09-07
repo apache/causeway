@@ -71,7 +71,6 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -505,9 +504,6 @@ public class IsisTransaction implements TransactionScopedComponent {
                         if (persistenceCommand instanceof DestroyObjectCommand) {
                             final ObjectAdapter adapter = persistenceCommand.onAdapter();
                             adapter.setVersion(null);
-                            if (!adapter.isDestroyed()) {
-                                adapter.changeState(ResolveState.DESTROYED);
-                            }
                         }
                     }
                 } catch (final RuntimeException ex) {

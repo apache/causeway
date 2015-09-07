@@ -33,7 +33,6 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.*;
@@ -386,12 +385,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * <tt>Memento</tt> support however, so {@link Oid} could also represent a
      * {@link Oid#isTransient() transient} object.
      *
-     * <p>
-     * If the {@link ObjectAdapter adapter} is recreated, its
-     * {@link ResolveState} will be set to either
-     * {@link ResolveState#TRANSIENT} or {@link ResolveState#GHOST} based on
-     * whether the {@link Oid} is {@link Oid#isTransient() transient} or not.
-     *
      * @param oid
      * @param recreatedPojo - already known to the object store impl, or a service
      */
@@ -452,8 +445,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * <p>
      * If an {@link ObjectAdapter adapter} is removed while its pojo still is
      * referenced then a subsequent interaction of that pojo will create a
-     * different {@link ObjectAdapter adapter}, in a
-     * {@link ResolveState#TRANSIENT transient} state.
+     * different {@link ObjectAdapter adapter}.
      * 
      * <p>
      * TODO: should do a cascade remove of any aggregated objects.
@@ -487,9 +479,11 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
-        Ensure.ensureThatArg(rootAdapter.isTransient(), is(true), "root adapter should be transient; oid:" + transientRootOid);
-        Ensure.ensureThatArg(transientRootOid.isTransient(), is(true), "root adapter's OID should be transient; oid:" + transientRootOid);
-        
+        // no longer true, because isTransient now looks directly at the underlying pojo's state (for entities)
+        // and doesn't apply for services.
+//        Ensure.ensureThatArg(rootAdapter.isTransient(), is(true), "root adapter should be transient; oid:" + transientRootOid);
+//        Ensure.ensureThatArg(transientRootOid.isTransient(), is(true), "root adapter's OID should be transient; oid:" + transientRootOid);
+
         final RootAndCollectionAdapters rootAndCollectionAdapters = new RootAndCollectionAdapters(adapter, this);
         
         
@@ -580,9 +574,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
         remapContainedAggregatedObject(adapter, persistedRootOid);
         
-        // update the adapter's state
-        adapter.changeState(ResolveState.RESOLVED);
-        
         if (LOG.isDebugEnabled()) {
             LOG.debug("made persistent " + adapter + "; was " + transientRootOid);
         }
@@ -646,7 +637,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
      *
      * <p>
-     * The {@link ResolveState} state will be {@link ResolveState#VALUE}.
      * Standalone adapters are never {@link #mapAndInjectServices(ObjectAdapter) mapped}
      * (they have no {@link Oid}, after all).
      * 
@@ -657,23 +647,12 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      */
     private ObjectAdapter createStandaloneAdapterAndSetResolveState(final Object pojo) {
         final ObjectAdapter adapter = getObjectAdapterFactory().createAdapter(pojo, null, this);
-        adapter.changeState(ResolveState.VALUE);
         return adapter;
     }
 
     /**
      * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new 
-     * root {@link ObjectAdapter adapter} for the supplied domain object, and 
-     * sets its {@link ResolveState} based on the {@link Oid}.
-     * 
-     * <p>
-     * The {@link ResolveState} state will be:
-     * <ul>
-     * <li> {@link ResolveState#TRANSIENT} if the {@link Oid} is
-     * {@link Oid#isTransient() transient}.
-     * <li> {@link ResolveState#GHOST} if the {@link Oid} is persistent (not
-     * {@link Oid#isTransient() transient}).
-     * </ul>
+     * root {@link ObjectAdapter adapter} for the supplied domain object.
      * 
      * @see #createStandaloneAdapterAndSetResolveState(Object)
      * @see #createCollectionAdapterAndInferResolveState(Object, CollectionOid)
@@ -681,7 +660,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     private ObjectAdapter createRootAdapterAndInferResolveState(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
         final ObjectAdapter rootAdapter = getObjectAdapterFactory().createAdapter(pojo, rootOid, this);
-        rootAdapter.changeState(rootOid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
         doPostCreateRootAdapter(rootAdapter);
         return rootAdapter;
     }
@@ -701,7 +679,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     private ObjectAdapter createCollectionAdapterAndInferResolveState(final Object pojo, CollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
         final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid, this);
-        collectionAdapter.changeState(collectionOid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
         return collectionAdapter;
     }
 

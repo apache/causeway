@@ -38,7 +38,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -209,7 +208,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 adapterManager.remapAsPersistent(serviceAdapter, null);
             }
 
-            serviceAdapter.markAsResolvedIfPossible();
             if (existingOid == null) {
                 final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
                 registerService(persistentOid);
@@ -290,10 +288,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * Create a root or standalone {@link ObjectAdapter adapter}.
      *
      * <p>
-     * Creates a new instance of the specified type and returns it in an adapter
-     * whose resolved state set to {@link ResolveState#TRANSIENT} (except if the
-     * type is marked as {@link ObjectSpecification#isValueOrIsParented()
-     * aggregated} in which case it will be set to {@link ResolveState#VALUE}).
+     * Creates a new instance of the specified type and returns it in an adapter.
      *
      * <p>
      * The returned object will be initialised (had the relevant callback
@@ -330,8 +325,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     /**
      * Creates a new instance of the specified type and returns an adapter with
      * an aggregated OID that show that this new object belongs to the specified
-     * parent. The new object's resolved state is set to
-     * {@link ResolveState#RESOLVED} as it state is part of it parent.
+     * parent.
      *
      * <p>
      * While creating the object it will be initialised with default values and
@@ -347,12 +341,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
         final Object pojo = objectSpec.createObject();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
-        // returned adapter's ResolveState will either be TRANSIENT or GHOST
         objectSpec.initialize(adapter);
-        if (adapter.isGhost()) {
-            adapter.changeState(ResolveState.RESOLVING);
-            adapter.changeState(ResolveState.RESOLVED);
-        }
         return adapter;
     }
 
@@ -463,7 +452,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         final RootOid oid = getOidForService(serviceSpecification);
         final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
 
-        serviceAdapter.markAsResolvedIfPossible();
         return serviceAdapter;
     }
 
@@ -570,17 +558,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         // with DnD viewer + in-memory object store +
         // cglib bytecode enhancement
         synchronized (getAuthenticationSession()) {
-            if (!adapter.canTransitionToResolving()) {
-                return;
-            }
-            Assert.assertFalse("only resolve object that is not yet resolved", adapter, adapter.isResolved());
             Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
             resolveImmediatelyFromPersistenceLayer(adapter);
-            if (LOG.isDebugEnabled()) {
-                // don't log object - its toString() may use the unresolved
-                // field, or unresolved collection
-                LOG.debug("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + adapter.getResolveState().code() + " " + adapter.getOid());
-            }
         }
     }
 
@@ -832,14 +811,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return toString.toString();
     }
 
-    // ////////////////////////////////////////////////////////////////////
-    // Helpers
-    // ////////////////////////////////////////////////////////////////////
-
-    protected boolean isImmutable(final ObjectAdapter adapter) {
-        final ObjectSpecification noSpec = adapter.getSpecification();
-        return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || (ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && adapter.representsPersistent());
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // test support

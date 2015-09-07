@@ -24,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -46,12 +45,6 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
         if (adapter.getSpecification().isParentedOrFreeCollection()) {
             if(LOG.isDebugEnabled()) {
                 LOG.debug("persist " + adapter);
-            }
-            if (adapter.isGhost()) {
-                adapter.changeState(ResolveState.RESOLVING);
-                adapter.changeState(ResolveState.RESOLVED);
-            } else if (adapter.isTransient()) {
-                adapter.changeState(ResolveState.RESOLVED);
             }
             final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(adapter);
             for (final ObjectAdapter element : facet.iterable(adapter)) {
@@ -79,11 +72,6 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
 
             toPersistObjectSet.remapAsPersistent(adapter);
             
-            // was previously to SERIALIZING_RESOLVED, but 
-            // after refactoring simplifications this is now equivalent to UPDATING
-            final ResolveState stateWhilePersisting = ResolveState.UPDATING;
-            
-            adapter.changeState(stateWhilePersisting);  
 
             for (int i = 0; i < associations.size(); i++) {
                 final ObjectAssociation objectAssoc = associations.get(i);
@@ -108,8 +96,6 @@ class PersistAlgorithmDefault extends PersistAlgorithmAbstract {
 
             // this is now a responsibility of the objectstore
             // CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-            
-            adapter.changeState(stateWhilePersisting.getEndState());
         }
 
     }

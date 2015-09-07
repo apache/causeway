@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -379,7 +378,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
                 will(returnValue("Jones"));
                 
                 allowing(mockAdapterForStringJones).isTransient();
-                will(returnValue(ResolveState.VALUE.isTransient()));
+                will(returnValue(false));
             }
         });
     }

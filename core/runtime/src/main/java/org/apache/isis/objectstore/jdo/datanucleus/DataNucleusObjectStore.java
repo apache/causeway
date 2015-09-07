@@ -435,12 +435,6 @@ public class DataNucleusObjectStore implements ObjectStore {
             LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(getOidMarshaller()));
         }
 
-        if (adapter.isResolved()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("; already resolved - ignoring");
-            }
-            return;
-        }
         if (!adapter.representsPersistent()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("; not persistent - ignoring");
