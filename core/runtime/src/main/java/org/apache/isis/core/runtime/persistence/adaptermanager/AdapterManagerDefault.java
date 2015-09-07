@@ -20,8 +20,10 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -35,14 +37,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.adapter.oid.*;
+import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -50,8 +54,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
@@ -60,7 +62,10 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * Responsible for managing the {@link ObjectAdapter adapter}s and {@link Oid
@@ -224,16 +229,8 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             return existingOrValueAdapter;
         }
         
-        final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
-        
-        final ObjectAdapter newAdapter;
-        if(isAggregated(objSpec)) {
-            final AggregatedOid aggregatedOid = getOidGenerator().createAggregateOid(pojo, parentAdapter);
-            newAdapter = createAggregatedAdapter(pojo, aggregatedOid);
-        } else {
-            newAdapter = createTransientOrViewModelRootAdapter(pojo);
-        }
-        
+        final ObjectAdapter newAdapter = createTransientOrViewModelRootAdapter(pojo);
+
         return mapAndInjectServices(newAdapter);
     }
 
@@ -413,12 +410,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
             createdAdapter = createRootAdapter(pojo, rootOid);
-        } else if (oid instanceof CollectionOid){
+        } else /*if (oid instanceof CollectionOid)*/ {
             final CollectionOid collectionOid = (CollectionOid) oid;
             createdAdapter = createCollectionAdapter(pojo, collectionOid);
-        } else {
-            final AggregatedOid aggregatedOid = (AggregatedOid) oid;
-            createdAdapter = createAggregatedAdapter(pojo, aggregatedOid);
         }
         return createdAdapter;
     }
@@ -572,44 +566,11 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             }
         }
 
-        remapContainedAggregatedObject(adapter, persistedRootOid);
-        
         if (LOG.isDebugEnabled()) {
             LOG.debug("made persistent " + adapter + "; was " + transientRootOid);
         }
     }
 
-    private void remapContainedAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
-        for (final ObjectAssociation association: adapter.getSpecification().getAssociations(Contributed.EXCLUDED)) {
-            if (association.isOneToManyAssociation() && !association.isNotPersisted()) {
-                final ObjectAdapter collection = association.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-                final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-                for (final ObjectAdapter element : facet.iterable(collection)) {
-                   remapAggregatedObject(element, persistedRootOid);
-                }
-                
-            } else if (association.getSpecification().isParented()) {
-                final ObjectAdapter referencedAdapter = association.get(adapter, InteractionInitiatedBy.FRAMEWORK);
-    
-                if(referencedAdapter == null) {
-                    continue;
-                }
-                remapAggregatedObject(referencedAdapter, persistedRootOid);
-            }
-        }
-    }
-
-    private void remapAggregatedObject(final ObjectAdapter adapter, final RootOid persistedRootOid) {
-        final Oid oid = adapter.getOid();
-        if (!(oid instanceof AggregatedOid) || !oid.isTransient()) {
-                return;
-        }
-        AggregatedOid aoid = (AggregatedOid) oid;
-        AggregatedOid childOid = new AggregatedOid(aoid.getObjectSpecId(), persistedRootOid, aoid.getLocalId());
-        adapter.replaceOid(childOid);
-        
-        remapContainedAggregatedObject(adapter, persistedRootOid);
-    }
 
 	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
@@ -670,12 +631,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return collectionAdapter;
     }
 
-    private ObjectAdapter createAggregatedAdapter(final Object pojo, AggregatedOid aggregatedOid) {
-        Ensure.ensureThatArg(aggregatedOid, is(not(nullValue())));
-        final ObjectAdapter aggregatedAdapter = getObjectAdapterFactory().createAdapter(pojo, aggregatedOid, this);
-        // aggregated; nothing to do, since transient state determined by its parent.
-        return aggregatedAdapter;
-    }
 
     // //////////////////////////////////////////////////////////////////////////
     // Helpers: map & unmap

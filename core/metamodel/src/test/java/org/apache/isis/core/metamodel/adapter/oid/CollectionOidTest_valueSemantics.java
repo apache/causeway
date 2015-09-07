@@ -29,8 +29,7 @@ public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstr
 
     private final RootOidDefault parent = new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
     private final RootOidDefault otherParent = new RootOidDefault(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
-    private final AggregatedOid yetAnotherParent = new AggregatedOid(ObjectSpecId.of("NME"), parent, "789");
-    
+
     @Override
     protected List<CollectionOid> getObjectsWithSameValue() {
         return Arrays.asList(
@@ -43,8 +42,7 @@ public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstr
     protected List<CollectionOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
                 new CollectionOid(otherParent, "456"), 
-                new CollectionOid(parent, "457"), 
-                new CollectionOid(yetAnotherParent, "456"));
+                new CollectionOid(parent, "457"));
     }
 
 }

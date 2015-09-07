@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -148,11 +147,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     public boolean isParented() {
         return oid instanceof ParentedOid;
-    }
-
-    @Override
-    public boolean isAggregated() {
-        return oid instanceof AggregatedOid;
     }
 
     @Override

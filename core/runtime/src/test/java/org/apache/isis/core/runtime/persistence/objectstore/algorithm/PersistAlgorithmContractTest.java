@@ -26,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
@@ -87,32 +86,6 @@ public abstract class PersistAlgorithmContractTest {
         persistAlgorithm.makePersistent(valueAdapter, mockAdder);
     }
 
-    
-    @Test(expected=NotPersistableException.class)
-    public void makePersistent_failsIfObjectIsAggregated() {
-        final PojoAdapter rootAdapter = PojoAdapterBuilder.create().with(Type.ROOT).with(Persistence.TRANSIENT).with(objectSpec).build();
-        context.checking(new Expectations() {
-            {
-                allowing(objectSpec).isService();
-                will(returnValue(false));
-                
-                allowing(objectSpec).isParentedOrFreeCollection();
-                will(returnValue(false));
-
-                allowing(objectSpec).persistability();
-                will(returnValue(Persistability.USER_PERSISTABLE));
-    
-                allowing(mockObjectAdapterLookup).getAdapterFor(with(any(Oid.class)));
-                will(returnValue(rootAdapter));
-                
-                never(mockAdder);
-            }
-        });
-        
-
-        final PojoAdapter aggregatedAdapter = PojoAdapterBuilder.create().with(Type.AGGREGATED).with(Persistence.TRANSIENT).with(objectSpec).with(mockObjectAdapterLookup).build();
-        persistAlgorithm.makePersistent(aggregatedAdapter, mockAdder);
-    }
 
     @Test(expected=NotPersistableException.class)
     public void makePersistent_failsIfObjectAlreadyPersistent() {

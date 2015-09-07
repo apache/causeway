@@ -44,7 +44,6 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -377,11 +376,6 @@ public class DataNucleusObjectStore implements ObjectStore {
 
     public Object loadPojo(final TypedOid oid) {
     	
-        // REVIEW: does it make sense to get these directly?  not sure, so for now have decided to fail fast. 
-        if(oid instanceof AggregatedOid) {
-            throw new UnsupportedOperationException("Cannot retrieve aggregated objects directly, oid: " + oid.enString(getOidMarshaller()));
-        }
-        
         final RootOid rootOid = (RootOid) oid;
         
         Object result = null;
@@ -439,18 +433,6 @@ public class DataNucleusObjectStore implements ObjectStore {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("; not persistent - ignoring");
             }
-            return;
-        }
-
-        final Oid oid = adapter.getOid();
-        if (oid instanceof AggregatedOid) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("; aggregated - resolving parent");
-            }
-            final AggregatedOid aggregatedOid = (AggregatedOid) oid;
-            final TypedOid parentOid = aggregatedOid.getParentOid();
-            final ObjectAdapter parentAdapter = loadInstanceAndAdapt(parentOid);
-            resolveImmediately(parentAdapter);
             return;
         }
 

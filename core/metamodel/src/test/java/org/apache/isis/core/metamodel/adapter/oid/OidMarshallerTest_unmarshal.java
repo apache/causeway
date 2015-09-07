@@ -18,14 +18,14 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 /**
 * <dt>CUS:123</dt>
@@ -179,74 +179,7 @@ public class OidMarshallerTest_unmarshal {
         assertThat(oid, equalTo((Oid)collectionOid));
     }
 
-    @Test
-    public void aggregatedWithinPersistent() {
-        final String oidStr = "CUS:123~NME:2";
-        
-        final AggregatedOid aggregatedOid = oidMarshaller.unmarshal(oidStr, AggregatedOid.class);
-        assertThat(aggregatedOid.isTransient(), is(false));
-        assertThat(aggregatedOid.getParentOid(), is((TypedOid)oidMarshaller.unmarshal("CUS:123", RootOidDefault.class)));
-        assertThat(aggregatedOid.getObjectSpecId(), is(ObjectSpecId.of("NME")));
-        assertThat(aggregatedOid.getLocalId(), is("2"));
-        
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)aggregatedOid));
-    }
 
-    @Test
-    public void aggregatedWithinTransient() {
-        final String oidStr = "!CUS:123~NME:2";
-        
-        final AggregatedOid aggregatedOid = oidMarshaller.unmarshal(oidStr, AggregatedOid.class);
-        assertThat(aggregatedOid.isTransient(), is(true));
-        assertThat(aggregatedOid.getParentOid(), is((TypedOid)oidMarshaller.unmarshal("!CUS:123", RootOidDefault.class)));
-        assertThat(aggregatedOid.getObjectSpecId(), is(ObjectSpecId.of("NME")));
-        assertThat(aggregatedOid.getLocalId(), is("2"));
-        
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)aggregatedOid));
-    }
-
-    @Test
-    public void aggregatedWithinAggregatedWithinRoot() {
-        final String oidStr = "CUS:123~ADR:2~CTY:LON";
-        
-        final AggregatedOid aggregatedOid = oidMarshaller.unmarshal(oidStr, AggregatedOid.class);
-        assertThat(aggregatedOid.isTransient(), is(false));
-        assertThat(aggregatedOid.getParentOid(), is((TypedOid)oidMarshaller.unmarshal("CUS:123~ADR:2", AggregatedOid.class)));
-        assertThat(aggregatedOid.getObjectSpecId(), is(ObjectSpecId.of("CTY")));
-        assertThat(aggregatedOid.getLocalId(), is("LON"));
-        
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)aggregatedOid));
-    }
-
-    @Test
-    public void collectionOfAggregatedWithinRoot() {
-        final String oidStr = "CUS:123~NME:2$items";
-        
-        final CollectionOid collectionOid = oidMarshaller.unmarshal(oidStr, CollectionOid.class);
-        assertThat(collectionOid.isTransient(), is(false));
-        assertThat(collectionOid.getParentOid(), is((TypedOid)oidMarshaller.unmarshal("CUS:123~NME:2", AggregatedOid.class)));
-        assertThat(collectionOid.getName(), is("items"));
-        
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)collectionOid));
-    }
-
-    @Test
-    public void collectionOfAggregatedWithinAggregatedWithinRoot() {
-        final String oidStr = "CUS:123~ADR:2~CTY:LON$streets";
-        
-        final CollectionOid collectionOid = oidMarshaller.unmarshal(oidStr, CollectionOid.class);
-        assertThat(collectionOid.isTransient(), is(false));
-        assertThat(collectionOid.getParentOid(), is((TypedOid)oidMarshaller.unmarshal("CUS:123~ADR:2~CTY:LON", AggregatedOid.class)));
-        assertThat(collectionOid.getName(), is("streets"));
-        
-        final Oid oid = oidMarshaller.unmarshal(oidStr, Oid.class);
-        assertThat(oid, equalTo((Oid)collectionOid));
-    }
-    
 
     @Test(expected=IllegalArgumentException.class)
     public void root_forCollection_oidStr() {
@@ -269,21 +202,6 @@ public class OidMarshallerTest_unmarshal {
     }
 
     
-    @Test(expected=IllegalArgumentException.class)
-    public void aggregated_forPersistentRoot_oidStr() {
-        oidMarshaller.unmarshal("CUS:123", AggregatedOid.class);
-    }
-    
-    @Test(expected=IllegalArgumentException.class)
-    public void aggregated_forTransientRoot_oidStr() {
-        oidMarshaller.unmarshal("!CUS:123", AggregatedOid.class);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void aggregated_forCollection_oidStr() {
-        oidMarshaller.unmarshal("CUS:123~NME:123$items", AggregatedOid.class);
-    }
-
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
         oidMarshaller.unmarshal("xxx", RootOidDefault.class);

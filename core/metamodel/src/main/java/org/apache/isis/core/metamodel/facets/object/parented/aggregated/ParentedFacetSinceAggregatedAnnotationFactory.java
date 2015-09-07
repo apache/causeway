@@ -20,14 +20,21 @@
 package org.apache.isis.core.metamodel.facets.object.parented.aggregated;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
+import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class ParentedFacetSinceAggregatedAnnotationFactory extends FacetFactoryAbstract {
+public class ParentedFacetSinceAggregatedAnnotationFactory extends FacetFactoryAbstract implements
+        MetaModelValidatorRefiner {
 
     public ParentedFacetSinceAggregatedAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -43,4 +50,22 @@ public class ParentedFacetSinceAggregatedAnnotationFactory extends FacetFactoryA
         return annotation == null ? null : new ParentedFacetSinceAggregatedAnnotation(holder);
     }
 
+    @Override
+    public void refineMetaModelValidator(
+            final MetaModelValidatorComposite metaModelValidator,
+            final IsisConfiguration configuration) {
+
+        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
+
+            @Override
+            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
+                final ParentedFacet parentedFacet = objectSpec.getFacet(ParentedFacet.class);
+                if(parentedFacet != null && parentedFacet instanceof ParentedFacetSinceAggregatedAnnotation) {
+                    validationFailures.add("%s has @Aggregated annotation, which is no longer supported.",
+                                    objectSpec.getIdentifier().getClassName());
+                }
+                return true;
+            }
+        }));
+    }
 }

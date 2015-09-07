@@ -21,8 +21,6 @@ import java.util.List;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -41,20 +39,6 @@ public interface DomainObjectServices extends Injectable {
     ObjectAdapter createTransientInstance(ObjectSpecification spec);
 
     ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
-
-    /**
-     * Create an instance of an aggregated object that will be persisted within the
-     * parent adapter.
-     * 
-     * <p>
-     * The {@link Oid} of the returned {@link ObjectAdapter adapter} will be of type
-     * {@link AggregatedOid}.  The oid's {@link AggregatedOid#getLocalId() localId}
-     * is generated as per the configured objectstore (<tt>OidGenerator</tt>).
-     * 
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    ObjectAdapter createAggregatedInstance(ObjectSpecification spec, ObjectAdapter parent);
 
 
     // ///////////////////////////////////////////

@@ -26,7 +26,6 @@ import com.google.common.base.Splitter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -95,11 +94,6 @@ public class PojoAdapterBuilder {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String unused) {
                 return rootOid;
-            }
-        }, AGGREGATED {
-            @Override
-            Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String aggregateLocalId) {
-                return new AggregatedOid(objectSpecId, rootOid, aggregateLocalId);
             }
         }, COLLECTION {
             @Override

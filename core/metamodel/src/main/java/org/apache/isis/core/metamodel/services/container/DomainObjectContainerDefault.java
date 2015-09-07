@@ -65,7 +65,6 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -105,12 +104,8 @@ public class DomainObjectContainerDefault
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
-        if (spec.isParented()) {
-            return newAggregatedInstance(this, ofClass);
-        } else {
-            final ObjectAdapter adapter = doCreateTransientInstance(spec);
-            return (T) adapter.getObject();
-        }
+        final ObjectAdapter adapter = doCreateTransientInstance(spec);
+        return (T) adapter.getObject();
     }
 
     @Programmatic
@@ -129,20 +124,15 @@ public class DomainObjectContainerDefault
         }
     }
 
+    /**
+     * @deprecated - Aggregated objects are no longer supported
+     */
+    @Deprecated
     @Programmatic
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newAggregatedInstance(final Object parent, final Class<T> ofClass) {
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(ofClass);
-        if (!spec.isParented()) {
-            throw new IsisException("Type must be annotated as @Aggregated: " + ofClass);
-        }
-        final ObjectAdapter adapter = doCreateAggregatedInstance(spec, parent);
-        if (adapter.getOid() instanceof AggregatedOid) {
-            return (T) adapter.getObject();
-        } else {
-            throw new IsisException("Object instantiated but was not given a AggregatedOid (does the configured object store support aggregates?): " + ofClass);
-        }
+        throw new RuntimeException("Aggregated objects are no longer supported");
     }
 
     /**
@@ -185,8 +175,7 @@ public class DomainObjectContainerDefault
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
-        final ObjectAdapter parentAdapter = getAdapterManager().getAdapterFor(parent);
-        return getDomainObjectServices().createAggregatedInstance(spec, parentAdapter);
+        throw new RuntimeException("Aggregated instances are no longer supported");
     }
 
     @Programmatic

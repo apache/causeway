@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
@@ -168,54 +167,5 @@ public class AdapterManagerDefault_aggregateAdapters {
                 RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), rootObject);
     }
 
-    private void allowing_oidGenerator_createAggregatedOid(final Object value, final AggregatedOid resultOid) {
-        context.checking(new Expectations() {
-            {
-                allowing(mockOidGenerator).createAggregateOid(with(equalTo(value)), with(any(ObjectAdapter.class)));
-                will(returnValue(resultOid));
-                ignoring(mockOidGenerator);
-            }
-        });
-    }
-
-
-    @Test
-    public void adapterFor_whenAggregated() throws Exception {
-        // given
-        allowing_oidGenerator_createAggregatedOid(
-                aggregatedObject, 
-                new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
-        
-        // when
-        aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
-
-        // then
-        final AggregatedOid aggregatedOid = (AggregatedOid) aggregatedAdapter.getOid();
-        assertEquals(persistentParentAdapter.getOid(), aggregatedOid.getParentOid());
-    }
-
-    @Test
-    public void testOidHasSubId() throws Exception {
-        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
-        aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
-
-        final AggregatedOid aggregatedOid = (AggregatedOid) aggregatedAdapter.getOid();
-        assertEquals("123", aggregatedOid.getLocalId());
-    }
-
-    @Test
-    public void getResolveState_isInitiallyGhost() throws Exception {
-        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
-        aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
-    }
-
-    @Test
-    public void testSameParametersRetrievesSameAdapter() throws Exception {
-        allowing_oidGenerator_createAggregatedOid(aggregatedObject, new AggregatedOid(ObjectSpecId.of("NME"), (TypedOid) persistentParentAdapter.getOid(), "123"));
-        aggregatedAdapter = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter);
-
-        final ObjectAdapter valueAdapter2 = adapterManager.adapterFor(aggregatedObject, persistentParentAdapter, mockCollection);
-        assertSame(aggregatedAdapter, valueAdapter2);
-    }
 
 }

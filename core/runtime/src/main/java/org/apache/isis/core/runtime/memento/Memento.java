@@ -156,7 +156,8 @@ public class Memento implements Serializable {
         }
 
 
-        if ((referencedAdapter.getSpecification().isParented() || refOid.isTransient()) && !transientObjects.contains(refOid)) {
+        if (    (referencedAdapter.getSpecification().isParented() || refOid.isTransient()) &&
+                !transientObjects.contains(refOid)) {
             transientObjects.add(refOid);
             return createObjectData(referencedAdapter);
         }

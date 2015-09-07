@@ -189,11 +189,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
             public Object lookup(Bookmark bookmark) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }

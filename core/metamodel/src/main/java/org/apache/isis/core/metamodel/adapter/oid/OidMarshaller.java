@@ -190,10 +190,7 @@ public class OidMarshaller {
                 ensureCorrectType(oidStr, requestedType, RootOidDefault.class); 
                 return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
             } else {
-                ensureCorrectType(oidStr, requestedType, AggregatedOid.class);
-                final AggregateOidPart lastPart = aggregateOidParts.remove(aggregateOidParts.size()-1);
-                final TypedOid parentOid = parentOidFor(rootOidStr, aggregateOidParts, version);
-                return (T)new AggregatedOid(ObjectSpecId.of(lastPart.objectType), parentOid, lastPart.localId);
+                throw new RuntimeException("Aggregated Oids are no longer supported");
             }
         } else {
             final String oidStrWithoutCollectionName = getGroup(matcher, 1);
@@ -267,14 +264,6 @@ public class OidMarshaller {
 
     public String marshalNoVersion(CollectionOid collectionOid) {
         return collectionOid.getParentOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
-    }
-
-    public final String marshal(AggregatedOid aggregatedOid) {
-        return marshalNoVersion(aggregatedOid) + marshal(aggregatedOid.getVersion());
-    }
-
-    public final String marshalNoVersion(AggregatedOid aggregatedOid) {
-        return aggregatedOid.getParentOid().enStringNoVersion(this) + SEPARATOR_NESTING + aggregatedOid.getObjectSpecId() + SEPARATOR + aggregatedOid.getLocalId();
     }
 
     public final String marshal(Version version) {

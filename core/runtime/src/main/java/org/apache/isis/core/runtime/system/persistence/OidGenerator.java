@@ -64,20 +64,6 @@ public class OidGenerator implements DebuggableWithTitle {
     }
 
     /**
-     * Creates a new id, locally unique within an aggregate root, for the specified 
-     * object for use in an {@link AggregatedOid} (as returned by {@link AggregatedOid#getLocalId()}).
-     * 
-     * <p>
-     * This is used by {@link Aggregated} references (either referenced by properties or by
-     * collections).
-     */
-    public AggregatedOid createAggregateOid(final Object pojo, final ObjectAdapter parentAdapter) {
-        final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
-        final String aggregateLocalId = identifierGenerator.createAggregateLocalId(objectSpecId, pojo, parentAdapter);
-        return new AggregatedOid(objectSpecId, (TypedOid) parentAdapter.getOid(), aggregateLocalId);
-    }
-
-    /**
      * Return an equivalent {@link RootOid}, but being persistent.
      * 
      * <p>

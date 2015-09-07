@@ -185,11 +185,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter createAggregatedInstance(final ObjectSpecification spec, final ObjectAdapter parent) {
-                return getPersistenceSession().createAggregatedInstance(spec, parent);
-            };
-
-            @Override
             public Object lookup(Bookmark bookmark) {
                 return new DomainObjectContainerResolve().lookup(bookmark);
             }

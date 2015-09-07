@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.commons.lang.MethodUtil;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -185,15 +184,10 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
 
     /**
      * Whether this instance belongs to another object (meaning its
-     * {@link #getOid()} will be <tt>ParentedOid</tt>, either an 
-     * {@link AggregatedOid} or a {@link CollectionOid}).
+     * {@link #getOid()} will be a {@link CollectionOid}).
      */
     boolean isParented();
 
-    /**
-     * Whether this is an aggregated Oid.
-     */
-    boolean isAggregated();
 
     /**
      * Whether this is a value (standalone, has no oid).

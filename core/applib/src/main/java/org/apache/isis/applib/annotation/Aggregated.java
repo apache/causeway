@@ -26,18 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that every instance of this type is part of 
- * (aggregated within) a larger aggregate.
- * 
- * <p>
- * This is/should be interpreted by viewers as meaning that references to the
- * object may not be shared between instances.
- *
- * <p>
- *     Note: This annotation is not recognized by the Wicket viewer, Restful Objects viewer or JDO Objectstore,
- *     and may be deprecated in the future.
- * </p>
+ * @deprecated - this annotation is no longer supported; the framework will throw a validation exception (and fail-fast) if the annotation is found.
  */
+@Deprecated
 @Inherited
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)

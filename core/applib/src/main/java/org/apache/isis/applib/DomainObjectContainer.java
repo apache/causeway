@@ -184,13 +184,9 @@ public interface DomainObjectContainer {
     <T> T newViewModelInstance(final Class<T> ofType, final String memento);
 
     /**
-     * Create a new instance that will be persisted as part of the specified
-     * parent (ie will be a part of a larger aggregate).
-     * 
-     * <p>
-     * <b>Note:</b> not every objectstore implementation supports the concept
-     * of aggregated instances.
+     * @deprecated - not supported, will throw a RuntimeException
      */
+    @Deprecated
     @Programmatic
     <T> T newAggregatedInstance(Object parent, Class<T> ofType);
 

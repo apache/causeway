@@ -44,7 +44,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.Auditab
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.embeddedonly.JdoEmbeddedOnlyAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
@@ -201,8 +200,7 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
         programmingModel.addFactory(
                 JdoPersistenceCapableAnnotationFacetFactory.class, ProgrammingModel.Position.BEGINNING);
         programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoEmbeddedOnlyAnnotationFacetFactory.class);
-        
+
         programmingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
         programmingModel.addFactory(JdoNotPersistentAnnotationFacetFactory.class);
         programmingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
