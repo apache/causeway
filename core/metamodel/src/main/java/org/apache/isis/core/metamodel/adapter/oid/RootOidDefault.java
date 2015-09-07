@@ -216,17 +216,6 @@ public final class RootOidDefault implements Serializable, RootOid {
     }
     
 
-    // ////////////////////////////////////////////
-    // asPersistent
-    // ////////////////////////////////////////////
-    
-    @Override
-    public RootOidDefault asPersistent(final String identifier) {
-        Ensure.ensureThatState(state.isTransient(), is(true));
-        Ensure.ensureThatArg(identifier, is(not(nullValue())));
-
-        return new RootOidDefault(objectSpecId, identifier, State.PERSISTENT);
-    }
 
 
     // ////////////////////////////////////////////
@@ -242,18 +231,6 @@ public final class RootOidDefault implements Serializable, RootOid {
         this.version = version;
     }
 
-    @Override
-    public Comparison compareAgainst(final RootOid other) {
-        if(!equals(other)) {
-            return Comparison.NOT_EQUIVALENT;
-        }
-        if(getVersion() == null || other.getVersion() == null) {
-            return Comparison.EQUIVALENT_BUT_NO_VERSION_INFO;
-        }
-        return getVersion().equals(other.getVersion()) 
-                ? Comparison.EQUIVALENT_AND_UNCHANGED
-                : Comparison.EQUIVALENT_BUT_CHANGED;
-    }
 
     // ////////////////////////////////////////////
     // bookmark

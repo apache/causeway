@@ -280,7 +280,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
         // persistence of collection follows the parent
         final CollectionOid collectionOid = new CollectionOid((TypedOid) parentOid, otma);
-        final ObjectAdapter collectionAdapter = createCollectionAdapterAndInferResolveState(pojo, collectionOid);
+        final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself
         // [not sure why this is really needed, surely we have enough info in
@@ -412,10 +412,10 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
-            createdAdapter = createRootAdapterAndInferResolveState(pojo, rootOid);
+            createdAdapter = createRootAdapter(pojo, rootOid);
         } else if (oid instanceof CollectionOid){
             final CollectionOid collectionOid = (CollectionOid) oid;
-            createdAdapter = createCollectionAdapterAndInferResolveState(pojo, collectionOid);
+            createdAdapter = createCollectionAdapter(pojo, collectionOid);
         } else {
             final AggregatedOid aggregatedOid = (AggregatedOid) oid;
             createdAdapter = createAggregatedAdapter(pojo, aggregatedOid);
@@ -630,7 +630,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      */
     protected final ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
         final RootOid rootOid = getOidGenerator().createTransientOrViewModelOid(pojo);
-        return createRootAdapterAndInferResolveState(pojo, rootOid);
+        return createRootAdapter(pojo, rootOid);
     }
 
     /**
@@ -655,28 +655,16 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * root {@link ObjectAdapter adapter} for the supplied domain object.
      * 
      * @see #createStandaloneAdapterAndSetResolveState(Object)
-     * @see #createCollectionAdapterAndInferResolveState(Object, CollectionOid)
+     * @see #createCollectionAdapter(Object, CollectionOid)
      */
-    private ObjectAdapter createRootAdapterAndInferResolveState(final Object pojo, RootOid rootOid) {
+    private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
         final ObjectAdapter rootAdapter = getObjectAdapterFactory().createAdapter(pojo, rootOid, this);
-        doPostCreateRootAdapter(rootAdapter);
         return rootAdapter;
     }
 
-    /**
-     * Hook method for objectstores to register the newly created root-adapter.
-     * 
-     * <p>
-     * For example, the JDO DataNucleus object store uses this to attach the pojo
-     * into its persistence context.  This enables dirty tracking and lazy loading of the
-     * pojo.
-     */
-    protected void doPostCreateRootAdapter(ObjectAdapter rootAdapter) {
-        
-    }
 
-    private ObjectAdapter createCollectionAdapterAndInferResolveState(final Object pojo, CollectionOid collectionOid) {
+    private ObjectAdapter createCollectionAdapter(final Object pojo, CollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
         final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid, this);
         return collectionAdapter;

@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.adapter.oid;
 
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
@@ -31,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
  * <p>
  * The root adapter/pojo can be recreated with no further information; the
  * {@link #getObjectSpecId()} can be used to fetch the corresponding
- * {@link ObjectSpecification} using {@link SpecificationLoaderSpi#lookupBySpecId(String)}.
+ * {@link ObjectSpecification} using {@link SpecificationLoaderSpi#lookupBySpecId(ObjectSpecId)}.
  * 
  * <p>
  * <p>
@@ -49,48 +50,6 @@ public interface RootOid extends TypedOid {
     String getIdentifier();
     
     void setVersion(Version version);
-
-
-    /**
-     * Returns a new RootOid for the same {@link #getObjectSpecId()}, but persistent and with the specified {@link #getIdentifier() identifier}.
-     */
-    RootOid asPersistent(String identifier);
-
-    /**
-     * The result of performing a {@link #compareTo(Comparison) comparison.}
-     */
-    public static enum Comparison {
-        /**
-         * The two {@link RootOid oid}s identify the same domain object,
-         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
-         * and the {@link RootOid#getVersion() version information} held within the 
-         * oid is the same.
-         */
-        EQUIVALENT_AND_UNCHANGED,
-        /**
-         * The two {@link RootOid oid}s identify the same domain object,
-         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
-         * but the {@link RootOid#getVersion() version information} held within the 
-         * oid is the different.
-         */
-        EQUIVALENT_BUT_CHANGED,
-        /**
-         * The two {@link RootOid oid}s identify the same domain object,
-         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>true</tt>)
-         * but there is no {@link RootOid#getVersion() version information} so 
-         * cannot determine whether the domain object has changed.
-         */
-        EQUIVALENT_BUT_NO_VERSION_INFO,
-        /**
-         * The two {@link RootOid oid}s identify the different domain objects,
-         * (meaning {@link RootOid#equals(Object) equals} method returns <tt>false</tt>).
-         * 
-         * <p>
-         */
-        NOT_EQUIVALENT,
-    }
-    
-    Comparison compareAgainst(RootOid oid2);
 
     Bookmark asBookmark();
 

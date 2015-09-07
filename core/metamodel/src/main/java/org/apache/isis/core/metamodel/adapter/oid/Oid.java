@@ -46,6 +46,7 @@ public interface Oid extends Encodable {
     String enStringNoVersion(OidMarshaller oidMarshaller);
     
     Version getVersion();
+
     void setVersion(Version version);
 
     /**
