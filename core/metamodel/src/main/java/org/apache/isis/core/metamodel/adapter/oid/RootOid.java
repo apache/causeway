@@ -40,7 +40,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class RootOid implements Oid, Serializable {
+public class RootOid implements TypedOid, Serializable {
 
     private final static Logger LOG = LoggerFactory.getLogger(RootOid.class);
 
