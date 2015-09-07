@@ -26,10 +26,9 @@ import com.google.common.base.Splitter;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,13 +70,13 @@ public class PojoAdapterBuilder {
         TRANSIENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return RootOidDefault.createTransient(objectSpecId, identifier);
+                return RootOid.createTransient(objectSpecId, identifier);
             }
         },
         PERSISTENT {
             @Override
             RootOid createOid(ObjectSpecId objectSpecId, String identifier) {
-                return RootOidDefault.create(objectSpecId, identifier);
+                return RootOid.create(objectSpecId, identifier);
             }
         },
         VALUE {
@@ -98,7 +97,7 @@ public class PojoAdapterBuilder {
         }, COLLECTION {
             @Override
             Oid oidFor(RootOid rootOid, ObjectSpecId objectSpecId, String collectionId) {
-                return new CollectionOid(rootOid, collectionId);
+                return new ParentedCollectionOid(rootOid, collectionId);
             }
         }, VALUE {
             @Override

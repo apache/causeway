@@ -25,23 +25,23 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
-public class RootOidDefaultTest_valueSemantics_whenTransient extends ValueTypeContractTestAbstract<RootOidDefault> {
+public class RootOidDefaultTest_valueSemantics_whenTransient extends ValueTypeContractTestAbstract<RootOid> {
 
     @Override
-    protected List<RootOidDefault> getObjectsWithSameValue() {
+    protected List<RootOid> getObjectsWithSameValue() {
         return Arrays.asList(
-            new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.TRANSIENT), 
-            new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.TRANSIENT), 
-            new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.TRANSIENT) 
+            new RootOid(ObjectSpecId.of("CUS"), "123", State.TRANSIENT),
+            new RootOid(ObjectSpecId.of("CUS"), "123", State.TRANSIENT),
+            new RootOid(ObjectSpecId.of("CUS"), "123", State.TRANSIENT)
             );
     }
 
     @Override
-    protected List<RootOidDefault> getObjectsWithDifferentValue() {
+    protected List<RootOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-            new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.PERSISTENT), 
-            new RootOidDefault(ObjectSpecId.of("CUS"), "124", State.TRANSIENT), 
-            new RootOidDefault(ObjectSpecId.of("CUX"), "123", State.TRANSIENT));
+            new RootOid(ObjectSpecId.of("CUS"), "123", State.PERSISTENT),
+            new RootOid(ObjectSpecId.of("CUS"), "124", State.TRANSIENT),
+            new RootOid(ObjectSpecId.of("CUX"), "123", State.TRANSIENT));
     }
 
 }

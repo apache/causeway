@@ -326,7 +326,7 @@ public class DomainObjectContainerDefault
         if(adapter == null) {
             throw new PersistFailedException("Object not known to framework; instantiate using newTransientInstance(...) rather than simply new'ing up.");
         }
-        if (adapter.isParented()) {
+        if (adapter.isParentedCollection()) {
             // TODO check aggregation is supported
             return;
         }

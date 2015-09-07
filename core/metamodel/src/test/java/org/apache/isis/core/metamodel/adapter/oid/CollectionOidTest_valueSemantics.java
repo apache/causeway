@@ -25,24 +25,24 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid.State;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.value.ValueTypeContractTestAbstract;
 
-public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<CollectionOid> {
+public class CollectionOidTest_valueSemantics extends ValueTypeContractTestAbstract<ParentedCollectionOid> {
 
-    private final RootOidDefault parent = new RootOidDefault(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
-    private final RootOidDefault otherParent = new RootOidDefault(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
+    private final RootOid parent = new RootOid(ObjectSpecId.of("CUS"), "123", State.PERSISTENT);
+    private final RootOid otherParent = new RootOid(ObjectSpecId.of("CUS"), "124", State.PERSISTENT);
 
     @Override
-    protected List<CollectionOid> getObjectsWithSameValue() {
+    protected List<ParentedCollectionOid> getObjectsWithSameValue() {
         return Arrays.asList(
-                new CollectionOid(parent, "456"), 
-                new CollectionOid(parent, "456"), 
-                new CollectionOid(parent, "456"));
+                new ParentedCollectionOid(parent, "456"),
+                new ParentedCollectionOid(parent, "456"),
+                new ParentedCollectionOid(parent, "456"));
     }
 
     @Override
-    protected List<CollectionOid> getObjectsWithDifferentValue() {
+    protected List<ParentedCollectionOid> getObjectsWithDifferentValue() {
         return Arrays.asList(
-                new CollectionOid(otherParent, "456"), 
-                new CollectionOid(parent, "457"));
+                new ParentedCollectionOid(otherParent, "456"),
+                new ParentedCollectionOid(parent, "457"));
     }
 
 }

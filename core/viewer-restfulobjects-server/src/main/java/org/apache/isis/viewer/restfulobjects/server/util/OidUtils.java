@@ -21,7 +21,7 @@ package org.apache.isis.viewer.restfulobjects.server.util;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -60,7 +60,7 @@ public final class OidUtils {
     private static ObjectAdapter getObjectAdapter(
             final RendererContext rendererContext,
             final String oidStrUnencoded) {
-        RootOidDefault rootOid = RootOidDefault.deString(oidStrUnencoded, getOidMarshaller());
+        RootOid rootOid = RootOid.deString(oidStrUnencoded, getOidMarshaller());
         final ObjectSpecId specId = rootOid.getObjectSpecId();
 
         final ObjectSpecification spec = IsisContext.getSpecificationLoader().lookupBySpecId(specId);
@@ -78,7 +78,7 @@ public final class OidUtils {
             // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
             // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
             if(!rootOid.isViewModel()) {
-                rootOid = new RootOidDefault(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
             }
 
             try {

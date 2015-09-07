@@ -18,13 +18,13 @@
  */
 package org.apache.isis.core.metamodel.adapter.oid;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 public class OidMarshallerTest_marshall {
 
@@ -37,45 +37,45 @@ public class OidMarshallerTest_marshall {
     
     @Test
     public void rootOid() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123"));
+        final String marshal = oidMarshaller.marshal(RootOid.create(ObjectSpecId.of("CUS"),  "123"));
         assertThat(marshal, equalTo("CUS:123"));
     }
 
     @Test
     public void rootOid_transient() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.createTransient(ObjectSpecId.of("CUS"),  "123"));
+        final String marshal = oidMarshaller.marshal(RootOid.createTransient(ObjectSpecId.of("CUS"),  "123"));
         assertThat(marshal, equalTo("!CUS:123"));
     }
     
     @Test
     public void rootOid_versionSequence() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123", 90807L));
+        final String marshal = oidMarshaller.marshal(RootOid.create(ObjectSpecId.of("CUS"),  "123", 90807L));
         assertThat(marshal, equalTo("CUS:123^90807::"));
     }
 
     @Test
     public void rootOid_versionSequenceAndUser() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs"));
+        final String marshal = oidMarshaller.marshal(RootOid.create(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs"));
         assertThat(marshal, equalTo("CUS:123^90807:joebloggs:"));
     }
 
     @Test
     public void rootOid_versionSequenceAndUserThatHasAnAtSymbol() {
         final ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
-        final RootOidDefault oid = RootOidDefault.create(objectSpecId,  "123", 90807L, "joebloggs@foo.bar");
+        final RootOid oid = RootOid.create(objectSpecId,  "123", 90807L, "joebloggs@foo.bar");
         final String marshal = oidMarshaller.marshal(oid);
         assertThat(marshal, equalTo("CUS:123^90807:joebloggs@foo.bar:"));
     }
 
     @Test
     public void rootOid_versionSequenceAndUtc() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123", 90807L, 3453452141L));
+        final String marshal = oidMarshaller.marshal(RootOid.create(ObjectSpecId.of("CUS"),  "123", 90807L, 3453452141L));
         assertThat(marshal, equalTo("CUS:123^90807::3453452141"));
     }
 
     @Test
     public void rootOid_versionSequenceAndUserAndUtc() {
-        final String marshal = oidMarshaller.marshal(RootOidDefault.create(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs", 3453452141L));
+        final String marshal = oidMarshaller.marshal(RootOid.create(ObjectSpecId.of("CUS"),  "123", 90807L, "joebloggs", 3453452141L));
         assertThat(marshal, equalTo("CUS:123^90807:joebloggs:3453452141"));
     }
 

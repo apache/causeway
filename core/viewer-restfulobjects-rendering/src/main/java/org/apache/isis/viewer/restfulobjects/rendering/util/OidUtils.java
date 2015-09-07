@@ -22,7 +22,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
 public final class OidUtils {
@@ -32,11 +31,11 @@ public final class OidUtils {
 
     public static String getDomainType(final ObjectAdapter objectAdapter) {
         Oid oid = objectAdapter.getOid();
-        if (oid == null || !(oid instanceof TypedOid)) {
+        if (oid == null || !(oid instanceof RootOid)) {
             return null;
         }
-        TypedOid typedOid = (TypedOid) oid;
-        return typedOid.getObjectSpecId().asString();
+        RootOid rootOid = (RootOid) oid;
+        return rootOid.getObjectSpecId().asString();
     }
 
     public static String getInstanceId(final RendererContext renderContext, final ObjectAdapter objectAdapter) {
@@ -51,7 +50,7 @@ public final class OidUtils {
         if (!(oid instanceof RootOid)) {
             throw new IllegalArgumentException("objectAdapter must be a root adapter");
         }
-        return oid != null ? oid.enStringNoVersion(getOidMarshaller()) : null;
+        return oid.enStringNoVersion(getOidMarshaller());
     }
 
     private static OidMarshaller getOidMarshaller() {

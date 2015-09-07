@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.EqualByContentFacet;
@@ -72,7 +72,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
  * <li> {@link EqualByContentFacet} - if specified explicitly in the annotation
  * </ul>
  * <p>
- * Note that {@link ParentedFacet} is <i>not</i> installed.
+ * Note that {@link ParentedCollectionFacet} is <i>not</i> installed.
  */
 public class ValueFacetAnnotationOrConfigurationFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterManagerAware, ServicesInjectorAware {
 

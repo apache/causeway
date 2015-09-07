@@ -19,11 +19,11 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 public interface PojoRecreator {
 
-    Object recreatePojo(final TypedOid oid);
+    Object recreatePojo(final RootOid oid);
 
     /**
      * Return an adapter, if possible, for a pojo that was instantiated by the

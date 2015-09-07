@@ -19,20 +19,20 @@
 
 package org.apache.isis.core.metamodel.services.container;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 public class DomainObjectContainerDefaultTest_recognizes {
 
@@ -54,7 +54,7 @@ public class DomainObjectContainerDefaultTest_recognizes {
     
     @Test
     public void whenConcurrencyException_is_recognized() throws Exception {
-        ex = new ConcurrencyException("foo", RootOidDefault.create(ObjectSpecId.of("CUS"), "123"));
+        ex = new ConcurrencyException("foo", RootOid.create(ObjectSpecId.of("CUS"), "123"));
         assertThat(container.recognize(ex), is(not(nullValue())));
     }
 

@@ -17,24 +17,24 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.parented;
+package org.apache.isis.core.metamodel.facets.object.parented.aggregated;
 
 import org.apache.isis.applib.annotation.Aggregated;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.parented.aggregated.ParentedFacetSinceAggregatedAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.parented.aggregated.ParentedFacetSinceAggregatedAnnotation;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 
-public class ParentedFacetSinceAggregatedAnnotationFactoryTest extends AbstractFacetFactoryTest {
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
-    private ParentedFacetSinceAggregatedAnnotationFactory facetFactory;
+public class AggregatedAnnotationFactoryTest extends AbstractFacetFactoryTest {
+
+    private AggregatedAnnotationFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new ParentedFacetSinceAggregatedAnnotationFactory();
+        facetFactory = new AggregatedAnnotationFactory();
     }
 
     @Override
@@ -50,11 +50,9 @@ public class ParentedFacetSinceAggregatedAnnotationFactoryTest extends AbstractF
 
         facetFactory.process(new ProcessClassContext(Customer.class, null, methodRemover, facetedMethod));
 
-        final Facet facet = facetedMethod.getFacet(ParentedFacet.class);
-        assertNotNull(facet);
-        assertTrue(facet instanceof ParentedFacetSinceAggregatedAnnotation);
-
-        assertNoMethodsRemoved();
+        assertThat(facetFactory.classesWithAnnotation.size(), is(1));
     }
+
+
 
 }

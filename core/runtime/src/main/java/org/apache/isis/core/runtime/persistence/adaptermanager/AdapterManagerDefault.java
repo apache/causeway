@@ -37,17 +37,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
-import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -261,7 +260,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * of the parent.
      * 
      * <p>
-     * The returned adapter will have a {@link CollectionOid}; its version 
+     * The returned adapter will have a {@link ParentedCollectionOid}; its version
      * and its persistence are the same as its owning parent.
      * 
      * <p>
@@ -276,7 +275,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         final Oid parentOid = parentAdapter.getOid();
 
         // persistence of collection follows the parent
-        final CollectionOid collectionOid = new CollectionOid((TypedOid) parentOid, otma);
+        final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) parentOid, otma);
         final ObjectAdapter collectionAdapter = createCollectionAdapter(pojo, collectionOid);
 
         // we copy over the type onto the adapter itself
@@ -290,7 +289,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     }
 
     private static boolean isAggregated(final ObjectSpecification objSpec) {
-        return objSpec.containsFacet(ParentedFacet.class);
+        return objSpec.containsFacet(ParentedCollectionFacet.class);
     }
 
     
@@ -299,25 +298,25 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAdapter adapterFor(final TypedOid typedOid) {
-        return adapterFor(typedOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
+    public ObjectAdapter adapterFor(final RootOid rootOid) {
+        return adapterFor(rootOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
     }
 
 
     @Override
-    public ObjectAdapter adapterFor(final TypedOid typedOid, final AdapterManager.ConcurrencyChecking concurrencyChecking) {
+    public ObjectAdapter adapterFor(final RootOid rootOid, final AdapterManager.ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
-        ObjectAdapter adapter = getAdapterFor(typedOid);
+        ObjectAdapter adapter = getAdapterFor(rootOid);
         if (adapter == null) {
             // else recreate
             try {
-                final Object pojo = pojoRecreator.recreatePojo(typedOid);
-                adapter = mapRecreatedPojo(typedOid, pojo);
+                final Object pojo = pojoRecreator.recreatePojo(rootOid);
+                adapter = mapRecreatedPojo(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
             } catch(RuntimeException ex) {
-                throw new PojoRecreationException(typedOid, ex);
+                throw new PojoRecreationException(rootOid, ex);
             }
         }
 
@@ -325,7 +324,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         Oid adapterOid = adapter.getOid();
         if(adapterOid instanceof RootOid) {
             final RootOid recreatedOid = (RootOid) adapterOid;
-            final RootOid originalOid = (RootOid) typedOid;
+            final RootOid originalOid = (RootOid) rootOid;
             
             try {
                 if(concurrencyChecking.isChecking()) {
@@ -411,7 +410,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             final RootOid rootOid = (RootOid) oid;
             createdAdapter = createRootAdapter(pojo, rootOid);
         } else /*if (oid instanceof CollectionOid)*/ {
-            final CollectionOid collectionOid = (CollectionOid) oid;
+            final ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
             createdAdapter = createCollectionAdapter(pojo, collectionOid);
         }
         return createdAdapter;
@@ -542,8 +541,8 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             LOG.debug("replacing Oids for collection adapter(s) and re-adding into maps");
         }
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
-            final CollectionOid previousCollectionOid = (CollectionOid) collectionAdapter.getOid();
-            final CollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
+            final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
+            final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
             oidAdapterMap.add(persistedCollectionOid, collectionAdapter);
         }
 
@@ -616,7 +615,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * root {@link ObjectAdapter adapter} for the supplied domain object.
      * 
      * @see #createStandaloneAdapterAndSetResolveState(Object)
-     * @see #createCollectionAdapter(Object, CollectionOid)
+     * @see #createCollectionAdapter(Object, ParentedCollectionOid)
      */
     private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
@@ -625,7 +624,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     }
 
 
-    private ObjectAdapter createCollectionAdapter(final Object pojo, CollectionOid collectionOid) {
+    private ObjectAdapter createCollectionAdapter(final Object pojo, ParentedCollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
         final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid, this);
         return collectionAdapter;
@@ -663,7 +662,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
         // add all aggregated collections
         final ObjectSpecification objSpec = adapter.getSpecification();
-        if (!adapter.isParented() || adapter.isParented() && !objSpec.isImmutable()) {
+        if (!adapter.isParentedCollection() || adapter.isParentedCollection() && !objSpec.isImmutable()) {
             pojoAdapterMap.add(pojo, adapter);
         }
 
@@ -697,7 +696,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         if (adapter.isValue()) {
             return;
         }
-        if (adapter.isParented()) {
+        if (adapter.isParentedCollection()) {
             return;
         }
         ensurePojoAdapterMapConsistent(adapter);

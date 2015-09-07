@@ -35,8 +35,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -210,8 +209,8 @@ public class Memento implements Serializable {
             populateCollection(adapter, (CollectionData) data);
             
         } else {
-        	Assert.assertTrue("oid must be a TypedOid representing an object because spec is not a collection and cannot be a value", oid instanceof TypedOid);
-        	TypedOid typedOid = (TypedOid) oid;
+        	Assert.assertTrue("oid must be a RootOid representing an object because spec is not a collection and cannot be a value", oid instanceof RootOid);
+        	RootOid typedOid = (RootOid) oid;
 
             // remove adapter if already in the adapter manager maps, because
             // otherwise would (as a side-effect) update the version to that of the current.
@@ -255,29 +254,13 @@ public class Memento implements Serializable {
         // reference to entity
         
         Oid oid = data.getOid();
-        Assert.assertTrue("can only create a reference to an entity", oid instanceof TypedOid);
+        Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
         
-		final TypedOid typedOid = (TypedOid) oid; 
-        if (typedOid == null) {
-            return null;
-        }
-        
-        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(typedOid);
+		final RootOid rootOid = (RootOid) oid;
+        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
-        	
-        	// no longer needed
-        	//final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
-        	if(typedOid instanceof ParentedOid) { // equiv to spec.isParented()), I think
-        		
-        		// rather than the following, is it equivalent to pass in RESOLVING? (like everywhere else)
-//            final ResolveState targetState = ResolveState.GHOST;
-//            if (referencedAdapter.getResolveState().isValidToChangeTo(targetState)) {
-//                referencedAdapter.changeState(targetState);
-//            }
-        		
-        		updateObject(referencedAdapter, data);
-        	} else if (typedOid.isTransient()) {
+            if (rootOid.isTransient()) {
         		updateObject(referencedAdapter, data);
         	}
         }
@@ -315,7 +298,7 @@ public class Memento implements Serializable {
         } else if (objectAdapter.isTransient() && dataIsTransient) {
             updateFields(objectAdapter, data);
             
-        } else if (objectAdapter.isParented()) {
+        } else if (objectAdapter.isParentedCollection()) {
             // this branch is kind-a wierd, I think it's to handle aggregated adapters.
             updateFields(objectAdapter, data);
             

@@ -19,35 +19,39 @@
 
 package org.apache.isis.core.metamodel.facets.object.parented.aggregated;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorAbstract;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 
-public class ParentedFacetSinceAggregatedAnnotationFactory extends FacetFactoryAbstract implements
+/**
+ * The {@link Aggregated @Aggregated} annotation is no longer supported; this facet factory prevents its use.
+ */
+public class AggregatedAnnotationFactory extends FacetFactoryAbstract implements
         MetaModelValidatorRefiner {
 
-    public ParentedFacetSinceAggregatedAnnotationFactory() {
+    public AggregatedAnnotationFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
+    final List<String> classesWithAnnotation = Lists.newArrayList();
+
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Aggregated annotation = Annotations.getAnnotation(processClassContext.getCls(), Aggregated.class);
-        FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
-    }
-
-    private ParentedFacet create(final Aggregated annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ParentedFacetSinceAggregatedAnnotation(holder);
+        final Class<?> cls = processClassContext.getCls();
+        final Aggregated annotation = Annotations.getAnnotation(cls, Aggregated.class);
+        if(annotation != null) {
+            classesWithAnnotation.add(cls.getName());
+        }
     }
 
     @Override
@@ -55,17 +59,14 @@ public class ParentedFacetSinceAggregatedAnnotationFactory extends FacetFactoryA
             final MetaModelValidatorComposite metaModelValidator,
             final IsisConfiguration configuration) {
 
-        metaModelValidator.add(new MetaModelValidatorVisiting(new MetaModelValidatorVisiting.Visitor() {
-
+        metaModelValidator.add(new MetaModelValidatorAbstract() {
             @Override
-            public boolean visit(final ObjectSpecification objectSpec, final ValidationFailures validationFailures) {
-                final ParentedFacet parentedFacet = objectSpec.getFacet(ParentedFacet.class);
-                if(parentedFacet != null && parentedFacet instanceof ParentedFacetSinceAggregatedAnnotation) {
+            public void validate(final ValidationFailures validationFailures) {
+                for (String className : classesWithAnnotation) {
                     validationFailures.add("%s has @Aggregated annotation, which is no longer supported.",
-                                    objectSpec.getIdentifier().getClassName());
+                            className);
                 }
-                return true;
             }
-        }));
+        });
     }
 }

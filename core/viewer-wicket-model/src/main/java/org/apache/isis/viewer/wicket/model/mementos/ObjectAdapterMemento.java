@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -108,7 +107,7 @@ public class ObjectAdapterMemento implements Serializable {
         PERSISTENT {
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
-                TypedOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, TypedOid.class);
+                RootOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
                     final ObjectAdapter adapter = getAdapterManager().adapterFor(oid, concurrencyChecking);
                     return adapter;

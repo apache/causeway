@@ -44,10 +44,8 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -356,7 +354,7 @@ public class DataNucleusObjectStore implements ObjectStore {
     // loadMappedObject, resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////
 
-    public ObjectAdapter loadInstanceAndAdapt(final TypedOid oid) {
+    public ObjectAdapter loadInstanceAndAdapt(final RootOid oid) {
         ensureOpened();
         ensureInTransaction();
 
@@ -374,10 +372,8 @@ public class DataNucleusObjectStore implements ObjectStore {
     // delegated to by PojoRecreator
     /////////////////////////////////////////////////////////////
 
-    public Object loadPojo(final TypedOid oid) {
+    public Object loadPojo(final RootOid rootOid) {
     	
-        final RootOid rootOid = (RootOid) oid;
-        
         Object result = null;
         try {
             final Class<?> cls = clsOf(rootOid);
@@ -395,7 +391,7 @@ public class DataNucleusObjectStore implements ObjectStore {
                     final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
                     if(recognition != null) {
                         if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
-                            throw new ObjectNotFoundException(oid, e);
+                            throw new ObjectNotFoundException(rootOid, e);
                         }
                     }
                 }
@@ -405,7 +401,7 @@ public class DataNucleusObjectStore implements ObjectStore {
         }
 
         if (result == null) {
-            throw new ObjectNotFoundException(oid);
+            throw new ObjectNotFoundException(rootOid);
         }
         return result;
     }
@@ -646,7 +642,7 @@ public class DataNucleusObjectStore implements ObjectStore {
     // Helpers
     // ///////////////////////////////////////////////////////////////////////
 
-    private Class<?> clsOf(final TypedOid oid) {
+    private Class<?> clsOf(final RootOid oid) {
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
         return objectSpec.getCorrespondingClass();
     }

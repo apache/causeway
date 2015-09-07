@@ -29,10 +29,8 @@ import com.google.common.collect.Maps;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
@@ -48,16 +46,17 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private final ObjectAdapter parentAdapter;
-    private final Oid rootAdapterOid;
+    private final RootOid rootAdapterOid;
     
     private final Map<OneToManyAssociation, ObjectAdapter> collectionAdapters = Maps.newLinkedHashMap();
 
-    public RootAndCollectionAdapters(ObjectAdapter parentAdapter, AdapterManager objectAdapterLookup) {
+    public RootAndCollectionAdapters(
+            final ObjectAdapter parentAdapter,
+            final AdapterManager adapterManager) {
         Assert.assertNotNull(parentAdapter);
-        final Oid oid = parentAdapter.getOid();
+        this.rootAdapterOid = (RootOid) parentAdapter.getOid();
         this.parentAdapter = parentAdapter;
-        this.rootAdapterOid = (RootOid) oid;
-        addCollectionAdapters(objectAdapterLookup);
+        addCollectionAdapters(adapterManager);
     }
 
     public ObjectAdapter getRootAdapter() {
@@ -99,7 +98,7 @@ public class RootAndCollectionAdapters implements Iterable<ObjectAdapter> {
 
     private void addCollectionAdapters(AdapterManager objectAdapterLookup) {
         for (final OneToManyAssociation otma : parentAdapter.getSpecification().getCollections(Contributed.EXCLUDED)) {
-            final CollectionOid collectionOid = new CollectionOid((TypedOid) rootAdapterOid, otma);
+            final ParentedCollectionOid collectionOid = new ParentedCollectionOid((RootOid) rootAdapterOid, otma);
             final ObjectAdapter collectionAdapter = objectAdapterLookup.getAdapterFor(collectionOid);
             if (collectionAdapter != null) {
                 // collection adapters are lazily created and so there may not be one.

@@ -31,8 +31,8 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -56,7 +56,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     private static final int INCOMPLETE_COLLECTION = -1;
 
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager objectAdapterLookup;
+    private final AdapterManager adapterManager;
     private final Localization localization;
     
     private Object pojo;
@@ -73,7 +73,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoader specificationLoader, AdapterManager adapterManager, Localization localization, AuthenticationSession authenticationSession) {
         this.specificationLoader = specificationLoader;
-        this.objectAdapterLookup = adapterManager;
+        this.adapterManager = adapterManager;
         this.localization = localization;
         this.authenticationSession = authenticationSession;
         
@@ -145,8 +145,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     }
 
     @Override
-    public boolean isParented() {
-        return oid instanceof ParentedOid;
+    public boolean isParentedCollection() {
+        return oid instanceof ParentedCollectionOid;
     }
 
     @Override
@@ -231,17 +231,17 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public ObjectAdapter getAggregateRoot() {
-        if(!isParented()) {
+        if(!isParentedCollection()) {
             return this;
         }
-        ParentedOid parentedOid = (ParentedOid) oid;
-        final Oid parentOid = parentedOid.getParentOid();
-        ObjectAdapter parentAdapter = objectAdapterLookup.getAdapterFor(parentOid);
-        if(parentAdapter == null) {
-            final Oid parentOidNowPersisted = getPersistenceSession().remappedFrom(parentOid);
-            parentAdapter = objectAdapterLookup.getAdapterFor(parentOidNowPersisted);
+        ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
+        final Oid rootOid = collectionOid.getRootOid();
+        ObjectAdapter rootadapter = adapterManager.getAdapterFor(rootOid);
+        if(rootadapter == null) {
+            final Oid parentOidNowPersisted = getPersistenceSession().remappedFrom(rootOid);
+            rootadapter = adapterManager.getAdapterFor(parentOidNowPersisted);
         }
-        return parentAdapter;
+        return rootadapter;
     }
 
     
@@ -255,7 +255,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public Version getVersion() {
-        if(isParented()) {
+        if(isParentedCollection()) {
             return getAggregateRoot().getVersion();
         } else {
             return getOid().getVersion();
@@ -265,7 +265,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void checkLock(final Version otherVersion) {
-        if(isParented()) {
+        if(isParentedCollection()) {
             getAggregateRoot().checkLock(otherVersion);
             return;
         }
@@ -290,7 +290,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public void setVersion(final Version version) {
-        if(isParented()) {
+        if(isParentedCollection()) {
             // ignored
             return;
         }

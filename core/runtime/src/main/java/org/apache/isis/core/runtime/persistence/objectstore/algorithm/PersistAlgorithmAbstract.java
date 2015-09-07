@@ -84,7 +84,7 @@ public abstract class PersistAlgorithmAbstract implements PersistAlgorithm {
     }
 
     private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
-        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParented();
+        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParentedCollection();
     }
 
     private static boolean objectSpecIsService(final ObjectAdapter adapter) {

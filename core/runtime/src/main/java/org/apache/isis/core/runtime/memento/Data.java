@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 
 public class Data implements Encodable, Serializable {
 
@@ -69,10 +69,6 @@ public class Data implements Encodable, Serializable {
         return oid;
     }
 
-    /**
-     * REVIEW: this probably isn't needed anymore given that {@link #getOid() oid} (at least for {@link TypedOid})
-     * includes the object type.
-     */
     public String getClassName() {
         return className;
     }

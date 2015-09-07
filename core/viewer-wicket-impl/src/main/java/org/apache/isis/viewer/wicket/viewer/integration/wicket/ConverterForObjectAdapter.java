@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 /**
@@ -44,7 +44,7 @@ public class ConverterForObjectAdapter implements IConverter<ObjectAdapter> {
      */
     @Override
     public ObjectAdapter convertToObject(final String value, final Locale locale) {
-        final Oid oid = RootOidDefault.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
         return getAdapterManager().getAdapterFor(oid);
     }
 

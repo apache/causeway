@@ -156,8 +156,6 @@ public class OidMarshaller {
             state = State.PERSISTENT;
         }
         
-        final String rootOidStr = getGroup(matcher, 2);
-        
         final String rootObjectType = getGroup(matcher, 4);
         final String rootIdentifier = getGroup(matcher, 5);
         
@@ -187,8 +185,8 @@ public class OidMarshaller {
 
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
-                ensureCorrectType(oidStr, requestedType, RootOidDefault.class); 
-                return (T)new RootOidDefault(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
+                ensureCorrectType(oidStr, requestedType, RootOid.class);
+                return (T)new RootOid(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
             } else {
                 throw new RuntimeException("Aggregated Oids are no longer supported");
             }
@@ -197,9 +195,9 @@ public class OidMarshaller {
             
             final String parentOidStr = oidStrWithoutCollectionName + marshal(version);
 
-            TypedOid parentOid = this.unmarshal(parentOidStr, TypedOid.class);
-            ensureCorrectType(oidStr, requestedType, CollectionOid.class);
-            return (T)new CollectionOid(parentOid, collectionName);
+            RootOid parentOid = this.unmarshal(parentOidStr, RootOid.class);
+            ensureCorrectType(oidStr, requestedType, ParentedCollectionOid.class);
+            return (T)new ParentedCollectionOid(parentOid, collectionName);
         }
     }
 
@@ -217,15 +215,6 @@ public class OidMarshaller {
         }
     }
     
-
-    private TypedOid parentOidFor(final String rootOidStr, final List<AggregateOidPart> aggregateOidParts, Version version) {
-        final StringBuilder buf = new StringBuilder(rootOidStr);
-        for(AggregateOidPart part: aggregateOidParts) {
-            buf.append(part.toString());
-        }
-        buf.append(marshal(version));
-        return unmarshal(buf.toString(), TypedOid.class);
-    }
 
     private <T> void ensureCorrectType(String oidStr, Class<T> requestedType, final Class<? extends Oid> actualType) {
         if(!requestedType.isAssignableFrom(actualType)) {
@@ -258,12 +247,12 @@ public class OidMarshaller {
         return transientIndicator + viewModelIndicator + rootOid.getObjectSpecId() + SEPARATOR + rootOid.getIdentifier();
     }
 
-    public final String marshal(CollectionOid collectionOid) {
+    public final String marshal(ParentedCollectionOid collectionOid) {
         return marshalNoVersion(collectionOid) + marshal(collectionOid.getVersion());
     }
 
-    public String marshalNoVersion(CollectionOid collectionOid) {
-        return collectionOid.getParentOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
+    public String marshalNoVersion(ParentedCollectionOid collectionOid) {
+        return collectionOid.getRootOid().enStringNoVersion(this) + SEPARATOR_COLLECTION + collectionOid.getName();
     }
 
     public final String marshal(Version version) {

@@ -21,7 +21,7 @@ package org.apache.isis.objectstore.jdo.metamodel.specloader.validator;
 import javax.jdo.annotations.IdentityType;
 
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
@@ -101,7 +101,7 @@ public class JdoMetaModelValidator extends MetaModelValidatorComposite {
         MetaModelValidatorVisiting.Visitor ensureIdentityType = new MetaModelValidatorVisiting.Visitor(){
             @Override
             public boolean visit(ObjectSpecification objSpec, ValidationFailures validationFailures) {
-                if (objSpec.containsDoOpFacet(ParentedFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
+                if (objSpec.containsDoOpFacet(ParentedCollectionFacet.class) && !objSpec.containsDoOpFacet(CollectionFacet.class)) {
                     validationFailures.add(
                             "%s: DataNucleus object store currently does not supported Aggregated or EmbeddedOnly annotations",
                             objSpec.getFullIdentifier());

@@ -36,64 +36,64 @@ public class OidVersionTest  {
     
     @Test
     public void whenEquivalentAndSameVersion() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123", 90807L);
-        oid2 = RootOidDefault.create(cusObjectSpecId, "123", 90807L);
+        oid1 = RootOid.create(cusObjectSpecId, "123", 90807L);
+        oid2 = RootOid.create(cusObjectSpecId, "123", 90807L);
         
         assertThat(oid1, is(equalTo(oid2)));
     }
     
     @Test
     public void whenEquivalentAndDifferentVersions() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123", 90807L);
-        oid2 = RootOidDefault.create(cusObjectSpecId, "123", 90808L);
+        oid1 = RootOid.create(cusObjectSpecId, "123", 90807L);
+        oid2 = RootOid.create(cusObjectSpecId, "123", 90808L);
         
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenEquivalentAndNoVersionInfoForLeftHand() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123");
-        oid2 = RootOidDefault.create(cusObjectSpecId, "123", 90808L);
+        oid1 = RootOid.create(cusObjectSpecId, "123");
+        oid2 = RootOid.create(cusObjectSpecId, "123", 90808L);
         
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenEquivalentAndNoVersionInfoForRightHand() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123", 90807L);
-        oid2 = RootOidDefault.create(cusObjectSpecId, "123");
+        oid1 = RootOid.create(cusObjectSpecId, "123", 90807L);
+        oid2 = RootOid.create(cusObjectSpecId, "123");
         
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenEquivalentAndNoVersionInfoForEither() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123");
-        oid2 = RootOidDefault.create(cusObjectSpecId, "123");
+        oid1 = RootOid.create(cusObjectSpecId, "123");
+        oid2 = RootOid.create(cusObjectSpecId, "123");
         
         assertThat(oid1, is(equalTo(oid2)));
     }
 
     @Test
     public void whenNotEquivalentById() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123");
-        oid2 = RootOidDefault.create(cusObjectSpecId, "124");
+        oid1 = RootOid.create(cusObjectSpecId, "123");
+        oid2 = RootOid.create(cusObjectSpecId, "124");
         
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
     @Test
     public void whenNotEquivalentByObjectSpecId() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123");
-        oid2 = RootOidDefault.create(ordObjectSpecId, "123");
+        oid1 = RootOid.create(cusObjectSpecId, "123");
+        oid2 = RootOid.create(ordObjectSpecId, "123");
         
         assertThat(oid1, is(not(equalTo(oid2))));
     }
 
     @Test
     public void whenNotEquivalentByState() throws Exception {
-        oid1 = RootOidDefault.create(cusObjectSpecId, "123");
-        oid2 = RootOidDefault.createTransient(cusObjectSpecId, "123");
+        oid1 = RootOid.create(cusObjectSpecId, "123");
+        oid2 = RootOid.createTransient(cusObjectSpecId, "123");
         
         assertThat(oid1, is(not(equalTo(oid2))));
     }

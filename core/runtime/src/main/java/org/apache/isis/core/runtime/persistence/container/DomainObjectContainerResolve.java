@@ -24,7 +24,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -50,7 +49,7 @@ public class DomainObjectContainerResolve {
     }
 
     public Object lookup(final Bookmark bookmark) {
-        RootOid oid = RootOidDefault.create(bookmark);
+        RootOid oid = RootOid.create(bookmark);
         final ObjectAdapter adapter = adapterFor(oid);
         if(adapter == null) {
             return null;

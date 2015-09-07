@@ -56,7 +56,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
@@ -399,7 +398,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         
         try {
-            final RootOid oid = RootOidDefault.deStringEncoded(encoded, getOidMarshaller());
+            final RootOid oid = RootOid.deStringEncoded(encoded, getOidMarshaller());
             return getAdapterManager().adapterFor(oid);
         } catch (final Exception e) {
             return null;

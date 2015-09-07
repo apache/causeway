@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -54,7 +53,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
         if (Strings.isNullOrEmpty(value)) {
             return null;
         }
-        final Oid oid = RootOidDefault.deStringEncoded(value, getOidMarshaller());
+        final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }

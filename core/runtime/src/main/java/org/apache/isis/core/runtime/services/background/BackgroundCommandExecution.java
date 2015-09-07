@@ -28,7 +28,6 @@ import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -157,7 +156,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
             return adapterFor(arg);
         } else {
             final Bookmark argBookmark = (Bookmark)arg;
-            final RootOid rootOid = RootOidDefault.create(argBookmark);
+            final RootOid rootOid = RootOid.create(argBookmark);
             return adapterFor(rootOid);
         }
     }

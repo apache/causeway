@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
@@ -134,12 +134,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(TypedOid oid) {
+            public ObjectAdapter adapterFor(RootOid oid) {
             	return getRuntimeAdapterManager().adapterFor(oid);
             }
 
             @Override
-            public ObjectAdapter adapterFor(TypedOid oid, ConcurrencyChecking concurrencyChecking) {
+            public ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking) {
                 return getRuntimeAdapterManager().adapterFor(oid, concurrencyChecking);
             }
 

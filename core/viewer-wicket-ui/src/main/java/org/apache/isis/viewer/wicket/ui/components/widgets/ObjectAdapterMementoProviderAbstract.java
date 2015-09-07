@@ -29,7 +29,6 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
 import org.apache.isis.viewer.wicket.model.isis.WicketViewerSettings;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -123,7 +122,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
                 if(NULL_PLACEHOLDER.equals(input)) {
                     return null;
                 }
-                final RootOid oid = RootOidDefault.deString(input, ObjectAdapterMemento.getOidMarshaller());
+                final RootOid oid = RootOid.deString(input, ObjectAdapterMemento.getOidMarshaller());
                 return ObjectAdapterMemento.createPersistent(oid);
             }
         };

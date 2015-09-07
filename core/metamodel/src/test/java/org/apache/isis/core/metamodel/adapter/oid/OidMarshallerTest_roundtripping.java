@@ -32,19 +32,19 @@ public class OidMarshallerTest_roundtripping {
     
     @Test
     public void rootOid_withNoVersion() {
-        RootOid oid = RootOidDefault.create(ObjectSpecId.of("CUS"), "123");
+        RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123");
         
         final String enString = oid.enString(oidMarshaller);
-        final RootOid deString = RootOidDefault.deString(enString, oidMarshaller);
+        final RootOid deString = RootOid.deString(enString, oidMarshaller);
         assertThat(deString, is(oid));
     }
 
     @Test
     public void rootOid_withVersion() {
-        RootOid oid = RootOidDefault.create(ObjectSpecId.of("CUS"), "123", 90807L);
+        RootOid oid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
         
         final String enString = oid.enString(oidMarshaller);
-        final RootOid deString = RootOidDefault.deString(enString, oidMarshaller);
+        final RootOid deString = RootOid.deString(enString, oidMarshaller);
         assertThat(deString, is(oid));
         assertThat(deString.getVersion(), is(oid.getVersion())); // assert separately because not part of equality check
     }
@@ -53,23 +53,23 @@ public class OidMarshallerTest_roundtripping {
 
     @Test
     public void collectionOid_withNoVersion() {
-        RootOid parentOid = RootOidDefault.create(ObjectSpecId.of("CUS"), "123");
-        CollectionOid oid = new CollectionOid(parentOid, "items");
+        RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123");
+        ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
         final String enString = oid.enString(oidMarshaller);
-        final CollectionOid deString = CollectionOid.deString(enString, oidMarshaller);
+        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString, oidMarshaller);
         assertThat(deString, is(oid));
     }
 
     @Test
     public void collectionOid_withVersion() {
-        RootOid parentOid = RootOidDefault.create(ObjectSpecId.of("CUS"), "123", 90807L);
-        CollectionOid oid = new CollectionOid(parentOid, "items");
+        RootOid parentOid = RootOid.create(ObjectSpecId.of("CUS"), "123", 90807L);
+        ParentedCollectionOid oid = new ParentedCollectionOid(parentOid, "items");
         
         final String enString = oid.enString(oidMarshaller);
-        final CollectionOid deString = CollectionOid.deString(enString, oidMarshaller);
+        final ParentedCollectionOid deString = ParentedCollectionOid.deString(enString, oidMarshaller);
         assertThat(deString, is(oid));
-        assertThat(deString.getParentOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
+        assertThat(deString.getRootOid().getVersion(), is(parentOid.getVersion())); // assert separately because not part of equality check
     }
 
 }

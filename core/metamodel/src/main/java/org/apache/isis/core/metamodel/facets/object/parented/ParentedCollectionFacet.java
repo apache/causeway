@@ -23,34 +23,18 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 /**
  * Indicates that this class is parented, that is, wholly contained within a
  * larger object.
  * 
  * <p>
- * There are two classes of object that are parented:
- * <ul>
- * <li>Aggregated objects</li>
- * <li>Internal collections</li>
- * </ul>
- * 
- * <p>
- * In the standard Apache Isis Programming Model, aggregated objects typically corresponds to
- * applying the <tt>@Aggregated</tt> annotation at the class level.  
- * In terms of an analogy, aggregated is similar to Hibernate's component types
- * (for larger mutable in-line objects) or to Hibernate's user-defined types
- * (for smaller immutable values).
- * 
+ * There is (now) only one class of object that is parented, namely internal collections.
+ *
  * <p>
  * Internal collections are the {@link List}s, {@link Set}s etc that hold references to
  * other root entities.
- * 
- * <p>
- * The object may or may not be {@link ImmutableFacet immutable}.  If an aggregated entity, then it may
- * reference regular entity domain objects or other aggregated objects.
  */
-public interface ParentedFacet extends MarkerFacet {
+public interface ParentedCollectionFacet extends MarkerFacet {
 
 }

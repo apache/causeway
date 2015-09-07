@@ -16,14 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.adapter.oid;
 
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+package org.apache.isis.core.metamodel.facets.collections.parented;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 
-public interface TypedOid extends Oid {
-    
-    ObjectSpecId getObjectSpecId();
+public class ParentedCollectionFacetDefault extends MarkerFacetAbstract implements ParentedCollectionFacet {
 
+    public static Class<? extends Facet> type() {
+        return ParentedCollectionFacet.class;
+    }
+
+    public ParentedCollectionFacetDefault(final FacetHolder holder) {
+        super(type(), holder);
+    }
 
 }

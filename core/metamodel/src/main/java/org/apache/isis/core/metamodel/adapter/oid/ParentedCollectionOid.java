@@ -26,39 +26,74 @@ import com.google.common.base.Objects;
 
 import org.apache.isis.core.commons.encoding.DataInputExtended;
 import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
  * Used as the {@link Oid} for collections.
  */
-public final class CollectionOid extends ParentedOid implements Serializable {
+public final class ParentedCollectionOid implements Serializable, Oid {
 
     private static final long serialVersionUID = 1L;
 
     private final String name;
     private int cachedHashCode;
 
+    private final RootOid parentOid;
+
     // /////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////
 
-    public CollectionOid(TypedOid parentOid, OneToManyAssociation otma) {
-        this(parentOid, otma.getId());
+    public ParentedCollectionOid(RootOid rootOid, OneToManyAssociation otma) {
+        this(rootOid, otma.getId());
     }
 
-    public CollectionOid(TypedOid parentOid, String name) {
-        super(parentOid);
+    public ParentedCollectionOid(RootOid rootOid, String name) {
+        Assert.assertNotNull("rootOid required", rootOid);
+        this.parentOid = rootOid;
         this.name = name;
         cacheState();
     }
 
-    
+
+    public RootOid getRootOid() {
+        return parentOid;
+    }
+
+    @Override
+    public Version getVersion() {
+        return parentOid.getVersion();
+    }
+
+    @Override
+    public void setVersion(Version version) {
+        parentOid.setVersion(version);
+    }
+
+    @Override
+    public boolean isTransient() {
+        return getRootOid().isTransient();
+    }
+
+    @Override
+    public boolean isViewModel() {
+        return getRootOid().isViewModel();
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return getRootOid().isPersistent();
+    }
+
+
     // /////////////////////////////////////////////////////////
     // enstring
     // /////////////////////////////////////////////////////////
 
-    public static CollectionOid deString(String oidStr, OidMarshaller oidMarshaller) {
-        return oidMarshaller.unmarshal(oidStr, CollectionOid.class);
+    public static ParentedCollectionOid deString(String oidStr, OidMarshaller oidMarshaller) {
+        return oidMarshaller.unmarshal(oidStr, ParentedCollectionOid.class);
     }
 
 
@@ -78,12 +113,12 @@ public final class CollectionOid extends ParentedOid implements Serializable {
     // /////////////////////////////////////////////////////////
 
 
-    public CollectionOid(DataInputExtended inputStream) throws IOException {
-        this(CollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller()));
+    public ParentedCollectionOid(DataInputExtended inputStream) throws IOException {
+        this(ParentedCollectionOid.deString(inputStream.readUTF(), getEncodingMarshaller()));
     }
 
-    private CollectionOid(CollectionOid oid) throws IOException {
-        super(oid.getParentOid());
+    private ParentedCollectionOid(ParentedCollectionOid oid) throws IOException {
+        this.parentOid = oid.getRootOid();
         this.name = oid.name;
     }
 
@@ -110,6 +145,17 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
 
     // /////////////////////////////////////////////////////////
+    // toString
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return enString(new OidMarshaller());
+    }
+
+
+
+    // /////////////////////////////////////////////////////////
     // Value semantics
     // /////////////////////////////////////////////////////////
 
@@ -124,14 +170,14 @@ public final class CollectionOid extends ParentedOid implements Serializable {
         if (getClass() != other.getClass()) {
             return false;
         }
-        return equals((CollectionOid) other);
+        return equals((ParentedCollectionOid) other);
     }
 
-    public boolean equals(final CollectionOid other) {
-        return Objects.equal(other.getParentOid(), getParentOid()) && Objects.equal(other.name, name);
+    public boolean equals(final ParentedCollectionOid other) {
+        return Objects.equal(other.getRootOid(), getRootOid()) && Objects.equal(other.name, name);
     }
 
-    
+
     @Override
     public int hashCode() {
         cacheState();
@@ -140,13 +186,13 @@ public final class CollectionOid extends ParentedOid implements Serializable {
 
     private void cacheState() {
         int hashCode = 17;
-        hashCode = 37 * hashCode + getParentOid().hashCode();
+        hashCode = 37 * hashCode + getRootOid().hashCode();
         hashCode = 37 * hashCode + name.hashCode();
         cachedHashCode = hashCode;
     }
 
 
-    
+
     // /////////////////////////////////////////////////////////
     // asPersistent
     // /////////////////////////////////////////////////////////
@@ -155,10 +201,9 @@ public final class CollectionOid extends ParentedOid implements Serializable {
      * When the RootOid is persisted, all its &quot;children&quot;
      * need updating similarly.
      */
-    public CollectionOid asPersistent(TypedOid newParentRootOid) {
-        return new CollectionOid(newParentRootOid, name);
+    public ParentedCollectionOid asPersistent(RootOid newParentRootOid) {
+        return new ParentedCollectionOid(newParentRootOid, name);
     }
-
 
 
 

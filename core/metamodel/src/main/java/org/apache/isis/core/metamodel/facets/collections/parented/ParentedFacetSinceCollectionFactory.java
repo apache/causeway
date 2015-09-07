@@ -23,14 +23,14 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacet;
+import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.facets.collections.javautilcollection.CollectionFacetFactory;
 
 /**
  * All {@link CollectionTypeRegistry collection types} are intrinsically
- * {@link ParentedFacet parented}.
+ * {@link ParentedCollectionFacet parented}.
  * 
  * <p> 
  * Must be registered in the {@link ProgrammingModel} after
@@ -47,7 +47,7 @@ public class ParentedFacetSinceCollectionFactory extends FacetFactoryAbstract {
         if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
             return;
         }
-        FacetUtil.addFacet(new ParentedFacetSinceCollection(processClassContaxt.getFacetHolder()));
+        FacetUtil.addFacet(new ParentedCollectionFacetDefault(processClassContaxt.getFacetHolder()));
     }
 
 }

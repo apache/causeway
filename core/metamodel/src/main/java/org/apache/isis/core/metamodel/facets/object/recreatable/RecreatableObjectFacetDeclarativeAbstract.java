@@ -22,13 +22,14 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
@@ -74,7 +75,7 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
         if(viewModelAdapter == null) {
             final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter = adapterManager.mapRecreatedPojo(new RootOidDefault(objectSpecId, mementoStr, Oid.State.VIEWMODEL), viewModelPojo);
+            viewModelAdapter = adapterManager.mapRecreatedPojo(new RootOid(objectSpecId, mementoStr, Oid.State.VIEWMODEL), viewModelPojo);
         }
 
         final ObjectSpecification spec = viewModelAdapter.getSpecification();
@@ -116,7 +117,7 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
         if(viewModelAdapter == null) {
             final ObjectSpecification objectSpecification = specificationLoader.loadSpecification(viewModelPojo.getClass());
             final ObjectSpecId objectSpecId = objectSpecification.getSpecId();
-            viewModelAdapter = adapterManager.mapRecreatedPojo(RootOidDefault.create(objectSpecId, UUID.randomUUID().toString()), viewModelPojo);
+            viewModelAdapter = adapterManager.mapRecreatedPojo(RootOid.create(objectSpecId, UUID.randomUUID().toString()), viewModelPojo);
 
             createdTemporaryAdapter = true;
         }

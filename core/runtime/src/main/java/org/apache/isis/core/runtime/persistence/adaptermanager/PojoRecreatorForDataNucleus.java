@@ -19,7 +19,7 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
@@ -29,7 +29,7 @@ class PojoRecreatorForDataNucleus implements PojoRecreator {
     private final PojoRecreator delegate = new PojoRecreatorDefault();
     
     @Override
-    public Object recreatePojo(TypedOid oid) {
+    public Object recreatePojo(RootOid oid) {
         if(oid.isTransient() || oid.isViewModel()) {
             return delegate.recreatePojo(oid);
         }

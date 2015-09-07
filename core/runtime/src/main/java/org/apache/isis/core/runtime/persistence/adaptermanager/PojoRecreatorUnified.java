@@ -20,7 +20,7 @@ package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.PersistorImplementation;
 
 public class PojoRecreatorUnified implements PojoRecreator {
@@ -34,7 +34,7 @@ public class PojoRecreatorUnified implements PojoRecreator {
                     : new PojoRecreatorDefault();
     }
 
-    public Object recreatePojo(final TypedOid oid) {
+    public Object recreatePojo(final RootOid oid) {
         return pojoRecreator.recreatePojo(oid);
     }
 

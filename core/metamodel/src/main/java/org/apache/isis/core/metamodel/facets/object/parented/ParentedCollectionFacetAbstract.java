@@ -17,15 +17,20 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.parented;
+package org.apache.isis.core.metamodel.facets.object.parented;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
-public class ParentedFacetSinceCollection extends ParentedFacetAbstract {
+public abstract class ParentedCollectionFacetAbstract extends MarkerFacetAbstract implements ParentedCollectionFacet {
 
-    public ParentedFacetSinceCollection(final FacetHolder holder) {
-        super(holder);
+    public static Class<? extends Facet> type() {
+        return ParentedCollectionFacet.class;
+    }
+
+    public ParentedCollectionFacetAbstract(final FacetHolder holder) {
+        super(type(), holder);
     }
 
 }

@@ -20,11 +20,11 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import com.google.common.collect.Lists;
-import org.jmock.Expectations;
+
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
-import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.profiles.Localization;
@@ -32,8 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.oid.RootOidDefault;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -45,10 +44,6 @@ import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
 
 public class AdapterManagerDefault_aggregateAdapters {
 
@@ -164,7 +159,7 @@ public class AdapterManagerDefault_aggregateAdapters {
         aggregatedObject = new Name();
         
         persistentParentAdapter = adapterManager.mapRecreatedPojo(
-                RootOidDefault.create(ObjectSpecId.of("CUS"), "1"), rootObject);
+                RootOid.create(ObjectSpecId.of("CUS"), "1"), rootObject);
     }
 
 

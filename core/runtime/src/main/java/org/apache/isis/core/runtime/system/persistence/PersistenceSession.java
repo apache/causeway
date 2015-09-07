@@ -40,9 +40,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -511,10 +509,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
-     * Loads the object identified by the specified {@link TypedOid} from the
+     * Loads the object identified by the specified {@link RootOid} from the
      * persisted set of objects.
      */
-    public ObjectAdapter loadObject(final TypedOid oid) {
+    public ObjectAdapter loadObject(final RootOid oid) {
         
         // REVIEW: 
         // this method does not account for the oid possibly being a view model
@@ -533,7 +531,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return loadMappedObjectFromObjectStore(oid);
     }
 
-    private ObjectAdapter loadMappedObjectFromObjectStore(final TypedOid oid) {
+    private ObjectAdapter loadMappedObjectFromObjectStore(final RootOid oid) {
         final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {

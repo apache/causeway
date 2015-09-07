@@ -116,7 +116,7 @@ import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistabl
 import org.apache.isis.core.metamodel.facets.object.objectspecid.classname.ObjectSpecIdFacetDerivedFromClassNameFactory;
 import org.apache.isis.core.metamodel.facets.object.objectvalidprops.impl.ObjectValidPropertiesFacetImplFactory;
 import org.apache.isis.core.metamodel.facets.object.paged.annotation.PagedFacetOnTypeAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.parented.aggregated.ParentedFacetSinceAggregatedAnnotationFactory;
+import org.apache.isis.core.metamodel.facets.object.parented.aggregated.AggregatedAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.plural.staticmethod.PluralFacetStaticMethodFactory;
@@ -316,7 +316,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(FieldOrderFacetAnnotationFactory.class);
         addFactory(MemberGroupLayoutFacetFactory.class);
 
-        addFactory(ParentedFacetSinceAggregatedAnnotationFactory.class);
+        addFactory(AggregatedAnnotationFactory.class);
         addFactory(BookmarkPolicyFacetViaBookmarkableAnnotationFactory.class);
         addFactory(HomePageFacetAnnotationFactory.class);
         addFactory(ChoicesFacetFromBoundedMarkerInterfaceFactory.class);

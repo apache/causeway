@@ -20,15 +20,18 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.List;
+
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.CollectionOid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.adapter.oid.TypedOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 
 public interface ObjectStore extends TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
 
@@ -108,7 +111,7 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
     // ///////////////////////////////////////////////////////
 
     /**
-     * Retrieves the object identified by the specified {@link TypedOid} from the object
+     * Retrieves the object identified by the specified {@link RootOid} from the object
      * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
      * 
      * <p>The cache should be checked first and, if the object is cached,
@@ -126,12 +129,12 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
      * 
      * <p>
      * If the persistence mechanism does not known of an object with the
-     * specified {@link TypedOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
+     * specified {@link RootOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
      * thrown.
      * 
      * <p>
      * Note that the OID could be for an internal collection, and is
-     * therefore related to the parent object (using a {@link CollectionOid}).
+     * therefore related to the parent object (using a {@link ParentedCollectionOid}).
      * The elements for an internal collection are commonly stored as
      * part of the parent object, so to get element the parent object needs to
      * be retrieved first, and the internal collection can be got from that.
@@ -141,12 +144,12 @@ public interface ObjectStore extends TransactionalResource, DebuggableWithTitle,
      * 
      * 
      * @return the requested {@link ObjectAdapter} that has the specified
-     *         {@link TypedOid}.
+     *         {@link RootOid}.
      * 
      * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    ObjectAdapter loadInstanceAndAdapt(TypedOid oid);
+    ObjectAdapter loadInstanceAndAdapt(RootOid oid);
 
 
     // ///////////////////////////////////////////////////////
