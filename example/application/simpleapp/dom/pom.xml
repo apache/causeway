@@ -79,7 +79,9 @@
         <profile>
             <id>enhance</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skip.enhance</name>
+                </property>
             </activation>
             <properties>
                 <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
@@ -161,7 +163,7 @@
                     <plugin>
                         <groupId>org.apache.isis.tool</groupId>
                         <artifactId>isis-maven-plugin</artifactId>
-                        <version>1.10.0-SNAPSHOT</version>
+                        <version>${isis.version}</version>
                         <configuration>
                             <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>
                         </configuration>
