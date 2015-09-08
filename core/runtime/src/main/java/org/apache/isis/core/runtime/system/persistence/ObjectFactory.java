@@ -20,37 +20,25 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.lang.reflect.Modifier;
+
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class ObjectFactory {
 
-    private final Mode mode;
+    private final PersistenceSession persistenceSession;
+    private final ServicesInjectorSpi servicesInjector;
 
-    public enum Mode {
-        /**
-         * Fail if no {@link ObjectFactory#getServicesInjector() services injector} has been injected.
-         */
-        STRICT,
-        /**
-         * Ignore if no {@link ObjectFactory#getServicesInjector() services injector} has been injected
-         * (intended for testing only).
-         */
-        RELAXED
-    }
-
-    public ObjectFactory() {
-        this(Mode.STRICT);
-    }
-
-    public ObjectFactory(final Mode mode) {
-        this.mode = mode;
+    public ObjectFactory(
+            final PersistenceSession persistenceSession,
+            final ServicesInjectorSpi servicesInjector) {
+        this.persistenceSession = persistenceSession;
+        this.servicesInjector = servicesInjector;
     }
 
     public <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
 
-        if (mode == Mode.STRICT && getServicesInjector() == null) {
+        if (getServicesInjector() == null) {
             throw new IllegalStateException("ServicesInjector is not available (no open session)");
         }
         if (Modifier.isAbstract(cls.getModifiers())) {
@@ -82,14 +70,14 @@ public class ObjectFactory {
     }
     //endregion
 
-    //region > dependencies (looked up from context)
+    //region > dependencies (from constructor)
 
     private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return persistenceSession;
     }
 
     protected ServicesInjectorSpi getServicesInjector() {
-        return getPersistenceSession().getServicesInjector();
+        return servicesInjector;
     }
 
     //endregion

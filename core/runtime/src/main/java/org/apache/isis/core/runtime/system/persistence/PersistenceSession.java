@@ -56,7 +56,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
@@ -73,7 +72,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
-    private final ObjectFactory objectFactory = new ObjectFactory();
+    private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final ObjectAdapterFactory objectAdapterFactory;
@@ -85,8 +84,12 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
     private final PersistenceQueryFactory persistenceQueryFactory;
+    private final IsisConfiguration configuration;
+    private final SpecificationLoaderSpi specificationLoader;
+    private final AuthenticationSession authenticationSession;
 
     private IsisTransactionManager transactionManager;
+    private final ServicesInjectorSpi servicesInjector;
 
     private static enum State {
         NOT_INITIALIZED, OPEN, CLOSED
@@ -101,30 +104,39 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
             final DataNucleusObjectStore objectStore,
-            final IsisConfiguration configuration) {
-
+            final IsisConfiguration configuration,
+            final SpecificationLoaderSpi specificationLoader,
+            final AuthenticationSession authenticationSession) {
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
-        this.persistenceSessionFactory = persistenceSessionFactory;
+        this.configuration = configuration;
+        this.specificationLoader = specificationLoader;
+        this.authenticationSession = authenticationSession;
 
+        this.persistenceSessionFactory = persistenceSessionFactory;
+        this.objectStore = objectStore;
+
+        this.servicesInjector = persistenceSessionFactory.getServicesInjector();
+
+        this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.objectAdapterFactory = new PojoAdapterFactory();
-        this.oidGenerator = new OidGenerator();
+        this.oidGenerator = new OidGenerator(this, specificationLoader);
         this.adapterManager = new AdapterManagerDefault();
         this.persistAlgorithm = new PersistAlgorithm();
 
-        this.objectStore = objectStore;
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
-        this.transactionManager = new IsisTransactionManager(this, objectStore, persistenceSessionFactory.getServicesInjector());
+        this.transactionManager = new IsisTransactionManager(this, objectStore,
+                servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
-
     }
+
 
     // ///////////////////////////////////////////////////////////////////////////
     // PersistenceSessionFactory
@@ -793,6 +805,14 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     // Dependencies (injected in constructor, possibly implicitly)
     // ///////////////////////////////////////////////////////////////////////////
 
+    //region > dependencies (from constructor)
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return specificationLoader;
+    }
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
+
     /**
      * Injected by constructor.
      */
@@ -845,13 +865,12 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     /**
      * The configured {@link ObjectFactory}.
-     * 
-     * <p>
-     * Obtained indirectly from the injected reflector.
      */
     public ObjectFactory getObjectFactory() {
         return objectFactory;
     }
+
+    //endregion
 
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected)
@@ -867,18 +886,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     // for testing only
     void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
-    }
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ///////////////////////////////////////////////////////////////////////////
-
-    protected SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
     }
 
 }

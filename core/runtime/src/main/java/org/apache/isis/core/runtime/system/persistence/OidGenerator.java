@@ -19,6 +19,13 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.util.UUID;
+
+import javax.jdo.PersistenceManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -28,41 +35,34 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 public class OidGenerator implements DebuggableWithTitle {
 
-    private final IdentifierGenerator identifierGenerator;
-    
-    public OidGenerator() {
-        this(new IdentifierGenerator());
-    }
-    public OidGenerator(final IdentifierGenerator identifierGenerator) {
-        this.identifierGenerator = identifierGenerator;
-    }
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(OidGenerator.class);
 
-    
-    public IdentifierGenerator getIdentifierGenerator() {
-        return identifierGenerator;
+    //region > constructor 
+    private final PersistenceSession persistenceSession;
+    private final SpecificationLoaderSpi specificationLoader;
+
+    public OidGenerator(
+            final PersistenceSession persistenceSession,
+            final SpecificationLoaderSpi specificationLoader) {
+        this.persistenceSession = persistenceSession;
+        this.specificationLoader = specificationLoader;
     }
+    //endregion
 
-
-    // //////////////////////////////////////////////////////////////
-    // API and mandatory hooks
-    // //////////////////////////////////////////////////////////////
-    
+    //region > create...Oid (main API)
     /**
      * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
      * supplied pojo, uniquely distinguishable from any other {@link Oid}.
-     *
-     * TODO: the responsibility for knowing if this pojo is a view model or not are split unhappily between this class and the {@link org.apache.isis.core.runtime.system.persistence.IdentifierGenerator} impl.
      */
     public final RootOid createTransientOrViewModelOid(final Object pojo) {
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(pojo.getClass());
-        final ObjectSpecId objectSpecId = spec.getSpecId();
-        final String transientIdentifier = identifierGenerator.createTransientIdentifierFor(objectSpecId, pojo);
-        final State state = spec.containsDoOpFacet(ViewModelFacet.class)? State.VIEWMODEL:State.TRANSIENT;
-        return new RootOid(objectSpecId, transientIdentifier, state);
+        return newIdentifier(pojo, Type.TRANSIENT);
     }
 
     /**
@@ -75,56 +75,85 @@ public class OidGenerator implements DebuggableWithTitle {
      * to obtain an application-defined value.  
      * 
      * @param pojo - being persisted
-     * @param transientRootOid - the oid for the pojo when transient.
      */
     public final RootOid createPersistentOrViewModelOid(Object pojo) {
-
-        final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
-        final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo);
-        
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
-        final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.PERSISTENT;
-        return new RootOid(objectSpecId, persistentIdentifier, state);
+        return newIdentifier(pojo, Type.PERSISTENT);
     }
 
-    
+    //endregion
 
+    //region > helpers
 
-    // //////////////////////////////////////////////////////////////
-    // Helpers
-    // //////////////////////////////////////////////////////////////
-
-    private ObjectSpecId objectSpecIdFor(final Object pojo) {
-        final Class<? extends Object> cls = pojo.getClass();
-        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(cls);
-        return objectSpec.getSpecId();
+    enum Type {
+        TRANSIENT, PERSISTENT
     }
 
+    private RootOid newIdentifier(final Object pojo, final OidGenerator.Type type) {
+        final ObjectSpecification spec = objectSpecFor(pojo);
+        if(spec.isService()) {
+            return newRootId(spec, "1", type);
+        }
 
+        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+        final String identifier =
+                recreatableObjectFacet != null
+                        ? recreatableObjectFacet.memento(pojo)
+                        : newIdentifierFor(pojo, type);
 
-    // //////////////////////////////////////////////////////////////
-    // debug
-    // //////////////////////////////////////////////////////////////
+        return newRootId(spec, identifier, type);
+    }
 
+    private String newIdentifierFor(final Object pojo, final Type type) {
+        return type == Type.TRANSIENT
+                ? UUID.randomUUID().toString()
+                : JdoObjectIdSerializer.toOidIdentifier(getJdoPersistenceManager().getObjectId(pojo));
+    }
 
+    private RootOid newRootId(final ObjectSpecification spec, final String identifier, final Type type) {
+        final State state =
+                spec.containsDoOpFacet(ViewModelFacet.class)
+                    ? State.VIEWMODEL
+                    : type == Type.TRANSIENT
+                        ? State.TRANSIENT
+                        : State.PERSISTENT;
+        final ObjectSpecId objectSpecId = spec.getSpecId();
+        return new RootOid(objectSpecId, identifier, state);
+    }
+
+    private ObjectSpecification objectSpecFor(final Object pojo) {
+        final Class<?> pojoClass = pojo.getClass();
+        return getSpecificationLoader().loadSpecification(pojoClass);
+    }
+    //endregion
+
+    //region > dependencies (from constructor)
+    protected SpecificationLoader getSpecificationLoader() {
+        return specificationLoader;
+    }
+
+    protected DataNucleusObjectStore getObjectStore() {
+        return persistenceSession.getObjectStore();
+    }
+
+    protected PersistenceManager getJdoPersistenceManager() {
+        final DataNucleusObjectStore objectStore = getObjectStore();
+        return objectStore.getPersistenceManager();
+    }
+    //endregion
+
+    //region > debug
     @Override
     public void debugData(final DebugBuilder debug) {
-        getIdentifierGenerator().debugData(debug);
     }
 
 
     @Override
     public String debugTitle() {
-        return getIdentifierGenerator().debugTitle();
+        return "OidGenerator";
     }
 
-    
-    //////////////////////////////////////////////////////////////////
-    // context
-    //////////////////////////////////////////////////////////////////
+    //endregion
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
+
 
 }

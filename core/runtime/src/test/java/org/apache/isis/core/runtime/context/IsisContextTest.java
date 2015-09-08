@@ -64,6 +64,9 @@ public class IsisContextTest {
     protected AuthorizationManager mockAuthorizationManager;
 
     @Mock
+    private AuthenticationSession mockAuthenticationSession;
+
+    @Mock
     protected DomainObjectContainer mockContainer;
     
     protected OidMarshaller oidMarshaller;
@@ -88,7 +91,7 @@ public class IsisContextTest {
         
         context.checking(new Expectations() {
             {
-                allowing(mockPersistenceSessionFactory).createPersistenceSession();
+                allowing(mockPersistenceSessionFactory).createPersistenceSession(mockSpecificationLoader,                         mockAuthenticationSession);
                 will(returnValue(mockPersistenceSession));
                 
                 ignoring(mockPersistenceSession);

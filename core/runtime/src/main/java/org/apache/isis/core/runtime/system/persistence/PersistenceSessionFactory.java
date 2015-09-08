@@ -267,10 +267,11 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
-    public PersistenceSession createPersistenceSession() {
+    public PersistenceSession createPersistenceSession(
+            final SpecificationLoaderSpi specificationLoader,
+            final AuthenticationSession authenticationSession) {
         final DataNucleusObjectStore objectStore = new DataNucleusObjectStore(applicationComponents);
-        final PersistenceSession persistenceSession = new PersistenceSession(this, objectStore, getConfiguration());
-        return persistenceSession;
+        return new PersistenceSession(this, objectStore, getConfiguration(), specificationLoader, authenticationSession);
     }
 
     //endregion

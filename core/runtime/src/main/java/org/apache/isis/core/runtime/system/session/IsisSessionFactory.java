@@ -138,12 +138,9 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * Creates and {@link IsisSession#open() open}s the {@link IsisSession}.
      */
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
-        final PersistenceSession persistenceSession = persistenceSessionFactory.createPersistenceSession();
+        final PersistenceSession persistenceSession =
+                persistenceSessionFactory.createPersistenceSession(getSpecificationLoader(), authenticationSession);
         ensureThatArg(persistenceSession, is(not(nullValue())));
-
-        // inject into persistenceSession any/all application-scoped components
-        // that it requires
-        getSpecificationLoader().injectInto(persistenceSession);
 
         return newIsisSession(authenticationSession, persistenceSession);
     }
