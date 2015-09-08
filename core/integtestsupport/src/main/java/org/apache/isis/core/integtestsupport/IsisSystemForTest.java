@@ -31,8 +31,8 @@ import org.junit.Before;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.services.command.Command;
@@ -59,7 +59,6 @@ import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationA
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction.State;
@@ -67,6 +66,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
 /**
  * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
@@ -600,7 +600,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
+    public <T extends DataNucleusObjectStore> T getObjectStore(Class<T> cls) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }

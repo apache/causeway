@@ -38,13 +38,16 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -57,13 +60,13 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -87,7 +90,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class DataNucleusObjectStore implements ObjectStore {
+public class DataNucleusObjectStore implements TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusObjectStore.class);
 
@@ -148,7 +151,6 @@ public class DataNucleusObjectStore implements ObjectStore {
         this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
     }
 
-    @Override
     public String name() {
         return "datanucleus";
     }
@@ -206,9 +208,12 @@ public class DataNucleusObjectStore implements ObjectStore {
     }
 
     private void addPersistenceQueryProcessors(final PersistenceManager persistenceManager) {
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class, new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class, new PersistenceQueryFindByTitleProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class, new PersistenceQueryFindByPatternProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class,
+                new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class,
+                new PersistenceQueryFindByTitleProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class,
+                new PersistenceQueryFindByPatternProcessor(persistenceManager, frameworkSynchronizer));
         persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
     }
 
@@ -217,8 +222,17 @@ public class DataNucleusObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////////////////////
 
     /**
+     * Determine if the object store has been initialized with its set of start
+     * up objects.
+     *
+     * <p>
+     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+     * framework will run the fixtures to initialise the object store.
+     *
+     * <p>
      * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the
      * {@link #getConfiguration() configuration}.
+     *
      * <p>
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
@@ -300,6 +314,26 @@ public class DataNucleusObjectStore implements ObjectStore {
     // Command Factory
     // ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * Makes an {@link ObjectAdapter} persistent. The specified object should be
+     * stored away via this object store's persistence mechanism, and have an
+     * new and unique OID assigned to it (by calling the object's
+     * <code>setOid</code> method). The object, should also be added to the
+     * cache as the object is implicitly 'in use'.
+     *
+     * <p>
+     * If the object has any associations then each of these, where they aren't
+     * already persistent, should also be made persistent by recursively calling
+     * this method.
+     * </p>
+     *
+     * <p>
+     * If the object to be persisted is a collection, then each element of that
+     * collection, that is not already persistent, should be made persistent by
+     * recursively calling this method.
+     * </p>
+     *
+     */
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInSession();
@@ -354,6 +388,45 @@ public class DataNucleusObjectStore implements ObjectStore {
     // loadMappedObject, resolveImmediately, resolveField
     // ///////////////////////////////////////////////////////////////////////
 
+    /**
+     * Retrieves the object identified by the specified {@link RootOid} from the object
+     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
+     *
+     * <p>The cache should be checked first and, if the object is cached,
+     * the cached version should be returned. It is important that if this
+     * method is called again, while the originally returned object is in
+     * working memory, then this method must return that same Java object.
+     *
+     * <p>
+     * Assuming that the object is not cached then the data for the object
+     * should be retrieved from the persistence mechanism and the object
+     * recreated (as describe previously). The specified OID should then be
+     * assigned to the recreated object by calling its <method>setOID </method>.
+     * Before returning the object its resolved flag should also be set by
+     * calling its <method>setResolved </method> method as well.
+     *
+     * <p>
+     * If the persistence mechanism does not known of an object with the
+     * specified {@link RootOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
+     * thrown.
+     *
+     * <p>
+     * Note that the OID could be for an internal collection, and is
+     * therefore related to the parent object (using a {@link ParentedCollectionOid}).
+     * The elements for an internal collection are commonly stored as
+     * part of the parent object, so to get element the parent object needs to
+     * be retrieved first, and the internal collection can be got from that.
+     *
+     * <p>
+     * Returns the stored {@link ObjectAdapter} object.
+     *
+     *
+     * @return the requested {@link ObjectAdapter} that has the specified
+     *         {@link RootOid}.
+     *
+     * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
+     *             when no object corresponding to the oid can be found
+     */
     public ObjectAdapter loadInstanceAndAdapt(final RootOid oid) {
         ensureOpened();
         ensureInTransaction();
@@ -525,13 +598,11 @@ public class DataNucleusObjectStore implements ObjectStore {
     // Services
     // ///////////////////////////////////////////////////////////////////////
 
-    @Override
     public void registerService(RootOid rootOid) {
         ensureOpened();
         this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
     }
 
-    @Override
     public RootOid getOidForService(ObjectSpecification serviceSpec) {
         ensureOpened();
         return this.registeredServices.get(serviceSpec.getSpecId());

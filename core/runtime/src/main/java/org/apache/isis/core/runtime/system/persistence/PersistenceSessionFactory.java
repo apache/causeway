@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.fixtures.FixtureClock;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -70,14 +71,14 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory.class);
 
+    //region > constructor
+
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
 
     private final ServicesInjectorSpi servicesInjector;
     private final RuntimeContextFromSession runtimeContext;
 
-    private DataNucleusApplicationComponents applicationComponents;
-    private Boolean fixturesInstalled;
     private SpecificationLoaderSpi specificationLoader;
 
     public PersistenceSessionFactory(
@@ -101,8 +102,19 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
         return deploymentType;
     }
 
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public ServicesInjectorSpi getServicesInjector() {
+        return servicesInjector;
+    }
+
+    //endregion
 
     //region > init, createDataNucleusApplicationComponents
+
+    private DataNucleusApplicationComponents applicationComponents;
 
     public final void init() {
 
@@ -216,20 +228,7 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
 
     //endregion
 
-
-    public PersistenceSession createPersistenceSession() {
-        final DataNucleusObjectStore objectStore = new DataNucleusObjectStore(applicationComponents);
-        final PersistenceSession persistenceSession = new PersistenceSession(this, objectStore, getConfiguration());
-        return persistenceSession;
-    }
-
-
-    // //////////////////////////////////////////////////////
-    // MetaModelAdjuster impl
-    // //////////////////////////////////////////////////////
-
-
-    //region > PersistenceSessionFactoryDelegate impl
+    //region > MetaModelRefiner impl
 
     @Override
     public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
@@ -262,10 +261,23 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
 
     //endregion
 
+    //region > createPersisenceSession
 
-    // //////////////////////////////////////////////////////
-    // FixturesInstalledFlag impl
-    // //////////////////////////////////////////////////////
+
+    /**
+     * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
+     */
+    public PersistenceSession createPersistenceSession() {
+        final DataNucleusObjectStore objectStore = new DataNucleusObjectStore(applicationComponents);
+        final PersistenceSession persistenceSession = new PersistenceSession(this, objectStore, getConfiguration());
+        return persistenceSession;
+    }
+
+    //endregion
+
+    //region > FixturesInstalledFlag impl
+
+    private Boolean fixturesInstalled;
 
     @Override
     public Boolean isFixturesInstalled() {
@@ -277,22 +289,9 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
         this.fixturesInstalled = fixturesInstalled;
     }
 
-    // //////////////////////////////////////////////////////
-    // Dependencies (injected from constructor)
-    // //////////////////////////////////////////////////////
+    //endregion
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
-    public ServicesInjectorSpi getServicesInjector() {
-        return servicesInjector;
-    }
-
-    // //////////////////////////////////////////////////////
-    // Dependencies (from init)
-    // //////////////////////////////////////////////////////
-
+    //region > dependencies (from init)
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return specificationLoader;
@@ -302,4 +301,7 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
+
+    //endregion
+
 }

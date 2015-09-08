@@ -60,6 +60,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -80,7 +81,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     private final AdapterManagerDefault adapterManager;
 
     private final PersistAlgorithm persistAlgorithm ;
-    private final ObjectStore objectStore;
+    private final DataNucleusObjectStore objectStore;
     private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
     private final PersistenceQueryFactory persistenceQueryFactory;
@@ -99,7 +100,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
-            final ObjectStore objectStore,
+            final DataNucleusObjectStore objectStore,
             final IsisConfiguration configuration) {
 
 
@@ -474,11 +475,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
+     * Returns the cached value of {@link DataNucleusObjectStore#isFixturesInstalled()
      * whether fixtures are installed} from the
-     * {@link PersistenceSessionFactory} (provided it implements
-     * {@link FixturesInstalledFlag}), otherwise queries {@link ObjectStore}
-     * directly.
+     * {@link PersistenceSessionFactory}.
      * <p>
      * This caching is important because if we've determined, for a given run,
      * that fixtures are not installed, then we don't want to change our mind by
@@ -714,8 +713,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     /**
-     * Uses the {@link ObjectStore} to
-     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
+     * Uses the {@link DataNucleusObjectStore} to
+     * {@link DataNucleusObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
@@ -797,7 +796,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     /**
      * Injected by constructor.
      */
-    public ObjectStore getObjectStore() {
+    public DataNucleusObjectStore getObjectStore() {
         return objectStore;
     }
 
