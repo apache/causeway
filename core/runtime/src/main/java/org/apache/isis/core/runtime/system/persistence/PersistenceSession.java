@@ -104,7 +104,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
-        ensureThatArg(objectStore, is(not(nullValue())), "object store required");
 
         this.persistenceSessionFactory = persistenceSessionFactory;
 
@@ -112,6 +111,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.oidGenerator = new OidGenerator();
         this.adapterManager = new AdapterManagerDefault();
         this.persistAlgorithm = new PersistAlgorithm();
+
         this.objectStore = objectStore;
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);

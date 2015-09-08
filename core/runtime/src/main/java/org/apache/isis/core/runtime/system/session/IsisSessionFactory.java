@@ -120,18 +120,18 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         authenticationManager.init();
         authorizationManager.init();
         persistenceSessionFactory.init();
-
     }
 
 
 
     @Override
     public void shutdown() {
-
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoaderSpi.shutdown();
     }
+
+    // //////////////////////////////////////
 
 
     /**

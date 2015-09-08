@@ -171,14 +171,14 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
         final Collection<MetaModelRefiner> metaModelRefiners =
                 refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
-        final SpecificationLoaderSpi reflector =
+        final SpecificationLoaderSpi specificationLoader =
                 isisComponentProvider.provideSpecificationLoaderSpi(metaModelRefiners);
 
         // bind metamodel to the (runtime) framework
-        runtimeContext.injectInto(reflector);
+        runtimeContext.injectInto(specificationLoader);
 
         return new IsisSessionFactory (
-                deploymentType, configuration, reflector,
+                deploymentType, configuration, specificationLoader,
                 authenticationManager, authorizationManager,
                 persistenceSessionFactory);
     }
