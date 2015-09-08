@@ -53,9 +53,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithmUnified;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -89,8 +87,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private IsisTransactionManager transactionManager;
 
-    private boolean dirtiableSupport = true;
-
     private static enum State {
         NOT_INITIALIZED, OPEN, CLOSED
     }
@@ -113,9 +109,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.persistenceSessionFactory = persistenceSessionFactory;
 
         this.objectAdapterFactory = new PojoAdapterFactory();
-        this.oidGenerator = new OidGenerator(new IdentifierGeneratorUnified(configuration));
-        this.adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(configuration));
-        this.persistAlgorithm = new PersistAlgorithmUnified(configuration);
+        this.oidGenerator = new OidGenerator();
+        this.adapterManager = new AdapterManagerDefault();
+        this.persistAlgorithm = new PersistAlgorithm();
         this.objectStore = objectStore;
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
@@ -612,8 +608,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * If the object to be persisted is a collection, then each element of that
      * collection, that is not already persistent, should be made persistent by
      * recursively calling this method.
-     *
-     * @see #remapAsPersistent(ObjectAdapter)
      */
     public void makePersistent(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
@@ -705,35 +699,11 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
 
     // ///////////////////////////////////////////////////////////////////////////
-    // ToPersistObjectSet
+    // addCreateObjectCommand
     // ///////////////////////////////////////////////////////////////////////////
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
 
-    /**
-     * Callback from the {@link PersistAlgorithm} (or equivalent; some object
-     * stores such as Hibernate will use listeners instead) to indicate that the
-     * {@link ObjectAdapter adapter} is persisted, and the adapter maps should
-     * be updated.
-     * 
-     * <p>
-     * The object store is expected to have already updated the {@link Oid}
-     * state and the {@link ResolveState} . Some object stores (again, we're
-     * thinking Hibernate here) might also have updated collections, both the
-     * Oid of the collection and the pojo wrapped by the adapter.
-     * 
-     * <p>
-     * The {@link PersistAlgorithm} is called from
-     * {@link #makePersistent(ObjectAdapter)}.
-     * 
-     * @see #remapAsPersistent(ObjectAdapter)
-     */
-    public void remapAsPersistent(final ObjectAdapter adapter) {
-        final Oid transientOid = adapter.getOid();
-        adapterManager.remapAsPersistent(adapter, null);
-        final Oid persistentOid = adapter.getOid();
-        persistentByTransient.put(transientOid, persistentOid);
-    }
 
     /**
      * To support ISIS-234; keep track, for the duration of the transaction only,
@@ -769,8 +739,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
         adapterManager.debugData(debug);
         debug.appendln();
-
-        debug.appendln("manually dirtiable support (isDirty flag)?", dirtiableSupport);
 
         debug.appendTitle("OID Generator");
         oidGenerator.debugData(debug);

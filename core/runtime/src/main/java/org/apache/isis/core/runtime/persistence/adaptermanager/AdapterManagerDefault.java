@@ -97,6 +97,10 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     // constructor
     // //////////////////////////////////////////////////////////////////
 
+    public AdapterManagerDefault() {
+        this(new PojoRecreator());
+    }
+
     /**
      * For object store implementations (eg JDO) that do not provide any mechanism
      * to allow transient objects to be reattached; can instead provide a
@@ -526,7 +530,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             persistedRootOid = hintRootOid;
         } else {
             // normal flow - delegate to OidGenerator to obtain a persistent root oid
-            persistedRootOid = getOidGenerator().createPersistentOrViewModelOid(adapter.getObject(), transientRootOid);
+            persistedRootOid = getOidGenerator().createPersistentOrViewModelOid(adapter.getObject());
         }
         
         // associate root adapter with the new Oid, and remap

@@ -246,8 +246,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     
 
-    
-
     // ///////////////////////////////////////////////////////////////////
     // Version 
     // (nb: delegates to parent if parented)

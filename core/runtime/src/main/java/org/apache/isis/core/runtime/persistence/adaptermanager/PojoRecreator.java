@@ -20,21 +20,71 @@ package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
-public interface PojoRecreator {
+public class PojoRecreator {
 
-    Object recreatePojo(final RootOid oid);
+    public Object recreatePojo(RootOid oid) {
+        if(oid.isTransient() || oid.isViewModel()) {
+            return recreatePojoDefault(oid);
+        } else {
+            return getObjectStore().loadPojo(oid);
+        }
+    }
+
+    private Object recreatePojoDefault(final RootOid rootOid) {
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(rootOid.getObjectSpecId());
+        final Object pojo = spec.createObject();
+        if(rootOid.isViewModel()) {
+            // initialize the view model pojo from the oid's identifier
+
+            final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
+            if(facet == null) {
+                throw new IllegalArgumentException("spec does not have RecreatableObjectFacet; " + rootOid.toString() + "; spec is " + spec.getFullIdentifier());
+            }
+
+            final String memento = rootOid.getIdentifier();
+
+            facet.initialize(pojo, memento);
+        }
+        return pojo;
+    }
+
+
+
 
     /**
      * Return an adapter, if possible, for a pojo that was instantiated by the
      * object store as a result of lazily loading, but which hasn't yet been seen
      * by the Isis framework.
-     * 
+     *
      * <p>
      * For example, in the case of JDO object store, downcast to <tt>PersistenceCapable</tt>
      * and 'look inside' its state.
      */
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        return getObjectStore().lazilyLoaded(pojo);
+    }
 
-    ObjectAdapter lazilyLoaded(Object pojo);
-    
+    ///////////////////////////////
+
+
+    protected SpecificationLoaderSpi getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+    protected DataNucleusObjectStore getObjectStore() {
+        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
+    }
+
+
 }

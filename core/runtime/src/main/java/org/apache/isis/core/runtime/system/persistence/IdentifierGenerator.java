@@ -18,18 +18,103 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.util.UUID;
+
+import javax.jdo.PersistenceManager;
+
+import org.datanucleus.enhancement.Persistable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
-public interface IdentifierGenerator extends DebuggableWithTitle {
+public class IdentifierGenerator implements DebuggableWithTitle {
 
-    public String createTransientIdentifierFor(ObjectSpecId objectSpecId, final Object pojo);
 
-    public String createAggregateLocalId(ObjectSpecId objectSpecId, final Object pojo, final ObjectAdapter parentAdapter);
+    @SuppressWarnings("unused")
+    private static final Logger LOG = LoggerFactory.getLogger(IdentifierGenerator.class);
 
-    public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo, RootOid transientRootOid);
 
-    public <T extends IdentifierGenerator> T underlying(Class<T> cls);
+    // //////////////////////////////////////////////////////////////
+    // main api
+    // //////////////////////////////////////////////////////////////
+
+    /**
+     * TODO: this is really to create a transient or view model identifier?  The responsibilities are split unhappily between this class and its caller, the OidGenerator.
+     */
+    public String createTransientIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
+
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+        if(recreatableObjectFacet != null) {
+            return recreatableObjectFacet.memento(pojo);
+        }
+
+        return UUID.randomUUID().toString();
+    }
+
+
+    public String createPersistentIdentifierFor(ObjectSpecId objectSpecId, Object pojo) {
+
+        // hack to deal with services
+        if(!(pojo instanceof Persistable)) {
+            return "1";
+        }
+
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
+        if(spec.containsFacet(ViewModelFacet.class)) {
+            ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+            return recreatableObjectFacet.memento(pojo);
+        }
+        final Object jdoOid = getJdoPersistenceManager().getObjectId(pojo);
+
+        return JdoObjectIdSerializer.toOidIdentifier(jdoOid);
+    }
+
+
+
+    // //////////////////////////////////////////////////////////////
+    // Debugging
+    // //////////////////////////////////////////////////////////////
+
+
+    public String debugTitle() {
+        return "DataNucleus Identifier Generator";
+    }
+
+
+    @Override
+    public void debugData(DebugBuilder debug) {
+    }
+
+
+    // //////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////////
+
+
+    protected PersistenceManager getJdoPersistenceManager() {
+        final DataNucleusObjectStore objectStore = getDataNucleusObjectStore();
+        return objectStore.getPersistenceManager();
+    }
+
+    protected DataNucleusObjectStore getDataNucleusObjectStore() {
+        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    }
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
+    }
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
 }

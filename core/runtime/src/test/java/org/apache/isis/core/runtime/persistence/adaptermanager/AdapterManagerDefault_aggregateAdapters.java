@@ -136,7 +136,7 @@ public class AdapterManagerDefault_aggregateAdapters {
             }
         };
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreatorDefault()) {
+        adapterManager = new AdapterManagerDefault() {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();

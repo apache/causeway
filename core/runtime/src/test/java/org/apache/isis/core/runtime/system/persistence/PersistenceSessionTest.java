@@ -20,12 +20,14 @@
 package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Collections;
+
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -43,10 +45,13 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreatorUnified;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.*;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
@@ -147,7 +152,7 @@ public class PersistenceSessionTest {
         servicesInjector = new ServicesInjectorDefault(
                 Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreatorUnified(mockConfiguration));
+        adapterManager = new AdapterManagerDefault();
         adapterFactory = new PojoAdapterFactory();
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockObjectStore, mockConfiguration) {
             @Override

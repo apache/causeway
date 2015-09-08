@@ -121,7 +121,7 @@ public class FrameworkSynchronizer {
                     }
                 } else {
                     final OidGenerator oidGenerator = getOidGenerator();
-                    originalOid = oidGenerator.createPersistentOrViewModelOid(pojo, null);
+                    originalOid = oidGenerator.createPersistentOrViewModelOid(pojo);
                     
                     // it appears to be possible that there is already an adapter for this Oid, 
                     // ie from ObjectStore#resolveImmediately()
@@ -201,7 +201,7 @@ public class FrameworkSynchronizer {
 
                 if (isisOid.isTransient()) {
                     // persisting
-                    final RootOid persistentOid = getOidGenerator().createPersistentOrViewModelOid(pojo, isisOid);
+                    final RootOid persistentOid = getOidGenerator().createPersistentOrViewModelOid(pojo);
 
                     getPersistenceSession().getAdapterManager().remapAsPersistent(adapter, persistentOid);
 
@@ -271,7 +271,7 @@ public class FrameworkSynchronizer {
                 if(getJdoPersistenceManager().getObjectId(pojo) == null) {
                     return null;
                 }
-                final RootOid oid = getPersistenceSession().getOidGenerator().createPersistentOrViewModelOid(pojo, null);
+                final RootOid oid = getPersistenceSession().getOidGenerator().createPersistentOrViewModelOid(pojo);
                 final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
                 return adapter;
             }

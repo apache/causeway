@@ -34,6 +34,9 @@ public class OidGenerator implements DebuggableWithTitle {
 
     private final IdentifierGenerator identifierGenerator;
     
+    public OidGenerator() {
+        this(new IdentifierGenerator());
+    }
     public OidGenerator(final IdentifierGenerator identifierGenerator) {
         this.identifierGenerator = identifierGenerator;
     }
@@ -74,10 +77,10 @@ public class OidGenerator implements DebuggableWithTitle {
      * @param pojo - being persisted
      * @param transientRootOid - the oid for the pojo when transient.
      */
-    public final RootOid createPersistentOrViewModelOid(Object pojo, RootOid transientRootOid) {
+    public final RootOid createPersistentOrViewModelOid(Object pojo) {
 
         final ObjectSpecId objectSpecId = objectSpecIdFor(pojo);
-        final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo, transientRootOid);
+        final String persistentIdentifier = identifierGenerator.createPersistentIdentifierFor(objectSpecId, pojo);
         
         final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(objectSpecId);
         final State state = spec != null && spec.containsFacet(ViewModelFacet.class)? State.VIEWMODEL:State.PERSISTENT;

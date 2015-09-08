@@ -176,6 +176,10 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
      */
     void replaceOid(Oid persistedOid);
 
+    /**
+     * Returns either itself (if this is a root) or the parented collections, the
+     * adapter corresponding to their {@link ParentedCollectionOid#getRootOid() root oid}.
+     */
     ObjectAdapter getAggregateRoot();
 
     Version getVersion();
