@@ -135,8 +135,6 @@ public class FrameworkSynchronizer {
                 }
 
                 adapter.setVersion(datastoreVersion);
-
-                ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
     }
@@ -218,8 +216,6 @@ public class FrameworkSynchronizer {
 
                 Version versionIfAny = getVersionIfAny(pojo);
                 adapter.setVersion(versionIfAny);
-
-                ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
     }
@@ -258,7 +254,6 @@ public class FrameworkSynchronizer {
                 transaction.enlistUpdating(adapter);
 
                 ensureRootObject(pojo);
-                ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
     }
@@ -289,7 +284,6 @@ public class FrameworkSynchronizer {
                 transaction.enlistDeleting(adapter);
 
                 CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-                ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
         
@@ -304,7 +298,6 @@ public class FrameworkSynchronizer {
                     return;
                 }
 
-
                 // previously we called the removed callback (if any).
                 // however, this is almost certainly incorrect, because DN will not allow us
                 // to "touch" the pojo once deleted.
@@ -312,8 +305,6 @@ public class FrameworkSynchronizer {
                 // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
 
 
-                // this is probably still ok to do, however.
-                ensureFrameworksInAgreement(pojo);
             }
         }, calledFrom);
         
@@ -362,19 +353,8 @@ public class FrameworkSynchronizer {
     // More Helpers...
     // /////////////////////////////////////////////////////////
 
-    void ensureFrameworksInAgreement(final Persistable pojo) {
-
-        if(!pojo.dnIsPersistent()) {
-
-        } else if(pojo.dnIsDeleted()) {
-            
-        } else {
-
-        }
-    }
 
     // make sure the entity is known to Isis and is a root
-    // TODO: will probably need to handle aggregated entities at some point...
     void ensureRootObject(final Persistable pojo) {
         final Oid oid = getAdapterManager().adapterFor(pojo).getOid();
         if (!(oid instanceof RootOid)) {

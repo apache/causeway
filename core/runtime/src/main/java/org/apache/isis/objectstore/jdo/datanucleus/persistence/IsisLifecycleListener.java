@@ -32,13 +32,14 @@ import javax.jdo.listener.StoreLifecycleListener;
 
 import com.google.common.collect.Maps;
 
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
-import org.datanucleus.enhancement.Persistable;
 
 public class IsisLifecycleListener implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener, DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener, SuspendableListener {
 
@@ -62,12 +63,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableEnsureFrameworksInAgreement(event));
+        withLogging(Phase.PRE, event, new RunnableEnsureRootObject(event));
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureFrameworksInAgreement(event));
+        withLogging(Phase.POST, event, new RunnableEnsureRootObject(event));
     }
 
     @Override
@@ -163,12 +164,12 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableEnsureFrameworksInAgreement(event));
+        withLogging(Phase.PRE, event, new RunnableEnsureRootObject(event));
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureFrameworksInAgreement(event));
+        withLogging(Phase.POST, event, new RunnableEnsureRootObject(event));
     }
 
     
@@ -215,15 +216,14 @@ public class IsisLifecycleListener implements AttachLifecycleListener, ClearLife
         protected void doRun() {} 
     }
     
-    private class RunnableEnsureFrameworksInAgreement extends RunnableAbstract {
-        RunnableEnsureFrameworksInAgreement(InstanceLifecycleEvent event) {
+    private class RunnableEnsureRootObject extends RunnableAbstract {
+        RunnableEnsureRootObject(InstanceLifecycleEvent event) {
             super(event);
         }
         protected void doRun() {
             final Persistable pojo = Utils.persistenceCapableFor(event);
             synchronizer.ensureRootObject(pojo);
-            synchronizer.ensureFrameworksInAgreement(pojo);
-        } 
+        }
     }
     
 
