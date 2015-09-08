@@ -156,22 +156,14 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isTransient() {
-        if(getSpecification().isService()) {
-            // view models are treated as persistent objects
-            return false;
-        }
-        if(getSpecification().isViewModel()) {
-            // view models are treated as persistent objects
+        if(getSpecification().isService() || getSpecification().isViewModel()) {
+            // services and view models are treated as persistent objects
             return false;
         }
         if (pojo instanceof Persistable) {
             final Persistable pojo = (Persistable) this.pojo;
-            final boolean isNew = pojo.dnIsNew();
             final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDirty = pojo.dnIsDirty();
             final boolean isDeleted = pojo.dnIsDeleted();
-            final boolean isDetached = pojo.dnIsDetached();
-            final boolean isTransactional = pojo.dnIsTransactional();
             if (!isPersistent && !isDeleted) {
                 return true;
             }
@@ -181,22 +173,15 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean representsPersistent() {
-        if(getSpecification().isService()) {
-            // view models are treated as persistent objects
-            return true;
-        }
-        if(getSpecification().isViewModel()) {
-            // view models are treated as persistent objects
+        if(getSpecification().isService() || getSpecification().isViewModel()) {
+            // services and view models are treated as persistent objects
             return true;
         }
         if (pojo instanceof Persistable) {
             final Persistable pojo = (Persistable) this.pojo;
-            final boolean isNew = pojo.dnIsNew();
             final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDirty = pojo.dnIsDirty();
             final boolean isDeleted = pojo.dnIsDeleted();
-            final boolean isDetached = pojo.dnIsDetached();
-            final boolean isTransactional = pojo.dnIsTransactional();
+            // REVIEW: should we also ensure !isDeleted ???
             if (isPersistent) {
                 return true;
             }
@@ -206,22 +191,13 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     public boolean isDestroyed() {
-        if(getSpecification().isService()) {
-            // view models are treated as persistent objects
-            return false;
-        }
-        if(getSpecification().isViewModel()) {
-            // view models are treated as persistent objects
+        if(getSpecification().isService() || getSpecification().isViewModel()) {
+            // services and view models are treated as persistent objects
             return false;
         }
         if (pojo instanceof Persistable) {
             final Persistable pojo = (Persistable) this.pojo;
-            final boolean isNew = pojo.dnIsNew();
-            final boolean isPersistent = pojo.dnIsPersistent();
-            final boolean isDirty = pojo.dnIsDirty();
             final boolean isDeleted = pojo.dnIsDeleted();
-            final boolean isDetached = pojo.dnIsDetached();
-            final boolean isTransactional = pojo.dnIsTransactional();
             if (isDeleted) {
                 return true;
             }
