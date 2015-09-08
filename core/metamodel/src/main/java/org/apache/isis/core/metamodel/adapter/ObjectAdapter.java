@@ -328,6 +328,10 @@ public interface ObjectAdapter extends Instance, org.apache.isis.applib.annotati
         public static boolean isVisible(
                 final ObjectAdapter adapter,
                 final InteractionInitiatedBy interactionInitiatedBy) {
+            if(adapter == null) {
+                // a choices list could include a null (eg example in ToDoItems#choices1Categorized()); want to show as "visible"
+                return true;
+            }
             if(adapter.isDestroyed()) {
                 return false;
             }
