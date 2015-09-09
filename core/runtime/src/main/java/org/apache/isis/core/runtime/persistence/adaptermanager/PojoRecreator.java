@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 public class PojoRecreator {
 
@@ -82,8 +82,8 @@ public class PojoRecreator {
         return IsisContext.getPersistenceSession();
     }
 
-    protected DataNucleusObjectStore getObjectStore() {
-        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
+    protected ObjectStore getObjectStore() {
+        return (ObjectStore) getPersistenceSession().getObjectStore();
     }
 
 

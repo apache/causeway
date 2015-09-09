@@ -49,7 +49,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 public class FrameworkSynchronizer {
 
@@ -402,12 +402,12 @@ public class FrameworkSynchronizer {
     }
 
     protected PersistenceManager getJdoPersistenceManager() {
-        final DataNucleusObjectStore objectStore = getObjectStore();
+        final ObjectStore objectStore = getObjectStore();
         return objectStore.getPersistenceManager();
     }
 
-    protected DataNucleusObjectStore getObjectStore() {
-        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    protected ObjectStore getObjectStore() {
+        return (ObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
 

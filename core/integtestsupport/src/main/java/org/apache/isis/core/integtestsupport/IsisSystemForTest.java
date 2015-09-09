@@ -66,7 +66,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 /**
  * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.
@@ -600,7 +600,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends DataNucleusObjectStore> T getObjectStore(Class<T> cls) {
+    public <T extends ObjectStore> T getObjectStore(Class<T> cls) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         return (T) persistenceSession.getObjectStore();
     }

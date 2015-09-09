@@ -79,7 +79,7 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
         addDataNucleusProperty("datanucleus.cache.level2.mode","ENABLE_SELECTIVE");
 
         // automatically install any fixtures that might have been registered
-        add(DataNucleusObjectStore.INSTALL_FIXTURES_KEY , "true");
+        add(ObjectStore.INSTALL_FIXTURES_KEY , "true");
 
         add(PersistenceConstants.ENFORCE_SAFE_SEMANTICS, ""+PersistenceConstants.ENFORCE_SAFE_SEMANTICS_DEFAULT);
 
@@ -89,12 +89,12 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
-        add(DataNucleusObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        add(ObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
     public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
-        put(DataNucleusObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        put(ObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 

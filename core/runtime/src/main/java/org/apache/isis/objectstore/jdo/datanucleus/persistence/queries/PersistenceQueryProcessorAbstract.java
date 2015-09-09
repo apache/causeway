@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
@@ -106,8 +106,8 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
-    protected DataNucleusObjectStore getJdoObjectStore() {
-        return (DataNucleusObjectStore) IsisContext.getPersistenceSession().getObjectStore();
+    protected ObjectStore getJdoObjectStore() {
+        return (ObjectStore) IsisContext.getPersistenceSession().getObjectStore();
     }
 
 }

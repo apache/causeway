@@ -22,23 +22,23 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 import java.util.List;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 /**
  * Interface for the {@link IsisTransactionManager} to interact with some
- * transactional resource (ie a {@link DataNucleusObjectStore}).
+ * transactional resource (ie a {@link ObjectStore}).
  */
 public interface TransactionalResource {
 
     /**
      * Used by the {@link IsisTransactionManager} to tell the underlying
-     * {@link DataNucleusObjectStore} to start a transaction.
+     * {@link ObjectStore} to start a transaction.
      */
     void startTransaction();
 
     /**
      * Used by the current {@link IsisTransaction} to flush changes to
-     * the {@link DataNucleusObjectStore} (either via a
+     * the {@link ObjectStore} (either via a
      * {@link IsisTransactionManager#flushTransaction()} or a
      * {@link IsisTransactionManager#endTransaction()}).
      */
@@ -46,13 +46,13 @@ public interface TransactionalResource {
 
     /**
      * Used by the {@link IsisTransactionManager} to tell the underlying
-     * {@link DataNucleusObjectStore} to commit a transaction.
+     * {@link ObjectStore} to commit a transaction.
      */
     void endTransaction();
 
     /**
      * Used by the {@link IsisTransactionManager} to tell the underlying
-     * {@link DataNucleusObjectStore} to abort a transaction.
+     * {@link ObjectStore} to abort a transaction.
      */
     void abortTransaction();
 

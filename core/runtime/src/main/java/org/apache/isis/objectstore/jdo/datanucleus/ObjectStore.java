@@ -69,25 +69,23 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.Persisten
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class DataNucleusObjectStore implements TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
+public class ObjectStore implements TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DataNucleusObjectStore.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectStore.class);
+
+    //region > constructors, fields
+
     private final PersistenceSession persistenceSession;
     private final SpecificationLoaderSpi specificationLoader;
     private final IsisConfiguration configuration;
     private final OidMarshaller oidMarshaller;
 
-    static enum State {
-        NOT_YET_OPEN, OPEN, CLOSED;
-    }
-    
     private static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
 
     /**
@@ -111,9 +109,7 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
     private final FrameworkSynchronizer frameworkSynchronizer;
 
-    private State state;
-
-    public DataNucleusObjectStore(
+    public ObjectStore(
             final PersistenceSession persistenceSession,
             final SpecificationLoaderSpi specificationLoader,
             final IsisConfiguration configuration,
@@ -130,13 +126,15 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         this.oidMarshaller = new OidMarshaller();
     }
 
-    public String name() {
-        return "datanucleus";
+    //endregion
+
+    //region > open, close
+
+    enum State {
+        NOT_YET_OPEN, OPEN, CLOSED;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // open, close
-    // ///////////////////////////////////////////////////////////////////////
+    private State state;
 
     public void open() {
         ensureNotYetOpen();
@@ -158,7 +156,7 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
      * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
-     * {@link DataNucleusObjectStore#commitJdoTransaction() commits the underlying
+     * {@link ObjectStore#commitJdoTransaction() commits the underlying
      * JDO transaction}.
      *
      * <p>
@@ -183,11 +181,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
             state = State.CLOSED;
         }
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // isFixturesInstalled
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > isFixturesInstalled
     /**
      * Determine if the object store has been initialized with its set of start
      * up objects.
@@ -209,13 +205,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
         return !installFixtures;
     }
+    //endregion
 
-
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Transactions
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > transactions
     public void startTransaction() {
         beginJdoTransaction();
     }
@@ -249,11 +241,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
             transaction.rollback();
         }
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // Command Factory
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > createXxxCommand
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have an
@@ -300,11 +290,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         }
         return new DataNucleusDeleteObjectCommand(adapter, getPersistenceManager());
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // Execute
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > execute
     public void execute(final List<PersistenceCommand> commands) {
         ensureOpened();
         ensureInTransaction();
@@ -323,11 +311,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         }
         getPersistenceManager().flush();
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // loadMappedObject, resolveImmediately, resolveField
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > loadInstanceAndAdapt
     /**
      * Retrieves the object identified by the specified {@link RootOid} from the object
      * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
@@ -379,11 +365,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
     }
 
-    
-    
-    /////////////////////////////////////////////////////////////
-    // delegated to by PojoRecreator
-    /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > loadPojo, lazilyLoaded, resolveImmediately
 
     public Object loadPojo(final RootOid rootOid) {
     	
@@ -473,18 +457,18 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject, CalledFrom.OS_RESOLVE);
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // getInstances, hasInstances
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > loadInstancesAndAdapt
     public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
         ensureOpened();
         ensureInTransaction();
 
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor = persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
         if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format("Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
         }
         return processPersistenceQuery(processor, persistenceQuery);
     }
@@ -494,11 +478,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return persistenceQueryProcessor.process((Q)persistenceQuery);
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // Services
-    // ///////////////////////////////////////////////////////////////////////
-
+    //region > registerServices, getOidForService
     public void registerService(RootOid rootOid) {
         ensureOpened();
         this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
@@ -509,11 +491,9 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return this.registeredServices.get(serviceSpec.getSpecId());
     }
 
+    //endregion
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Helpers: ensure*
-    // ///////////////////////////////////////////////////////////////////////
+    //region > helpers
 
     private void ensureNotYetOpen() {
         ensureStateIs(State.NOT_YET_OPEN);
@@ -545,9 +525,14 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // Debugging
-    // ///////////////////////////////////////////////////////////////////////
+    private Class<?> clsOf(final RootOid oid) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+        return objectSpec.getCorrespondingClass();
+    }
+
+    //endregion
+
+    //region > debug
 
     public void debugData(final DebugBuilder debug) {
         // no-op
@@ -558,33 +543,10 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return "JDO (DataNucleus) ObjectStore";
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////
-    // non-API
-    // ///////////////////////////////////////////////////////////////////////
+    //region > dependencies (from constructor)
 
-    public JdoNamedQuery getNamedQuery(String queryName) {
-        return applicationComponents.getNamedQuery(queryName);
-    }
-
-
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Helpers
-    // ///////////////////////////////////////////////////////////////////////
-
-    private Class<?> clsOf(final RootOid oid) {
-        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
-        return objectSpec.getCorrespondingClass();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // ///////////////////////////////////////////////////////////////////////
-
-    /**
-     * Intended for internal and test use only.
-     */
     public PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
@@ -612,6 +574,8 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     protected OidMarshaller getOidMarshaller() {
         return oidMarshaller;
     }
+
+    //endregion
 
 
 }

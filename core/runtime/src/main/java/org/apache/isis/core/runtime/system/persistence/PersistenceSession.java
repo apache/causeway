@@ -59,7 +59,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusApplicationComponents;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -72,6 +72,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
+    //region > constructor, fields
     private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
@@ -80,7 +81,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     private final AdapterManagerDefault adapterManager;
 
     private final PersistAlgorithm persistAlgorithm ;
-    private final DataNucleusObjectStore objectStore;
+    private final ObjectStore objectStore;
     private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
     private final PersistenceQueryFactory persistenceQueryFactory;
@@ -88,14 +89,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     private final SpecificationLoaderSpi specificationLoader;
     private final AuthenticationSession authenticationSession;
 
-    private IsisTransactionManager transactionManager;
     private final ServicesInjectorSpi servicesInjector;
 
-    private static enum State {
-        NOT_INITIALIZED, OPEN, CLOSED
-    }
-
-    private State state;
+    // not final only for testing purposes
+    private IsisTransactionManager transactionManager;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -109,22 +106,23 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
 
+        // injected
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
 
         this.persistenceSessionFactory = persistenceSessionFactory;
-        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory .getApplicationComponents();
-        this.objectStore = new DataNucleusObjectStore(this, specificationLoader, configuration, applicationComponents);
-
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
+
+        // sub-components
+        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory .getApplicationComponents();
+        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents);
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
         this.adapterManager = new AdapterManagerDefault();
         this.persistAlgorithm = new PersistAlgorithm();
         this.objectAdapterFactory = new PojoAdapterFactory(adapterManager, specificationLoader, authenticationSession);
-
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
         this.transactionManager = new IsisTransactionManager(this, objectStore, servicesInjector);
@@ -136,9 +134,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // open
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > open
 
     /**
      * Injects components, calls  {@link org.apache.isis.core.commons.components.SessionScopedComponent#open()} on subcomponents, and then creates service
@@ -184,8 +182,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     /**
-     * Creates (or recreates following a {@link #testReset()})
-     * {@link ObjectAdapter adapters} for the service list.
+     * Creates {@link ObjectAdapter adapters} for the service list.
      */
     private void createServiceAdapters(final List<Object> registeredServices) {
         for (final Object service : registeredServices) {
@@ -215,9 +212,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return persistenceSessionFactory.getServicesInjector().lookupService(serviceType);
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // close
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > close
 
 
     /**
@@ -252,11 +249,15 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
 
     }
+    //endregion
 
+    //region > State
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // State Management
-    // ///////////////////////////////////////////////////////////////////////////
+    private enum State {
+        NOT_INITIALIZED, OPEN, CLOSED
+    }
+
+    private State state;
 
     private State getState() {
         return state;
@@ -272,9 +273,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Factory
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > createTransientInstance, createViewModelInstance
 
     /**
      * Create a root or standalone {@link ObjectAdapter adapter}.
@@ -313,11 +314,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
+    //endregion
 
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // findInstances, getInstances
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > findInstances, getInstances
 
     /**
      * Finds and returns instances that match the specified query.
@@ -385,11 +384,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             }
         });
     }
+    //endregion
 
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Services
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > Services
 
     /**
      * Returns the OID for the adapted service. This allows a service object to
@@ -435,9 +432,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return oid;
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // fixture installation
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > fixture installation
 
     /**
      * Determine if the object store has been initialized with its set of start
@@ -450,7 +447,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link DataNucleusObjectStore#isFixturesInstalled()
+     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
      * whether fixtures are installed} from the
      * {@link PersistenceSessionFactory}.
      * <p>
@@ -472,11 +469,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         super.finalize();
         LOG.debug("finalizing persistence session");
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // loadObject, reload
-    // ///////////////////////////////////////////////////////////////////////////
-
+    //region > loadObject, reload
     /**
      * Loads the object identified by the specified {@link RootOid} from the
      * persisted set of objects.
@@ -510,9 +505,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return adapter;
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // resolveImmediately, resolveField
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > resolveImmediately, resolveField
 
     /**
      * Re-initialises the fields of an object. If the object is unresolved then
@@ -562,9 +557,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         });
     }
 
-    // ////////////////////////////////////////////////////////////////
-    // makePersistent
-    // ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > makePersistent
 
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
@@ -624,11 +619,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         });
     }
 
+    //endregion
 
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // destroyObject
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > destroyObject
 
     /**
      * Removes the specified object from the system. The specified object's data
@@ -670,10 +663,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         });
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // addCreateObjectCommand
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > remappedFrom, addCreateObjectCommand
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
 
@@ -687,8 +679,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     /**
-     * Uses the {@link DataNucleusObjectStore} to
-     * {@link DataNucleusObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
+     * Uses the {@link ObjectStore} to
+     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
@@ -696,9 +688,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Debugging
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Debugging
 
     @Override
     public String debugTitle() {
@@ -738,39 +730,22 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         objectStore.debugData(debug);
     }
 
+
     @Override
     public String toString() {
-        final ToString toString = new ToString(this);
-        if (objectStore != null) {
-            toString.append("objectStore", objectStore.name());
-        }
-        if (persistAlgorithm != null) {
-            toString.append("persistAlgorithm", persistAlgorithm.name());
-        }
-        return toString.toString();
+        return new ToString(this).toString();
     }
 
-
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies (injected in constructor, possibly implicitly)
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
 
     //region > dependencies (from constructor)
+
     protected SpecificationLoaderSpi getSpecificationLoader() {
         return specificationLoader;
     }
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-
-    /**
-     * Injected by constructor.
-     */
-    public DataNucleusObjectStore getObjectStore() {
-        return objectStore;
-    }
-
 
     /**
      * The configured {@link PojoAdapterFactory}.
@@ -793,6 +768,18 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     /**
+     * The configured {@link ServicesInjectorSpi}.
+     */
+    public ServicesInjectorSpi getServicesInjector() {
+        return persistenceSessionFactory.getServicesInjector();
+    }
+
+
+    //endregion
+
+    //region > sub components
+
+    /**
      * The configured {@link AdapterManager}.
      *
      * Access to looking up (and possibly lazily loading) adapters.
@@ -807,25 +794,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return adapterManager;
     }
 
-    /**
-     * The configured {@link ServicesInjectorSpi}.
-     */
-    public ServicesInjectorSpi getServicesInjector() {
-        return persistenceSessionFactory.getServicesInjector();
-    }
-
-    /**
-     * The configured {@link ObjectFactory}.
-     */
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
-
-    //endregion
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // Dependencies (injected)
-    // ///////////////////////////////////////////////////////////////////////////
 
     /**
      * The configured {@link IsisTransactionManager}.
@@ -838,5 +806,18 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
+
+    public ObjectStore getObjectStore() {
+        return objectStore;
+    }
+
+    /**
+     * The configured {@link ObjectFactory}.
+     */
+    public ObjectFactory getObjectFactory() {
+        return objectFactory;
+    }
+
+    //endregion
 
 }

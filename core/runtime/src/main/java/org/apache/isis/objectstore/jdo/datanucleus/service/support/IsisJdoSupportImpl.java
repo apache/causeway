@@ -51,7 +51,7 @@ import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
+import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 
 /**
@@ -68,7 +68,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     @Programmatic
     @Override
     public <T> T refresh(final T domainObject) {
-        final DataNucleusObjectStore objectStore = getObjectStore();
+        final ObjectStore objectStore = getObjectStore();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
         objectStore.refreshRoot(adapter);
         return domainObject;
@@ -196,8 +196,8 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     // //////////////////////////////////////
 
     
-    protected DataNucleusObjectStore getObjectStore() {
-        return (DataNucleusObjectStore) getPersistenceSession().getObjectStore();
+    protected ObjectStore getObjectStore() {
+        return (ObjectStore) getPersistenceSession().getObjectStore();
     }
 
     protected AdapterManager getAdapterManager() {
