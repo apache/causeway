@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
 public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault {

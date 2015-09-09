@@ -54,7 +54,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Publishi
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 
 import static org.hamcrest.CoreMatchers.equalTo;

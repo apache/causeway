@@ -59,7 +59,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusApplicationComponents;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;

@@ -51,7 +51,7 @@ import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 
 /**

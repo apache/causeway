@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 import java.util.List;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 /**
  * Interface for the {@link IsisTransactionManager} to interact with some

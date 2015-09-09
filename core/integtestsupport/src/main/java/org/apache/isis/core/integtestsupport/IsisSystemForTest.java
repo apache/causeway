@@ -66,7 +66,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 import org.apache.isis.core.security.authentication.AuthenticationRequestNameOnly;
 import org.apache.isis.core.specsupport.scenarios.DomainServiceProvider;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 /**
  * Wraps a plain {@link IsisSystem}, and provides a number of features to assist with testing.

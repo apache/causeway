@@ -49,7 +49,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.objectstore.jdo.datanucleus.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 public class FrameworkSynchronizer {
 

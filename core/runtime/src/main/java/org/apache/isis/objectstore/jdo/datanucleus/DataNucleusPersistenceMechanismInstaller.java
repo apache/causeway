@@ -79,9 +79,6 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     }
     //endregion
 
-
-
-
     //region > dependencies
 
     protected SpecificationLoaderSpi getSpecificationLoader() {

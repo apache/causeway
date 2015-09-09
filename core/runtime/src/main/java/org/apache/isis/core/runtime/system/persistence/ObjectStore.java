@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus;
+package org.apache.isis.core.runtime.system.persistence;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -57,10 +57,9 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusApplicationComponents;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
