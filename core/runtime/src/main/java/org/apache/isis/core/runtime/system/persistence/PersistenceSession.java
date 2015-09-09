@@ -59,6 +59,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusApplicationComponents;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -103,7 +104,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
-            final DataNucleusObjectStore objectStore,
             final IsisConfiguration configuration,
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationSession authenticationSession) {
@@ -115,7 +115,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.authenticationSession = authenticationSession;
 
         this.persistenceSessionFactory = persistenceSessionFactory;
-        this.objectStore = objectStore;
+        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory .getApplicationComponents();
+        this.objectStore = new DataNucleusObjectStore(this, specificationLoader, configuration, applicationComponents);
 
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
 
@@ -127,27 +128,13 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
-        this.transactionManager = new IsisTransactionManager(this, objectStore,
-                servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, objectStore, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////////////
-    // PersistenceSessionFactory
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * The {@link PersistenceSessionFactory} that created this
-     * {@link PersistenceSession}.
-     */
-    public PersistenceSessionFactory getPersistenceSessionFactory() {
-        return persistenceSessionFactory;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -170,7 +157,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         ensureThatState(transactionManager, is(not(nullValue())), "TransactionManager missing");
 
         // inject any required dependencies into object factory
-        final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
         servicesInjector.injectInto(objectFactory);
         servicesInjector.injectInto(adapterManager);
 
@@ -329,28 +315,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return objectSpec.initialize(adapter);
     }
 
-    /**
-     * Creates a new instance of the specified type and returns an adapter with
-     * an aggregated OID that show that this new object belongs to the specified
-     * parent.
-     *
-     * <p>
-     * While creating the object it will be initialised with default values and
-     * its created lifecycle method (its logical constructor) will be invoked.
-     *
-     * <p>
-     * This method is ultimately delegated to by the
-     * {@link org.apache.isis.applib.DomainObjectContainer}.
-     */
-    public ObjectAdapter createAggregatedInstance(final ObjectSpecification objectSpec, final ObjectAdapter parentAdapter) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating aggregated instance of " + objectSpec);
-        }
-        final Object pojo = objectSpec.createObject();
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo, parentAdapter);
-        objectSpec.initialize(adapter);
-        return adapter;
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // findInstances, getInstances
@@ -498,7 +462,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * @see FixturesInstalledFlag
      */
     public boolean isFixturesInstalled() {
-        final PersistenceSessionFactory persistenceSessionFactory = getPersistenceSessionFactory();
         if (persistenceSessionFactory.isFixturesInstalled() == null) {
             persistenceSessionFactory.setFixturesInstalled(objectStore.isFixturesInstalled());
         }
@@ -789,17 +752,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // test support
-    // ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * For testing purposes only.
-     */
-    public void testReset() {
-        objectStore.reset();
-        adapterManager.reset();
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor, possibly implicitly)

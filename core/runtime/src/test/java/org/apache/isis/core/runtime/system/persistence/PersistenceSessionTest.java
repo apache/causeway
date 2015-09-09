@@ -157,7 +157,7 @@ public class PersistenceSessionTest {
 
         adapterManager = new AdapterManagerDefault();
         adapterFactory = new PojoAdapterFactory();
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockObjectStore, mockConfiguration,
+        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockConfiguration,
                 mockSpecificationLoader, mockAuthenticationSession) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {

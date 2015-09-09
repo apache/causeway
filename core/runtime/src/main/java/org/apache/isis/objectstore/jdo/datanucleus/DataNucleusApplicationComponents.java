@@ -293,16 +293,5 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     }
 
     
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    ///////////////////////////////////////////////////////////////////////////
-
-    public void suspendListener() {
-        lifecycleListener.setSuspended(true);
-    }
-
-    public void resumeListener() {
-        lifecycleListener.setSuspended(false);
-    }
 
 }

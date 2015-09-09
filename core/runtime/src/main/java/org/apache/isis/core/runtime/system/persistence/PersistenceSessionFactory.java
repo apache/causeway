@@ -42,7 +42,6 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusApplicationComponents;
-import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusObjectStore;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
@@ -270,8 +269,11 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     public PersistenceSession createPersistenceSession(
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationSession authenticationSession) {
-        final DataNucleusObjectStore objectStore = new DataNucleusObjectStore(applicationComponents);
-        return new PersistenceSession(this, objectStore, getConfiguration(), specificationLoader, authenticationSession);
+        return new PersistenceSession(this, getConfiguration(), specificationLoader, authenticationSession);
+    }
+
+    DataNucleusApplicationComponents getApplicationComponents() {
+        return applicationComponents;
     }
 
     //endregion

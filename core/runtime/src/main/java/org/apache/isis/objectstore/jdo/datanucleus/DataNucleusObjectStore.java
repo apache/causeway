@@ -18,7 +18,6 @@
  */
 package org.apache.isis.objectstore.jdo.datanucleus;
 
-import java.sql.Connection;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +25,9 @@ import java.util.Map;
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.datanucleus.api.jdo.NucleusJDOHelper;
 import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,9 +38,7 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -55,15 +49,11 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -76,15 +66,11 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchron
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByPatternProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindByTitleProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.QueryUtil;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
@@ -93,6 +79,10 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 public class DataNucleusObjectStore implements TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusObjectStore.class);
+    private final PersistenceSession persistenceSession;
+    private final SpecificationLoaderSpi specificationLoader;
+    private final IsisConfiguration configuration;
+    private final OidMarshaller oidMarshaller;
 
     static enum State {
         NOT_YET_OPEN, OPEN, CLOSED;
@@ -111,18 +101,7 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
-    static enum TransactionMode {
-        /**
-         * Requires transactions to be started explicitly.
-         */
-        UNCHAINED,
-        /**
-         * Transactions are started automatically if not already in progress.
-         */
-        CHAINED;
-    }
 
-    private final ObjectAdapterFactory adapterFactory;
     private final DataNucleusApplicationComponents applicationComponents;
     
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
@@ -133,22 +112,22 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     private final FrameworkSynchronizer frameworkSynchronizer;
 
     private State state;
-    private TransactionMode transactionMode;
-    
 
     public DataNucleusObjectStore(
+            final PersistenceSession persistenceSession,
+            final SpecificationLoaderSpi specificationLoader,
+            final IsisConfiguration configuration,
             final DataNucleusApplicationComponents applicationComponents) {
 
-        final ObjectAdapterFactory adapterFactory = new PojoAdapterFactory();
-        ensureThatArg(adapterFactory, is(notNullValue()));
-        ensureThatArg(applicationComponents, is(notNullValue()));
+        this.persistenceSession = persistenceSession;
+        this.specificationLoader = specificationLoader;
+        this.configuration = configuration;
+        this.applicationComponents = applicationComponents;
 
         this.state = State.NOT_YET_OPEN;
-        this.transactionMode = TransactionMode.UNCHAINED;
 
-        this.adapterFactory = adapterFactory;
-        this.applicationComponents = applicationComponents;
         this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
+        this.oidMarshaller = new OidMarshaller();
     }
 
     public String name() {
@@ -162,10 +141,14 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     public void open() {
         ensureNotYetOpen();
 
-        openSession();
-        ensureThatState(persistenceManager, is(notNullValue()));
+        this.persistenceManager = applicationComponents.createPersistenceManager();
 
-        addPersistenceQueryProcessors(persistenceManager);
+        persistenceQueryProcessorByClass.put(
+                PersistenceQueryFindAllInstances.class,
+                new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(
+                PersistenceQueryFindUsingApplibQueryDefault.class,
+                new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
 
         state = State.OPEN;
     }
@@ -199,22 +182,6 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
             persistenceManager.close();
             state = State.CLOSED;
         }
-
-    }
-
-    private PersistenceManager openSession() {
-        this.persistenceManager = applicationComponents.createPersistenceManager();
-        return this.persistenceManager;
-    }
-
-    private void addPersistenceQueryProcessors(final PersistenceManager persistenceManager) {
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByTitle.class,
-                new PersistenceQueryFindByTitleProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindByPattern.class,
-                new PersistenceQueryFindByPatternProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(PersistenceQueryFindUsingApplibQueryDefault.class, new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
     }
 
     // ///////////////////////////////////////////////////////////////////////
@@ -244,33 +211,6 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
     }
 
 
-    // ///////////////////////////////////////////////////////////////////////
-    // reset
-    // ///////////////////////////////////////////////////////////////////////
-
-    public void reset() {
-        // does nothing.
-    }
-
-    /**
-     * Non-API.
-     */
-    public Connection getJavaSqlConnection() {
-        return (Connection) persistenceManager.getDataStoreConnection().getNativeConnection();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // TransactionMode (not API)
-    // ///////////////////////////////////////////////////////////////////////
-
-    public TransactionMode getTransactionMode() {
-        return transactionMode;
-    }
-
-    public void setTransactionMode(final TransactionMode transactionMode) {
-        ensureNotInTransaction();
-        this.transactionMode = transactionMode;
-    }
 
     // ///////////////////////////////////////////////////////////////////////
     // Transactions
@@ -554,45 +494,6 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return persistenceQueryProcessor.process((Q)persistenceQuery);
     }
 
-    public boolean hasInstances(final ObjectSpecification specification) {
-        ensureOpened();
-        ensureInTransaction();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("hasInstances: class=" + specification.getFullIdentifier());
-        }
-
-        if (!specification.persistability().isPersistable()) {
-            LOG.warn("hasInstances: trying to run for non-persistent class " + specification);
-            return false;
-        }
-
-        final Query jdoQuery = QueryUtil.createQuery(getPersistenceManager(), "o", "select o.id", specification, null);
-        throw new NotYetImplementedException();
-    }
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Helpers (loadObjects)
-    // ///////////////////////////////////////////////////////////////////////
-
-    @SuppressWarnings("unused")
-    private List<ObjectAdapter> loadObjects(final ObjectSpecification specification, final List<?> listOfPojs, final AdapterManagerDefault adapterManager) {
-        final List<ObjectAdapter> adapters = Lists.newArrayList();
-        int i = 0;
-        for (final Object pojo : listOfPojs) {
-            // REVIEW: cannot just load adapter for object - if Naked Objects
-            // has
-            // already loaded the object
-            // then object won't match it (e.g. if getInstances has been called
-            // and an instance has
-            // been loaded) - so need to use Hibernate session to get an Oid to
-            // do a lookup in that case
-            adapters.add(adapterManager.getAdapterFor(pojo));
-        }
-        return adapters;
-    }
-
-    
 
     // ///////////////////////////////////////////////////////////////////////
     // Services
@@ -608,15 +509,6 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return this.registeredServices.get(serviceSpec.getSpecId());
     }
 
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Not API
-    // ///////////////////////////////////////////////////////////////////////
-
-
-    public boolean isDeleted(final ObjectAdapter adapter) {
-        return NucleusJDOHelper.isDeleted(adapter.getObject());
-    }
 
 
     // ///////////////////////////////////////////////////////////////////////
@@ -635,26 +527,12 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         ensureThatContext(IsisContext.inSession(), is(true));
     }
 
-    private void ensureNotInTransaction() {
-        ensureInSession();
-        ensureThatContext(IsisContext.inTransaction(), is(false));
-    }
-
     private void ensureInTransaction() {
-        if (transactionMode == TransactionMode.UNCHAINED) {
-            ensureThatContext(IsisContext.inTransaction(), is(true));
-            ensureInHibernateTransaction();
-        } else {
-            ensureInSession();
-            if (IsisContext.inTransaction()) {
-                ensureInHibernateTransaction();
-            } else {
-                getTransactionManager().startTransaction();
-            }
-        }
+        ensureThatContext(IsisContext.inTransaction(), is(true));
+        ensureInJdoTransaction();
     }
 
-    private void ensureInHibernateTransaction() {
+    private void ensureInJdoTransaction() {
         javax.jdo.Transaction currentTransaction = getPersistenceManager().currentTransaction();
         ensureThatState(currentTransaction, is(notNullValue()));
         ensureThatState(currentTransaction.isActive(), is(true));
@@ -680,6 +558,7 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return "JDO (DataNucleus) ObjectStore";
     }
 
+
     // ///////////////////////////////////////////////////////////////////////
     // non-API
     // ///////////////////////////////////////////////////////////////////////
@@ -688,25 +567,6 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return applicationComponents.getNamedQuery(queryName);
     }
 
-    /**
-     * For testing purposes, to allow fixtures to use JDO to initialize the
-     * database without triggering the objectstore.
-     * 
-     * @see #resumeListener()
-     */
-    public void suspendListener() {
-        applicationComponents.suspendListener();
-    }
-
-    /**
-     * For testing purposes, to allow fixtures to use JDO to initialize the
-     * database without triggering the objectstore.
-     * 
-     * @see #suspendListener()
-     */
-    public void resumeListener() {
-        applicationComponents.resumeListener();
-    }
 
 
     // ///////////////////////////////////////////////////////////////////////
@@ -718,6 +578,10 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return objectSpec.getCorrespondingClass();
     }
 
+    // ///////////////////////////////////////////////////////////////////////
+    // Dependencies (from constructor)
+    // ///////////////////////////////////////////////////////////////////////
+
     /**
      * Intended for internal and test use only.
      */
@@ -725,41 +589,28 @@ public class DataNucleusObjectStore implements TransactionalResource, Debuggable
         return persistenceManager;
     }
 
-    // ///////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // ///////////////////////////////////////////////////////////////////////
-
-    public ObjectAdapterFactory getAdapterFactory() {
-        return adapterFactory;
-    }
-
-
-    // ///////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // ///////////////////////////////////////////////////////////////////////
-
     public IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return configuration;
     }
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return specificationLoader;
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return persistenceSession;
     }
 
     protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+        return persistenceSession.getAdapterManager();
     }
     
     protected IsisTransactionManager getTransactionManager() {
-        return IsisContext.getTransactionManager();
+        return persistenceSession.getTransactionManager();
     }
 
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return oidMarshaller;
     }
 
 
