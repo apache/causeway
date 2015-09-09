@@ -71,7 +71,13 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     // Constructor, finalizer
     // ///////////////////////////////////////////////////////////////////
 
-    public PojoAdapter(final Object pojo, final Oid oid, SpecificationLoader specificationLoader, AdapterManager adapterManager, Localization localization, AuthenticationSession authenticationSession) {
+    public PojoAdapter(
+            final Object pojo,
+            final Oid oid,
+            final AuthenticationSession authenticationSession,
+            final Localization localization,
+            final SpecificationLoader specificationLoader,
+            final AdapterManager adapterManager) {
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.localization = localization;

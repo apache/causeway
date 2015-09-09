@@ -37,7 +37,6 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -76,7 +75,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final ObjectAdapterFactory objectAdapterFactory;
+    private final PojoAdapterFactory objectAdapterFactory;
     private final OidGenerator oidGenerator;
     private final AdapterManagerDefault adapterManager;
 
@@ -121,10 +120,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
-        this.objectAdapterFactory = new PojoAdapterFactory();
         this.oidGenerator = new OidGenerator(this, specificationLoader);
         this.adapterManager = new AdapterManagerDefault();
         this.persistAlgorithm = new PersistAlgorithm();
+        this.objectAdapterFactory = new PojoAdapterFactory(adapterManager, specificationLoader, authenticationSession);
 
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
@@ -774,12 +773,12 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
 
     /**
-     * The configured {@link ObjectAdapterFactory}.
+     * The configured {@link PojoAdapterFactory}.
      * 
      * <p>
      * Injected in constructor.
      */
-    public final ObjectAdapterFactory getObjectAdapterFactory() {
+    public final PojoAdapterFactory getObjectAdapterFactory() {
         return objectAdapterFactory;
     }
 

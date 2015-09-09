@@ -21,32 +21,38 @@ package org.apache.isis.core.runtime.persistence.adapter;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
-public class PojoAdapterFactory implements ObjectAdapterFactory {
+public class PojoAdapterFactory  {
 
-    public PojoAdapterFactory() {
+    private final AdapterManagerDefault adapterManager;
+    private final SpecificationLoaderSpi specificationLoader;
+    private final AuthenticationSession authenticationSession;
 
+    public PojoAdapterFactory(
+            final AdapterManagerDefault adapterManager,
+            final SpecificationLoaderSpi specificationLoader,
+            final AuthenticationSession authenticationSession) {
+
+        this.adapterManager = adapterManager;
+        this.specificationLoader = specificationLoader;
+        this.authenticationSession = authenticationSession;
     }
 
-    @Override
-    public PojoAdapter createAdapter(final Object pojo, final Oid oid, final AdapterManager adapterManager) {
-        return new PojoAdapter(pojo, oid, getSpecificationLoader(), adapterManager, getLocalization(), getAuthenticationSession());
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
-    }
-
-    protected SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+    public PojoAdapter createAdapter(
+            final Object pojo,
+            final Oid oid) {
+        return new PojoAdapter(
+                pojo, oid,
+                authenticationSession, getLocalization(),
+                specificationLoader, adapterManager);
     }
 
     protected Localization getLocalization() {
         return IsisContext.getLocalization();
     }
+
 }

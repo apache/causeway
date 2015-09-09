@@ -34,7 +34,6 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -67,7 +66,7 @@ public class PersistenceSessionTest {
 
     private ServicesInjectorDefault servicesInjector;
     private AdapterManagerDefault adapterManager;
-    private ObjectAdapterFactory adapterFactory;
+    private PojoAdapterFactory adapterFactory;
     
     
     private PersistenceSession persistenceSession;
@@ -156,7 +155,7 @@ public class PersistenceSessionTest {
                 Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
         adapterManager = new AdapterManagerDefault();
-        adapterFactory = new PojoAdapterFactory();
+        adapterFactory = new PojoAdapterFactory(adapterManager, mockSpecificationLoader, mockAuthenticationSession);
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockConfiguration,
                 mockSpecificationLoader, mockAuthenticationSession) {
             @Override

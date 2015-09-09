@@ -31,7 +31,6 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -87,13 +86,15 @@ public class AdapterManagerDefault_aggregateAdapters {
     
     @Mock
     private AuthenticationSession mockAuthenticationSession;
-    
+    @Mock
+    private SpecificationLoaderSpi mockSpecificationLoader;
+
     @Mock
     private IsisConfiguration mockConfiguration;
     
     private IsisMetaModel isisMetaModel;
     
-    private ObjectAdapterFactory adapterFactory;
+    private PojoAdapterFactory adapterFactory;
     
     private AdapterManagerDefault adapterManager;
     
@@ -120,19 +121,10 @@ public class AdapterManagerDefault_aggregateAdapters {
                                 Lists.newArrayList(new CustomerRepository()));
         isisMetaModel.init();
 
-        adapterFactory = new PojoAdapterFactory() {
+        adapterFactory = new PojoAdapterFactory(adapterManager, mockSpecificationLoader, mockAuthenticationSession) {
             @Override
             protected Localization getLocalization() {
                 return mockLocalization;
-            }
-            @Override
-            protected SpecificationLoaderSpi getSpecificationLoader() {
-                return isisMetaModel.getSpecificationLoader();
-            }
-            
-            @Override
-            protected AuthenticationSession getAuthenticationSession() {
-                return mockAuthenticationSession;
             }
         };
 
@@ -142,7 +134,7 @@ public class AdapterManagerDefault_aggregateAdapters {
                 return isisMetaModel.getSpecificationLoader();
             }
             @Override
-            protected ObjectAdapterFactory getObjectAdapterFactory() {
+            protected PojoAdapterFactory getObjectAdapterFactory() {
                 return adapterFactory;
             }
             @Override

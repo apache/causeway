@@ -34,7 +34,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapterFactory;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -56,6 +55,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -610,7 +610,8 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * referenced.
      */
     private ObjectAdapter createStandaloneAdapterAndSetResolveState(final Object pojo) {
-        final ObjectAdapter adapter = getObjectAdapterFactory().createAdapter(pojo, null, this);
+        final ObjectAdapter adapter = getObjectAdapterFactory().createAdapter(pojo, null
+        );
         return adapter;
     }
 
@@ -623,14 +624,16 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      */
     private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
-        final ObjectAdapter rootAdapter = getObjectAdapterFactory().createAdapter(pojo, rootOid, this);
+        final ObjectAdapter rootAdapter = getObjectAdapterFactory().createAdapter(pojo, rootOid
+        );
         return rootAdapter;
     }
 
 
     private ObjectAdapter createCollectionAdapter(final Object pojo, ParentedCollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
-        final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid, this);
+        final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid
+        );
         return collectionAdapter;
     }
 
@@ -789,7 +792,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return IsisContext.getSpecificationLoader();
     }
 
-    protected ObjectAdapterFactory getObjectAdapterFactory() {
+    protected PojoAdapterFactory getObjectAdapterFactory() {
         return getPersistenceSession().getObjectAdapterFactory();
     }
 
