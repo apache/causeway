@@ -133,7 +133,6 @@ public class PersistenceSessionTest {
             {
                 ignoring(mockObjectStore).open();
                 ignoring(mockObjectStore).close();
-                ignoring(mockObjectStore).name();
                 ignoring(mockConfiguration);
 
                 ignoring(createObjectCommand);

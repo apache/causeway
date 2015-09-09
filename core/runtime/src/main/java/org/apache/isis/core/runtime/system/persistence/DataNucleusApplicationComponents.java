@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus;
+package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Map;
 import java.util.Properties;
@@ -42,13 +42,16 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
+import org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
+import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
 
 public class DataNucleusApplicationComponents implements ApplicationScopedComponent {
 
+    public static final String CLASS_METADATA_LOADED_LISTENER_KEY = "classMetadataLoadedListener";
+    static final String CLASS_METADATA_LOADED_LISTENER_DEFAULT = CreateSchemaObjectFromClassMetadata.class.getName();
 
     ///////////////////////////////////////////////////////////////////////////
     // JRebel support
@@ -191,7 +194,7 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
         final MetaDataManager metaDataManager = nucleusContext.getMetaDataManager();
 
-        registerMetadataListener(metaDataManager, persistenceManagerFactory, datanucleusProps);
+        registerMetadataListener(metaDataManager, datanucleusProps);
 
         schemaAwareStoreManager.createSchemaForClasses(persistableClassNameSet, asProperties(datanucleusProps));
     }
@@ -200,14 +203,12 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         return Boolean.parseBoolean( props.get(key) );
     }
 
-    private void registerMetadataListener(final MetaDataManager metaDataManager, final PersistenceManagerFactory persistenceManagerFactory, final Map<String, String> datanucleusProps) {
+    private void registerMetadataListener(
+            final MetaDataManager metaDataManager,
+            final Map<String, String> datanucleusProps) {
         final MetaDataListener listener = createMetaDataListener();
         if(listener == null) {
             return;
-        }
-
-        if(listener instanceof PersistenceManagerFactoryAware) {
-            ((PersistenceManagerFactoryAware) listener).setPersistenceManagerFactory(persistenceManagerFactory);
         }
 
         if(listener instanceof DataNucleusPropertiesAware) {
@@ -222,8 +223,8 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
 
     private MetaDataListener createMetaDataListener() {
         final String classMetadataListenerClassName = jdoObjectstoreConfig.getString(
-                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_KEY,
-                DataNucleusPersistenceMechanismInstaller.CLASS_METADATA_LOADED_LISTENER_DEFAULT);
+                CLASS_METADATA_LOADED_LISTENER_KEY,
+                CLASS_METADATA_LOADED_LISTENER_DEFAULT);
         return classMetadataListenerClassName != null
                 ? InstanceUtil.createInstance(classMetadataListenerClassName, MetaDataListener.class)
                 : null;

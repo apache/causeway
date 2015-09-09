@@ -35,8 +35,8 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer.CalledFrom;
+import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
+import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.datanucleus.enhancement.Persistable;
 

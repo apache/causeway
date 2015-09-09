@@ -16,11 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus;
+package org.apache.isis.core.runtime.system.persistence;
 
-import javax.jdo.PersistenceManagerFactory;
-
-public interface PersistenceManagerFactoryAware {
-
-    public void setPersistenceManagerFactory(final PersistenceManagerFactory persistenceManagerFactory);
+public enum LoggingLocation {
+    ENTRY(">>"), EXIT("<<");
+    final String prefix;
+    private LoggingLocation(String prefix) {
+        this.prefix = prefix;
+    }
 }

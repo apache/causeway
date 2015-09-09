@@ -57,9 +57,6 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
 
     public static final String NAME = "datanucleus";
 
-    public static final String CLASS_METADATA_LOADED_LISTENER_KEY = "classMetadataLoadedListener";
-    static final String CLASS_METADATA_LOADED_LISTENER_DEFAULT = CreateSchemaObjectFromClassMetadata.class.getName();
-
     public static final String JDO_OBJECTSTORE_CONFIG_PREFIX = "isis.persistor.datanucleus";  // specific to the JDO objectstore
     public static final String DATANUCLEUS_CONFIG_PREFIX = "isis.persistor.datanucleus.impl"; // reserved for datanucleus' own config props
 

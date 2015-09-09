@@ -73,7 +73,6 @@ The guts of its implementation is:
 ----
 public class CreateSchemaObjectFromClassMetadata
         implements MetaDataListener,
-                   PersistenceManagerFactoryAware,
                    DataNucleusPropertiesAware {
     @Override
     public void loaded(final AbstractClassMetaData cmd) { ... }
@@ -123,16 +122,7 @@ Because this pertains to the JDO Objectstore we suggest you put this configurati
 
 Any implementation must implement `org.datanucleus.metadata.MetaDataListener`.  In many cases simply subclassing from `CreateSchemaObjectFromClassMetadata` and overriding `buildSqlToCheck(...)` and `buildSqlToExec(...)` should suffice.
 
-If you _do_ need more control, your implementation can also optionally implement `org.apache.isis.objectstore.jdo.datanucleus.PersistenceManagerFactoryAware`:
-
-[source,java]
-----
-public interface PersistenceManagerFactoryAware {
-    public void setPersistenceManagerFactory(final PersistenceManagerFactory persistenceManagerFactory);
-}
-----
-
-and also `org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware`:
+If you _do_ need more control, your implementation can also optionally implement  `org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware`:
 
 [source,java]
 ----
@@ -141,7 +131,7 @@ public interface DataNucleusPropertiesAware {
 }
 ----
 
-This latter interface provides access to the properties passed through to JDO/DataNucleus.
+This provides access to the properties passed through to JDO/DataNucleus.
 
 
 [IMPORTANT]

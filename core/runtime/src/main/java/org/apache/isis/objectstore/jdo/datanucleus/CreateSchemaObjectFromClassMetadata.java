@@ -25,8 +25,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
-import javax.jdo.PersistenceManagerFactory;
-
 import com.google.common.base.Strings;
 
 import org.datanucleus.metadata.AbstractClassMetaData;
@@ -37,15 +35,11 @@ import org.slf4j.LoggerFactory;
 /**
  * Implementation note: the methods in this class are <tt>protected</tt> to allow for easy subclassing.
  */
-public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, PersistenceManagerFactoryAware, DataNucleusPropertiesAware {
+public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, DataNucleusPropertiesAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(DataNucleusPersistenceMechanismInstaller.class);
 
     //region > persistenceManagerFactory, properties
-    private PersistenceManagerFactory persistenceManagerFactory;
-    protected PersistenceManagerFactory getPersistenceManagerFactory() {
-        return persistenceManagerFactory;
-    }
 
     private Map<String, String> properties;
     protected Map<String, String> getProperties() {
@@ -177,10 +171,6 @@ public class CreateSchemaObjectFromClassMetadata implements MetaDataListener, Pe
     //endregion
 
     //region > injected dependencies
-    public void setPersistenceManagerFactory(final PersistenceManagerFactory persistenceManagerFactory) {
-        this.persistenceManagerFactory = persistenceManagerFactory;
-    }
-
     @Override
     public void setDataNucleusProperties(final Map<String, String> properties) {
         this.properties = properties;

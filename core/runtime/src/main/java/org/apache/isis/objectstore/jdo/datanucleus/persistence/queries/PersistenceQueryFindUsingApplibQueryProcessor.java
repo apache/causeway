@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.FrameworkSynchronizer;
+import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
     
