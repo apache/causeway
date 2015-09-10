@@ -390,9 +390,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
         }
-        final Object pojo = createObject(objectSpec);
+        final Object pojo = instantiateAndInjectServices(objectSpec);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-        return initialize(adapter);
+        return initializePropertiesAndDoCallback(adapter);
     }
 
 
@@ -401,15 +401,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating view model instance of " + objectSpec);
         }
-        final Object pojo = createObject(objectSpec);
+        final Object pojo = instantiateAndInjectServices(objectSpec);
         final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
         facet.initialize(pojo, memento);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-        return initialize(adapter);
+        return initializePropertiesAndDoCallback(adapter);
     }
 
 
-    public Object createObject(final ObjectSpecification objectSpec) {
+    public Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
         final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
         if (correspondingClass.isArray()) {
@@ -439,7 +439,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
     }
 
-    public ObjectAdapter initialize(final ObjectAdapter adapter) {
+    private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {
 
         // initialize new object
         final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);

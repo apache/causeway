@@ -204,7 +204,7 @@ public class Memento implements Serializable {
         final Oid oid = getOid();
 		if (spec.isParentedOrFreeCollection()) {
 
-            final Object recreatedPojo = getPersistenceSession().createObject(spec);
+            final Object recreatedPojo = getPersistenceSession().instantiateAndInjectServices(spec);
         	adapter = getPersistenceSession().getAdapterManager() .mapRecreatedPojo(oid, recreatedPojo);
             populateCollection(adapter, (CollectionData) data);
             

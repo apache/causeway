@@ -371,7 +371,7 @@ public class AdapterManagerDefault implements AdapterManager,
     private Object recreatePojoDefault(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
-        final Object pojo = persistenceSession.createObject(spec);
+        final Object pojo = persistenceSession.instantiateAndInjectServices(spec);
         if(rootOid.isViewModel()) {
             // initialize the view model pojo from the oid's identifier
 
