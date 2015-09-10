@@ -387,7 +387,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * {@link org.apache.isis.applib.DomainObjectContainer}.
      */
     public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
-        return createInstance(objectSpec, Variant.TRANSIENT);
+        return createInstance(objectSpec, Variant.TRANSIENT, null);
     }
 
     public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
@@ -398,20 +398,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         TRANSIENT,
         VIEW_MODEL
     }
-
-    private ObjectAdapter createInstance(
-            final ObjectSpecification objectSpec,
-            final Variant variant) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating " + variant + " instance of " + objectSpec);
-        }
-        final Object pojo = instantiateAndInjectServices(objectSpec);
-
-
-        final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-        return initializePropertiesAndDoCallback(adapter);
-    }
-
 
     private ObjectAdapter createInstance(
             final ObjectSpecification objectSpec,
