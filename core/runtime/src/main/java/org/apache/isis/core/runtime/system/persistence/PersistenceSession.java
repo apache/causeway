@@ -416,10 +416,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      *             if the criteria is not support by this persistor
      */
     public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
-        final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
-        if (persistenceQuery == null) {
-            throw new IllegalArgumentException("Unknown query type: " + query.getDescription());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("findInstances using (applib) Query: " + query);
         }
+
+        final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         return findInstances(persistenceQuery);
     }
 
@@ -436,18 +437,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
-    public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
+    private ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("getInstances matching " + persistenceQuery);
+            LOG.debug("findInstances using (core runtime) PersistenceQuery: " + persistenceQuery);
         }
 
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                PersistenceSession.this.persistenceQueryProcessorByClass
-                        .get(persistenceQuery.getClass());
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
-        }
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
 
         final List<ObjectAdapter> instances = getTransactionManager().executeWithinTransaction(
                 new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
@@ -461,12 +456,32 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return getAdapterManager().adapterFor(results);
     }
 
+    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
+        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                persistenceQueryProcessorByClass.get(persistenceQueryClass);
+        if (processor == null) {
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
+        }
+        return processor;
+    }
+
     /**
      * Converts the {@link Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.
      */
-    protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
-        return persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
+    protected final PersistenceQuery createPersistenceQueryFor(
+            final Query<?> query,
+            final QueryCardinality cardinality) {
+
+        final PersistenceQuery persistenceQuery =
+                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
+        if (persistenceQuery == null) {
+            throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
+        }
+
+        return persistenceQuery;
     }
 
     //endregion
