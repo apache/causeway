@@ -88,7 +88,6 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSe
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -190,6 +189,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > open
 
+    public PersistenceManager getPersistenceManager() {
+        return persistenceManager;
+    }
+
     /**
      * Injects components, calls  {@link org.apache.isis.core.commons.components.SessionScopedComponent#open()} on subcomponents, and then creates service
      * adapters.
@@ -208,8 +211,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         adapterManager.open();
 
-        getAdapterManager().injectInto(objectStore);
-        getSpecificationLoader().injectInto(objectStore);
+        adapterManager.injectInto(objectStore);
+        specificationLoader.injectInto(objectStore);
 
         this.persistenceManager = applicationComponents.createPersistenceManager();
 
@@ -288,43 +291,38 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         try {
-            ensureOpened();
-            ensureThatState(persistenceManager, is(notNullValue()));
-
-            try {
-                final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
-                if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
-                    if(currentTransaction.getState().canCommit()) {
-                        getTransactionManager().endTransaction();
-                    } else if(currentTransaction.getState().canAbort()) {
-                        getTransactionManager().abortTransaction();
-                    }
+            final IsisTransaction currentTransaction = transactionManager.getTransaction();
+            if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+                if(currentTransaction.getState().canCommit()) {
+                    transactionManager.endTransaction();
+                } else if(currentTransaction.getState().canAbort()) {
+                    transactionManager.abortTransaction();
                 }
-            } finally {
-                // make sure release everything ok.
-                persistenceManager.close();
             }
         } catch(final Throwable ex) {
             // ignore
-            LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");
+            LOG.error("close: failed to end transaction; continuing to avoid memory leakage");
+        }
+
+        try {
+            persistenceManager.close();
+        } catch(final Throwable ex) {
+            // ignore
+            LOG.error(
+                "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
 
         try {
             adapterManager.close();
         } catch(final Throwable ex) {
             // ignore
-            LOG.error("adapterManager#close() failed while closing the session; continuing to avoid memory leakage");
-        } finally {
-            setState(State.CLOSED);
+            LOG.error("close: adapterManager#close() failed; continuing to avoid memory leakage");
         }
+
+        setState(State.CLOSED);
     }
 
-    public PersistenceManager getPersistenceManager() {
-        return persistenceManager;
-    }
     //endregion
-
-
 
 
     //region > State
@@ -506,7 +504,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return oid;
     }
 
-    //endregion
 
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
