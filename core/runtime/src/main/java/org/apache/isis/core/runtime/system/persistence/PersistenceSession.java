@@ -21,6 +21,10 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.List;
 import java.util.Map;
 
+import javax.jdo.FetchGroup;
+import javax.jdo.FetchPlan;
+import javax.jdo.PersistenceManager;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -28,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
+import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -39,6 +45,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -50,6 +57,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -62,6 +70,7 @@ import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstr
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
@@ -515,10 +524,112 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
-                return objectStore.loadInstanceAndAdapt(oid);
+                return loadInstanceAndAdapt(oid);
             }
         });
         return adapter;
+    }
+
+    //endregion
+
+    //region > loadInstanceAndAdapt
+    /**
+     * Retrieves the object identified by the specified {@link RootOid} from the object
+     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
+     *
+     * <p>The cache should be checked first and, if the object is cached,
+     * the cached version should be returned. It is important that if this
+     * method is called again, while the originally returned object is in
+     * working memory, then this method must return that same Java object.
+     *
+     * <p>
+     * Assuming that the object is not cached then the data for the object
+     * should be retrieved from the persistence mechanism and the object
+     * recreated (as describe previously). The specified OID should then be
+     * assigned to the recreated object by calling its <method>setOID </method>.
+     * Before returning the object its resolved flag should also be set by
+     * calling its <method>setResolved </method> method as well.
+     *
+     * <p>
+     * If the persistence mechanism does not known of an object with the
+     * specified {@link RootOid} then a {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} should be
+     * thrown.
+     *
+     * <p>
+     * Note that the OID could be for an internal collection, and is
+     * therefore related to the parent object (using a {@link ParentedCollectionOid}).
+     * The elements for an internal collection are commonly stored as
+     * part of the parent object, so to get element the parent object needs to
+     * be retrieved first, and the internal collection can be got from that.
+     *
+     * <p>
+     * Returns the stored {@link ObjectAdapter} object.
+     *
+     *
+     * @return the requested {@link ObjectAdapter} that has the specified
+     *         {@link RootOid}.
+     *
+     * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
+     *             when no object corresponding to the oid can be found
+     */
+    public ObjectAdapter loadInstanceAndAdapt(final RootOid oid) {
+        ensureOpened();
+        ensureInTransaction();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getObject; oid=" + oid);
+        }
+
+        final Object pojo = loadPojo(oid);
+        return getAdapterManager().mapRecreatedPojo(oid, pojo);
+    }
+
+    //region > loadPojo
+
+
+    public Object loadPojo(final RootOid rootOid) {
+
+        Object result = null;
+        try {
+            final Class<?> cls = clsOf(rootOid);
+            final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
+            final PersistenceManager pm = objectStore.getPersistenceManager();
+            FetchPlan fetchPlan = pm.getFetchPlan();
+            fetchPlan.addGroup(FetchGroup.DEFAULT);
+            result = pm.getObjectById(cls, jdoObjectId);
+        } catch (final RuntimeException e) {
+
+            final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
+            for (ExceptionRecognizer exceptionRecognizer : exceptionRecognizers) {
+                if(exceptionRecognizer instanceof ExceptionRecognizer2) {
+                    final ExceptionRecognizer2 recognizer = (ExceptionRecognizer2) exceptionRecognizer;
+                    final ExceptionRecognizer2.Recognition recognition = recognizer.recognize2(e);
+                    if(recognition != null) {
+                        if(recognition.getCategory() == ExceptionRecognizer2.Category.NOT_FOUND) {
+                            throw new ObjectNotFoundException(rootOid, e);
+                        }
+                    }
+                }
+            }
+
+            throw e;
+        }
+
+        if (result == null) {
+            throw new ObjectNotFoundException(rootOid);
+        }
+        return result;
+    }
+
+    private Class<?> clsOf(final RootOid oid) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(oid.getObjectSpecId());
+        return objectSpec.getCorrespondingClass();
+    }
+
+    //endregion
+
+    void ensureInTransaction() {
+        objectStore.ensureInTransaction();
     }
 
     //endregion

@@ -33,7 +33,7 @@ public class PojoRecreator {
         if(oid.isTransient() || oid.isViewModel()) {
             return recreatePojoDefault(oid);
         } else {
-            return getObjectStore().loadPojo(oid);
+            return getPersistenceSession().loadPojo(oid);
         }
     }
 
@@ -83,7 +83,7 @@ public class PojoRecreator {
     }
 
     protected ObjectStore getObjectStore() {
-        return (ObjectStore) getPersistenceSession().getObjectStore();
+        return getPersistenceSession().getObjectStore();
     }
 
 
