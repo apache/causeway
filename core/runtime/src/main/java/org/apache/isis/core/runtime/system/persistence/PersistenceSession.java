@@ -1191,6 +1191,35 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     //endregion
 
+    //region > FrameworkSynchronizer delegate methods
+
+    public void postDeleteProcessingFor(final Persistable pojo, final FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.postDeleteProcessingFor(pojo, calledFrom);
+    }
+
+    public void preDeleteProcessingFor(final Persistable pojo, final FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.preDeleteProcessingFor(pojo, calledFrom);
+    }
+
+    public void postLoadProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.postLoadProcessingFor(pojo, calledFrom);
+    }
+
+    public void preStoreProcessingFor(final Persistable pojo, final FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.preStoreProcessingFor(pojo, calledFrom);
+    }
+
+    public void postStoreProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.postStoreProcessingFor(pojo, calledFrom);
+    }
+
+    public void preDirtyProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
+        frameworkSynchronizer.preDirtyProcessingFor(pojo, calledFrom);
+    }
+    public void ensureRootObject(final Persistable pojo) {
+        frameworkSynchronizer.ensureRootObject(pojo);
+    }
+    //endregion
 
 }
 

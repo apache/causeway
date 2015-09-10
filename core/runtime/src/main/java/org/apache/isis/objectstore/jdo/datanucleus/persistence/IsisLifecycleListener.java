@@ -36,6 +36,6 @@ public class IsisLifecycleListener extends IsisLifecycleListener2 {
     public IsisLifecycleListener(
             final PersistenceSession persistenceSession,
             final FrameworkSynchronizer synchronizer) {
-        super(persistenceSession, synchronizer);
+        super(persistenceSession);
     }
 }

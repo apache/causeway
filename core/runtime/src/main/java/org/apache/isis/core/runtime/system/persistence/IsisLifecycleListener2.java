@@ -44,13 +44,10 @@ public class IsisLifecycleListener2
         SuspendableListener {
 
     private final PersistenceSession persistenceSession;
-    private final FrameworkSynchronizer synchronizer;
 
     public IsisLifecycleListener2(
-            final PersistenceSession persistenceSession,
-            final FrameworkSynchronizer synchronizer) {
+            final PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
-        this.synchronizer = synchronizer;
     }
 
 
@@ -79,7 +76,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.postLoadProcessingFor(pojo, CalledFrom.EVENT_LOAD);
+                persistenceSession.postLoadProcessingFor(pojo, CalledFrom.EVENT_LOAD);
             }});
     }
 
@@ -89,7 +86,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.preStoreProcessingFor(pojo, CalledFrom.EVENT_PRESTORE);
+                persistenceSession.preStoreProcessingFor(pojo, CalledFrom.EVENT_PRESTORE);
 
             }});
     }
@@ -100,7 +97,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.postStoreProcessingFor(pojo, CalledFrom.EVENT_POSTSTORE);
+                persistenceSession.postStoreProcessingFor(pojo, CalledFrom.EVENT_POSTSTORE);
             }});
     }
 
@@ -110,7 +107,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.preDirtyProcessingFor(pojo, CalledFrom.EVENT_PREDIRTY);
+                persistenceSession.preDirtyProcessingFor(pojo, CalledFrom.EVENT_PREDIRTY);
             }});
     }
 
@@ -132,7 +129,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.preDeleteProcessingFor(pojo, CalledFrom.EVENT_PREDELETE);
+                persistenceSession.preDeleteProcessingFor(pojo, CalledFrom.EVENT_PREDELETE);
             }
         });
     }
@@ -143,7 +140,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                synchronizer.postDeleteProcessingFor(pojo, CalledFrom.EVENT_POSTDELETE);
+                persistenceSession.postDeleteProcessingFor(pojo, CalledFrom.EVENT_POSTDELETE);
             }
         });
     }
@@ -224,7 +221,7 @@ public class IsisLifecycleListener2
         }
         protected void doRun() {
             final Persistable pojo = Utils.persistenceCapableFor(event);
-            synchronizer.ensureRootObject(pojo);
+            persistenceSession.ensureRootObject(pojo);
         }
     }
     
