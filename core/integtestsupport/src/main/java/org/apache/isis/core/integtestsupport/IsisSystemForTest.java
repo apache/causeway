@@ -583,7 +583,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public ObjectAdapter reload(RootOid oid) {
         ensureSessionInProgress();
         final PersistenceSession persistenceSession = getPersistenceSession();
-        return persistenceSession.loadObject(oid);
+        return persistenceSession.loadObjectInTransaction(oid);
     }
 
     public ObjectAdapter recreateAdapter(RootOid oid) {

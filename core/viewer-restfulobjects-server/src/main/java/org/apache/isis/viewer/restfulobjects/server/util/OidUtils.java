@@ -90,7 +90,7 @@ public final class OidUtils {
             }
         } else {
             try {
-                ObjectAdapter objectAdapter = persistenceSession.loadObject(rootOid);
+                ObjectAdapter objectAdapter = persistenceSession.loadObjectInTransaction(rootOid);
                 return objectAdapter.isTransient() ? null : objectAdapter;
             } catch(final ObjectNotFoundException ex) {
                 return null;

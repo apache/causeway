@@ -591,7 +591,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    public ObjectAdapter loadObject(final RootOid oid) {
+    public ObjectAdapter loadObjectInTransaction(final RootOid oid) {
         
         // REVIEW: 
         // this method does not account for the oid possibly being a view model
