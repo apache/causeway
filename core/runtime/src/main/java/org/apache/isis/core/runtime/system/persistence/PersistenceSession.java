@@ -60,7 +60,6 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -424,27 +423,24 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             return Array.newInstance(correspondingClass.getComponentType(), 0);
         }
 
+        final Class<?> cls = correspondingClass;
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+        }
+        final Object newInstance;
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new IsisException("Cannot create an instance of an abstract class: " + cls);
+        }
+
         try {
-            final Class<?> cls = correspondingClass;
-
-            if (Modifier.isAbstract(cls.getModifiers())) {
-                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-            }
-            final Object newInstance;
-            if (Modifier.isAbstract(cls.getModifiers())) {
-                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-            }
-            try {
-                newInstance = cls.newInstance();
-            } catch (final IllegalAccessException | InstantiationException e) {
-                throw new ObjectInstantiationException(e);
-            }
-
-            servicesInjector.injectServicesInto(newInstance);
-            return newInstance;
-        } catch (final ObjectInstantiationException e) {
+            newInstance = cls.newInstance();
+        } catch (final IllegalAccessException | InstantiationException e) {
             throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
         }
+
+        servicesInjector.injectServicesInto(newInstance);
+        return newInstance;
+
     }
 
     private ObjectAdapter initializePropertiesAndDoCallback(final ObjectAdapter adapter) {
