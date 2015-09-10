@@ -104,7 +104,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private final PersistAlgorithm persistAlgorithm ;
     private final ObjectStore objectStore;
-    private final Map<ObjectSpecId, RootOid> servicesByObjectType = Maps.newHashMap();
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfiguration configuration;
@@ -475,13 +474,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * session.
      */
     protected RootOid getOidForService(final ObjectSpecification serviceSpec) {
-        final ObjectSpecId objectSpecId = serviceSpec.getSpecId();
-        RootOid oid = servicesByObjectType.get(objectSpecId);
-        if (oid == null) {
-            ensureOpened();
-            oid = this.registeredServices.get(serviceSpec.getSpecId());
-            servicesByObjectType.put(objectSpecId, oid);
-        }
+        final ObjectSpecId serviceSpecId = serviceSpec.getSpecId();
+        final RootOid oid = this.registeredServices.get(serviceSpecId);
         return oid;
     }
 
