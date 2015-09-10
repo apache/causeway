@@ -25,17 +25,19 @@ import com.google.common.base.Splitter;
 
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoAdapterBuilder {
+
+    private PersistenceSession persistenceSession;
 
     private PojoAdapterBuilder(){
     }
@@ -46,8 +48,6 @@ public class PojoAdapterBuilder {
     private ObjectSpecification objectSpec;
     
     private SpecificationLoader specificationLoader;
-    
-    private AdapterManager objectAdapterLookup;
     
     private ObjectSpecId objectSpecId = ObjectSpecId.of("CUS");
     private String identifier = "1";
@@ -166,11 +166,11 @@ public class PojoAdapterBuilder {
         return this;
     }
 
-    public PojoAdapterBuilder with(AdapterManager objectAdapterLookup) {
-        this.objectAdapterLookup = objectAdapterLookup;
+    public PojoAdapterBuilder with(PersistenceSession persistenceSession) {
+        this.persistenceSession = persistenceSession;
         return this;
     }
-    
+
     public PojoAdapterBuilder with(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
         return this;

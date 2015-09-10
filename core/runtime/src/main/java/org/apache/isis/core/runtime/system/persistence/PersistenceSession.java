@@ -81,7 +81,6 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -133,8 +132,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final OidGenerator oidGenerator;
     private final AdapterManagerDefault adapterManager;
-
-    private final PersistAlgorithm persistAlgorithm ;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfiguration configuration;
@@ -191,7 +188,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         this.adapterManager = new AdapterManagerDefault(this, specificationLoader, oidMarshaller,
                 oidGenerator, authenticationSession, servicesInjector, configuration);
-        this.persistAlgorithm = new PersistAlgorithm();
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
@@ -872,7 +868,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
             @Override
             public void execute() {
-                persistAlgorithm.makePersistent(adapter, PersistenceSession.this);
+                makePersistent(adapter);
 
                 // clear out the map of transient -> persistent
                 PersistenceSession.this.persistentByTransient.clear();
@@ -880,6 +876,37 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         });
     }
+
+    private void makePersistent(final ObjectAdapter adapter) {
+        if (alreadyPersistedOrNotPersistable(adapter)) {
+            return;
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("persist " + adapter);
+        }
+
+        // previously we called the PersistingCallback here.
+        // this is now done in the JDO framework synchronizer.
+        //
+        // the guard below used to be because (apparently)
+        // the callback might have caused the adapter to become persistent.
+        // leaving it in as think it does no harm...
+        if (alreadyPersistedOrNotPersistable(adapter)) {
+            return;
+        }
+        addCreateObjectCommand(adapter);
+    }
+
+
+    private static boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
+        return adapter.representsPersistent() || objectSpecNotPersistable(adapter);
+    }
+
+
+    private static boolean objectSpecNotPersistable(final ObjectAdapter adapter) {
+        return !adapter.getSpecification().persistability().isPersistable() || adapter.isParentedCollection();
+    }
+
 
     //endregion
 
@@ -1071,7 +1098,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         debug.appendTitle("Persistor");
         getTransactionManager().debugData(debug);
-        debug.appendln("Persist Algorithm", persistAlgorithm);
         debug.appendln();
     }
 
