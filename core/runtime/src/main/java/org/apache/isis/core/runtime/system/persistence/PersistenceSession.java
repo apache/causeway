@@ -437,7 +437,26 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      *             if the criteria is not support by this persistor
      */
     public ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
-        final List<ObjectAdapter> instances = getInstances(persistenceQuery);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("getInstances matching " + persistenceQuery);
+        }
+        final List<ObjectAdapter> instances = getTransactionManager().executeWithinTransaction(
+                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
+                    @Override
+                    public List<ObjectAdapter> execute() {
+                        PersistenceSession.this.ensureOpened();
+                        PersistenceSession.this.ensureInTransaction();
+
+                        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                                PersistenceSession.this.persistenceQueryProcessorByClass
+                                        .get(persistenceQuery.getClass());
+                        if (processor == null) {
+                            throw new UnsupportedFindException(MessageFormat.format(
+                                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
+                        }
+                        return PersistenceSession.this.processPersistenceQuery(processor, persistenceQuery);
+                    }
+                });
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         final FreeStandingList results = new FreeStandingList(specification, instances);
         return getAdapterManager().adapterFor(results);
@@ -449,29 +468,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      */
     protected final PersistenceQuery createPersistenceQueryFor(final Query<?> query, final QueryCardinality cardinality) {
         return persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
-    }
-
-
-    protected List<ObjectAdapter> getInstances(final PersistenceQuery persistenceQuery) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getInstances matching " + persistenceQuery);
-        }
-        return getTransactionManager().executeWithinTransaction(
-                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
-                    @Override
-                    public List<ObjectAdapter> execute() {
-                        ensureOpened();
-                        ensureInTransaction();
-
-                        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
-                        if (processor == null) {
-                            throw new UnsupportedFindException(MessageFormat.format(
-                                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
-                        }
-                        return processPersistenceQuery(processor, persistenceQuery);
-                    }
-                });
     }
 
     //endregion
