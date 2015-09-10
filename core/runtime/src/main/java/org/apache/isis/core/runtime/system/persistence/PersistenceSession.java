@@ -245,7 +245,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             if (existingOid == null) {
                 final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
-                objectStoreRegisterService(persistentOid);
+                ensureOpened();
+                this.registeredServices.put(persistentOid.getObjectSpecId(), persistentOid);
             }
         }
     }
@@ -476,12 +477,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     protected RootOid getOidForService(final ObjectSpecification serviceSpec) {
         return getOidForServiceFromPersistenceLayer(serviceSpec);
-    }
-
-    //region > registerServices, getOidForService
-    private void objectStoreRegisterService(RootOid rootOid) {
-        ensureOpened();
-        this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
     }
 
     private RootOid objectStoreGetOidForService(ObjectSpecification serviceSpec) {
