@@ -34,6 +34,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -42,7 +43,6 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDe
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
@@ -63,8 +63,7 @@ public class PersistenceSessionTest {
 
     private ServicesInjectorDefault servicesInjector;
     private AdapterManagerDefault adapterManager;
-    private PojoAdapterFactory adapterFactory;
-    
+
     
     private PersistenceSession persistenceSession;
     private IsisTransactionManager transactionManager;
@@ -102,7 +101,10 @@ public class PersistenceSessionTest {
     @Mock
     private MessageBroker mockMessageBroker;
     
-    
+    @Mock
+    private OidGenerator mockOidGenerator;
+
+
     private IsisMetaModel isisMetaModel;
 
 
@@ -146,8 +148,6 @@ public class PersistenceSessionTest {
         servicesInjector = new ServicesInjectorDefault(
                 Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
-        adapterManager = new AdapterManagerDefault(new PojoRecreator(persistenceSession, mockSpecificationLoader));
-        adapterFactory = new PojoAdapterFactory(adapterManager, mockSpecificationLoader, mockAuthenticationSession);
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockConfiguration,
                 mockSpecificationLoader, mockAuthenticationSession) {
             @Override
@@ -156,7 +156,10 @@ public class PersistenceSessionTest {
             }
             
         };
-        
+        adapterManager = new AdapterManagerDefault(persistenceSession, mockSpecificationLoader, new PojoRecreator(persistenceSession, mockSpecificationLoader),
+                new OidMarshaller(), mockOidGenerator, mockAuthenticationSession, servicesInjector,
+                mockConfiguration);
+
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();
             will(returnValue("sven"));

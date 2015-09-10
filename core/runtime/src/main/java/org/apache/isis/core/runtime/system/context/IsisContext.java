@@ -500,6 +500,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         return debugList.debug();
     }
 
+    // TODO: looks to be unused..
     public static DebuggableWithTitle[] debugSession() {
         final DebugList debugList = new DebugList("Apache Isis Session");
         debugList.add("Apache Isis session", getSession());
@@ -509,7 +510,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("Transaction Manager", getTransactionManager());
 
         debugList.add("Service injector", getPersistenceSession().getServicesInjector());
-        debugList.add("Adapter factory", getPersistenceSession().getObjectAdapterFactory());
         debugList.add("Object factory", getPersistenceSession().getObjectFactory());
         debugList.add("OID generator", getPersistenceSession().getOidGenerator());
         debugList.add("Adapter manager", getPersistenceSession().getAdapterManager());

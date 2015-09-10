@@ -24,6 +24,7 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
@@ -55,7 +56,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRecreationException;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
+import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.OidGenerator;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -90,8 +91,14 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     protected final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     protected final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
+    private final PersistenceSession persistenceSession;
+    private final SpecificationLoaderSpi specificationLoader;
     private final PojoRecreator pojoRecreator;
-
+    private final OidMarshaller oidMarshaller;
+    private final OidGenerator oidGenerator;
+    private final AuthenticationSession authenticationSession;
+    private final ServicesInjector servicesInjector;
+    private final IsisConfiguration configuration;
 
     // //////////////////////////////////////////////////////////////////
     // constructor
@@ -104,8 +111,23 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * 
      * @see <a href="http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976">this thread</a>
      */
-    public AdapterManagerDefault(PojoRecreator pojoRecreator) {
+    public AdapterManagerDefault(
+            final PersistenceSession persistenceSession,
+            final SpecificationLoaderSpi specificationLoader,
+            final PojoRecreator pojoRecreator,
+            final OidMarshaller oidMarshaller,
+            final OidGenerator oidGenerator,
+            final AuthenticationSession authenticationSession,
+            final ServicesInjector servicesInjector,
+            final IsisConfiguration configuration) {
+        this.persistenceSession = persistenceSession;
+        this.specificationLoader = specificationLoader;
         this.pojoRecreator = pojoRecreator;
+        this.oidMarshaller = oidMarshaller;
+        this.oidGenerator = oidGenerator;
+        this.authenticationSession = authenticationSession;
+        this.servicesInjector = servicesInjector;
+        this.configuration = configuration;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -606,9 +628,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * referenced.
      */
     private ObjectAdapter createStandaloneAdapterAndSetResolveState(final Object pojo) {
-        final ObjectAdapter adapter = getObjectAdapterFactory().createAdapter(pojo, null
-        );
-        return adapter;
+        return createAdapter(pojo, null);
     }
 
     /**
@@ -620,7 +640,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      */
     private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
-        final ObjectAdapter rootAdapter = getObjectAdapterFactory().createAdapter(pojo, rootOid
+        final ObjectAdapter rootAdapter = createAdapter(pojo, rootOid
         );
         return rootAdapter;
     }
@@ -628,10 +648,24 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
     private ObjectAdapter createCollectionAdapter(final Object pojo, ParentedCollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
-        final ObjectAdapter collectionAdapter = getObjectAdapterFactory().createAdapter(pojo, collectionOid
+        final ObjectAdapter collectionAdapter = createAdapter(pojo, collectionOid
         );
         return collectionAdapter;
     }
+
+    private PojoAdapter createAdapter(
+            final Object pojo,
+            final Oid oid) {
+        return new PojoAdapter(
+                pojo, oid,
+                authenticationSession, getLocalization(),
+                specificationLoader, this);
+    }
+
+    protected Localization getLocalization() {
+        return IsisContext.getLocalization();
+    }
+
 
 
     // //////////////////////////////////////////////////////////////////////////
@@ -771,43 +805,37 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
     }
 
-    
-    // /////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////////
 
+    //region > Dependencies (from constructor)
     protected OidMarshaller getOidMarshaller() {
-		return IsisContext.getOidMarshaller();
+		return oidMarshaller;
 	}
 
     public OidGenerator getOidGenerator() {
-        return IsisContext.getPersistenceSession().getOidGenerator();
+        return oidGenerator;
     }
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
-    }
-
-    protected PojoAdapterFactory getObjectAdapterFactory() {
-        return getPersistenceSession().getObjectAdapterFactory();
+        return specificationLoader;
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return persistenceSession;
     }
 
     protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
+        return servicesInjector;
     }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+        return authenticationSession;
     }
     
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return configuration;
     }
 
+    //endregion
 
 
 }

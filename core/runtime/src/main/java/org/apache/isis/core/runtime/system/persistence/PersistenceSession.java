@@ -63,7 +63,6 @@ import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
@@ -116,7 +115,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final PojoAdapterFactory objectAdapterFactory;
     private final OidGenerator oidGenerator;
     private final AdapterManagerDefault adapterManager;
 
@@ -178,9 +176,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
         final PojoRecreator pojoRecreator = new PojoRecreator(this, specificationLoader);
-        this.adapterManager = new AdapterManagerDefault(pojoRecreator);
+        this.adapterManager = new AdapterManagerDefault(this, specificationLoader, pojoRecreator, oidMarshaller,
+                oidGenerator, authenticationSession, servicesInjector, configuration);
         this.persistAlgorithm = new PersistAlgorithm();
-        this.objectAdapterFactory = new PojoAdapterFactory(adapterManager, specificationLoader, authenticationSession);
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
@@ -1017,16 +1015,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    /**
-     * The configured {@link PojoAdapterFactory}.
-     * 
-     * <p>
-     * Injected in constructor.
-     */
-    public final PojoAdapterFactory getObjectAdapterFactory() {
-        return objectAdapterFactory;
     }
 
     /**
