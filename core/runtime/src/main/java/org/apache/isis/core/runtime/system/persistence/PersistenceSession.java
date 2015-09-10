@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
@@ -1256,8 +1257,39 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         frameworkSynchronizer.postLoadProcessingFor(pojo, calledFrom);
     }
 
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
+     * lifecycle callback.
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
     public void preStoreProcessingFor(final Persistable pojo, final FrameworkSynchronizer.CalledFrom calledFrom) {
-        frameworkSynchronizer.preStoreProcessingFor(pojo, calledFrom);
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                final ObjectAdapter adapter = getAdapterFor(pojo);
+                if (adapter == null) {
+                    // not expected.
+                    return;
+                }
+
+                final RootOid isisOid = (RootOid) adapter.getOid();
+                if (isisOid.isTransient()) {
+                    // persisting
+                    // previously this was performed in the DataNucleusSimplePersistAlgorithm.
+                    CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
+                } else {
+                    // updating
+
+                    // don't call here, already called in preDirty.
+
+                    // CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+                }
+
+            }
+        }, calledFrom);
     }
 
     /**
