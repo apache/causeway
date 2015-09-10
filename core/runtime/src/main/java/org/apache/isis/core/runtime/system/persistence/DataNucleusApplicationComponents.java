@@ -23,7 +23,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
 import javax.jdo.PersistenceManagerFactory;
 
 import com.google.common.base.Joiner;
@@ -44,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.objectstore.jdo.datanucleus.CreateSchemaObjectFromClassMetadata;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPropertiesAware;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoNamedQuery;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryFacet;
 
@@ -85,8 +83,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private final IsisConfiguration jdoObjectstoreConfig;
     private final Map<String, String> datanucleusProps;
     
-    private final FrameworkSynchronizer synchronizer;
-    
     private Map<String, JdoNamedQuery> namedQueryByName;
     private PersistenceManagerFactory persistenceManagerFactory;
 
@@ -98,8 +94,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         this.datanucleusProps = datanucleusProps;
         this.persistableClassNameSet = persistableClassNameSet;
         this.jdoObjectstoreConfig = jdoObjectstoreConfig;
-
-        this.synchronizer = new FrameworkSynchronizer();
 
         initialize();
         
@@ -271,12 +265,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     ///////////////////////////////////////////////////////////////////////////
     //
     ///////////////////////////////////////////////////////////////////////////
-    
-    public PersistenceManager createPersistenceManager() {
-        PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
-
-        return persistenceManager;
-    }
 
     public JdoNamedQuery getNamedQuery(String queryName) {
         return namedQueryByName.get(queryName);
