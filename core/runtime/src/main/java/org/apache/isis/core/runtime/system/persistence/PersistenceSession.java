@@ -245,7 +245,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             if (existingOid == null) {
                 final RootOid persistentOid = (RootOid) serviceAdapter.getOid();
-                registerService(persistentOid);
+                objectStoreRegisterService(persistentOid);
             }
         }
     }
@@ -476,13 +476,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     protected RootOid getOidForService(final ObjectSpecification serviceSpec) {
         return getOidForServiceFromPersistenceLayer(serviceSpec);
-    }
-
-    /**
-     * Registers the specified service as having the specified OID.
-     */
-    protected void registerService(final RootOid rootOid) {
-        objectStoreRegisterService(rootOid);
     }
 
     //region > registerServices, getOidForService
