@@ -23,7 +23,6 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoRecreator {
@@ -47,7 +46,8 @@ public class PojoRecreator {
     }
 
     private Object recreatePojoDefault(final RootOid rootOid) {
-        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(rootOid.getObjectSpecId());
+        final ObjectSpecification spec =
+                getSpecificationLoader().lookupBySpecId(rootOid.getObjectSpecId());
         final Object pojo = spec.createObject();
         if(rootOid.isViewModel()) {
             // initialize the view model pojo from the oid's identifier
@@ -66,18 +66,17 @@ public class PojoRecreator {
 
 
 
-
     /**
      * Return an adapter, if possible, for a pojo that was instantiated by the
      * object store as a result of lazily loading, but which hasn't yet been seen
      * by the Isis framework.
      *
      * <p>
-     * For example, in the case of JDO object store, downcast to <tt>PersistenceCapable</tt>
+     * In the case of JDO object store, downcast to <tt>Persistence</tt>
      * and 'look inside' its state.
      */
     public ObjectAdapter lazilyLoaded(Object pojo) {
-        return getObjectStore().lazilyLoaded(pojo);
+        return persistenceSession.lazilyLoaded(pojo);
     }
 
     ///////////////////////////////
@@ -90,10 +89,5 @@ public class PojoRecreator {
     protected PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
-
-    protected ObjectStore getObjectStore() {
-        return getPersistenceSession().getObjectStore();
-    }
-
 
 }

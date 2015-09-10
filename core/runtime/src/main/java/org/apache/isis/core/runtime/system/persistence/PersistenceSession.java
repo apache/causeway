@@ -28,6 +28,7 @@ import javax.jdo.PersistenceManager;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,6 +107,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     // not final only for testing purposes
     private IsisTransactionManager transactionManager;
+    private final FrameworkSynchronizer frameworkSynchronizer;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -128,9 +130,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
 
         // sub-components
-        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory .getApplicationComponents();
+        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory.getApplicationComponents();
         this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents);
 
+        frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
@@ -524,12 +527,13 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     private ObjectAdapter loadMappedObjectFromObjectStore(final RootOid oid) {
-        final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
-            @Override
-            public ObjectAdapter execute() {
-                return loadInstanceAndAdapt(oid);
-            }
-        });
+        final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(
+                new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+                    @Override
+                    public ObjectAdapter execute() {
+                        return loadInstanceAndAdapt(oid);
+                    }
+                });
         return adapter;
     }
 
@@ -587,6 +591,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         return getAdapterManager().mapRecreatedPojo(oid, pojo);
     }
 
+
+    //endregion
+
     //region > loadPojo
 
 
@@ -631,11 +638,27 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     //endregion
 
+    //region > transactions
+
     void ensureInTransaction() {
         objectStore.ensureInTransaction();
     }
 
     //endregion
+
+    //region > lazilyLoaded
+
+    public ObjectAdapter lazilyLoaded(Object pojo) {
+        if(!(pojo instanceof Persistable)) {
+            return null;
+        }
+        final Persistable persistenceCapable = (Persistable) pojo;
+        return frameworkSynchronizer.lazilyLoaded(persistenceCapable, FrameworkSynchronizer.CalledFrom.OS_LAZILYLOADED);
+    }
+
+    //endregion
+
+
 
     //region > resolveImmediately, resolveField
 

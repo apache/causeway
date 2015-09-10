@@ -219,17 +219,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
 
 
-    //region > loadPojo, lazilyLoaded, resolveImmediately
-
-
-    public ObjectAdapter lazilyLoaded(Object pojo) {
-        if(!(pojo instanceof Persistable)) {
-            return null;
-        } 
-        final Persistable persistenceCapable = (Persistable) pojo;
-        return frameworkSynchronizer.lazilyLoaded(persistenceCapable, CalledFrom.OS_LAZILYLOADED);
-    }
-
+    //region > resolveImmediately
 
 
     public void resolveImmediately(final ObjectAdapter adapter) {
