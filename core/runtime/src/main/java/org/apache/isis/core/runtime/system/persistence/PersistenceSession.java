@@ -277,9 +277,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      *
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
-     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
-     * {@link PersistenceSession#commitJdoTransaction() commits the underlying
-     * JDO transaction}.
+     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn commits the underlying
+     * JDO transaction.
      *
      * <p>
      * The corresponding DataNucleus entity is then closed.
@@ -879,7 +878,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * </p>
      *
      */
-    public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter adapter) {
+    public CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInSession();
 
@@ -948,31 +947,18 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     /**
-     * Uses the {@link ObjectStore} to
-     * {@link #createCreateObjectCommand(ObjectAdapter) create} a
-     * {@link CreateObjectCommand}, and adds to the
+     * {@link #newCreateObjectCommand(ObjectAdapter) Create}s a {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
     public void addCreateObjectCommand(final ObjectAdapter object) {
-        getTransactionManager().addCommand(createCreateObjectCommand(object));
+        final CreateObjectCommand createObjectCommand = newCreateObjectCommand(object);
+        transactionManager.addCommand(createObjectCommand);
     }
 
     //endregion
 
     //region > transactions
     public void startTransaction() {
-        beginJdoTransaction();
-    }
-
-    public void endTransaction() {
-        commitJdoTransaction();
-    }
-
-    public void abortTransaction() {
-        rollbackJdoTransaction();
-    }
-
-    private void beginJdoTransaction() {
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             throw new IllegalStateException("Transaction already active");
@@ -980,14 +966,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         transaction.begin();
     }
 
-    private void commitJdoTransaction() {
+    public void endTransaction() {
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             transaction.commit();
         }
     }
 
-    private void rollbackJdoTransaction() {
+    public void abortTransaction() {
         final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             transaction.rollback();
