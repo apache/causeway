@@ -839,10 +839,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroyObject " + adapter);
         }
-        destroyObjectInPersistenceLayer(adapter);
-    }
-
-    private void destroyObjectInPersistenceLayer(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
             @Override
@@ -936,7 +932,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > remappedFrom, addCreateObjectCommand
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
-
 
     /**
      * To support ISIS-234; keep track, for the duration of the transaction only,
