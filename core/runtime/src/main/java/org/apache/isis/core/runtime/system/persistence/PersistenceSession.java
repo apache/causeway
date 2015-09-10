@@ -209,7 +209,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
 
-        objectStore.open();
+        objectStore.objectStoreOpen();
 
         persistenceManager = objectStore.getPersistenceManager();
 
@@ -284,7 +284,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         try {
             try {
-                objectStore.close();
+                objectStore.objectStoreClose();
             } catch(final Throwable ex) {
                 // ignore
                 LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");

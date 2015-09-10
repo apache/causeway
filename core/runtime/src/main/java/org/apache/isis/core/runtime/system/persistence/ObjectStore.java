@@ -23,13 +23,11 @@ import javax.jdo.PersistenceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
@@ -40,7 +38,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class ObjectStore implements DebuggableWithTitle, SessionScopedComponent {
+public class ObjectStore implements DebuggableWithTitle {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectStore.class);
 
@@ -79,7 +77,7 @@ public class ObjectStore implements DebuggableWithTitle, SessionScopedComponent 
 
     //region > open, close
 
-    public void open() {
+    public void objectStoreOpen() {
         persistenceSession.ensureNotOpened();
 
         this.persistenceManager = applicationComponents.createPersistenceManager();
@@ -90,13 +88,13 @@ public class ObjectStore implements DebuggableWithTitle, SessionScopedComponent 
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
      * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
-     * {@link ObjectStore#commitJdoTransaction() commits the underlying
+     * {@link PersistenceSession#commitJdoTransaction() commits the underlying
      * JDO transaction}.
      *
      * <p>
      * The corresponding DataNucleus entity is then closed.
      */
-    public void close() {
+    public void objectStoreClose() {
         ensureOpened();
         ensureThatState(persistenceManager, is(notNullValue()));
 

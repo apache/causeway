@@ -129,8 +129,8 @@ public class PersistenceSessionTest {
         
         context.checking(new Expectations() {
             {
-                ignoring(mockObjectStore).open();
-                ignoring(mockObjectStore).close();
+                ignoring(mockObjectStore).objectStoreOpen();
+                ignoring(mockObjectStore).objectStoreClose();
                 ignoring(mockConfiguration);
 
                 ignoring(createObjectCommand);
