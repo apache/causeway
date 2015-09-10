@@ -35,7 +35,6 @@ import com.google.common.collect.Maps;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 
@@ -271,17 +270,9 @@ public class IsisLifecycleListener2
 
     private String logString(Phase phase, LoggingLocation location, InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        final AdapterManager adapterManager = getAdapterManager();
-        final ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
+        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
         return phase + " " + location.prefix + " " + LifecycleEventType.lookup(event.getEventType()) + ": oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     }
 
     
-    // /////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////
-
-    protected AdapterManager getAdapterManager() {
-        return persistenceSession.getAdapterManager();
-    }
 }
