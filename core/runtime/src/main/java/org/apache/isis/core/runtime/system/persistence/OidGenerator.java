@@ -81,10 +81,11 @@ public class OidGenerator implements DebuggableWithTitle {
 
     //endregion
 
-    //region > helpers
+    //region > helpers: newIdentifier
 
     enum Type {
-        TRANSIENT, PERSISTENT
+        TRANSIENT,
+        PERSISTENT
     }
 
     private RootOid newIdentifier(final Object pojo, final OidGenerator.Type type) {
@@ -139,7 +140,6 @@ public class OidGenerator implements DebuggableWithTitle {
     @Override
     public void debugData(final DebugBuilder debug) {
     }
-
 
     @Override
     public String debugTitle() {

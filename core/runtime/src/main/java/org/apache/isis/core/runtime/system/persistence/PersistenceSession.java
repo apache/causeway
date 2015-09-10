@@ -177,7 +177,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // sub-components
 
         this.oidMarshaller = new OidMarshaller();
-        this.frameworkSynchronizer = new FrameworkSynchronizer();
+        this.frameworkSynchronizer = new FrameworkSynchronizer(this, authenticationSession);
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);

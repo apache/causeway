@@ -44,17 +44,28 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallback
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class FrameworkSynchronizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameworkSynchronizer.class);
 
-    public FrameworkSynchronizer() {
+    private final PersistenceSession persistenceSession;
+    private final AuthenticationSession authenticationSession;
+    private ServicesInjectorSpi servicesInjector;
+
+    public FrameworkSynchronizer(
+            final PersistenceSession persistenceSession,
+            final AuthenticationSession authenticationSession) {
+        this.persistenceSession = persistenceSession;
+        this.authenticationSession = authenticationSession;
+
+        this.servicesInjector = getPersistenceSession().getServicesInjector();
+
     }
-    
+
     /**
      * Categorises where called from.
      * 
@@ -84,7 +95,7 @@ public class FrameworkSynchronizer {
                 
                 // need to do eagerly, because (if a viewModel then) a
                 // viewModel's #viewModelMemento might need to use services 
-                getPersistenceSession().getServicesInjector().injectServicesInto(pojo);
+                servicesInjector.injectServicesInto(pojo);
                 
                 final Version datastoreVersion = getVersionIfAny(pc);
                 
@@ -381,6 +392,14 @@ public class FrameworkSynchronizer {
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
 
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSession;
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return persistenceSession;
+    }
+
     protected AdapterManagerDefault getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
     }
@@ -389,20 +408,12 @@ public class FrameworkSynchronizer {
         return getPersistenceSession().getOidGenerator();
     }
 
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return IsisContext.getAuthenticationSession();
+    protected PersistenceManager getJdoPersistenceManager() {
+        return getPersistenceSession().getPersistenceManager();
     }
 
     protected IsisTransaction getCurrentTransaction() {
-        return IsisContext.getCurrentTransaction();
-    }
-
-    protected PersistenceManager getJdoPersistenceManager() {
-        return getPersistenceSession().getPersistenceManager();
+        return persistenceSession.getTransactionManager().getTransaction();
     }
 
 }
