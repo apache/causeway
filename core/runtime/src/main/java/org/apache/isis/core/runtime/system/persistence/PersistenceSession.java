@@ -546,47 +546,15 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
     //endregion
 
-    //region > loadObject, reload
+    //region > loadObject
+
     /**
-     * Loads the object identified by the specified {@link RootOid} from the
-     * persisted set of objects.
-     */
-    public ObjectAdapter loadObject(final RootOid oid) {
-        
-        // REVIEW: 
-        // this method does not account for the oid possibly being a view model
-        // alternatively, can call getAdapterManager().adapterFor(oid); this code
-        // delegates to the PojoRecreator which *does* take view models into account
-        //
-        // it's possible, therefore, that existing callers to this method (the Scimpi viewer)
-        // could be refactored to use getAdapterManager().adapterFor(...)
-        ensureThatArg(oid, is(notNullValue()));
-
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
-        if (adapter != null) {
-            return adapter;
-        }
-
-        return loadMappedObjectFromObjectStore(oid);
-    }
-
-    private ObjectAdapter loadMappedObjectFromObjectStore(final RootOid oid) {
-        final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(
-                new TransactionalClosureWithReturn<ObjectAdapter>() {
-                    @Override
-                    public ObjectAdapter execute() {
-                        return loadInstanceAndAdapt(oid);
-                    }
-                });
-        return adapter;
-    }
-
-    //endregion
-
-    //region > loadInstanceAndAdapt
-    /**
-     * Retrieves the object identified by the specified {@link RootOid} from the object
-     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by the adapter manager}.
+     * Loads the object identified by the specified {@link RootOid}.
+     *
+     * <p>
+     * That is, it retrieves the object identified by the specified {@link RootOid} from the object
+     * store, {@link AdapterManager#mapRecreatedPojo(org.apache.isis.core.metamodel.adapter.oid.Oid, Object) mapped by
+     * the adapter manager}.
      *
      * <p>The cache should be checked first and, if the object is cached,
      * the cached version should be returned. It is important that if this
@@ -623,23 +591,40 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * @throws org.apache.isis.core.runtime.persistence.ObjectNotFoundException
      *             when no object corresponding to the oid can be found
      */
-    public ObjectAdapter loadInstanceAndAdapt(final RootOid oid) {
-        ensureOpened();
-        ensureInTransaction();
+    public ObjectAdapter loadObject(final RootOid oid) {
+        
+        // REVIEW: 
+        // this method does not account for the oid possibly being a view model
+        // alternatively, can call getAdapterManager().adapterFor(oid); this code
+        // delegates to the PojoRecreator which *does* take view models into account
+        //
+        // it's possible, therefore, that existing callers to this method (the Scimpi viewer)
+        // could be refactored to use getAdapterManager().adapterFor(...)
+        ensureThatArg(oid, is(notNullValue()));
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("getObject; oid=" + oid);
+        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        if (adapter != null) {
+            return adapter;
         }
 
-        final Object pojo = loadPojo(oid);
-        return getAdapterManager().mapRecreatedPojo(oid, pojo);
+        return getTransactionManager().executeWithinTransaction(
+                new TransactionalClosureWithReturn<ObjectAdapter>() {
+                    @Override
+                    public ObjectAdapter execute() {
+                        if (LOG.isDebugEnabled()) {
+                            LOG.debug("getObject; oid=" + oid);
+                        }
+
+                        final Object pojo = loadPojo(oid);
+                        return getAdapterManager().mapRecreatedPojo(oid, pojo);
+                    }
+                });
     }
 
 
     //endregion
 
     //region > loadPojo
-
 
     public Object loadPojo(final RootOid rootOid) {
 
