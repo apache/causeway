@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackF
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class FrameworkSynchronizer {
@@ -223,43 +222,6 @@ public class FrameworkSynchronizer {
         }, calledFrom);
     }
 
-    public void preDirtyProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
-        withLogging(pojo, new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-                if (adapter == null) {
-                    // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
-                    // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
-                    // mapped.
-                    
-                    // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
-                    // DN would not be calling this callback if the pojo was not persistent.
-                    
-                    adapter = lazilyLoaded(pojo, CalledFrom.EVENT_PREDIRTY);
-                    if(adapter == null) {
-                        throw new RuntimeException("DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=[" +  pojo + "]");
-                    }
-                }
-                if(adapter.isTransient()) {
-                    // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
-                    // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
-                    // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
-                    // 
-                    // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
-                    // hasn't yet executed, so thinks that the adapter is still transient. 
-                    return;
-                }
-
-                CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-
-                final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
-                transaction.enlistUpdating(adapter);
-
-                ensureRootObject(pojo);
-            }
-        }, calledFrom);
-    }
 
 
     public ObjectAdapter lazilyLoaded(final Persistable pojo, CalledFrom calledFrom) {

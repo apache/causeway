@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -55,6 +56,7 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -1214,8 +1216,79 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     public void preDirtyProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
-        frameworkSynchronizer.preDirtyProcessingFor(pojo, calledFrom);
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                ObjectAdapter adapter = getAdapterFor(pojo);
+                if (adapter == null) {
+                    // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
+                    // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
+                    // mapped.
+
+                    // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
+                    // DN would not be calling this callback if the pojo was not persistent.
+
+                    adapter = frameworkSynchronizer.lazilyLoaded(pojo, FrameworkSynchronizer.CalledFrom.EVENT_PREDIRTY);
+                    if (adapter == null) {
+                        throw new RuntimeException(
+                                "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
+                                        + pojo + "]");
+                    }
+                }
+                if (adapter.isTransient()) {
+                    // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
+                    // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
+                    // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
+                    //
+                    // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
+                    // hasn't yet executed, so thinks that the adapter is still transient.
+                    return;
+                }
+
+                CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+
+                final IsisTransaction transaction = getCurrentTransaction();
+                transaction.enlistUpdating(adapter);
+
+                ensureRootObject(pojo);
+            }
+        }, calledFrom);
     }
+
+    private <T> T withLogging(Persistable pojo, Callable<T> runnable, FrameworkSynchronizer.CalledFrom calledFrom) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug(logString(calledFrom, LoggingLocation.ENTRY, pojo));
+        }
+        try {
+            return runnable.call();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug(logString(calledFrom, LoggingLocation.EXIT, pojo));
+            }
+        }
+    }
+
+    private void withLogging(Persistable pojo, final Runnable runnable, FrameworkSynchronizer.CalledFrom calledFrom) {
+        withLogging(pojo, new Callable<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+                runnable.run();
+                return null;
+            }
+
+        }, calledFrom);
+    }
+
+    private String logString(FrameworkSynchronizer.CalledFrom calledFrom, LoggingLocation location, Persistable pojo) {
+        final ObjectAdapter adapter = getAdapterFor(pojo);
+        // initial spaces just to look better in log when wrapped by IsisLifecycleListener...
+        return calledFrom.name() + " " + location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
+    }
+
+
     public void ensureRootObject(final Persistable pojo) {
         frameworkSynchronizer.ensureRootObject(pojo);
     }
