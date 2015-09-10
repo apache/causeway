@@ -418,31 +418,27 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
         
         try {
-            return instantiate(getCorrespondingClass());
+            final Class<?> cls = getCorrespondingClass();
+
+            if (Modifier.isAbstract(cls.getModifiers())) {
+                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+            }
+            final Object newInstance;
+            if (Modifier.isAbstract(cls.getModifiers())) {
+                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+            }
+            try {
+                newInstance = cls.newInstance();
+            } catch (final IllegalAccessException | InstantiationException e) {
+                throw new ObjectInstantiationException(e);
+            }
+
+            getDependencyInjector().injectServicesInto(newInstance);
+            return newInstance;
         } catch (final ObjectInstantiationException e) {
             throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
         }
     }
-
-    private <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
-
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-        }
-        final T newInstance;
-        if (Modifier.isAbstract(cls.getModifiers())) {
-            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-        }
-        try {
-            newInstance = cls.newInstance();
-        } catch (final IllegalAccessException | InstantiationException e) {
-            throw new ObjectInstantiationException(e);
-        }
-
-        getDependencyInjector().injectServicesInto(newInstance);
-        return newInstance;
-    }
-
 
     /**
      * REVIEW: does this behaviour live best here?  Not that sure that it does...
