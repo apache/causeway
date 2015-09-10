@@ -54,7 +54,7 @@ public class DomainObjectContainerResolve {
         if(adapter == null) {
             return null;
         }
-        getPersistenceSession().resolveImmediately(adapter);
+        getPersistenceSession().refreshRootInTransaction(adapter);
         return adapter.getObject();
     }
 
@@ -81,7 +81,7 @@ public class DomainObjectContainerResolve {
 
     public void resolve(final Object parent) {
         final ObjectAdapter adapter = adapterFor(parent);
-        getPersistenceSession().resolveImmediately(adapter);
+        getPersistenceSession().refreshRootInTransaction(adapter);
     }
 
     public void resolve(final Object parent, final Object field) {

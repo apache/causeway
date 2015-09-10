@@ -706,19 +706,15 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     //endregion
 
-    //region > resolveImmediately, resolveField
+    //region > refreshRootInTransaction, refreshRoot
 
     /**
      * Re-initialises the fields of an object. If the object is unresolved then
      * the object's missing data should be retrieved from the persistence
      * mechanism and be used to set up the value objects and associations.
      */
-    public void resolveImmediately(final ObjectAdapter adapter) {
+    public void refreshRootInTransaction(final ObjectAdapter adapter) {
         Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-        resolveImmediatelyInTransaction(adapter);
-    }
-
-    private void resolveImmediatelyInTransaction(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void preExecute() {
@@ -762,10 +758,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         });
     }
 
-    //endregion
-
-
-    //region > refreshRoot
     /**
      * Not API; provides the ability to force a reload (refresh in JDO terms)
      * of the domain object wrapped in the {@link ObjectAdapter}.
