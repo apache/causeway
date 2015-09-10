@@ -94,7 +94,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -1488,10 +1487,17 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return calledFrom.name() + " " + location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     }
 
-
+    /**
+     * makes sure the entity is known to Isis and is a root
+     * @param pojo
+     */
     public void ensureRootObject(final Persistable pojo) {
-        frameworkSynchronizer.ensureRootObject(pojo);
+        final Oid oid = adapterFor(pojo).getOid();
+        if (!(oid instanceof RootOid)) {
+            throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
+        }
     }
+
     //endregion
 
 }
