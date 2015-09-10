@@ -200,7 +200,7 @@ public class PojoAdapterBuilder {
         final RootOid rootOid = persistence.createOid(objectSpecId, identifier);
         final Oid oid = type.oidFor(rootOid, objectSpecId, aggregatedId);
         final PojoAdapter pojoAdapter = new PojoAdapter(pojo, oid, authenticationSession, localization,
-                specificationLoader, objectAdapterLookup) {
+                specificationLoader, persistenceSession) {
             @Override
             public ObjectSpecification getSpecification() { return objectSpec != null? objectSpec: super.getSpecification(); }
             @Override

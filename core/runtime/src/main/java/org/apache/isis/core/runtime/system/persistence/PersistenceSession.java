@@ -127,7 +127,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
 
-    //region > constructor, fields
+    //region > constructor, fields, finalize()
     private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
@@ -201,6 +201,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        LOG.debug("finalizing persistence session");
     }
 
     //endregion
@@ -494,7 +500,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
 
-        final List<ObjectAdapter> instances = getTransactionManager().executeWithinTransaction(
+        final List<ObjectAdapter> instances = transactionManager.executeWithinTransaction(
                 new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
                     @Override
                     public List<ObjectAdapter> execute() {
@@ -540,23 +546,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
 
-
-
     //endregion
 
-    //region > Services
-
-    /**
-     * Returns the OID for the adapted service. This allows a service object to
-     * be given the same OID that it had when it was created in a different
-     * session.
-     */
-    protected RootOid getOidForService(final ObjectSpecification serviceSpec) {
-        final ObjectSpecId serviceSpecId = serviceSpec.getSpecId();
-        final RootOid oid = this.registeredServices.get(serviceSpecId);
-        return oid;
-    }
-
+    //region > getServices, getService
 
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
@@ -575,6 +567,17 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
 
         return serviceAdapter;
+    }
+
+    /**
+     * Returns the OID for the adapted service. This allows a service object to
+     * be given the same OID that it had when it was created in a different
+     * session.
+     */
+    private RootOid getOidForService(final ObjectSpecification serviceSpec) {
+        final ObjectSpecId serviceSpecId = serviceSpec.getSpecId();
+        final RootOid oid = this.registeredServices.get(serviceSpecId);
+        return oid;
     }
 
     //endregion
@@ -631,11 +634,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return !installFixtures;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-        LOG.debug("finalizing persistence session");
-    }
     //endregion
 
     //region > loadObject
@@ -694,12 +692,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // could be refactored to use getAdapterManager().adapterFor(...)
         ensureThatArg(oid, is(notNullValue()));
 
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter adapter = adapterManager.getAdapterFor(oid);
         if (adapter != null) {
             return adapter;
         }
 
-        return getTransactionManager().executeWithinTransaction(
+        return transactionManager.executeWithinTransaction(
                 new TransactionalClosureWithReturn<ObjectAdapter>() {
                     @Override
                     public ObjectAdapter execute() {
@@ -708,7 +706,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                         }
 
                         final Object pojo = loadPojo(oid);
-                        return getAdapterManager().mapRecreatedPojo(oid, pojo);
+                        return adapterManager.mapRecreatedPojo(oid, pojo);
                     }
                 });
     }
@@ -899,15 +897,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("destroyObject " + adapter);
         }
-        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
-
+        transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
                 final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
-                getTransactionManager().addCommand(command);
+                transactionManager.addCommand(command);
             }
-
-
         });
     }
 
@@ -934,7 +929,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * </p>
      *
      */
-    public CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
+    private CreateObjectCommand newCreateObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInSession();
 
@@ -951,9 +946,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         ensureThatContext(IsisContext.inSession(), is(true));
     }
 
-
-
-    public DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
+    private DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInSession();
 

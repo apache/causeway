@@ -29,10 +29,9 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
-import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -43,7 +42,7 @@ import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -53,23 +52,26 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private final static Logger LOG = LoggerFactory.getLogger(PojoAdapter.class);
 
-    private static final int INCOMPLETE_COLLECTION = -1;
+    //region > Constructor, fields, finalizer
 
+    private final AuthenticationSession authenticationSession;
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
     private final Localization localization;
-    
+    private final PersistenceSession persistenceSession;
+
+    /**
+     * can be {@link #replacePojo(Object) replace}d.
+     */
     private Object pojo;
+    /**
+     * can be {@link #replaceOid(Oid) replace}d.
+     */
     private Oid oid;
 
+    /**
+     * only for standalone or parented collections.
+     */
     private ElementSpecificationProvider elementSpecificationProvider;
-
-    private AuthenticationSession authenticationSession;
-
-
-    // ///////////////////////////////////////////////////////////////////
-    // Constructor, finalizer
-    // ///////////////////////////////////////////////////////////////////
 
     public PojoAdapter(
             final Object pojo,
@@ -77,12 +79,13 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final AuthenticationSession authenticationSession,
             final Localization localization,
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager) {
+            final PersistenceSession persistenceSession) {
+
+        this.persistenceSession = persistenceSession;
 
         Ensure.ensureThatArg(specificationLoader, is(notNullValue()));
 
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
         this.localization = localization;
         this.authenticationSession = authenticationSession;
         
@@ -92,19 +95,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         this.pojo = pojo;
         this.oid = oid;
     }
+    //endregion
 
-    
-    // ///////////////////////////////////////////////////////////////////
-    // Specification
-    // ///////////////////////////////////////////////////////////////////
-
-    @Override
-    protected ObjectSpecification loadSpecification() {
-        final Class<?> aClass = getObject().getClass();
-        final ObjectSpecification specification = specificationLoader.loadSpecification(aClass);
-        //String defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
-        return specification;
-    }
+    //region > getSpecification
 
     /**
      * Downcasts {@link #getSpecification()}.
@@ -114,10 +107,16 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return (ObjectSpecification) super.getSpecification();
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Object, replacePojo
-    // ///////////////////////////////////////////////////////////////////
+    @Override
+    protected ObjectSpecification loadSpecification() {
+        final Class<?> aClass = getObject().getClass();
+        final ObjectSpecification specification = specificationLoader.loadSpecification(aClass);
+        return specification;
+    }
 
+    //endregion
+
+    //region > getObject, replacePojo
     @Override
     public Object getObject() {
         return pojo;
@@ -132,17 +131,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public void replacePojo(final Object pojo) {
         this.pojo = pojo;
     }
+    //endregion
 
-
-
-
-
-
-    
-    // ///////////////////////////////////////////////////////////////////
-    // Oid
-    // ///////////////////////////////////////////////////////////////////
-
+    //region > getOid, replaceOid
     @Override
     public Oid getOid() {
         return oid;
@@ -153,6 +144,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         Ensure.ensureThatArg(oid, is(notNullValue())); // values have no oid, so cannot be replaced 
         this.oid = persistedOid;
     }
+    //endregion
+
+    //region > isParentedCollection, isValue
 
     @Override
     public boolean isParentedCollection() {
@@ -163,6 +157,10 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     public boolean isValue() {
         return oid == null;
     }
+
+    //endregion
+
+    //region > isTransient, representsPersistent, isDestroyed
 
     @Override
     public boolean isTransient() {
@@ -214,7 +212,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return false;
     }
+    //endregion
 
+    //region > getAggregateRoot
     @Override
     public ObjectAdapter getAggregateRoot() {
         if(!isParentedCollection()) {
@@ -222,20 +222,16 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         ParentedCollectionOid collectionOid = (ParentedCollectionOid) oid;
         final Oid rootOid = collectionOid.getRootOid();
-        ObjectAdapter rootadapter = adapterManager.getAdapterFor(rootOid);
+        ObjectAdapter rootadapter = persistenceSession.getAdapterFor(rootOid);
         if(rootadapter == null) {
-            final Oid parentOidNowPersisted = getPersistenceSession().remappedFrom(rootOid);
-            rootadapter = adapterManager.getAdapterFor(parentOidNowPersisted);
+            final Oid parentOidNowPersisted = persistenceSession.remappedFrom(rootOid);
+            rootadapter = persistenceSession.getAdapterFor(parentOidNowPersisted);
         }
         return rootadapter;
     }
+    //endregion
 
-    
-
-    // ///////////////////////////////////////////////////////////////////
-    // Version 
-    // (nb: delegates to parent if parented)
-    // ///////////////////////////////////////////////////////////////////
+    //region > getVersion, setVersion, checkLock
 
     @Override
     public Version getVersion() {
@@ -264,7 +260,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             
             if(ConcurrencyChecking.isCurrentlyEnabled()) {
                 LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
-                final String currentUser = getAuthenticationSession().getUserName();
+                final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
             } else {
                 LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
@@ -289,10 +285,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return version == null || otherVersion == null || otherVersion.different(version);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // Title, toString
-    // ///////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > titleString
     /**
      * Returns the title from the underlying business object.
      * 
@@ -409,10 +404,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         }
         return "S"; // standalone adapter (value)
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////
-    // IconName
-    // ///////////////////////////////////////////////////////////////////
+    //region > iconName
 
     /**
      * Returns the name of the icon to use to represent this object.
@@ -422,9 +416,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return getSpecification().getIconName(this);
     }
 
-    // ///////////////////////////////////////////////////////////////////
-    // ElementType
-    // ///////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > elementSpecification
 
     @Override
     public ObjectSpecification getElementSpecification() {
@@ -434,14 +428,21 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         return elementSpecificationProvider.getElementType();
     }
 
+    /**
+     * Called whenever there is a {@link org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet} present.
+     *
+     * <p>
+     *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
+     *     (is copied by the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault adapter manager} when {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
+     * </p>
+     */
     @Override
     public void setElementSpecificationProvider(final ElementSpecificationProvider elementSpecificationProvider) {
         this.elementSpecificationProvider = elementSpecificationProvider;
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
+    //region > getInstance (unsupported for this impl)
 
     /**
      * Not supported by this implementation.
@@ -451,18 +452,6 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         throw new UnsupportedOperationException();
     }
 
-
-    
-    ////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    ////////////////////////////////////////////////////////////////////
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
+    //endregion
 
 }

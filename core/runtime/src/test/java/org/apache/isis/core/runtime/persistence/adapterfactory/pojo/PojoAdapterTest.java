@@ -70,7 +70,7 @@ public class PojoAdapterTest {
         domainObject = new RuntimeTestPojo();
         
         adapter = new PojoAdapter(domainObject, RootOid.create(ObjectSpecId.of("CUS"), "1"), mockAuthenticationSession,
-                mockLocalization, mockSpecificationLoader, mockObjectAdapterLookup);
+                mockLocalization, mockSpecificationLoader, persistenceSession);
         adapter.setVersion(mockVersion);
         
         allowUnimportantMethodCallsOn(mockVersion);

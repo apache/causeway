@@ -646,7 +646,7 @@ public class AdapterManagerDefault implements AdapterManager,
         return new PojoAdapter(
                 pojo, oid,
                 authenticationSession, getLocalization(),
-                specificationLoader, this);
+                specificationLoader, persistenceSession);
     }
 
     //endregion
