@@ -714,14 +714,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * mechanism and be used to set up the value objects and associations.
      */
     public void resolveImmediately(final ObjectAdapter adapter) {
-        // synchronize on the current session because getting race
-        // conditions, I think between different UI threads when running
-        // with DnD viewer + in-memory object store +
-        // cglib bytecode enhancement
-        synchronized (getAuthenticationSession()) {
-            Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-            resolveImmediatelyInTransaction(adapter);
-        }
+        Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
+        resolveImmediatelyInTransaction(adapter);
     }
 
     private void resolveImmediatelyInTransaction(final ObjectAdapter adapter) {
