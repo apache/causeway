@@ -1177,6 +1177,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     // endregion
 
+    //region > ServicesInjector delegate methods
+
+    public void injectServicesInto(final Object domainObject) {
+        servicesInjector.injectInto(domainObject);
+    }
+
+    //endregion
+    
 }
 
 

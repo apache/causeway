@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallback
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class FrameworkSynchronizer {
@@ -51,15 +50,12 @@ public class FrameworkSynchronizer {
 
     private final PersistenceSession persistenceSession;
     private final AuthenticationSession authenticationSession;
-    private ServicesInjectorSpi servicesInjector;
 
     public FrameworkSynchronizer(
             final PersistenceSession persistenceSession,
             final AuthenticationSession authenticationSession) {
         this.persistenceSession = persistenceSession;
         this.authenticationSession = authenticationSession;
-
-        this.servicesInjector = getPersistenceSession().getServicesInjector();
 
     }
 
@@ -92,7 +88,7 @@ public class FrameworkSynchronizer {
                 
                 // need to do eagerly, because (if a viewModel then) a
                 // viewModel's #viewModelMemento might need to use services 
-                servicesInjector.injectServicesInto(pojo);
+                persistenceSession.injectServicesInto(pojo);
                 
                 final Version datastoreVersion = getVersionIfAny(pc);
                 
