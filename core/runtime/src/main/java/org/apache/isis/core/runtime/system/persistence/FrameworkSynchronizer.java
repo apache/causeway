@@ -22,7 +22,6 @@ import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
 import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
 
 import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
@@ -31,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -45,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class FrameworkSynchronizer {
@@ -100,7 +97,7 @@ public class FrameworkSynchronizer {
                 final Version datastoreVersion = getVersionIfAny(pc);
                 
                 final RootOid originalOid ;
-                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
                 if(adapter != null) {
                     ensureRootObject(pojo);
                     originalOid = (RootOid) adapter.getOid();
@@ -108,7 +105,7 @@ public class FrameworkSynchronizer {
                     final Version originalVersion = adapter.getVersion();
 
                     // sync the pojo held by the adapter with that just loaded
-                    getPersistenceSession().getAdapterManager() .remapRecreatedPojo(adapter, pojo);
+                    persistenceSession.remapRecreatedPojo(adapter, pojo);
                     
                     // since there was already an adapter, do concurrency check
                     // (but don't set abort cause if checking is suppressed through thread-local)
@@ -131,15 +128,15 @@ public class FrameworkSynchronizer {
                         }
                     }
                 } else {
-                    originalOid = getPersistenceSession().createPersistentOrViewModelOid(pojo);
+                    originalOid = persistenceSession.createPersistentOrViewModelOid(pojo);
                     
                     // it appears to be possible that there is already an adapter for this Oid, 
                     // ie from ObjectStore#resolveImmediately()
-                    adapter = getAdapterManager().getAdapterFor(originalOid);
+                    adapter = persistenceSession.getAdapterFor(originalOid);
                     if(adapter != null) {
-                        getPersistenceSession().getAdapterManager() .remapRecreatedPojo(adapter, pojo);
+                        persistenceSession.remapRecreatedPojo(adapter, pojo);
                     } else {
-                        adapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(originalOid, pojo);
+                        adapter = persistenceSession.mapRecreatedPojo(originalOid, pojo);
                         CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
                     }
                 }
@@ -162,7 +159,7 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
                 if(adapter == null) {
                     // not expected.
                     return;
@@ -203,15 +200,15 @@ public class FrameworkSynchronizer {
                     throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
                 }
 
-                final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
                 final RootOid isisOid = (RootOid) adapter.getOid();
 
 
                 if (isisOid.isTransient()) {
                     // persisting
-                    final RootOid persistentOid = getPersistenceSession().createPersistentOrViewModelOid(pojo);
+                    final RootOid persistentOid = persistenceSession.createPersistentOrViewModelOid(pojo);
 
-                    getPersistenceSession().getAdapterManager().remapAsPersistent(adapter, persistentOid);
+                    persistenceSession.remapAsPersistent(adapter, persistentOid);
 
                     CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
 
@@ -234,7 +231,7 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+                ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
                 if (adapter == null) {
                     // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
                     // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
@@ -273,11 +270,11 @@ public class FrameworkSynchronizer {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
-                if(getPersistenceSession().getJdoObjectId(pojo) == null) {
+                if(persistenceSession.getJdoObjectId(pojo) == null) {
                     return null;
                 }
-                final RootOid oid = getPersistenceSession().getOidGenerator().createPersistentOrViewModelOid(pojo);
-                final ObjectAdapter adapter = getPersistenceSession().getAdapterManager().mapRecreatedPojo(oid, pojo);
+                final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
+                final ObjectAdapter adapter = persistenceSession.mapRecreatedPojo(oid, pojo);
                 return adapter;
             }
         }, calledFrom);
@@ -288,7 +285,7 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+                ObjectAdapter adapter = persistenceSession.adapterFor(pojo);
                 
                 final IsisTransaction transaction = getCurrentTransaction();
                 transaction.enlistDeleting(adapter);
@@ -303,8 +300,8 @@ public class FrameworkSynchronizer {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
-                ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
-                if(adapter == null) {
+                ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
+                if (adapter == null) {
                     return;
                 }
 
@@ -352,8 +349,7 @@ public class FrameworkSynchronizer {
     }
     
     private String logString(CalledFrom calledFrom, LoggingLocation location, Persistable pojo) {
-        final AdapterManager adapterManager = getAdapterManager();
-        final ObjectAdapter adapter = adapterManager.getAdapterFor(pojo);
+        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
         // initial spaces just to look better in log when wrapped by IsisLifecycleListener...
         return calledFrom.name() + " " + location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     }
@@ -366,7 +362,7 @@ public class FrameworkSynchronizer {
 
     // make sure the entity is known to Isis and is a root
     void ensureRootObject(final Persistable pojo) {
-        final Oid oid = getAdapterManager().adapterFor(pojo).getOid();
+        final Oid oid = persistenceSession.adapterFor(pojo).getOid();
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
@@ -378,7 +374,7 @@ public class FrameworkSynchronizer {
 
     @SuppressWarnings("unused")
     private void ensureObjectNotLoaded(final Persistable pojo) {
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(pojo);
+        final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
         if(adapter != null) {
             final Oid oid = adapter.getOid();
             throw new IsisException(MessageFormat.format("Object is already mapped in Isis: oid={0}, for {1}", oid, pojo));
@@ -397,10 +393,6 @@ public class FrameworkSynchronizer {
 
     protected PersistenceSession getPersistenceSession() {
         return persistenceSession;
-    }
-
-    protected AdapterManagerDefault getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
     }
 
     protected IsisTransaction getCurrentTransaction() {

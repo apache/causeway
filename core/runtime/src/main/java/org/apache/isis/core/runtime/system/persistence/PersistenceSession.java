@@ -1153,6 +1153,30 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     // endregion
 
+    //region > AdapterManager delegate methods
+
+    public ObjectAdapter getAdapterFor(final Object pojo) {
+        return adapterManager.getAdapterFor(pojo);
+    }
+
+    public ObjectAdapter adapterFor(final Object pojo) {
+        return adapterManager.adapterFor(pojo);
+    }
+
+    public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
+        adapterManager.remapAsPersistent(adapter, hintRootOid);
+    }
+
+    public ObjectAdapter mapRecreatedPojo(final Oid oid, final Object recreatedPojo) {
+        return adapterManager.mapRecreatedPojo(oid, recreatedPojo);
+    }
+
+    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
+        adapterManager.remapRecreatedPojo(adapter, pojo);
+    }
+
+    // endregion
+
 }
 
 
