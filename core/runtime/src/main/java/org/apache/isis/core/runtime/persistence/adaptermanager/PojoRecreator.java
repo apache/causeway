@@ -23,11 +23,20 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PojoRecreator {
+
+    private final PersistenceSession persistenceSession;
+    private final SpecificationLoaderSpi specificationLoader;
+
+    public PojoRecreator(
+            final PersistenceSession persistenceSession,
+            final SpecificationLoaderSpi specificationLoader) {
+        this.persistenceSession = persistenceSession;
+        this.specificationLoader = specificationLoader;
+    }
 
     public Object recreatePojo(RootOid oid) {
         if(oid.isTransient() || oid.isViewModel()) {
@@ -75,11 +84,11 @@ public class PojoRecreator {
 
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
-        return IsisContext.getSpecificationLoader();
+        return specificationLoader;
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return persistenceSession;
     }
 
     protected ObjectStore getObjectStore() {

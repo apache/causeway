@@ -60,6 +60,7 @@ import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -132,7 +133,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
-        this.adapterManager = new AdapterManagerDefault();
+
+        final PojoRecreator pojoRecreator = new PojoRecreator(this, specificationLoader);
+        this.adapterManager = new AdapterManagerDefault(pojoRecreator);
         this.persistAlgorithm = new PersistAlgorithm();
         this.objectAdapterFactory = new PojoAdapterFactory(adapterManager, specificationLoader, authenticationSession);
 

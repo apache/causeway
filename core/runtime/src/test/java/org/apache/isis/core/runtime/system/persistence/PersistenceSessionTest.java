@@ -44,6 +44,7 @@ import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -149,7 +150,7 @@ public class PersistenceSessionTest {
         servicesInjector = new ServicesInjectorDefault(
                 Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
-        adapterManager = new AdapterManagerDefault();
+        adapterManager = new AdapterManagerDefault(new PojoRecreator(persistenceSession, mockSpecificationLoader));
         adapterFactory = new PojoAdapterFactory(adapterManager, mockSpecificationLoader, mockAuthenticationSession);
         persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockConfiguration,
                 mockSpecificationLoader, mockAuthenticationSession) {

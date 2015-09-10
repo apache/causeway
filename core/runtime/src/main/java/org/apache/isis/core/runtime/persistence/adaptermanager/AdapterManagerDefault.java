@@ -97,10 +97,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     // constructor
     // //////////////////////////////////////////////////////////////////
 
-    public AdapterManagerDefault() {
-        this(new PojoRecreator());
-    }
-
     /**
      * For object store implementations (eg JDO) that do not provide any mechanism
      * to allow transient objects to be reattached; can instead provide a
