@@ -113,6 +113,8 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
     public void setUp() throws Exception {
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
     }
 
     @After

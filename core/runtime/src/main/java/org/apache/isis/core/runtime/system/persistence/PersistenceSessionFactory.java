@@ -84,12 +84,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
             final ServicesInjectorSpi servicesInjector,
             final IsisConfiguration isisConfiguration,
             final RuntimeContextFromSession runtimeContext) {
-
-        ensureThatState(deploymentType, is(notNullValue()));
-        ensureThatState(servicesInjector, is(notNullValue()));
-        ensureThatState(isisConfiguration, is(not(nullValue())));
-        ensureThatState(runtimeContext, is(not(nullValue())));
-
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
         this.servicesInjector = servicesInjector;

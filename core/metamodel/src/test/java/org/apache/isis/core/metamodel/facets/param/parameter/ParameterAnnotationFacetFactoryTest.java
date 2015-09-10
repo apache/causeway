@@ -76,6 +76,9 @@ public class ParameterAnnotationFacetFactoryTest extends AbstractFacetFactoryJUn
     public void setUp() throws Exception {
         facetFactory = new ParameterAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+
     }
 
     @After

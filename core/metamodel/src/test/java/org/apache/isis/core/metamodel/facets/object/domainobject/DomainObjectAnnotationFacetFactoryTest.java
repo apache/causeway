@@ -74,6 +74,9 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
     public void setUp() throws Exception {
         facetFactory = new DomainObjectAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+
     }
 
     @After

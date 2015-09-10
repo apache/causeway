@@ -156,7 +156,7 @@ class PoReader extends PoAbstract {
         // 3. fallback
         // so this message is only ever displayed if the locale isn't using fallback (ie a translation is genuinely missing)
         final Boolean usesFallback = usesFallbackByLocale.get(targetLocale);
-        if(!usesFallback) {
+        if(usesFallback == null || !usesFallback) {
             LOG.warn("No translation found for: " + key);
         }
 

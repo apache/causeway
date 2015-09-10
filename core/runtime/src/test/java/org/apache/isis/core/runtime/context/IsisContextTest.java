@@ -64,9 +64,6 @@ public class IsisContextTest {
     protected AuthorizationManager mockAuthorizationManager;
 
     @Mock
-    private AuthenticationSession mockAuthenticationSession;
-
-    @Mock
     protected DomainObjectContainer mockContainer;
     
     protected OidMarshaller oidMarshaller;
@@ -89,20 +86,13 @@ public class IsisContextTest {
         
         oidMarshaller = new OidMarshaller();
         
-        context.checking(new Expectations() {
-            {
-                allowing(mockPersistenceSessionFactory).createPersistenceSession(mockSpecificationLoader,                         mockAuthenticationSession);
-                will(returnValue(mockPersistenceSession));
-                
-                ignoring(mockPersistenceSession);
-                ignoring(mockSpecificationLoader);
-                ignoring(mockPersistenceSessionFactory);
-                ignoring(mockAuthenticationManager);
-                ignoring(mockAuthorizationManager);
-
-                ignoring(mockContainer);
-            }
-        });
+        context.ignoring(
+                mockPersistenceSession,
+                mockSpecificationLoader,
+                mockAuthenticationManager,
+                mockAuthorizationManager,
+                mockContainer)
+        ;
 
         sessionFactory = new IsisSessionFactory(DeploymentType.UNIT_TESTING, configuration, mockSpecificationLoader, mockAuthenticationManager, mockAuthorizationManager, mockPersistenceSessionFactory);
         authSession = new SimpleSession("tester", Collections.<String>emptyList());
@@ -120,31 +110,27 @@ public class IsisContextTest {
     @Test
     public void getConfiguration() {
         IsisContextStatic.createRelaxedInstance(sessionFactory);
+
         Assert.assertEquals(configuration, IsisContext.getConfiguration());
     }
 
     @Test
     public void openSession_getSpecificationLoader() {
         IsisContextStatic.createRelaxedInstance(sessionFactory);
+
+        // expecting
+        context.checking(new Expectations() {{
+            one(mockPersistenceSessionFactory)
+                    .createPersistenceSession(mockSpecificationLoader, authSession);
+            will(returnValue(mockPersistenceSession));
+        }});
+
         IsisContext.openSession(authSession);
 
         Assert.assertEquals(mockSpecificationLoader, IsisContext.getSpecificationLoader());
-    }
-
-    @Test
-    public void openSession_getAuthenticationLoader() {
-        IsisContextStatic.createRelaxedInstance(sessionFactory);
-        IsisContext.openSession(authSession);
-
         Assert.assertEquals(authSession, IsisContext.getAuthenticationSession());
-    }
-    
-    @Test
-    public void openSession_getPersistenceSession() {
-        IsisContextStatic.createRelaxedInstance(sessionFactory);
-        IsisContext.openSession(authSession);
-
-        Assert.assertSame(mockPersistenceSession, IsisContext.getPersistenceSession());
+        final PersistenceSession persistenceSession = IsisContext.getPersistenceSession();
+        Assert.assertNotNull(persistenceSession);
     }
 
 

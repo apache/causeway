@@ -27,6 +27,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.apache.isis.applib.services.i18n.LocaleProvider;
+import org.apache.isis.applib.services.i18n.TranslationsResolver;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -40,7 +41,8 @@ public class PoReaderTest {
 
     @Mock
     TranslationServicePo mockTranslationServicePo;
-
+    @Mock
+    TranslationsResolver mockTranslationsResolver;
     @Mock
     LocaleProvider mockLocaleProvider;
 
@@ -51,6 +53,9 @@ public class PoReaderTest {
         context.checking(new Expectations() {{
             allowing(mockTranslationServicePo).getLocaleProvider();
             will(returnValue(mockLocaleProvider));
+
+            allowing(mockTranslationServicePo).getTranslationsResolver();
+            will(returnValue(mockTranslationsResolver));
 
             allowing(mockLocaleProvider).getLocale();
             will(returnValue(Locale.UK));

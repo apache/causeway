@@ -28,6 +28,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -59,6 +61,10 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     protected MethodRemover mockMethodRemover;
     @Mock
     protected FacetHolder mockFacetHolder;
+    @Mock
+    protected ServicesInjector mockServicesInjector;
+    @Mock
+    protected TranslationService mockTranslationService;
 
     @Mock
     protected IsisConfiguration mockConfiguration;
@@ -100,6 +106,11 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
         context.checking(new Expectations() {{
             allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
             will(returnValue(DeploymentCategory.PRODUCTION));
+        }});
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
         }});
 
         facetHolder = new AbstractFacetFactoryTest.IdentifiedHolderImpl(Identifier.propertyOrCollectionIdentifier(Customer.class, "firstName"));

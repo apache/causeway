@@ -182,26 +182,10 @@ public class OidMarshallerTest_unmarshal {
 
 
     @Test(expected=IllegalArgumentException.class)
-    public void root_forCollection_oidStr() {
-        oidMarshaller.unmarshal("CUS:123~NME:123$items", RootOid.class);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
-    public void root_forAggregated_oidStr() {
-        oidMarshaller.unmarshal("CUS:123~NME:123", RootOid.class);
-    }
-
-    @Test(expected=IllegalArgumentException.class)
     public void collection_forRoot_oidStr() {
         oidMarshaller.unmarshal("CUS:123", ParentedCollectionOid.class);
     }
 
-    @Test(expected=IllegalArgumentException.class)
-    public void collection_forAggregated_oidStr() {
-        oidMarshaller.unmarshal("CUS:123~NME:123", ParentedCollectionOid.class);
-    }
-
-    
     @Test(expected=IllegalArgumentException.class)
     public void badPattern() {
         oidMarshaller.unmarshal("xxx", RootOid.class);

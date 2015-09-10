@@ -108,15 +108,5 @@ public class ObjectStoreTransactionManager_StartTransactionTest {
         assertThat(transactionManager.getTransactionLevel(), is(1));
     }
 
-    @Test
-    public void startTransactionCallsStartTransactionOnObjectStore() throws Exception {
-        context.checking(new Expectations() {
-            {
-                one(mockObjectStore).startTransaction();
-            }
-        });
-
-        transactionManager.startTransaction();
-    }
 
 }

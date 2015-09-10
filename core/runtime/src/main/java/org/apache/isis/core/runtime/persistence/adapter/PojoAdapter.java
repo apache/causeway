@@ -78,6 +78,9 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             final Localization localization,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager) {
+
+        Ensure.ensureThatArg(specificationLoader, is(notNullValue()));
+
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.localization = localization;
@@ -97,7 +100,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     @Override
     protected ObjectSpecification loadSpecification() {
-        final ObjectSpecification specification = specificationLoader.loadSpecification(getObject().getClass());
+        final Class<?> aClass = getObject().getClass();
+        final ObjectSpecification specification = specificationLoader.loadSpecification(aClass);
         //String defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
         return specification;
     }

@@ -23,12 +23,14 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionInteraction;
@@ -125,6 +127,9 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
         facetFactory = new ActionAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+
 
         actionMethod = findMethod(Customer.class, "someAction");
     }

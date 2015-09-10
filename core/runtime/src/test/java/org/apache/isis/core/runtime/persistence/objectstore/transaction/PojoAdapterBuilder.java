@@ -113,11 +113,6 @@ public class PojoAdapterBuilder {
         return new PojoAdapterBuilder();
     }
 
-    public PojoAdapterBuilder withAggregatedId(String aggregatedId) {
-        this.aggregatedId = aggregatedId;
-        return this;
-    }
-    
     public PojoAdapterBuilder withIdentifier(String identifier) {
         this.identifier = identifier;
         return this;

@@ -19,17 +19,29 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import junit.framework.TestCase;
-
 import java.lang.reflect.Method;
 import java.util.List;
+
+import org.jmock.Expectations;
+import org.junit.Rule;
+
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
+
+import junit.framework.TestCase;
 
 public abstract class AbstractFacetFactoryTest extends TestCase {
+
+    @Rule
+    public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     public static class Customer {
 
@@ -43,6 +55,10 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
             this.firstName = firstName;
         }
     }
+
+    protected ServicesInjector mockServicesInjector;
+    protected TranslationService mockTranslationService;
+    protected DeploymentCategoryProvider mockDeploymentCategoryProvider;
 
     protected ProgrammableReflector programmableReflector;
     protected ProgrammableMethodRemover methodRemover;
@@ -73,6 +89,22 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         facetedMethodParameter = new FacetedMethodParameter(facetedMethod.getOwningType(), facetedMethod.getMethod(), String.class);
         methodRemover = new ProgrammableMethodRemover();
+
+        mockDeploymentCategoryProvider = context.mock(DeploymentCategoryProvider.class);
+        mockServicesInjector = context.mock(ServicesInjector.class);
+        mockTranslationService = context.mock(TranslationService.class);
+
+        context.checking(new Expectations() {{
+            allowing(mockDeploymentCategoryProvider).getDeploymentCategory();
+            will(returnValue(DeploymentCategory.PRODUCTION));
+        }});
+
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).lookupService(TranslationService.class);
+            will(returnValue(mockTranslationService));
+        }});
+
+
     }
 
     @Override

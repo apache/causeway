@@ -46,6 +46,9 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         super.setUp();
         facetFactory = new ActionAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
+        facetFactory.setServicesInjector(mockServicesInjector);
+        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -150,10 +153,13 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactoryForChoices.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForChoices.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
         facetFactoryForDisable.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
+        facetFactoryForDisable.setServicesInjector(mockServicesInjector);
+        facetFactoryForDisable.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
 
         class Customer {
             @SuppressWarnings("unused")

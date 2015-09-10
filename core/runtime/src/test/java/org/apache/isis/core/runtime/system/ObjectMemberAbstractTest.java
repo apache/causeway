@@ -19,11 +19,13 @@
 
 package org.apache.isis.core.runtime.system;
 
+import org.datanucleus.enhancement.Persistable;
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -46,7 +48,9 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
@@ -54,14 +58,14 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdap
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ObjectMemberAbstractTest {
 
@@ -77,6 +81,13 @@ public class ObjectMemberAbstractTest {
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     private AuthenticationSession mockAuthenticationSession;
+    @Mock
+    private SpecificationLoader mockSpecificationLoader;
+    @Mock
+    private ObjectSpecification mockSpecForCustomer;
+
+    @Mock
+    private Persistable mockPersistable;
 
     @Before
     public void setUp() throws Exception {
@@ -86,10 +97,35 @@ public class ObjectMemberAbstractTest {
             allowing(mockAuthenticationSessionProvider).getAuthenticationSession();
             will(returnValue(mockAuthenticationSession));
         }});
-        persistentAdapter = PojoAdapterBuilder.create().build();
-        transientAdapter = PojoAdapterBuilder.create().with(Persistence.TRANSIENT).build();
+        persistentAdapter = PojoAdapterBuilder.create()
+                                .with(mockSpecificationLoader)
+                                .withOid("CUS|1")
+                                .withPojo(mockPersistable)
+                                .build();
+        transientAdapter = PojoAdapterBuilder.create()
+                                .with(mockSpecificationLoader)
+                                .with(Persistence.TRANSIENT)
+                                .withPojo(mockPersistable)
+                                .build();
 
         testMember = new ObjectMemberAbstractImpl("id");
+
+        context.checking(new Expectations() {{
+            allowing(mockSpecificationLoader).lookupBySpecId(ObjectSpecId.of("CUS"));
+            will(returnValue(mockSpecForCustomer));
+            allowing(mockSpecificationLoader).loadSpecification(with(any(Class.class)));
+            will(returnValue(mockSpecForCustomer));
+
+            allowing(mockSpecForCustomer).isService();
+            will(returnValue(false));
+
+            allowing(mockSpecForCustomer).isViewModel();
+            will(returnValue(false));
+
+            allowing(mockSpecForCustomer).getShortIdentifier();
+            will(returnValue("Customer"));
+        }});
+
     }
 
     @Test
@@ -128,6 +164,15 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToOncePersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.ONCE_PERSISTED, Where.ANYWHERE, testMember){});
+
+        context.checking(new Expectations() {{
+            allowing(mockPersistable).dnIsPersistent();
+            will(returnValue(true));
+            allowing(mockPersistable).dnIsDeleted();
+            will(returnValue(false));
+        }});
+
+
         assertFalse(testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE).isAllowed());
     }
 
@@ -135,6 +180,15 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetPersistentAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
+
+        context.checking(new Expectations() {{
+            allowing(mockPersistable).dnIsPersistent();
+            will(returnValue(true));
+            allowing(mockPersistable).dnIsDeleted();
+            will(returnValue(false));
+        }});
+
+
         final Consent visible = testMember.isVisible(persistentAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertTrue(visible.isAllowed());
     }
@@ -143,7 +197,14 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenTargetTransientAndHiddenFacetSetToUntilPersisted() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstractImpl(When.UNTIL_PERSISTED, Where.ANYWHERE, testMember){});
-        
+
+        context.checking(new Expectations() {{
+            allowing(mockPersistable).dnIsPersistent();
+            will(returnValue(false));
+            allowing(mockPersistable).dnIsDeleted();
+            will(returnValue(false));
+        }});
+
         final Consent visible = testMember.isVisible(transientAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
         assertFalse(visible.isAllowed());
     }

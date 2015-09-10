@@ -25,10 +25,8 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.jmock.Expectations;
-import org.jmock.Sequence;
 import org.jmock.auto.Mock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -56,7 +54,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     @Mock
     private MessageBroker mockMessageBroker;
     @Mock
-    private TransactionalResource mockObjectStore;
+    private TransactionalResource mockTransactionalResource;
 
     private IsisTransactionManager transactionManager;
 
@@ -96,7 +94,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     @Test
     public void endTransactionDecrementsTransactionLevel() throws Exception {
         // setup
-        context.ignoring(mockObjectStore, mockPersistenceSession);
+        context.ignoring(mockTransactionalResource, mockPersistenceSession);
         transactionManager.startTransaction();
         transactionManager.startTransaction();
 
@@ -108,7 +106,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
     @Test
     public void endTransactionCommitsTransactionWhenLevelDecrementsDownToZero() throws Exception {
         // setup
-        context.ignoring(mockObjectStore);
+        context.ignoring(mockTransactionalResource, mockPersistenceSession);
         transactionManager.startTransaction();
 
         assertThat(transactionManager.getTransactionLevel(), is(1));
@@ -116,43 +114,6 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
         assertThat(transactionManager.getTransactionLevel(), is(0));
     }
 
-    @Test
-    public void startTransactionInteractsWithObjectStore() throws Exception {
-        // setup
-        context.ignoring(mockPersistenceSession);
 
-        context.checking(new Expectations() {
-            {
-                one(mockObjectStore).startTransaction();
-            }
-        });
-        transactionManager.startTransaction();
-
-    }
-
-    @Ignore // ISIS-1194
-    @Test
-    public void endTransactionInteractsWithObjectStore() throws Exception {
-        // setup
-        context.ignoring(mockPersistenceSession);
-
-        context.checking(new Expectations() {
-            {
-                final Sequence transactionOrdering = context.sequence("transactionOrdering");
-                oneOf(mockObjectStore).startTransaction();
-                inSequence(transactionOrdering);
-
-//                // flushed twice, once before publishing, once after
-//                exactly(3).of(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-//                inSequence(transactionOrdering);
-
-                oneOf(mockObjectStore).endTransaction();
-                inSequence(transactionOrdering);
-            }
-        });
-
-        transactionManager.startTransaction();
-        transactionManager.endTransaction();
-    }
 
 }
