@@ -224,21 +224,7 @@ public class FrameworkSynchronizer {
 
 
 
-    public ObjectAdapter lazilyLoaded(final Persistable pojo, CalledFrom calledFrom) {
-        return withLogging(pojo, new Callable<ObjectAdapter>() {
-            @Override
-            public ObjectAdapter call() {
-                if(persistenceSession.getJdoObjectId(pojo) == null) {
-                    return null;
-                }
-                final RootOid oid = persistenceSession.createPersistentOrViewModelOid(pojo);
-                final ObjectAdapter adapter = persistenceSession.mapRecreatedPojo(oid, pojo);
-                return adapter;
-            }
-        }, calledFrom);
-    }
 
-    
     public void preDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {
             @Override

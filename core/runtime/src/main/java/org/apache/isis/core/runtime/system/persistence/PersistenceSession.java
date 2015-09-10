@@ -762,8 +762,23 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             return null;
         }
         final Persistable persistenceCapable = (Persistable) pojo;
-        return frameworkSynchronizer.lazilyLoaded(persistenceCapable, FrameworkSynchronizer.CalledFrom.OS_LAZILYLOADED);
+        return lazilyLoaded(persistenceCapable, FrameworkSynchronizer.CalledFrom.OS_LAZILYLOADED);
     }
+
+    public ObjectAdapter lazilyLoaded(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
+        return withLogging(pojo, new Callable<ObjectAdapter>() {
+            @Override
+            public ObjectAdapter call() {
+                if (getJdoObjectId(pojo) == null) {
+                    return null;
+                }
+                final RootOid oid = createPersistentOrViewModelOid(pojo);
+                final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
+                return adapter;
+            }
+        }, calledFrom);
+    }
+
 
     //endregion
 
@@ -1228,7 +1243,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
                     // DN would not be calling this callback if the pojo was not persistent.
 
-                    adapter = frameworkSynchronizer.lazilyLoaded(pojo, FrameworkSynchronizer.CalledFrom.EVENT_PREDIRTY);
+                    adapter = lazilyLoaded(pojo, FrameworkSynchronizer.CalledFrom.EVENT_PREDIRTY);
                     if (adapter == null) {
                         throw new RuntimeException(
                                 "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
