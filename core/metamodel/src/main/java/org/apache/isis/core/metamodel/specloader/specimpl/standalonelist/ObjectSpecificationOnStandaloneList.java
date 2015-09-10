@@ -182,4 +182,11 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
     }
 
 
+    @Override
+    public Object createObject() {
+        throw new UnsupportedOperationException(getFullIdentifier());
+    }
+
+
+
 }

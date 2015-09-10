@@ -1151,11 +1151,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // //////////////////////////////////////////////////////////////////////
 
     @Override
-    public Object createObject() {
-        throw new UnsupportedOperationException(getFullIdentifier());
-    }
-
-    @Override
     public ObjectAdapter initialize(ObjectAdapter objectAdapter) {
         return objectAdapter;
     }

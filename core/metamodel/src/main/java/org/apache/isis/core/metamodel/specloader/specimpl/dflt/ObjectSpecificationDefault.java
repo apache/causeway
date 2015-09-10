@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -417,11 +418,31 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         }
         
         try {
-            return getObjectInstantiator().instantiate(getCorrespondingClass());
+            return instantiate(getCorrespondingClass());
         } catch (final ObjectInstantiationException e) {
             throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
         }
     }
+
+    private <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
+
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+        }
+        final T newInstance;
+        if (Modifier.isAbstract(cls.getModifiers())) {
+            throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+        }
+        try {
+            newInstance = cls.newInstance();
+        } catch (final IllegalAccessException | InstantiationException e) {
+            throw new ObjectInstantiationException(e);
+        }
+
+        getDependencyInjector().injectServicesInto(newInstance);
+        return newInstance;
+    }
+
 
     /**
      * REVIEW: does this behaviour live best here?  Not that sure that it does...

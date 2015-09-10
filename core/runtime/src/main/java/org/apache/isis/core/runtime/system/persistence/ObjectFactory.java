@@ -38,48 +38,24 @@ public class ObjectFactory {
 
     public <T> T instantiate(final Class<T> cls) throws ObjectInstantiationException {
 
-        if (getServicesInjector() == null) {
+        if (servicesInjector == null) {
             throw new IllegalStateException("ServicesInjector is not available (no open session)");
         }
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
         }
-        final T newInstance = doInstantiate(cls);
-
-        if (getServicesInjector() != null) {
-            getServicesInjector().injectServicesInto(newInstance);
-        }
-        return newInstance;
-    }
-
-
-    //region > doInstantiate
-
-    /**
-     * Simply instantiates reflectively.
-     */
-    protected <T> T doInstantiate(final Class<T> cls) throws ObjectInstantiationException {
+        final T newInstance;
         if (Modifier.isAbstract(cls.getModifiers())) {
             throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
         }
         try {
-            return cls.newInstance();
+            newInstance = cls.newInstance();
         } catch (final IllegalAccessException | InstantiationException e) {
             throw new ObjectInstantiationException(e);
         }
+
+        servicesInjector.injectServicesInto(newInstance);
+        return newInstance;
     }
-    //endregion
-
-    //region > dependencies (from constructor)
-
-    private PersistenceSession getPersistenceSession() {
-        return persistenceSession;
-    }
-
-    protected ServicesInjectorSpi getServicesInjector() {
-        return servicesInjector;
-    }
-
-    //endregion
 
 }
