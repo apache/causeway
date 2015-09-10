@@ -46,6 +46,7 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -108,6 +109,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     // not final only for testing purposes
     private IsisTransactionManager transactionManager;
     private final FrameworkSynchronizer frameworkSynchronizer;
+    private final OidMarshaller oidMarshaller;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -131,7 +133,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
         // sub-components
         final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory.getApplicationComponents();
-        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents);
+        oidMarshaller = new OidMarshaller();
+        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents
+        );
 
         frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
         this.objectFactory = new ObjectFactory(this, servicesInjector);
@@ -658,8 +662,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     //endregion
 
-
-
     //region > resolveImmediately, resolveField
 
     /**
@@ -691,7 +693,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             @Override
             public void execute() {
-                objectStore.resolveImmediately(adapter);
+                objectStoreResolveImmediately(adapter);
             }
 
             @Override
@@ -709,6 +711,29 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             }
         });
     }
+
+    //endregion
+
+    //region > objectStoreResolveImmediately
+
+    public void objectStoreResolveImmediately(final ObjectAdapter adapter) {
+        ensureOpened();
+        ensureInTransaction();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(oidMarshaller));
+        }
+
+        if (!adapter.representsPersistent()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("; not persistent - ignoring");
+            }
+            return;
+        }
+
+        objectStore.refreshRoot(adapter);
+    }
+
 
     //endregion
 

@@ -36,7 +36,6 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -69,7 +68,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     private final PersistenceSession persistenceSession;
     private final SpecificationLoaderSpi specificationLoader;
     private final IsisConfiguration configuration;
-    private final OidMarshaller oidMarshaller;
 
     private static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
 
@@ -106,7 +104,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         this.applicationComponents = applicationComponents;
 
         this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
-        this.oidMarshaller = new OidMarshaller();
     }
 
     //endregion
@@ -219,36 +216,16 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
 
 
-    //region > resolveImmediately
-
-
-    public void resolveImmediately(final ObjectAdapter adapter) {
-        ensureOpened();
-        ensureInTransaction();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(getOidMarshaller()));
-        }
-
-        if (!adapter.representsPersistent()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("; not persistent - ignoring");
-            }
-            return;
-        }
-
-        refreshRoot(adapter);
-    }
-
+    //region > refreshRoot
     /**
      * Not API; provides the ability to force a reload (refresh in JDO terms)
      * of the domain object wrapped in the {@link ObjectAdapter}.
      */
     public void refreshRoot(final ObjectAdapter adapter) {
-        
+
         final Object domainObject = adapter.getObject();
-		if (domainObject == null) {
-		    // REVIEW: is this possible?
+        if (domainObject == null) {
+            // REVIEW: is this possible?
             throw new PojoRefreshException(adapter.getOid());
         }
 
@@ -259,12 +236,11 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         }
 
         // possibly redundant because also called in the post-load event
-        // listener, but (with JPA impl) found it was required if we were ever to 
+        // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        
+
         frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject, CalledFrom.OS_RESOLVE);
     }
-
     //endregion
 
     //region > loadInstancesAndAdapt
@@ -360,9 +336,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         return persistenceSession.getTransactionManager();
     }
 
-    protected OidMarshaller getOidMarshaller() {
-        return oidMarshaller;
-    }
 
     //endregion
 
