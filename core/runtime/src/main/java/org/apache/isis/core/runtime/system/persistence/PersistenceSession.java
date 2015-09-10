@@ -403,9 +403,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final ObjectSpecification objectSpec,
             final Variant variant) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating transient instance of " + objectSpec);
+            LOG.debug("creating " + variant + " instance of " + objectSpec);
         }
         final Object pojo = instantiateAndInjectServices(objectSpec);
+
+
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
     }
@@ -416,12 +418,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final Variant variant,
             final String memento) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating view model instance of " + objectSpec);
+            LOG.debug("creating " + variant + " instance of " + objectSpec);
         }
         final Object pojo = instantiateAndInjectServices(objectSpec);
 
-        final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-        facet.initialize(pojo, memento);
+        if(variant == Variant.VIEW_MODEL) {
+            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
+            facet.initialize(pojo, memento);
+        }
 
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
