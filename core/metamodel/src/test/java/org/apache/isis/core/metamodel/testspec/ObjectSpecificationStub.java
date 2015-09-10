@@ -323,11 +323,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return Identifier.classIdentifier(name);
     }
 
-    @Override
-    public ObjectAdapter initialize(final ObjectAdapter objectAdapter) {
-        return objectAdapter;
-    }
-
     // TODO: not used
     public void setupPersistable(final Persistability persistable) {
         this.persistable = persistable;
