@@ -464,25 +464,20 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
                     @Override
                     public List<ObjectAdapter> execute() {
-                        return loadInstancesAndAdapt(persistenceQuery);
+                        ensureOpened();
+                        ensureInTransaction();
+
+                        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
+                        if (processor == null) {
+                            throw new UnsupportedFindException(MessageFormat.format(
+                                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
+                        }
+                        return processPersistenceQuery(processor, persistenceQuery);
                     }
                 });
     }
     //endregion
-
-    //region > loadInstancesAndAdapt
-    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
-        ensureOpened();
-        ensureInTransaction();
-
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
-        }
-        return processPersistenceQuery(processor, persistenceQuery);
-    }
 
     @SuppressWarnings("unchecked")
     private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(final PersistenceQueryProcessor<Q> persistenceQueryProcessor, final PersistenceQuery persistenceQuery) {
@@ -750,8 +745,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     /**
-     * Not API; provides the ability to force a reload (refresh in JDO terms)
-     * of the domain object wrapped in the {@link ObjectAdapter}.
+     * Forces a reload (refresh in JDO terminology) of the domain object wrapped in the {@link ObjectAdapter}.
      */
     public void refreshRoot(final ObjectAdapter adapter) {
 
@@ -770,7 +764,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-
         frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject,
                 FrameworkSynchronizer.CalledFrom.OS_RESOLVE);
     }
@@ -849,7 +842,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
-    //region > createXxxCommand
+    //region > newXxxCommand
     /**
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have an
