@@ -53,7 +53,6 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
@@ -64,7 +63,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
@@ -94,8 +92,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
      */
     private Map<Method, ObjectMember> membersByMethod = null;
     
-    private final CreateObjectContext createObjectContext;
-
     private final FacetedMethodsBuilder facetedMethodsBuilder;
 
 
@@ -107,12 +103,10 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             final Class<?> correspondingClass,
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext,
             final ObjectSpecificationDependencies specContext,
-            final ObjectMemberDependencies objectMemberDependencies,
-            final CreateObjectContext createObjectContext) {
+            final ObjectMemberDependencies objectMemberDependencies) {
         super(correspondingClass, determineShortName(correspondingClass), specContext, objectMemberDependencies);
 
         this.facetedMethodsBuilder = new FacetedMethodsBuilder(this, facetedMethodsBuilderContext);
-        this.createObjectContext = createObjectContext;
     }
 
     @Override
@@ -480,14 +474,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         str.append("persistable", persistability());
         str.append("superclass", superclass() == null ? "Object" : superclass().getFullIdentifier());
         return str.toString();
-    }
-
-    // //////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // //////////////////////////////////////////////////////////////////
-
-    protected ServicesInjector getDependencyInjector() {
-        return createObjectContext.getDependencyInjector();
     }
 
 

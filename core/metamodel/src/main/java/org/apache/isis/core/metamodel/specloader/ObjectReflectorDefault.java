@@ -463,12 +463,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             return new ObjectSpecificationOnStandaloneList(specContext, objectMemberDependencies);
         } else {
             final SpecificationLoaderSpi specificationLoader = this;
-            final CreateObjectContext createObjectContext = new CreateObjectContext(adapterManager, servicesInjector);
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
                             specificationLoader, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext,
-                    objectMemberDependencies, createObjectContext);
+                    objectMemberDependencies);
         }
     }
 
