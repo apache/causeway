@@ -28,7 +28,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
@@ -60,7 +59,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                persistenceSession.postLoadProcessingFor((Persistable) pojo, CalledFrom.OS_QUERY);
+                persistenceSession.postLoadProcessingFor((Persistable) pojo, PersistenceSession.CalledFrom.OS_QUERY);
                 adapter = persistenceSession.getAdapterFor(pojo);
             } else {
                 // a value type

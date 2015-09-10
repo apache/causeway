@@ -35,7 +35,6 @@ import com.google.common.collect.Maps;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 
 public class IsisLifecycleListener2
@@ -76,7 +75,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postLoadProcessingFor(pojo, CalledFrom.EVENT_LOAD);
+                persistenceSession.postLoadProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_LOAD);
             }});
     }
 
@@ -86,7 +85,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preStoreProcessingFor(pojo, CalledFrom.EVENT_PRESTORE);
+                persistenceSession.preStoreProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PRESTORE);
 
             }});
     }
@@ -97,7 +96,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postStoreProcessingFor(pojo, CalledFrom.EVENT_POSTSTORE);
+                persistenceSession.postStoreProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_POSTSTORE);
             }});
     }
 
@@ -107,7 +106,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preDirtyProcessingFor(pojo, CalledFrom.EVENT_PREDIRTY);
+                persistenceSession.preDirtyProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PREDIRTY);
             }});
     }
 
@@ -129,7 +128,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preDeleteProcessingFor(pojo, CalledFrom.EVENT_PREDELETE);
+                persistenceSession.preDeleteProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PREDELETE);
             }
         });
     }
@@ -140,7 +139,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postDeleteProcessingFor(pojo, CalledFrom.EVENT_POSTDELETE);
+                persistenceSession.postDeleteProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_POSTDELETE);
             }
         });
     }
