@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
-import java.util.Iterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +79,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * work with the POJOs even though it does not understand their types. Each POJO
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
-public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAdapter>,
+public class AdapterManagerDefault implements AdapterManager,
         SessionScopedComponent,
         DebuggableWithTitle,
         Resettable {
@@ -150,13 +148,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     }
     //endregion
 
-    //region > iterable
-
-    @Override
-    public Iterator<ObjectAdapter> iterator() {
-        return pojoAdapterMap.iterator();
-    }
-    //endregion
 
 
 
