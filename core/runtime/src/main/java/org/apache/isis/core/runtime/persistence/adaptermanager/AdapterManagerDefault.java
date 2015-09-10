@@ -48,6 +48,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecification
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -93,7 +94,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
     private final PersistenceSession persistenceSession;
     private final SpecificationLoaderSpi specificationLoader;
-    private final PojoRecreator pojoRecreator;
     private final OidMarshaller oidMarshaller;
     private final OidGenerator oidGenerator;
     private final AuthenticationSession authenticationSession;
@@ -106,15 +106,13 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
     /**
      * For object store implementations (eg JDO) that do not provide any mechanism
-     * to allow transient objects to be reattached; can instead provide a
-     * {@link PojoRecreator} implementation that is injected into the Adapter Manager.
+     * to allow transient objects to be reattached.
      * 
      * @see <a href="http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976">this thread</a>
      */
     public AdapterManagerDefault(
             final PersistenceSession persistenceSession,
             final SpecificationLoaderSpi specificationLoader,
-            final PojoRecreator pojoRecreator,
             final OidMarshaller oidMarshaller,
             final OidGenerator oidGenerator,
             final AuthenticationSession authenticationSession,
@@ -122,7 +120,6 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             final IsisConfiguration configuration) {
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
-        this.pojoRecreator = pojoRecreator;
         this.oidMarshaller = oidMarshaller;
         this.oidGenerator = oidGenerator;
         this.authenticationSession = authenticationSession;
@@ -333,7 +330,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         if (adapter == null) {
             // else recreate
             try {
-                final Object pojo = pojoRecreator.recreatePojo(rootOid);
+                final Object pojo = recreatePojo(rootOid);
                 adapter = mapRecreatedPojo(rootOid, pojo);
             } catch(ObjectNotFoundException ex) {
                 throw ex; // just rethrow
@@ -383,6 +380,33 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
 
         return adapter;
+    }
+
+    public Object recreatePojo(RootOid oid) {
+        if(oid.isTransient() || oid.isViewModel()) {
+            return recreatePojoDefault(oid);
+        } else {
+            return getPersistenceSession().loadPojo(oid);
+        }
+    }
+
+    private Object recreatePojoDefault(final RootOid rootOid) {
+        final ObjectSpecification spec =
+                getSpecificationLoader().lookupBySpecId(rootOid.getObjectSpecId());
+        final Object pojo = spec.createObject();
+        if(rootOid.isViewModel()) {
+            // initialize the view model pojo from the oid's identifier
+
+            final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
+            if(facet == null) {
+                throw new IllegalArgumentException("spec does not have RecreatableObjectFacet; " + rootOid.toString() + "; spec is " + spec.getFullIdentifier());
+            }
+
+            final String memento = rootOid.getIdentifier();
+
+            facet.initialize(pojo, memento);
+        }
+        return pojo;
     }
 
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {

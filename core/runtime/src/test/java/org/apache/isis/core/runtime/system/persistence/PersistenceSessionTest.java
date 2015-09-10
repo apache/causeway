@@ -44,7 +44,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -156,7 +155,7 @@ public class PersistenceSessionTest {
             }
             
         };
-        adapterManager = new AdapterManagerDefault(persistenceSession, mockSpecificationLoader, new PojoRecreator(persistenceSession, mockSpecificationLoader),
+        adapterManager = new AdapterManagerDefault(persistenceSession, mockSpecificationLoader,
                 new OidMarshaller(), mockOidGenerator, mockAuthenticationSession, servicesInjector,
                 mockConfiguration);
 

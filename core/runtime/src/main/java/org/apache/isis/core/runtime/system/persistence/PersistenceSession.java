@@ -64,7 +64,6 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -175,8 +174,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
-        final PojoRecreator pojoRecreator = new PojoRecreator(this, specificationLoader);
-        this.adapterManager = new AdapterManagerDefault(this, specificationLoader, pojoRecreator, oidMarshaller,
+        this.adapterManager = new AdapterManagerDefault(this, specificationLoader, oidMarshaller,
                 oidGenerator, authenticationSession, servicesInjector, configuration);
         this.persistAlgorithm = new PersistAlgorithm();
 
