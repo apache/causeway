@@ -806,10 +806,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             throw new NotPersistableException("Cannot persist services: " + adapter);
         }
 
-        makePersistentInPersistenceLayer(adapter);
-    }
-
-    protected void makePersistentInPersistenceLayer(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
             @Override
