@@ -456,10 +456,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("getInstances matching " + persistenceQuery);
         }
-        return getInstancesFromPersistenceLayer(persistenceQuery);
-    }
-
-    private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
         return getTransactionManager().executeWithinTransaction(
                 new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
                     @Override
@@ -477,6 +473,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     }
                 });
     }
+
     //endregion
 
     @SuppressWarnings("unchecked")
