@@ -55,11 +55,15 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -270,6 +274,19 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             throw new IllegalStateException("Persistence session has already been initialized");
         }
     }
+
+    public void ensureOpened() {
+        ensureStateIs(State.OPEN);
+    }
+
+    private void ensureStateIs(final State stateRequired) {
+        if (state == stateRequired) {
+            return;
+        }
+        throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
+    }
+
+
 
     //endregion
 
@@ -645,7 +662,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             @Override
             public void execute() {
-                final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
+                final DestroyObjectCommand command = createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);
             }
 
@@ -663,6 +680,60 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     //endregion
 
+    //region > createXxxCommand
+    /**
+     * Makes an {@link ObjectAdapter} persistent. The specified object should be
+     * stored away via this object store's persistence mechanism, and have an
+     * new and unique OID assigned to it (by calling the object's
+     * <code>setOid</code> method). The object, should also be added to the
+     * cache as the object is implicitly 'in use'.
+     *
+     * <p>
+     * If the object has any associations then each of these, where they aren't
+     * already persistent, should also be made persistent by recursively calling
+     * this method.
+     * </p>
+     *
+     * <p>
+     * If the object to be persisted is a collection, then each element of that
+     * collection, that is not already persistent, should be made persistent by
+     * recursively calling this method.
+     * </p>
+     *
+     */
+    public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter adapter) {
+        ensureOpened();
+        ensureInSession();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("create object - creating command for: " + adapter);
+        }
+        if (adapter.representsPersistent()) {
+            throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
+        }
+        return new DataNucleusCreateObjectCommand(adapter, objectStore.getPersistenceManager());
+    }
+
+    private void ensureInSession() {
+        ensureThatContext(IsisContext.inSession(), is(true));
+    }
+
+
+
+    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter adapter) {
+        ensureOpened();
+        ensureInSession();
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("destroy object - creating command for: " + adapter);
+        }
+        if (!adapter.representsPersistent()) {
+            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
+        }
+        return new DataNucleusDeleteObjectCommand(adapter, objectStore.getPersistenceManager());
+    }
+    //endregion
+
     //region > remappedFrom, addCreateObjectCommand
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
@@ -678,12 +749,12 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     /**
      * Uses the {@link ObjectStore} to
-     * {@link ObjectStore#createCreateObjectCommand(ObjectAdapter) create} a
+     * {@link #createCreateObjectCommand(ObjectAdapter) create} a
      * {@link CreateObjectCommand}, and adds to the
      * {@link IsisTransactionManager}.
      */
     public void addCreateObjectCommand(final ObjectAdapter object) {
-        getTransactionManager().addCommand(objectStore.createCreateObjectCommand(object));
+        getTransactionManager().addCommand(createCreateObjectCommand(object));
     }
 
     //endregion

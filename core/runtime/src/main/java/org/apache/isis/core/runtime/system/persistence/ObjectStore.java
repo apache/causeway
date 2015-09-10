@@ -49,19 +49,15 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
@@ -117,8 +113,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         this.configuration = configuration;
         this.applicationComponents = applicationComponents;
 
-        this.state = State.NOT_YET_OPEN;
-
         this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
         this.oidMarshaller = new OidMarshaller();
     }
@@ -127,14 +121,8 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
     //region > open, close
 
-    enum State {
-        NOT_YET_OPEN, OPEN, CLOSED;
-    }
-
-    private State state;
-
     public void open() {
-        ensureNotYetOpen();
+        persistenceSession.ensureNotOpened();
 
         this.persistenceManager = applicationComponents.createPersistenceManager();
 
@@ -144,8 +132,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
                 new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
-
-        state = State.OPEN;
     }
 
     /**
@@ -175,7 +161,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         } finally {
             // make sure release everything ok.
             persistenceManager.close();
-            state = State.CLOSED;
         }
     }
     //endregion
@@ -240,57 +225,10 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     }
     //endregion
 
-    //region > createXxxCommand
-    /**
-     * Makes an {@link ObjectAdapter} persistent. The specified object should be
-     * stored away via this object store's persistence mechanism, and have an
-     * new and unique OID assigned to it (by calling the object's
-     * <code>setOid</code> method). The object, should also be added to the
-     * cache as the object is implicitly 'in use'.
-     *
-     * <p>
-     * If the object has any associations then each of these, where they aren't
-     * already persistent, should also be made persistent by recursively calling
-     * this method.
-     * </p>
-     *
-     * <p>
-     * If the object to be persisted is a collection, then each element of that
-     * collection, that is not already persistent, should be made persistent by
-     * recursively calling this method.
-     * </p>
-     *
-     */
-    public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter adapter) {
-        ensureOpened();
-        ensureInSession();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("create object - creating command for: " + adapter);
-        }
-        if (adapter.representsPersistent()) {
-            throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
-        }
-        return new DataNucleusCreateObjectCommand(adapter, getPersistenceManager());
-    }
-
-
-    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter adapter) {
-        ensureOpened();
-        ensureInSession();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("destroy object - creating command for: " + adapter);
-        }
-        if (!adapter.representsPersistent()) {
-            throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
-        }
-        return new DataNucleusDeleteObjectCommand(adapter, getPersistenceManager());
-    }
-    //endregion
 
     //region > execute
     public void execute(final List<PersistenceCommand> commands) {
+
         ensureOpened();
         ensureInTransaction();
 
@@ -492,16 +430,8 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
     //region > helpers
 
-    private void ensureNotYetOpen() {
-        ensureStateIs(State.NOT_YET_OPEN);
-    }
-
-    private void ensureOpened() {
-        ensureStateIs(State.OPEN);
-    }
-
-    private void ensureInSession() {
-        ensureThatContext(IsisContext.inSession(), is(true));
+    public void ensureOpened() {
+        persistenceSession.ensureOpened();
     }
 
     private void ensureInTransaction() {
@@ -513,13 +443,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         javax.jdo.Transaction currentTransaction = getPersistenceManager().currentTransaction();
         ensureThatState(currentTransaction, is(notNullValue()));
         ensureThatState(currentTransaction.isActive(), is(true));
-    }
-
-    private void ensureStateIs(final State stateRequired) {
-        if (state == stateRequired) {
-            return;
-        }
-        throw new IllegalStateException("State is: " + state + "; should be: " + stateRequired);
     }
 
     private Class<?> clsOf(final RootOid oid) {
