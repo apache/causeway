@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySe
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public class PropertySetterFacetWrapTransaction extends PropertySetterFacetAbstract implements DecoratingFacet<PropertySetterFacet> {
 
@@ -53,7 +53,7 @@ public class PropertySetterFacetWrapTransaction extends PropertySetterFacetAbstr
             // (value adapters are neither persistent or transient)
             underlyingFacet.setProperty(adapter, referencedAdapter, interactionInitiatedBy);
         } else {
-            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
                 @Override
                 public void execute() {
                     underlyingFacet.setProperty(adapter, referencedAdapter, interactionInitiatedBy);

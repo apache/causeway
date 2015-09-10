@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearF
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public class CollectionClearFacetWrapTransaction extends CollectionClearFacetAbstract implements DecoratingFacet<CollectionClearFacet> {
 
@@ -49,7 +49,7 @@ public class CollectionClearFacetWrapTransaction extends CollectionClearFacetAbs
             // (value adapters are neither persistent or transient)
             underlyingFacet.clear(adapter);
         } else {
-            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
                 @Override
                 public void execute() {
                     underlyingFacet.clear(adapter);

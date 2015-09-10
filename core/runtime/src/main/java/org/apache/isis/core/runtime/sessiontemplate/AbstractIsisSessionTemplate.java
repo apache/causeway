@@ -24,7 +24,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public abstract class AbstractIsisSessionTemplate {
 
@@ -59,7 +59,7 @@ public abstract class AbstractIsisSessionTemplate {
     protected void doExecute(final Object context) {
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
-        transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
+        transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
                 doExecuteWithTransaction(context);

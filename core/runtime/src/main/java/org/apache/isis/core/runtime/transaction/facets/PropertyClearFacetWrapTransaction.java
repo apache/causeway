@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.properties.update.clear.PropertyCle
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstract implements DecoratingFacet<PropertyClearFacet> {
 
@@ -50,7 +50,7 @@ public class PropertyClearFacetWrapTransaction extends PropertyClearFacetAbstrac
             // (value adapters are neither persistent or transient)
             underlyingFacet.clearProperty(adapter, interactionInitiatedBy);
         } else {
-            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
                 @Override
                 public void execute() {
                     underlyingFacet.clearProperty(adapter, interactionInitiatedBy);

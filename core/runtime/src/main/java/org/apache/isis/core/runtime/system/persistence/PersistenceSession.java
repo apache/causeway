@@ -74,8 +74,8 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -431,7 +431,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
         return getTransactionManager().executeWithinTransaction(
-                new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
+                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
                     @Override
                     public List<ObjectAdapter> execute() {
                         return loadInstancesAndAdapt(persistenceQuery);
@@ -572,7 +572,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private ObjectAdapter loadMappedObjectFromObjectStore(final RootOid oid) {
         final ObjectAdapter adapter = getTransactionManager().executeWithinTransaction(
-                new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+                new TransactionalClosureWithReturn<ObjectAdapter>() {
                     @Override
                     public ObjectAdapter execute() {
                         return loadInstanceAndAdapt(oid);
@@ -711,7 +711,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public void refreshRootInTransaction(final ObjectAdapter adapter) {
         Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
             @Override
             public void execute() {
@@ -796,7 +796,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     protected void makePersistentInPersistenceLayer(final ObjectAdapter adapter) {
-        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
             @Override
             public void execute() {
@@ -829,7 +829,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     private void destroyObjectInPersistenceLayer(final ObjectAdapter adapter) {
-        getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+        getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
 
             @Override
             public void execute() {

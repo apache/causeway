@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
 
 public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements DecoratingFacet<ActionInvocationFacet> {
 
@@ -56,7 +56,7 @@ public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetA
             final ObjectAdapter targetAdapter,
             final ObjectAdapter[] argumentAdapters,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<ObjectAdapter>() {
+        final ObjectAdapter result = getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturn<ObjectAdapter>() {
             @Override
             public ObjectAdapter execute() {
                 return underlyingFacet.invoke(owningAction, targetAdapter, argumentAdapters,

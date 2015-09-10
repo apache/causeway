@@ -17,8 +17,10 @@
 package org.apache.isis.core.runtime.services.background;
 
 import java.util.List;
+
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.background.ActionInvocationMemento;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -29,15 +31,15 @@ import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.sessiontemplate.AbstractIsisSessionTemplate;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 /**
  * Intended to be used as a base class for executing queued up {@link Command background action}s.
@@ -63,7 +65,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
         final PersistenceSession persistenceSession = getPersistenceSession();
         final IsisTransactionManager transactionManager = getTransactionManager(persistenceSession);
         final List<Command> commands = Lists.newArrayList();
-        transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
+        transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
                 commands.addAll(findBackgroundCommandsToExecute());
@@ -84,7 +86,7 @@ public abstract class BackgroundCommandExecution extends AbstractIsisSessionTemp
 
     
     private void execute(final IsisTransactionManager transactionManager, final Command command) {
-        transactionManager.executeWithinTransaction(new TransactionalClosureAbstract() {
+        transactionManager.executeWithinTransaction(new TransactionalClosure() {
             @Override
             public void execute() {
                 commandContext.setCommand(command);

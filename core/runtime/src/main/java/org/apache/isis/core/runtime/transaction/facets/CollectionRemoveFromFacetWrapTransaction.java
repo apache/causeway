@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 
 public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFromFacetAbstract implements DecoratingFacet<CollectionRemoveFromFacet> {
 
@@ -53,7 +53,7 @@ public class CollectionRemoveFromFacetWrapTransaction extends CollectionRemoveFr
             // (value adapters are neither persistent or transient)
             underlyingFacet.remove(adapter, referencedAdapter, interactionInitiatedBy);
         } else {
-            getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
+            getTransactionManager().executeWithinTransaction(new TransactionalClosure() {
                 @Override
                 public void execute() {
                     underlyingFacet.remove(adapter, referencedAdapter, interactionInitiatedBy);
