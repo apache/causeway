@@ -402,11 +402,4 @@ public class FrameworkSynchronizer {
         return getPersistenceSession().getPersistenceManager();
     }
 
-    protected ObjectStore getObjectStore() {
-        return (ObjectStore) IsisContext.getPersistenceSession().getObjectStore();
-    }
-
-
-
-
 }

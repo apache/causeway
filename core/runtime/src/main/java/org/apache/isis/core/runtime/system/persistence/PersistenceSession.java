@@ -88,6 +88,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSe
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -103,6 +104,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
+    private static final String ROOT_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_ROOT_KEY;
+
+    /**
+     * Append regular <a href="http://www.datanucleus.org/products/accessplatform/persistence_properties.html">datanucleus properties</a> to this key
+     */
+    public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
+
+
     //region > constructor, fields
     private final ObjectFactory objectFactory;
 
@@ -112,7 +121,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final AdapterManagerDefault adapterManager;
 
     private final PersistAlgorithm persistAlgorithm ;
-    private final ObjectStore objectStore;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfiguration configuration;
@@ -165,7 +173,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // sub-components
 
         oidMarshaller = new OidMarshaller();
-        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents);
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
@@ -211,12 +218,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         adapterManager.open();
 
-        adapterManager.injectInto(objectStore);
-        specificationLoader.injectInto(objectStore);
-
-        this.persistenceManager = applicationComponents.createPersistenceManager();
-
-        persistenceManager = objectStore.getPersistenceManager();
+        persistenceManager = applicationComponents.createPersistenceManager();
 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
@@ -323,7 +325,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     //endregion
-
 
     //region > State
 
@@ -705,13 +706,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
-    //region > transactions
-
-    void ensureInTransaction() {
-        objectStore.ensureInTransaction();
-    }
-
-    //endregion
 
     //region > lazilyLoaded
 
@@ -922,7 +916,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     public void execute(final List<PersistenceCommand> commands) {
 
         ensureOpened();
-        objectStore.ensureInTransaction();
+        ensureInTransaction();
 
         // previously we used to check that there were some commands, and skip processing otherwise.
         // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
@@ -999,6 +993,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             transaction.rollback();
         }
     }
+
+    private void ensureInTransaction() {
+        ensureThatContext(IsisContext.inTransaction(), is(true));
+        javax.jdo.Transaction currentTransaction = persistenceManager.currentTransaction();
+        ensureThatState(currentTransaction, is(notNullValue()));
+        ensureThatState(currentTransaction.isActive(), is(true));
+    }
+
     //endregion
 
 
@@ -1036,10 +1038,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         debug.appendTitle("Persistor");
         getTransactionManager().debugData(debug);
         debug.appendln("Persist Algorithm", persistAlgorithm);
-        debug.appendln("Object Store", objectStore);
         debug.appendln();
-
-        objectStore.debugData(debug);
     }
 
 
@@ -1117,10 +1116,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     // for testing only
     void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
-    }
-
-    public ObjectStore getObjectStore() {
-        return objectStore;
     }
 
     /**

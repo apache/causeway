@@ -81,8 +81,6 @@ public class PersistenceSessionTest {
     private SpecificationLoaderSpi mockSpecificationLoader;
 
     @Mock
-    private ObjectStore mockObjectStore;
-    @Mock
     private AuditingService3 mockAuditingService3;
     @Mock
     private PublishingServiceWithDefaultPayloadFactories mockPublishingService;

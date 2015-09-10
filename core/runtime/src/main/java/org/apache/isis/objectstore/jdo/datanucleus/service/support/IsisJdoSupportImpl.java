@@ -51,7 +51,6 @@ import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.applib.service.support.IsisJdoSupport;
-import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 
 
 /**
@@ -194,10 +193,6 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     // //////////////////////////////////////
 
-    
-    protected ObjectStore getObjectStore() {
-        return getPersistenceSession().getObjectStore();
-    }
 
     protected AdapterManager getAdapterManager() {
         return getPersistenceSession().getAdapterManager();

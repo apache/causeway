@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
-import org.apache.isis.core.runtime.system.persistence.ObjectStore;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
@@ -91,12 +90,12 @@ public class IsisConfigurationForJdoIntegTests extends IsisConfigurationDefault 
     }
 
     public final IsisConfigurationForJdoIntegTests addDataNucleusProperty(final String key, final String value) {
-        add(ObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        add(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
     public final IsisConfigurationForJdoIntegTests putDataNucleusProperty(final String key, final String value) {
-        put(ObjectStore.DATANUCLEUS_PROPERTIES_ROOT + key, value);
+        put(PersistenceSession.DATANUCLEUS_PROPERTIES_ROOT + key, value);
         return this;
     }
 
