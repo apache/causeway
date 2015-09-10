@@ -82,7 +82,6 @@ import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
@@ -123,7 +122,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private final DeploymentCategory deploymentCategory;
     private final ServicesInjector servicesInjector;
-    private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
     private final AdapterManager adapterManager;
@@ -193,7 +191,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         this.deploymentCategory = objectSpecificationDependencies.getDeploymentCategory();
         this.servicesInjector = objectSpecificationDependencies.getServicesInjector();
-        this.objectInstantiator = objectSpecificationDependencies.getObjectInstantiator();
         this.specificationLoader = objectSpecificationDependencies.getSpecificationLoader();
         this.facetProcessor = objectSpecificationDependencies.getFacetProcessor();
         this.adapterManager = objectSpecificationDependencies.getAdapterManager();
@@ -1172,10 +1169,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
-    }
-
-    protected ObjectInstantiator getObjectInstantiator() {
-        return objectInstantiator;
     }
 
     protected SpecificationLoader getSpecificationLoader() {

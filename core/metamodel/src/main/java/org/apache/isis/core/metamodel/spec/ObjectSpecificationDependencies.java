@@ -25,7 +25,6 @@ public class ObjectSpecificationDependencies {
 
     private final DeploymentCategory deploymentCategory;
     private final ServicesInjector servicesInjector;
-    private final ObjectInstantiator objectInstantiator;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
     private final AdapterManager adapterManager;
@@ -33,13 +32,11 @@ public class ObjectSpecificationDependencies {
     public ObjectSpecificationDependencies(
             final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
-            final ObjectInstantiator objectInstantiator,
             final SpecificationLoader specificationLoader,
             final FacetProcessor facetProcessor,
             final AdapterManager adapterManager) {
         this.deploymentCategory = deploymentCategory;
         this.servicesInjector = servicesInjector;
-        this.objectInstantiator = objectInstantiator;
         this.specificationLoader = specificationLoader;
         this.facetProcessor = facetProcessor;
         this.adapterManager = adapterManager;
@@ -51,10 +48,6 @@ public class ObjectSpecificationDependencies {
     
     public ServicesInjector getServicesInjector() {
         return servicesInjector;
-    }
-
-    public ObjectInstantiator getObjectInstantiator() {
-        return objectInstantiator;
     }
 
     public SpecificationLoader getSpecificationLoader() {

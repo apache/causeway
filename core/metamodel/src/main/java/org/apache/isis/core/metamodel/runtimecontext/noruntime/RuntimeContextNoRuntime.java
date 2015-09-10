@@ -46,9 +46,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
@@ -61,7 +58,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final ServicesInjector servicesInjector;
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final ObjectInstantiatorAbstract objectInstantiator;
     private final ObjectPersistorAbstract objectPersistor;
     private final DomainObjectServicesAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
@@ -164,13 +160,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
 
-        };
-        objectInstantiator = new ObjectInstantiatorAbstract() {
-
-            @Override
-            public Object instantiate(final Class<?> cls) throws ObjectInstantiationException {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
         };
         objectPersistor = new ObjectPersistorAbstract() {
 
@@ -330,11 +319,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     @Override
     public AdapterManager getAdapterManager() {
         return adapterManager;
-    }
-
-    @Override
-    public ObjectInstantiator getObjectInstantiator() {
-        return objectInstantiator;
     }
 
     @Override

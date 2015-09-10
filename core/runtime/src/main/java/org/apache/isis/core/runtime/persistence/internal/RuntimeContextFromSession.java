@@ -50,9 +50,6 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetU
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
@@ -73,7 +70,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final ObjectInstantiator objectInstantiator;
     private final ObjectPersistor objectPersistor;
     private final QuerySubmitter querySubmitter;
     private final DomainObjectServices domainObjectServices;
@@ -152,13 +148,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
 
-        };
-        this.objectInstantiator = new ObjectInstantiatorAbstract() {
-
-            @Override
-            public Object instantiate(final Class<?> cls) throws ObjectInstantiationException {
-                return getPersistenceSession().getObjectFactory().instantiate(cls);
-            }
         };
 
         this.objectPersistor = new ObjectPersistorAbstract() {
@@ -312,11 +301,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     @Override
     public AdapterManager getAdapterManager() {
         return adapterManager;
-    }
-
-    @Override
-    public ObjectInstantiator getObjectInstantiator() {
-        return objectInstantiator;
     }
 
     @Override

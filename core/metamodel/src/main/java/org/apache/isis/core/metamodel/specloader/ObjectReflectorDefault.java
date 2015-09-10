@@ -58,7 +58,6 @@ import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoR
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
@@ -449,12 +448,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
         final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final ObjectInstantiator objectInstantiator = getRuntimeContext().getObjectInstantiator();
         final AdapterManager adapterManager = getRuntimeContext().getAdapterManager();
 
         final ObjectSpecificationDependencies specContext =
                 new ObjectSpecificationDependencies(
-                        getDeploymentCategory(), servicesInjector, objectInstantiator, specificationLookup,
+                        getDeploymentCategory(), servicesInjector, specificationLookup,
                         facetProcessor, adapterManager);
 
         final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(

@@ -20,7 +20,9 @@
 package org.apache.isis.core.metamodel.app;
 
 import java.util.TreeSet;
+
 import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
@@ -28,6 +30,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
@@ -38,7 +41,6 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.unittestsupport.jmocking.IsisActions;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -57,8 +59,6 @@ public class IsisMetaModelTest_init {
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
-    @Mock
-    private ObjectInstantiator mockObjectInstantiator;
     @Mock
     private AdapterManager mockAdapterManager;
     @Mock
@@ -99,9 +99,6 @@ public class IsisMetaModelTest_init {
 
                 allowing(mockRuntimeContext).getServicesInjector();
                 will(returnValue(mockDependencyInjector));
-
-                allowing(mockRuntimeContext).getObjectInstantiator();
-                will(returnValue(mockObjectInstantiator));
 
                 allowing(mockRuntimeContext).getDeploymentCategoryProvider();
                 will(returnValue(new DeploymentCategoryProviderAbstract() {

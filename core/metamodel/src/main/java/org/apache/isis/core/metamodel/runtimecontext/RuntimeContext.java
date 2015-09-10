@@ -29,7 +29,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 
@@ -56,8 +55,6 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
     public QuerySubmitter getQuerySubmitter();
 
     public AdapterManager getAdapterManager();
-
-    public ObjectInstantiator getObjectInstantiator();
 
     public SpecificationLoader getSpecificationLoader();
 
