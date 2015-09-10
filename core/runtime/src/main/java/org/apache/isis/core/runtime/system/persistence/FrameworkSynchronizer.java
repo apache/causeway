@@ -52,6 +52,9 @@ public class FrameworkSynchronizer {
 
     private static final Logger LOG = LoggerFactory.getLogger(FrameworkSynchronizer.class);
 
+    public FrameworkSynchronizer() {
+
+    }
     /**
      * Categorises where called from.
      * 

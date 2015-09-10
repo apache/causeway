@@ -172,11 +172,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
         this.applicationComponents = persistenceSessionFactory.getApplicationComponents();
-        this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
 
         // sub-components
 
-        oidMarshaller = new OidMarshaller();
+        this.oidMarshaller = new OidMarshaller();
+        this.frameworkSynchronizer = new FrameworkSynchronizer();
 
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
