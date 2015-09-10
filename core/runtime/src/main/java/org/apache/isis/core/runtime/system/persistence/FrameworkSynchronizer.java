@@ -192,27 +192,7 @@ public class FrameworkSynchronizer {
         
     }
 
-    public void postDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
-        withLogging(pojo, new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-                if (adapter == null) {
-                    return;
-                }
 
-                // previously we called the removed callback (if any).
-                // however, this is almost certainly incorrect, because DN will not allow us
-                // to "touch" the pojo once deleted.
-                //
-                // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
-
-
-            }
-        }, calledFrom);
-        
-    }
-    
     // /////////////////////////////////////////////////////////
     // Helpers
     // /////////////////////////////////////////////////////////
