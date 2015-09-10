@@ -18,11 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.util.Map;
-
 import javax.jdo.PersistenceManager;
-
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +28,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
@@ -73,8 +66,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
     private final DataNucleusApplicationComponents applicationComponents;
     
-    private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
-
     private PersistenceManager persistenceManager;
 
     public ObjectStore(
@@ -190,18 +181,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     }
     //endregion
 
-    //region > registerServices, getOidForService
-    public void objectStoreRegisterService(RootOid rootOid) {
-        ensureOpened();
-        this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
-    }
-
-    public RootOid objectStoreGetOidForService(ObjectSpecification serviceSpec) {
-        ensureOpened();
-        return this.registeredServices.get(serviceSpec.getSpecId());
-    }
-
-    //endregion
 
     //region > helpers
 

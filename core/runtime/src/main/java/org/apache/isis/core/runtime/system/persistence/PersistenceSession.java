@@ -129,6 +129,8 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
 
+    private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
+
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -480,8 +482,21 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * Registers the specified service as having the specified OID.
      */
     protected void registerService(final RootOid rootOid) {
-        objectStore.objectStoreRegisterService(rootOid);
+        objectStoreRegisterService(rootOid);
     }
+
+    //region > registerServices, getOidForService
+    private void objectStoreRegisterService(RootOid rootOid) {
+        ensureOpened();
+        this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
+    }
+
+    private RootOid objectStoreGetOidForService(ObjectSpecification serviceSpec) {
+        ensureOpened();
+        return this.registeredServices.get(serviceSpec.getSpecId());
+    }
+
+    //endregion
 
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
@@ -505,7 +520,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         final ObjectSpecId objectSpecId = serviceSpecification.getSpecId();
         RootOid oid = servicesByObjectType.get(objectSpecId);
         if (oid == null) {
-            oid = objectStore.objectStoreGetOidForService(serviceSpecification);
+            oid = objectStoreGetOidForService(serviceSpecification);
             servicesByObjectType.put(objectSpecId, oid);
         }
         return oid;
@@ -632,7 +647,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     public Object loadPojo(final RootOid rootOid) {
 
-        Object result = null;
+        Object result;
         try {
             final Class<?> cls = clsOf(rootOid);
             final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
