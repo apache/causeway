@@ -75,6 +75,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
@@ -87,6 +88,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSe
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -137,7 +139,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
 
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
-
+    private final DataNucleusApplicationComponents applicationComponents;
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -155,17 +157,17 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-
         this.persistenceSessionFactory = persistenceSessionFactory;
+
         this.servicesInjector = persistenceSessionFactory.getServicesInjector();
+        this.applicationComponents = persistenceSessionFactory.getApplicationComponents();
+        this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
 
         // sub-components
-        final DataNucleusApplicationComponents applicationComponents = persistenceSessionFactory.getApplicationComponents();
-        oidMarshaller = new OidMarshaller();
-        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents
-        );
 
-        frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
+        oidMarshaller = new OidMarshaller();
+        this.objectStore = new ObjectStore(this, specificationLoader, configuration, applicationComponents);
+
         this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
@@ -209,7 +211,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
 
-        objectStore.objectStoreOpen();
+        objectStoreOpen();
 
         persistenceManager = objectStore.getPersistenceManager();
 
@@ -284,7 +286,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         try {
             try {
-                objectStore.objectStoreClose();
+                objectStoreClose();
             } catch(final Throwable ex) {
                 // ignore
                 LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");
@@ -307,6 +309,45 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return persistenceManager;
     }
     //endregion
+
+    //region > open, close
+
+    public void objectStoreOpen() {
+        this.persistenceManager = applicationComponents.createPersistenceManager();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Automatically {@link IsisTransactionManager#endTransaction() ends
+     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
+     * {@link PersistenceSession#commitJdoTransaction() commits the underlying
+     * JDO transaction}.
+     *
+     * <p>
+     * The corresponding DataNucleus entity is then closed.
+     */
+    public void objectStoreClose() {
+        ensureOpened();
+        ensureThatState(persistenceManager, is(notNullValue()));
+
+        try {
+            final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
+            if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+                if(currentTransaction.getState().canCommit()) {
+                    getTransactionManager().endTransaction();
+                } else if(currentTransaction.getState().canAbort()) {
+                    getTransactionManager().abortTransaction();
+                }
+            }
+        } finally {
+            // make sure release everything ok.
+            persistenceManager.close();
+        }
+    }
+    //endregion
+
+
 
     //region > State
 
