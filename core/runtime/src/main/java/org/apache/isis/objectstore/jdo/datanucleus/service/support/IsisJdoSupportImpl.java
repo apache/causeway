@@ -68,9 +68,8 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     @Programmatic
     @Override
     public <T> T refresh(final T domainObject) {
-        final ObjectStore objectStore = getObjectStore();
         final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
-        objectStore.refreshRoot(adapter);
+        getPersistenceSession().refreshRoot(adapter);
         return domainObject;
     }
 
@@ -197,7 +196,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
 
     
     protected ObjectStore getObjectStore() {
-        return (ObjectStore) getPersistenceSession().getObjectStore();
+        return getPersistenceSession().getObjectStore();
     }
 
     protected AdapterManager getAdapterManager() {

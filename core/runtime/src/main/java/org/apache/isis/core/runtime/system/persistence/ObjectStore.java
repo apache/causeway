@@ -216,33 +216,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
 
 
-    //region > refreshRoot
-    /**
-     * Not API; provides the ability to force a reload (refresh in JDO terms)
-     * of the domain object wrapped in the {@link ObjectAdapter}.
-     */
-    public void refreshRoot(final ObjectAdapter adapter) {
-
-        final Object domainObject = adapter.getObject();
-        if (domainObject == null) {
-            // REVIEW: is this possible?
-            throw new PojoRefreshException(adapter.getOid());
-        }
-
-        try {
-            getPersistenceManager().refresh(domainObject);
-        } catch (final RuntimeException e) {
-            throw new PojoRefreshException(adapter.getOid(), e);
-        }
-
-        // possibly redundant because also called in the post-load event
-        // listener, but (with JPA impl) found it was required if we were ever to
-        // get an eager left-outer-join as the result of a refresh (sounds possible).
-
-        frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject, CalledFrom.OS_RESOLVE);
-    }
-    //endregion
-
     //region > loadInstancesAndAdapt
     public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
         ensureOpened();
