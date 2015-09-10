@@ -70,8 +70,10 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlg
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -90,9 +92,15 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class PersistenceSession implements SessionScopedComponent, DebuggableWithTitle {
+public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
+
+    /**
+     * @see #isFixturesInstalled()
+     */
+    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
+    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
     //region > constructor, fields
     private final ObjectFactory objectFactory;
@@ -167,7 +175,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         this.objectAdapterFactory = new PojoAdapterFactory(adapterManager, specificationLoader, authenticationSession);
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
-        this.transactionManager = new IsisTransactionManager(this, objectStore, servicesInjector);
+        this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
@@ -515,7 +523,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link ObjectStore#objectStoreIsFixturesInstalled()
+     * Returns the cached value of {@link #isFixturesInstalled()
      * whether fixtures are installed} from the
      * {@link PersistenceSessionFactory}.
      * <p>
@@ -527,9 +535,31 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public boolean isFixturesInstalled() {
         if (persistenceSessionFactory.isFixturesInstalled() == null) {
-            persistenceSessionFactory.setFixturesInstalled(objectStore.objectStoreIsFixturesInstalled());
+            persistenceSessionFactory.setFixturesInstalled(objectStoreIsFixturesInstalled());
         }
         return persistenceSessionFactory.isFixturesInstalled();
+    }
+
+
+    /**
+     * Determine if the object store has been initialized with its set of start
+     * up objects.
+     *
+     * <p>
+     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
+     * framework will run the fixtures to initialise the object store.
+     *
+     * <p>
+     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the injected {@link #configuration configuration}.
+     *
+     * <p>
+     * By default this is not expected to be there, but utilities can add in on
+     * the fly during bootstrapping if required.
+     */
+    public boolean objectStoreIsFixturesInstalled() {
+        final boolean installFixtures = configuration.getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
+        LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
+        return !installFixtures;
     }
 
     @Override
@@ -737,8 +767,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
     //endregion
 
-
-
     //region > makePersistent
 
     /**
@@ -920,6 +948,43 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     //endregion
+
+    //region > transactions
+    public void startTransaction() {
+        beginJdoTransaction();
+    }
+
+    public void endTransaction() {
+        commitJdoTransaction();
+    }
+
+    public void abortTransaction() {
+        rollbackJdoTransaction();
+    }
+
+    private void beginJdoTransaction() {
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
+        if (transaction.isActive()) {
+            throw new IllegalStateException("Transaction already active");
+        }
+        transaction.begin();
+    }
+
+    private void commitJdoTransaction() {
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
+        if (transaction.isActive()) {
+            transaction.commit();
+        }
+    }
+
+    private void rollbackJdoTransaction() {
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
+        if (transaction.isActive()) {
+            transaction.rollback();
+        }
+    }
+    //endregion
+
 
     //region > Debugging
 

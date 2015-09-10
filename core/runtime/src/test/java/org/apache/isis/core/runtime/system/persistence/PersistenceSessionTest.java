@@ -168,7 +168,7 @@ public class PersistenceSessionTest {
 
         
         transactionManager = persistenceSession.getTransactionManager();
-        new IsisTransactionManager(persistenceSession, mockObjectStore, servicesInjector) {
+        new IsisTransactionManager(persistenceSession, servicesInjector) {
             @Override
             public AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;
@@ -188,14 +188,14 @@ public class PersistenceSessionTest {
         final Sequence tran = context.sequence("tran");
         context.checking(new Expectations() {
             {
-                one(mockObjectStore).startTransaction();
-                inSequence(tran);
+//                one(mockObjectStore).startTransaction();
+//                inSequence(tran);
 
 //                one(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
 //                inSequence(tran);
 
-                one(mockObjectStore).abortTransaction();
-                inSequence(tran);
+//                one(mockObjectStore).abortTransaction();
+//                inSequence(tran);
             }
         });
         
@@ -211,8 +211,8 @@ public class PersistenceSessionTest {
         final Sequence tran = context.sequence("tran");
         context.checking(new Expectations() {
             {
-                oneOf(mockObjectStore).startTransaction();
-                inSequence(tran);
+//                oneOf(mockObjectStore).startTransaction();
+//                inSequence(tran);
 
 //                oneOf(mockObjectStore).createDestroyObjectCommand(persistentAdapter);
 //                inSequence(tran);
@@ -229,8 +229,8 @@ public class PersistenceSessionTest {
 //                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
 //                inSequence(tran);
 
-                oneOf(mockObjectStore).endTransaction();
-                inSequence(tran);
+//                oneOf(mockObjectStore).endTransaction();
+//                inSequence(tran);
             }
 
         });
@@ -247,8 +247,8 @@ public class PersistenceSessionTest {
         final Sequence tran = context.sequence("tran");
         context.checking(new Expectations() {
             {
-                oneOf(mockObjectStore).startTransaction();
-                inSequence(tran);
+//                oneOf(mockObjectStore).startTransaction();
+//                inSequence(tran);
 
 //                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
 //                inSequence(tran);
@@ -261,8 +261,8 @@ public class PersistenceSessionTest {
 //                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
 //                inSequence(tran);
 
-                oneOf(mockObjectStore).endTransaction();
-                inSequence(tran);
+//                oneOf(mockObjectStore).endTransaction();
+//                inSequence(tran);
             }
         });
 

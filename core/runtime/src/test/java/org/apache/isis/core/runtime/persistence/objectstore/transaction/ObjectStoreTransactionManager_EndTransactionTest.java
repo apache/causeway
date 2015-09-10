@@ -70,7 +70,7 @@ public class ObjectStoreTransactionManager_EndTransactionTest {
             will(returnValue(mockMessageBroker));
         }});
 
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault(Collections.emptyList())) {
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, new ServicesInjectorDefault(Collections.emptyList())) {
             @Override
             public AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;

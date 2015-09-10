@@ -58,7 +58,7 @@ public class ObjectStoreTransactionManager_StartTransactionTest {
 
     @Before
     public void setUpTransactionManager() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault(Collections.emptyList())) {
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, new ServicesInjectorDefault(Collections.emptyList())) {
             @Override
             protected AuthenticationSession getAuthenticationSession() {
                 return mockAuthenticationSession;

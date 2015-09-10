@@ -46,7 +46,7 @@ public class ObjectStoreTransactionManager_InstantiationTest {
 
     @Test
     public void canInstantiate() throws Exception {
-        transactionManager = new IsisTransactionManager(mockPersistenceSession, mockObjectStore, new ServicesInjectorDefault(Collections.emptyList()));
+        transactionManager = new IsisTransactionManager(mockPersistenceSession, new ServicesInjectorDefault(Collections.emptyList()));
     }
 
 }

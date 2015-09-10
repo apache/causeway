@@ -40,7 +40,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
-public class ObjectStore implements TransactionalResource, DebuggableWithTitle, SessionScopedComponent {
+public class ObjectStore implements DebuggableWithTitle, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectStore.class);
 
@@ -57,11 +57,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
      */
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
-    /**
-     * @see #objectStoreIsFixturesInstalled()
-     */
-    public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
-    public static final boolean INSTALL_FIXTURES_DEFAULT = false;
 
 
     private final DataNucleusApplicationComponents applicationComponents;
@@ -120,67 +115,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         }
     }
     //endregion
-
-    //region > isFixturesInstalled
-    /**
-     * Determine if the object store has been initialized with its set of start
-     * up objects.
-     *
-     * <p>
-     * This method is called only once after the session is opened called. If it returns <code>false</code> then the
-     * framework will run the fixtures to initialise the object store.
-     *
-     * <p>
-     * Implementation looks for the {@link #INSTALL_FIXTURES_KEY} in the
-     * {@link #getConfiguration() configuration}.
-     *
-     * <p>
-     * By default this is not expected to be there, but utilities can add in on
-     * the fly during bootstrapping if required.
-     */
-    public boolean objectStoreIsFixturesInstalled() {
-        final boolean installFixtures = getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
-        LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
-        return !installFixtures;
-    }
-    //endregion
-
-    //region > transactions
-    public void startTransaction() {
-        beginJdoTransaction();
-    }
-
-    public void endTransaction() {
-        commitJdoTransaction();
-    }
-
-    public void abortTransaction() {
-        rollbackJdoTransaction();
-    }
-
-    private void beginJdoTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            throw new IllegalStateException("Transaction already active");
-        }
-        transaction.begin();
-    }
-
-    private void commitJdoTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.commit();
-        }
-    }
-
-    private void rollbackJdoTransaction() {
-        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
-        if (transaction.isActive()) {
-            transaction.rollback();
-        }
-    }
-    //endregion
-
 
     //region > helpers
 
