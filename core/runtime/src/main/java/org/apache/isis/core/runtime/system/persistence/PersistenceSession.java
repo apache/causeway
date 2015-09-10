@@ -1146,6 +1146,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     //endregion
 
+    //region > jdoPersistenceManager delegate methods
+
+    public Object getJdoObjectId(Object pojo) {
+        return persistenceManager.getObjectId(pojo);
+    }
+    // endregion
 
 }
 

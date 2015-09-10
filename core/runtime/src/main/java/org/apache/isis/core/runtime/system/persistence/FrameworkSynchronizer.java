@@ -273,7 +273,7 @@ public class FrameworkSynchronizer {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
-                if(getJdoPersistenceManager().getObjectId(pojo) == null) {
+                if(getPersistenceSession().getJdoObjectId(pojo) == null) {
                     return null;
                 }
                 final RootOid oid = getPersistenceSession().getOidGenerator().createPersistentOrViewModelOid(pojo);
@@ -401,10 +401,6 @@ public class FrameworkSynchronizer {
 
     protected AdapterManagerDefault getAdapterManager() {
         return getPersistenceSession().getAdapterManager();
-    }
-
-    protected PersistenceManager getJdoPersistenceManager() {
-        return getPersistenceSession().getPersistenceManager();
     }
 
     protected IsisTransaction getCurrentTransaction() {
