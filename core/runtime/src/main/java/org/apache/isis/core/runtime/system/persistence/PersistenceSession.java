@@ -436,10 +436,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                     public List<ObjectAdapter> execute() {
                         return loadInstancesAndAdapt(persistenceQuery);
                     }
-
-                    @Override
-                    public void onSuccess() {
-                    }
                 });
     }
     //endregion
@@ -716,14 +712,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     public void refreshRootInTransaction(final ObjectAdapter adapter) {
         Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-            @Override
-            public void preExecute() {
-                // previously there was callback to LoadingCallbackFacet.class
-                // for JDO objectstore at least this codepath does not fire, and JDO (not surprisingly)
-                // provides no preLoad callback.
-                //
-                // for consistency, have therefore removed this call.
-            }
 
             @Override
             public void execute() {
@@ -742,19 +730,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 refreshRoot(adapter);
             }
 
-            @Override
-            public void onSuccess() {
-                // previously there was callback to LoadedCallbackFacet.class
-                // for JDO objectstore at least this codepath does not fire, and instead we rely on the
-                // JDO lifecycle event (IsisLifecycleListener/FrameworkSynchronizer) to perform the callback.
-                //
-                // have therefore removed this call.
-            }
-
-            @Override
-            public void onFailure() {
-                // should we do something here?
-            }
         });
     }
 
@@ -822,10 +797,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     protected void makePersistentInPersistenceLayer(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-            @Override
-            public void preExecute() {
-                // callbacks are called by the persist algorithm
-            }
 
             @Override
             public void execute() {
@@ -835,15 +806,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 PersistenceSession.this.persistentByTransient.clear();
             }
 
-            @Override
-            public void onSuccess() {
-                // callbacks are called by the persist algorithm
-            }
-
-            @Override
-            public void onFailure() {
-                // TODO: some sort of callback?
-            }
         });
     }
 
@@ -868,10 +830,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private void destroyObjectInPersistenceLayer(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
-            @Override
-            public void preExecute() {
-                // previously called the RemovingCallbackFacet here; now done through the object store (see ISIS-796).
-            }
 
             @Override
             public void execute() {
@@ -879,15 +837,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 getTransactionManager().addCommand(command);
             }
 
-            @Override
-            public void onSuccess() {
-                // previously called the RemovedCallbackFacet here; now done through the object store (see ISIS-796).
-            }
 
-            @Override
-            public void onFailure() {
-                // some sort of callback?
-            }
         });
     }
 

@@ -26,24 +26,5 @@ package org.apache.isis.core.runtime.system.transaction;
  */
 public abstract class TransactionalClosureWithReturnAbstract<T> implements TransactionalClosureWithReturn<T> {
 
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void preExecute() {
-    }
 
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void onSuccess() {
-    }
-
-    /**
-     * No-op implementation; does nothing.
-     */
-    @Override
-    public void onFailure() {
-    }
 }

@@ -162,14 +162,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
             startTransaction();
         }
         try {
-            closure.preExecute();
             closure.execute();
-            closure.onSuccess();
             if (!initiallyInTransaction) {
                 endTransaction();
             }
         } catch (final RuntimeException ex) {
-            closure.onFailure();
             if (!initiallyInTransaction) {
                 try {
                     abortTransaction();
@@ -207,15 +204,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
             startTransaction();
         }
         try {
-            closure.preExecute();
             final Q retVal = closure.execute();
-            closure.onSuccess();
             if (!initiallyInTransaction) {
                 endTransaction();
             }
             return retVal;
         } catch (final RuntimeException ex) {
-            closure.onFailure();
             if (!initiallyInTransaction) {
                 abortTransaction();
             } else {
