@@ -387,11 +387,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * {@link org.apache.isis.applib.DomainObjectContainer}.
      */
     public ObjectAdapter createTransientInstance(final ObjectSpecification objectSpec) {
-        return createInstance(objectSpec);
+        return createInstance(objectSpec, Variant.TRANSIENT);
     }
 
     public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
-        return createInstance(objectSpec, memento);
+        return createInstance(objectSpec, Variant.VIEW_MODEL, memento);
     }
 
     private enum Variant {
@@ -399,7 +399,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         VIEW_MODEL
     }
 
-    private ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
+    private ObjectAdapter createInstance(
+            final ObjectSpecification objectSpec,
+            final Variant variant) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
         }
@@ -409,7 +411,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    private ObjectAdapter createInstance(final ObjectSpecification objectSpec, final String memento) {
+    private ObjectAdapter createInstance(
+            final ObjectSpecification objectSpec,
+            final Variant variant,
+            final String memento) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating view model instance of " + objectSpec);
         }
