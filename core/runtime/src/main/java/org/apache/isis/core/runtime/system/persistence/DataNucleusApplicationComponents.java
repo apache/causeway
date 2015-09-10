@@ -85,7 +85,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     private final IsisConfiguration jdoObjectstoreConfig;
     private final Map<String, String> datanucleusProps;
     
-    private final IsisLifecycleListener lifecycleListener;
     private final FrameworkSynchronizer synchronizer;
     
     private Map<String, JdoNamedQuery> namedQueryByName;
@@ -101,7 +100,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
         this.jdoObjectstoreConfig = jdoObjectstoreConfig;
 
         this.synchronizer = new FrameworkSynchronizer();
-        this.lifecycleListener = new IsisLifecycleListener(synchronizer);
 
         initialize();
         
@@ -276,8 +274,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     
     public PersistenceManager createPersistenceManager() {
         PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
-        
-        persistenceManager.addInstanceLifecycleListener(lifecycleListener, (Class[])null);
+
+        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(synchronizer);
+        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
         return persistenceManager;
     }
 
