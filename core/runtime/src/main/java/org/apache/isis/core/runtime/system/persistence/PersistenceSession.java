@@ -59,6 +59,7 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
@@ -1236,8 +1237,20 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     public void preDeleteProcessingFor(final Persistable pojo, final FrameworkSynchronizer.CalledFrom calledFrom) {
-        frameworkSynchronizer.preDeleteProcessingFor(pojo, calledFrom);
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                ObjectAdapter adapter = adapterFor(pojo);
+
+                final IsisTransaction transaction = getCurrentTransaction();
+                transaction.enlistDeleting(adapter);
+
+                CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
+            }
+        }, calledFrom);
+
     }
+
 
     public void postLoadProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
         frameworkSynchronizer.postLoadProcessingFor(pojo, calledFrom);

@@ -177,20 +177,6 @@ public class FrameworkSynchronizer {
 
 
 
-    public void preDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
-        withLogging(pojo, new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = persistenceSession.adapterFor(pojo);
-                
-                final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
-                transaction.enlistDeleting(adapter);
-
-                CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-            }
-        }, calledFrom);
-        
-    }
 
 
     // /////////////////////////////////////////////////////////
