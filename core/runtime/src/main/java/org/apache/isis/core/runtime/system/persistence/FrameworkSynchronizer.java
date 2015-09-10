@@ -115,9 +115,9 @@ public class FrameworkSynchronizer {
 
                         if(ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
-                            final String currentUser = getAuthenticationSession().getUserName();
+                            final String currentUser = authenticationSession.getUserName();
                             final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);
-                            getCurrentTransaction().setAbortCause(abortCause);
+                            persistenceSession.getCurrentTransaction().setAbortCause(abortCause);
 
                         } else {
                             LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion + ")");
@@ -208,7 +208,7 @@ public class FrameworkSynchronizer {
 
                     CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
 
-                    final IsisTransaction transaction = getCurrentTransaction();
+                    final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
                     transaction.enlistCreated(adapter);
                 } else {
                     // updating;
@@ -253,7 +253,7 @@ public class FrameworkSynchronizer {
 
                 CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
 
-                final IsisTransaction transaction = getCurrentTransaction();
+                final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
                 transaction.enlistUpdating(adapter);
 
                 ensureRootObject(pojo);
@@ -283,7 +283,7 @@ public class FrameworkSynchronizer {
             public void run() {
                 ObjectAdapter adapter = persistenceSession.adapterFor(pojo);
                 
-                final IsisTransaction transaction = getCurrentTransaction();
+                final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
                 transaction.enlistDeleting(adapter);
 
                 CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
@@ -365,7 +365,7 @@ public class FrameworkSynchronizer {
     }
 
     private Version getVersionIfAny(final Persistable pojo) {
-        return Utils.getVersionIfAny(pojo, getAuthenticationSession());
+        return Utils.getVersionIfAny(pojo, authenticationSession);
     }
 
     @SuppressWarnings("unused")
@@ -377,22 +377,5 @@ public class FrameworkSynchronizer {
         }
     }
 
-
-    
-    // /////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return persistenceSession;
-    }
-
-    protected IsisTransaction getCurrentTransaction() {
-        return persistenceSession.getTransactionManager().getTransaction();
-    }
 
 }

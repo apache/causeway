@@ -1184,7 +1184,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     //endregion
-    
+
+    //region > TransactionManager delegate methods
+    protected IsisTransaction getCurrentTransaction() {
+        return transactionManager.getTransaction();
+    }
+    //endregion
+
+
 }
 
 
