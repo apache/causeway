@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import com.google.common.collect.Lists;
@@ -43,10 +42,8 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
 
-    public PersistenceQueryFindUsingApplibQueryProcessor(
-            final PersistenceSession persistenceSession,
-            final PersistenceManager persistenceManager) {
-        super(persistenceSession, persistenceManager);
+    public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceSession persistenceSession) {
+        super(persistenceSession);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
@@ -77,7 +74,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final OneToOneAssociation pkOtoa = JdoPropertyUtils.getPrimaryKeyPropertyFor(objectSpec);
         final String pkOtoaId = pkOtoa.getId();
         final String filter = pkOtoaId + "==" + map.get(pkOtoaId);
-        final Query jdoQuery = getPersistenceManager().newQuery(cls, filter);
+        final Query jdoQuery = persistenceSession.newJdoQuery(cls, filter);
 
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");
@@ -97,13 +94,13 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     private List<?> getResults(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
         
         final String queryName = persistenceQuery.getQueryName();
-        final Map<String, Object> argumentsByParameterName = unwrap(persistenceQuery.getArgumentsAdaptersByParameterName());
+        final Map<String, Object> argumentsByParameterName = unwrap(
+                persistenceQuery.getArgumentsAdaptersByParameterName());
         final QueryCardinality cardinality = persistenceQuery.getCardinality();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
-        final PersistenceManager persistenceManager = persistenceSession.getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
-        final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
+        final Query jdoQuery = persistenceSession.newJdoNamedQuery(cls, queryName);
         
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");

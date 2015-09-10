@@ -234,17 +234,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         persistenceManager = applicationComponents.getPersistenceManagerFactory().getPersistenceManager();
 
-        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(this, frameworkSynchronizer);
+        final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(this);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(this,
-                        persistenceManager));
+                new PersistenceQueryFindAllInstancesProcessor(this));
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(this,
-                        persistenceManager));
+                new PersistenceQueryFindUsingApplibQueryProcessor(this));
 
         initServices();
 
@@ -1174,6 +1172,18 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     public Object getJdoObjectId(Object pojo) {
         return persistenceManager.getObjectId(pojo);
+    }
+
+    public javax.jdo.Query newJdoQuery(Class<?> cls) {
+        return persistenceManager.newQuery(cls);
+    }
+
+    public javax.jdo.Query newJdoNamedQuery (Class<?> cls, String queryName) {
+        return persistenceManager.newNamedQuery(cls, queryName);
+    }
+
+    public javax.jdo.Query newJdoQuery (Class<?> cls, String filter) {
+        return persistenceManager.newQuery(cls, filter);
     }
     // endregion
 

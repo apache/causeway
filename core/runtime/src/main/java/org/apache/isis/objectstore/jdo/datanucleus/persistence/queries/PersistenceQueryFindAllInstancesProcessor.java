@@ -20,7 +20,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
 import org.slf4j.Logger;
@@ -35,10 +34,8 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
-    public PersistenceQueryFindAllInstancesProcessor(
-            final PersistenceSession persistenceSession,
-            final PersistenceManager persistenceManager) {
-        super(persistenceSession, persistenceManager);
+    public PersistenceQueryFindAllInstancesProcessor(final PersistenceSession persistenceSession) {
+        super(persistenceSession);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
@@ -46,7 +43,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
         final ObjectSpecification specification = persistenceQuery.getSpecification();
         
         Class<?> cls = specification.getCorrespondingClass();
-        final Query jdoQuery = getPersistenceManager().newQuery(cls);
+        final Query jdoQuery = persistenceSession.newJdoQuery(cls);
         
         // http://www.datanucleus.org/servlet/jira/browse/NUCCORE-1103
         jdoQuery.addExtension("datanucleus.multivaluedFetch", "none");

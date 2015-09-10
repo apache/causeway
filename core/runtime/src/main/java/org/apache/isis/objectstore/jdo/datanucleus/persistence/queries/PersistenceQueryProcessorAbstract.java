@@ -20,10 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 
 import java.util.List;
 
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.listener.InstanceLifecycleEvent;
-import javax.jdo.metadata.TypeMetadata;
 
 import com.google.common.collect.Lists;
 
@@ -40,33 +37,16 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         implements PersistenceQueryProcessor<T> {
 
     final PersistenceSession persistenceSession;
-    private final PersistenceManager persistenceManager;
 
-    protected PersistenceQueryProcessorAbstract(
-            final PersistenceSession persistenceSession,
-            final PersistenceManager persistenceManager) {
+    protected PersistenceQueryProcessorAbstract(final PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
-        this.persistenceManager = persistenceManager;
     }
 
-    protected PersistenceManager getPersistenceManager() {
-        return persistenceManager;
-    }
-    
-    
+
     // /////////////////////////////////////////////////////////////
     // helpers for subclasses
     // /////////////////////////////////////////////////////////////
 
-    protected PersistenceManagerFactory getPersistenceManagerFactory() {
-        return getPersistenceManager().getPersistenceManagerFactory();
-    }
-
-    // TODO: unused?
-    protected TypeMetadata getTypeMetadata(final String classFullName) {
-        return getPersistenceManagerFactory().getMetadata(classFullName);
-    }
-    
     /**
      * Traversing the provided list causes (or should cause) the
      * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {

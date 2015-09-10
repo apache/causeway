@@ -21,7 +21,6 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
 import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener2;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -33,9 +32,7 @@ public class IsisLifecycleListener extends IsisLifecycleListener2 {
 
     public static final Logger LOG = LoggerFactory.getLogger(IsisLifecycleListener.class);
 
-    public IsisLifecycleListener(
-            final PersistenceSession persistenceSession,
-            final FrameworkSynchronizer synchronizer) {
+    public IsisLifecycleListener(final PersistenceSession persistenceSession) {
         super(persistenceSession);
     }
 }
