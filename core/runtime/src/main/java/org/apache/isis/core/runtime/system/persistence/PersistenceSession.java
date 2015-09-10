@@ -440,21 +440,20 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("getInstances matching " + persistenceQuery);
         }
+
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                PersistenceSession.this.persistenceQueryProcessorByClass
+                        .get(persistenceQuery.getClass());
+        if (processor == null) {
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
+        }
+
         final List<ObjectAdapter> instances = getTransactionManager().executeWithinTransaction(
                 new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
                     @Override
                     public List<ObjectAdapter> execute() {
-                        PersistenceSession.this.ensureOpened();
-                        PersistenceSession.this.ensureInTransaction();
-
-                        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                                PersistenceSession.this.persistenceQueryProcessorByClass
-                                        .get(persistenceQuery.getClass());
-                        if (processor == null) {
-                            throw new UnsupportedFindException(MessageFormat.format(
-                                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
-                        }
-                        return PersistenceSession.this.processPersistenceQuery(processor, persistenceQuery);
+                        return processPersistenceQuery(processor, persistenceQuery);
                     }
                 });
         final ObjectSpecification specification = persistenceQuery.getSpecification();
