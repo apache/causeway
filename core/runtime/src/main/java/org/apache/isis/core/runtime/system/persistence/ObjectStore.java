@@ -77,8 +77,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
     private PersistenceManager persistenceManager;
 
-    private final FrameworkSynchronizer frameworkSynchronizer;
-
     public ObjectStore(
             final PersistenceSession persistenceSession,
             final SpecificationLoaderSpi specificationLoader,
@@ -89,8 +87,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         this.specificationLoader = specificationLoader;
         this.configuration = configuration;
         this.applicationComponents = applicationComponents;
-
-        this.frameworkSynchronizer = applicationComponents.getFrameworkSynchronizer();
     }
 
     //endregion
@@ -195,12 +191,12 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     //endregion
 
     //region > registerServices, getOidForService
-    public void registerService(RootOid rootOid) {
+    public void objectStoreRegisterService(RootOid rootOid) {
         ensureOpened();
         this.registeredServices.put(rootOid.getObjectSpecId(), rootOid);
     }
 
-    public RootOid getOidForService(ObjectSpecification serviceSpec) {
+    public RootOid objectStoreGetOidForService(ObjectSpecification serviceSpec) {
         ensureOpened();
         return this.registeredServices.get(serviceSpec.getSpecId());
     }
@@ -223,7 +219,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         ensureThatState(currentTransaction, is(notNullValue()));
         ensureThatState(currentTransaction.isActive(), is(true));
     }
-
 
     //endregion
 

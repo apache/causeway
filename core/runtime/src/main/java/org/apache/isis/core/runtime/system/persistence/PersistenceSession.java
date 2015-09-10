@@ -480,7 +480,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * Registers the specified service as having the specified OID.
      */
     protected void registerService(final RootOid rootOid) {
-        objectStore.registerService(rootOid);
+        objectStore.objectStoreRegisterService(rootOid);
     }
 
     // REVIEW why does this get called multiple times when starting up
@@ -505,7 +505,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         final ObjectSpecId objectSpecId = serviceSpecification.getSpecId();
         RootOid oid = servicesByObjectType.get(objectSpecId);
         if (oid == null) {
-            oid = objectStore.getOidForService(serviceSpecification);
+            oid = objectStore.objectStoreGetOidForService(serviceSpecification);
             servicesByObjectType.put(objectSpecId, oid);
         }
         return oid;
