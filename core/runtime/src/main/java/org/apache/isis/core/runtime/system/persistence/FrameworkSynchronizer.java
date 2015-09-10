@@ -399,8 +399,7 @@ public class FrameworkSynchronizer {
     }
 
     protected PersistenceManager getJdoPersistenceManager() {
-        final ObjectStore objectStore = getObjectStore();
-        return objectStore.getPersistenceManager();
+        return getPersistenceSession().getPersistenceManager();
     }
 
     protected ObjectStore getObjectStore() {

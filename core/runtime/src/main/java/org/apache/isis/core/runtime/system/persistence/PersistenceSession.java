@@ -293,6 +293,10 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
 
     }
+
+    public PersistenceManager getPersistenceManager() {
+        return persistenceManager;
+    }
     //endregion
 
     //region > State
@@ -632,10 +636,9 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         try {
             final Class<?> cls = clsOf(rootOid);
             final Object jdoObjectId = JdoObjectIdSerializer.toJdoObjectId(rootOid);
-            final PersistenceManager pm = objectStore.getPersistenceManager();
-            FetchPlan fetchPlan = pm.getFetchPlan();
+            FetchPlan fetchPlan = persistenceManager.getFetchPlan();
             fetchPlan.addGroup(FetchGroup.DEFAULT);
-            result = pm.getObjectById(cls, jdoObjectId);
+            result = persistenceManager.getObjectById(cls, jdoObjectId);
         } catch (final RuntimeException e) {
 
             final List<ExceptionRecognizer> exceptionRecognizers = getServicesInjector().lookupServices(ExceptionRecognizer.class);
@@ -731,7 +734,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         }
 
         try {
-            objectStore.getPersistenceManager().refresh(domainObject);
+            persistenceManager.refresh(domainObject);
         } catch (final RuntimeException e) {
             throw new PojoRefreshException(adapter.getOid(), e);
         }
@@ -859,7 +862,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         if (adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is persistent; adapter: " + adapter);
         }
-        return new DataNucleusCreateObjectCommand(adapter, objectStore.getPersistenceManager());
+        return new DataNucleusCreateObjectCommand(adapter, persistenceManager);
     }
 
     private void ensureInSession() {
@@ -878,7 +881,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         if (!adapter.representsPersistent()) {
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
-        return new DataNucleusDeleteObjectCommand(adapter, objectStore.getPersistenceManager());
+        return new DataNucleusDeleteObjectCommand(adapter, persistenceManager);
     }
     //endregion
 
@@ -900,7 +903,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         for (final PersistenceCommand command : commands) {
             command.execute(null);
         }
-        objectStore.getPersistenceManager().flush();
+        persistenceManager.flush();
     }
     //endregion
 

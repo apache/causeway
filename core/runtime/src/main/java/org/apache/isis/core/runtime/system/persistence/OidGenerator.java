@@ -130,13 +130,8 @@ public class OidGenerator implements DebuggableWithTitle {
         return specificationLoader;
     }
 
-    protected ObjectStore getObjectStore() {
-        return persistenceSession.getObjectStore();
-    }
-
     protected PersistenceManager getJdoPersistenceManager() {
-        final ObjectStore objectStore = getObjectStore();
-        return objectStore.getPersistenceManager();
+        return persistenceSession.getPersistenceManager();
     }
     //endregion
 

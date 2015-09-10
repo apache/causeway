@@ -99,7 +99,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final QueryCardinality cardinality = persistenceQuery.getCardinality();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
-        final PersistenceManager persistenceManager = getJdoObjectStore().getPersistenceManager();
+        final PersistenceManager persistenceManager = getPersistenceSession().getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
         

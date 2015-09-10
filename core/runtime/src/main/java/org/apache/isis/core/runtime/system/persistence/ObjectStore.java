@@ -172,7 +172,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     }
 
     private void beginJdoTransaction() {
-        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             throw new IllegalStateException("Transaction already active");
         }
@@ -180,14 +180,14 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     }
 
     private void commitJdoTransaction() {
-        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             transaction.commit();
         }
     }
 
     private void rollbackJdoTransaction() {
-        final javax.jdo.Transaction transaction = getPersistenceManager().currentTransaction();
+        final javax.jdo.Transaction transaction = persistenceManager.currentTransaction();
         if (transaction.isActive()) {
             transaction.rollback();
         }
@@ -219,7 +219,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     }
 
     private void ensureInJdoTransaction() {
-        javax.jdo.Transaction currentTransaction = getPersistenceManager().currentTransaction();
+        javax.jdo.Transaction currentTransaction = persistenceManager.currentTransaction();
         ensureThatState(currentTransaction, is(notNullValue()));
         ensureThatState(currentTransaction.isActive(), is(true));
     }
