@@ -720,11 +720,11 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
         // cglib bytecode enhancement
         synchronized (getAuthenticationSession()) {
             Assert.assertTrue("only resolve object that is persistent", adapter, adapter.representsPersistent());
-            resolveImmediatelyFromPersistenceLayer(adapter);
+            resolveImmediatelyInTransaction(adapter);
         }
     }
 
-    private void resolveImmediatelyFromPersistenceLayer(final ObjectAdapter adapter) {
+    private void resolveImmediatelyInTransaction(final ObjectAdapter adapter) {
         getTransactionManager().executeWithinTransaction(new TransactionalClosureAbstract() {
             @Override
             public void preExecute() {
@@ -737,7 +737,19 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
             @Override
             public void execute() {
-                objectStoreResolveImmediately(adapter);
+
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(oidMarshaller));
+                }
+
+                if (!adapter.representsPersistent()) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("; not persistent - ignoring");
+                    }
+                    return;
+                }
+
+                refreshRoot(adapter);
             }
 
             @Override
@@ -758,27 +770,6 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     //endregion
 
-    //region > objectStoreResolveImmediately
-
-    public void objectStoreResolveImmediately(final ObjectAdapter adapter) {
-        ensureOpened();
-        ensureInTransaction();
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("resolveImmediately; oid=" + adapter.getOid().enString(oidMarshaller));
-        }
-
-        if (!adapter.representsPersistent()) {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("; not persistent - ignoring");
-            }
-            return;
-        }
-
-        refreshRoot(adapter);
-    }
-
-    //endregion
 
     //region > refreshRoot
     /**
