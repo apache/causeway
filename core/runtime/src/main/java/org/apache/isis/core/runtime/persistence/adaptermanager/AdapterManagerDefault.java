@@ -198,7 +198,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
         
         // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        final ObjectAdapter lazilyLoadedAdapter = pojoRecreator.lazilyLoaded(pojo);
+        final ObjectAdapter lazilyLoadedAdapter = getPersistenceSession().lazilyLoaded(pojo);
         if(lazilyLoadedAdapter != null) {
             return lazilyLoadedAdapter;
         }

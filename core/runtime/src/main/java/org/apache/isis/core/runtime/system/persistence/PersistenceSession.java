@@ -387,7 +387,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.debug("creating transient instance of " + objectSpec);
         }
         final Object pojo = objectSpec.createObject();
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
 
@@ -398,12 +398,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         final Object pojo = objectSpec.createObject();
         final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
         facet.initialize(pojo, memento);
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(pojo);
+        final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
     //endregion
 
-    //region > findInstances, getInstances
+    //region > findInstancesInTransaction
 
     /**
      * Finds and returns instances that match the specified query.
@@ -420,9 +420,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.debug("findInstances using (applib) Query: " + query);
         }
 
+        // TODO: unify PersistenceQuery and PersistenceQueryProcessor
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (LOG.isDebugEnabled()) {
-            LOG.debug("findInstances using (core runtime) PersistenceQuery: " + persistenceQuery);
+            LOG.debug("maps to (core runtime) PersistenceQuery: " + persistenceQuery);
         }
 
         final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
@@ -439,22 +440,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return getAdapterManager().adapterFor(results);
     }
 
-    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
-        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                persistenceQueryProcessorByClass.get(persistenceQueryClass);
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
-        }
-        return processor;
-    }
-
     /**
      * Converts the {@link Query applib representation of a query} into the
      * {@link PersistenceQuery NOF-internal representation}.
      */
-    protected final PersistenceQuery createPersistenceQueryFor(
+    private final PersistenceQuery createPersistenceQueryFor(
             final Query<?> query,
             final QueryCardinality cardinality) {
 
@@ -467,12 +457,24 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return persistenceQuery;
     }
 
-    //endregion
-
+    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
+        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                persistenceQueryProcessorByClass.get(persistenceQueryClass);
+        if (processor == null) {
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
+        }
+        return processor;
+    }
     @SuppressWarnings("unchecked")
-    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(final PersistenceQueryProcessor<Q> persistenceQueryProcessor, final PersistenceQuery persistenceQuery) {
+    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(
+            final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
+            final PersistenceQuery persistenceQuery) {
         return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
+
+
 
     //endregion
 
@@ -689,7 +691,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     //endregion
-
 
     //region > lazilyLoaded
 

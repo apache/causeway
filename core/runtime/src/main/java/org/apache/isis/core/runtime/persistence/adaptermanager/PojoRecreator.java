@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -66,18 +65,6 @@ public class PojoRecreator {
 
 
 
-    /**
-     * Return an adapter, if possible, for a pojo that was instantiated by the
-     * object store as a result of lazily loading, but which hasn't yet been seen
-     * by the Isis framework.
-     *
-     * <p>
-     * In the case of JDO object store, downcast to <tt>Persistence</tt>
-     * and 'look inside' its state.
-     */
-    public ObjectAdapter lazilyLoaded(Object pojo) {
-        return persistenceSession.lazilyLoaded(pojo);
-    }
 
     ///////////////////////////////
 
