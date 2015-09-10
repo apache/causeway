@@ -18,6 +18,7 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,7 @@ import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
+import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoRecreator;
@@ -68,17 +70,21 @@ import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlg
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -109,8 +115,20 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     // not final only for testing purposes
     private IsisTransactionManager transactionManager;
+
     private final FrameworkSynchronizer frameworkSynchronizer;
     private final OidMarshaller oidMarshaller;
+
+    /**
+     * populated only when {@link #open()}ed.
+     */
+    private PersistenceManager persistenceManager;
+
+    /**
+     * populated only when {@link #open()}ed.
+     */
+    private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
+
 
     /**
      * Initialize the object store so that calls to this object store access
@@ -173,24 +191,27 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             LOG.debug("opening " + this);
         }
 
-        // injected via setters
-        ensureThatState(transactionManager, is(not(nullValue())), "TransactionManager missing");
-
         // inject any required dependencies into object factory
         servicesInjector.injectInto(objectFactory);
         servicesInjector.injectInto(adapterManager);
 
         adapterManager.open();
 
-        // doOpen..
-        ensureThatState(objectStore, is(notNullValue()), "object store required");
-        ensureThatState(getTransactionManager(), is(notNullValue()), "transaction manager required");
-        ensureThatState(persistAlgorithm, is(notNullValue()), "persist algorithm required");
-
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
 
         objectStore.open();
+
+        persistenceManager = objectStore.getPersistenceManager();
+
+        persistenceQueryProcessorByClass.put(
+                PersistenceQueryFindAllInstances.class,
+                new PersistenceQueryFindAllInstancesProcessor(
+                        persistenceManager, frameworkSynchronizer));
+        persistenceQueryProcessorByClass.put(
+                PersistenceQueryFindUsingApplibQueryDefault.class,
+                new PersistenceQueryFindUsingApplibQueryProcessor(
+                        persistenceManager, frameworkSynchronizer));
 
         initServices();
 
@@ -409,17 +430,39 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
     }
 
     private List<ObjectAdapter> getInstancesFromPersistenceLayer(final PersistenceQuery persistenceQuery) {
-        return getTransactionManager().executeWithinTransaction(new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
-            @Override
-            public List<ObjectAdapter> execute() {
-                return objectStore.loadInstancesAndAdapt(persistenceQuery);
-            }
+        return getTransactionManager().executeWithinTransaction(
+                new TransactionalClosureWithReturnAbstract<List<ObjectAdapter>>() {
+                    @Override
+                    public List<ObjectAdapter> execute() {
+                        return loadInstancesAndAdapt(persistenceQuery);
+                    }
 
-            @Override
-            public void onSuccess() {
-            }
-        });
+                    @Override
+                    public void onSuccess() {
+                    }
+                });
     }
+    //endregion
+
+    //region > loadInstancesAndAdapt
+    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
+        ensureOpened();
+        ensureInTransaction();
+
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
+        if (processor == null) {
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
+        }
+        return processPersistenceQuery(processor, persistenceQuery);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(final PersistenceQueryProcessor<Q> persistenceQueryProcessor, final PersistenceQuery persistenceQuery) {
+        return persistenceQueryProcessor.process((Q) persistenceQuery);
+    }
+
     //endregion
 
     //region > Services
@@ -764,6 +807,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
                 FrameworkSynchronizer.CalledFrom.OS_RESOLVE);
     }
     //endregion
+
 
 
     //region > makePersistent

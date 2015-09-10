@@ -18,15 +18,12 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
-import java.text.MessageFormat;
-import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 
 import com.google.common.collect.Maps;
 
-import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,25 +31,16 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.persistence.PojoRefreshException;
-import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
-import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatContext;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -89,7 +77,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
 
     private PersistenceManager persistenceManager;
 
-    private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
     private final FrameworkSynchronizer frameworkSynchronizer;
 
     public ObjectStore(
@@ -114,13 +101,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         persistenceSession.ensureNotOpened();
 
         this.persistenceManager = applicationComponents.createPersistenceManager();
-
-        persistenceQueryProcessorByClass.put(
-                PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(persistenceManager, frameworkSynchronizer));
-        persistenceQueryProcessorByClass.put(
-                PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(persistenceManager, frameworkSynchronizer));
     }
 
     /**
@@ -212,29 +192,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
             transaction.rollback();
         }
     }
-    //endregion
-
-
-
-    //region > loadInstancesAndAdapt
-    public List<ObjectAdapter> loadInstancesAndAdapt(final PersistenceQuery persistenceQuery) {
-        ensureOpened();
-        ensureInTransaction();
-
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                persistenceQueryProcessorByClass.get(persistenceQuery.getClass());
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported criteria type: {0}", persistenceQuery.getClass().getName()));
-        }
-        return processPersistenceQuery(processor, persistenceQuery);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(final PersistenceQueryProcessor<Q> persistenceQueryProcessor, final PersistenceQuery persistenceQuery) {
-        return persistenceQueryProcessor.process((Q)persistenceQuery);
-    }
-
     //endregion
 
     //region > registerServices, getOidForService
