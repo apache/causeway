@@ -390,6 +390,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return createInstance(objectSpec);
     }
 
+    public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
+        return createInstance(objectSpec, memento);
+    }
+
+    private enum Variant {
+        TRANSIENT,
+        VIEW_MODEL
+    }
+
     private ObjectAdapter createInstance(final ObjectSpecification objectSpec) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
@@ -399,9 +408,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return initializePropertiesAndDoCallback(adapter);
     }
 
-    public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
-        return createInstance(objectSpec, memento);
-    }
 
     private ObjectAdapter createInstance(final ObjectSpecification objectSpec, final String memento) {
         if (LOG.isDebugEnabled()) {
