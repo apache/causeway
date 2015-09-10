@@ -335,7 +335,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     // Creation
     // //////////////////////////////////////////////////////////////
 
-    Object createObject();
 
     /**
      * REVIEW: should this behaviour move, eg onto ObjectAdapter?

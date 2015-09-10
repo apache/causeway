@@ -411,35 +411,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////////
 
 
-    @Override
-    public Object createObject() {
-        if (getCorrespondingClass().isArray()) {
-            return Array.newInstance(getCorrespondingClass().getComponentType(), 0);
-        }
-        
-        try {
-            final Class<?> cls = getCorrespondingClass();
-
-            if (Modifier.isAbstract(cls.getModifiers())) {
-                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-            }
-            final Object newInstance;
-            if (Modifier.isAbstract(cls.getModifiers())) {
-                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
-            }
-            try {
-                newInstance = cls.newInstance();
-            } catch (final IllegalAccessException | InstantiationException e) {
-                throw new ObjectInstantiationException(e);
-            }
-
-            getDependencyInjector().injectServicesInto(newInstance);
-            return newInstance;
-        } catch (final ObjectInstantiationException e) {
-            throw new IsisException("Failed to create instance of type " + getFullIdentifier(), e);
-        }
-    }
-
     /**
      * REVIEW: does this behaviour live best here?  Not that sure that it does...
      */

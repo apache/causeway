@@ -18,6 +18,8 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -55,6 +58,7 @@ import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -382,21 +386,56 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating transient instance of " + objectSpec);
         }
-        final Object pojo = objectSpec.createObject();
+        final Object pojo = createObject(objectSpec);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
+
+
 
     public ObjectAdapter createViewModelInstance(final ObjectSpecification objectSpec, final String memento) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating view model instance of " + objectSpec);
         }
-        final Object pojo = objectSpec.createObject();
+        final Object pojo = createObject(objectSpec);
         final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
         facet.initialize(pojo, memento);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
         return objectSpec.initialize(adapter);
     }
+
+
+    public Object createObject(final ObjectSpecification objectSpec) {
+
+        final Class<?> correspondingClass = objectSpec.getCorrespondingClass();
+        if (correspondingClass.isArray()) {
+            return Array.newInstance(correspondingClass.getComponentType(), 0);
+        }
+
+        try {
+            final Class<?> cls = correspondingClass;
+
+            if (Modifier.isAbstract(cls.getModifiers())) {
+                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+            }
+            final Object newInstance;
+            if (Modifier.isAbstract(cls.getModifiers())) {
+                throw new ObjectInstantiationException("Cannot create an instance of an abstract class: " + cls);
+            }
+            try {
+                newInstance = cls.newInstance();
+            } catch (final IllegalAccessException | InstantiationException e) {
+                throw new ObjectInstantiationException(e);
+            }
+
+            servicesInjector.injectServicesInto(newInstance);
+            return newInstance;
+        } catch (final ObjectInstantiationException e) {
+            throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
+        }
+    }
+
+
     //endregion
 
     //region > findInstancesInTransaction

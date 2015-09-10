@@ -324,20 +324,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public Object createObject() {
-        try {
-            final Class<?> cls = Class.forName(name);
-            return cls.newInstance();
-        } catch (final ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            throw new IsisException(e);
-        }
-    }
-
-    @Override
     public ObjectAdapter initialize(final ObjectAdapter objectAdapter) {
         return objectAdapter;
     }
 
+    // TODO: not used
     public void setupPersistable(final Persistability persistable) {
         this.persistable = persistable;
     }

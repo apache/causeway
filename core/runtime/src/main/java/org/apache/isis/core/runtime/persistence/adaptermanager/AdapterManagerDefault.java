@@ -371,7 +371,7 @@ public class AdapterManagerDefault implements AdapterManager,
     private Object recreatePojoDefault(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
-        final Object pojo = spec.createObject();
+        final Object pojo = persistenceSession.createObject(spec);
         if(rootOid.isViewModel()) {
             // initialize the view model pojo from the oid's identifier
 
@@ -748,7 +748,8 @@ public class AdapterManagerDefault implements AdapterManager,
         // take care not to touch the pojo, since it might have been deleted.
         ensureThatArg(
                 adapter, is(adapterAccordingToOidAdapterMap),
-                "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: " + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
+                "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: "
+                        + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
     }
     //endregion
 
