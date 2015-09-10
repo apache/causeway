@@ -46,7 +46,6 @@ import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
@@ -89,6 +88,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
     private static final Logger LOG = LoggerFactory.getLogger(AdapterManagerDefault.class);
 
+    //region > constructor and fields
     protected final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     protected final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
@@ -126,11 +126,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         this.servicesInjector = servicesInjector;
         this.configuration = configuration;
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // open, close
-    // //////////////////////////////////////////////////////////////////
-
+    //region > open, close
     @Override
     public void open() {
         oidAdapterMap.open();
@@ -142,33 +140,27 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         oidAdapterMap.close();
         pojoAdapterMap.close();
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // reset
-    // //////////////////////////////////////////////////////////////////
-
+    //region > reset
     @Override
     public void reset() {
         oidAdapterMap.reset();
         pojoAdapterMap.reset();
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // Iterable
-    // //////////////////////////////////////////////////////////////////
+    //region > iterable
 
     @Override
     public Iterator<ObjectAdapter> iterator() {
         return pojoAdapterMap.iterator();
     }
+    //endregion
 
 
-    
 
-    // //////////////////////////////////////////////////////////////////
-    // Adapter lookup
-    // //////////////////////////////////////////////////////////////////
-
+    //region > getAdapterFor
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         ensureThatArg(pojo, is(notNullValue()));
@@ -183,11 +175,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
         return oidAdapterMap.getAdapter(oid);
     }
+    //endregion
 
-    
-    // //////////////////////////////////////////////////////////////////
-    // Adapter lookup/creation
-    // //////////////////////////////////////////////////////////////////
+    //region > adapterFor
 
     /**
      * {@inheritDoc}
@@ -227,12 +217,13 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         
         // we create value facets as standalone (so not added to maps)
         if (objSpec.containsFacet(ValueFacet.class)) {
-            ObjectAdapter valueAdapter = createStandaloneAdapterAndSetResolveState(pojo);
+            ObjectAdapter valueAdapter = createStandaloneAdapter(pojo);
             return valueAdapter;
         }
         
         return null;
     }
+
 
     /**
      * {@inheritDoc}
@@ -273,15 +264,14 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return mapAndInjectServices(newAdapter);
     }
 
-    
     /**
      * Creates an {@link ObjectAdapter adapter} to represent a collection
      * of the parent.
-     * 
+     *
      * <p>
      * The returned adapter will have a {@link ParentedCollectionOid}; its version
      * and its persistence are the same as its owning parent.
-     * 
+     *
      * <p>
      * Should only be called if the pojo is known not to be
      * {@link #getAdapterFor(Object) mapped}.
@@ -307,23 +297,18 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return collectionAdapter;
     }
 
-    private static boolean isAggregated(final ObjectSpecification objSpec) {
-        return objSpec.containsFacet(ParentedCollectionFacet.class);
-    }
 
-    
-    // //////////////////////////////////////////////////////////////////
-    // Recreate adapter
-    // //////////////////////////////////////////////////////////////////
+
 
     @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
         return adapterFor(rootOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
     }
 
-
     @Override
-    public ObjectAdapter adapterFor(final RootOid rootOid, final AdapterManager.ConcurrencyChecking concurrencyChecking) {
+    public ObjectAdapter adapterFor(
+            final RootOid rootOid,
+            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
         ObjectAdapter adapter = getAdapterFor(rootOid);
@@ -382,17 +367,17 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return adapter;
     }
 
-    public Object recreatePojo(RootOid oid) {
+    private Object recreatePojo(RootOid oid) {
         if(oid.isTransient() || oid.isViewModel()) {
             return recreatePojoDefault(oid);
         } else {
-            return getPersistenceSession().loadPojo(oid);
+            return persistenceSession.loadPojo(oid);
         }
     }
 
     private Object recreatePojoDefault(final RootOid rootOid) {
         final ObjectSpecification spec =
-                getSpecificationLoader().lookupBySpecId(rootOid.getObjectSpecId());
+                specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
         final Object pojo = spec.createObject();
         if(rootOid.isViewModel()) {
             // initialize the view model pojo from the oid's identifier
@@ -408,13 +393,17 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
         return pojo;
     }
+    //endregion
 
+    //region > remapRecreatedPojo
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapter(adapter);
         adapter.replacePojo(pojo);
         mapAndInjectServices(adapter);
     }
+    //endregion
 
+    //region > mapRecreatedPojo
 
     /**
      * Either returns an existing {@link ObjectAdapter adapter} (as per
@@ -461,6 +450,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
         return createdAdapter;
     }
+    //endregion
 
     private boolean isConcurrencyCheckingGloballyEnabled() {
         final boolean disabled = getConfiguration().getBoolean("isis.persistor.disableConcurrencyChecking", false);
@@ -468,11 +458,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
     }
 
 
-    // //////////////////////////////////////////////////////////////////
-    // adapter deletion
-    // //////////////////////////////////////////////////////////////////
-
-
+    //region > removeAdapter
     /**
      * Removes the specified object from both the identity-adapter map, and the
      * pojo-adapter map.
@@ -499,11 +485,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
 
         unmap(adapter);
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // Persist API
-    // //////////////////////////////////////////////////////////////////
-
+    //region > remapAsPersistent
     /**
      * {@inheritDoc}
      * 
@@ -515,7 +499,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      */
     public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
         
-        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
+        final ObjectAdapter rootAdapter = adapter.getAggregateRoot();  // TODO: REVIEW: think this is redundant; would seem this method is only ever called for roots anyway.
         final RootOid transientRootOid = (RootOid) rootAdapter.getOid();
 
         // no longer true, because isTransient now looks directly at the underlying pojo's state (for entities)
@@ -616,25 +600,19 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         }
     }
 
-
 	private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Helpers
-    // ///////////////////////////////////////////////////////////////////////////
-
+    //region > Helpers: createXxxAdapter
     /**
      * Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
      * object.
-     * 
-     * <p>
-     * Has <tt>protected</tt> visibility just so can be used by subclasses if required.
      */
-    protected final ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
+    private ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
         final RootOid rootOid = getOidGenerator().createTransientOrViewModelOid(pojo);
         return createRootAdapter(pojo, rootOid);
     }
@@ -651,7 +629,7 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * {@link #getAdapterFor(Object) mapped}, and for immutable value types
      * referenced.
      */
-    private ObjectAdapter createStandaloneAdapterAndSetResolveState(final Object pojo) {
+    private ObjectAdapter createStandaloneAdapter(final Object pojo) {
         return createAdapter(pojo, null);
     }
 
@@ -659,22 +637,19 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
      * Creates (but does not {@link #mapAndInjectServices(ObjectAdapter) map}) a new 
      * root {@link ObjectAdapter adapter} for the supplied domain object.
      * 
-     * @see #createStandaloneAdapterAndSetResolveState(Object)
+     * @see #createStandaloneAdapter(Object)
      * @see #createCollectionAdapter(Object, ParentedCollectionOid)
      */
     private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
-        final ObjectAdapter rootAdapter = createAdapter(pojo, rootOid
-        );
-        return rootAdapter;
+        return createAdapter(pojo, rootOid);
     }
 
-
-    private ObjectAdapter createCollectionAdapter(final Object pojo, ParentedCollectionOid collectionOid) {
+    private ObjectAdapter createCollectionAdapter(
+            final Object pojo,
+            ParentedCollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
-        final ObjectAdapter collectionAdapter = createAdapter(pojo, collectionOid
-        );
-        return collectionAdapter;
+        return createAdapter(pojo, collectionOid);
     }
 
     private PojoAdapter createAdapter(
@@ -686,16 +661,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
                 specificationLoader, this);
     }
 
-    protected Localization getLocalization() {
-        return IsisContext.getLocalization();
-    }
+    //endregion
 
-
-
-    // //////////////////////////////////////////////////////////////////////////
-    // Helpers: map & unmap
-    // //////////////////////////////////////////////////////////////////////////
-
+    //region > Helpers: mapAndInjectServices & unmap
     private ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
         // since the whole point of this method is to map an adapter that's just been created.
         // so we *don't* call ensureMapsConsistent(adapter); 
@@ -746,10 +714,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         pojoAdapterMap.remove(adapter);
     }
 
-    // //////////////////////////////////////////////////////////////////////////
-    // Helpers: ensure invariants
-    // //////////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Helpers: ensure invariants
     /**
      * Fail early if any problems.
      */
@@ -795,11 +762,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
                 adapter, is(adapterAccordingToOidAdapterMap),
                 "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: " + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // debug
-    // //////////////////////////////////////////////////////////////////
-
+    //region > debug
     @Override
     public String debugTitle() {
         return "Identity map (adapter manager)";
@@ -815,11 +780,9 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         oidAdapterMap.debugData(debug);
 
     }
+    //endregion
 
-    
-    // //////////////////////////////////////////////////////////////////////////
-    // Injectable
-    // //////////////////////////////////////////////////////////////////////////
+    //region > Injectable
 
     @Override
     public void injectInto(final Object candidate) {
@@ -828,9 +791,10 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
             cast.setAdapterManager(this);
         }
     }
-
+    //endregion
 
     //region > Dependencies (from constructor)
+    // only used for debugging
     protected OidMarshaller getOidMarshaller() {
 		return oidMarshaller;
 	}
@@ -859,6 +823,12 @@ public class AdapterManagerDefault implements AdapterManager, Iterable<ObjectAda
         return configuration;
     }
 
+    //endregion
+
+    //region > dependencies (from context)
+    protected Localization getLocalization() {
+        return IsisContext.getLocalization();
+    }
     //endregion
 
 
