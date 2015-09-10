@@ -1139,4 +1139,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
+    //region > oidGenerator delegate methods
+
+    public final RootOid createPersistentOrViewModelOid(Object pojo) {
+        return oidGenerator.createPersistentOrViewModelOid(pojo);
+    }
+    //endregion
+
+
 }
+
+
+
