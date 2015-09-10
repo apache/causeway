@@ -58,7 +58,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     public static final String DATANUCLEUS_PROPERTIES_ROOT = ROOT_KEY + "impl.";
 
     /**
-     * @see #isFixturesInstalled()
+     * @see #objectStoreIsFixturesInstalled()
      */
     public static final String INSTALL_FIXTURES_KEY = OptionHandlerFixtureAbstract.DATANUCLEUS_INSTALL_FIXTURES_KEY;
     public static final boolean INSTALL_FIXTURES_DEFAULT = false;
@@ -138,7 +138,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
      * By default this is not expected to be there, but utilities can add in on
      * the fly during bootstrapping if required.
      */
-    public boolean isFixturesInstalled() {
+    public boolean objectStoreIsFixturesInstalled() {
         final boolean installFixtures = getConfiguration().getBoolean(INSTALL_FIXTURES_KEY, INSTALL_FIXTURES_DEFAULT);
         LOG.info("isFixturesInstalled: {} = {}", INSTALL_FIXTURES_KEY, installFixtures);
         return !installFixtures;

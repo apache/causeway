@@ -483,7 +483,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
-        final List<Object> services = persistenceSessionFactory.getServicesInjector().getRegisteredServices();
+        final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
         for (final Object servicePojo : services) {
             serviceAdapters.add(getService(servicePojo));
@@ -493,7 +493,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
 
     private ObjectAdapter getService(final Object servicePojo) {
         final ObjectSpecification serviceSpecification =
-                getSpecificationLoader().loadSpecification(servicePojo.getClass());
+                specificationLoader.loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
         final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
 
@@ -515,7 +515,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      * initialise the persistor.
      * 
      * <p>
-     * Returns the cached value of {@link ObjectStore#isFixturesInstalled()
+     * Returns the cached value of {@link ObjectStore#objectStoreIsFixturesInstalled()
      * whether fixtures are installed} from the
      * {@link PersistenceSessionFactory}.
      * <p>
@@ -527,7 +527,7 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
      */
     public boolean isFixturesInstalled() {
         if (persistenceSessionFactory.isFixturesInstalled() == null) {
-            persistenceSessionFactory.setFixturesInstalled(objectStore.isFixturesInstalled());
+            persistenceSessionFactory.setFixturesInstalled(objectStore.objectStoreIsFixturesInstalled());
         }
         return persistenceSessionFactory.isFixturesInstalled();
     }
