@@ -97,7 +97,7 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         if (validity.isVetoed()) {
             throw RestfulObjectsApplicationException.createWithBody(HttpStatusCode.BAD_REQUEST, objectRepr, validity.getReason());
         }
-        getResourceContext().getPersistenceSession().makePersistent(objectAdapter);
+        getResourceContext().getPersistenceSession().makePersistentInTransaction(objectAdapter);
 
         return getDomainResourceHelper(objectAdapter).objectRepresentation();
     }

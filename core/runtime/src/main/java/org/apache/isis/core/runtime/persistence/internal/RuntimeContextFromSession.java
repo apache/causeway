@@ -164,7 +164,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         this.objectPersistor = new ObjectPersistorAbstract() {
             @Override
             public void makePersistent(final ObjectAdapter adapter) {
-                getPersistenceSession().makePersistent(adapter);
+                getPersistenceSession().makePersistentInTransaction(adapter);
             }
 
             @Override

@@ -71,14 +71,14 @@ public class ObjectFixtureFilePersistor {
                     loadFieldData(object, loaded, line);
                 } else {
                     if (object != null && !object.representsPersistent()) {
-                        getPersistenceSession().makePersistent(object);
+                        getPersistenceSession().makePersistentInTransaction(object);
                     }
                     object = loaded.get(line);
                 }
             }
 
             if (object != null && !object.representsPersistent()) {
-                getPersistenceSession().makePersistent(object);
+                getPersistenceSession().makePersistentInTransaction(object);
             }
         } catch (final Exception e) {
             throw new FixtureException("failed to load data at line " + lineNo, e);

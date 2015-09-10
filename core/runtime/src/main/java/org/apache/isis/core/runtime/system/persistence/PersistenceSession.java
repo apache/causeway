@@ -794,7 +794,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * collection, that is not already persistent, should be made persistent by
      * recursively calling this method.
      */
-    public void makePersistent(final ObjectAdapter adapter) {
+    public void makePersistentInTransaction(final ObjectAdapter adapter) {
         if (adapter.representsPersistent()) {
             throw new NotPersistableException("Object already persistent: " + adapter);
         }

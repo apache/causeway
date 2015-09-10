@@ -263,7 +263,7 @@ public class PersistenceSessionTest {
         });
 
         transactionManager.startTransaction();
-        persistenceSession.makePersistent(transientAdapter);
+        persistenceSession.makePersistentInTransaction(transientAdapter);
         transactionManager.endTransaction();
     }
 }
