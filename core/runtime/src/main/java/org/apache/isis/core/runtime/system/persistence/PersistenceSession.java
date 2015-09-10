@@ -53,6 +53,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -62,6 +64,8 @@ import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -388,7 +392,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         final Object pojo = createObject(objectSpec);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-        return objectSpec.initialize(adapter);
+        return initialize(adapter);
     }
 
 
@@ -401,7 +405,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
         facet.initialize(pojo, memento);
         final ObjectAdapter adapter = adapterManager.adapterFor(pojo);
-        return objectSpec.initialize(adapter);
+        return initialize(adapter);
     }
 
 
@@ -433,6 +437,20 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         } catch (final ObjectInstantiationException e) {
             throw new IsisException("Failed to create instance of type " + objectSpec.getFullIdentifier(), e);
         }
+    }
+
+    public ObjectAdapter initialize(final ObjectAdapter adapter) {
+
+        // initialize new object
+        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
+        for (ObjectAssociation field : fields) {
+            field.toDefault(adapter);
+        }
+        servicesInjector.injectServicesInto(adapter.getObject());
+
+        CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
+
+        return adapter;
     }
 
 

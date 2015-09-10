@@ -19,22 +19,22 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl.dflt;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -46,8 +46,6 @@ import org.apache.isis.core.metamodel.facets.all.i18n.NamedFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.i18n.PluralFacetTranslated;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.inferred.PluralFacetInferred;
@@ -57,10 +55,9 @@ import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.object.wizard.WizardFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
+import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -406,28 +403,6 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
         return null;
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // createObject
-    // //////////////////////////////////////////////////////////////////////
-
-
-    /**
-     * REVIEW: does this behaviour live best here?  Not that sure that it does...
-     */
-    @Override
-    public ObjectAdapter initialize(final ObjectAdapter adapter) {
-                        
-        // initialize new object
-        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(Contributed.EXCLUDED);
-        for (ObjectAssociation field : fields) {
-            field.toDefault(adapter);
-        }
-        getDependencyInjector().injectServicesInto(adapter.getObject());
-
-        CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
-
-        return adapter;
-    }
 
 
     // //////////////////////////////////////////////////////////////////////

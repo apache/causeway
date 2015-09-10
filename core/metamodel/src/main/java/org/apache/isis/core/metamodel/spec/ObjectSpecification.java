@@ -331,16 +331,6 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     boolean isHidden();
 
-    // //////////////////////////////////////////////////////////////
-    // Creation
-    // //////////////////////////////////////////////////////////////
-
-
-    /**
-     * REVIEW: should this behaviour move, eg onto ObjectAdapter?
-     */
-    ObjectAdapter initialize(ObjectAdapter object);
-
 
 
     // //////////////////////////////////////////////////////////////
