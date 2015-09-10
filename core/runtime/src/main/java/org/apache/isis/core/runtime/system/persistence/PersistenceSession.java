@@ -211,7 +211,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         getAdapterManager().injectInto(objectStore);
         getSpecificationLoader().injectInto(objectStore);
 
-        objectStoreOpen();
+        this.persistenceManager = applicationComponents.createPersistenceManager();
 
         persistenceManager = objectStore.getPersistenceManager();
 
@@ -229,24 +229,20 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         setState(State.OPEN);
     }
 
-    
-    private void initServices() {
-        final List<Object> registeredServices =
-                persistenceSessionFactory.getServicesInjector().getRegisteredServices();
-        createServiceAdapters(registeredServices);
-    }
 
     /**
      * Creates {@link ObjectAdapter adapters} for the service list.
      */
-    private void createServiceAdapters(final List<Object> registeredServices) {
+    private void initServices() {
+        final List<Object> registeredServices = servicesInjector.getRegisteredServices();
         for (final Object service : registeredServices) {
-            final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(service.getClass());
+            final ObjectSpecification serviceSpecification =
+                    specificationLoader.loadSpecification(service.getClass());
             serviceSpecification.markAsService();
             final RootOid existingOid = getOidForService(serviceSpecification);
             final ObjectAdapter serviceAdapter =
                     existingOid == null
-                            ? getAdapterManager().adapterFor(service) 
+                            ? getAdapterManager().adapterFor(service)
                             : getAdapterManager().mapRecreatedPojo(existingOid, service);
             if (serviceAdapter.getOid().isTransient()) {
                 adapterManager.remapAsPersistent(serviceAdapter, null);
@@ -259,22 +255,29 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
     }
 
-
     /**
      * @return - the service, or <tt>null</tt> if no service registered of specified type.
      */
     public <T> T getServiceOrNull(final Class<T> serviceType) {
-        return persistenceSessionFactory.getServicesInjector().lookupService(serviceType);
+        return servicesInjector.lookupService(serviceType);
     }
 
     //endregion
 
     //region > close
 
-
     /**
      * Calls {@link org.apache.isis.core.commons.components.SessionScopedComponent#close()}
      * on the subcomponents.
+     *
+     * <p>
+     * Automatically {@link IsisTransactionManager#endTransaction() ends
+     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
+     * {@link PersistenceSession#commitJdoTransaction() commits the underlying
+     * JDO transaction}.
+     *
+     * <p>
+     * The corresponding DataNucleus entity is then closed.
      */
     @Override
     public void close() {
@@ -285,24 +288,35 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         try {
-            try {
-                objectStoreClose();
-            } catch(final Throwable ex) {
-                // ignore
-                LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");
-            }
+            ensureOpened();
+            ensureThatState(persistenceManager, is(notNullValue()));
 
             try {
-                adapterManager.close();
-            } catch(final Throwable ex) {
-                // ignore
-                LOG.error("adapterManager#close() failed while closing the session; continuing to avoid memory leakage");
+                final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
+                if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
+                    if(currentTransaction.getState().canCommit()) {
+                        getTransactionManager().endTransaction();
+                    } else if(currentTransaction.getState().canAbort()) {
+                        getTransactionManager().abortTransaction();
+                    }
+                }
+            } finally {
+                // make sure release everything ok.
+                persistenceManager.close();
             }
+        } catch(final Throwable ex) {
+            // ignore
+            LOG.error("objectStore#close() failed while closing the session; continuing to avoid memory leakage");
+        }
 
+        try {
+            adapterManager.close();
+        } catch(final Throwable ex) {
+            // ignore
+            LOG.error("adapterManager#close() failed while closing the session; continuing to avoid memory leakage");
         } finally {
             setState(State.CLOSED);
         }
-
     }
 
     public PersistenceManager getPersistenceManager() {
@@ -310,42 +324,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     //endregion
 
-    //region > open, close
-
-    public void objectStoreOpen() {
-        this.persistenceManager = applicationComponents.createPersistenceManager();
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * Automatically {@link IsisTransactionManager#endTransaction() ends
-     * (commits)} the current (Isis) {@link IsisTransaction}. This in turn
-     * {@link PersistenceSession#commitJdoTransaction() commits the underlying
-     * JDO transaction}.
-     *
-     * <p>
-     * The corresponding DataNucleus entity is then closed.
-     */
-    public void objectStoreClose() {
-        ensureOpened();
-        ensureThatState(persistenceManager, is(notNullValue()));
-
-        try {
-            final IsisTransaction currentTransaction = getTransactionManager().getTransaction();
-            if (currentTransaction != null && !currentTransaction.getState().isComplete()) {
-                if(currentTransaction.getState().canCommit()) {
-                    getTransactionManager().endTransaction();
-                } else if(currentTransaction.getState().canAbort()) {
-                    getTransactionManager().abortTransaction();
-                }
-            }
-        } finally {
-            // make sure release everything ok.
-            persistenceManager.close();
-        }
-    }
-    //endregion
 
 
 
