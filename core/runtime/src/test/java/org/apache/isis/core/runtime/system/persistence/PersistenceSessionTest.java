@@ -196,7 +196,7 @@ public class PersistenceSessionTest {
         });
         
         transactionManager.startTransaction();
-        persistenceSession.destroyObject(persistentAdapter);
+        persistenceSession.destroyObjectInTransaction(persistentAdapter);
         transactionManager.abortTransaction();
     }
 
@@ -232,7 +232,7 @@ public class PersistenceSessionTest {
         });
 
         transactionManager.startTransaction();
-        persistenceSession.destroyObject(persistentAdapter);
+        persistenceSession.destroyObjectInTransaction(persistentAdapter);
         transactionManager.endTransaction();
     }
 

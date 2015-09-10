@@ -169,7 +169,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public void remove(final ObjectAdapter adapter) {
-                getPersistenceSession().destroyObject(adapter);
+                getPersistenceSession().destroyObjectInTransaction(adapter);
             }
         };
         this.domainObjectServices = new DomainObjectServicesAbstract() {

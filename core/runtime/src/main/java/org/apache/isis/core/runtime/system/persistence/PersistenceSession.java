@@ -825,13 +825,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
-    //region > destroyObject
+    //region > destroyObjectInTransaction
 
     /**
      * Removes the specified object from the system. The specified object's data
      * should be removed from the persistence mechanism.
      */
-    public void destroyObject(final ObjectAdapter adapter) {
+    public void destroyObjectInTransaction(final ObjectAdapter adapter) {
         final ObjectSpecification spec = adapter.getSpecification();
         if (spec.isParented()) {
             return;
@@ -843,7 +843,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
             @Override
             public void execute() {
-                final DestroyObjectCommand command = createDestroyObjectCommand(adapter);
+                final DestroyObjectCommand command = newDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);
             }
 
@@ -893,7 +893,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
 
-    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter adapter) {
+    public DestroyObjectCommand newDestroyObjectCommand(final ObjectAdapter adapter) {
         ensureOpened();
         ensureInSession();
 
