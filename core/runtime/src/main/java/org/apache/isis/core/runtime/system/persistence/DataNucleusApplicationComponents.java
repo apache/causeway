@@ -275,8 +275,6 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     public PersistenceManager createPersistenceManager() {
         PersistenceManager persistenceManager = persistenceManagerFactory.getPersistenceManager();
 
-        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(synchronizer);
-        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
         return persistenceManager;
     }
 

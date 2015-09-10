@@ -84,6 +84,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureWithReturn;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusCreateObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucleusDeleteObjectCommand;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
@@ -222,6 +223,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         adapterManager.open();
 
         persistenceManager = applicationComponents.createPersistenceManager();
+
+        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(frameworkSynchronizer);
+        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
