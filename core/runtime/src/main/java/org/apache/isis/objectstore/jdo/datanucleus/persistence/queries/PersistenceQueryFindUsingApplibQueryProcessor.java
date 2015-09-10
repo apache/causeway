@@ -44,7 +44,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
 
     public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
-        super(persistenceManager, frameworkSynchronizer);
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {

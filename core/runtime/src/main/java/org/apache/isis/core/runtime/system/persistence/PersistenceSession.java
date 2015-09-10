@@ -55,9 +55,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
@@ -839,8 +841,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        frameworkSynchronizer.postLoadProcessingFor((Persistable) domainObject,
-                FrameworkSynchronizer.CalledFrom.OS_RESOLVE);
+        postLoadProcessingFor((Persistable) domainObject, FrameworkSynchronizer.CalledFrom.OS_RESOLVE);
     }
     //endregion
 
@@ -1254,7 +1255,68 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     public void postLoadProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
-        frameworkSynchronizer.postLoadProcessingFor(pojo, calledFrom);
+
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                final Persistable pc = pojo;
+
+                // need to do eagerly, because (if a viewModel then) a
+                // viewModel's #viewModelMemento might need to use services
+                injectServicesInto(pojo);
+
+                final Version datastoreVersion = getVersionIfAny(pc);
+
+                final RootOid originalOid;
+                ObjectAdapter adapter = getAdapterFor(pojo);
+                if (adapter != null) {
+                    ensureRootObject(pojo);
+                    originalOid = (RootOid) adapter.getOid();
+
+                    final Version originalVersion = adapter.getVersion();
+
+                    // sync the pojo held by the adapter with that just loaded
+                    remapRecreatedPojo(adapter, pojo);
+
+                    // since there was already an adapter, do concurrency check
+                    // (but don't set abort cause if checking is suppressed through thread-local)
+                    final RootOid thisOid = originalOid;
+                    final Version thisVersion = originalVersion;
+                    final Version otherVersion = datastoreVersion;
+
+                    if (thisVersion != null &&
+                            otherVersion != null &&
+                            thisVersion.different(otherVersion)) {
+
+                        if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+                            LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                            final String currentUser = authenticationSession.getUserName();
+                            final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
+                                    thisVersion, otherVersion);
+                            getCurrentTransaction().setAbortCause(abortCause);
+
+                        } else {
+                            LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
+                                    + ")");
+                        }
+                    }
+                } else {
+                    originalOid = createPersistentOrViewModelOid(pojo);
+
+                    // it appears to be possible that there is already an adapter for this Oid,
+                    // ie from ObjectStore#resolveImmediately()
+                    adapter = getAdapterFor(originalOid);
+                    if (adapter != null) {
+                        remapRecreatedPojo(adapter, pojo);
+                    } else {
+                        adapter = mapRecreatedPojo(originalOid, pojo);
+                        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
+                    }
+                }
+
+                adapter.setVersion(datastoreVersion);
+            }
+        }, calledFrom);
     }
 
     /**

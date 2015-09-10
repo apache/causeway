@@ -34,7 +34,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
 import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -44,11 +43,9 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         implements PersistenceQueryProcessor<T> {
 
     private final PersistenceManager persistenceManager;
-    private final FrameworkSynchronizer frameworkSynchronizer;
 
-    protected PersistenceQueryProcessorAbstract(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
+    protected PersistenceQueryProcessorAbstract(final PersistenceManager persistenceManager) {
         this.persistenceManager = persistenceManager;
-        this.frameworkSynchronizer = frameworkSynchronizer;
     }
 
     protected PersistenceManager getPersistenceManager() {
@@ -82,7 +79,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                frameworkSynchronizer.postLoadProcessingFor((Persistable) pojo, CalledFrom.OS_QUERY);
+                getPersistenceSession().postLoadProcessingFor((Persistable) pojo, CalledFrom.OS_QUERY);
                 adapter = getAdapterManager().getAdapterFor(pojo);
             } else {
                 // a value type

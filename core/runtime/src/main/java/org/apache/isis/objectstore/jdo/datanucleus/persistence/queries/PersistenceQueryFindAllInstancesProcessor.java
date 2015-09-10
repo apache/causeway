@@ -36,7 +36,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
     public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
-        super(persistenceManager, frameworkSynchronizer);
+        super(persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
