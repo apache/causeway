@@ -36,7 +36,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 
@@ -45,9 +44,13 @@ public class IsisLifecycleListener2
         DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
         SuspendableListener {
 
+    private final PersistenceSession persistenceSession;
     private final FrameworkSynchronizer synchronizer;
 
-    public IsisLifecycleListener2(FrameworkSynchronizer synchronizer) {
+    public IsisLifecycleListener2(
+            final PersistenceSession persistenceSession,
+            final FrameworkSynchronizer synchronizer) {
+        this.persistenceSession = persistenceSession;
         this.synchronizer = synchronizer;
     }
 
@@ -279,6 +282,6 @@ public class IsisLifecycleListener2
     // /////////////////////////////////////////////////////////
 
     protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
+        return persistenceSession.getAdapterManager();
     }
 }

@@ -224,7 +224,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         persistenceManager = applicationComponents.getPersistenceManagerFactory().getPersistenceManager();
 
-        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(frameworkSynchronizer);
+        final IsisLifecycleListener isisLifecycleListener = new IsisLifecycleListener(this, frameworkSynchronizer);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
 
         persistenceQueryProcessorByClass.put(

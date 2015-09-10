@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
 import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener2;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 /**
  * @deprecated - retained only for backward compatibility of logging (in logging.properties file).
@@ -32,7 +33,9 @@ public class IsisLifecycleListener extends IsisLifecycleListener2 {
 
     public static final Logger LOG = LoggerFactory.getLogger(IsisLifecycleListener.class);
 
-    public IsisLifecycleListener(final FrameworkSynchronizer synchronizer) {
-        super(synchronizer);
+    public IsisLifecycleListener(
+            final PersistenceSession persistenceSession,
+            final FrameworkSynchronizer synchronizer) {
+        super(persistenceSession, synchronizer);
     }
 }
