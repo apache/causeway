@@ -17,32 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.objectstore.transaction;
-
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+package org.apache.isis.core.runtime.system.transaction;
 
 /**
- * Interface for the {@link IsisTransactionManager} to interact with some
- * transactional resource.
+ * Not used by the framework, but provided for backward compatibility.
+ *
+ * @deprecated - implement {@link TransactionalClosureWithReturn} instead
  */
-public interface TransactionalResource {
-
-    /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
-     * object store to start a transaction.
-     */
-    void startTransaction();
-
-    /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
-     * object store to commit a transaction.
-     */
-    void endTransaction();
-
-    /**
-     * Used by the {@link IsisTransactionManager} to tell the underlying
-     * object store to abort a transaction.
-     */
-    void abortTransaction();
+@Deprecated
+public abstract class TransactionalClosureWithReturnAbstract<T> implements TransactionalClosureWithReturn<T> {
 
 }
