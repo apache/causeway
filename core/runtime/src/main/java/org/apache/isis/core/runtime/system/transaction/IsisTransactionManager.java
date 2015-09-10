@@ -83,8 +83,11 @@ public class IsisTransactionManager implements SessionScopedComponent {
         this.transactionalResource = transactionalResource;
         this.servicesInjector = servicesInjector;
     }
-    
-    
+
+    public PersistenceSession getPersistenceSession() {
+        return persistenceSession;
+    }
+
     // ////////////////////////////////////////////////////////////////
     // open, close
     // ////////////////////////////////////////////////////////////////

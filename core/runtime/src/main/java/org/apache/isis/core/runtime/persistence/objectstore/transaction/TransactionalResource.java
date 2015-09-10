@@ -19,10 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.transaction;
 
-import java.util.List;
-import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
-import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.persistence.ObjectStore;
+import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 
 /**
  * Interface for the {@link IsisTransactionManager} to interact with some
@@ -35,14 +33,6 @@ public interface TransactionalResource {
      * {@link ObjectStore} to start a transaction.
      */
     void startTransaction();
-
-    /**
-     * Used by the current {@link IsisTransaction} to flush changes to
-     * the {@link ObjectStore} (either via a
-     * {@link IsisTransactionManager#flushTransaction()} or a
-     * {@link IsisTransactionManager#endTransaction()}).
-     */
-    void execute(List<PersistenceCommand> unmodifiableList);
 
     /**
      * Used by the {@link IsisTransactionManager} to tell the underlying

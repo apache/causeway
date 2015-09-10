@@ -226,27 +226,6 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
     //endregion
 
 
-    //region > execute
-    public void execute(final List<PersistenceCommand> commands) {
-
-        ensureOpened();
-        ensureInTransaction();
-
-        // previously we used to check that there were some commands, and skip processing otherwise.
-        // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
-        // don't have commands wrapped around them...
-
-        executeCommands(commands);
-    }
-
-    private void executeCommands(final List<PersistenceCommand> commands) {
-        
-        for (final PersistenceCommand command : commands) {
-            command.execute(null);
-        }
-        getPersistenceManager().flush();
-    }
-    //endregion
 
     //region > loadInstanceAndAdapt
     /**
@@ -434,7 +413,7 @@ public class ObjectStore implements TransactionalResource, DebuggableWithTitle, 
         persistenceSession.ensureOpened();
     }
 
-    private void ensureInTransaction() {
+    void ensureInTransaction() {
         ensureThatContext(IsisContext.inTransaction(), is(true));
         ensureInJdoTransaction();
     }

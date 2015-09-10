@@ -55,6 +55,7 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.PersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosureAbstract;
@@ -731,6 +732,28 @@ public class PersistenceSession implements SessionScopedComponent, DebuggableWit
             throw new IllegalArgumentException("Adapter is not persistent; adapter: " + adapter);
         }
         return new DataNucleusDeleteObjectCommand(adapter, objectStore.getPersistenceManager());
+    }
+    //endregion
+
+    //region > execute
+    public void execute(final List<PersistenceCommand> commands) {
+
+        ensureOpened();
+        objectStore.ensureInTransaction();
+
+        // previously we used to check that there were some commands, and skip processing otherwise.
+        // we no longer do that; it could be (is quite likely) that DataNucleus has some dirty objects anyway that
+        // don't have commands wrapped around them...
+
+        executeCommands(commands);
+    }
+
+    private void executeCommands(final List<PersistenceCommand> commands) {
+
+        for (final PersistenceCommand command : commands) {
+            command.execute(null);
+        }
+        objectStore.getPersistenceManager().flush();
     }
     //endregion
 

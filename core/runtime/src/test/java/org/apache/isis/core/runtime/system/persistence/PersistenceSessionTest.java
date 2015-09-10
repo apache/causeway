@@ -33,7 +33,6 @@ import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
@@ -48,7 +47,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDef
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PojoAdapterBuilder.Persistence;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
@@ -56,8 +54,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
-
-import static org.hamcrest.CoreMatchers.equalTo;
 
 public class PersistenceSessionTest {
 
@@ -221,16 +217,16 @@ public class PersistenceSessionTest {
 //                inSequence(tran);
 //                will(returnValue(destroyObjectCommand));
                 
-                oneOf(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)destroyObjectCommand)));
-                inSequence(tran);
+//                oneOf(mockObjectStore).execute(with(IsisMatchers.listContaining((PersistenceCommand)destroyObjectCommand)));
+//                inSequence(tran);
 
-                // second flush after publish
-                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-                inSequence(tran);
+//                // second flush after publish
+//                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+//                inSequence(tran);
 
-                // third flush after commands
-                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-                inSequence(tran);
+//                // third flush after commands
+//                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+//                inSequence(tran);
 
                 oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);
@@ -243,6 +239,7 @@ public class PersistenceSessionTest {
         transactionManager.endTransaction();
     }
 
+    @Ignore // ISIS-1194
     @Test
     public void makePersistent_happyCase() {
 
@@ -252,14 +249,16 @@ public class PersistenceSessionTest {
                 oneOf(mockObjectStore).startTransaction();
                 inSequence(tran);
 
-                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-                inSequence(tran);
-                // second flush after publish
-                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-                inSequence(tran);
-                // third flush after commands
-                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
-                inSequence(tran);
+//                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+//                inSequence(tran);
+
+//                // second flush after publish
+//                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+//                inSequence(tran);
+
+//                // third flush after commands
+//                oneOf(mockObjectStore).execute(with(equalTo(Collections.<PersistenceCommand>emptyList())));
+//                inSequence(tran);
 
                 oneOf(mockObjectStore).endTransaction();
                 inSequence(tran);

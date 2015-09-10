@@ -499,7 +499,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                 // so won't be processed again if a flush is encountered subsequently
                 persistenceCommands.removeAll(persistenceCommandList);
                 try {
-                    objectStore.execute(persistenceCommandList);
+                    this.transactionManager.getPersistenceSession().execute(persistenceCommandList);
                     for (PersistenceCommand persistenceCommand : persistenceCommandList) {
                         if (persistenceCommand instanceof DestroyObjectCommand) {
                             final ObjectAdapter adapter = persistenceCommand.onAdapter();
