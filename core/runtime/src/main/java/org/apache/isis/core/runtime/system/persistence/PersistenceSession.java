@@ -27,6 +27,7 @@ import java.util.concurrent.Callable;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
+import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 
 import com.google.common.collect.Lists;
@@ -54,8 +55,11 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
@@ -765,7 +769,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return lazilyLoaded(persistenceCapable, FrameworkSynchronizer.CalledFrom.OS_LAZILYLOADED);
     }
 
-    public ObjectAdapter lazilyLoaded(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
+    private ObjectAdapter lazilyLoaded(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
@@ -1226,9 +1230,56 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         frameworkSynchronizer.preStoreProcessingFor(pojo, calledFrom);
     }
 
+    /**
+     * Called either when an entity is initially persisted, or when an entity is updated;
+     * fires the appropriate lifecycle callback
+     *
+     * <p>
+     * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
+     * to determine which callback to fire.
+     */
     public void postStoreProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
-        frameworkSynchronizer.postStoreProcessingFor(pojo, calledFrom);
+        withLogging(pojo, new Runnable() {
+            @Override
+            public void run() {
+                ensureRootObject(pojo);
+
+                // assert is persistent
+                if (!pojo.dnIsPersistent()) {
+                    throw new IllegalStateException(
+                            "Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
+                }
+
+                final ObjectAdapter adapter = getAdapterFor(pojo);
+                final RootOid isisOid = (RootOid) adapter.getOid();
+
+                if (isisOid.isTransient()) {
+                    // persisting
+                    final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
+
+                    remapAsPersistent(adapter, persistentOid);
+
+                    CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
+
+                    final IsisTransaction transaction = getCurrentTransaction();
+                    transaction.enlistCreated(adapter);
+                } else {
+                    // updating;
+                    // the callback and transaction.enlist are done in the preDirty callback
+                    // (can't be done here, as the enlist requires to capture the 'before' values)
+                    CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
+                }
+
+                Version versionIfAny = getVersionIfAny(pojo);
+                adapter.setVersion(versionIfAny);
+            }
+        }, calledFrom);
     }
+
+    private Version getVersionIfAny(final Persistable pojo) {
+        return Utils.getVersionIfAny(pojo, authenticationSession);
+    }
+
 
     public void preDirtyProcessingFor(final Persistable pojo, FrameworkSynchronizer.CalledFrom calledFrom) {
         withLogging(pojo, new Runnable() {

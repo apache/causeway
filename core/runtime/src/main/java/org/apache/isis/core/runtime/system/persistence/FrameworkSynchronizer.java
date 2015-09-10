@@ -21,8 +21,6 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.text.MessageFormat;
 import java.util.concurrent.Callable;
 
-import javax.jdo.JDOHelper;
-
 import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,10 +35,8 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 
 public class FrameworkSynchronizer {
@@ -177,50 +173,6 @@ public class FrameworkSynchronizer {
         }, calledFrom);
     }
 
-    /**
-     * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate lifecycle callback
-     *
-     * <p>
-     * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
-     * to determine which callback to fire.
-     */
-    public void postStoreProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
-        withLogging(pojo, new Runnable() {
-            @Override
-            public void run() {
-                ensureRootObject(pojo);
-
-                // assert is persistent
-                if(!pojo.dnIsPersistent()) {
-                    throw new IllegalStateException("Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
-                }
-
-                final ObjectAdapter adapter = persistenceSession.getAdapterFor(pojo);
-                final RootOid isisOid = (RootOid) adapter.getOid();
-
-
-                if (isisOid.isTransient()) {
-                    // persisting
-                    final RootOid persistentOid = persistenceSession.createPersistentOrViewModelOid(pojo);
-
-                    persistenceSession.remapAsPersistent(adapter, persistentOid);
-
-                    CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-
-                    final IsisTransaction transaction = persistenceSession.getCurrentTransaction();
-                    transaction.enlistCreated(adapter);
-                } else {
-                    // updating;
-                    // the callback and transaction.enlist are done in the preDirty callback
-                    // (can't be done here, as the enlist requires to capture the 'before' values)
-                    CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-                }
-
-                Version versionIfAny = getVersionIfAny(pojo);
-                adapter.setVersion(versionIfAny);
-            }
-        }, calledFrom);
-    }
 
 
 
