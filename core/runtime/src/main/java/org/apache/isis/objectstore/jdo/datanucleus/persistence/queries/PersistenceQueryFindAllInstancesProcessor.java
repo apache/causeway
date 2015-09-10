@@ -29,14 +29,16 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindAllInstances> {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindAllInstancesProcessor.class);
 
-    public PersistenceQueryFindAllInstancesProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
-        super(persistenceManager);
+    public PersistenceQueryFindAllInstancesProcessor(
+            final PersistenceSession persistenceSession,
+            final PersistenceManager persistenceManager) {
+        super(persistenceSession, persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindAllInstances persistenceQuery) {
@@ -55,7 +57,7 @@ public class PersistenceQueryFindAllInstancesProcessor extends PersistenceQueryP
 
         try {
             final List<?> pojos = (List<?>) jdoQuery.execute();
-            return loadAdapters(specification, pojos);
+            return loadAdapters(pojos);
         } finally {
             jdoQuery.closeAll();
         }

@@ -36,15 +36,17 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
-import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
     
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
 
-    public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceManager persistenceManager, final FrameworkSynchronizer frameworkSynchronizer) {
-        super(persistenceManager);
+    public PersistenceQueryFindUsingApplibQueryProcessor(
+            final PersistenceSession persistenceSession,
+            final PersistenceManager persistenceManager) {
+        super(persistenceSession, persistenceManager);
     }
 
     public List<ObjectAdapter> process(final PersistenceQueryFindUsingApplibQueryDefault persistenceQuery) {
@@ -58,7 +60,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
             results = getResults(persistenceQuery);
         }
         
-        return loadAdapters(objectSpec, results);
+        return loadAdapters(results);
     }
 
     // special case handling
@@ -99,7 +101,7 @@ public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQu
         final QueryCardinality cardinality = persistenceQuery.getCardinality();
         final ObjectSpecification objectSpec = persistenceQuery.getSpecification();
 
-        final PersistenceManager persistenceManager = getPersistenceSession().getPersistenceManager();
+        final PersistenceManager persistenceManager = persistenceSession.getPersistenceManager();
         final Class<?> cls = objectSpec.getCorrespondingClass();
         final Query jdoQuery = persistenceManager.newNamedQuery(cls, queryName);
         

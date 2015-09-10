@@ -31,9 +31,6 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.FrameworkSynchronizer.CalledFrom;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -42,9 +39,13 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleList
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
         implements PersistenceQueryProcessor<T> {
 
+    final PersistenceSession persistenceSession;
     private final PersistenceManager persistenceManager;
 
-    protected PersistenceQueryProcessorAbstract(final PersistenceManager persistenceManager) {
+    protected PersistenceQueryProcessorAbstract(
+            final PersistenceSession persistenceSession,
+            final PersistenceManager persistenceManager) {
+        this.persistenceSession = persistenceSession;
         this.persistenceManager = persistenceManager;
     }
 
@@ -60,7 +61,8 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
     protected PersistenceManagerFactory getPersistenceManagerFactory() {
         return getPersistenceManager().getPersistenceManagerFactory();
     }
-    
+
+    // TODO: unused?
     protected TypeMetadata getTypeMetadata(final String classFullName) {
         return getPersistenceManagerFactory().getMetadata(classFullName);
     }
@@ -70,8 +72,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
      * {@link IsisLifecycleListener#postLoad(InstanceLifecycleEvent) {
      * to be called.
      */
-    protected List<ObjectAdapter> loadAdapters(
-            final ObjectSpecification specification, final List<?> pojos) {
+    protected List<ObjectAdapter> loadAdapters(final List<?> pojos) {
         final List<ObjectAdapter> adapters = Lists.newArrayList();
         for (final Object pojo : pojos) {
         	// ought not to be necessary, however for some queries it seems that the 
@@ -79,11 +80,11 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                getPersistenceSession().postLoadProcessingFor((Persistable) pojo, CalledFrom.OS_QUERY);
-                adapter = getAdapterManager().getAdapterFor(pojo);
+                persistenceSession.postLoadProcessingFor((Persistable) pojo, CalledFrom.OS_QUERY);
+                adapter = persistenceSession.getAdapterFor(pojo);
             } else {
                 // a value type
-                adapter = getAdapterManager().adapterFor(pojo);
+                adapter = persistenceSession.adapterFor(pojo);
             }
             Assert.assertNotNull(adapter);
             adapters.add(adapter);
@@ -91,16 +92,5 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
         return adapters;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////
-
-    protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
-    }
-
-    protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
-    }
 
 }

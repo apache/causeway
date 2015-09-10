@@ -239,12 +239,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(
-                        persistenceManager, frameworkSynchronizer));
+                new PersistenceQueryFindAllInstancesProcessor(this,
+                        persistenceManager));
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(
-                        persistenceManager, frameworkSynchronizer));
+                new PersistenceQueryFindUsingApplibQueryProcessor(this,
+                        persistenceManager));
 
         initServices();
 
