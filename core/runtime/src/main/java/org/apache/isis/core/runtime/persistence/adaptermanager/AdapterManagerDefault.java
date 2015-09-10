@@ -97,6 +97,7 @@ public class AdapterManagerDefault implements AdapterManager,
     private final AuthenticationSession authenticationSession;
     private final ServicesInjector servicesInjector;
     private final IsisConfiguration configuration;
+    private boolean concurrencyCheckingGloballyEnabled;
 
     // //////////////////////////////////////////////////////////////////
     // constructor
@@ -123,6 +124,10 @@ public class AdapterManagerDefault implements AdapterManager,
         this.authenticationSession = authenticationSession;
         this.servicesInjector = servicesInjector;
         this.configuration = configuration;
+
+        final boolean concurrencyCheckingGloballyDisabled =
+                configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
+        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
     }
     //endregion
 
@@ -147,9 +152,6 @@ public class AdapterManagerDefault implements AdapterManager,
         pojoAdapterMap.reset();
     }
     //endregion
-
-
-
 
     //region > getAdapterFor
     @Override
@@ -198,13 +200,13 @@ public class AdapterManagerDefault implements AdapterManager,
         }
         
         // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        final ObjectAdapter lazilyLoadedAdapter = getPersistenceSession().lazilyLoaded(pojo);
+        final ObjectAdapter lazilyLoadedAdapter = persistenceSession.lazilyLoaded(pojo);
         if(lazilyLoadedAdapter != null) {
             return lazilyLoadedAdapter;
         }
 
         // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
+        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
         
         // we create value facets as standalone (so not added to maps)
         if (objSpec.containsFacet(ValueFacet.class)) {
@@ -319,7 +321,7 @@ public class AdapterManagerDefault implements AdapterManager,
         Oid adapterOid = adapter.getOid();
         if(adapterOid instanceof RootOid) {
             final RootOid recreatedOid = (RootOid) adapterOid;
-            final RootOid originalOid = (RootOid) rootOid;
+            final RootOid originalOid = rootOid;
             
             try {
                 if(concurrencyChecking.isChecking()) {
@@ -330,10 +332,10 @@ public class AdapterManagerDefault implements AdapterManager,
                     if(thisVersion != null && 
                        otherVersion != null && 
                        thisVersion.different(otherVersion)) {
-                        
-                        if(isConcurrencyCheckingGloballyEnabled() && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+
+                        if(concurrencyCheckingGloballyEnabled && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
-                            final String currentUser = getAuthenticationSession().getUserName();
+                            final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
                         } else {
                             LOG.warn("concurrency conflict detected but suppressed, on " + recreatedOid + " (" + otherVersion + ")");
@@ -443,12 +445,6 @@ public class AdapterManagerDefault implements AdapterManager,
     }
     //endregion
 
-    private boolean isConcurrencyCheckingGloballyEnabled() {
-        final boolean disabled = getConfiguration().getBoolean("isis.persistor.disableConcurrencyChecking", false);
-        return !disabled;
-    }
-
-
     //region > removeAdapter
     /**
      * Removes the specified object from both the identity-adapter map, and the
@@ -547,12 +543,13 @@ public class AdapterManagerDefault implements AdapterManager,
             persistedRootOid = hintRootOid;
         } else {
             // normal flow - delegate to OidGenerator to obtain a persistent root oid
-            persistedRootOid = getOidGenerator().createPersistentOrViewModelOid(adapter.getObject());
+            persistedRootOid = oidGenerator.createPersistentOrViewModelOid(adapter.getObject());
         }
         
         // associate root adapter with the new Oid, and remap
         if (LOG.isDebugEnabled()) {
-            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString(getOidMarshaller()) + " (was: " + transientRootOid.enString(getOidMarshaller()) + ")");
+            LOG.debug("replacing Oid for root adapter and re-adding into maps; oid is now: " + persistedRootOid.enString(
+                    oidMarshaller) + " (was: " + transientRootOid.enString(oidMarshaller) + ")");
         }
         adapter.replaceOid(persistedRootOid);
         oidAdapterMap.add(persistedRootOid, adapter);
@@ -604,7 +601,7 @@ public class AdapterManagerDefault implements AdapterManager,
      * object.
      */
     private ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
-        final RootOid rootOid = getOidGenerator().createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = oidGenerator.createTransientOrViewModelOid(pojo);
         return createRootAdapter(pojo, rootOid);
     }
 
@@ -676,7 +673,7 @@ public class AdapterManagerDefault implements AdapterManager,
             if (LOG.isDebugEnabled()) {
                 LOG.debug("not mapping value adapter");
             }
-            getServicesInjector().injectServicesInto(pojo);
+            servicesInjector.injectServicesInto(pojo);
             return adapter;
         }
 
@@ -690,7 +687,7 @@ public class AdapterManagerDefault implements AdapterManager,
         oidAdapterMap.add(adapter.getOid(), adapter);
 
         // must inject after mapping, otherwise infinite loop
-        getServicesInjector().injectServicesInto(pojo);
+        servicesInjector.injectServicesInto(pojo);
 
         return adapter;
     }
@@ -782,38 +779,6 @@ public class AdapterManagerDefault implements AdapterManager,
             cast.setAdapterManager(this);
         }
     }
-    //endregion
-
-    //region > Dependencies (from constructor)
-    // only used for debugging
-    protected OidMarshaller getOidMarshaller() {
-		return oidMarshaller;
-	}
-
-    public OidGenerator getOidGenerator() {
-        return oidGenerator;
-    }
-
-    protected SpecificationLoaderSpi getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    protected PersistenceSession getPersistenceSession() {
-        return persistenceSession;
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return servicesInjector;
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return authenticationSession;
-    }
-    
-    protected IsisConfiguration getConfiguration() {
-        return configuration;
-    }
-
     //endregion
 
     //region > dependencies (from context)
