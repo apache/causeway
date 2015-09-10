@@ -266,13 +266,15 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-                final ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
+                final ObjectAdapter instances = getPersistenceSession().findInstancesInTransaction(query,
+                        QueryCardinality.MULTIPLE);
                 return CollectionFacetUtils.convertToAdapterList(instances);
             }
 
             @Override
             public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-                final ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.SINGLE);
+                final ObjectAdapter instances = getPersistenceSession().findInstancesInTransaction(query,
+                        QueryCardinality.SINGLE);
                 final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
                 return list.size() > 0 ? list.get(0) : null;
             }

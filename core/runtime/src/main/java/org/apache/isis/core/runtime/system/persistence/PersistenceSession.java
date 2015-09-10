@@ -415,29 +415,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
-    public <T> ObjectAdapter findInstances(final Query<T> query, final QueryCardinality cardinality) {
+    public <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("findInstances using (applib) Query: " + query);
         }
 
         final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
-        return findInstances(persistenceQuery);
-    }
-
-    /**
-     * Finds and returns instances that match the specified
-     * {@link PersistenceQuery}.
-     *
-     * <p>
-     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that
-     * there is no {@link QueryCardinality} parameter. That's because
-     * {@link PersistenceQuery} intrinsically carry the knowledge as to how many
-     * rows they return.
-     *
-     * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
-     *             if the criteria is not support by this persistor
-     */
-    private ObjectAdapter findInstances(final PersistenceQuery persistenceQuery) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("findInstances using (core runtime) PersistenceQuery: " + persistenceQuery);
         }
