@@ -192,53 +192,6 @@ public class AdapterManagerDefault implements AdapterManager,
         return mapAndInjectServices(newAdapter);
     }
 
-    private ObjectAdapter existingOrValueAdapter(Object pojo) {
-
-        // attempt to locate adapter for the pojo
-        final ObjectAdapter adapter = getAdapterFor(pojo);
-        if (adapter != null) {
-            return adapter;
-        }
-        
-        // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        final ObjectAdapter lazilyLoadedAdapter =
-                pojo instanceof Persistable
-                        ? persistenceSession.mapPersistent((Persistable) pojo)
-                        : null;
-        if(lazilyLoadedAdapter != null) {
-            return lazilyLoadedAdapter;
-        }
-
-        // need to create (and possibly map) the adapter.
-        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
-        
-        // we create value facets as standalone (so not added to maps)
-        if (objSpec.containsFacet(ValueFacet.class)) {
-            ObjectAdapter valueAdapter = createStandaloneAdapter(pojo);
-            return valueAdapter;
-        }
-        
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter parentAdapter) {
-        
-        Ensure.ensureThatArg(parentAdapter, is(not(nullValue())));
-        
-        final ObjectAdapter existingOrValueAdapter = existingOrValueAdapter(pojo);
-        if(existingOrValueAdapter != null) {
-            return existingOrValueAdapter;
-        }
-        
-        final ObjectAdapter newAdapter = createTransientOrViewModelRootAdapter(pojo);
-
-        return mapAndInjectServices(newAdapter);
-    }
-
 
     /**
      * {@inheritDoc}
@@ -292,7 +245,6 @@ public class AdapterManagerDefault implements AdapterManager,
 
         return collectionAdapter;
     }
-
 
 
 
@@ -361,6 +313,41 @@ public class AdapterManagerDefault implements AdapterManager,
         }
 
         return adapter;
+    }
+
+
+    private ObjectAdapter existingOrValueAdapter(Object pojo) {
+
+        // attempt to locate adapter for the pojo
+        ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter != null) {
+            return adapter;
+        }
+
+        // pojo may have been lazily loaded by object store, but we haven't yet seen it
+        if (pojo instanceof Persistable) {
+            adapter = persistenceSession.mapPersistent((Persistable) pojo);
+
+            // TODO: could return null if the pojo passed in !dnIsPersistent() || !dnIsDetached()
+            // in which case, we would ought to map as a transient object, rather than fall through and treat as a value?
+        } else {
+            adapter = null;
+        }
+
+        if(adapter != null) {
+            return adapter;
+        }
+
+        // need to create (and possibly map) the adapter.
+        final ObjectSpecification objSpec = specificationLoader.loadSpecification(pojo.getClass());
+
+        // we create value facets as standalone (so not added to maps)
+        if (objSpec.containsFacet(ValueFacet.class)) {
+            adapter = createStandaloneAdapter(pojo);
+            return adapter;
+        }
+
+        return null;
     }
 
     private Object recreatePojo(RootOid oid) {

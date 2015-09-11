@@ -110,11 +110,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter) {
-                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter);
-            }
-
-            @Override
             public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
                 return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, collection);
             }

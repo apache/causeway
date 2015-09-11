@@ -28,7 +28,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 /**
@@ -162,10 +161,7 @@ public interface AdapterManager extends Injectable {
      * 
      * <p>
      * The pojo itself is recreated by delegating to a {@link org.apache.isis.core.metamodel.adapter.mgr.AdapterManager}.
-     * The default impl just uses the {@link ObjectSpecification#createObject()};
-     * however object stores (eg JDO/DataNucleus) can provide alternative implementations
-     * in order to ensure that the created pojo is attached to a persistence context.
-     * 
+     *
      * <p>
      * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
      * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version} 
@@ -186,11 +182,6 @@ public interface AdapterManager extends Injectable {
      */
     ObjectAdapter adapterFor(Object domainObject);
     
-    /**
-     * Looks up or creates a standalone (value), aggregated or root adapter.
-     */
-    ObjectAdapter adapterFor(Object domainObject, ObjectAdapter parentAdapter);
-
     /**
      * Looks up or creates a collection adapter.
      */

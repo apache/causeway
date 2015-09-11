@@ -26,7 +26,6 @@ import java.util.Map;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
 
 import com.google.common.collect.Lists;
@@ -1324,19 +1323,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void postStoreProcessingFor(final Persistable pojo) {
-        ensureRootObject(pojo);
+    public void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(final Persistable pojo) {
+        final ObjectAdapter objectAdapter = adapterFor(pojo);
 
-        // assert is persistent
-        if (!pojo.dnIsPersistent()) {
-            throw new IllegalStateException(
-                    "Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
-        }
+        final ObjectAdapter adapter = objectAdapter;
+        final RootOid rootOid = (RootOid) adapter.getOid(); // ok since this is for a Persistable
 
-        final ObjectAdapter adapter = getAdapterFor(pojo);
-        final RootOid isisOid = (RootOid) adapter.getOid();
-
-        if (isisOid.isTransient()) {
+        if (rootOid.isTransient()) {
             // persisting
             final RootOid persistentOid = oidGenerator.createPersistentOrViewModelOid(pojo);
 
@@ -1346,6 +1339,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
             final IsisTransaction transaction = getCurrentTransaction();
             transaction.enlistCreated(adapter);
+
         } else {
             // updating;
             // the callback and transaction.enlist are done in the preDirty callback
@@ -1358,7 +1352,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public void preDirtyProcessingFor(final Persistable pojo) {
+    public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
         ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter == null) {
             // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
@@ -1387,8 +1381,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
 
-        final IsisTransaction transaction = getCurrentTransaction();
-        transaction.enlistUpdating(adapter);
+        getCurrentTransaction().enlistUpdating(adapter);
 
         ensureRootObject(pojo);
     }

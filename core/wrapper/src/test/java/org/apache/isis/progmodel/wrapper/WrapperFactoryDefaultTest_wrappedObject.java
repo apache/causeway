@@ -262,7 +262,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         context.checking(new Expectations() {
             {
 
-                oneOf(mockAdapterManager).adapterFor("Jones", mockEmployeeAdapter);
+                oneOf(mockAdapterManager).adapterFor("Jones");
                 will(returnValue(mockAdapterForStringJones));
             }
         });
@@ -359,7 +359,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     private void allowingEmployeeHasSmithAdapter() {
         context.checking(new Expectations() {
             {
-                allowing(mockAdapterManager).adapterFor("Smith", mockEmployeeAdapter);
+                allowing(mockAdapterManager).adapterFor("Smith");
                 will(returnValue(mockAdapterForStringSmith));
 
                 allowing(mockAdapterForStringSmith).getObject();

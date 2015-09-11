@@ -85,13 +85,13 @@ public class IsisLifecycleListener2
     @Override
     public void postStore(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.postStoreProcessingFor(pojo);
+        persistenceSession.enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(pojo);
     }
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.preDirtyProcessingFor(pojo);
+        persistenceSession.enlistUpdatingAndInvokeIsisUpdatingCallback(pojo);
     }
 
     @Override

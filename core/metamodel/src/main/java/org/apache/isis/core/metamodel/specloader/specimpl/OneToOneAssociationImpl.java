@@ -148,7 +148,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             return null;
         }
 
-        return getAdapterManager().adapterFor(referencedPojo, ownerAdapter);
+        return getAdapterManager().adapterFor(referencedPojo);
     }
 
     // UNUSED
