@@ -56,22 +56,22 @@ public class IsisLifecycleListener2
 
     @Override
     public void postCreate(final InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableNoop(event));
+        withLogging(new RunnableNoop(event));
     }
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableEnsureRootObject(event));
+        withLogging(new RunnableEnsureRootObject(event));
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureRootObject(event));
+        withLogging(new RunnableEnsureRootObject(event));
     }
 
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableAbstract(event){
+        withLogging(new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
@@ -81,7 +81,7 @@ public class IsisLifecycleListener2
 
 	@Override
     public void preStore(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableAbstract(event){
+        withLogging(new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
@@ -92,7 +92,7 @@ public class IsisLifecycleListener2
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableAbstract(event){
+        withLogging(new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
@@ -102,7 +102,7 @@ public class IsisLifecycleListener2
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableAbstract(event){
+        withLogging(new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
@@ -118,13 +118,13 @@ public class IsisLifecycleListener2
         //
         // 1<->m bidirectional, persistence-by-reachability
 
-        withLogging(Phase.POST, event, new RunnableNoop(event));
+        withLogging(new RunnableNoop(event));
     }
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
 
-        withLogging(Phase.PRE, event, new RunnableAbstract(event){
+        withLogging(new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
@@ -162,12 +162,12 @@ public class IsisLifecycleListener2
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        withLogging(Phase.PRE, event, new RunnableEnsureRootObject(event));
+        withLogging(new RunnableEnsureRootObject(event));
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableEnsureRootObject(event));
+        withLogging(new RunnableEnsureRootObject(event));
     }
 
     
@@ -175,17 +175,8 @@ public class IsisLifecycleListener2
     // withLogging
     /////////////////////////////////////////////////////////////////////////
 
-    private void withLogging(Phase phase, InstanceLifecycleEvent event, Runnable runnable) {
-        if (IsisLifecycleListener.LOG.isDebugEnabled()) {
-            IsisLifecycleListener.LOG.debug(logString(phase, LoggingLocation.ENTRY, event));
-        }
-        try {
-            runnable.run();
-        } finally {
-            if (IsisLifecycleListener.LOG.isDebugEnabled()) {
-                IsisLifecycleListener.LOG.debug(logString(phase, LoggingLocation.EXIT, event));
-            }
-        }
+    private void withLogging(Runnable runnable) {
+        runnable.run();
     }
     
     private abstract class RunnableAbstract implements Runnable {
