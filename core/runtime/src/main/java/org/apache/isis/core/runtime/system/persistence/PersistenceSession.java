@@ -763,17 +763,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     private ObjectAdapter lazilyLoaded(final Persistable pojo) {
-        return withLogging(pojo, new Callable<ObjectAdapter>() {
-            @Override
-            public ObjectAdapter call() {
-                if (getJdoObjectId(pojo) == null) {
-                    return null;
-                }
-                final RootOid oid = createPersistentOrViewModelOid(pojo);
-                final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
-                return adapter;
-            }
-        });
+        if (getJdoObjectId(pojo) == null) {
+            return null;
+        }
+        final RootOid oid = createPersistentOrViewModelOid(pojo);
+        final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
+        return adapter;
     }
 
 
