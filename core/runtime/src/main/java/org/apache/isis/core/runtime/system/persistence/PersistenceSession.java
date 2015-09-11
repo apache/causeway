@@ -759,10 +759,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             return null;
         }
         final Persistable persistenceCapable = (Persistable) pojo;
-        return lazilyLoaded(persistenceCapable, CalledFrom.OS_LAZILYLOADED);
+        return lazilyLoaded(persistenceCapable);
     }
 
-    private ObjectAdapter lazilyLoaded(final Persistable pojo, CalledFrom calledFrom) {
+    private ObjectAdapter lazilyLoaded(final Persistable pojo) {
         return withLogging(pojo, new Callable<ObjectAdapter>() {
             @Override
             public ObjectAdapter call() {
@@ -773,7 +773,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
                 return adapter;
             }
-        }, calledFrom);
+        });
     }
 
 
@@ -830,7 +830,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        postLoadProcessingFor((Persistable) domainObject, CalledFrom.OS_RESOLVE);
+        postLoadProcessingFor((Persistable) domainObject);
     }
     //endregion
 
@@ -1243,7 +1243,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > FrameworkSynchronizer delegate methods
 
-    public void postDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
+    public void postDeleteProcessingFor(final Persistable pojo) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -1259,12 +1259,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
 
             }
-        }, calledFrom);
+        });
 
     }
 
 
-    public void preDeleteProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
+    public void preDeleteProcessingFor(final Persistable pojo) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -1275,12 +1275,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
             }
-        }, calledFrom);
+        });
 
     }
 
 
-    public void postLoadProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
+    public void postLoadProcessingFor(final Persistable pojo) {
 
         withLogging(pojo, new Runnable() {
             @Override
@@ -1342,7 +1342,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 adapter.setVersion(datastoreVersion);
             }
-        }, calledFrom);
+        });
     }
 
     /**
@@ -1353,7 +1353,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void preStoreProcessingFor(final Persistable pojo, final CalledFrom calledFrom) {
+    public void preStoreProcessingFor(final Persistable pojo) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -1377,7 +1377,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 }
 
             }
-        }, calledFrom);
+        });
     }
 
     /**
@@ -1388,7 +1388,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void postStoreProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
+    public void postStoreProcessingFor(final Persistable pojo) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -1423,7 +1423,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 Version versionIfAny = getVersionIfAny(pojo);
                 adapter.setVersion(versionIfAny);
             }
-        }, calledFrom);
+        });
     }
 
     private Version getVersionIfAny(final Persistable pojo) {
@@ -1431,7 +1431,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public void preDirtyProcessingFor(final Persistable pojo, CalledFrom calledFrom) {
+    public void preDirtyProcessingFor(final Persistable pojo) {
         withLogging(pojo, new Runnable() {
             @Override
             public void run() {
@@ -1444,7 +1444,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
                     // DN would not be calling this callback if the pojo was not persistent.
 
-                    adapter = lazilyLoaded(pojo, CalledFrom.EVENT_PREDIRTY);
+                    adapter = lazilyLoaded(pojo);
                     if (adapter == null) {
                         throw new RuntimeException(
                                 "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
@@ -1468,12 +1468,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 ensureRootObject(pojo);
             }
-        }, calledFrom);
+        });
     }
 
-    private <T> T withLogging(Persistable pojo, Callable<T> runnable, CalledFrom calledFrom) {
+    private <T> T withLogging(Persistable pojo, Callable<T> runnable) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug(logString(calledFrom, LoggingLocation.ENTRY, pojo));
+            LOG.debug(logString(LoggingLocation.ENTRY, pojo));
         }
         try {
             return runnable.call();
@@ -1481,12 +1481,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             throw new RuntimeException(e);
         } finally {
             if (LOG.isDebugEnabled()) {
-                LOG.debug(logString(calledFrom, LoggingLocation.EXIT, pojo));
+                LOG.debug(logString(LoggingLocation.EXIT, pojo));
             }
         }
     }
 
-    private void withLogging(Persistable pojo, final Runnable runnable, CalledFrom calledFrom) {
+    private void withLogging(Persistable pojo, final Runnable runnable) {
         withLogging(pojo, new Callable<Void>() {
 
             @Override
@@ -1495,13 +1495,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 return null;
             }
 
-        }, calledFrom);
+        });
     }
 
-    private String logString(CalledFrom calledFrom, LoggingLocation location, Persistable pojo) {
+    private String logString(LoggingLocation location, Persistable pojo) {
         final ObjectAdapter adapter = getAdapterFor(pojo);
         // initial spaces just to look better in log when wrapped by IsisLifecycleListener...
-        return calledFrom.name() + " " + location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
+        return location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
     }
 
     /**

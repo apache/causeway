@@ -75,7 +75,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postLoadProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_LOAD);
+                persistenceSession.postLoadProcessingFor(pojo);
             }});
     }
 
@@ -85,7 +85,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preStoreProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PRESTORE);
+                persistenceSession.preStoreProcessingFor(pojo);
 
             }});
     }
@@ -96,7 +96,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postStoreProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_POSTSTORE);
+                persistenceSession.postStoreProcessingFor(pojo);
             }});
     }
 
@@ -106,7 +106,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preDirtyProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PREDIRTY);
+                persistenceSession.preDirtyProcessingFor(pojo);
             }});
     }
 
@@ -128,7 +128,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preDeleteProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_PREDELETE);
+                persistenceSession.preDeleteProcessingFor(pojo);
             }
         });
     }
@@ -139,7 +139,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postDeleteProcessingFor(pojo, PersistenceSession.CalledFrom.EVENT_POSTDELETE);
+                persistenceSession.postDeleteProcessingFor(pojo);
             }
         });
     }
