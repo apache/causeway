@@ -59,7 +59,7 @@ public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQue
             ObjectAdapter adapter;
             if(pojo instanceof Persistable) {
                 // an entity
-                persistenceSession.postLoadProcessingFor((Persistable) pojo);
+                persistenceSession.initializeMapAndCheckConcurrency((Persistable) pojo);
                 adapter = persistenceSession.getAdapterFor(pojo);
             } else {
                 // a value type

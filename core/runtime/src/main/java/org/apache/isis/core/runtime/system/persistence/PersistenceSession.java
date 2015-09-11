@@ -753,15 +753,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > lazilyLoaded
 
-    public ObjectAdapter lazilyLoaded(Object pojo) {
-        if(!(pojo instanceof Persistable)) {
-            return null;
-        }
-        final Persistable persistenceCapable = (Persistable) pojo;
-        return lazilyLoaded(persistenceCapable);
-    }
 
-    private ObjectAdapter lazilyLoaded(final Persistable pojo) {
+    public ObjectAdapter mapRecreatedPersistent(final Persistable pojo) {
         if (getJdoObjectId(pojo) == null) {
             return null;
         }
@@ -824,7 +817,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // possibly redundant because also called in the post-load event
         // listener, but (with JPA impl) found it was required if we were ever to
         // get an eager left-outer-join as the result of a refresh (sounds possible).
-        postLoadProcessingFor((Persistable) domainObject);
+        initializeMapAndCheckConcurrency((Persistable) domainObject);
     }
     //endregion
 
@@ -1237,21 +1230,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > FrameworkSynchronizer delegate methods
 
-    public void postDeleteProcessingFor(final Persistable pojo) {
-        ObjectAdapter adapter = getAdapterFor(pojo);
-        if (adapter == null) {
-            return;
-        }
-
-        // previously we called the removed callback (if any).
-        // however, this is almost certainly incorrect, because DN will not allow us
-        // to "touch" the pojo once deleted.
-        //
-        // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
-    }
-
-
-    public void preDeleteProcessingFor(final Persistable pojo) {
+    public void invokeIsisRemovingCallback(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
         final IsisTransaction transaction = getCurrentTransaction();
@@ -1261,7 +1240,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public void postLoadProcessingFor(final Persistable pojo) {
+    public void initializeMapAndCheckConcurrency(final Persistable pojo) {
         final Persistable pc = pojo;
 
         // need to do eagerly, because (if a viewModel then) a
@@ -1287,7 +1266,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final Version thisVersion = originalVersion;
             final Version otherVersion = datastoreVersion;
 
-            if (thisVersion != null &&
+            if (    thisVersion != null &&
                     otherVersion != null &&
                     thisVersion.different(otherVersion)) {
 
@@ -1328,7 +1307,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void preStoreProcessingFor(final Persistable pojo) {
+    public void callIsisPersistingCallback(final Persistable pojo) {
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter == null) {
             // not expected.
@@ -1390,10 +1369,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         adapter.setVersion(versionIfAny);
     }
 
-    private Version getVersionIfAny(final Persistable pojo) {
-        return Utils.getVersionIfAny(pojo, authenticationSession);
-    }
-
 
     public void preDirtyProcessingFor(final Persistable pojo) {
         ObjectAdapter adapter = getAdapterFor(pojo);
@@ -1405,7 +1380,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
 
-            adapter = lazilyLoaded(pojo);
+            adapter = mapRecreatedPersistent(pojo);
             if (adapter == null) {
                 throw new RuntimeException(
                         "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
@@ -1440,6 +1415,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
     }
+
+    private Version getVersionIfAny(final Persistable pojo) {
+        return Utils.getVersionIfAny(pojo, authenticationSession);
+    }
+
 
     //endregion
 

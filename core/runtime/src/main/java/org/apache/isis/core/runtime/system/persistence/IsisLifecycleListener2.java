@@ -75,7 +75,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postLoadProcessingFor(pojo);
+                persistenceSession.initializeMapAndCheckConcurrency(pojo);
             }});
     }
 
@@ -85,7 +85,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preStoreProcessingFor(pojo);
+                persistenceSession.callIsisPersistingCallback(pojo);
 
             }});
     }
@@ -128,20 +128,20 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.preDeleteProcessingFor(pojo);
+                persistenceSession.invokeIsisRemovingCallback(pojo);
             }
         });
     }
 
     @Override
     public void postDelete(InstanceLifecycleEvent event) {
-        withLogging(Phase.POST, event, new RunnableAbstract(event){
-            @Override
-            protected void doRun() {
-                final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.postDeleteProcessingFor(pojo);
-            }
-        });
+
+        // previously we called the PersistenceSession to invoke the removed callback (if any).
+        // however, this is almost certainly incorrect, because DN will not allow us
+        // to "touch" the pojo once deleted.
+        //
+        // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
+
     }
 
     /**

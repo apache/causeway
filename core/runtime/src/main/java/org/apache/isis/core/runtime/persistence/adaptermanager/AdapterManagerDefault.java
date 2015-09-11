@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
+import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,7 +201,7 @@ public class AdapterManagerDefault implements AdapterManager,
         }
         
         // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        final ObjectAdapter lazilyLoadedAdapter = persistenceSession.lazilyLoaded(pojo);
+        final ObjectAdapter lazilyLoadedAdapter = lazilyLoaded(pojo);
         if(lazilyLoadedAdapter != null) {
             return lazilyLoadedAdapter;
         }
@@ -216,6 +217,15 @@ public class AdapterManagerDefault implements AdapterManager,
         
         return null;
     }
+
+    private ObjectAdapter lazilyLoaded(Object pojo) {
+        if(!(pojo instanceof Persistable)) {
+            return null;
+        }
+        final Persistable persistenceCapable = (Persistable) pojo;
+        return persistenceSession.mapRecreatedPersistent(persistenceCapable);
+    }
+
 
 
     /**
