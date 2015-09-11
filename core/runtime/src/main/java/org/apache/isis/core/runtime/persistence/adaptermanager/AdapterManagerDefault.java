@@ -201,7 +201,10 @@ public class AdapterManagerDefault implements AdapterManager,
         }
         
         // pojo may have been lazily loaded by object store, but we haven't yet seen it
-        final ObjectAdapter lazilyLoadedAdapter = lazilyLoaded(pojo);
+        final ObjectAdapter lazilyLoadedAdapter =
+                pojo instanceof Persistable
+                        ? persistenceSession.mapPersistent((Persistable) pojo)
+                        : null;
         if(lazilyLoadedAdapter != null) {
             return lazilyLoadedAdapter;
         }
@@ -217,16 +220,6 @@ public class AdapterManagerDefault implements AdapterManager,
         
         return null;
     }
-
-    private ObjectAdapter lazilyLoaded(Object pojo) {
-        if(!(pojo instanceof Persistable)) {
-            return null;
-        }
-        final Persistable persistenceCapable = (Persistable) pojo;
-        return persistenceSession.mapPersistent(persistenceCapable);
-    }
-
-
 
     /**
      * {@inheritDoc}
