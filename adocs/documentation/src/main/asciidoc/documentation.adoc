@@ -48,6 +48,7 @@ pass:[<br/>]
 *Isis Add-ons*
 
 * http://isisaddons.org[Isis addons] (not ASF)
+* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL] (not ASF)
 
 
 |===
