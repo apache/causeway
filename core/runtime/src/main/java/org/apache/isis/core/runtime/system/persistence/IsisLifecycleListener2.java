@@ -56,58 +56,58 @@ public class IsisLifecycleListener2
 
     @Override
     public void postCreate(final InstanceLifecycleEvent event) {
-        withLogging(new RunnableNoop(event));
+        new RunnableNoop(event).run();
     }
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        withLogging(new RunnableEnsureRootObject(event));
+        new RunnableEnsureRootObject(event).run();
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        withLogging(new RunnableEnsureRootObject(event));
+        new RunnableEnsureRootObject(event).run();
     }
 
     @Override
     public void postLoad(final InstanceLifecycleEvent event) {
-        withLogging(new RunnableAbstract(event){
+        new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
                 persistenceSession.initializeMapAndCheckConcurrency(pojo);
-            }});
+            }}.run();
     }
 
 	@Override
     public void preStore(InstanceLifecycleEvent event) {
-        withLogging(new RunnableAbstract(event){
+        new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
                 persistenceSession.invokeIsisPersistingCallback(pojo);
 
-            }});
+            }}.run();
     }
 
     @Override
     public void postStore(InstanceLifecycleEvent event) {
-        withLogging(new RunnableAbstract(event){
+        new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
                 persistenceSession.postStoreProcessingFor(pojo);
-            }});
+            }}.run();
     }
 
     @Override
     public void preDirty(InstanceLifecycleEvent event) {
-        withLogging(new RunnableAbstract(event){
+        new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
                 persistenceSession.preDirtyProcessingFor(pojo);
-            }});
+            }}.run();
     }
 
     @Override
@@ -118,19 +118,19 @@ public class IsisLifecycleListener2
         //
         // 1<->m bidirectional, persistence-by-reachability
 
-        withLogging(new RunnableNoop(event));
+        new RunnableNoop(event).run();
     }
 
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
 
-        withLogging(new RunnableAbstract(event){
+        new RunnableAbstract(event){
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
                 persistenceSession.invokeIsisRemovingCallback(pojo);
             }
-        });
+        }.run();
     }
 
     @Override
@@ -162,12 +162,12 @@ public class IsisLifecycleListener2
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        withLogging(new RunnableEnsureRootObject(event));
+        new RunnableEnsureRootObject(event).run();
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        withLogging(new RunnableEnsureRootObject(event));
+        new RunnableEnsureRootObject(event).run();
     }
 
     
@@ -175,10 +175,6 @@ public class IsisLifecycleListener2
     // withLogging
     /////////////////////////////////////////////////////////////////////////
 
-    private void withLogging(Runnable runnable) {
-        runnable.run();
-    }
-    
     private abstract class RunnableAbstract implements Runnable {
         final InstanceLifecycleEvent event;
         public RunnableAbstract(final InstanceLifecycleEvent event) {
