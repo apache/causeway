@@ -23,7 +23,6 @@ import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Callable;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -1239,105 +1238,86 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > FrameworkSynchronizer delegate methods
 
     public void postDeleteProcessingFor(final Persistable pojo) {
-        new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = getAdapterFor(pojo);
-                if (adapter == null) {
-                    return;
-                }
+        ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter == null) {
+            return;
+        }
 
-                // previously we called the removed callback (if any).
-                // however, this is almost certainly incorrect, because DN will not allow us
-                // to "touch" the pojo once deleted.
-                //
-                // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
-
-            }
-        }.run();
-
+        // previously we called the removed callback (if any).
+        // however, this is almost certainly incorrect, because DN will not allow us
+        // to "touch" the pojo once deleted.
+        //
+        // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
     }
 
 
     public void preDeleteProcessingFor(final Persistable pojo) {
-        new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = adapterFor(pojo);
+        ObjectAdapter adapter = adapterFor(pojo);
 
-                final IsisTransaction transaction = getCurrentTransaction();
-                transaction.enlistDeleting(adapter);
+        final IsisTransaction transaction = getCurrentTransaction();
+        transaction.enlistDeleting(adapter);
 
-                CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-            }
-        }.run();
-
+        CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
     }
 
 
     public void postLoadProcessingFor(final Persistable pojo) {
+        final Persistable pc = pojo;
 
-        new Runnable() {
-            @Override
-            public void run() {
-                final Persistable pc = pojo;
+        // need to do eagerly, because (if a viewModel then) a
+        // viewModel's #viewModelMemento might need to use services
+        injectServicesInto(pojo);
 
-                // need to do eagerly, because (if a viewModel then) a
-                // viewModel's #viewModelMemento might need to use services
-                injectServicesInto(pojo);
+        final Version datastoreVersion = getVersionIfAny(pc);
 
-                final Version datastoreVersion = getVersionIfAny(pc);
+        final RootOid originalOid;
+        ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter != null) {
+            ensureRootObject(pojo);
+            originalOid = (RootOid) adapter.getOid();
 
-                final RootOid originalOid;
-                ObjectAdapter adapter = getAdapterFor(pojo);
-                if (adapter != null) {
-                    ensureRootObject(pojo);
-                    originalOid = (RootOid) adapter.getOid();
+            final Version originalVersion = adapter.getVersion();
 
-                    final Version originalVersion = adapter.getVersion();
+            // sync the pojo held by the adapter with that just loaded
+            remapRecreatedPojo(adapter, pojo);
 
-                    // sync the pojo held by the adapter with that just loaded
-                    remapRecreatedPojo(adapter, pojo);
+            // since there was already an adapter, do concurrency check
+            // (but don't set abort cause if checking is suppressed through thread-local)
+            final RootOid thisOid = originalOid;
+            final Version thisVersion = originalVersion;
+            final Version otherVersion = datastoreVersion;
 
-                    // since there was already an adapter, do concurrency check
-                    // (but don't set abort cause if checking is suppressed through thread-local)
-                    final RootOid thisOid = originalOid;
-                    final Version thisVersion = originalVersion;
-                    final Version otherVersion = datastoreVersion;
+            if (thisVersion != null &&
+                    otherVersion != null &&
+                    thisVersion.different(otherVersion)) {
 
-                    if (thisVersion != null &&
-                            otherVersion != null &&
-                            thisVersion.different(otherVersion)) {
+                if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+                    LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
+                    final String currentUser = authenticationSession.getUserName();
+                    final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
+                            thisVersion, otherVersion);
+                    getCurrentTransaction().setAbortCause(abortCause);
 
-                        if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
-                            LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
-                            final String currentUser = authenticationSession.getUserName();
-                            final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
-                                    thisVersion, otherVersion);
-                            getCurrentTransaction().setAbortCause(abortCause);
-
-                        } else {
-                            LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
-                                    + ")");
-                        }
-                    }
                 } else {
-                    originalOid = createPersistentOrViewModelOid(pojo);
-
-                    // it appears to be possible that there is already an adapter for this Oid,
-                    // ie from ObjectStore#resolveImmediately()
-                    adapter = getAdapterFor(originalOid);
-                    if (adapter != null) {
-                        remapRecreatedPojo(adapter, pojo);
-                    } else {
-                        adapter = mapRecreatedPojo(originalOid, pojo);
-                        CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-                    }
+                    LOG.warn("concurrency conflict detected but suppressed, on " + thisOid + " (" + otherVersion
+                            + ")");
                 }
-
-                adapter.setVersion(datastoreVersion);
             }
-        }.run();
+        } else {
+            originalOid = createPersistentOrViewModelOid(pojo);
+
+            // it appears to be possible that there is already an adapter for this Oid,
+            // ie from ObjectStore#resolveImmediately()
+            adapter = getAdapterFor(originalOid);
+            if (adapter != null) {
+                remapRecreatedPojo(adapter, pojo);
+            } else {
+                adapter = mapRecreatedPojo(originalOid, pojo);
+                CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
+            }
+        }
+
+        adapter.setVersion(datastoreVersion);
     }
 
     /**
@@ -1349,30 +1329,24 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * to determine which callback to fire.
      */
     public void preStoreProcessingFor(final Persistable pojo) {
-        new Runnable() {
-            @Override
-            public void run() {
-                final ObjectAdapter adapter = getAdapterFor(pojo);
-                if (adapter == null) {
-                    // not expected.
-                    return;
-                }
+        final ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter == null) {
+            // not expected.
+            return;
+        }
 
-                final RootOid isisOid = (RootOid) adapter.getOid();
-                if (isisOid.isTransient()) {
-                    // persisting
-                    // previously this was performed in the DataNucleusSimplePersistAlgorithm.
-                    CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
-                } else {
-                    // updating
+        final RootOid isisOid = (RootOid) adapter.getOid();
+        if (isisOid.isTransient()) {
+            // persisting
+            // previously this was performed in the DataNucleusSimplePersistAlgorithm.
+            CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
+        } else {
+            // updating
 
-                    // don't call here, already called in preDirty.
+            // don't call here, already called in preDirty.
 
-                    // CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-                }
-
-            }
-        }.run();
+            // CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+        }
     }
 
     /**
@@ -1384,41 +1358,36 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * to determine which callback to fire.
      */
     public void postStoreProcessingFor(final Persistable pojo) {
-        new Runnable() {
-            @Override
-            public void run() {
-                ensureRootObject(pojo);
+        ensureRootObject(pojo);
 
-                // assert is persistent
-                if (!pojo.dnIsPersistent()) {
-                    throw new IllegalStateException(
-                            "Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
-                }
+        // assert is persistent
+        if (!pojo.dnIsPersistent()) {
+            throw new IllegalStateException(
+                    "Pojo JDO state is not persistent! pojo dnOid: " + JDOHelper.getObjectId(pojo));
+        }
 
-                final ObjectAdapter adapter = getAdapterFor(pojo);
-                final RootOid isisOid = (RootOid) adapter.getOid();
+        final ObjectAdapter adapter = getAdapterFor(pojo);
+        final RootOid isisOid = (RootOid) adapter.getOid();
 
-                if (isisOid.isTransient()) {
-                    // persisting
-                    final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
+        if (isisOid.isTransient()) {
+            // persisting
+            final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
 
-                    remapAsPersistent(adapter, persistentOid);
+            remapAsPersistent(adapter, persistentOid);
 
-                    CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
+            CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
 
-                    final IsisTransaction transaction = getCurrentTransaction();
-                    transaction.enlistCreated(adapter);
-                } else {
-                    // updating;
-                    // the callback and transaction.enlist are done in the preDirty callback
-                    // (can't be done here, as the enlist requires to capture the 'before' values)
-                    CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-                }
+            final IsisTransaction transaction = getCurrentTransaction();
+            transaction.enlistCreated(adapter);
+        } else {
+            // updating;
+            // the callback and transaction.enlist are done in the preDirty callback
+            // (can't be done here, as the enlist requires to capture the 'before' values)
+            CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
+        }
 
-                Version versionIfAny = getVersionIfAny(pojo);
-                adapter.setVersion(versionIfAny);
-            }
-        }.run();
+        Version versionIfAny = getVersionIfAny(pojo);
+        adapter.setVersion(versionIfAny);
     }
 
     private Version getVersionIfAny(final Persistable pojo) {
@@ -1427,64 +1396,38 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     public void preDirtyProcessingFor(final Persistable pojo) {
-        new Runnable() {
-            @Override
-            public void run() {
-                ObjectAdapter adapter = getAdapterFor(pojo);
-                if (adapter == null) {
-                    // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
-                    // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
-                    // mapped.
+        ObjectAdapter adapter = getAdapterFor(pojo);
+        if (adapter == null) {
+            // seen this happen in the case when a parent entity (LeaseItem) has a collection of children
+            // objects (LeaseTerm) for which we haven't had a loaded callback fired and so are not yet
+            // mapped.
 
-                    // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
-                    // DN would not be calling this callback if the pojo was not persistent.
+            // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
+            // DN would not be calling this callback if the pojo was not persistent.
 
-                    adapter = lazilyLoaded(pojo);
-                    if (adapter == null) {
-                        throw new RuntimeException(
-                                "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
-                                        + pojo + "]");
-                    }
-                }
-                if (adapter.isTransient()) {
-                    // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
-                    // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
-                    // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
-                    //
-                    // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
-                    // hasn't yet executed, so thinks that the adapter is still transient.
-                    return;
-                }
-
-                CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-
-                final IsisTransaction transaction = getCurrentTransaction();
-                transaction.enlistUpdating(adapter);
-
-                ensureRootObject(pojo);
-            }
-        }.run();
-    }
-
-    private <T> T withLogging(Persistable pojo, Callable<T> runnable) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug(logString(LoggingLocation.ENTRY, pojo));
-        }
-        try {
-            return runnable.call();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug(logString(LoggingLocation.EXIT, pojo));
+            adapter = lazilyLoaded(pojo);
+            if (adapter == null) {
+                throw new RuntimeException(
+                        "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
+                                + pojo + "]");
             }
         }
-    }
+        if (adapter.isTransient()) {
+            // seen this happen in the case when there's a 1<->m bidirectional collection, and we're
+            // attaching the child object, which is being persisted by DN as a result of persistence-by-reachability,
+            // and it "helpfully" sets up the parent attribute on the child, causing this callback to fire.
+            //
+            // however, at the same time, Isis has only queued up a CreateObjectCommand for the transient object, but it
+            // hasn't yet executed, so thinks that the adapter is still transient.
+            return;
+        }
 
-    private String logString(LoggingLocation location, Persistable pojo) {
-        final ObjectAdapter adapter = getAdapterFor(pojo);
-        // initial spaces just to look better in log when wrapped by IsisLifecycleListener...
-        return location.prefix + " oid=" + (adapter !=null? adapter.getOid(): "(null)") + " ,pojo " + pojo;
+        CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+
+        final IsisTransaction transaction = getCurrentTransaction();
+        transaction.enlistUpdating(adapter);
+
+        ensureRootObject(pojo);
     }
 
     /**
@@ -1496,25 +1439,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (!(oid instanceof RootOid)) {
             throw new IsisException(MessageFormat.format("Not a RootOid: oid={0}, for {1}", oid, pojo));
         }
-    }
-
-    /**
-     * Categorises where called from.
-     *
-     * <p>
-     * Just used for logging.
-     */
-    public enum CalledFrom {
-        EVENT_LOAD,
-        EVENT_PRESTORE,
-        EVENT_POSTSTORE,
-        EVENT_PREDIRTY,
-        EVENT_POSTDIRTY,
-        OS_QUERY,
-        OS_RESOLVE,
-        OS_LAZILYLOADED,
-        EVENT_PREDELETE,
-        EVENT_POSTDELETE
     }
 
     //endregion
