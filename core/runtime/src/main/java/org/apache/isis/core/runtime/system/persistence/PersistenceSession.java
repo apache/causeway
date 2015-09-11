@@ -1239,7 +1239,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > FrameworkSynchronizer delegate methods
 
     public void postDeleteProcessingFor(final Persistable pojo) {
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 ObjectAdapter adapter = getAdapterFor(pojo);
@@ -1254,13 +1254,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 // CallbackFacet.Util.callCallback(adapter, RemovedCallbackFacet.class);
 
             }
-        });
+        }.run();
 
     }
 
 
     public void preDeleteProcessingFor(final Persistable pojo) {
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 ObjectAdapter adapter = adapterFor(pojo);
@@ -1270,14 +1270,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
             }
-        });
+        }.run();
 
     }
 
 
     public void postLoadProcessingFor(final Persistable pojo) {
 
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 final Persistable pc = pojo;
@@ -1337,7 +1337,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 adapter.setVersion(datastoreVersion);
             }
-        });
+        }.run();
     }
 
     /**
@@ -1349,7 +1349,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * to determine which callback to fire.
      */
     public void preStoreProcessingFor(final Persistable pojo) {
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 final ObjectAdapter adapter = getAdapterFor(pojo);
@@ -1372,7 +1372,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 }
 
             }
-        });
+        }.run();
     }
 
     /**
@@ -1384,7 +1384,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * to determine which callback to fire.
      */
     public void postStoreProcessingFor(final Persistable pojo) {
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 ensureRootObject(pojo);
@@ -1418,7 +1418,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 Version versionIfAny = getVersionIfAny(pojo);
                 adapter.setVersion(versionIfAny);
             }
-        });
+        }.run();
     }
 
     private Version getVersionIfAny(final Persistable pojo) {
@@ -1427,7 +1427,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     public void preDirtyProcessingFor(final Persistable pojo) {
-        withLogging(pojo, new Runnable() {
+        new Runnable() {
             @Override
             public void run() {
                 ObjectAdapter adapter = getAdapterFor(pojo);
@@ -1463,7 +1463,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
                 ensureRootObject(pojo);
             }
-        });
+        }.run();
     }
 
     private <T> T withLogging(Persistable pojo, Callable<T> runnable) {
@@ -1479,18 +1479,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 LOG.debug(logString(LoggingLocation.EXIT, pojo));
             }
         }
-    }
-
-    private void withLogging(Persistable pojo, final Runnable runnable) {
-        withLogging(pojo, new Callable<Void>() {
-
-            @Override
-            public Void call() throws Exception {
-                runnable.run();
-                return null;
-            }
-
-        });
     }
 
     private String logString(LoggingLocation location, Persistable pojo) {
