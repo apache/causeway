@@ -56,17 +56,32 @@ public class IsisLifecycleListener2
 
     @Override
     public void postCreate(final InstanceLifecycleEvent event) {
-        new RunnableNoop(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {}
+        }.run();
     }
 
     @Override
     public void preAttach(final InstanceLifecycleEvent event) {
-        new RunnableEnsureRootObject(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {
+                final Persistable pojo = Utils.persistenceCapableFor(event);
+                persistenceSession.ensureRootObject(pojo);
+            }
+        }.run();
     }
 
     @Override
     public void postAttach(final InstanceLifecycleEvent event) {
-        new RunnableEnsureRootObject(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {
+                final Persistable pojo = Utils.persistenceCapableFor(event);
+                persistenceSession.ensureRootObject(pojo);
+            }
+        }.run();
     }
 
     @Override
@@ -118,7 +133,10 @@ public class IsisLifecycleListener2
         //
         // 1<->m bidirectional, persistence-by-reachability
 
-        new RunnableNoop(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {}
+        }.run();
     }
 
     @Override
@@ -162,12 +180,24 @@ public class IsisLifecycleListener2
 
     @Override
     public void preDetach(InstanceLifecycleEvent event) {
-        new RunnableEnsureRootObject(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {
+                final Persistable pojo = Utils.persistenceCapableFor(event);
+                persistenceSession.ensureRootObject(pojo);
+            }
+        }.run();
     }
 
     @Override
     public void postDetach(InstanceLifecycleEvent event) {
-        new RunnableEnsureRootObject(event).run();
+        final InstanceLifecycleEvent event1 = event;
+        new RunnableAbstract(event1) {
+            protected void doRun() {
+                final Persistable pojo = Utils.persistenceCapableFor(event);
+                persistenceSession.ensureRootObject(pojo);
+            }
+        }.run();
     }
 
     
@@ -193,24 +223,6 @@ public class IsisLifecycleListener2
         
         protected abstract void doRun(); 
     }
-    
-    private class RunnableNoop extends RunnableAbstract {
-        RunnableNoop(InstanceLifecycleEvent event) {
-            super(event);
-        }
-        protected void doRun() {} 
-    }
-    
-    private class RunnableEnsureRootObject extends RunnableAbstract {
-        RunnableEnsureRootObject(InstanceLifecycleEvent event) {
-            super(event);
-        }
-        protected void doRun() {
-            final Persistable pojo = Utils.persistenceCapableFor(event);
-            persistenceSession.ensureRootObject(pojo);
-        }
-    }
-    
 
     // /////////////////////////////////////////////////////////
     // SuspendListener
