@@ -108,7 +108,7 @@ public class IsisLifecycleListener2
     @Override
     public void preDelete(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
-        persistenceSession.invokeIsisRemovingCallback(pojo);
+        persistenceSession.enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
     }
 
     @Override

@@ -1219,7 +1219,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > FrameworkSynchronizer delegate methods
 
-    public void invokeIsisRemovingCallback(final Persistable pojo) {
+    public void enlistDeletingAndInvokeIsisRemovingCallbackFacet(final Persistable pojo) {
         ObjectAdapter adapter = adapterFor(pojo);
 
         final IsisTransaction transaction = getCurrentTransaction();
@@ -1227,7 +1227,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
     }
-
 
     public void initializeMapAndCheckConcurrency(final Persistable pojo) {
         final Persistable pc = pojo;
