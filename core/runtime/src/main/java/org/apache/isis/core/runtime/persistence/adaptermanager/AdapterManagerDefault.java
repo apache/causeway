@@ -223,7 +223,7 @@ public class AdapterManagerDefault implements AdapterManager,
             return null;
         }
         final Persistable persistenceCapable = (Persistable) pojo;
-        return persistenceSession.mapRecreatedPersistent(persistenceCapable);
+        return persistenceSession.mapPersistent(persistenceCapable);
     }
 
 

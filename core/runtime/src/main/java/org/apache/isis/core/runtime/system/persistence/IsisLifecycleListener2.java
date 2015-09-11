@@ -85,7 +85,7 @@ public class IsisLifecycleListener2
             @Override
             protected void doRun() {
                 final Persistable pojo = Utils.persistenceCapableFor(event);
-                persistenceSession.callIsisPersistingCallback(pojo);
+                persistenceSession.invokeIsisPersistingCallback(pojo);
 
             }});
     }

@@ -754,11 +754,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > lazilyLoaded
 
 
-    public ObjectAdapter mapRecreatedPersistent(final Persistable pojo) {
-        if (getJdoObjectId(pojo) == null) {
+    public ObjectAdapter mapPersistent(final Persistable pojo) {
+        if (persistenceManager.getObjectId(pojo) == null) {
             return null;
         }
-        final RootOid oid = createPersistentOrViewModelOid(pojo);
+        final RootOid oid = oidGenerator.createPersistentOrViewModelOid(pojo);
         final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
         return adapter;
     }
@@ -1164,19 +1164,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
-    //region > oidGenerator delegate methods
-
-    public final RootOid createPersistentOrViewModelOid(Object pojo) {
-        return oidGenerator.createPersistentOrViewModelOid(pojo);
-    }
-    //endregion
 
     //region > jdoPersistenceManager delegate methods
-
-    public Object getJdoObjectId(Object pojo) {
-        return persistenceManager.getObjectId(pojo);
-    }
-
     public javax.jdo.Query newJdoQuery(Class<?> cls) {
         return persistenceManager.newQuery(cls);
     }
@@ -1283,7 +1272,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 }
             }
         } else {
-            originalOid = createPersistentOrViewModelOid(pojo);
+            originalOid = oidGenerator.createPersistentOrViewModelOid(pojo);
 
             // it appears to be possible that there is already an adapter for this Oid,
             // ie from ObjectStore#resolveImmediately()
@@ -1307,7 +1296,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The implementation therefore uses Isis' {@link org.apache.isis.core.metamodel.adapter.oid.Oid#isTransient() oid}
      * to determine which callback to fire.
      */
-    public void callIsisPersistingCallback(final Persistable pojo) {
+    public void invokeIsisPersistingCallback(final Persistable pojo) {
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter == null) {
             // not expected.
@@ -1350,7 +1339,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         if (isisOid.isTransient()) {
             // persisting
-            final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
+            final RootOid persistentOid = oidGenerator.createPersistentOrViewModelOid(pojo);
 
             remapAsPersistent(adapter, persistentOid);
 
@@ -1380,7 +1369,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             // it seems reasonable in this case to simply map into Isis here ("just-in-time"); presumably
             // DN would not be calling this callback if the pojo was not persistent.
 
-            adapter = mapRecreatedPersistent(pojo);
+            adapter = mapPersistent(pojo);
             if (adapter == null) {
                 throw new RuntimeException(
                         "DN could not find objectId for pojo (unexpected) and so could not map into Isis; pojo=["
