@@ -48,6 +48,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -56,6 +58,7 @@ import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
@@ -108,7 +111,8 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager {
+public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
+        QuerySubmitter {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -337,12 +341,38 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         setState(State.CLOSED);
     }
 
+    //endregion
+
+    //region > Injectable
+    //endregion
+
     @Override
     public void injectInto(final Object candidate) {
         if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
             final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
             cast.setAdapterManager(this);
         }
+        if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
+            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
+            cast.setQuerySubmitter(this);
+        }
+    }
+
+    //region > QuerySubmitter impl
+
+    @Override
+    public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
+        final ObjectAdapter instances = findInstancesInTransaction(query,
+                QueryCardinality.MULTIPLE);
+        return CollectionFacetUtils.convertToAdapterList(instances);
+    }
+
+    @Override
+    public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
+        final ObjectAdapter instances = findInstancesInTransaction(query,
+                QueryCardinality.SINGLE);
+        final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
+        return list.size() > 0 ? list.get(0) : null;
     }
 
     //endregion
