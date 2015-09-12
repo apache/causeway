@@ -48,6 +48,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -112,7 +114,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        QuerySubmitter {
+        QuerySubmitter, ObjectPersistor {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -356,21 +358,23 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
             cast.setQuerySubmitter(this);
         }
+        if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
+            final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
+            cast.setObjectPersistor(this);
+        }
     }
 
     //region > QuerySubmitter impl
 
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-        final ObjectAdapter instances = findInstancesInTransaction(query,
-                QueryCardinality.MULTIPLE);
+        final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.MULTIPLE);
         return CollectionFacetUtils.convertToAdapterList(instances);
     }
 
     @Override
     public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-        final ObjectAdapter instances = findInstancesInTransaction(query,
-                QueryCardinality.SINGLE);
+        final ObjectAdapter instances = findInstancesInTransaction(query, QueryCardinality.SINGLE);
         final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
         return list.size() > 0 ? list.get(0) : null;
     }
@@ -894,7 +898,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
             @Override
             public void execute() {
-                makePersistent(adapter);
+                makePersistentTransactionAssumed(adapter);
 
                 // clear out the map of transient -> persistent
                 PersistenceSession.this.persistentByTransient.clear();
@@ -903,7 +907,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         });
     }
 
-    private void makePersistent(final ObjectAdapter adapter) {
+    private void makePersistentTransactionAssumed(final ObjectAdapter adapter) {
         if (alreadyPersistedOrNotPersistable(adapter)) {
             return;
         }
@@ -935,6 +939,19 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     //endregion
+
+    //region > ObjectPersistor impl
+    @Override
+    public void makePersistent(final ObjectAdapter adapter) {
+        makePersistentInTransaction(adapter);
+    }
+
+    @Override
+    public void remove(final ObjectAdapter adapter) {
+        destroyObjectInTransaction(adapter);
+    }
+    //endregion
+
 
     //region > destroyObjectInTransaction
 
