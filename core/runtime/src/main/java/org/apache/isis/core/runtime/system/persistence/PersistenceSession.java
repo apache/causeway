@@ -23,6 +23,7 @@ import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -35,7 +36,9 @@ import org.datanucleus.enhancement.Persistable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -47,6 +50,8 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
@@ -86,6 +91,8 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -114,7 +121,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        QuerySubmitter, ObjectPersistor {
+        QuerySubmitter, ObjectPersistor, DomainObjectServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -199,6 +206,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
+
+        // to implement DomainObjectServices
+        final Properties properties = RuntimeContextFromSession.applicationPropertiesFrom(configuration);
+        setProperties(properties);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
@@ -361,6 +372,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
             final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
             cast.setObjectPersistor(this);
+        }
+        if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
+            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
+            cast.setDomainObjectServices(this);
         }
     }
 
@@ -1489,6 +1504,97 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     //endregion
+
+    //region > DomainObjectServices impl
+
+
+    @Override
+    public Object lookup(Bookmark bookmark) {
+        return new DomainObjectContainerResolve().lookup(bookmark);
+    }
+
+    @Override
+    public Bookmark bookmarkFor(Object domainObject) {
+        return new DomainObjectContainerResolve().bookmarkFor(domainObject);
+    }
+
+    @Override
+    public Bookmark bookmarkFor(Class<?> cls, String identifier) {
+        return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
+    }
+
+
+    @Override
+    public void resolve(final Object parent) {
+        new DomainObjectContainerResolve().resolve(parent);
+    }
+
+    @Override
+    public void resolve(final Object parent, final Object field) {
+        new DomainObjectContainerResolve().resolve(parent, field);
+    }
+
+    @Override
+    public boolean flush() {
+        return getTransactionManager().flushTransaction();
+    }
+
+    @Override
+    public void commit() {
+        getTransactionManager().endTransaction();
+    }
+
+    @Override
+    public void informUser(final String message) {
+        getCurrentTransaction().getMessageBroker().addMessage(message);
+    }
+
+    @Override
+    public void warnUser(final String message) {
+        getCurrentTransaction().getMessageBroker().addWarning(message);
+    }
+
+    @Override
+    public void raiseError(final String message) {
+        throw new RecoverableException(message);
+    }
+
+    private Properties properties;
+
+    private void setProperties(final Properties properties) {
+        this.properties = properties;
+    }
+
+    @Override
+    public String getProperty(final String name) {
+        return properties.getProperty(name);
+    }
+
+    @Override
+    public List<String> getPropertyNames() {
+        final List<String> list = Lists.newArrayList();
+        for (final Object key : properties.keySet()) {
+            list.add((String) key);
+        }
+        return list;
+    }
+
+
+    @Override
+    public <T> T lookupService(final Class<T> service) {
+        return servicesInjector.lookupService(service);
+    }
+
+    @Override
+    public <T> Iterable<T> lookupServices(final Class<T> service) {
+        return servicesInjector.lookupServices(service);
+    }
+
+
+
+
+    //endregion
+
 
 }
 

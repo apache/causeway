@@ -272,7 +272,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         };
     }
 
-    private static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
+    public static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
         final Properties properties = new Properties();
         final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
         for (final String key : applicationConfiguration) {
