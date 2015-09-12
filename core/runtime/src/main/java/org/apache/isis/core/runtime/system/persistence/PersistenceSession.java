@@ -49,6 +49,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -73,6 +74,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -106,7 +108,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle {
+public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -333,6 +335,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         setState(State.CLOSED);
+    }
+
+    @Override
+    public void injectInto(final Object candidate) {
+        if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+            cast.setAdapterManager(this);
+        }
     }
 
     //endregion
@@ -1178,22 +1188,51 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     // endregion
 
-    //region > AdapterManager delegate methods
+    //region > AdapterManager implementation
+    @Override
+    public ObjectAdapter getAdapterFor(final Oid oid) {
+        return adapterManager.getAdapterFor(oid);
+    }
 
+    @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         return adapterManager.getAdapterFor(pojo);
+    }
+
+    @Override
+    public ObjectAdapter adapterFor(final RootOid oid) {
+        return adapterManager.adapterFor(oid);
+    }
+
+    @Override
+    public ObjectAdapter adapterFor(
+            final RootOid oid,
+            final ConcurrencyChecking concurrencyChecking) {
+        return adapterManager.adapterFor(oid, concurrencyChecking);
     }
 
     public ObjectAdapter adapterFor(final Object pojo) {
         return adapterManager.adapterFor(pojo);
     }
 
+    @Override
+    public ObjectAdapter adapterFor(
+            final Object pojo, final ObjectAdapter parentAdapter, final OneToManyAssociation collection) {
+        return adapterManager.adapterFor(pojo, parentAdapter, collection);
+    }
+
     public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
         adapterManager.remapAsPersistent(adapter, hintRootOid);
     }
 
+    @Override
     public ObjectAdapter mapRecreatedPojo(final Oid oid, final Object recreatedPojo) {
         return adapterManager.mapRecreatedPojo(oid, recreatedPojo);
+    }
+
+    @Override
+    public void removeAdapter(final ObjectAdapter adapter) {
+        adapterManager.removeAdapter(adapter);
     }
 
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
