@@ -154,8 +154,8 @@ public class PersistenceSessionTest {
             }
             
         };
-        adapterManager = new AdapterManagerDefault(persistenceSession,
-                mockConfiguration);
+        adapterManager = new AdapterManagerDefault(persistenceSession
+        );
 
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();

@@ -212,8 +212,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
-        this.adapterManager = new AdapterManagerDefault(this,
-                configuration);
+        this.adapterManager = new AdapterManagerDefault(this
+        );
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
@@ -263,7 +263,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // inject any required dependencies into object factory
         servicesInjector.injectInto(adapterManager);
 
-        adapterManager.open();
+        getOidAdapterMap().open();
+        getPojoAdapterMap().open();
 
         persistenceManager = applicationComponents.getPersistenceManagerFactory().getPersistenceManager();
 
@@ -362,7 +363,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         try {
-            adapterManager.close();
+            getOidAdapterMap().close();
+            getPojoAdapterMap().close();
         } catch(final Throwable ex) {
             // ignore
             LOG.error("close: adapterManager#close() failed; continuing to avoid memory leakage");
@@ -1167,6 +1169,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             debug.appendln(oidForService != null ? oidForService.toString() : "[NULL]", serviceId);
         }
         debug.appendln();
+
+        debug.appendTitle(getPojoAdapterMap().debugTitle());
+        getPojoAdapterMap().debugData(debug);
+        debug.appendln();
+
+        debug.appendTitle(getOidAdapterMap().debugTitle());
+        getOidAdapterMap().debugData(debug);
 
         debug.appendTitle("Persistor");
         getTransactionManager().debugData(debug);

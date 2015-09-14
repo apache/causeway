@@ -22,16 +22,12 @@ package org.apache.isis.core.runtime.persistence.adaptermanager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.commons.debug.DebugBuilder;
-import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -50,20 +46,13 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
  * maps to an {@link ObjectAdapter adapter} and these are reused.
  */
 public class AdapterManagerDefault implements AdapterManager,
-        SessionScopedComponent,
-        DebuggableWithTitle,
-        Resettable {
+        SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(AdapterManagerDefault.class);
 
     //region > constructor and fields
 
     private final PersistenceSession persistenceSession;
-
-
-    // //////////////////////////////////////////////////////////////////
-    // constructor
-    // //////////////////////////////////////////////////////////////////
 
     /**
      * For object store implementations (eg JDO) that do not provide any mechanism
@@ -72,8 +61,7 @@ public class AdapterManagerDefault implements AdapterManager,
      * @see <a href="http://www.datanucleus.org/servlet/forum/viewthread_thread,7238_lastpage,yes#35976">this thread</a>
      */
     public AdapterManagerDefault(
-            final PersistenceSession persistenceSession,
-            final IsisConfiguration configuration) {
+            final PersistenceSession persistenceSession) {
         this.persistenceSession = persistenceSession;
 
     }
@@ -82,22 +70,10 @@ public class AdapterManagerDefault implements AdapterManager,
     //region > open, close
     @Override
     public void open() {
-        persistenceSession.getOidAdapterMap().open();
-        persistenceSession.getPojoAdapterMap().open();
     }
 
     @Override
     public void close() {
-        persistenceSession.getOidAdapterMap().close();
-        persistenceSession.getPojoAdapterMap().close();
-    }
-    //endregion
-
-    //region > reset
-    @Override
-    public void reset() {
-        persistenceSession.getOidAdapterMap().reset();
-        persistenceSession.getPojoAdapterMap().reset();
     }
     //endregion
 
@@ -171,26 +147,6 @@ public class AdapterManagerDefault implements AdapterManager,
         persistenceSession.remapAsPersistent(adapter, hintRootOid);
     }
 
-
-    //endregion
-
-
-    //region > debug
-    @Override
-    public String debugTitle() {
-        return "Identity map (adapter manager)";
-    }
-
-    @Override
-    public void debugData(final DebugBuilder debug) {
-        debug.appendTitle(persistenceSession.getPojoAdapterMap().debugTitle());
-        persistenceSession.getPojoAdapterMap().debugData(debug);
-        debug.appendln();
-
-        debug.appendTitle(persistenceSession.getOidAdapterMap().debugTitle());
-        persistenceSession.getOidAdapterMap().debugData(debug);
-
-    }
     //endregion
 
     //region > Injectable
