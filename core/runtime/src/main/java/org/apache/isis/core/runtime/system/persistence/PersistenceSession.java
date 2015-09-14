@@ -256,8 +256,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.debug("opening " + this);
         }
 
-        getOidAdapterMap().open();
-        getPojoAdapterMap().open();
+        oidAdapterMap.open();
+        pojoAdapterMap.open();
 
         persistenceManager = applicationComponents.getPersistenceManagerFactory().getPersistenceManager();
 
@@ -356,14 +356,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         try {
-            getOidAdapterMap().close();
+            oidAdapterMap.close();
         } catch(final Throwable ex) {
             // ignore
             LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
         }
 
         try {
-            getPojoAdapterMap().close();
+            pojoAdapterMap.close();
         } catch(final Throwable ex) {
             // ignore
             LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
@@ -1178,12 +1178,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         debug.appendln();
 
-        debug.appendTitle(getPojoAdapterMap().debugTitle());
-        getPojoAdapterMap().debugData(debug);
+        debug.appendTitle(pojoAdapterMap.debugTitle());
+        pojoAdapterMap.debugData(debug);
         debug.appendln();
 
-        debug.appendTitle(getOidAdapterMap().debugTitle());
-        getOidAdapterMap().debugData(debug);
+        debug.appendTitle(oidAdapterMap.debugTitle());
+        oidAdapterMap.debugData(debug);
 
         debug.appendTitle("Persistor");
         getTransactionManager().debugData(debug);
@@ -1265,19 +1265,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
-    public PojoAdapterHashMap getPojoAdapterMap() {
-        return pojoAdapterMap;
-    }
-
-    public OidAdapterHashMap getOidAdapterMap() {
-        return oidAdapterMap;
-    }
-
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         ensureThatArg(pojo, is(notNullValue()));
 
-        return getPojoAdapterMap().getAdapter(pojo);
+        return pojoAdapterMap.getAdapter(pojo);
     }
 
     @Override
@@ -1285,11 +1277,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         ensureThatArg(oid, is(notNullValue()));
         ensureMapsConsistent(oid);
 
-        return getOidAdapterMap().getAdapter(oid);
+        return oidAdapterMap.getAdapter(oid);
     }
 
 
-    public ObjectAdapter existingOrValueAdapter(Object pojo) {
+    private ObjectAdapter existingOrValueAdapter(Object pojo) {
 
         // attempt to locate adapter for the pojo
         ObjectAdapter adapter = getAdapterFor(pojo);
@@ -1328,7 +1320,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     /**
      * Fail early if any problems.
      */
-    public void ensureMapsConsistent(final ObjectAdapter adapter) {
+    private void ensureMapsConsistent(final ObjectAdapter adapter) {
         if (adapter.isValue()) {
             return;
         }
@@ -1345,7 +1337,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private void ensureMapsConsistent(final Oid oid) {
         ensureThatArg(oid, is(notNullValue()));
 
-        final ObjectAdapter adapter = getOidAdapterMap().getAdapter(oid);
+        final ObjectAdapter adapter = oidAdapterMap.getAdapter(oid);
         if (adapter == null) {
             return;
         }
@@ -1355,7 +1347,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
         final Object adapterPojo = adapter.getObject();
-        final ObjectAdapter adapterAccordingToPojoAdapterMap = getPojoAdapterMap().getAdapter(adapterPojo);
+        final ObjectAdapter adapterAccordingToPojoAdapterMap = pojoAdapterMap.getAdapter(adapterPojo);
         // take care not to touch the pojo, since it might have been deleted.
         ensureThatArg(
                 adapter, is(adapterAccordingToPojoAdapterMap),
@@ -1365,7 +1357,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         final Oid adapterOid = adapter.getOid();
-        final ObjectAdapter adapterAccordingToOidAdapterMap = getOidAdapterMap()
+        final ObjectAdapter adapterAccordingToOidAdapterMap = oidAdapterMap
                 .getAdapter(adapterOid);
         // take care not to touch the pojo, since it might have been deleted.
         ensureThatArg(
@@ -1375,13 +1367,82 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    @Override
+    public ObjectAdapter adapterForAny(RootOid rootOid) {
+
+        final ObjectSpecId specId = rootOid.getObjectSpecId();
+        final ObjectSpecification spec = getSpecificationLoader().lookupBySpecId(specId);
+        if(spec == null) {
+            // eg "NONEXISTENT:123"
+            return null;
+        }
+
+        if(spec.containsFacet(ViewModelFacet.class)) {
+
+            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
+            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
+            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
+            if(!rootOid.isViewModel()) {
+                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
+            }
+
+            try {
+                return adapterFor(rootOid);
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            } catch(final PojoRecreationException ex) {
+                return null;
+            }
+        } else {
+            try {
+                ObjectAdapter objectAdapter = loadObjectInTransaction(rootOid);
+                return objectAdapter.isTransient() ? null : objectAdapter;
+            } catch(final ObjectNotFoundException ex) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
+     * {@link ConcurrencyChecking#NO_CHECK no checking}.
+     *
+     * <p>
+     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
+     * know that the oid does indeed represent an object you know exists.
+     * </p>
+     */
     public ObjectAdapter adapterFor(final RootOid rootOid) {
         return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
     }
 
 
-    @Override
+    /**
+     * Either returns an existing {@link ObjectAdapter adapter} (as per
+     * {@link #getAdapterFor(Oid)}), otherwise re-creates an adapter with the
+     * specified (persistent) {@link Oid}.
+     *
+     * <p>
+     * Typically called when the {@link Oid} is already known, that is, when
+     * resolving an already-persisted object. Is also available for
+     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
+     * {@link Oid#isTransient() transient} object.
+     *
+     * <p>
+     * The pojo itself is recreated by delegating to a {@link AdapterManager}.
+     *
+     * <p>
+     * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
+     * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version}
+     * of the {@link RootOid oid} of the recreated adapter is the same as that of the provided {@link RootOid oid}.
+     * If the version differs, then a {@link ConcurrencyException} is thrown.
+     *
+     * <p>
+     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link RootOid oid}'s {@link Version version}
+     * will be {@link RootOid#setVersion(Version) set} to the current
+     * value.  This allows the client to retry if they wish.
+     *
+     * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
+     */
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
             final ConcurrencyChecking concurrencyChecking) {
@@ -1412,9 +1473,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     // check for exception, but don't throw if suppressed through thread-local
                     final Version otherVersion = originalOid.getVersion();
                     final Version thisVersion = recreatedOid.getVersion();
-                    if(thisVersion != null &&
-                            otherVersion != null &&
-                            thisVersion.different(otherVersion)) {
+                    if( thisVersion != null &&
+                        otherVersion != null &&
+                        thisVersion.different(otherVersion)) {
 
                         if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
@@ -1444,7 +1505,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public Object recreatePojo(RootOid oid) {
+    private Object recreatePojo(RootOid oid) {
         if(oid.isTransient() || oid.isViewModel()) {
             return recreatePojoDefault(oid);
         } else {
@@ -1528,7 +1589,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * Should only be called if the pojo is known not to be
      * {@link #getAdapterFor(Object) mapped}.
      */
-    public ObjectAdapter createCollectionAdapter(
+    private ObjectAdapter createCollectionAdapter(
             final Object pojo,
             final ObjectAdapter parentAdapter,
             final OneToManyAssociation otma) {
@@ -1551,8 +1612,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         return collectionAdapter;
     }
-
-
 
 
 
@@ -1586,7 +1645,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.debug("removing root adapter from oid map");
         }
 
-        boolean removed = getOidAdapterMap().remove(transientRootOid);
+        boolean removed = oidAdapterMap.remove(transientRootOid);
         if (!removed) {
             LOG.warn("could not remove oid: " + transientRootOid);
             // should we fail here with a more serious error?
@@ -1597,7 +1656,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
             final Oid collectionOid = collectionAdapter.getOid();
-            removed = getOidAdapterMap().remove(collectionOid);
+            removed = oidAdapterMap.remove(collectionOid);
             if (!removed) {
                 LOG.warn("could not remove collectionOid: " + collectionOid);
                 // should we fail here with a more serious error?
@@ -1633,7 +1692,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     oidMarshaller) + " (was: " + transientRootOid.enString(oidMarshaller) + ")");
         }
         adapter.replaceOid(persistedRootOid);
-        getOidAdapterMap().add(persistedRootOid, adapter);
+        oidAdapterMap.add(persistedRootOid, adapter);
 
         // associate the collection adapters with new Oids, and re-map
         if (LOG.isDebugEnabled()) {
@@ -1642,7 +1701,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         for (final ObjectAdapter collectionAdapter : rootAndCollectionAdapters) {
             final ParentedCollectionOid previousCollectionOid = (ParentedCollectionOid) collectionAdapter.getOid();
             final ParentedCollectionOid persistedCollectionOid = previousCollectionOid.asPersistent(persistedRootOid);
-            getOidAdapterMap().add(persistedCollectionOid, collectionAdapter);
+            oidAdapterMap.add(persistedCollectionOid, collectionAdapter);
         }
 
 
@@ -1658,9 +1717,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final Object collectionPojoActuallyOnPojo = getCollectionPojo(otma, adapter);
 
             if (collectionPojoActuallyOnPojo != collectionPojoWrappedByAdapter) {
-                getPojoAdapterMap().remove(collectionAdapter);
+                pojoAdapterMap.remove(collectionAdapter);
                 collectionAdapter.replacePojo(collectionPojoActuallyOnPojo);
-                getPojoAdapterMap().add(collectionPojoActuallyOnPojo, collectionAdapter);
+                pojoAdapterMap.add(collectionPojoActuallyOnPojo, collectionAdapter);
             }
         }
 
@@ -1669,7 +1728,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
     }
 
-    public static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
+    private static Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyOrCollectionAccessorFacet accessor = association.getFacet(PropertyOrCollectionAccessorFacet.class);
         return accessor.getProperty(ownerAdapter, InteractionInitiatedBy.FRAMEWORK);
     }
@@ -1738,6 +1797,18 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         unmap(adapter);
     }
 
+    private void unmap(final ObjectAdapter adapter) {
+        ensureMapsConsistent(adapter);
+
+        final Oid oid = adapter.getOid();
+        if (oid != null) {
+            oidAdapterMap.remove(oid);
+        }
+        pojoAdapterMap.remove(adapter);
+    }
+
+
+
 
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
         removeAdapter(adapter);
@@ -1746,7 +1817,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
+    private ObjectAdapter createRootOrAggregatedAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter createdAdapter;
         if(oid instanceof RootOid) {
             final RootOid rootOid = (RootOid) oid;
@@ -1762,7 +1833,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * Creates a new transient root {@link ObjectAdapter adapter} for the supplied domain
      * object.
      */
-    public ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
+    private ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
         final RootOid rootOid = oidGenerator.createTransientOrViewModelOid(pojo);
         return createRootAdapter(pojo, rootOid);
     }
@@ -1779,7 +1850,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * {@link #getAdapterFor(Object) mapped}, and for immutable value types
      * referenced.
      */
-    public ObjectAdapter createStandaloneAdapter(final Object pojo) {
+    private ObjectAdapter createStandaloneAdapter(final Object pojo) {
         return createAdapter(pojo, null);
     }
 
@@ -1790,12 +1861,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * @see #createStandaloneAdapter(Object)
      * @see #createCollectionAdapter(Object, ParentedCollectionOid)
      */
-    public ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
+    private ObjectAdapter createRootAdapter(final Object pojo, RootOid rootOid) {
         Ensure.ensureThatArg(rootOid, is(not(nullValue())));
         return createAdapter(pojo, rootOid);
     }
 
-    public ObjectAdapter createCollectionAdapter(
+    private ObjectAdapter createCollectionAdapter(
             final Object pojo,
             ParentedCollectionOid collectionOid) {
         Ensure.ensureThatArg(collectionOid, is(not(nullValue())));
@@ -1812,13 +1883,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
 
-    public ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
+    private ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
         // since the whole point of this method is to map an adapter that's just been created.
         // so we *don't* call ensureMapsConsistent(adapter);
 
         Assert.assertNotNull(adapter);
         final Object pojo = adapter.getObject();
-        Assert.assertFalse("POJO Map already contains object", pojo, getPojoAdapterMap().containsPojo(pojo));
+        Assert.assertFalse("POJO Map already contains object", pojo, pojoAdapterMap.containsPojo(pojo));
 
         if (LOG.isDebugEnabled()) {
             // don't interact with the underlying object because may be a ghost
@@ -1840,26 +1911,16 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // add all aggregated collections
         final ObjectSpecification objSpec = adapter.getSpecification();
         if (!adapter.isParentedCollection() || adapter.isParentedCollection() && !objSpec.isImmutable()) {
-            getPojoAdapterMap().add(pojo, adapter);
+            pojoAdapterMap.add(pojo, adapter);
         }
 
         // order is important - add to pojo map first, then identity map
-        getOidAdapterMap().add(adapter.getOid(), adapter);
+        oidAdapterMap.add(adapter.getOid(), adapter);
 
         // must inject after mapping, otherwise infinite loop
         servicesInjector.injectServicesInto(pojo);
 
         return adapter;
-    }
-
-    public void unmap(final ObjectAdapter adapter) {
-        ensureMapsConsistent(adapter);
-
-        final Oid oid = adapter.getOid();
-        if (oid != null) {
-            getOidAdapterMap().remove(oid);
-        }
-        getPojoAdapterMap().remove(adapter);
     }
 
 

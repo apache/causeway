@@ -399,7 +399,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         
         try {
             final RootOid oid = RootOid.deStringEncoded(encoded, getOidMarshaller());
-            return getAdapterManager().adapterFor(oid);
+            return getPersistenceSession().adapterFor(oid);
         } catch (final Exception e) {
             return null;
         }

@@ -25,7 +25,6 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public interface AdapterManager extends Injectable {
@@ -120,46 +119,8 @@ public interface AdapterManager extends Injectable {
 
     }
 
-    /**
-     * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link ConcurrencyChecking#NO_CHECK no checking}.
-     *
-     * <p>
-     * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
-     * know that the oid does indeed represent an object you know exists.
-     * </p>
-     */
-    ObjectAdapter adapterFor(RootOid oid);
 
 
-    /**
-     * Either returns an existing {@link ObjectAdapter adapter} (as per
-     * {@link #getAdapterFor(Oid)}), otherwise re-creates an adapter with the
-     * specified (persistent) {@link Oid}.
-     *
-     * <p>
-     * Typically called when the {@link Oid} is already known, that is, when
-     * resolving an already-persisted object. Is also available for
-     * <tt>Memento</tt> support however, so {@link Oid} could also represent a
-     * {@link Oid#isTransient() transient} object.
-     *
-     * <p>
-     * The pojo itself is recreated by delegating to a {@link AdapterManager}.
-     *
-     * <p>
-     * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.
-     * If it is requested, then a check is made to ensure that the {@link Oid#getVersion() version}
-     * of the {@link RootOid oid} of the recreated adapter is the same as that of the provided {@link RootOid oid}.
-     * If the version differs, then a {@link ConcurrencyException} is thrown.
-     *
-     * <p>
-     * ALSO, even if a {@link ConcurrencyException}, then the provided {@link RootOid oid}'s {@link Version version}
-     * will be {@link RootOid#setVersion(Version) set} to the current
-     * value.  This allows the client to retry if they wish.
-     *
-     * @throws {@link org.apache.isis.core.runtime.persistence.ObjectNotFoundException} if the object does not exist.
-     */
-    ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking);
 
     /**
      * Looks up or creates a standalone (value) or root adapter.

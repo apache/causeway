@@ -95,7 +95,7 @@ public class DomainObjectContainerResolve {
     }
 
     private ObjectAdapter adapterFor(final RootOid oid) {
-        return getAdapterManager().adapterFor(oid);
+        return getPersistenceSession().adapterFor(oid);
     }
 
     // /////////////////////////////////////////////////////////////////

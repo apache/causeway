@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -102,27 +101,8 @@ public class AdapterManagerDefault implements AdapterManager,
         return persistenceSession.adapterFor(pojo, parentAdapter, collection);
     }
 
-
-    @Override
-    public ObjectAdapter adapterFor(final RootOid rootOid) {
-        return persistenceSession.adapterFor(rootOid);
-    }
-
-    @Override
-    public ObjectAdapter adapterFor(
-            final RootOid oid,
-            final ConcurrencyChecking concurrencyChecking) {
-        return persistenceSession.adapterFor(oid, concurrencyChecking);
-    }
-
-
     //endregion
 
-    //region > remapRecreatedPojo
-    public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {
-        persistenceSession.remapRecreatedPojo(adapter, pojo);
-    }
-    //endregion
 
     //region > mapRecreatedPojo
 
@@ -141,13 +121,6 @@ public class AdapterManagerDefault implements AdapterManager,
 
     //endregion
 
-    //region > remapAsPersistent
-
-    public void remapAsPersistent(final ObjectAdapter adapter, RootOid hintRootOid) {
-        persistenceSession.remapAsPersistent(adapter, hintRootOid);
-    }
-
-    //endregion
 
     //region > Injectable
 

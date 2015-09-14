@@ -81,10 +81,10 @@ public abstract class AbstractIsisSessionTemplate {
     // //////////////////////////////////////
 
     protected ObjectAdapter adapterFor(final Object targetObject) {
-        return getAdapterManager().adapterFor(targetObject);
+        return getPersistenceSession().adapterFor(targetObject);
     }
     protected ObjectAdapter adapterFor(final RootOid rootOid) {
-        return getAdapterManager().adapterFor(rootOid);
+        return getPersistenceSession().adapterFor(rootOid);
     }
     
     // //////////////////////////////////////

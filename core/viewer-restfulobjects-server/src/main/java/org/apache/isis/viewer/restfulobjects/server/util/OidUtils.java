@@ -19,15 +19,8 @@
 package org.apache.isis.viewer.restfulobjects.server.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.core.runtime.persistence.PojoRecreationException;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 
@@ -61,41 +54,10 @@ public final class OidUtils {
             final RendererContext rendererContext,
             final String oidStrUnencoded) {
         RootOid rootOid = RootOid.deString(oidStrUnencoded, getOidMarshaller());
-        final ObjectSpecId specId = rootOid.getObjectSpecId();
 
-        final ObjectSpecification spec = IsisContext.getSpecificationLoader().lookupBySpecId(specId);
-        if(spec == null) {
-            // eg "NONEXISTENT:123"
-            return null;
-        }
-
-        // TODO: the logic to figure out which PersistenceSession API to call should be pushed down into PersistenceSession itself.
         final PersistenceSession persistenceSession = rendererContext.getPersistenceSession();
 
-        if(spec.containsFacet(ViewModelFacet.class)) {
-
-            // this is a hack; the RO viewer when rendering the URL for the view model loses the "view model" indicator
-            // ("*") from the specId, meaning that the marshalling logic above in RootOidDefault.deString() creates an
-            // oid in the wrong state.  The code below checks for this and recreates the oid with the current state of 'view model'
-            if(!rootOid.isViewModel()) {
-                rootOid = new RootOid(rootOid.getObjectSpecId(), rootOid.getIdentifier(), Oid.State.VIEWMODEL);
-            }
-
-            try {
-                return persistenceSession.adapterFor(rootOid);
-            } catch(final ObjectNotFoundException ex) {
-                return null;
-            } catch(final PojoRecreationException ex) {
-                return null;
-            }
-        } else {
-            try {
-                ObjectAdapter objectAdapter = persistenceSession.loadObjectInTransaction(rootOid);
-                return objectAdapter.isTransient() ? null : objectAdapter;
-            } catch(final ObjectNotFoundException ex) {
-                return null;
-            }
-        }
+        return persistenceSession.adapterForAny(rootOid);
     }
 
     private static OidMarshaller getOidMarshaller() {

@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
@@ -120,16 +119,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public void removeAdapter(ObjectAdapter adapter) {
                 getPersistenceSession().removeAdapter(adapter);
-            }
-
-            @Override
-            public ObjectAdapter adapterFor(RootOid oid) {
-                return getPersistenceSession().adapterFor(oid);
-            }
-
-            @Override
-            public ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking) {
-                return getPersistenceSession().adapterFor(oid, concurrencyChecking);
             }
 
             @Override

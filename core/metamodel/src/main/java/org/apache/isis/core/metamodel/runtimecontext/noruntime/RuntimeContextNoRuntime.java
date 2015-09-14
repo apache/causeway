@@ -141,16 +141,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(RootOid rootOid) {
-            	throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-            
-            @Override
-            public ObjectAdapter adapterFor(RootOid rootOid, ConcurrencyChecking concurrencyChecking) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-            
-            @Override
             public ObjectAdapter getAdapterFor(Oid oid) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
