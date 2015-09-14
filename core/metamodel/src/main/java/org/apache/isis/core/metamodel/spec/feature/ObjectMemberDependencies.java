@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -24,18 +23,15 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public class ObjectMemberDependencies {
 
     private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
     private final PersistenceSessionService persistenceSessionService;
 
     public ObjectMemberDependencies(
             final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PersistenceSessionService persistenceSessionService) {
 
         this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
 
         this.servicesInjector = servicesInjector;
         this.persistenceSessionService = persistenceSessionService;
@@ -43,10 +39,6 @@ public class ObjectMemberDependencies {
 
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
-    }
-
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
     }
 
     public ServicesInjector getServicesInjector() {

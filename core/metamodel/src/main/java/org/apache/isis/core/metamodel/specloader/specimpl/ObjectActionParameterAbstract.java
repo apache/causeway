@@ -513,7 +513,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     protected AdapterManager getAdapterMap() {
-        return parentAction.getAdapterManager();
+        return parentAction.getPersistenceSessionService();
     }
 
     protected PersistenceSessionService getObjectPersistor() {

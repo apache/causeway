@@ -196,6 +196,6 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     }
 
     private ObjectAdapter getServiceAdapter() {
-        return getAdapterManager().adapterFor(servicePojo);
+        return getPersistenceSessionService().adapterFor(servicePojo);
     }
 }

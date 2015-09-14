@@ -171,7 +171,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         if (collection == null) {
             return null;
         }
-        return getAdapterManager().adapterFor(collection, ownerAdapter, this);
+        return getPersistenceSessionService().adapterFor(collection, ownerAdapter, this);
     }
 
     @Override

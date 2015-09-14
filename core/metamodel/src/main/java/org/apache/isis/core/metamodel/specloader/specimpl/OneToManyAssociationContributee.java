@@ -212,6 +212,6 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     }
 
     public ObjectAdapter getServiceAdapter() {
-        return getAdapterManager().adapterFor(servicePojo);
+        return getPersistenceSessionService().adapterFor(servicePojo);
     }
 }

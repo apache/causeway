@@ -444,7 +444,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     private ObjectAdapter adapterFor(final Object pojo) {
-        return pojo == null ? null : getAdapterManager().adapterFor(pojo);
+        return pojo == null ? null : getPersistenceSessionService().adapterFor(pojo);
     }
 
     // /////////////////////////////////////////////////////////////

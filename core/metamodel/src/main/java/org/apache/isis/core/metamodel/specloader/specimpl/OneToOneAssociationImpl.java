@@ -148,7 +148,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             return null;
         }
 
-        return getAdapterManager().adapterFor(referencedPojo);
+        return getPersistenceSessionService().adapterFor(referencedPojo);
     }
 
     // UNUSED
@@ -282,7 +282,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
                 getSpecificationLoader(),
                 interactionInitiatedBy);
         List<ObjectAdapter> adapters = Lists.transform(
-                Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getAdapterManager()));
+                Lists.newArrayList(pojoOptions), ObjectAdapter.Functions.adapterForUsing(getPersistenceSessionService()));
         return adapters.toArray(new ObjectAdapter[]{});
     }
 
@@ -304,7 +304,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
-                options[i] = getAdapterManager().adapterFor(pojoOptions[i]);
+                options[i] = getPersistenceSessionService().adapterFor(pojoOptions[i]);
             }
             return options;
         }

@@ -41,7 +41,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -50,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -61,7 +61,6 @@ import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
@@ -445,27 +444,26 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
-        final SpecificationLoader specificationLookup = getRuntimeContext().getSpecificationLoader();
         final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final AdapterManager adapterManager = getRuntimeContext().getAdapterManager();
+        final PersistenceSessionService persistenceSessionService =
+                getRuntimeContext().getPersistenceSessionService();
 
         final ObjectSpecificationDependencies specContext =
                 new ObjectSpecificationDependencies(
-                        getDeploymentCategory(), servicesInjector, specificationLookup,
-                        facetProcessor);
+                        getDeploymentCategory(), servicesInjector, this, facetProcessor);
 
-        final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(
-                specificationLookup, adapterManager, servicesInjector,
-                getRuntimeContext().getPersistenceSessionService());
+        final ObjectMemberDependencies objectMemberDependencies =
+                new ObjectMemberDependencies(
+                this, servicesInjector,
+                        persistenceSessionService);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
             return new ObjectSpecificationOnStandaloneList(specContext, objectMemberDependencies);
         } else {
-            final SpecificationLoaderSpi specificationLoader = this;
             final FacetedMethodsBuilderContext facetedMethodsBuilderContext =
                     new FacetedMethodsBuilderContext(
-                            specificationLoader, facetProcessor, layoutMetadataReaders);
+                            this, facetProcessor, layoutMetadataReaders);
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext,
                     objectMemberDependencies);
         }

@@ -333,6 +333,6 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     }
 
     public ObjectAdapter getServiceAdapter() {
-        return getAdapterManager().adapterFor(servicePojo);
+        return getPersistenceSessionService().adapterFor(servicePojo);
     }
 }

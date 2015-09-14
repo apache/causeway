@@ -69,7 +69,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
     private final SpecificationLoader specificationLookup;
-    private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
 
     protected ObjectMemberAbstract(
@@ -86,7 +85,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.defaultName = StringExtensions.asNaturalName2(this.id);
 
         this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
-        this.adapterManager = objectMemberDependencies.getAdapterManager();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
         this.persistenceSessionService = objectMemberDependencies.getPersistenceSessionService();
     }
@@ -334,10 +332,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;
-    }
-
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
     }
 
     public ServicesInjector getServicesInjector() {

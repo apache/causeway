@@ -124,7 +124,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         objectMemberDependencies = new ObjectMemberDependencies(
-                mockSpecificationLoader, mockAdapterManager, mockServicesInjector,
+                mockSpecificationLoader, mockServicesInjector,
                 mockPersistenceSessionService);
         
         employeeRepository = new EmployeeRepositoryImpl();

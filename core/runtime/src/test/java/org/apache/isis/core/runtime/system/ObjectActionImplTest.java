@@ -80,7 +80,7 @@ public class ObjectActionImplTest {
         });
 
         action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberDependencies(
-                mockSpecificationLookup, mockAdapterManager, mockServicesInjector,
+                mockSpecificationLookup, mockServicesInjector,
                 mockPersistenceSessionService));
     }
 

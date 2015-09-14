@@ -67,7 +67,7 @@ public class ObjectAssociationAbstractTest_alwaysHidden {
         
         objectAssociation = new ObjectAssociationAbstract(
                 facetedMethod, FeatureType.PROPERTY, mockObjectSpecification,
-                new ObjectMemberDependencies(null, null, null, null)) {
+                new ObjectMemberDependencies(null, null, null)) {
 
             @Override
             public ObjectAdapter get(
