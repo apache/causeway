@@ -222,6 +222,19 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         this.domainObjectServices = new DomainObjectServicesAbstract() {
 
             @Override
+            public String getProperty(final String name) {
+                return RuntimeContextFromSession.this.getProperty(name);
+            }
+
+            @Override
+            public List<String> getPropertyNames() {
+                return RuntimeContextFromSession.this.getPropertyNames();
+            }
+
+        };
+        this.messageBrokerService = new MessageBrokerServiceAbstract() {
+
+            @Override
             public void informUser(final String message) {
                 getMessageBroker().addMessage(message);
             }
@@ -236,18 +249,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 throw new RecoverableException(message);
             }
 
-            @Override
-            public String getProperty(final String name) {
-                return RuntimeContextFromSession.this.getProperty(name);
-            }
-
-            @Override
-            public List<String> getPropertyNames() {
-                return RuntimeContextFromSession.this.getPropertyNames();
-            }
-
-        };
-        this.messageBrokerService = new MessageBrokerServiceAbstract() {
 
         };
         this.localizationProvider = new LocalizationProviderAbstract() {

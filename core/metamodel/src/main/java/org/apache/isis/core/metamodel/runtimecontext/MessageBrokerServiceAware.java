@@ -21,6 +21,6 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 public interface MessageBrokerServiceAware {
 
-    public void setQuerySubmitter(final MessageBrokerService messageBrokerService);
+    public void setMessageBrokerService(final MessageBrokerService messageBrokerService);
 
 }

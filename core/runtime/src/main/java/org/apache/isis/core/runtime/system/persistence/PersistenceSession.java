@@ -367,7 +367,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
-            cast.setQuerySubmitter(this);
+            cast.setMessageBrokerService(this);
         }
         if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
             final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);

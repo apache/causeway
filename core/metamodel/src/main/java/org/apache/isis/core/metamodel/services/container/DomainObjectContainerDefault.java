@@ -65,6 +65,8 @@ import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
 import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -79,8 +81,9 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 public class DomainObjectContainerDefault
         implements DomainObjectContainer, DomainObjectServicesAware,
         ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
-        ServicesInjectorAware,
+        ServicesInjectorAware, MessageBrokerServiceAware,
         LocalizationProviderAware, ExceptionRecognizer {
+    private MessageBrokerService messageBrokerService;
 
     //region > titleOf
 
@@ -349,6 +352,11 @@ public class DomainObjectContainerDefault
         persist(object);
     }
 
+    @Override
+    public void setMessageBrokerService(final MessageBrokerService messageBrokerService) {
+        this.messageBrokerService = messageBrokerService;
+    }
+
     //endregion
 
     //region > security
@@ -464,7 +472,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void informUser(final String message) {
-        getDomainObjectServices().informUser(message);
+        messageBrokerService.informUser(message);
     }
 
     @Override
@@ -475,7 +483,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void warnUser(final String message) {
-        getDomainObjectServices().warnUser(message);
+        messageBrokerService.warnUser(message);
     }
 
     @Override
@@ -486,7 +494,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void raiseError(final String message) {
-        getDomainObjectServices().raiseError(message);
+        messageBrokerService.raiseError(message);
     }
 
     @Override

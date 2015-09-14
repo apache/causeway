@@ -61,7 +61,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final ObjectPersistorAbstract objectPersistor;
     private final DomainObjectServicesAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
-    private final MessageBrokerServiceAbstract querySubmitter;
+    private final MessageBrokerServiceAbstract messageBrokerService;
 
     public RuntimeContextNoRuntime() {
         this(DeploymentCategory.PRODUCTION);
@@ -228,21 +228,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
 
             @Override
-            public void informUser(final String message) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-            
-            @Override
-            public void warnUser(final String message) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public void raiseError(final String message) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
             public List<String> getPropertyNames() {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
@@ -261,7 +246,23 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 return defaultLocalization;
             }
         };
-        querySubmitter = new MessageBrokerServiceAbstract() {
+        messageBrokerService = new MessageBrokerServiceAbstract() {
+
+            @Override
+            public void informUser(final String message) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void warnUser(final String message) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void raiseError(final String message) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
 
         };
     }
@@ -314,7 +315,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public MessageBrokerService getMessageBrokerService() {
-        return querySubmitter;
+        return messageBrokerService;
     }
 
     @Override

@@ -20,5 +20,29 @@ import org.apache.isis.core.commons.components.Injectable;
 
 public interface MessageBrokerService extends Injectable {
 
+    /**
+     * Provided by <tt>MessageBroker</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void informUser(String message);
+
+    /**
+     * Provided by <tt>MessageBroker</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void warnUser(String message);
+
+    /**
+     * Provided by <tt>MessageBroker</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void raiseError(String message);
+
 
 }

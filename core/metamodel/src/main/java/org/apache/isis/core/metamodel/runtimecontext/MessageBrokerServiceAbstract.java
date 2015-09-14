@@ -22,7 +22,7 @@ public abstract class MessageBrokerServiceAbstract implements MessageBrokerServi
     public void injectInto(final Object candidate) {
         if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
-            cast.setQuerySubmitter(this);
+            cast.setMessageBrokerService(this);
         }
     }
 
