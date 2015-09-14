@@ -22,9 +22,10 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface PersistenceSessionService extends Injectable {
+public interface PersistenceSessionService extends AdapterManager, Injectable {
 
 
     // ///////////////////////////////////////////

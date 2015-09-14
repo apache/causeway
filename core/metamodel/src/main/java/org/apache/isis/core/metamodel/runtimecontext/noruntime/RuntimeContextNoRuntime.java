@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstr
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
-    private final AdapterManager adapterManager;
     private final PersistenceSessionServiceAbstract persistenceSessionService;
     private final LocalizationProviderAbstract localizationProvider;
     private final MessageBrokerServiceAbstract messageBrokerService;
@@ -72,7 +71,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
         };
-        adapterManager = new AdapterManager() {
+        persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
             @Override
             public void injectInto(final Object candidate) {
@@ -111,9 +110,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public ObjectAdapter getAdapterFor(Oid oid) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-
-        };
-        persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
@@ -234,7 +230,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public AdapterManager getAdapterManager() {
-        return adapterManager;
+        return getPersistenceSessionService();
     }
 
     @Override

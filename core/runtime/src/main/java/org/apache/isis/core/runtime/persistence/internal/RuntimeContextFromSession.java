@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -61,7 +62,6 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final AdapterManager adapterManager;
     private final PersistenceSessionService persistenceSessionService;
     private final MessageBrokerService messageBrokerService;
     private final LocalizationProviderAbstract localizationProvider;
@@ -83,7 +83,9 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return IsisContext.getAuthenticationSession();
             }
         };
-        this.adapterManager = new AdapterManager() {
+
+        this.persistenceSessionService = new PersistenceSessionServiceAbstract() {
+
 
             @Override
             public ObjectAdapter getAdapterFor(Oid oid) {
@@ -115,18 +117,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 getPersistenceSession().removeAdapter(adapter);
             }
 
-            @Override
-            public void injectInto(Object candidate) {
-                if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
-                    final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
-                    cast.setAdapterManager(this);
-                }
-            }
-
-
-        };
-
-        this.persistenceSessionService = new PersistenceSessionServiceAbstract() {
             @Override
             public void makePersistent(final ObjectAdapter adapter) {
                 getPersistenceSession().makePersistentInTransaction(adapter);
@@ -194,7 +184,19 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return getPersistenceSession().firstMatchingQuery(query);
             }
 
+            @Override
+            public void injectInto(Object candidate) {
+                if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+                    final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+                    cast.setAdapterManager(this);
+                }
+                if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
+                    final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
+                    cast.setPersistenceSessionService(this);
+                }
+            }
         };
+
         this.messageBrokerService = new MessageBrokerServiceAbstract() {
 
             @Override
@@ -234,7 +236,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     @Override
     public AdapterManager getAdapterManager() {
-        return adapterManager;
+        return getPersistenceSessionService();
     }
 
     @Override
