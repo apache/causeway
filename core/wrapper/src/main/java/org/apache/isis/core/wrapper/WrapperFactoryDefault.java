@@ -50,8 +50,8 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.applib.services.wrapper.listeners.InteractionListener;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -74,7 +74,7 @@ import org.apache.isis.core.wrapper.proxy.ProxyCreator;
  */
 @DomainService(nature = NatureOfService.DOMAIN)
 public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware,
-        SpecificationLoaderAware, AdapterManagerAware, ObjectPersistorAware {
+        SpecificationLoaderAware, AdapterManagerAware, PersistenceSessionServiceAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
@@ -82,7 +82,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     private AuthenticationSessionProvider authenticationSessionProvider;
     private SpecificationLoader specificationLoader;
     private AdapterManager adapterManager;
-    private ObjectPersistor objectPersistor;
+    private PersistenceSessionService persistenceSessionService;
 
     private final ProxyContextHandler proxyContextHandler;
 
@@ -257,7 +257,7 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
     }
 
     protected <T> T createProxy(final T domainObject, final ExecutionMode mode) {
-        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getObjectPersistor());
+        return proxyContextHandler.proxy(domainObject, this, mode, getAuthenticationSessionProvider(), getSpecificationLoader(), getAdapterManager(), getPersistenceSessionService());
     }
 
     @Override
@@ -336,13 +336,13 @@ public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSess
         this.specificationLoader = specificationLookup;
     }
 
-    protected ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    protected PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
     @Programmatic
     @Override
-    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
-        this.objectPersistor = objectPersistor;
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+        this.persistenceSessionService = persistenceSessionService;
     }
 
 }

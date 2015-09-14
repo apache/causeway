@@ -456,7 +456,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(
                 specificationLookup, adapterManager, getRuntimeContext().getMessageBrokerService(), servicesInjector,
-                getRuntimeContext().getObjectPersistor());
+                getRuntimeContext().getPersistenceSessionService());
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {

@@ -53,8 +53,8 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -121,7 +121,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        MessageBrokerService, ObjectPersistor, ConfigurationService {
+        MessageBrokerService, PersistenceSessionService, ConfigurationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -369,9 +369,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
             cast.setMessageBrokerService(this);
         }
-        if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
-            final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
-            cast.setObjectPersistor(this);
+        if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
+            cast.setPersistenceSessionService(this);
         }
         if (ConfigurationServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final ConfigurationServiceAware cast = ConfigurationServiceAware.class.cast(candidate);

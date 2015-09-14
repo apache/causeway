@@ -16,13 +16,13 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class ObjectPersistorAbstract implements ObjectPersistor {
+public abstract class PersistenceSessionServiceAbstract implements PersistenceSessionService {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {
-            final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
-            cast.setObjectPersistor(this);
+        if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
+            cast.setPersistenceSessionService(this);
         }
     }
 

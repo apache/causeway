@@ -67,8 +67,8 @@ import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -80,7 +80,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
         implements DomainObjectContainer, ConfigurationServiceAware,
-        ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
+        PersistenceSessionServiceAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
         ServicesInjectorAware, MessageBrokerServiceAware,
         LocalizationProviderAware, ExceptionRecognizer {
     private MessageBrokerService messageBrokerService;
@@ -171,11 +171,11 @@ public class DomainObjectContainerDefault
      * Factored out as a potential hook method for subclasses.
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
-        return getObjectPersistor().createTransientInstance(spec);
+        return getPersistenceSessionService().createTransientInstance(spec);
     }
 
     protected ObjectAdapter doCreateViewModelInstance(final ObjectSpecification spec, final String memento) {
-        return getObjectPersistor().createViewModelInstance(spec, memento);
+        return getPersistenceSessionService().createViewModelInstance(spec, memento);
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
@@ -193,7 +193,7 @@ public class DomainObjectContainerDefault
             throw new RepositoryException("Object not persistent: " + adapter);
         }
 
-        getObjectPersistor().remove(adapter);
+        getPersistenceSessionService().remove(adapter);
     }
 
     @Programmatic
@@ -239,7 +239,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void resolve(final Object parent) {
-        getObjectPersistor().resolve(unwrapped(parent));
+        getPersistenceSessionService().resolve(unwrapped(parent));
     }
 
     /**
@@ -249,7 +249,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void resolve(final Object parent, final Object field) {
-        getObjectPersistor().resolve(unwrapped(parent), field);
+        getPersistenceSessionService().resolve(unwrapped(parent), field);
     }
 
     /**
@@ -268,13 +268,13 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public boolean flush() {
-        return getObjectPersistor().flush();
+        return getPersistenceSessionService().flush();
     }
 
     @Programmatic
     @Override
     public void commit() {
-        getObjectPersistor().commit();
+        getPersistenceSessionService().commit();
     }
 
     //endregion
@@ -337,7 +337,7 @@ public class DomainObjectContainerDefault
         if (isPersistent(domainObject)) {
             throw new PersistFailedException("Object already persistent; OID=" + adapter.getOid());
         }
-        getObjectPersistor().makePersistent(adapter);
+        getPersistenceSessionService().makePersistent(adapter);
     }
 
     /**
@@ -561,7 +561,7 @@ public class DomainObjectContainerDefault
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = getObjectPersistor().allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = getPersistenceSessionService().allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
 
@@ -605,7 +605,7 @@ public class DomainObjectContainerDefault
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
         flush(); // auto-flush any pending changes
-        final ObjectAdapter firstMatching = getObjectPersistor().firstMatchingQuery(query);
+        final ObjectAdapter firstMatching = getPersistenceSessionService().firstMatchingQuery(query);
         return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
@@ -753,7 +753,7 @@ public class DomainObjectContainerDefault
 
     //region > framework dependencies
 
-    private ObjectPersistor objectPersistor;
+    private PersistenceSessionService persistenceSessionService;
     private SpecificationLoader specificationLoader;
     private ConfigurationService configurationService;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -802,14 +802,14 @@ public class DomainObjectContainerDefault
         this.adapterManager = adapterManager;
     }
 
-    protected ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    protected PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 
     @Programmatic
     @Override
-    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
-        this.objectPersistor = objectPersistor;
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+        this.persistenceSessionService = persistenceSessionService;
     }
 
     @Override

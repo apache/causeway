@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -70,7 +70,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final ObjectPersistor objectPersistor;
+    private final PersistenceSessionService persistenceSessionService;
     private final MessageBrokerService messageBrokerService;
     private final ConfigurationService configurationService;
     private final LocalizationProviderAbstract localizationProvider;
@@ -145,7 +145,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
         };
 
-        this.objectPersistor = new ObjectPersistorAbstract() {
+        this.persistenceSessionService = new PersistenceSessionServiceAbstract() {
             @Override
             public void makePersistent(final ObjectAdapter adapter) {
                 getPersistenceSession().makePersistentInTransaction(adapter);
@@ -297,8 +297,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    public PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 
     @Override

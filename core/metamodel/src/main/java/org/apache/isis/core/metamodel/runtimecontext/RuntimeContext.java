@@ -56,7 +56,7 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
     public ServicesInjector getServicesInjector();
 
-    public ObjectPersistor getObjectPersistor();
+    public PersistenceSessionService getPersistenceSessionService();
 
     public ConfigurationService getConfigurationService();
 

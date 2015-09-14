@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -521,8 +521,8 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parentAction.getMessageBrokerService();
     }
 
-    protected ObjectPersistor getObjectPersistor() {
-        return parentAction.getObjectPersistor();
+    protected PersistenceSessionService getObjectPersistor() {
+        return parentAction.getPersistenceSessionService();
     }
 
 }

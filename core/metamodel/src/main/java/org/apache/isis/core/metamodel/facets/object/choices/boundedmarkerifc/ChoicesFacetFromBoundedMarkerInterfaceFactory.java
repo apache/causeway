@@ -22,17 +22,18 @@ package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
-public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements ObjectPersistorAware {
+public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements
+        PersistenceSessionServiceAware {
 
-    private ObjectPersistor objectPersistor;
+    private PersistenceSessionService persistenceSessionService;
 
     public ChoicesFacetFromBoundedMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -49,7 +50,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
             final FacetHolder holder) {
         return implementsMarker
                 ? new ChoicesFacetFromBoundedMarkerInterface(
-                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(),objectPersistor) : null;
+                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(), persistenceSessionService) : null;
     }
 
     public boolean recognizes(final Method method) {
@@ -57,7 +58,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
     }
 
     @Override
-    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
-        this.objectPersistor = objectPersistor;
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+        this.persistenceSessionService = persistenceSessionService;
     }
 }

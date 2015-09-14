@@ -28,7 +28,7 @@ import org.junit.Test;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -77,7 +77,7 @@ public class OneToManyAssociationImplTest {
     @Mock
     private MessageBrokerService mockMessageBrokerService;
     @Mock
-    private ObjectPersistor mockObjectPersistor;
+    private PersistenceSessionService mockPersistenceSessionService;
     @Mock
     private FacetedMethod mockPeer;
     @Mock
@@ -95,7 +95,8 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
         association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberDependencies(
-                mockSpecificationLookup, mockAdapterManager, mockMessageBrokerService, mockServicesInjector, mockObjectPersistor));
+                mockSpecificationLookup, mockAdapterManager, mockMessageBrokerService, mockServicesInjector,
+                mockPersistenceSessionService));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {

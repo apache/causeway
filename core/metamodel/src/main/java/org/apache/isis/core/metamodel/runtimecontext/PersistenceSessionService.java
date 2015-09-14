@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public interface ObjectPersistor extends Injectable {
+public interface PersistenceSessionService extends Injectable {
 
 
     // ///////////////////////////////////////////

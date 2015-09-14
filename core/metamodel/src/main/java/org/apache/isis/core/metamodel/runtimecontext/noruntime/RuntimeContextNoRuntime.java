@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -58,7 +58,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final ServicesInjector servicesInjector;
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final ObjectPersistorAbstract objectPersistor;
+    private final PersistenceSessionServiceAbstract objectPersistor;
     private final ConfigurationServiceAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
     private final MessageBrokerServiceAbstract messageBrokerService;
@@ -156,7 +156,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
         };
-        objectPersistor = new ObjectPersistorAbstract() {
+        objectPersistor = new PersistenceSessionServiceAbstract() {
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
@@ -304,7 +304,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public ObjectPersistor getObjectPersistor() {
+    public PersistenceSessionService getPersistenceSessionService() {
         return objectPersistor;
     }
 

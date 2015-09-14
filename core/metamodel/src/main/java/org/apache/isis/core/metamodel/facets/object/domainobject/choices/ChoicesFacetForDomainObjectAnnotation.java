@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
@@ -34,7 +34,7 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
             final FacetHolder facetHolder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectPersistor objectPersistor) {
+            final PersistenceSessionService persistenceSessionService) {
 
         if(domainObject == null) {
             return null;
@@ -43,15 +43,15 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
         final boolean bounded = domainObject.bounded();
         return bounded
                 ? new ChoicesFacetForDomainObjectAnnotation(
-                    facetHolder, deploymentCategory, authenticationSessionProvider, objectPersistor)
+                    facetHolder, deploymentCategory, authenticationSessionProvider, persistenceSessionService)
                 : null;
     }
 
     private ChoicesFacetForDomainObjectAnnotation(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
-            final AuthenticationSessionProvider authenticationSessionProvider, final ObjectPersistor objectPersistor) {
-        super(holder, deploymentCategory, authenticationSessionProvider, objectPersistor);
+            final AuthenticationSessionProvider authenticationSessionProvider, final PersistenceSessionService persistenceSessionService) {
+        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionService);
     }
 
 }

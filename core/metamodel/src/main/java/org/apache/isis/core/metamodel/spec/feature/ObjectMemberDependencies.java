@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -28,21 +28,21 @@ public class ObjectMemberDependencies {
     private final AdapterManager adapterManager;
     private final MessageBrokerService messageBrokerService;
     private final ServicesInjector servicesInjector;
-    private final ObjectPersistor objectPersistor;
+    private final PersistenceSessionService persistenceSessionService;
 
     public ObjectMemberDependencies(
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final MessageBrokerService messageBrokerService,
             final ServicesInjector servicesInjector,
-            final ObjectPersistor objectPersistor) {
+            final PersistenceSessionService persistenceSessionService) {
 
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.messageBrokerService = messageBrokerService;
 
         this.servicesInjector = servicesInjector;
-        this.objectPersistor = objectPersistor;
+        this.persistenceSessionService = persistenceSessionService;
     }
 
     public SpecificationLoader getSpecificationLoader() {
@@ -61,7 +61,7 @@ public class ObjectMemberDependencies {
         return messageBrokerService;
     }
 
-    public ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    public PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 }

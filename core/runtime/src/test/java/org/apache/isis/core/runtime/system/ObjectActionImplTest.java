@@ -27,7 +27,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -67,7 +67,7 @@ public class ObjectActionImplTest {
     @Mock
     private MessageBrokerService mockMessageBrokerService;
     @Mock
-    private ObjectPersistor mockObjectPersistor;
+    private PersistenceSessionService mockPersistenceSessionService;
 
     @Before
     public void setUp() throws Exception {
@@ -80,7 +80,8 @@ public class ObjectActionImplTest {
         });
 
         action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberDependencies(
-                mockSpecificationLookup, mockAdapterManager, mockMessageBrokerService, mockServicesInjector, mockObjectPersistor));
+                mockSpecificationLookup, mockAdapterManager, mockMessageBrokerService, mockServicesInjector,
+                mockPersistenceSessionService));
     }
 
 

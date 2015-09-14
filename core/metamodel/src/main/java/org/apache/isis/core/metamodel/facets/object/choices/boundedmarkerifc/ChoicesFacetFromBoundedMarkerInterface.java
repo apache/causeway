@@ -23,7 +23,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 
 public class ChoicesFacetFromBoundedMarkerInterface extends ChoicesFacetFromBoundedAbstract {
 
@@ -31,8 +31,8 @@ public class ChoicesFacetFromBoundedMarkerInterface extends ChoicesFacetFromBoun
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectPersistor objectPersistor) {
-        super(holder, deploymentCategory, authenticationSessionProvider, objectPersistor);
+            final PersistenceSessionService persistenceSessionService) {
+        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionService);
     }
 
 }

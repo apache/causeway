@@ -26,7 +26,7 @@ import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.applib.services.wrapper.WrapperFactory.ExecutionMode;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -44,15 +44,16 @@ public class ProxyContextHandler {
         this.proxyCreator = proxyCreator;
     }
     
-    public <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final ObjectPersistor objectPersistor) {
+    public <T> T proxy(final T domainObject, final WrapperFactory wrapperFactory, final ExecutionMode mode, final AuthenticationSessionProvider authenticationSessionProvider, final SpecificationLoader specificationLookup, final AdapterManager adapterManager, final PersistenceSessionService persistenceSessionService) {
 
         Ensure.ensureThatArg(wrapperFactory, is(not(nullValue())));
         Ensure.ensureThatArg(authenticationSessionProvider, is(not(nullValue())));
         Ensure.ensureThatArg(specificationLookup, is(not(nullValue())));
         Ensure.ensureThatArg(adapterManager, is(not(nullValue())));
-        Ensure.ensureThatArg(objectPersistor, is(not(nullValue())));
+        Ensure.ensureThatArg(persistenceSessionService, is(not(nullValue())));
 
-        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor, this);
+        final DomainObjectInvocationHandler<T> invocationHandler = new DomainObjectInvocationHandler<T>(domainObject, wrapperFactory, mode, authenticationSessionProvider, specificationLookup, adapterManager,
+                persistenceSessionService, this);
 
         return proxyCreator.instantiateProxy(invocationHandler);
     }

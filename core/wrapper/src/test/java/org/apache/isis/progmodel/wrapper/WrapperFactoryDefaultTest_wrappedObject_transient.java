@@ -41,7 +41,7 @@ import org.apache.isis.applib.services.wrapper.DisabledException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -84,7 +84,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
     @Mock
     private IsisConfiguration mockConfiguration;
     @Mock
-    private ObjectPersistor mockObjectPersistor;
+    private PersistenceSessionService mockPersistenceSessionService;
     @Mock
     private SpecificationLoader mockSpecificationLoader;
 
@@ -125,7 +125,7 @@ public class WrapperFactoryDefaultTest_wrappedObject_transient {
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
-        wrapperFactory.setObjectPersistor(mockObjectPersistor);
+        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
         wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
         
         context.checking(new Expectations() {

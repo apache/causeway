@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface ObjectPersistorAware {
+public interface PersistenceSessionServiceAware {
 
     @Programmatic
-    public void setObjectPersistor(final ObjectPersistor objectPersistor);
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService);
 
 }

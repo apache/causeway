@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -67,21 +67,21 @@ public abstract class ChoicesFacetFromBoundedAbstract
 
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final ObjectPersistor objectPersistor;
+    private final PersistenceSessionService persistenceSessionService;
 
     public ChoicesFacetFromBoundedAbstract(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectPersistor objectPersistor) {
+            final PersistenceSessionService persistenceSessionService) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.objectPersistor = objectPersistor;
+        this.persistenceSessionService = persistenceSessionService;
     }
 
-    public ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    public PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 
     @Override
@@ -127,7 +127,7 @@ public abstract class ChoicesFacetFromBoundedAbstract
             ObjectAdapter adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Query query = new QueryFindAllInstances(getObjectSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getObjectPersistor().allMatchingQuery(query);
+        final List<ObjectAdapter> allInstancesAdapter = getPersistenceSessionService().allMatchingQuery(query);
 
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(

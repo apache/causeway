@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 
 /**
  * @deprecated
@@ -37,8 +37,8 @@ public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAb
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectPersistor objectPersistor) {
-        super(holder, deploymentCategory, authenticationSessionProvider, objectPersistor);
+            final PersistenceSessionService persistenceSessionService) {
+        super(holder, deploymentCategory, authenticationSessionProvider, persistenceSessionService);
     }
 
     public static ChoicesFacet create(
@@ -46,13 +46,13 @@ public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAb
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final ObjectPersistor objectPersistor) {
+            final PersistenceSessionService persistenceSessionService) {
         if (annotation == null) {
             return null;
         }
 
         return new ChoicesFacetFromBoundedAnnotation(holder, deploymentCategory, authenticationSessionProvider,
-                objectPersistor);
+                persistenceSessionService);
     }
 
 

@@ -35,7 +35,7 @@ import org.apache.isis.applib.services.wrapper.InvalidException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -81,7 +81,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
     @Mock
-    private ObjectPersistor mockObjectPersistor;
+    private PersistenceSessionService mockPersistenceSessionService;
     @Mock
     private MessageBrokerService mockMessageBrokerService;
     @Mock
@@ -124,7 +124,8 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         objectMemberDependencies = new ObjectMemberDependencies(
-                mockSpecificationLoader, mockAdapterManager, mockMessageBrokerService, mockServicesInjector, mockObjectPersistor);
+                mockSpecificationLoader, mockAdapterManager, mockMessageBrokerService, mockServicesInjector,
+                mockPersistenceSessionService);
         
         employeeRepository = new EmployeeRepositoryImpl();
 
@@ -135,7 +136,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         wrapperFactory = createWrapperFactory();
         wrapperFactory.setAdapterManager(mockAdapterManager);
         wrapperFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
-        wrapperFactory.setObjectPersistor(mockObjectPersistor);
+        wrapperFactory.setPersistenceSessionService(mockPersistenceSessionService);
         wrapperFactory.setSpecificationLoader(mockSpecificationLoader);
 
         context.checking(new Expectations() {

@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 
 /**
@@ -42,8 +42,9 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class BookmarkServiceDefault implements BookmarkService, ConfigurationServiceAware, ObjectPersistorAware {
-    private ObjectPersistor objectPersistor;
+public class BookmarkServiceDefault implements BookmarkService, ConfigurationServiceAware,
+        PersistenceSessionServiceAware {
+    private PersistenceSessionService persistenceSessionService;
 
     // //////////////////////////////////////
 
@@ -63,7 +64,7 @@ public class BookmarkServiceDefault implements BookmarkService, ConfigurationSer
             return null;
         }
         try {
-            return objectPersistor.lookup(bookmark);
+            return persistenceSessionService.lookup(bookmark);
         } catch(ObjectNotFoundException ex) {
             return null;
         }
@@ -86,7 +87,7 @@ public class BookmarkServiceDefault implements BookmarkService, ConfigurationSer
         if(domainObject == null) {
             return null;
         }
-        return objectPersistor.bookmarkFor(unwrapped(domainObject));
+        return persistenceSessionService.bookmarkFor(unwrapped(domainObject));
     }
 
     private Object unwrapped(Object domainObject) {
@@ -98,7 +99,7 @@ public class BookmarkServiceDefault implements BookmarkService, ConfigurationSer
     @Programmatic
     @Override
     public Bookmark bookmarkFor(Class<?> cls, String identifier) {
-        return objectPersistor.bookmarkFor(cls, identifier);
+        return persistenceSessionService.bookmarkFor(cls, identifier);
     }
 
     // //////////////////////////////////////
@@ -113,8 +114,8 @@ public class BookmarkServiceDefault implements BookmarkService, ConfigurationSer
     }
 
     @Override
-    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
-        this.objectPersistor = objectPersistor;
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+        this.persistenceSessionService = persistenceSessionService;
     }
 
     // //////////////////////////////////////

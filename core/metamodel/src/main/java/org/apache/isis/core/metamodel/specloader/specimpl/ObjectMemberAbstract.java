@@ -27,7 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -57,7 +57,7 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    private final ObjectPersistor objectPersistor;
+    private final PersistenceSessionService persistenceSessionService;
 
     public static ObjectSpecification getSpecification(final SpecificationLoader specificationLookup, final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
@@ -91,7 +91,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.adapterManager = objectMemberDependencies.getAdapterManager();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
         this.messageBrokerService = objectMemberDependencies.getMessageBrokerService();
-        this.objectPersistor = objectMemberDependencies.getObjectPersistor();
+        this.persistenceSessionService = objectMemberDependencies.getPersistenceSessionService();
     }
 
 
@@ -351,8 +351,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return messageBrokerService;
     }
 
-    public ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    public PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 
     public CollectionTypeRegistry getCollectionTypeRegistry() {

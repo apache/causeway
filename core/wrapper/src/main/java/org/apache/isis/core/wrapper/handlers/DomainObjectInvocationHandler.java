@@ -53,7 +53,7 @@ import org.apache.isis.applib.services.wrapper.WrappingObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -78,7 +78,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
-    private final ObjectPersistor objectPersistor;
+    private final PersistenceSessionService persistenceSessionService;
 
     private final ProxyContextHandler proxy;
     private final ExecutionMode executionMode;
@@ -124,7 +124,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             final AuthenticationSessionProvider authenticationSessionProvider,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
-            final ObjectPersistor objectPersistor,
+            final PersistenceSessionService persistenceSessionService,
             final ProxyContextHandler proxy) {
         super(delegate, wrapperFactory, mode);
 
@@ -132,7 +132,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
-        this.objectPersistor = objectPersistor;
+        this.persistenceSessionService = persistenceSessionService;
         this.executionMode = mode;
 
         try {
@@ -357,7 +357,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode().shouldExecute()) {
             if (targetAdapter.isTransient()) {
-                getObjectPersistor().makePersistent(targetAdapter);
+                getPersistenceSessionService().makePersistent(targetAdapter);
             }
         }
         return null;
@@ -794,8 +794,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return adapterManager;
     }
 
-    protected ObjectPersistor getObjectPersistor() {
-        return objectPersistor;
+    protected PersistenceSessionService getPersistenceSessionService() {
+        return persistenceSessionService;
     }
 
 }

@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -74,7 +74,7 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapabl
 
 
 public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, MetaModelValidatorRefiner,
-        ObjectPersistorAware {
+        PersistenceSessionServiceAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
@@ -87,7 +87,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
-    private ObjectPersistor objectPersistor;
+    private PersistenceSessionService persistenceSessionService;
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -208,12 +208,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
             ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
                     getDeploymentCategory(),
                     getAuthenticationSessionProvider(),
-                    objectPersistor));
+                    persistenceSessionService));
 
         // else check from @DomainObject(bounded=...)
         if(facet == null) {
             facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(),
-                    getAuthenticationSessionProvider(), objectPersistor);
+                    getAuthenticationSessionProvider(), persistenceSessionService);
         }
 
         // then add
@@ -347,7 +347,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     }
 
     @Override
-    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
-        this.objectPersistor = objectPersistor;
+    public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
+        this.persistenceSessionService = persistenceSessionService;
     }
 }
