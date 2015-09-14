@@ -510,7 +510,6 @@ public abstract class IsisContext implements DebuggableWithTitle {
         debugList.add("Transaction Manager", getTransactionManager());
 
         debugList.add("Service injector", getPersistenceSession().getServicesInjector());
-        debugList.add("Object factory", getPersistenceSession().getObjectFactory());
         debugList.add("OID generator", getPersistenceSession().getOidGenerator());
         debugList.add("Adapter manager", getPersistenceSession().getAdapterManager());
         debugList.add("Services", getPersistenceSession().getServices());

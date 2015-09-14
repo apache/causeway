@@ -140,7 +140,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
 
     //region > constructor, fields, finalize()
-    private final ObjectFactory objectFactory;
 
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final OidGenerator oidGenerator;
@@ -196,7 +195,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         this.oidMarshaller = new OidMarshaller();
 
-        this.objectFactory = new ObjectFactory(this, servicesInjector);
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
         this.adapterManager = new AdapterManagerDefault(this, specificationLoader, oidMarshaller,
@@ -243,7 +241,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         // inject any required dependencies into object factory
-        servicesInjector.injectInto(objectFactory);
         servicesInjector.injectInto(adapterManager);
 
         adapterManager.open();
@@ -1226,12 +1223,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.transactionManager = transactionManager;
     }
 
-    /**
-     * The configured {@link ObjectFactory}.
-     */
-    public ObjectFactory getObjectFactory() {
-        return objectFactory;
-    }
 
     //endregion
 
