@@ -35,8 +35,8 @@ import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstrac
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -61,7 +61,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final ObjectPersistorAbstract objectPersistor;
     private final DomainObjectServicesAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
-    private final QuerySubmitterAbstract querySubmitter;
+    private final MessageBrokerServiceAbstract querySubmitter;
 
     public RuntimeContextNoRuntime() {
         this(DeploymentCategory.PRODUCTION);
@@ -261,7 +261,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 return defaultLocalization;
             }
         };
-        querySubmitter = new QuerySubmitterAbstract() {
+        querySubmitter = new MessageBrokerServiceAbstract() {
 
         };
     }
@@ -313,7 +313,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public QuerySubmitter getQuerySubmitter() {
+    public MessageBrokerService getMessageBrokerService() {
         return querySubmitter;
     }
 

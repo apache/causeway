@@ -16,9 +16,14 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.commons.components.Injectable;
+public abstract class MessageBrokerServiceAbstract implements MessageBrokerService {
 
-public interface QuerySubmitter extends Injectable {
-
+    @Override
+    public void injectInto(final Object candidate) {
+        if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
+            cast.setQuerySubmitter(this);
+        }
+    }
 
 }

@@ -29,7 +29,7 @@ public interface DomainObjectServices extends Injectable {
 
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.
-     * 
+     *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
@@ -37,7 +37,7 @@ public interface DomainObjectServices extends Injectable {
 
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.
-     * 
+     *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
@@ -45,7 +45,7 @@ public interface DomainObjectServices extends Injectable {
 
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.
-     * 
+     *
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */

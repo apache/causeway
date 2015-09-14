@@ -16,14 +16,9 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class QuerySubmitterAbstract implements QuerySubmitter {
+import org.apache.isis.core.commons.components.Injectable;
 
-    @Override
-    public void injectInto(final Object candidate) {
-        if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
-            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
-            cast.setQuerySubmitter(this);
-        }
-    }
+public interface MessageBrokerService extends Injectable {
+
 
 }

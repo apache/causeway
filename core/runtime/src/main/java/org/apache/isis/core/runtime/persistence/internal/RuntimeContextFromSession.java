@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstrac
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -71,7 +71,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ObjectPersistor objectPersistor;
-    private final QuerySubmitter querySubmitter;
+    private final MessageBrokerService messageBrokerService;
     private final DomainObjectServices domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
 
@@ -247,7 +247,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
         };
-        this.querySubmitter = new QuerySubmitterAbstract() {
+        this.messageBrokerService = new MessageBrokerServiceAbstract() {
 
         };
         this.localizationProvider = new LocalizationProviderAbstract() {
@@ -306,8 +306,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public QuerySubmitter getQuerySubmitter() {
-        return querySubmitter;
+    public MessageBrokerService getMessageBrokerService() {
+        return messageBrokerService;
     }
 
     // ///////////////////////////////////////////

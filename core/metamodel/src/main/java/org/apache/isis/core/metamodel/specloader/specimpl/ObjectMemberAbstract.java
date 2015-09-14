@@ -28,7 +28,7 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -72,7 +72,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final SpecificationLoader specificationLookup;
     private final AdapterManager adapterManager;
     private final ServicesInjector servicesInjector;
-    private final QuerySubmitter querySubmitter;
+    private final MessageBrokerService messageBrokerService;
 
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
@@ -90,7 +90,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
         this.adapterManager = objectMemberDependencies.getAdapterManager();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
-        this.querySubmitter = objectMemberDependencies.getQuerySubmitter();
+        this.messageBrokerService = objectMemberDependencies.getMessageBrokerService();
         this.objectPersistor = objectMemberDependencies.getObjectPersistor();
     }
 
@@ -347,8 +347,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return servicesInjector;
     }
 
-    public QuerySubmitter getQuerySubmitter() {
-        return querySubmitter;
+    public MessageBrokerService getMessageBrokerService() {
+        return messageBrokerService;
     }
 
     public ObjectPersistor getObjectPersistor() {

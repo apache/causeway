@@ -455,7 +455,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
                         facetProcessor, adapterManager);
 
         final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(
-                specificationLookup, adapterManager, getRuntimeContext().getQuerySubmitter(), servicesInjector,
+                specificationLookup, adapterManager, getRuntimeContext().getMessageBrokerService(), servicesInjector,
                 getRuntimeContext().getObjectPersistor());
 
         // ... and create the specs

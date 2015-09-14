@@ -36,7 +36,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
@@ -83,7 +83,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     @Mock
     private ObjectPersistor mockObjectPersistor;
     @Mock
-    private QuerySubmitter mockQuerySubmitter;
+    private MessageBrokerService mockMessageBrokerService;
     @Mock
     private ServicesInjector mockServicesInjector;
     @Mock
@@ -124,7 +124,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
     public void setUp() {
 
         objectMemberDependencies = new ObjectMemberDependencies(
-                mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter, mockServicesInjector, mockObjectPersistor);
+                mockSpecificationLoader, mockAdapterManager, mockMessageBrokerService, mockServicesInjector, mockObjectPersistor);
         
         employeeRepository = new EmployeeRepositoryImpl();
 

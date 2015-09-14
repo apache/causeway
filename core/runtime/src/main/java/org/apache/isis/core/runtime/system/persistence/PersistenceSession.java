@@ -55,8 +55,8 @@ import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -121,7 +121,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        QuerySubmitter, ObjectPersistor, DomainObjectServices {
+        MessageBrokerService, ObjectPersistor, DomainObjectServices {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -365,8 +365,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
             cast.setAdapterManager(this);
         }
-        if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
-            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
+        if (MessageBrokerServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final MessageBrokerServiceAware cast = MessageBrokerServiceAware.class.cast(candidate);
             cast.setQuerySubmitter(this);
         }
         if (ObjectPersistorAware.class.isAssignableFrom(candidate.getClass())) {

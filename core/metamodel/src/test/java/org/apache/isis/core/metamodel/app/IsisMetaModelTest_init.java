@@ -33,7 +33,7 @@ import org.junit.Test;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
@@ -62,7 +62,7 @@ public class IsisMetaModelTest_init {
     @Mock
     private AdapterManager mockAdapterManager;
     @Mock
-    private QuerySubmitter mockQuerySubmitter;
+    private MessageBrokerService mockMessageBrokerService;
     @Mock
     private ServicesInjector mockDependencyInjector;
     @Mock
@@ -94,8 +94,8 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).getAdapterManager();
                 will(returnValue(mockAdapterManager));
 
-                allowing(mockRuntimeContext).getQuerySubmitter();
-                will(returnValue(mockQuerySubmitter));
+                allowing(mockRuntimeContext).getMessageBrokerService();
+                will(returnValue(mockMessageBrokerService));
 
                 allowing(mockRuntimeContext).getServicesInjector();
                 will(returnValue(mockDependencyInjector));

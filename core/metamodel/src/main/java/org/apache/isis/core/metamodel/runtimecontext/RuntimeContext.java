@@ -48,7 +48,7 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
      */
     public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
-    public QuerySubmitter getQuerySubmitter();
+    public MessageBrokerService getMessageBrokerService();
 
     public AdapterManager getAdapterManager();
 
