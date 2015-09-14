@@ -16,10 +16,83 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
+import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface ObjectPersistor extends Injectable {
+
+
+    // ///////////////////////////////////////////
+    // Instantiate
+    // ///////////////////////////////////////////
+
+    /**
+     * Provided by the <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    ObjectAdapter createTransientInstance(ObjectSpecification spec);
+
+    ObjectAdapter createViewModelInstance(ObjectSpecification spec, String memento);
+
+
+    // ///////////////////////////////////////////
+    // retrieve
+    // ///////////////////////////////////////////
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void resolve(Object parent);
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void resolve(Object parent, Object field);
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>BookmarkServicesDefault</tt>.
+     * @return
+     */
+    Object lookup(Bookmark bookmark);
+
+    Bookmark bookmarkFor(Object domainObject);
+
+    Bookmark bookmarkFor(Class<?> cls, String identifier);
+
+
+    // ///////////////////////////////////////////
+    // flush, commit
+    // ///////////////////////////////////////////
+
+    /**
+     * Provided by <tt>TransactionManager</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    boolean flush();
+
+    /**
+     * Provided by <tt>TransactionManager</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void commit();
+
 
     /**
      * Provided by the <tt>PersistenceSession</tt> when used by framework.

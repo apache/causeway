@@ -170,11 +170,11 @@ public class DomainObjectContainerDefault
      * Factored out as a potential hook method for subclasses.
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
-        return getDomainObjectServices().createTransientInstance(spec);
+        return getObjectPersistor().createTransientInstance(spec);
     }
 
     protected ObjectAdapter doCreateViewModelInstance(final ObjectSpecification spec, final String memento) {
-        return getDomainObjectServices().createViewModelInstance(spec, memento);
+        return getObjectPersistor().createViewModelInstance(spec, memento);
     }
 
     private ObjectAdapter doCreateAggregatedInstance(final ObjectSpecification spec, final Object parent) {
@@ -238,7 +238,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void resolve(final Object parent) {
-        getDomainObjectServices().resolve(unwrapped(parent));
+        getObjectPersistor().resolve(unwrapped(parent));
     }
 
     /**
@@ -248,7 +248,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public void resolve(final Object parent, final Object field) {
-        getDomainObjectServices().resolve(unwrapped(parent), field);
+        getObjectPersistor().resolve(unwrapped(parent), field);
     }
 
     /**
@@ -267,13 +267,13 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public boolean flush() {
-        return getDomainObjectServices().flush();
+        return getObjectPersistor().flush();
     }
 
     @Programmatic
     @Override
     public void commit() {
-        getDomainObjectServices().commit();
+        getObjectPersistor().commit();
     }
 
     //endregion

@@ -159,19 +159,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         objectPersistor = new ObjectPersistorAbstract() {
 
             @Override
-            public void remove(final ObjectAdapter adapter) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public void makePersistent(final ObjectAdapter adapter) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-        };
-        domainObjectServices = new DomainObjectServicesAbstract() {
-
-
-            @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
@@ -195,7 +182,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public Bookmark bookmarkFor(Class<?> cls, String identifier) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void resolve(final Object parent, final Object field) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
@@ -210,11 +197,24 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public boolean flush() {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
-            
+
             @Override
             public void commit() {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
+
+            @Override
+            public void remove(final ObjectAdapter adapter) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public void makePersistent(final ObjectAdapter adapter) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+        };
+        domainObjectServices = new DomainObjectServicesAbstract() {
+
 
             @Override
             public void informUser(final String message) {

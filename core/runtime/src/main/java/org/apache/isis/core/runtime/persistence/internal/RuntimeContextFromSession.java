@@ -155,8 +155,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public void remove(final ObjectAdapter adapter) {
                 getPersistenceSession().destroyObjectInTransaction(adapter);
             }
-        };
-        this.domainObjectServices = new DomainObjectServicesAbstract() {
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
@@ -204,6 +202,10 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             public void commit() {
                 getTransactionManager().endTransaction();
             }
+
+
+        };
+        this.domainObjectServices = new DomainObjectServicesAbstract() {
 
             @Override
             public void informUser(final String message) {
