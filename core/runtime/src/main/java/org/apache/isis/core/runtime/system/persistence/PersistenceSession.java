@@ -1303,14 +1303,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     // endregion
 
-    //region > ServicesInjector delegate methods
-
-    public void injectServicesInto(final Object domainObject) {
-        servicesInjector.injectInto(domainObject);
-    }
-
-    //endregion
-
     //region > TransactionManager delegate methods
     protected IsisTransaction getCurrentTransaction() {
         return transactionManager.getTransaction();
@@ -1333,7 +1325,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         // need to do eagerly, because (if a viewModel then) a
         // viewModel's #viewModelMemento might need to use services
-        injectServicesInto(pojo);
+        servicesInjector.injectInto(pojo);
 
         final Version datastoreVersion = getVersionIfAny(pc);
 
@@ -1578,18 +1570,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         return list;
     }
-
-
-    @Override
-    public <T> T lookupService(final Class<T> service) {
-        return servicesInjector.lookupService(service);
-    }
-
-    @Override
-    public <T> Iterable<T> lookupServices(final Class<T> service) {
-        return servicesInjector.lookupServices(service);
-    }
-
 
 
 

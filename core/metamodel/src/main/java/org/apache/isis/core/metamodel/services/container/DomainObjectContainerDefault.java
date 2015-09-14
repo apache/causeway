@@ -69,6 +69,8 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -79,6 +81,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 public class DomainObjectContainerDefault
         implements DomainObjectContainer, QuerySubmitterAware, DomainObjectServicesAware,
         ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
+        ServicesInjectorAware,
         LocalizationProviderAware, ExceptionRecognizer {
 
     //region > titleOf
@@ -208,20 +211,20 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public <T> T injectServicesInto(T domainObject) {
-        getDomainObjectServices().injectServicesInto(unwrapped(domainObject));
+        servicesInjector.injectServicesInto(unwrapped(domainObject));
         return domainObject;
     }
 
     @Programmatic
     @Override
     public <T> T lookupService(final Class<T> service) {
-        return getDomainObjectServices().lookupService(service);
+        return servicesInjector.lookupService(service);
     }
 
     @Programmatic
     @Override
     public <T> Iterable<T> lookupServices(final Class<T> service) {
-        return getDomainObjectServices().lookupServices(service);
+        return servicesInjector.lookupServices(service);
     }
 
     //endregion
@@ -751,6 +754,7 @@ public class DomainObjectContainerDefault
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
     private LocalizationProvider localizationProvider;
+    private ServicesInjector servicesInjector;
 
     protected QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
@@ -816,6 +820,13 @@ public class DomainObjectContainerDefault
     public void setLocalizationProvider(final LocalizationProvider localizationProvider) {
         this.localizationProvider = localizationProvider;
     }
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
+
+
     //endregion
 
     //region > service dependencies

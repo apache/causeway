@@ -230,21 +230,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return RuntimeContextFromSession.this.getPropertyNames();
             }
 
-            @Override
-            public void injectServicesInto(Object domainObject) {
-                getPersistenceSession().getServicesInjector().injectServicesInto(domainObject);
-            }
-
-            @Override
-            public <T> T lookupService(final Class<T> service) {
-                return getPersistenceSession().getServicesInjector().lookupService(service);
-            }
-
-            @Override
-            public <T> Iterable<T> lookupServices(final Class<T> service) {
-                return getPersistenceSession().getServicesInjector().lookupServices(service);
-            }
-
         };
         this.querySubmitter = new QuerySubmitterAbstract() {
 

@@ -42,16 +42,6 @@ public interface DomainObjectServices extends Injectable {
 
 
     // ///////////////////////////////////////////
-    // services
-    // ///////////////////////////////////////////
-
-    void injectServicesInto(Object domainObject);
-
-    <T> T lookupService(Class<T> service);
-
-    <T> Iterable<T> lookupServices(Class<T> service);
-
-    // ///////////////////////////////////////////
     // retrieve
     // ///////////////////////////////////////////
 
