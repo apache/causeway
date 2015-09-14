@@ -25,8 +25,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.bookmark.BookmarkHolder;
 import org.apache.isis.applib.services.bookmark.BookmarkService;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
@@ -42,7 +42,7 @@ import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class BookmarkServiceDefault implements BookmarkService, DomainObjectServicesAware, ObjectPersistorAware {
+public class BookmarkServiceDefault implements BookmarkService, ConfigurationServiceAware, ObjectPersistorAware {
     private ObjectPersistor objectPersistor;
 
     // //////////////////////////////////////
@@ -104,12 +104,12 @@ public class BookmarkServiceDefault implements BookmarkService, DomainObjectServ
     // //////////////////////////////////////
 
 
-    private DomainObjectServices domainObjectServices;
+    private ConfigurationService configurationService;
 
     @Programmatic
     @Override
-    public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
-        this.domainObjectServices = domainObjectServices;
+    public void setConfigurationService(final ConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     @Override

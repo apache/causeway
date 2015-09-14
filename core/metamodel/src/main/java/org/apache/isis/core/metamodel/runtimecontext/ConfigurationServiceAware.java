@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface DomainObjectServicesAware {
+public interface ConfigurationServiceAware {
 
     @Programmatic
-    public void setDomainObjectServices(DomainObjectServices domainObjectServices);
+    public void setConfigurationService(ConfigurationService configurationService);
 
 }

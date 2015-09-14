@@ -29,7 +29,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -44,7 +44,7 @@ public class DomainObjectContainerDefaultTest_allMatches {
     private DomainObjectContainerDefault container;
 
     @Mock
-    private DomainObjectServices mockDomainObjectServices;
+    private ConfigurationService mockConfigurationService;
 
     private boolean flushCalled;
 
@@ -60,8 +60,8 @@ public class DomainObjectContainerDefaultTest_allMatches {
                 return null;
             }
         };
-        container.setDomainObjectServices(mockDomainObjectServices);
-        context.allowing(mockDomainObjectServices);
+        container.setConfigurationService(mockConfigurationService);
+        context.allowing(mockConfigurationService);
     }
 
     @Test

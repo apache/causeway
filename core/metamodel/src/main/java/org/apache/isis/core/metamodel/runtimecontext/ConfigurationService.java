@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public interface DomainObjectServices extends Injectable {
+public interface ConfigurationService extends Injectable {
 
     // //////////////////////////////////////////////////////////////////
     // properties

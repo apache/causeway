@@ -50,8 +50,8 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
@@ -121,7 +121,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        MessageBrokerService, ObjectPersistor, DomainObjectServices {
+        MessageBrokerService, ObjectPersistor, ConfigurationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -373,9 +373,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final ObjectPersistorAware cast = ObjectPersistorAware.class.cast(candidate);
             cast.setObjectPersistor(this);
         }
-        if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
-            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
-            cast.setDomainObjectServices(this);
+        if (ConfigurationServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final ConfigurationServiceAware cast = ConfigurationServiceAware.class.cast(candidate);
+            cast.setConfigurationService(this);
         }
     }
 

@@ -66,7 +66,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getDeploymentCategoryProvider().injectInto(candidate);
         getTransactionStateProvider().injectInto(candidate);
         getServicesInjector().injectInto(candidate);
-        getDomainObjectServices().injectInto(candidate);
+        getConfigurationService().injectInto(candidate);
         getLocalizationProvider().injectInto(candidate);
         getObjectPersistor().injectInto(candidate);
         getMessageBrokerService().injectInto(candidate);

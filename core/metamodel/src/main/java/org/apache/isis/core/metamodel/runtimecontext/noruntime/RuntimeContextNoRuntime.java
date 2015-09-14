@@ -27,8 +27,8 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
@@ -59,7 +59,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
     private final ObjectPersistorAbstract objectPersistor;
-    private final DomainObjectServicesAbstract domainObjectServices;
+    private final ConfigurationServiceAbstract domainObjectServices;
     private final LocalizationProviderAbstract localizationProvider;
     private final MessageBrokerServiceAbstract messageBrokerService;
 
@@ -224,7 +224,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
         };
-        domainObjectServices = new DomainObjectServicesAbstract() {
+        domainObjectServices = new ConfigurationServiceAbstract() {
 
 
             @Override
@@ -309,7 +309,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public DomainObjectServices getDomainObjectServices() {
+    public ConfigurationService getConfigurationService() {
         return domainObjectServices;
     }
 

@@ -61,8 +61,8 @@ import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
@@ -79,7 +79,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer, DomainObjectServicesAware,
+        implements DomainObjectContainer, ConfigurationServiceAware,
         ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
         ServicesInjectorAware, MessageBrokerServiceAware,
         LocalizationProviderAware, ExceptionRecognizer {
@@ -449,7 +449,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public String getProperty(final String name) {
-        return getDomainObjectServices().getProperty(name);
+        return getConfigurationService().getProperty(name);
     }
 
     @Programmatic
@@ -462,7 +462,7 @@ public class DomainObjectContainerDefault
     @Programmatic
     @Override
     public List<String> getPropertyNames() {
-        return getDomainObjectServices().getPropertyNames();
+        return getConfigurationService().getPropertyNames();
     }
 
     //endregion
@@ -755,21 +755,21 @@ public class DomainObjectContainerDefault
 
     private ObjectPersistor objectPersistor;
     private SpecificationLoader specificationLoader;
-    private DomainObjectServices domainObjectServices;
+    private ConfigurationService configurationService;
     private AuthenticationSessionProvider authenticationSessionProvider;
     private AdapterManager adapterManager;
     private LocalizationProvider localizationProvider;
     private ServicesInjector servicesInjector;
 
 
-    protected DomainObjectServices getDomainObjectServices() {
-        return domainObjectServices;
+    protected ConfigurationService getConfigurationService() {
+        return configurationService;
     }
 
     @Programmatic
     @Override
-    public void setDomainObjectServices(final DomainObjectServices domainObjectServices) {
-        this.domainObjectServices = domainObjectServices;
+    public void setConfigurationService(final ConfigurationService configurationService) {
+        this.configurationService = configurationService;
     }
 
     protected SpecificationLoader getSpecificationLoader() {

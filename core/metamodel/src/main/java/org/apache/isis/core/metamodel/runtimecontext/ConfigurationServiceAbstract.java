@@ -16,13 +16,13 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class DomainObjectServicesAbstract implements DomainObjectServices {
+public abstract class ConfigurationServiceAbstract implements ConfigurationService {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
-            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
-            cast.setDomainObjectServices(this);
+        if (ConfigurationServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final ConfigurationServiceAware cast = ConfigurationServiceAware.class.cast(candidate);
+            cast.setConfigurationService(this);
         }
     }
 

@@ -31,8 +31,8 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
@@ -72,7 +72,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final AdapterManager adapterManager;
     private final ObjectPersistor objectPersistor;
     private final MessageBrokerService messageBrokerService;
-    private final DomainObjectServices domainObjectServices;
+    private final ConfigurationService configurationService;
     private final LocalizationProviderAbstract localizationProvider;
 
     // //////////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
         };
-        this.domainObjectServices = new DomainObjectServicesAbstract() {
+        this.configurationService = new ConfigurationServiceAbstract() {
 
             @Override
             public String getProperty(final String name) {
@@ -287,8 +287,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public DomainObjectServices getDomainObjectServices() {
-        return domainObjectServices;
+    public ConfigurationService getConfigurationService() {
+        return configurationService;
     }
 
     @Override
