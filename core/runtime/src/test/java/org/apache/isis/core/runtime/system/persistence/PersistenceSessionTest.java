@@ -34,7 +34,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -155,8 +154,7 @@ public class PersistenceSessionTest {
             }
             
         };
-        adapterManager = new AdapterManagerDefault(persistenceSession, mockSpecificationLoader,
-                new OidMarshaller(), mockOidGenerator, mockAuthenticationSession, servicesInjector,
+        adapterManager = new AdapterManagerDefault(persistenceSession,
                 mockConfiguration);
 
         context.checking(new Expectations(){{
