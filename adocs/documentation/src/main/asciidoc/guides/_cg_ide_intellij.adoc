@@ -384,6 +384,16 @@ One thing worth knowing; IntelliJ actively scans the filesystem all the time.  I
 
 
 
+== Running Integration Tests
+
+
+When running integration tests from within IntelliJ, make sure that the `search for tests` radio button is set to `In single module`:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-debug-configuration-single-module.png"]
+
+If this radio button is set to one of the other options then you may obtain class loading issues; these result from IntelliJ attempting to run unit tests of the `dom` project that depend on test classes in that module, but using the classpath of the `integtests` module whereby the `dom` test-classes (`test-jar` artifact) are not exposed on the Maven classpath.
+
+
 == Advanced
 
 In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
