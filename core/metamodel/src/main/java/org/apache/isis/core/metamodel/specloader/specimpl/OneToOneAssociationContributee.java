@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -43,9 +44,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember {
 
-    private final ObjectAdapter serviceAdapter;
+    private final Object servicePojo;
     private final ObjectAction serviceAction;
-    
 
     /**
      * Hold facets rather than delegate to the contributed action (different types might
@@ -56,12 +56,14 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     private final Identifier identifier;
 
     public OneToOneAssociationContributee(
-            final ObjectAdapter serviceAdapter, 
-            final ObjectActionImpl serviceAction, 
+            final Object servicePojo,
+            final ObjectActionImpl serviceAction,
             final ObjectSpecification contributeeType,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberDependencies);
-        this.serviceAdapter = serviceAdapter;
+
+        this.servicePojo = servicePojo;
+
         this.serviceAction = serviceAction;
 
         //
@@ -69,7 +71,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         //
         final NotPersistedFacet notPersistedFacet = new NotPersistedFacetAbstract(this) {};
         final DisabledFacet disabledFacet = disabledFacet();
-        
+
         FacetUtil.addFacet(notPersistedFacet);
         FacetUtil.addFacet(disabledFacet);
 
@@ -86,7 +88,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         final Identifier contributorIdentifier = contributor.getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
         List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
-        
+
         identifier = Identifier.actionIdentifier(contributeeType.getCorrespondingClass().getName(), memberName, memberParameterNames);
     }
 
@@ -103,7 +105,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
+        return serviceAction.execute(getServiceAdapter(), new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
     }
 
     @Override
@@ -128,7 +130,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
             final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         final VisibilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createVisibleInteractionContext(
-                serviceAdapter, interactionInitiatedBy, where);
+                getServiceAdapter(), interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -138,7 +140,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
             final ObjectAdapter contributee,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final UsabilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createUsableInteractionContext(
-                serviceAdapter, interactionInitiatedBy, where);
+                getServiceAdapter(), interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
@@ -193,4 +195,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         facetHolder.removeFacet(facetType);
     }
 
+    private ObjectAdapter getServiceAdapter() {
+        return getAdapterManager().adapterFor(servicePojo);
+    }
 }

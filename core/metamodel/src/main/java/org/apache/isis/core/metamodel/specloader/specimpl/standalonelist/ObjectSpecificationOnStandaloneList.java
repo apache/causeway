@@ -169,17 +169,6 @@ public class ObjectSpecificationOnStandaloneList extends ObjectSpecificationAbst
         return null;
     }
 
-    // /////////////////////////////////////////////////////
-    // Service Actions
-    // /////////////////////////////////////////////////////
-
-    /**
-     * Review: is it necessary to override for this subclass?
-     */
-    @Override
-    public List<ObjectAction> getServiceActionsReturning(final List<ActionType> type) {
-        return Collections.emptyList();
-    }
 
 
 

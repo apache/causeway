@@ -100,11 +100,6 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final List<ActionType> types) {
-        return null;
-    }
-
-    @Override
     public boolean isAbstract() {
         return false;
     }

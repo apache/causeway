@@ -452,7 +452,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         final ObjectSpecificationDependencies specContext =
                 new ObjectSpecificationDependencies(
                         getDeploymentCategory(), servicesInjector, specificationLookup,
-                        facetProcessor, adapterManager);
+                        facetProcessor);
 
         final ObjectMemberDependencies objectMemberDependencies = new ObjectMemberDependencies(
                 specificationLookup, adapterManager, getRuntimeContext().getMessageBrokerService(), servicesInjector,

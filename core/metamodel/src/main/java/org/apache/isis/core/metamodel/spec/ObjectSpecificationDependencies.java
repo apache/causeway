@@ -16,7 +16,6 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
@@ -27,19 +26,16 @@ public class ObjectSpecificationDependencies {
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
     private final FacetProcessor facetProcessor;
-    private final AdapterManager adapterManager;
 
     public ObjectSpecificationDependencies(
             final DeploymentCategory deploymentCategory,
             final ServicesInjector servicesInjector,
             final SpecificationLoader specificationLoader,
-            final FacetProcessor facetProcessor,
-            final AdapterManager adapterManager) {
+            final FacetProcessor facetProcessor) {
         this.deploymentCategory = deploymentCategory;
         this.servicesInjector = servicesInjector;
         this.specificationLoader = specificationLoader;
         this.facetProcessor = facetProcessor;
-        this.adapterManager = adapterManager;
     }
 
     public DeploymentCategory getDeploymentCategory() {
@@ -58,7 +54,4 @@ public class ObjectSpecificationDependencies {
         return facetProcessor;
     }
 
-    public AdapterManager getAdapterManager() {
-        return adapterManager;
-    }
 }

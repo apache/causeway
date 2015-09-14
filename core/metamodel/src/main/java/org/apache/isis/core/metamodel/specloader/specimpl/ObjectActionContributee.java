@@ -51,7 +51,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
 
-    private final ObjectAdapter serviceAdapter;
+    private final Object servicePojo;
     private final ObjectActionImpl serviceAction;
     private final int contributeeParam;
     private final ObjectSpecification contributeeType;
@@ -74,14 +74,14 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
      * @param contributeeParam - the parameter number which corresponds to the contributee, and so should be suppressed.
      */
     public ObjectActionContributee(
-            final ObjectAdapter serviceAdapter,
+            final Object servicePojo,
             final ObjectActionImpl serviceAction,
             final int contributeeParam,
             final ObjectSpecification contributeeType,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(serviceAction.getFacetedMethod(), objectMemberDependencies);
-        
-        this.serviceAdapter = serviceAdapter;
+
+        this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
         this.contributeeType = contributeeType;
         this.contributeeParam = contributeeParam;
@@ -138,11 +138,11 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
                 final ObjectActionParameterContributee contributedParam;
                 if(serviceParameter instanceof ObjectActionParameterParseable) {
                     contributedParam = new ObjectActionParameterParseableContributee(
-                            serviceAdapter, serviceAction, serviceParameter, serviceParamNum, 
+                            getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
                             contributeeParamNum, this);
                 } else if(serviceParameter instanceof OneToOneActionParameterImpl) {
                     contributedParam = new OneToOneActionParameterContributee(
-                            serviceAdapter, serviceAction, serviceParameter, serviceParamNum, 
+                            getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
                             contributeeParamNum, this);
                 } else {
                     throw new RuntimeException("Unknown implementation of ObjectActionParameter; " + serviceParameter.getClass().getName());
@@ -162,7 +162,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             final ObjectAdapter contributee,
             final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
-        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(serviceAdapter,
+        final VisibilityContext<?> ic = serviceAction.createVisibleInteractionContext(getServiceAdapter(),
                 interactionInitiatedBy, where);
         ic.putContributee(this.contributeeParam, contributee);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
@@ -172,7 +172,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     public Consent isUsable(
             final ObjectAdapter contributee,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(serviceAdapter,
+        final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(getServiceAdapter(),
                 interactionInitiatedBy, where);
         ic.putContributee(this.contributeeParam, contributee);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
@@ -180,7 +180,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
-        final ObjectAdapter[] contributorDefaults = serviceAction.getDefaults(serviceAdapter);
+        final ObjectAdapter[] contributorDefaults = serviceAction.getDefaults(getServiceAdapter());
         return removeElementFromArray(contributorDefaults, contributeeParam, new ObjectAdapter[]{});
     }
 
@@ -188,7 +188,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter target,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(serviceAdapter,
+        final ObjectAdapter[][] serviceChoices = serviceAction.getChoices(getServiceAdapter(),
                 interactionInitiatedBy);
         return removeElementFromArray(serviceChoices, contributeeParam, new ObjectAdapter[][]{});
     }
@@ -198,7 +198,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
         ObjectAdapter[] serviceArguments = argsPlusContributee(contributee, proposedArguments);
-        return serviceAction.isProposedArgumentSetValid(serviceAdapter, serviceArguments, interactionInitiatedBy);
+        return serviceAction.isProposedArgumentSetValid(getServiceAdapter(), serviceArguments, interactionInitiatedBy);
     }
 
     @Override
@@ -250,7 +250,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
             }
         }
         
-        return serviceAction.execute(serviceAdapter, argsPlusContributee(contributee, arguments),
+        return serviceAction.execute(getServiceAdapter(), argsPlusContributee(contributee, arguments),
                 interactionInitiatedBy);
     }
 
@@ -332,4 +332,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
         return list.toArray(t);
     }
 
+    public ObjectAdapter getServiceAdapter() {
+        return getAdapterManager().adapterFor(servicePojo);
+    }
 }

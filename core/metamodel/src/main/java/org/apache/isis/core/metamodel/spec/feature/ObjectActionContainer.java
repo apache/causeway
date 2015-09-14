@@ -68,7 +68,6 @@ public interface ObjectActionContainer {
 
     List<ObjectAction> getObjectActions(Contributed contributee);
 
-    List<ObjectAction> getServiceActionsReturning(List<ActionType> type);
 
 
 }

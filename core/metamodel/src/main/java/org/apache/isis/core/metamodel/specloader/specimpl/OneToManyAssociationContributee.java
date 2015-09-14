@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
 
-    private final ObjectAdapter serviceAdapter;
+    private final Object servicePojo;
     private final ObjectAction serviceAction;
     
 
@@ -68,13 +68,13 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     }
     
     public OneToManyAssociationContributee(
-            final ObjectAdapter serviceAdapter, 
+            final Object servicePojo,
             final ObjectActionImpl serviceAction,
             final ObjectSpecification contributeeType,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(serviceAction.getFacetedMethod(), typeOfSpec(serviceAction, objectMemberDependencies),
                 objectMemberDependencies);
-        this.serviceAdapter = serviceAdapter;
+        this.servicePojo = servicePojo;
         this.serviceAction = serviceAction;
 
         //
@@ -97,13 +97,13 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         // CollectionAnnotationFacetFactory is also run against actions.
         //
         FacetUtil.copyFacets(serviceAction.getFacetedMethod(), facetHolder);
-        
+
 
         // calculate the identifier
         final Identifier contributorIdentifier = serviceAction.getFacetedMethod().getIdentifier();
         final String memberName = contributorIdentifier.getMemberName();
         List<String> memberParameterNames = contributorIdentifier.getMemberParameterNames();
-        
+
         identifier = Identifier.actionIdentifier(contributeeType.getCorrespondingClass().getName(), memberName, memberParameterNames);
     }
 
@@ -120,7 +120,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
-        return serviceAction.execute(serviceAdapter, new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
+        return serviceAction.execute(getServiceAdapter(), new ObjectAdapter[]{ownerAdapter}, interactionInitiatedBy);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         final VisibilityContext<?> ic = ((ObjectMemberAbstract)serviceAction).createVisibleInteractionContext(
-                serviceAdapter, interactionInitiatedBy, where);
+                getServiceAdapter(), interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
@@ -156,7 +156,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
         final ObjectMemberAbstract serviceAction = (ObjectMemberAbstract) this.serviceAction;
         final UsabilityContext<?> ic = serviceAction.createUsableInteractionContext(
-                serviceAdapter, interactionInitiatedBy, where);
+                getServiceAdapter(), interactionInitiatedBy, where);
         ic.putContributee(0, contributee); // by definition, the contributee will be the first arg of the service action
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
@@ -211,4 +211,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         facetHolder.removeFacet(facetType);
     }
 
+    public ObjectAdapter getServiceAdapter() {
+        return getAdapterManager().adapterFor(servicePojo);
+    }
 }
