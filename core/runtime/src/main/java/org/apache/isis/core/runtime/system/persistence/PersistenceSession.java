@@ -24,6 +24,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
@@ -154,7 +155,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > constructor, fields, finalize()
 
     private final PersistenceSessionFactory persistenceSessionFactory;
-    private final OidGenerator oidGenerator;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfiguration configuration;
@@ -207,8 +207,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         // sub-components
 
         this.oidMarshaller = new OidMarshaller();
-
-        this.oidGenerator = new OidGenerator(this, specificationLoader);
 
 
         this.persistenceQueryFactory = new PersistenceQueryFactory(this, getSpecificationLoader());
@@ -831,7 +829,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (persistenceManager.getObjectId(pojo) == null) {
             return null;
         }
-        final RootOid oid = oidGenerator.createPersistentOrViewModelOid(pojo);
+        final RootOid oid = createPersistentOrViewModelOid(pojo);
         final ObjectAdapter adapter = mapRecreatedPojo(oid, pojo);
         return adapter;
     }
@@ -1163,7 +1161,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         debug.appendln();
 
         debug.appendTitle("OID Generator");
-        oidGenerator.debugData(debug);
         debug.appendln();
 
         debug.appendTitle("Services");
@@ -1205,16 +1202,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     protected AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
-    }
-
-    /**
-     * The configured {@link OidGenerator}.
-     * 
-     * <p>
-     * Injected in constructor.
-     */
-    public final OidGenerator getOidGenerator() {
-        return oidGenerator;
     }
 
     /**
@@ -1683,7 +1670,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             persistedRootOid = hintRootOid;
         } else {
             // normal flow - delegate to OidGenerator to obtain a persistent root oid
-            persistedRootOid = oidGenerator.createPersistentOrViewModelOid(adapter.getObject());
+            persistedRootOid = createPersistentOrViewModelOid(adapter.getObject());
         }
 
         // associate root adapter with the new Oid, and remap
@@ -1834,7 +1821,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * object.
      */
     private ObjectAdapter createTransientOrViewModelRootAdapter(final Object pojo) {
-        final RootOid rootOid = oidGenerator.createTransientOrViewModelOid(pojo);
+        final RootOid rootOid = createTransientOrViewModelOid(pojo);
         return createRootAdapter(pojo, rootOid);
     }
 
@@ -1994,7 +1981,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                 }
             }
         } else {
-            originalOid = oidGenerator.createPersistentOrViewModelOid(pojo);
+            originalOid = createPersistentOrViewModelOid(pojo);
 
             // it appears to be possible that there is already an adapter for this Oid,
             // ie from ObjectStore#resolveImmediately()
@@ -2009,6 +1996,75 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         adapter.setVersion(datastoreVersion);
     }
+
+
+    //region > create...Oid (main API)
+    /**
+     * Create a new {@link Oid#isTransient() transient} {@link Oid} for the
+     * supplied pojo, uniquely distinguishable from any other {@link Oid}.
+     */
+    public final RootOid createTransientOrViewModelOid(final Object pojo) {
+        return newIdentifier(pojo, Type.TRANSIENT);
+    }
+
+    /**
+     * Return an equivalent {@link RootOid}, but being persistent.
+     *
+     * <p>
+     * It is the responsibility of the implementation to determine the new unique identifier.
+     * For example, the generator may simply assign a new value from a sequence, or a GUID;
+     * or, the generator may use the oid to look up the object and inspect the object in order
+     * to obtain an application-defined value.
+     *
+     * @param pojo - being persisted
+     */
+    public final RootOid createPersistentOrViewModelOid(Object pojo) {
+        return newIdentifier(pojo, Type.PERSISTENT);
+    }
+
+    enum Type {
+        TRANSIENT,
+        PERSISTENT
+    }
+
+    private RootOid newIdentifier(final Object pojo, final Type type) {
+        final ObjectSpecification spec = objectSpecFor(pojo);
+        if(spec.isService()) {
+            return newRootId(spec, "1", type);
+        }
+
+        final ViewModelFacet recreatableObjectFacet = spec.getFacet(ViewModelFacet.class);
+        final String identifier =
+                recreatableObjectFacet != null
+                        ? recreatableObjectFacet.memento(pojo)
+                        : newIdentifierFor(pojo, type);
+
+        return newRootId(spec, identifier, type);
+    }
+
+    private String newIdentifierFor(final Object pojo, final Type type) {
+        return type == Type.TRANSIENT
+                ? UUID.randomUUID().toString()
+                : JdoObjectIdSerializer.toOidIdentifier(getPersistenceManager().getObjectId(pojo));
+    }
+
+    private RootOid newRootId(final ObjectSpecification spec, final String identifier, final Type type) {
+        final Oid.State state =
+                spec.containsDoOpFacet(ViewModelFacet.class)
+                        ? Oid.State.VIEWMODEL
+                        : type == Type.TRANSIENT
+                        ? Oid.State.TRANSIENT
+                        : Oid.State.PERSISTENT;
+        final ObjectSpecId objectSpecId = spec.getSpecId();
+        return new RootOid(objectSpecId, identifier, state);
+    }
+
+    private ObjectSpecification objectSpecFor(final Object pojo) {
+        final Class<?> pojoClass = pojo.getClass();
+        return getSpecificationLoader().loadSpecification(pojoClass);
+    }
+    //endregion
+
 
     /**
      * Called either when an entity is initially persisted, or when an entity is updated; fires the appropriate
@@ -2055,7 +2111,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         if (rootOid.isTransient()) {
             // persisting
-            final RootOid persistentOid = oidGenerator.createPersistentOrViewModelOid(pojo);
+            final RootOid persistentOid = createPersistentOrViewModelOid(pojo);
 
             remapAsPersistent(adapter, persistentOid);
 
