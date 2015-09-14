@@ -52,7 +52,6 @@ import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -515,10 +514,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     protected AdapterManager getAdapterMap() {
         return parentAction.getAdapterManager();
-    }
-
-    protected MessageBrokerService getQuerySubmitter() {
-        return parentAction.getMessageBrokerService();
     }
 
     protected PersistenceSessionService getObjectPersistor() {

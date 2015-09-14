@@ -272,7 +272,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     protected ObjectMemberAbstractImpl(final String id) {
         super(FacetedMethod.createForProperty(Customer.class, "firstName"), FeatureType.PROPERTY, new ObjectMemberDependencies(
-                null, null, null, null, null));
+                null, null, null, null));
     }
 
     @Override
