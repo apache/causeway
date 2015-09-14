@@ -31,7 +31,6 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -43,6 +42,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
@@ -67,21 +67,21 @@ public abstract class ChoicesFacetFromBoundedAbstract
 
     private final DeploymentCategory deploymentCategory;
     private final AuthenticationSessionProvider authenticationSessionProvider;
-    private final QuerySubmitter querySubmitter;
-    
+    private final ObjectPersistor objectPersistor;
+
     public ChoicesFacetFromBoundedAbstract(
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final QuerySubmitter querySubmitter) {
+            final ObjectPersistor objectPersistor) {
         super(type(), holder, Derivation.NOT_DERIVED);
         this.deploymentCategory = deploymentCategory;
         this.authenticationSessionProvider = authenticationSessionProvider;
-        this.querySubmitter = querySubmitter;
+        this.objectPersistor = objectPersistor;
     }
 
-    protected QuerySubmitter getQuerySubmitter() {
-        return querySubmitter;
+    public ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
     }
 
     @Override
@@ -127,10 +127,8 @@ public abstract class ChoicesFacetFromBoundedAbstract
             ObjectAdapter adapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         final Query query = new QueryFindAllInstances(getObjectSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+        final List<ObjectAdapter> allInstancesAdapter = getObjectPersistor().allMatchingQuery(query);
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> adapters =
                 ObjectAdapter.Util.visibleAdapters(
                     allInstancesAdapter, interactionInitiatedBy);

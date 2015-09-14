@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -52,6 +51,8 @@ import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefau
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -417,7 +418,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @SuppressWarnings("unused")
     private <T> void addAllInstancesForType(final List<ObjectAdapter> adapters) {
         final Query<T> query = new QueryFindAllInstances<T>(getSpecification().getFullIdentifier());
-        final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
+        final List<ObjectAdapter> allInstancesAdapter = getObjectPersistor().allMatchingQuery(query);
         for (final ObjectAdapter choiceAdapter : allInstancesAdapter) {
             adapters.add(choiceAdapter);
         }
@@ -518,6 +519,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     protected QuerySubmitter getQuerySubmitter() {
         return parentAction.getQuerySubmitter();
+    }
+
+    protected ObjectPersistor getObjectPersistor() {
+        return parentAction.getObjectPersistor();
     }
 
 }

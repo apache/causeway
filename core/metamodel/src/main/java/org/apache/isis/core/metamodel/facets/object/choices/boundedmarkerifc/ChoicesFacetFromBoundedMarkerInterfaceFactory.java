@@ -22,17 +22,17 @@ package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
 
-public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements QuerySubmitterAware {
+public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryAbstract implements ObjectPersistorAware {
 
-    private QuerySubmitter querySubmitter;
+    private ObjectPersistor objectPersistor;
 
     public ChoicesFacetFromBoundedMarkerInterfaceFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -49,8 +49,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
             final FacetHolder holder) {
         return implementsMarker
                 ? new ChoicesFacetFromBoundedMarkerInterface(
-                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(), querySubmitter)
-                : null;
+                    holder, getDeploymentCategory(), getAuthenticationSessionProvider(),objectPersistor) : null;
     }
 
     public boolean recognizes(final Method method) {
@@ -58,8 +57,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactory extends FacetFactoryA
     }
 
     @Override
-    public void setQuerySubmitter(QuerySubmitter querySubmitter) {
-        this.querySubmitter = querySubmitter;
+    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
+        this.objectPersistor = objectPersistor;
     }
-
 }

@@ -54,21 +54,19 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -79,7 +77,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class DomainObjectContainerDefault
-        implements DomainObjectContainer, QuerySubmitterAware, DomainObjectServicesAware,
+        implements DomainObjectContainer, DomainObjectServicesAware,
         ObjectPersistorAware, SpecificationLoaderAware, AuthenticationSessionProviderAware, AdapterManagerAware,
         ServicesInjectorAware,
         LocalizationProviderAware, ExceptionRecognizer {
@@ -555,7 +553,7 @@ public class DomainObjectContainerDefault
     }
 
     <T> List<T> submitQuery(final Query<T> query) {
-        final List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
+        final List<ObjectAdapter> allMatching = getObjectPersistor().allMatchingQuery(query);
         return ObjectAdapter.Util.unwrapT(allMatching);
     }
 
@@ -599,7 +597,7 @@ public class DomainObjectContainerDefault
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
         flush(); // auto-flush any pending changes
-        final ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
+        final ObjectAdapter firstMatching = getObjectPersistor().firstMatchingQuery(query);
         return (T) ObjectAdapter.Util.unwrap(firstMatching);
     }
 
@@ -748,7 +746,6 @@ public class DomainObjectContainerDefault
     //region > framework dependencies
 
     private ObjectPersistor objectPersistor;
-    private QuerySubmitter querySubmitter;
     private SpecificationLoader specificationLoader;
     private DomainObjectServices domainObjectServices;
     private AuthenticationSessionProvider authenticationSessionProvider;
@@ -756,15 +753,6 @@ public class DomainObjectContainerDefault
     private LocalizationProvider localizationProvider;
     private ServicesInjector servicesInjector;
 
-    protected QuerySubmitter getQuerySubmitter() {
-        return querySubmitter;
-    }
-
-    @Programmatic
-    @Override
-    public void setQuerySubmitter(final QuerySubmitter querySubmitter) {
-        this.querySubmitter = querySubmitter;
-    }
 
     protected DomainObjectServices getDomainObjectServices() {
         return domainObjectServices;

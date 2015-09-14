@@ -16,6 +16,9 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
+import java.util.List;
+
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -111,5 +114,23 @@ public interface ObjectPersistor extends Injectable {
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
     void remove(ObjectAdapter adapter);
+
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
+     * facets.
+     */
+    <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
+
+    /**
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
+     *
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
 }

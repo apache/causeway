@@ -18,11 +18,8 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.List;
 
-import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface DomainObjectServices extends Injectable {
 

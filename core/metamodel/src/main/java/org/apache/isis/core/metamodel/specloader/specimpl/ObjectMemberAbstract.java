@@ -27,6 +27,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -55,6 +56,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
+
+    private final ObjectPersistor objectPersistor;
 
     public static ObjectSpecification getSpecification(final SpecificationLoader specificationLookup, final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
@@ -88,6 +91,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.adapterManager = objectMemberDependencies.getAdapterManager();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
         this.querySubmitter = objectMemberDependencies.getQuerySubmitter();
+        this.objectPersistor = objectMemberDependencies.getObjectPersistor();
     }
 
 
@@ -345,6 +349,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
+    }
+
+    public ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
     }
 
     public CollectionTypeRegistry getCollectionTypeRegistry() {

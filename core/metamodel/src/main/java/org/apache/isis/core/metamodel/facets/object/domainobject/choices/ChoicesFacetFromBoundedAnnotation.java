@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
 import org.apache.isis.core.metamodel.facets.objectvalue.choices.ChoicesFacet;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 
 /**
  * @deprecated
@@ -37,8 +37,8 @@ public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAb
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final QuerySubmitter querySubmitter) {
-        super(holder, deploymentCategory, authenticationSessionProvider, querySubmitter);
+            final ObjectPersistor objectPersistor) {
+        super(holder, deploymentCategory, authenticationSessionProvider, objectPersistor);
     }
 
     public static ChoicesFacet create(
@@ -46,14 +46,13 @@ public class ChoicesFacetFromBoundedAnnotation extends ChoicesFacetFromBoundedAb
             final FacetHolder holder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final QuerySubmitter querySubmitter) {
+            final ObjectPersistor objectPersistor) {
         if (annotation == null) {
             return null;
         }
 
         return new ChoicesFacetFromBoundedAnnotation(holder, deploymentCategory, authenticationSessionProvider,
-                querySubmitter
-        );
+                objectPersistor);
     }
 
 

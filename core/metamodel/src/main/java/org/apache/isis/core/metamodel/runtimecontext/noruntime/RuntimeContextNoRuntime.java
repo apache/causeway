@@ -212,6 +212,17 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             public void makePersistent(final ObjectAdapter adapter) {
                 throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
             }
+
+            @Override
+            public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
+            @Override
+            public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
+                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
+            }
+
         };
         domainObjectServices = new DomainObjectServicesAbstract() {
 
@@ -252,15 +263,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
         };
         querySubmitter = new QuerySubmitterAbstract() {
 
-            @Override
-            public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
         };
     }
 

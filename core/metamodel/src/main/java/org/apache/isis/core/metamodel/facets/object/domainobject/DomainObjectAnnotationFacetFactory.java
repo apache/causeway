@@ -32,8 +32,8 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -73,7 +73,8 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 
-public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, QuerySubmitterAware, MetaModelValidatorRefiner {
+public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, MetaModelValidatorRefiner,
+        ObjectPersistorAware {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
@@ -86,7 +87,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     private IsisConfiguration configuration;
     private AdapterManager adapterManager;
     private ServicesInjector servicesInjector;
-    private QuerySubmitter querySubmitter;
+    private ObjectPersistor objectPersistor;
 
     public DomainObjectAnnotationFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -154,7 +155,8 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         PublishedObjectFacet publishedObjectFacet;
 
         // check for the deprecated @PublishedObject annotation first
-        final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(), PublishedObject.class);
+        final PublishedObject publishedObject = Annotations.getAnnotation(processClassContext.getCls(),
+                PublishedObject.class);
         publishedObjectFacet = publishedObjectValidator.flagIfPresent(
                                     PublishedObjectFacetForPublishedObjectAnnotation.create(publishedObject, facetHolder));
 
@@ -205,13 +207,13 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         Facet facet = boundedValidator.flagIfPresent(
             ChoicesFacetFromBoundedAnnotation.create(annotation, processClassContext.getFacetHolder(),
                     getDeploymentCategory(),
-                    getAuthenticationSessionProvider(), querySubmitter
-            ));
+                    getAuthenticationSessionProvider(),
+                    objectPersistor));
 
         // else check from @DomainObject(bounded=...)
         if(facet == null) {
             facet = ChoicesFacetForDomainObjectAnnotation.create(domainObject, facetHolder, getDeploymentCategory(),
-                    getAuthenticationSessionProvider(), querySubmitter);
+                    getAuthenticationSessionProvider(), objectPersistor);
         }
 
         // then add
@@ -345,8 +347,7 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     }
 
     @Override
-    public void setQuerySubmitter(final QuerySubmitter querySubmitter) {
-        this.querySubmitter = querySubmitter;
+    public void setObjectPersistor(final ObjectPersistor objectPersistor) {
+        this.objectPersistor = objectPersistor;
     }
-
 }

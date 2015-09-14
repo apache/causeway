@@ -21,11 +21,11 @@ package org.apache.isis.core.metamodel.facets.object.domainobject.choices;
 
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.choices.ChoicesFacetFromBoundedAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 
 public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBoundedAbstract {
 
@@ -34,7 +34,7 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
             final FacetHolder facetHolder,
             final DeploymentCategory deploymentCategory,
             final AuthenticationSessionProvider authenticationSessionProvider,
-            final QuerySubmitter querySubmitter) {
+            final ObjectPersistor objectPersistor) {
 
         if(domainObject == null) {
             return null;
@@ -43,16 +43,15 @@ public class ChoicesFacetForDomainObjectAnnotation extends ChoicesFacetFromBound
         final boolean bounded = domainObject.bounded();
         return bounded
                 ? new ChoicesFacetForDomainObjectAnnotation(
-                    facetHolder, querySubmitter, deploymentCategory, authenticationSessionProvider)
+                    facetHolder, deploymentCategory, authenticationSessionProvider, objectPersistor)
                 : null;
     }
 
     private ChoicesFacetForDomainObjectAnnotation(
             final FacetHolder holder,
-            final QuerySubmitter querySubmitter,
             final DeploymentCategory deploymentCategory,
-            final AuthenticationSessionProvider authenticationSessionProvider) {
-        super(holder, deploymentCategory, authenticationSessionProvider, querySubmitter);
+            final AuthenticationSessionProvider authenticationSessionProvider, final ObjectPersistor objectPersistor) {
+        super(holder, deploymentCategory, authenticationSessionProvider, objectPersistor);
     }
 
 }

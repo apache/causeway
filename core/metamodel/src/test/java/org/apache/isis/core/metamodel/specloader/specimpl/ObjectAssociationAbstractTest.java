@@ -19,9 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
@@ -44,6 +41,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ObjectAssociationAbstractTest {
 
@@ -72,7 +72,7 @@ public class ObjectAssociationAbstractTest {
         facetedMethod = FacetedMethod.createForProperty(Customer.class, "firstName");
         
         objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY, objectSpecification, new ObjectMemberDependencies(
-                null, null, null, null)) {
+                null, null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(

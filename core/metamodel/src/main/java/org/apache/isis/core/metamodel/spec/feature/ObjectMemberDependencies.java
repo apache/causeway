@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
 import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -27,18 +28,21 @@ public class ObjectMemberDependencies {
     private final AdapterManager adapterManager;
     private final QuerySubmitter querySubmitter;
     private final ServicesInjector servicesInjector;
+    private final ObjectPersistor objectPersistor;
 
     public ObjectMemberDependencies(
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final QuerySubmitter querySubmitter,
-            final ServicesInjector servicesInjector) {
+            final ServicesInjector servicesInjector,
+            final ObjectPersistor objectPersistor) {
 
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
 
         this.servicesInjector = servicesInjector;
+        this.objectPersistor = objectPersistor;
     }
 
     public SpecificationLoader getSpecificationLoader() {
@@ -55,5 +59,9 @@ public class ObjectMemberDependencies {
     
     public QuerySubmitter getQuerySubmitter() {
         return querySubmitter;
+    }
+
+    public ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
     }
 }
