@@ -60,7 +60,6 @@ public class AdapterManagerDefault implements AdapterManager,
 
     private final PersistenceSession persistenceSession;
 
-    public boolean concurrencyCheckingGloballyEnabled;
 
     // //////////////////////////////////////////////////////////////////
     // constructor
@@ -77,9 +76,6 @@ public class AdapterManagerDefault implements AdapterManager,
             final IsisConfiguration configuration) {
         this.persistenceSession = persistenceSession;
 
-        final boolean concurrencyCheckingGloballyDisabled =
-                configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
-        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
     }
     //endregion
 

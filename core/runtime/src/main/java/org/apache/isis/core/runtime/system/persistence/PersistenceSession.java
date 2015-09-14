@@ -183,6 +183,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
     private final DataNucleusApplicationComponents applicationComponents;
 
+    private final boolean concurrencyCheckingGloballyEnabled;
+
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
@@ -225,6 +227,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
         }
+
+        final boolean concurrencyCheckingGloballyDisabled =
+                configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
+        this.concurrencyCheckingGloballyEnabled = !concurrencyCheckingGloballyDisabled;
+
     }
 
     @Override
@@ -1407,7 +1414,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                             otherVersion != null &&
                             thisVersion.different(otherVersion)) {
 
-                        if(adapterManager.concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
+                        if(concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
