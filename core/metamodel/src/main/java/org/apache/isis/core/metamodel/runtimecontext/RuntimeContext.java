@@ -23,7 +23,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
@@ -49,8 +48,6 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
     public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
     public MessageBrokerService getMessageBrokerService();
-
-    public AdapterManager getAdapterManager();
 
     public SpecificationLoader getSpecificationLoader();
 

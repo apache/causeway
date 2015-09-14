@@ -229,11 +229,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     }
 
     @Override
-    public AdapterManager getAdapterManager() {
-        return getPersistenceSessionService();
-    }
-
-    @Override
     public PersistenceSessionService getPersistenceSessionService() {
         return persistenceSessionService;
     }

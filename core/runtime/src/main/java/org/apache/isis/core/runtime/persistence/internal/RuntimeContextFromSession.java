@@ -235,11 +235,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public AdapterManager getAdapterManager() {
-        return getPersistenceSessionService();
-    }
-
-    @Override
     public LocalizationProviderAbstract getLocalizationProvider() {
         return localizationProvider;
     }
