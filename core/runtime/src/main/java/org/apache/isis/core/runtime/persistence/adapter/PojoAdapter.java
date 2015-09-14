@@ -29,13 +29,13 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.InstanceAbstract;
@@ -258,7 +258,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
            otherVersion != null && 
            thisVersion.different(otherVersion)) {
             
-            if(ConcurrencyChecking.isCurrentlyEnabled()) {
+            if(AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
                 LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
                 final String currentUser = authenticationSession.getUserName();
                 throw new ConcurrencyException(currentUser, thisOid, thisVersion, otherVersion);

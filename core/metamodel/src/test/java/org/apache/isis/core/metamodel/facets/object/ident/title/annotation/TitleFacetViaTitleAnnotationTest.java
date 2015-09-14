@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;

@@ -44,8 +44,8 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -156,7 +156,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
             
             // temporarily disable concurrency checking while this method is performed
             try {
-                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Void>(){
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Callable<Void>() {
                     @Override
                     public Void call() {
                         getJdoPersistenceManager().deletePersistentAll(instances);

@@ -33,7 +33,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager.ConcurrencyChecking;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -96,7 +96,8 @@ public class ScalarModel extends EntityModel implements LinksProvider {
 
             @Override
             public String disable(final ScalarModel scalarModel, final Where where) {
-                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(ConcurrencyChecking.CHECK);
+                final ObjectAdapter parentAdapter = scalarModel.parentObjectAdapterMemento.getObjectAdapter(
+                        ConcurrencyChecking.CHECK);
                 final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
                 try {
                     final AuthenticationSession session = scalarModel.getAuthenticationSession();

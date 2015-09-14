@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
@@ -81,7 +81,7 @@ public abstract class FormAbstract<T> extends Form<T>
             
             if(preValidationErrorIfAny != null) {
                 // an exception has already occurred, so disable for remainder of thread.
-                AdapterManager.ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable(){
+                ConcurrencyChecking.executeWithConcurrencyCheckingDisabled(new Runnable(){
                     @Override
                     public void run() {
                         FormAbstract.super.process(submittingComponent);

@@ -17,10 +17,9 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.runtimecontext;
+package org.apache.isis.core.metamodel.adapter.mgr;
 
 import org.apache.isis.applib.annotation.Programmatic;
-
 
 public interface AdapterManagerAware {
 

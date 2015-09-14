@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.encodeable.annotcfg;
 
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;

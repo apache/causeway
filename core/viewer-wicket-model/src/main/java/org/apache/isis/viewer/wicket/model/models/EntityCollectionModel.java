@@ -27,17 +27,18 @@ import java.util.List;
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.Closure;
 import org.apache.isis.core.commons.lang.IterableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -76,7 +77,8 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         STANDALONE {
             @Override
             List<ObjectAdapter> load(final EntityCollectionModel entityCollectionModel) {
-                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapterMemento.Functions.fromMemento(ConcurrencyChecking.NO_CHECK));
+                return Lists.transform(entityCollectionModel.mementoList, ObjectAdapterMemento.Functions.fromMemento(
+                        ConcurrencyChecking.NO_CHECK));
             }
 
             @Override

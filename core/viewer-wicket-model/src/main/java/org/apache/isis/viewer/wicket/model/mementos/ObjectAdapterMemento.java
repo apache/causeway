@@ -26,12 +26,12 @@ import com.google.common.base.Function;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -152,7 +152,7 @@ public class ObjectAdapterMemento implements Serializable {
          */
         TRANSIENT {
             /**
-             * {@link ConcurrencyChecking} is ignored for transients.
+             * {@link AdapterManager.ConcurrencyChecking} is ignored for transients.
              */
             @Override
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
@@ -308,7 +308,8 @@ public class ObjectAdapterMemento implements Serializable {
             if(each == null) {
                 continue;
             }
-            final ObjectAdapter otherAdapter = each.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter otherAdapter = each.getObjectAdapter(
+                    ConcurrencyChecking.NO_CHECK);
             if(currAdapter == otherAdapter) {
                 return true;
             }
@@ -413,7 +414,8 @@ public class ObjectAdapterMemento implements Serializable {
         }
 
 
-        public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(final ConcurrencyChecking concurrencyChecking) {
+        public static Function<ObjectAdapterMemento, ObjectAdapter> fromMemento(final
+        ConcurrencyChecking concurrencyChecking) {
             return new Function<ObjectAdapterMemento, ObjectAdapter>() {
                 @Override
                 public ObjectAdapter apply(final ObjectAdapterMemento from) {

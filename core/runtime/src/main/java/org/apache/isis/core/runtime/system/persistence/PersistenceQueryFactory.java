@@ -26,7 +26,7 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;

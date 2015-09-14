@@ -26,7 +26,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.util.string.PrependingStringBuffer;
 import org.apache.wicket.util.string.Strings;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;

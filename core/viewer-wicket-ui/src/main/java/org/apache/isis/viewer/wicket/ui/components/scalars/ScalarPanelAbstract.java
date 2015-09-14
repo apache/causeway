@@ -19,10 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,10 +33,11 @@ import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -48,6 +49,8 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Adapter for {@link PanelAbstract panel}s that use a {@link ScalarModel} as
@@ -274,7 +277,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
         ScalarModel model = getModel();
         final CssClassFacet facet = model.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK);
+            final ObjectAdapter parentAdapter = model.getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.NO_CHECK);
             final String cssClass = facet.cssClass(parentAdapter);
             CssClassAppender.appendCssClassTo(this, cssClass);
         }

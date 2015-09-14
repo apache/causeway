@@ -75,8 +75,8 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManager;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterManagerAware;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
@@ -1368,14 +1368,14 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     @Override
     public ObjectAdapter adapterFor(final RootOid rootOid) {
-        return adapterFor(rootOid, AdapterManager.ConcurrencyChecking.NO_CHECK);
+        return adapterFor(rootOid, ConcurrencyChecking.NO_CHECK);
     }
 
 
     @Override
     public ObjectAdapter adapterFor(
             final RootOid rootOid,
-            final AdapterManager.ConcurrencyChecking concurrencyChecking) {
+            final ConcurrencyChecking concurrencyChecking) {
 
         // attempt to locate adapter for the Oid
         ObjectAdapter adapter = getAdapterFor(rootOid);
@@ -1407,7 +1407,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                             otherVersion != null &&
                             thisVersion.different(otherVersion)) {
 
-                        if(adapterManager.concurrencyCheckingGloballyEnabled && AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+                        if(adapterManager.concurrencyCheckingGloballyEnabled && ConcurrencyChecking.isCurrentlyEnabled()) {
                             LOG.info("concurrency conflict detected on " + recreatedOid + " (" + otherVersion + ")");
                             final String currentUser = authenticationSession.getUserName();
                             throw new ConcurrencyException(currentUser, recreatedOid, thisVersion, otherVersion);
@@ -1911,7 +1911,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
                     otherVersion != null &&
                     thisVersion.different(otherVersion)) {
 
-                if (AdapterManager.ConcurrencyChecking.isCurrentlyEnabled()) {
+                if (ConcurrencyChecking.isCurrentlyEnabled()) {
                     LOG.info("concurrency conflict detected on " + thisOid + " (" + otherVersion + ")");
                     final String currentUser = authenticationSession.getUserName();
                     final ConcurrencyException abortCause = new ConcurrencyException(currentUser, thisOid,
