@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter.mgr;
+package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.concurrent.Callable;
 
@@ -138,7 +138,7 @@ public interface AdapterManager extends Injectable {
 
     /**
      * As per {@link #adapterFor(RootOid, ConcurrencyChecking)}, with
-     * {@link org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking#NO_CHECK no checking}.
+     * {@link AdapterManager.ConcurrencyChecking#NO_CHECK no checking}.
      *
      * <p>
      * This method  will <i>always</i> return an object, possibly indicating it is persistent; so make sure that you
@@ -160,7 +160,7 @@ public interface AdapterManager extends Injectable {
      * {@link Oid#isTransient() transient} object.
      * 
      * <p>
-     * The pojo itself is recreated by delegating to a {@link org.apache.isis.core.metamodel.adapter.mgr.AdapterManager}.
+     * The pojo itself is recreated by delegating to a {@link AdapterManager}.
      *
      * <p>
      * The {@link ConcurrencyChecking} parameter determines whether concurrency checking is performed.

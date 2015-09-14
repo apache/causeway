@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter.mgr;
+package org.apache.isis.core.metamodel.runtimecontext;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
