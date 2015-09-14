@@ -71,7 +71,6 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -97,6 +96,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -652,7 +652,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                     if(object == null) {
                         return null;
                     }
-                    final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                    final ObjectAdapter adapter = IsisContext.getPersistenceSession().adapterFor(object);
                     Oid oid = adapter.getOid();
                     return oid != null? oid.enString(getOidMarshaller()): encodedValueOf(adapter);
                 }
@@ -662,7 +662,7 @@ public class IsisTransaction implements TransactionScopedComponent {
                 }
                 @Override
                 public String classNameOf(Object object) {
-                    final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
                     final String className = adapter.getSpecification().getFullIdentifier();
                     return className;
                 }
@@ -1411,16 +1411,16 @@ public class IsisTransaction implements TransactionScopedComponent {
     // Dependencies (from context)
     ////////////////////////////////////////////////////////////////////////
 
-    protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
-    }
-
     protected OidMarshaller getOidMarshaller() {
         return IsisContext.getOidMarshaller();
     }
 
     protected IsisConfiguration getConfiguration() {
         return IsisContext.getConfiguration();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
 

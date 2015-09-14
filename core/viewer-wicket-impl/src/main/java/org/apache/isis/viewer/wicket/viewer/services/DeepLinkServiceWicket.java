@@ -18,26 +18,28 @@
  */
 package org.apache.isis.viewer.wicket.viewer.services;
 
-import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+
+import javax.inject.Inject;
+
 import org.apache.wicket.Page;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.guice.GuiceBeanProvider;
 import org.apache.isis.applib.services.linking.DeepLinkService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.viewer.wicket.viewer.registries.pages.PageClassListDefault;
 
 /**
  * An implementation of {@link org.apache.isis.applib.services.linking.DeepLinkService}
@@ -52,7 +54,7 @@ public class DeepLinkServiceWicket implements DeepLinkService {
     @Override
     public URI deepLinkFor(final Object domainObject) {
 
-        final AdapterManagerDefault adapterManager = getAdapterManager();
+        final AdapterManager adapterManager = getPersistenceSession();
         final ObjectAdapter objectAdapter = adapterManager.adapterFor(domainObject);
         final PageParameters pageParameters = EntityModel.createPageParameters(objectAdapter);
 
@@ -67,10 +69,6 @@ public class DeepLinkServiceWicket implements DeepLinkService {
         } catch (final URISyntaxException ex) {
             throw new RuntimeException("Cannot create a deep link to domain object: " + domainObject, ex);
         }
-    }
-
-    protected AdapterManagerDefault getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
     }
 
     protected PersistenceSession getPersistenceSession() {

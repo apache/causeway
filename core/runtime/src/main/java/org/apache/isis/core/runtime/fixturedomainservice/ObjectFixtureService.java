@@ -41,7 +41,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -80,7 +79,7 @@ public class ObjectFixtureService {
     @MemberOrder(sequence = "1")
     @Exploration
     public void save(final Object object) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
         if (adapter.getSpecification().persistability() != Persistability.TRANSIENT) {
             LOG.info("Saving object for fixture: " + adapter);
             addObjectAndAssociates(adapter);
@@ -231,10 +230,6 @@ public class ObjectFixtureService {
     // //////////////////////////////////////////////////////////////////
     // from context
     // //////////////////////////////////////////////////////////////////
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

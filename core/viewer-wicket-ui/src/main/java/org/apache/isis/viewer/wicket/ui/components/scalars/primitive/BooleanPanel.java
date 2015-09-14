@@ -127,7 +127,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
 
             @Override
             public void setObject(final Boolean object) {
-                final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+                final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
                 getModel().setObject(adapter);
             }
         }) {
@@ -146,7 +146,7 @@ public class BooleanPanel extends ScalarPanelAbstract {
         final ObjectSpecification objectSpecification = getModel().getTypeOfSpecification();
         if(objectSpecification.getFullIdentifier().equals("boolean")) {
             if(getModel().getObject() == null) {
-                getModel().setObject(getAdapterManager().adapterFor(false));
+                getModel().setObject(getPersistenceSession().adapterFor(false));
             }
         }
 

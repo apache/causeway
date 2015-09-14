@@ -26,7 +26,6 @@ import com.google.common.base.Strings;
 import org.apache.wicket.util.convert.IConverter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -54,7 +53,7 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
             return null;
         }
         final Oid oid = RootOid.deStringEncoded(value, getOidMarshaller());
-        final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
+        final ObjectAdapter adapter = getPersistenceSession().getAdapterFor(oid);
         return ObjectAdapterMemento.createOrNull(adapter);
     }
 
@@ -81,10 +80,6 @@ public class ConverterForObjectAdapterMemento implements IConverter<ObjectAdapte
     // //////////////////////////////////////////////////////////
     // Dependencies (from context)
     // //////////////////////////////////////////////////////////
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

@@ -36,7 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -131,7 +130,7 @@ public class ObjectFixtureFilePersistor {
         final PrintWriter writer = new PrintWriter(out);
         final SavedObjects saved = new SavedObjects();
         for (final Object object : objects) {
-            final ObjectAdapter adapter = getAdapterManager().adapterFor(object);
+            final ObjectAdapter adapter = getPersistenceSession().adapterFor(object);
             saveData(writer, adapter, saved);
         }
         out.close();
@@ -188,9 +187,6 @@ public class ObjectFixtureFilePersistor {
         return IsisContext.getSpecificationLoader();
     }
 
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 }
 
 

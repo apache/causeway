@@ -59,7 +59,7 @@ public class PublishingServiceWithDefaultPayloadFactories {
             // we therefore replace that pojo with an 'empty' one.
 
             Object replacementObject = getPersistenceSession().instantiateAndInjectServices(adapter.getSpecification());
-            getPersistenceSession().getAdapterManager().remapRecreatedPojo(adapter, replacementObject);
+            getPersistenceSession().remapRecreatedPojo(adapter, replacementObject);
             return adapter;
         }
         protected PersistenceSession getPersistenceSession() {

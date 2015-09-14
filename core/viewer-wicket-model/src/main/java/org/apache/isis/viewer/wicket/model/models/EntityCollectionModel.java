@@ -429,7 +429,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     // //////////////////////////////////////
 
     private static AdapterManager getAdapterManagerStatic() {
-        return getPersistenceSessionStatic().getAdapterManager();
+        return getPersistenceSessionStatic();
     }
 
     private static ServicesInjectorSpi getServicesInjector() {

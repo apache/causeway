@@ -184,7 +184,7 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
             @Override
             public void validate(final IValidatable<T> validatable) {
                 final T proposedValue = validatable.getValue();
-                final ObjectAdapter proposedAdapter = getAdapterManager().adapterFor(proposedValue);
+                final ObjectAdapter proposedAdapter = getPersistenceSession().adapterFor(proposedValue);
                 final String reasonIfAny = scalarModel.validate(proposedAdapter);
                 if (reasonIfAny != null) {
                     final ValidationError error = new ValidationError();

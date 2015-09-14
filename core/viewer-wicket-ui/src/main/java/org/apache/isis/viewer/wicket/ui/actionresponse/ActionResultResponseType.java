@@ -133,7 +133,7 @@ public enum ActionResultResponseType {
         }
     }
     private static ObjectAdapter adapterFor(final Object pojo) {
-        return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(pojo);
+        return IsisContext.getPersistenceSession().adapterFor(pojo);
     }
 
     private static ActionResultResponse toEntityPage(final ActionModel model, final ObjectAdapter actualAdapter, ConcurrencyException exIfAny) {

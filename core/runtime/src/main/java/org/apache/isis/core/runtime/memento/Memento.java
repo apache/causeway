@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
@@ -205,7 +204,7 @@ public class Memento implements Serializable {
 		if (spec.isParentedOrFreeCollection()) {
 
             final Object recreatedPojo = getPersistenceSession().instantiateAndInjectServices(spec);
-        	adapter = getPersistenceSession().getAdapterManager() .mapRecreatedPojo(oid, recreatedPojo);
+        	adapter = getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
             populateCollection(adapter, (CollectionData) data);
             
         } else {
@@ -214,13 +213,13 @@ public class Memento implements Serializable {
 
             // remove adapter if already in the adapter manager maps, because
             // otherwise would (as a side-effect) update the version to that of the current.
-			adapter = getAdapterManager().getAdapterFor(typedOid);
+            adapter = getPersistenceSession().getAdapterFor(typedOid);
             if(adapter != null) {
-                getAdapterManager().removeAdapter(adapter);
+                getPersistenceSession().removeAdapter(adapter);
             }
 
             // recreate an adapter for the original OID (with correct version)
-            adapter = getAdapterManager().adapterFor(typedOid);
+            adapter = getPersistenceSession().adapterFor(typedOid);
 
             updateObject(adapter, data);
         }
@@ -257,7 +256,7 @@ public class Memento implements Serializable {
         Assert.assertTrue("can only create a reference to an entity", oid instanceof RootOid);
         
 		final RootOid rootOid = (RootOid) oid;
-        final ObjectAdapter referencedAdapter = getAdapterManager().adapterFor(rootOid);
+        final ObjectAdapter referencedAdapter = getPersistenceSession().adapterFor(rootOid);
 
         if (data instanceof ObjectData) {
             if (rootOid.isTransient()) {
@@ -413,10 +412,6 @@ public class Memento implements Serializable {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
-    }
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
     }
 
 }

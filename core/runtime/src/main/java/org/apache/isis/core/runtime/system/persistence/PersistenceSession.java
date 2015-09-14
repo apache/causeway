@@ -100,7 +100,6 @@ import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.adaptermanager.OidAdapterHashMap;
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.core.runtime.persistence.adaptermanager.RootAndCollectionAdapters;
@@ -156,7 +155,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     private final PersistenceSessionFactory persistenceSessionFactory;
     private final OidGenerator oidGenerator;
-    private final AdapterManagerDefault adapterManager;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfiguration configuration;
@@ -212,10 +210,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         this.oidGenerator = new OidGenerator(this, specificationLoader);
 
-        this.adapterManager = new AdapterManagerDefault(this
-        );
 
-        this.persistenceQueryFactory = new PersistenceQueryFactory(getSpecificationLoader(), adapterManager);
+        this.persistenceQueryFactory = new PersistenceQueryFactory(this, getSpecificationLoader());
         this.transactionManager = new IsisTransactionManager(this, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
@@ -260,9 +256,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.debug("opening " + this);
         }
 
-        // inject any required dependencies into object factory
-        servicesInjector.injectInto(adapterManager);
-
         getOidAdapterMap().open();
         getPojoAdapterMap().open();
 
@@ -296,8 +289,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             final RootOid existingOid = getOidForService(serviceSpecification);
             final ObjectAdapter serviceAdapter =
                     existingOid == null
-                            ? getAdapterManager().adapterFor(service)
-                            : getAdapterManager().mapRecreatedPojo(existingOid, service);
+                            ? adapterFor(service)
+                            : mapRecreatedPojo(existingOid, service);
             if (serviceAdapter.getOid().isTransient()) {
                 remapAsPersistent(serviceAdapter, null);
             }
@@ -364,10 +357,16 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         try {
             getOidAdapterMap().close();
+        } catch(final Throwable ex) {
+            // ignore
+            LOG.error("close: oidAdapterMap#close() failed; continuing to avoid memory leakage");
+        }
+
+        try {
             getPojoAdapterMap().close();
         } catch(final Throwable ex) {
             // ignore
-            LOG.error("close: adapterManager#close() failed; continuing to avoid memory leakage");
+            LOG.error("close: pojoAdapterMap#close() failed; continuing to avoid memory leakage");
         }
 
         setState(State.CLOSED);
@@ -398,7 +397,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
     }
 
-    //region > QuerySubmitter impl
+    //region > QuerySubmitter impl, findInstancesInTransaction
 
     @Override
     public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
@@ -412,6 +411,76 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
         return list.size() > 0 ? list.get(0) : null;
     }
+
+    /**
+     * Finds and returns instances that match the specified query.
+     *
+     * <p>
+     * The {@link QueryCardinality} determines whether all instances or just the
+     * first matching instance is returned.
+     *
+     * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
+     *             if the criteria is not support by this persistor
+     */
+    private <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("findInstances using (applib) Query: " + query);
+        }
+
+        // TODO: unify PersistenceQuery and PersistenceQueryProcessor
+        final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("maps to (core runtime) PersistenceQuery: " + persistenceQuery);
+        }
+
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
+
+        final List<ObjectAdapter> instances = transactionManager.executeWithinTransaction(
+                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
+                    @Override
+                    public List<ObjectAdapter> execute() {
+                        return processPersistenceQuery(processor, persistenceQuery);
+                    }
+                });
+        final ObjectSpecification specification = persistenceQuery.getSpecification();
+        final FreeStandingList results = new FreeStandingList(specification, instances);
+        return adapterFor(results);
+    }
+
+    /**
+     * Converts the {@link Query applib representation of a query} into the
+     * {@link PersistenceQuery NOF-internal representation}.
+     */
+    private final PersistenceQuery createPersistenceQueryFor(
+            final Query<?> query,
+            final QueryCardinality cardinality) {
+
+        final PersistenceQuery persistenceQuery =
+                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
+        if (persistenceQuery == null) {
+            throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
+        }
+
+        return persistenceQuery;
+    }
+
+    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
+        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
+        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
+                persistenceQueryProcessorByClass.get(persistenceQueryClass);
+        if (processor == null) {
+            throw new UnsupportedFindException(MessageFormat.format(
+                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
+        }
+        return processor;
+    }
+    @SuppressWarnings("unchecked")
+    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(
+            final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
+            final PersistenceQuery persistenceQuery) {
+        return persistenceQueryProcessor.process((Q) persistenceQuery);
+    }
+
 
     //endregion
 
@@ -547,79 +616,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //endregion
 
-    //region > findInstancesInTransaction
-
-    /**
-     * Finds and returns instances that match the specified query.
-     *
-     * <p>
-     * The {@link QueryCardinality} determines whether all instances or just the
-     * first matching instance is returned.
-     *
-     * @throws org.apache.isis.core.runtime.persistence.UnsupportedFindException
-     *             if the criteria is not support by this persistor
-     */
-    public <T> ObjectAdapter findInstancesInTransaction(final Query<T> query, final QueryCardinality cardinality) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("findInstances using (applib) Query: " + query);
-        }
-
-        // TODO: unify PersistenceQuery and PersistenceQueryProcessor
-        final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("maps to (core runtime) PersistenceQuery: " + persistenceQuery);
-        }
-
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor = lookupProcessorFor(persistenceQuery);
-
-        final List<ObjectAdapter> instances = transactionManager.executeWithinTransaction(
-                new TransactionalClosureWithReturn<List<ObjectAdapter>>() {
-                    @Override
-                    public List<ObjectAdapter> execute() {
-                        return processPersistenceQuery(processor, persistenceQuery);
-                    }
-                });
-        final ObjectSpecification specification = persistenceQuery.getSpecification();
-        final FreeStandingList results = new FreeStandingList(specification, instances);
-        return getAdapterManager().adapterFor(results);
-    }
-
-    /**
-     * Converts the {@link Query applib representation of a query} into the
-     * {@link PersistenceQuery NOF-internal representation}.
-     */
-    private final PersistenceQuery createPersistenceQueryFor(
-            final Query<?> query,
-            final QueryCardinality cardinality) {
-
-        final PersistenceQuery persistenceQuery =
-                persistenceQueryFactory.createPersistenceQueryFor(query, cardinality);
-        if (persistenceQuery == null) {
-            throw new IllegalArgumentException("Unknown Query type: " + query.getDescription());
-        }
-
-        return persistenceQuery;
-    }
-
-    private PersistenceQueryProcessor<? extends PersistenceQuery> lookupProcessorFor(final PersistenceQuery persistenceQuery) {
-        final Class<? extends PersistenceQuery> persistenceQueryClass = persistenceQuery.getClass();
-        final PersistenceQueryProcessor<? extends PersistenceQuery> processor =
-                persistenceQueryProcessorByClass.get(persistenceQueryClass);
-        if (processor == null) {
-            throw new UnsupportedFindException(MessageFormat.format(
-                    "Unsupported PersistenceQuery class: {0}", persistenceQueryClass.getName()));
-        }
-        return processor;
-    }
-    @SuppressWarnings("unchecked")
-    private <Q extends PersistenceQuery> List<ObjectAdapter> processPersistenceQuery(
-            final PersistenceQueryProcessor<Q> persistenceQueryProcessor,
-            final PersistenceQuery persistenceQuery) {
-        return persistenceQueryProcessor.process((Q) persistenceQuery);
-    }
-
-    //endregion
-
     //region > getServices, getService
 
     // REVIEW why does this get called multiple times when starting up
@@ -636,7 +632,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         final ObjectSpecification serviceSpecification =
                 specificationLoader.loadSpecification(servicePojo.getClass());
         final RootOid oid = getOidForService(serviceSpecification);
-        final ObjectAdapter serviceAdapter = getAdapterManager().mapRecreatedPojo(oid, servicePojo);
+        final ObjectAdapter serviceAdapter = mapRecreatedPojo(oid, servicePojo);
 
         return serviceAdapter;
     }
@@ -757,11 +753,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         
         // REVIEW: 
         // this method does not account for the oid possibly being a view model
-        // alternatively, can call getAdapterManager().adapterFor(oid); this code
+        // alternatively, can call #adapterFor(oid); this code
         // delegates to the PojoRecreator which *does* take view models into account
         //
         // it's possible, therefore, that existing callers to this method (the Scimpi viewer)
-        // could be refactored to use getAdapterManager().adapterFor(...)
+        // could be refactored to use #adapterFor(...)
         ensureThatArg(oid, is(notNullValue()));
 
         final ObjectAdapter adapter = getAdapterFor(oid);
@@ -961,6 +957,16 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         addCreateObjectCommand(adapter);
     }
 
+    /**
+     * {@link #newCreateObjectCommand(ObjectAdapter) Create}s a {@link CreateObjectCommand}, and adds to the
+     * {@link IsisTransactionManager}.
+     */
+    private void addCreateObjectCommand(final ObjectAdapter object) {
+        final CreateObjectCommand createObjectCommand = newCreateObjectCommand(object);
+        transactionManager.addCommand(createObjectCommand);
+    }
+
+
 
     private static boolean alreadyPersistedOrNotPersistable(final ObjectAdapter adapter) {
         return adapter.representsPersistent() || objectSpecNotPersistable(adapter);
@@ -1086,26 +1092,28 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
     //endregion
 
-    //region > remappedFrom, addCreateObjectCommand
+    //region > getAggregateRoot, remappedFrom
 
     private Map<Oid, Oid> persistentByTransient = Maps.newHashMap();
+
+    public ObjectAdapter getAggregateRoot(final ParentedCollectionOid collectionOid) {
+        final Oid rootOid = collectionOid.getRootOid();
+        ObjectAdapter rootadapter = getAdapterFor(rootOid);
+        if(rootadapter == null) {
+            final Oid parentOidNowPersisted = remappedFrom(rootOid);
+            rootadapter = getAdapterFor(parentOidNowPersisted);
+        }
+        return rootadapter;
+    }
 
     /**
      * To support ISIS-234; keep track, for the duration of the transaction only,
      * of the old transient {@link Oid}s and their corresponding persistent {@link Oid}s.
      */
-    public Oid remappedFrom(final Oid transientOid) {
+    private Oid remappedFrom(final Oid transientOid) {
         return persistentByTransient.get(transientOid);
     }
 
-    /**
-     * {@link #newCreateObjectCommand(ObjectAdapter) Create}s a {@link CreateObjectCommand}, and adds to the
-     * {@link IsisTransactionManager}.
-     */
-    public void addCreateObjectCommand(final ObjectAdapter object) {
-        final CreateObjectCommand createObjectCommand = newCreateObjectCommand(object);
-        transactionManager.addCommand(createObjectCommand);
-    }
 
     //endregion
 
@@ -1220,21 +1228,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //endregion
 
     //region > sub components
-
-    /**
-     * The configured {@link AdapterManager}.
-     *
-     * Access to looking up (and possibly lazily loading) adapters.
-     *
-     * <p>
-     * However, manipulating of adapters is not part of this interface.
-     *
-     * <p>
-     * Injected in constructor.
-     */
-    public final AdapterManagerDefault getAdapterManager() {
-        return adapterManager;
-    }
 
 
     /**
@@ -2147,8 +2140,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
         return list;
     }
-
-
 
     //endregion
 

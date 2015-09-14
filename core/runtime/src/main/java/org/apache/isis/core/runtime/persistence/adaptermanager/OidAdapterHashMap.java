@@ -27,18 +27,16 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * A map of the objects' identities and the adapters' of the objects.
  */
-public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent, Resettable {
+public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(OidAdapterHashMap.class);
     public static final int DEFAULT_OID_ADAPTER_MAP_SIZE = 100;
@@ -61,24 +59,6 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
         adapterByOidMap.clear();
     }
 
-    // ///////////////////////////////////////////////////////
-    // reset
-    // ///////////////////////////////////////////////////////
-
-    /**
-     * Removes all {@link ObjectSpecification#isService() non-service} adapters.
-     */
-    @Override
-    public void reset() {
-        LOG.debug("reset");
-        for (final Iterator<Map.Entry<Oid, ObjectAdapter>> iterator = adapterByOidMap.entrySet().iterator(); iterator.hasNext();) {
-            final Map.Entry<Oid, ObjectAdapter> entry = iterator.next();
-            final ObjectAdapter adapter = entry.getValue();
-            if (!adapter.getSpecification().isService()) {
-                iterator.remove();
-            }
-        }
-    }
 
     // ///////////////////////////////////////////////////////
     // add, remove

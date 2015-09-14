@@ -82,7 +82,7 @@ public final class OidUtils {
             }
 
             try {
-                return persistenceSession.getAdapterManager().adapterFor(rootOid);
+                return persistenceSession.adapterFor(rootOid);
             } catch(final ObjectNotFoundException ex) {
                 return null;
             } catch(final PojoRecreationException ex) {

@@ -44,7 +44,6 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.ObjectPersistenceException;
@@ -67,7 +66,7 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     @Programmatic
     @Override
     public <T> T refresh(final T domainObject) {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
         getPersistenceSession().refreshRoot(adapter);
         return domainObject;
     }
@@ -192,11 +191,6 @@ public class IsisJdoSupportImpl implements IsisJdoSupport {
     }
 
     // //////////////////////////////////////
-
-
-    protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

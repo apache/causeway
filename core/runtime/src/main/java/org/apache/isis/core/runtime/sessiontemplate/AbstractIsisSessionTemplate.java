@@ -98,7 +98,7 @@ public abstract class AbstractIsisSessionTemplate {
     }
 
     protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+        return getPersistenceSession();
     }
 
 

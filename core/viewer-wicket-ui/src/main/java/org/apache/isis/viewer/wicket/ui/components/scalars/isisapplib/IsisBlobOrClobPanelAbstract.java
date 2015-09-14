@@ -201,8 +201,8 @@ public abstract class IsisBlobOrClobPanelAbstract<T extends NamedWithMimeType> e
                 }
                 
                 final T blob = getBlobOrClobFrom(fileUploads);
-                
-                final ObjectAdapter adapter = getAdapterManager().adapterFor(blob);
+
+                final ObjectAdapter adapter = getPersistenceSession().adapterFor(blob);
                 getModel().setObject(adapter);
             }
     

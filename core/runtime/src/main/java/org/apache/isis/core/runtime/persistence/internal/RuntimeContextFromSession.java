@@ -31,14 +31,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -46,10 +39,15 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
@@ -101,37 +99,37 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public ObjectAdapter getAdapterFor(final Object pojo) {
-                return getRuntimeAdapterManager().getAdapterFor(pojo);
+                return getPersistenceSession().getAdapterFor(pojo);
             }
 
             @Override
             public ObjectAdapter adapterFor(final Object pojo) {
-                return getRuntimeAdapterManager().adapterFor(pojo);
+                return getPersistenceSession().adapterFor(pojo);
             }
 
             @Override
             public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, final OneToManyAssociation collection) {
-                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, collection);
+                return getPersistenceSession().adapterFor(pojo, ownerAdapter, collection);
             }
 
             @Override
             public ObjectAdapter mapRecreatedPojo(Oid oid, Object recreatedPojo) {
-                return getRuntimeAdapterManager().mapRecreatedPojo(oid, recreatedPojo);
+                return getPersistenceSession().mapRecreatedPojo(oid, recreatedPojo);
             }
 
             @Override
             public void removeAdapter(ObjectAdapter adapter) {
-                getRuntimeAdapterManager().removeAdapter(adapter);
+                getPersistenceSession().removeAdapter(adapter);
             }
 
             @Override
             public ObjectAdapter adapterFor(RootOid oid) {
-            	return getRuntimeAdapterManager().adapterFor(oid);
+                return getPersistenceSession().adapterFor(oid);
             }
 
             @Override
             public ObjectAdapter adapterFor(RootOid oid, ConcurrencyChecking concurrencyChecking) {
-                return getRuntimeAdapterManager().adapterFor(oid, concurrencyChecking);
+                return getPersistenceSession().adapterFor(oid, concurrencyChecking);
             }
 
             @Override
@@ -205,17 +203,12 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public <T> List<ObjectAdapter> allMatchingQuery(final Query<T> query) {
-                final ObjectAdapter instances = getPersistenceSession().findInstancesInTransaction(query,
-                        QueryCardinality.MULTIPLE);
-                return CollectionFacetUtils.convertToAdapterList(instances);
+                return getPersistenceSession().allMatchingQuery(query);
             }
 
             @Override
             public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
-                final ObjectAdapter instances = getPersistenceSession().findInstancesInTransaction(query,
-                        QueryCardinality.SINGLE);
-                final List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
-                return list.size() > 0 ? list.get(0) : null;
+                return getPersistenceSession().firstMatchingQuery(query);
             }
 
         };
@@ -343,10 +336,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
-    }
-
-    private static AdapterManager getRuntimeAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
     }
 
     private static IsisTransactionManager getTransactionManager() {

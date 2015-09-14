@@ -37,6 +37,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
@@ -391,5 +392,10 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     protected DeploymentType getDeploymentType() {
         return IsisContext.getDeploymentType();
     }
+
+    @Override
+    public AdapterManager getAdapterManager() {
+    return getPersistenceSession();
+}
 
 }

@@ -154,7 +154,7 @@ public abstract class ScalarPanelTextFieldDatePickerAbstract<T extends Serializa
     }
 
     private ObjectAdapter adapterFor(final Object pojo) {
-        return getAdapterManager().adapterFor(pojo);
+        return getPersistenceSession().adapterFor(pojo);
     }
     
     

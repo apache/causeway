@@ -594,7 +594,7 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
         ensureSessionInProgress();
         ensureObjectIsNotPersistent(pojo);
         final ObjectAdapter adapter = adapterFor(pojo);
-        getPersistenceSession().getAdapterManager().remapAsPersistent(adapter, persistentOid);
+        getPersistenceSession().remapAsPersistent(adapter, persistentOid);
         return adapter;
     }
 
@@ -837,9 +837,9 @@ public class IsisSystemForTest implements org.junit.rules.TestRule, DomainServic
     public PersistenceSession getPersistor() {
     	return getPersistenceSession();
     }
-    
+
     public AdapterManager getAdapterManager() {
-        return getPersistor().getAdapterManager();
+        return getPersistor();
     }
 
     protected PersistenceSession getPersistenceSession() {

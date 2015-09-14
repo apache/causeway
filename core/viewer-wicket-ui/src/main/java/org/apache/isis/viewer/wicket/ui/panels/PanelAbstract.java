@@ -24,10 +24,10 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
@@ -148,11 +148,6 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-
-    public AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
-
 
     // /////////////////////////////////////////////////
     // Dependency Injection

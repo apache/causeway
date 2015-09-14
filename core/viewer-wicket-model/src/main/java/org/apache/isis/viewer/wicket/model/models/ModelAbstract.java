@@ -123,7 +123,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
     }
 
     protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+        return getPersistenceSession();
     }
 
 }

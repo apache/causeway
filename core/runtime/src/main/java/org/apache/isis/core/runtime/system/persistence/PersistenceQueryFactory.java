@@ -41,7 +41,9 @@ public class PersistenceQueryFactory {
     private final SpecificationLoader specificationLoader;
     private final AdapterManager adapterManager;
 
-    PersistenceQueryFactory(final SpecificationLoader specificationLoader, final AdapterManager adapterManager) {
+    PersistenceQueryFactory(
+            final AdapterManager adapterManager,
+            final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
         this.adapterManager = adapterManager;
     }

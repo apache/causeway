@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 public class StandaloneData extends Data {
 
@@ -118,12 +119,16 @@ public class StandaloneData extends Data {
 
     public ObjectAdapter getAdapter() {
         if (objectAsSerializable != null) {
-            return IsisContext.getPersistenceSession().getAdapterManager().adapterFor(objectAsSerializable);
+            return getPersistenceSession().adapterFor(objectAsSerializable);
         } else {
             final ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(getClassName());
             final EncodableFacet encodeableFacet = spec.getFacet(EncodableFacet.class);
             return encodeableFacet.fromEncodedString(objectAsEncodedString);
         }
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
 }

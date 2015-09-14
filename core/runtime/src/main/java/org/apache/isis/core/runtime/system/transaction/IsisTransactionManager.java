@@ -21,8 +21,10 @@ package org.apache.isis.core.runtime.system.transaction;
 
 import java.util.List;
 import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.applib.services.command.Command;
@@ -34,7 +36,6 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -605,10 +606,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     protected AuthenticationSession getAuthenticationSession() {
         return IsisContext.getAuthenticationSession();
-    }
-    
-    protected AdapterManager getAdapterManager() {
-        return IsisContext.getPersistenceSession().getAdapterManager();
     }
 
     protected OidMarshaller getOidMarshaller() {

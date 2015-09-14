@@ -448,7 +448,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
             final ObjectAdapter objectAdapter;
             if(redirectIfAny != null) {
-                objectAdapter = getPersistenceSession().getAdapterManager().adapterFor(redirectIfAny);
+                objectAdapter = getPersistenceSession().adapterFor(redirectIfAny);
             } else {
                 // we obtain the adapter from the entity model because (if a view model) then the entity model may contain
                 // a different adapter (the cloned view model) to the one with which we started with.

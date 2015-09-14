@@ -23,7 +23,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -78,7 +77,7 @@ public class XmlSnapshotBuilder {
     }
 
     public XmlSnapshot build() {
-        final ObjectAdapter adapter = getAdapterManager().adapterFor(domainObject);
+        final ObjectAdapter adapter = getPersistenceSession().adapterFor(domainObject);
         final XmlSnapshot snapshot = (schema != null) ? new XmlSnapshot(adapter, schema, oidMarshaller) : new XmlSnapshot(adapter, oidMarshaller);
         for (final XmlSnapshotBuilder.PathAndAnnotation paa : paths) {
             if (paa.annotation != null) {
@@ -93,10 +92,6 @@ public class XmlSnapshotBuilder {
     // ///////////////////////////////////////////////////////
     // Dependencies (from context)
     // ///////////////////////////////////////////////////////
-
-    private static AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

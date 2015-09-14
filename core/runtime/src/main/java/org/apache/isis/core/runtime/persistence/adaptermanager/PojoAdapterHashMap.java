@@ -27,13 +27,12 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
+public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent {
 
     private static class IdentityHashKey {
         private final Object pojo;
@@ -91,21 +90,6 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         adapterByPojoMap.clear();
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // reset
-    // ///////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public void reset() {
-        LOG.debug("reset");
-        for (final Iterator<Map.Entry<Object, ObjectAdapter>> iterator = adapterByPojoMap.entrySet().iterator(); iterator.hasNext();) {
-            final Map.Entry<Object, ObjectAdapter> entry = iterator.next();
-            final ObjectAdapter adapter = entry.getValue();
-            if (!adapter.getSpecification().isService()) {
-                iterator.remove();
-            }
-        }
-    }
 
     // ///////////////////////////////////////////////////////////////////////////
     // add, remove

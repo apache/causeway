@@ -109,7 +109,7 @@ public class ObjectAdapterMemento implements Serializable {
             ObjectAdapter recreateAdapter(final ObjectAdapterMemento oam, ConcurrencyChecking concurrencyChecking) {
                 RootOid oid = getOidMarshaller().unmarshal(oam.persistentOidStr, RootOid.class);
                 try {
-                    final ObjectAdapter adapter = getAdapterManager().adapterFor(oid, concurrencyChecking);
+                    final ObjectAdapter adapter = getPersistenceSession().adapterFor(oid, concurrencyChecking);
                     return adapter;
                     
                 } finally {
@@ -446,10 +446,6 @@ public class ObjectAdapterMemento implements Serializable {
     //////////////////////////////////////////////////
     // Dependencies (from context)
     //////////////////////////////////////////////////
-    
-    private static AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
-    }
 
     private static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();

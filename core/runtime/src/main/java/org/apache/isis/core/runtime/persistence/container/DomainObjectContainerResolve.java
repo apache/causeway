@@ -107,7 +107,7 @@ public class DomainObjectContainerResolve {
     }
 
     protected AdapterManager getAdapterManager() {
-        return getPersistenceSession().getAdapterManager();
+        return getPersistenceSession();
     }
 
     protected SpecificationLoaderSpi getSpecificationLoader() {
