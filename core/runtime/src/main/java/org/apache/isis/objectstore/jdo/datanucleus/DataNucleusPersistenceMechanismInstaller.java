@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.InstallerAbstract;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
@@ -69,7 +69,7 @@ public class DataNucleusPersistenceMechanismInstaller extends InstallerAbstract 
     public PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final IsisConfiguration configuration,
+            final IsisConfigurationDefault configuration,
             final RuntimeContextFromSession runtimeContext) {
 
         return new PersistenceSessionFactory(deploymentType, servicesInjector, configuration, runtimeContext);

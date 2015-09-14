@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.runtimecontext;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
-import com.google.common.collect.Lists;
-
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpiDelegator;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -34,13 +34,42 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware, ServicesInjectorAware {
+public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware {
 
     private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
-    protected final ServicesInjectorSpiDelegator servicesInjectorDelegator = new ServicesInjectorSpiDelegator();
+    private final DeploymentCategory deploymentCategory;
+    private final IsisConfigurationDefault configuration;
+    private final ServicesInjector servicesInjector;
 
-    private Properties properties;
+    public RuntimeContextAbstract(
+            final DeploymentCategory deploymentCategory,
+            final IsisConfigurationDefault configuration,
+            final ServicesInjector servicesInjector) {
+        this.deploymentCategory = deploymentCategory;
+        this.configuration = configuration;
+        this.servicesInjector = servicesInjector;
+    }
 
+    @Override
+    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
+        return new DeploymentCategoryProviderAbstract() {
+            @Override
+            public DeploymentCategory getDeploymentCategory() {
+                return deploymentCategory;
+            }
+        };
+    }
+
+
+    @Override
+    public ConfigurationService getConfigurationService() {
+        return configuration;
+    }
+
+    @Override
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
+    }
 
     @Override
     public void init() {
@@ -156,29 +185,5 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
             }
         });
     }
-
-    protected void setProperties(final Properties properties) {
-        this.properties = properties;
-    }
-
-    public String getProperty(final String name) {
-        return properties.getProperty(name);
-    }
-
-    public List<String> getPropertyNames() {
-        final List<String> list = Lists.newArrayList();
-        for (final Object key : properties.keySet()) {
-            list.add((String) key);
-        }
-        return list;
-    }
-
-
-    //region > injected services
-    @Override
-    public void setServicesInjector(ServicesInjector servicesInjector) {
-        this.servicesInjectorDelegator.setServicesInjectorSpi((org.apache.isis.core.metamodel.services.ServicesInjectorSpi) servicesInjector);
-    }
-    //endregion
 
 }

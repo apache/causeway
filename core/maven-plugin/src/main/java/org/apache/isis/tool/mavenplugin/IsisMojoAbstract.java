@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
@@ -125,8 +126,11 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     }
 
     private static IsisMetaModel bootstrapIsis(List<Object> serviceList) {
+        final RuntimeContextNoRuntime runtimeContext =
+                new RuntimeContextNoRuntime(
+                new ServicesInjectorDefault(serviceList));
         IsisMetaModel isisMetaModel = new IsisMetaModel(
-                                            new RuntimeContextNoRuntime(),
+                runtimeContext,
                                             new ProgrammingModelFacetsJava5(),
                                             serviceList);
         isisMetaModel.init();

@@ -20,7 +20,6 @@
 package org.apache.isis.core.runtime.persistence.internal;
 
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
@@ -30,16 +29,12 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
@@ -69,18 +64,17 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private final AdapterManager adapterManager;
     private final PersistenceSessionService persistenceSessionService;
     private final MessageBrokerService messageBrokerService;
-    private final ConfigurationService configurationService;
     private final LocalizationProviderAbstract localizationProvider;
 
     // //////////////////////////////////////////////////////////////////
     // Constructor
     // //////////////////////////////////////////////////////////////////
 
-
-    public RuntimeContextFromSession(final IsisConfiguration configuration) {
-
-        final Properties properties = applicationPropertiesFrom(configuration);
-        setProperties(properties);
+    public RuntimeContextFromSession(
+            final DeploymentCategory deploymentCategory,
+            final IsisConfigurationDefault configuration,
+            final ServicesInjector servicesInjector) {
+        super(deploymentCategory, configuration, servicesInjector);
 
         this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
 
@@ -93,7 +87,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
             @Override
             public ObjectAdapter getAdapterFor(Oid oid) {
-                return null;
+                return getPersistenceSession().getAdapterFor(oid);
             }
 
             @Override
@@ -201,19 +195,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
         };
-        this.configurationService = new ConfigurationServiceAbstract() {
-
-            @Override
-            public String getProperty(final String name) {
-                return RuntimeContextFromSession.this.getProperty(name);
-            }
-
-            @Override
-            public List<String> getPropertyNames() {
-                return RuntimeContextFromSession.this.getPropertyNames();
-            }
-
-        };
         this.messageBrokerService = new MessageBrokerServiceAbstract() {
 
             @Override
@@ -242,18 +223,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
         };
     }
 
-    public static Properties applicationPropertiesFrom(final IsisConfiguration configuration) {
-        final Properties properties = new Properties();
-        final IsisConfiguration applicationConfiguration = configuration.getProperties("application");
-        for (final String key : applicationConfiguration) {
-            final String value = applicationConfiguration.getString(key);
-            final String newKey = key.substring("application.".length());
-            properties.setProperty(newKey, value);
-        }
-        return properties;
-    }
-
-
     // //////////////////////////////////////////////////////////////////
     // Components
     // //////////////////////////////////////////////////////////////////
@@ -269,11 +238,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     }
 
     @Override
-    public ConfigurationService getConfigurationService() {
-        return configurationService;
-    }
-
-    @Override
     public LocalizationProviderAbstract getLocalizationProvider() {
         return localizationProvider;
     }
@@ -281,11 +245,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     @Override
     public PersistenceSessionService getPersistenceSessionService() {
         return persistenceSessionService;
-    }
-
-    @Override
-    public ServicesInjector getServicesInjector() {
-        return servicesInjectorDelegator;
     }
 
     @Override
@@ -297,15 +256,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     // Dependencies (from context)
     // ///////////////////////////////////////////
 
-    @Override
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return new DeploymentCategoryProviderAbstract() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return IsisContext.getDeploymentType().getDeploymentCategory();
-            }
-        };
-    }
 
     @Override
     public TransactionStateProvider getTransactionStateProvider() {

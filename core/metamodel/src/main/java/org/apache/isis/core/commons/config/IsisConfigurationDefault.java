@@ -23,10 +23,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
@@ -35,12 +37,17 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 
-public class IsisConfigurationDefault implements IsisConfiguration {
+public class IsisConfigurationDefault implements IsisConfiguration, ConfigurationService {
     
     private static final Logger LOG = LoggerFactory.getLogger(IsisConfigurationDefault.class);
-    private final Properties properties = new Properties();
     private final ResourceStreamSource resourceStreamSource;
+    private final Properties properties = new Properties();
+    /**
+     * derived lazily from {@link #properties}.
+     */
+    private Properties applicationProperties;
 
     // ////////////////////////////////////////////////
     // Constructor
@@ -228,7 +235,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      */
     @Override
     public boolean getBoolean(final String name, final boolean defaultValue) {
-        String value = getProperty(name);
+        String value = getPropertyElseNull(name);
         if (value == null) {
             return defaultValue;
         }
@@ -266,7 +273,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      */
     @Override
     public Color getColor(final String name, final Color defaultValue) {
-        final String color = getProperty(name);
+        final String color = getPropertyElseNull(name);
 
         if (color == null) {
             return defaultValue;
@@ -314,7 +321,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      */
     @Override
     public Font getFont(final String name, final Font defaultValue) {
-        final String font = getProperty(name);
+        final String font = getPropertyElseNull(name);
 
         if (font == null) {
             return defaultValue;
@@ -346,7 +353,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      */
     @Override
     public int getInteger(final String name, final int defaultValue) {
-        final String value = getProperty(name);
+        final String value = getPropertyElseNull(name);
 
         if (value == null) {
             return defaultValue;
@@ -399,7 +406,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
         return isisConfigurationDefault;
     }
 
-    private String getProperty(final String name) {
+    private String getPropertyElseNull(final String name) {
         return getProperty(name, null);
     }
 
@@ -420,7 +427,7 @@ public class IsisConfigurationDefault implements IsisConfiguration {
      */
     @Override
     public String getString(final String name) {
-        return getProperty(name);
+        return getPropertyElseNull(name);
     }
 
     @Override
@@ -479,10 +486,48 @@ public class IsisConfigurationDefault implements IsisConfiguration {
     public Map<String,String> asMap() {
         final Map<String, String> map = Maps.newHashMap();
         for(String propertyName: this) {
-            final String propertyValue = this.getProperty(propertyName);
+            final String propertyValue = this.getPropertyElseNull(propertyName);
             map.put(propertyName, propertyValue);
         }
         return map;
     }
+
+
+    //region > ConfigurationService impl
+    @Override
+    public String getProperty(final String name) {
+        initAppPropertiesIfRequired();
+        return applicationProperties.getProperty(name);
+    }
+
+    private void initAppPropertiesIfRequired() {
+        if(applicationProperties == null) {
+            applicationProperties = deriveApplicationProperties();
+        }
+    }
+
+    private Properties deriveApplicationProperties() {
+        final Properties applicationProperties = new Properties();
+        final IsisConfiguration applicationConfiguration = getProperties("application");
+        for (final String key : applicationConfiguration) {
+            final String value = applicationConfiguration.getString(key);
+            final String newKey = key.substring("application.".length());
+            applicationProperties.setProperty(newKey, value);
+        }
+        return applicationProperties;
+    }
+
+
+    @Override
+    public List<String> getPropertyNames() {
+        initAppPropertiesIfRequired();
+        final List<String> list = Lists.newArrayList();
+        for (final Object key : applicationProperties.keySet()) {
+            list.add((String) key);
+        }
+        return list;
+    }
+    //endregion
+
 
 }

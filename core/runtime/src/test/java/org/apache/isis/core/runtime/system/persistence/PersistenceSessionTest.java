@@ -32,10 +32,11 @@ import org.junit.Test;
 import org.apache.isis.applib.services.audit.AuditingService3;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.MessageBroker;
-import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
@@ -94,14 +95,11 @@ public class PersistenceSessionTest {
     private RuntimeContext mockRuntimeContext;
 
     @Mock
-    private IsisConfiguration mockConfiguration;
+    private IsisConfigurationDefault mockConfiguration;
     
     @Mock
     private MessageBroker mockMessageBroker;
     
-    @Mock
-    private OidGenerator mockOidGenerator;
-
 
     private IsisMetaModel isisMetaModel;
 
@@ -138,7 +136,11 @@ public class PersistenceSessionTest {
             }
         });
 
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(mockConfiguration);
+        final RuntimeContextFromSession runtimeContext =
+                new RuntimeContextFromSession(
+                        DeploymentCategory.PRODUCTION,
+                        mockConfiguration,
+                        servicesInjector);
         final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);

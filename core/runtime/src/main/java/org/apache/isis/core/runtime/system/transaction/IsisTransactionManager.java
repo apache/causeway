@@ -39,7 +39,6 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -67,8 +66,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     private IsisTransaction transaction;
 
-    private final TransactionalResource transactionalResource;
-
     private final ServicesInjector servicesInjector;
 
 
@@ -80,7 +77,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
             final PersistenceSession persistenceSession,
             final ServicesInjector servicesInjector) {
         this.persistenceSession = persistenceSession;
-        this.transactionalResource = persistenceSession;
         this.servicesInjector = servicesInjector;
     }
 
@@ -234,23 +230,23 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     protected final IsisTransaction createTransaction() {
         MessageBroker messageBroker = createMessageBroker();
-        return this.transaction = createTransaction(messageBroker, transactionalResource);
+        return this.transaction = createTransaction(messageBroker, persistenceSession);
     }
 
 
     /**
      * The provided {@link org.apache.isis.core.commons.authentication.MessageBroker} is
      * obtained from the {@link #createMessageBroker()} hook method.
-     * @param transactionalResource
+     * @param persistenceSession
      *
      * @see #createMessageBroker()
      */
     private IsisTransaction createTransaction(
             final MessageBroker messageBroker,
-            final TransactionalResource transactionalResource) {
+            final PersistenceSession persistenceSession) {
         ensureThatArg(messageBroker, is(not(nullValue())));
 
-        return new IsisTransaction(this, messageBroker, transactionalResource, servicesInjector);
+        return new IsisTransaction(this, messageBroker, persistenceSession, servicesInjector);
     }
     
 
@@ -272,7 +268,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             IsisTransaction isisTransaction = createTransaction();
             transactionLevel = 0;
 
-            transactionalResource.startTransaction();
+            persistenceSession.startTransaction();
 
             startTransactionOnCommandIfConfigured(isisTransaction.getTransactionId());
         }
@@ -476,7 +472,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
             
             if(abortCause == null) {
                 try {
-                    transactionalResource.endTransaction();
+                    persistenceSession.endTransaction();
                 } catch(RuntimeException ex) {
                     // just in case any new exception was raised...
                     abortCause = ex;
@@ -527,7 +523,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() != null) {
             getTransaction().markAsAborted();
             transactionLevel = 0;
-            transactionalResource.abortTransaction();
+            persistenceSession.abortTransaction();
         }
     }
 
@@ -544,7 +540,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     /**
      * Overridable hook, used in
-     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource)}
+     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, PersistenceSession)}
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */
@@ -556,10 +552,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // helpers
     // ////////////////////////////////////////////////////////////////
 
+    // unused?
     protected void ensureTransactionInProgress() {
         ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(true), "No transaction in progress");
     }
 
+    // unused?
     protected void ensureTransactionNotInProgress() {
         ensureThatState(getTransaction() != null && !getTransaction().getState().isComplete(), is(false), "Transaction in progress");
     }

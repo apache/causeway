@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -71,7 +72,7 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        runtimeContext = new RuntimeContextNoRuntime();
+        runtimeContext = new RuntimeContextNoRuntime(new ServicesInjectorDefault(Collections.emptyList()));
     }
 
     @Override

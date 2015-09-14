@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -41,7 +42,7 @@ public interface IsisComponentProvider {
 
     DeploymentType getDeploymentType();
 
-    IsisConfiguration getConfiguration();
+    IsisConfigurationDefault getConfiguration();
 
     AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType);
     AuthorizationManager provideAuthorizationManager(final DeploymentType deploymentType);

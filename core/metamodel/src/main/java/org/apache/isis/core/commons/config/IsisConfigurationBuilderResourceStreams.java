@@ -135,8 +135,8 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      * {@link NotFoundPolicy} determines whether an exception is thrown or not.
      * 
      * <p>
-     * Must be called before {@link #getConfiguration()}; the resource is
-     * actually read on {@link #getConfiguration()}.
+     * Must be called before {@link IsisConfigurationBuilder#getConfiguration()}; the resource is
+     * actually read on {@link IsisConfigurationBuilder#getConfiguration()}.
      */
     @Override
     public synchronized void addConfigurationResource(final String configurationResource, final NotFoundPolicy notFoundPolicy) {
@@ -173,7 +173,7 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
      * Returns the current {@link IsisConfiguration configuration}.
      */
     @Override
-    public synchronized IsisConfiguration getConfiguration() {
+    public synchronized IsisConfigurationDefault getConfiguration() {
         return configuration;
      }
 

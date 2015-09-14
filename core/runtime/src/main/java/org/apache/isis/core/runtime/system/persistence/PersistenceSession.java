@@ -47,6 +47,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.ensure.Assert;
@@ -105,7 +106,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.OidAdapterHashMap
 import org.apache.isis.core.runtime.persistence.adaptermanager.PojoAdapterHashMap;
 import org.apache.isis.core.runtime.persistence.adaptermanager.RootAndCollectionAdapters;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
-import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
@@ -157,7 +157,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final PersistenceSessionFactory persistenceSessionFactory;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
-    private final IsisConfiguration configuration;
+    private final IsisConfigurationDefault configuration;
     private final SpecificationLoaderSpi specificationLoader;
     private final AuthenticationSession authenticationSession;
 
@@ -189,7 +189,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      */
     public PersistenceSession(
             final PersistenceSessionFactory persistenceSessionFactory,
-            final IsisConfiguration configuration,
+            final IsisConfigurationDefault configuration,
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationSession authenticationSession) {
 
@@ -215,8 +215,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         setState(State.NOT_INITIALIZED);
 
         // to implement DomainObjectServices
-        final Properties properties = RuntimeContextFromSession.applicationPropertiesFrom(configuration);
-        setProperties(properties);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("creating " + this);
@@ -479,6 +477,13 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         return persistenceQueryProcessor.process((Q) persistenceQuery);
     }
 
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public OidMarshaller getOidMarshaller() {
+        return oidMarshaller;
+    }
 
     //endregion
 
@@ -2238,29 +2243,23 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         throw new RecoverableException(message);
     }
 
-    private Properties properties;
 
-    private void setProperties(final Properties properties) {
-        this.properties = properties;
-    }
+
+    //endregion
+
+    //region > ConfigurationService delegate
 
     @Override
     public String getProperty(final String name) {
-        return properties.getProperty(name);
+        return configuration.getProperty(name);
     }
 
     @Override
     public List<String> getPropertyNames() {
-        final List<String> list = Lists.newArrayList();
-        for (final Object key : properties.keySet()) {
-            list.add((String) key);
-        }
-        return list;
+        return configuration.getPropertyNames();
     }
 
     //endregion
-
-
 }
 
 

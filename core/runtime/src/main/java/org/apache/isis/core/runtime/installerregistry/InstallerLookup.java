@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -302,7 +303,7 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
      * The {@link IsisConfiguration} could subsequently be appended to if
      * further {@link Installer}s are loaded.
      */
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         return isisConfigurationBuilder.getConfiguration();
     }
 

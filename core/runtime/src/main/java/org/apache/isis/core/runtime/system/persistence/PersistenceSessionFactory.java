@@ -32,6 +32,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -58,12 +59,6 @@ import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrima
 import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-
 public class PersistenceSessionFactory implements MetaModelRefiner,
         SpecificationLoaderSpiAware, ApplicationScopedComponent, FixturesInstalledFlag {
 
@@ -72,7 +67,7 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     //region > constructor
 
     private final DeploymentType deploymentType;
-    private final IsisConfiguration configuration;
+    private final IsisConfigurationDefault configuration;
 
     private final ServicesInjectorSpi servicesInjector;
     private final RuntimeContextFromSession runtimeContext;
@@ -82,7 +77,7 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     public PersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final IsisConfiguration isisConfiguration,
+            final IsisConfigurationDefault isisConfiguration,
             final RuntimeContextFromSession runtimeContext) {
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
@@ -94,7 +89,7 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
         return deploymentType;
     }
 
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         return configuration;
     }
 

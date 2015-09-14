@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.runtime.systemusinginstallers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +39,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -66,7 +66,7 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     /**
      * populated by subclass, in its constructor.
      */
-    protected IsisConfiguration configuration;
+    protected IsisConfigurationDefault configuration;
     /**
      * populated by subclass, in its constructor.
      */
@@ -211,7 +211,7 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     }
 
     @Override
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         return configuration;
     }
 

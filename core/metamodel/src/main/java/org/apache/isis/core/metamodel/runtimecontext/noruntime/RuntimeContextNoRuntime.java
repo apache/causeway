@@ -27,23 +27,19 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
-import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
-import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
+import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -54,51 +50,22 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAbstr
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
-    private final DeploymentCategory deploymentCategory;
-    private final ServicesInjector servicesInjector;
     private final AuthenticationSessionProviderAbstract authenticationSessionProvider;
     private final AdapterManager adapterManager;
-    private final PersistenceSessionServiceAbstract objectPersistor;
-    private final ConfigurationServiceAbstract domainObjectServices;
+    private final PersistenceSessionServiceAbstract persistenceSessionService;
     private final LocalizationProviderAbstract localizationProvider;
     private final MessageBrokerServiceAbstract messageBrokerService;
 
-    public RuntimeContextNoRuntime() {
-        this(DeploymentCategory.PRODUCTION);
+    public RuntimeContextNoRuntime(
+            final ServicesInjector servicesInjector) {
+        this(DeploymentCategory.PRODUCTION, new IsisConfigurationDefault(null), servicesInjector);
     }
-    
-    public RuntimeContextNoRuntime(DeploymentCategory deploymentCategory) {
-        this.deploymentCategory = deploymentCategory;
-        // Unlike most of the methods in this implementation, does nothing
-        // (because this will always be called, even in a no-runtime context).
-        servicesInjector = new ServicesInjector() {
-            @Override
-            public void injectServicesInto(final Object domainObject) {
-            }
 
-            @Override
-            public void injectServicesInto(List<Object> objects) {
-            }
-
-            @Override
-            public <T> T lookupService(Class<T> serviceClass) {
-                return null;
-            }
-
-            @Override
-            public void injectInto(Object candidate) {
-            }
-
-            @Override
-            public <T> List<T> lookupServices(Class<T> serviceClass) {
-                return null;
-            }
-
-            @Override
-            public List<Object> getRegisteredServices() {
-                return null;
-            }
-        };
+    public RuntimeContextNoRuntime(
+            final DeploymentCategory deploymentCategory,
+            final IsisConfigurationDefault isisConfiguration,
+            final ServicesInjector servicesInjector) {
+        super(deploymentCategory, isisConfiguration, servicesInjector);
         authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
             @Override
             public AuthenticationSession getAuthenticationSession() {
@@ -146,7 +113,7 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
         };
-        objectPersistor = new PersistenceSessionServiceAbstract() {
+        persistenceSessionService = new PersistenceSessionServiceAbstract() {
 
             @Override
             public ObjectAdapter createTransientInstance(final ObjectSpecification spec) {
@@ -214,19 +181,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
             }
 
         };
-        domainObjectServices = new ConfigurationServiceAbstract() {
-
-
-            @Override
-            public List<String> getPropertyNames() {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-
-            @Override
-            public String getProperty(final String name) {
-                throw new UnsupportedOperationException("Not supported by this implementation of RuntimeContext");
-            }
-        };
         localizationProvider = new LocalizationProviderAbstract() {
 
             private final Localization defaultLocalization = new LocalizationDefault();
@@ -263,16 +217,6 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
 
     @Override
-    public DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return new DeploymentCategoryProviderAbstract() {
-            @Override
-            public DeploymentCategory getDeploymentCategory() {
-                return deploymentCategory;
-            }
-        };
-    }
-
-    @Override
     public TransactionStateProvider getTransactionStateProvider() {
         return new TransactionStateProviderAbstract() {
             @Override
@@ -295,22 +239,12 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public PersistenceSessionService getPersistenceSessionService() {
-        return objectPersistor;
-    }
-
-    @Override
-    public ConfigurationService getConfigurationService() {
-        return domainObjectServices;
+        return persistenceSessionService;
     }
 
     @Override
     public MessageBrokerService getMessageBrokerService() {
         return messageBrokerService;
-    }
-
-    @Override
-    public ServicesInjector getServicesInjector() {
-        return servicesInjector;
     }
 
     @Override

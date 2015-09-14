@@ -34,6 +34,7 @@ import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
@@ -152,14 +153,14 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
-        final IsisConfiguration configuration = isisComponentProvider.getConfiguration();
+        final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
         final List<Object> services = isisComponentProvider.provideServices();
 
         ServicesInjectorSpi servicesInjectorSpi = new ServicesInjectorDefault(services);
         servicesInjectorSpi.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
         servicesInjectorSpi.validateServices();
 
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(configuration);
+        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(deploymentType.getDeploymentCategory(), configuration, servicesInjectorSpi);
 
         final PersistenceSessionFactory persistenceSessionFactory =
                 isisComponentProvider.providePersistenceSessionFactory(deploymentType, servicesInjectorSpi, runtimeContext);

@@ -208,7 +208,7 @@ public class IsisComponentProviderDefault extends IsisComponentProviderAbstract 
     }
 
     @Override
-    public IsisConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         return configuration;
     }
 

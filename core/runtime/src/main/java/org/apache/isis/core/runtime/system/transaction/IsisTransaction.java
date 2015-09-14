@@ -85,16 +85,15 @@ import org.apache.isis.core.metamodel.facets.actions.publish.PublishedActionFace
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
-import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.runtime.persistence.PersistenceConstants;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
-import org.apache.isis.core.runtime.persistence.objectstore.transaction.TransactionalResource;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
@@ -234,7 +233,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
-    private final TransactionalResource objectStore;
+    private final PersistenceSession persistenceSession;
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
@@ -273,7 +272,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     public IsisTransaction(
             final IsisTransactionManager transactionManager,
             final MessageBroker messageBroker,
-            final TransactionalResource objectStore,
+            final PersistenceSession persistenceSession,
             final ServicesInjector servicesInjector) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
@@ -306,7 +305,7 @@ public class IsisTransaction implements TransactionScopedComponent {
         
         this.state = State.IN_PROGRESS;
 
-        this.objectStore = objectStore;
+        this.persistenceSession = persistenceSession;
         if (LOG.isDebugEnabled()) {
             LOG.debug("new transaction " + this);
         }
@@ -1408,19 +1407,19 @@ public class IsisTransaction implements TransactionScopedComponent {
 
 
     ////////////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
+    // Dependencies (from constructor)
     ////////////////////////////////////////////////////////////////////////
 
     protected OidMarshaller getOidMarshaller() {
-        return IsisContext.getOidMarshaller();
+        return persistenceSession.getOidMarshaller();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return IsisContext.getConfiguration();
+        return persistenceSession.getConfiguration();
     }
 
     protected PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return persistenceSession;
     }
 
 

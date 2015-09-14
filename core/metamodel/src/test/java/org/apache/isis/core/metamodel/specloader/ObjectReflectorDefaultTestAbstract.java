@@ -79,7 +79,7 @@ public abstract class ObjectReflectorDefaultTestAbstract {
             }
         });
 
-        runtimeContext = new RuntimeContextNoRuntime();
+        runtimeContext = new RuntimeContextNoRuntime(new ServicesInjectorDefault(Collections.emptyList()));
         final ObjectReflectorDefault reflector = 
                 new ObjectReflectorDefault(
                         mockConfiguration,

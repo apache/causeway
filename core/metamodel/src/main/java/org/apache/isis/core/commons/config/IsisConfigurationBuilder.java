@@ -38,7 +38,7 @@ public interface IsisConfigurationBuilder extends Injectable {
     /**
      * Returns a currently known {@link IsisConfiguration}.
      */
-    IsisConfiguration getConfiguration();
+    IsisConfigurationDefault getConfiguration();
 
     void addDefaultConfigurationResources();
     

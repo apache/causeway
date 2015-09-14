@@ -241,7 +241,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // default subcomponents
         if (runtimeContext == null) {
-            runtimeContext = new RuntimeContextNoRuntime();
+            runtimeContext = new RuntimeContextNoRuntime(servicesInjector);
         }
         injectInto(runtimeContext);
         injectInto(specificationTraverser);

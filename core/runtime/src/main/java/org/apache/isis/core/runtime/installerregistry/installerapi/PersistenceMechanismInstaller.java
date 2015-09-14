@@ -20,8 +20,8 @@
 package org.apache.isis.core.runtime.installerregistry.installerapi;
 
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -38,6 +38,7 @@ public interface PersistenceMechanismInstaller extends Installer, IsisConfigurat
     PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjector,
-            final IsisConfiguration configuration, final RuntimeContextFromSession runtimeContext);
+            final IsisConfigurationDefault configuration,
+            final RuntimeContextFromSession runtimeContext);
 
 }
