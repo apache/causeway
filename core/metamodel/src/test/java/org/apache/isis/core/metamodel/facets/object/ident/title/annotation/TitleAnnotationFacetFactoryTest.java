@@ -32,8 +32,8 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.LocalizationDefault;
-import org.apache.isis.core.metamodel.adapter.LocalizationProvider;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;

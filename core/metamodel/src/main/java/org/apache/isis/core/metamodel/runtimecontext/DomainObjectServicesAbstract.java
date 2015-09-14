@@ -14,15 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class LocalizationProviderAbstract implements LocalizationProvider {
+public abstract class DomainObjectServicesAbstract implements DomainObjectServices {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (LocalizationProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final LocalizationProviderAware cast = LocalizationProviderAware.class.cast(candidate);
-            cast.setLocalizationProvider(this);
+        if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
+            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
+            cast.setDomainObjectServices(this);
         }
     }
 

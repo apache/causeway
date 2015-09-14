@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.applib.annotation.Programmatic;
 
-public interface LocalizationProvider extends Injectable {
+public interface ObjectPersistorAware {
 
-    Localization getLocalization();
+    @Programmatic
+    public void setObjectPersistor(final ObjectPersistor objectPersistor);
 
 }

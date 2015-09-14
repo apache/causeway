@@ -14,15 +14,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class DomainObjectServicesAbstract implements DomainObjectServices {
+public abstract class QuerySubmitterAbstract implements QuerySubmitter {
 
     @Override
     public void injectInto(final Object candidate) {
-        if (DomainObjectServicesAware.class.isAssignableFrom(candidate.getClass())) {
-            final DomainObjectServicesAware cast = DomainObjectServicesAware.class.cast(candidate);
-            cast.setDomainObjectServices(this);
+        if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
+            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
+            cast.setQuerySubmitter(this);
         }
     }
 

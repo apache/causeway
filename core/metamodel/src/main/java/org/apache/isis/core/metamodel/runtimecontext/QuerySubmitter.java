@@ -14,28 +14,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
+import java.util.List;
+
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-public interface ObjectPersistor extends Injectable {
+public interface QuerySubmitter extends Injectable {
 
     /**
-     * Provided by the <tt>PersistenceSession</tt> when used by framework.
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
      * 
      * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt> and also by
-     * <tt>DomainObjectInvocationHandler#handleSaveMethod()</tt>.
+     * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
+     * facets.
      */
-    void makePersistent(ObjectAdapter adapter);
+    <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
 
     /**
-     * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt> when
-     * used by framework.
+     * Provided by <tt>PersistenceSession</tt> when used by framework.
      * 
      * <p>
      * Called by <tt>DomainObjectContainerDefault</tt>.
      */
-    void remove(ObjectAdapter adapter);
+    <T> ObjectAdapter firstMatchingQuery(Query<T> query);
 
 }

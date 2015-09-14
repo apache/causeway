@@ -14,30 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-import java.util.List;
+public abstract class LocalizationProviderAbstract implements LocalizationProvider {
 
-import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.commons.components.Injectable;
-
-public interface QuerySubmitter extends Injectable {
-
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     * 
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt> and also by the choices
-     * facets.
-     */
-    <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
-
-    /**
-     * Provided by <tt>PersistenceSession</tt> when used by framework.
-     * 
-     * <p>
-     * Called by <tt>DomainObjectContainerDefault</tt>.
-     */
-    <T> ObjectAdapter firstMatchingQuery(Query<T> query);
+    @Override
+    public void injectInto(final Object candidate) {
+        if (LocalizationProviderAware.class.isAssignableFrom(candidate.getClass())) {
+            final LocalizationProviderAware cast = LocalizationProviderAware.class.cast(candidate);
+            cast.setLocalizationProvider(this);
+        }
+    }
 
 }

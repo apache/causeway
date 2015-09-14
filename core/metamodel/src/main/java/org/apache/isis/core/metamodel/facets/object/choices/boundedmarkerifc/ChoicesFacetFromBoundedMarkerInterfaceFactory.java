@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
-import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;

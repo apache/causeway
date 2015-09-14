@@ -14,16 +14,29 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-public abstract class QuerySubmitterAbstract implements QuerySubmitter {
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-    @Override
-    public void injectInto(final Object candidate) {
-        if (QuerySubmitterAware.class.isAssignableFrom(candidate.getClass())) {
-            final QuerySubmitterAware cast = QuerySubmitterAware.class.cast(candidate);
-            cast.setQuerySubmitter(this);
-        }
-    }
+public interface ObjectPersistor extends Injectable {
+
+    /**
+     * Provided by the <tt>PersistenceSession</tt> when used by framework.
+     * 
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt> and also by
+     * <tt>DomainObjectInvocationHandler#handleSaveMethod()</tt>.
+     */
+    void makePersistent(ObjectAdapter adapter);
+
+    /**
+     * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt> when
+     * used by framework.
+     * 
+     * <p>
+     * Called by <tt>DomainObjectContainerDefault</tt>.
+     */
+    void remove(ObjectAdapter adapter);
 
 }

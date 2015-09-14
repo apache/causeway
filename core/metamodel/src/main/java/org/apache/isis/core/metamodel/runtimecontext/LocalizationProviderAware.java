@@ -17,22 +17,10 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-import java.util.Locale;
-import java.util.TimeZone;
+public interface LocalizationProviderAware {
 
-import org.apache.isis.applib.profiles.Localization;
+    void setLocalizationProvider(LocalizationProvider localizationProvider);
 
-public final class LocalizationDefault implements Localization {
-
-    @Override
-    public Locale getLocale() {
-        return Locale.getDefault();
-    }
-
-    @Override
-    public TimeZone getTimeZone() {
-        return TimeZone.getDefault();
-    }
 }

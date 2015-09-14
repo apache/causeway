@@ -17,10 +17,13 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.adapter;
+package org.apache.isis.core.metamodel.runtimecontext;
 
-public interface QuerySubmitterAware {
+import org.apache.isis.applib.annotation.Programmatic;
 
-    public void setQuerySubmitter(final QuerySubmitter querySubmitter);
+public interface DomainObjectServicesAware {
+
+    @Programmatic
+    public void setDomainObjectServices(DomainObjectServices domainObjectServices);
 
 }
