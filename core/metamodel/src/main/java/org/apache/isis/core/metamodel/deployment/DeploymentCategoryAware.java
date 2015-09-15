@@ -21,9 +21,9 @@ package org.apache.isis.core.metamodel.deployment;
 
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface DeploymentCategoryProviderAware {
+public interface DeploymentCategoryAware {
 
     @Programmatic
-    public void setDeploymentCategoryProvider(DeploymentCategoryProvider deploymentCategoryProvider);
+    public void setDeploymentCategory(DeploymentCategory deploymentCategory);
 
 }

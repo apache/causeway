@@ -120,7 +120,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testProvidesDefaultNameForActionButIgnoresAnyNamedAnnotation() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
@@ -145,7 +145,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testPicksUpDebugPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -171,7 +171,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testPicksUpExplorationPrefixAndSetsNameAppropriatelyAlso() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -197,7 +197,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testCannotHaveBothDebugAndThenExplorationPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -220,7 +220,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testCannotHaveBothExplorationAndThenDebugPrefix() {
         final ActionNamedDebugExplorationFacetFactory facetFactory = new ActionNamedDebugExplorationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -244,7 +244,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -275,7 +275,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsValidateMethodSomeArgsFacetAndRemovesMethod() {
         final ActionValidationFacetViaMethodFactory facetFactory = new ActionValidationFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         facetFactory.setServicesInjector(mockServicesInjector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
@@ -307,7 +307,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterDefaultsMethodNoArgsFacetAndRemovesMethod() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -338,7 +338,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterDefaultsMethodSomeArgsIsIgnored() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -363,7 +363,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterChoicesMethodNoArgsFacetAndRemovesMethod() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         class Customer {
@@ -394,7 +394,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterChoicesMethodSomeArgsIsIgnored() {
         final ActionChoicesFacetViaMethodFactory facetFactory = new ActionChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -459,7 +459,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -498,7 +498,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         facetFactory.setSpecificationLoader(programmableReflector);
 
@@ -533,7 +533,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -570,7 +570,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -610,7 +610,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         final ActionParameterDefaultsFacetViaMethodFactory facetFactory = new ActionParameterDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -659,7 +659,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterChoicesMethodAndRemovesMethod() {
         final ActionParameterChoicesFacetViaMethodFactory facetFactory = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -723,7 +723,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testInstallsParameterAutoCompleteMethodAndRemovesMethod() {
         final ActionParameterAutoCompleteFacetViaMethodFactory facetFactory = new ActionParameterAutoCompleteFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -762,7 +762,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForParams = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactoryForParams.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 
@@ -803,7 +803,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testBothDefaultMethodCausesException() {
         final ActionDefaultsFacetViaMethodFactory facetFactory = new ActionDefaultsFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
 

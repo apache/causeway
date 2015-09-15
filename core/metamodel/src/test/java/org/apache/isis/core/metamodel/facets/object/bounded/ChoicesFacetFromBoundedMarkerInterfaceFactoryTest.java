@@ -61,7 +61,7 @@ public class ChoicesFacetFromBoundedMarkerInterfaceFactoryTest extends AbstractF
         }});
 
         facetFactory = new ChoicesFacetFromBoundedMarkerInterfaceFactory();
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
     }
 

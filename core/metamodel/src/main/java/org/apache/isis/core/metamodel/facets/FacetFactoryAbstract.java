@@ -26,20 +26,19 @@ import com.google.common.collect.ImmutableList;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware,
-        AuthenticationSessionProviderAware, DeploymentCategoryProviderAware {
+        AuthenticationSessionProviderAware, DeploymentCategoryAware {
 
     private final List<FeatureType> featureTypes;
 
     private SpecificationLoader specificationLoader;
     private AuthenticationSessionProvider authenticationSessionProvider;
-    private DeploymentCategoryProvider deploymentCategoryProvider;
+    private DeploymentCategory deploymentCategory;
 
     public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
         this.featureTypes = ImmutableList.copyOf(featureTypes);
@@ -88,16 +87,12 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     }
 
     @Override
-    public void setDeploymentCategoryProvider(final DeploymentCategoryProvider deploymentCategoryProvider) {
-        this.deploymentCategoryProvider = deploymentCategoryProvider;
-    }
-
-    private DeploymentCategoryProvider getDeploymentCategoryProvider() {
-        return deploymentCategoryProvider;
+    public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
     }
 
     protected DeploymentCategory getDeploymentCategory() {
-        return getDeploymentCategoryProvider().getDeploymentCategory();
+        return deploymentCategory;
     }
 
 }

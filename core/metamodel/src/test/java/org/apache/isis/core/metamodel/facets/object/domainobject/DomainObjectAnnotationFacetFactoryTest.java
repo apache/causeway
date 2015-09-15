@@ -20,11 +20,13 @@
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
 import java.util.UUID;
+
 import org.jmock.Expectations;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.Immutable;
@@ -33,6 +35,7 @@ import org.apache.isis.applib.annotation.PublishingChangeKind;
 import org.apache.isis.applib.annotation.PublishingPayloadFactoryForObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.applib.services.publish.EventPayload;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
@@ -75,7 +78,7 @@ public class DomainObjectAnnotationFacetFactoryTest extends AbstractFacetFactory
         facetFactory = new DomainObjectAnnotationFacetFactory();
         facetFactory.setConfiguration(mockConfiguration);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
     }
 

@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.parseable.annotcfg.ParseableFacetAnnotationElseConfigurationFactory;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 
@@ -67,7 +66,7 @@ public class ParseableFacetAnnotationElseConfigurationFactoryTest extends Abstra
         facetFactory.setConfiguration(isisConfigurationDefault);
 
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
     }
 

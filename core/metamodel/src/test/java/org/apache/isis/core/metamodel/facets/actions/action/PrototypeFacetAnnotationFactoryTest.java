@@ -66,7 +66,7 @@ public class PrototypeFacetAnnotationFactoryTest extends AbstractFacetFactoryTes
 
 
         facetFactory = new ActionAnnotationFacetFactory();
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
     }
 

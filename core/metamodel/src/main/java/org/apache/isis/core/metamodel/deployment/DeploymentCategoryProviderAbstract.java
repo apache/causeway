@@ -20,9 +20,9 @@ public abstract class DeploymentCategoryProviderAbstract implements DeploymentCa
 
     @Override
     public void injectInto(final Object candidate) {
-        if (DeploymentCategoryProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryProviderAware cast = DeploymentCategoryProviderAware.class.cast(candidate);
-            cast.setDeploymentCategoryProvider(this);
+        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
+            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
+            cast.setDeploymentCategory(this.getDeploymentCategory());
         }
     }
 

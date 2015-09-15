@@ -111,7 +111,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         class Customer {
@@ -136,7 +136,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForJavaUtilListAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         class Customer {
@@ -161,7 +161,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForJavaUtilSetAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         class Customer {
@@ -186,7 +186,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForObjectArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         class Customer {
@@ -211,7 +211,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testPropertyAccessorFacetIsInstalledForOrderArrayAndMethodRemoved() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -239,7 +239,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testAddToFacetIsInstalledViaAccessorIfNoExplicitAddToMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -265,7 +265,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCannotInferTypeOfFacetIfNoExplicitAddToOrRemoveFromMethods() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -287,7 +287,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testRemoveFromFacetIsInstalledViaAccessorIfNoExplicitRemoveFromMethodExists() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -313,7 +313,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testAddToFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -346,7 +346,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCanInferTypeOfFacetFromExplicitAddToMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -376,7 +376,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testRemoveFromFacetIsInstalledAndMethodRemoved() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -409,7 +409,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testCanInferTypeOfFacetFromExplicitRemoveFromMethod() {
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -439,7 +439,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testClearFacetIsInstalledAndMethodRemoved() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings({ "hiding", "unused" })
@@ -472,7 +472,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testClearFacetIsInstalledViaAccessorIfNoExplicitClearMethod() {
         final CollectionClearFacetFactory facetFactory = new CollectionClearFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings({ "hiding", "unused" })
@@ -499,7 +499,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -538,7 +538,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         final CollectionAddToRemoveFromAndValidateFacetFactory facetFactory = new CollectionAddToRemoveFromAndValidateFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -576,7 +576,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testMethodFoundInSuperclass() {
         final CollectionAccessorFacetViaAccessorFactory facetFactory = new CollectionAccessorFacetViaAccessorFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         @SuppressWarnings("hiding")
@@ -606,7 +606,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testMethodFoundInSuperclassButHelpeMethodsFoundInSubclasses() {
         final CollectionAccessorFacetViaAccessorFactory facetFactoryForAccessor = new CollectionAccessorFacetViaAccessorFactory();
         facetFactoryForAccessor.setSpecificationLoader(programmableReflector);
-        facetFactoryForAccessor.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactoryForAccessor.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactoryForAccessor.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
 
@@ -706,7 +706,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
         final NamedFacetStaticMethodFactory facetFactory = new NamedFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -726,7 +726,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
         final DescribedAsFacetStaticMethodFactory facetFactory = new DescribedAsFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -746,7 +746,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -764,7 +764,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
         final HiddenFacetStaticMethodFactory facetFactory = new HiddenFacetStaticMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
@@ -780,7 +780,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -800,7 +800,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
         final DisabledFacetStaticMethodFacetFactory facetFactory = new DisabledFacetStaticMethodFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOtherOrders");
@@ -816,7 +816,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
         final HideForSessionFacetViaMethodFactory facetFactory = new HideForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");
@@ -836,7 +836,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
         final DisableForSessionFacetViaMethodFactory facetFactory = new DisableForSessionFacetViaMethodFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
 
         final Method collectionAccessorMethod = findMethod(CustomerStatic.class, "getOrders");

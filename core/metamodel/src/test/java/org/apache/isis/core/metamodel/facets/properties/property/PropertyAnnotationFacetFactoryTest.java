@@ -40,6 +40,7 @@ import org.apache.isis.applib.services.eventbus.PropertyInteractionEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -114,7 +115,7 @@ public class PropertyAnnotationFacetFactoryTest extends AbstractFacetFactoryJUni
         facetFactory = new PropertyAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
     }
 
     @After

@@ -32,8 +32,6 @@ import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -43,15 +41,15 @@ import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationDefault;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Allowing;
-import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.ClassUnderTest;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
-    @ClassUnderTest
     private TitleAnnotationFacetFactory facetFactory;
 
     @Mock
@@ -64,14 +62,14 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
     @Before
     public void setUp() throws Exception {
-        
+
         context.allowing(mockSpecificationLoaderSpi);
 
-        facetFactory = context.getClassUnderTest();
+        facetFactory = new TitleAnnotationFacetFactory();
         facetFactory.setAdapterManager(mockAdapterManager);
         facetFactory.setSpecificationLoader(mockSpecificationLoaderSpi);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         context.checking(new Expectations() {
             {

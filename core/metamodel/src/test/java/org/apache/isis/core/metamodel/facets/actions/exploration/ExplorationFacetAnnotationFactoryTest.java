@@ -65,7 +65,7 @@ public class ExplorationFacetAnnotationFactoryTest extends AbstractFacetFactoryT
 
 
         facetFactory = new ExplorationFacetAnnotationFactory();
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
     }
 

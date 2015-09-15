@@ -91,9 +91,6 @@ public class IsisMetaModelTest_init {
                 allowing(mockRuntimeContext).getSpecificationLoader();
                 will(returnValue(mockSpecificationLoader));
 
-                allowing(mockRuntimeContext).getAdapterManager();
-                will(returnValue(mockAdapterManager));
-
                 allowing(mockRuntimeContext).getMessageBrokerService();
                 will(returnValue(mockMessageBrokerService));
 

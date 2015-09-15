@@ -470,9 +470,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     private DeploymentCategory getDeploymentCategory() {
-        if(runtimeContext == null) {
-            throw new IllegalStateException("Runtime context has not been injected.");
-        }
         return runtimeContext.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 

@@ -60,7 +60,7 @@ public class ChoicesFacetFromBoundedAnnotationFactoryTest extends AbstractFacetF
         }});
 
         facetFactory = new DomainObjectAnnotationFacetFactory();
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
         facetFactory.setAuthenticationSessionProvider(mockAuthenticationSessionProvider);
     }
 

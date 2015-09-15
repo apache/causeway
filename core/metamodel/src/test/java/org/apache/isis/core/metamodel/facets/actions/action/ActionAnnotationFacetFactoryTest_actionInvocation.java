@@ -20,6 +20,8 @@
 package org.apache.isis.core.metamodel.facets.actions.action;
 
 import java.lang.reflect.Method;
+
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
@@ -47,7 +49,7 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         facetFactory = new ActionAnnotationFacetFactory();
         facetFactory.setSpecificationLoader(programmableReflector);
         facetFactory.setServicesInjector(mockServicesInjector);
-        facetFactory.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactory.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
     }
 
@@ -153,13 +155,13 @@ public class ActionAnnotationFacetFactoryTest_actionInvocation extends AbstractF
         final ActionParameterChoicesFacetViaMethodFactory facetFactoryForChoices = new ActionParameterChoicesFacetViaMethodFactory();
         facetFactoryForChoices.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
-        facetFactoryForChoices.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactoryForChoices.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         final DisableForContextFacetViaMethodFactory facetFactoryForDisable = new DisableForContextFacetViaMethodFactory();
         facetFactoryForDisable.setSpecificationLoader(programmableReflector);
         programmableReflector.setLoadSpecificationStringReturn(voidSpec);
         facetFactoryForDisable.setServicesInjector(mockServicesInjector);
-        facetFactoryForDisable.setDeploymentCategoryProvider(mockDeploymentCategoryProvider);
+        facetFactoryForDisable.setDeploymentCategory(DeploymentCategory.PRODUCTION);
 
         class Customer {
             @SuppressWarnings("unused")

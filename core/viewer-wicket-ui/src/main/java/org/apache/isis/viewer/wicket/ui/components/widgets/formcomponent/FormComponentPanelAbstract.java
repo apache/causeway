@@ -34,7 +34,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAware;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -172,9 +172,9 @@ public abstract class FormComponentPanelAbstract<T> extends FormComponentPanel<T
             final AuthenticationSessionProviderAware cast = AuthenticationSessionProviderAware.class.cast(candidate);
             cast.setAuthenticationSessionProvider(this);
         }
-        if (DeploymentCategoryProviderAware.class.isAssignableFrom(candidate.getClass())) {
-            final DeploymentCategoryProviderAware cast = DeploymentCategoryProviderAware.class.cast(candidate);
-            cast.setDeploymentCategoryProvider(this);
+        if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
+            final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);
+            cast.setDeploymentCategory(this.getDeploymentCategory());
         }
     }
 

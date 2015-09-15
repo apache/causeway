@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -45,6 +46,8 @@ public class DomainObjectContainerDefaultTest_allMatches {
 
     @Mock
     private ConfigurationService mockConfigurationService;
+    @Mock
+    private ServicesInjector mockServicesInjector;
 
     private boolean flushCalled;
 
@@ -59,9 +62,14 @@ public class DomainObjectContainerDefaultTest_allMatches {
             @Override <T> List<T> submitQuery(final Query<T> query) {
                 return null;
             }
+
+            {
+                setServicesInjector(mockServicesInjector);
+            }
         };
         container.setConfigurationService(mockConfigurationService);
         context.allowing(mockConfigurationService);
+        context.allowing(mockServicesInjector);
     }
 
     @Test

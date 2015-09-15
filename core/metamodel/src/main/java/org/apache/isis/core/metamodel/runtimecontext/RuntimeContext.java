@@ -33,9 +33,21 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
  */
 public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
+    // //////////////////////////////////////
+    // application-scoped
+    // //////////////////////////////////////
+
     public DeploymentCategoryProvider getDeploymentCategoryProvider();
 
-    public TransactionStateProvider getTransactionStateProvider();
+    public ConfigurationService getConfigurationService();
+
+    public ServicesInjector getServicesInjector();
+
+    public SpecificationLoader getSpecificationLoader();
+
+    // //////////////////////////////////////
+    // session-scoped
+    // //////////////////////////////////////
 
     /**
      * A mechanism for returning the <tt>current</tt>
@@ -47,16 +59,16 @@ public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
      */
     public AuthenticationSessionProvider getAuthenticationSessionProvider();
 
+    public LocalizationProvider getLocalizationProvider();
+
     public MessageBrokerService getMessageBrokerService();
 
-    public SpecificationLoader getSpecificationLoader();
-
-    public ServicesInjector getServicesInjector();
+    // //////////////////////////////////////
+    // request-scoped
+    // //////////////////////////////////////
 
     public PersistenceSessionService getPersistenceSessionService();
 
-    public ConfigurationService getConfigurationService();
-
-    public LocalizationProvider getLocalizationProvider();
+    public TransactionStateProvider getTransactionStateProvider();
 
 }

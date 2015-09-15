@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware {
 
     private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
+
     private final DeploymentCategory deploymentCategory;
     private final IsisConfigurationDefault configuration;
     private final ServicesInjector servicesInjector;
@@ -49,6 +50,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         this.configuration = configuration;
         this.servicesInjector = servicesInjector;
     }
+
 
     @Override
     public DeploymentCategoryProvider getDeploymentCategoryProvider() {
