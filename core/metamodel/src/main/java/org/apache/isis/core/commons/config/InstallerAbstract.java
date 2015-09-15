@@ -94,7 +94,6 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     /**
      * Default implementation does nothing.
      */
-    @Override
     public void init() {
         // no-op implementation, subclasses may override!
     }
@@ -102,7 +101,6 @@ public abstract class InstallerAbstract implements Installer, IsisConfigurationB
     /**
      * Default implementation does nothing.
      */
-    @Override
     public void shutdown() {
         // no-op implementation, subclasses may override!
     }

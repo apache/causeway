@@ -108,7 +108,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     // init, shutdown
     // ///////////////////////////////////////////////////////
 
-    @Override
     public void init() {
         ensureNotInitialized();
 
@@ -140,7 +139,6 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         return validationFailures;
     }
 
-    @Override
     public void shutdown() {
         ensureInitialized();
         state = State.SHUTDOWN;

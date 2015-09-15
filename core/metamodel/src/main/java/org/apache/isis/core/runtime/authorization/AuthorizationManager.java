@@ -29,6 +29,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
  */
 public interface AuthorizationManager extends ApplicationScopedComponent {
 
+    public void init();
+    public void shutdown();
+
     /**
      * Returns true when the user represented by the specified session is
      * authorised to view the member of the class/object represented by the

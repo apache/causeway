@@ -107,7 +107,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
     //region > init
 
 
-    @Override
     public void init() {
 
         if (initialized) {
@@ -294,7 +293,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     //region > shutdown
 
-    @Override
     public void shutdown() {
         LOG.info("shutting down system");
 

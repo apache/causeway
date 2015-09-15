@@ -23,7 +23,6 @@ import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.UUID;
 
 import javax.jdo.FetchGroup;
@@ -56,6 +55,8 @@ import org.apache.isis.core.commons.ensure.IsisAssertException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.adapter.oid.ParentedCollectionOid;
@@ -77,8 +78,6 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFa
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
@@ -244,7 +243,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * Injects components, calls  {@link org.apache.isis.core.commons.components.SessionScopedComponent#open()} on subcomponents, and then creates service
      * adapters.
      */
-    @Override
     public void open() {
         ensureNotOpened();
 
@@ -321,7 +319,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * <p>
      * The corresponding DataNucleus entity is then closed.
      */
-    @Override
     public void close() {
 
         if (getState() == State.CLOSED) {

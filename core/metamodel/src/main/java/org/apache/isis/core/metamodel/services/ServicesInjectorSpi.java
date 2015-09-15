@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  */
 public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
 
+    public void init();
 
     /**
      * Update an individual service.

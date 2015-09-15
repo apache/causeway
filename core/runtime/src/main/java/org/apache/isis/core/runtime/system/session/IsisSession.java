@@ -95,7 +95,6 @@ public class IsisSession implements SessionScopedComponent {
     //endregion
 
     //region > open, close
-    @Override
     public void open() {
         persistenceSession.open();
     }
@@ -103,7 +102,6 @@ public class IsisSession implements SessionScopedComponent {
     /**
      * Closes session.
      */
-    @Override
     public void close() {
         try {
             takeSnapshot();
@@ -131,15 +129,9 @@ public class IsisSession implements SessionScopedComponent {
     public void closeAll() {
         close();
 
-        shutdownIfRequired(persistenceSession);
+        persistenceSession.close();
     }
 
-    private void shutdownIfRequired(final Object o) {
-        if (o instanceof SessionScopedComponent) {
-            final SessionScopedComponent requiresSetup = (SessionScopedComponent) o;
-            requiresSetup.close();
-        }
-    }
     //endregion
 
     //region > convenience methods

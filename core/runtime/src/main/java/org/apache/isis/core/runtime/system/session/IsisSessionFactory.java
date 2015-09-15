@@ -104,10 +104,8 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     // ///////////////////////////////////////////
 
     /**
-     * Wires components as necessary, and then
-     * {@link ApplicationScopedComponent#init() init}ializes all.
+     * Wires components as necessary, and then init}ializes all.
      */
-    @Override
     public void init() {
         final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
         specificationLoaderSpi.setServiceInjector(servicesInjector);
@@ -123,8 +121,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     }
 
 
-
-    @Override
     public void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();

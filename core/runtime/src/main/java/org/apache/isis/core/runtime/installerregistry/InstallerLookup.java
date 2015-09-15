@@ -154,7 +154,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
     //endregion
 
     //region > init, shutdown
-    @Override
     public void init() {
         ensureDependenciesInjected();
     }
@@ -163,7 +162,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
     }
 
-    @Override
     public void shutdown() {
         // nothing to do.
     }

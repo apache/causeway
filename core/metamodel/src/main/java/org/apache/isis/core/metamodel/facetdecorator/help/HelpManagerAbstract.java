@@ -30,14 +30,12 @@ public abstract class HelpManagerAbstract implements HelpManager {
     /**
      * Does nothing.
      */
-    @Override
     public void init() {
     }
 
     /**
      * Does nothing.
      */
-    @Override
     public void shutdown() {
     }
 

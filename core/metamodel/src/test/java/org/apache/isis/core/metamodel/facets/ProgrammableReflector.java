@@ -37,8 +37,10 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
 
-    @Override
     public void init() {
+    }
+
+    public void shutdown() {
     }
 
     private Collection<ObjectSpecification> allSpecificationsReturn;
@@ -62,10 +64,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     @Override
     public ObjectSpecification loadSpecification(final String name) {
         return loadSpecificationStringReturn;
-    }
-
-    @Override
-    public void shutdown() {
     }
 
     @Override

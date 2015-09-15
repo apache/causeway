@@ -19,10 +19,6 @@
 
 package org.apache.isis.core.runtime.authentication.standard;
 
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +37,10 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.RegistrationDetails;
+
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 public class AuthenticationManagerStandard implements AuthenticationManager, DebuggableWithTitle {
 
@@ -73,7 +73,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
      * {@link #addAuthenticator(Authenticator) added} or
      * {@link #setAuthenticators(List) injected}.
      */
-    @Override
     public final void init() {
         defaultRandomCodeGeneratorIfNecessary();
         addDefaultAuthenticators();
@@ -97,7 +96,6 @@ public class AuthenticationManagerStandard implements AuthenticationManager, Deb
     protected void addDefaultAuthenticators() {
     }
 
-    @Override
     public void shutdown() {
         for (final Authenticator authenticator : authenticators) {
             authenticator.shutdown();

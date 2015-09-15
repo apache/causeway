@@ -79,12 +79,10 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
     // open, close
     // ///////////////////////////////////////////////////////////////////////////
 
-    @Override
     public void open() {
         // nothing to do
     }
 
-    @Override
     public void close() {
         LOG.debug("close");
         adapterByPojoMap.clear();

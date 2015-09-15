@@ -25,6 +25,9 @@ import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 
 public interface SpecificationLoaderSpi extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLoader {
 
+    public void init();
+    public void shutdown();
+
     /**
      * Specify the services to pro-actively prime the cache, and to initialize them also.
      * @param services

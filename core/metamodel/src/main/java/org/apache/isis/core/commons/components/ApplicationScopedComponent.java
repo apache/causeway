@@ -32,15 +32,5 @@ package org.apache.isis.core.commons.components;
  */
 public interface ApplicationScopedComponent extends Component {
 
-    /**
-     * Indicates to the component that it is to initialise itself.
-     */
-    void init();
-
-    /**
-     * Indicates to the component that it will no longer be used and should shut
-     * itself down cleanly.
-     */
-    void shutdown();
 
 }

@@ -210,7 +210,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      * Initializes and wires up, and primes the cache based on any service
      * classes that may have been {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi) injected}.
      */
-    @Override
     public void init() {
 
         initialize();
@@ -282,7 +281,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return initialized;
     }
 
-    @Override
     public void shutdown() {
         LOG.info("shutting down " + this);
 

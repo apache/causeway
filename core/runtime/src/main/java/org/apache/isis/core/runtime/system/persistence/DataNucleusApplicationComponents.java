@@ -252,11 +252,9 @@ public class DataNucleusApplicationComponents implements ApplicationScopedCompon
     //
     ///////////////////////////////////////////////////////////////////////////
 
-    @Override
     public void init() {
     }
 
-    @Override
     public void shutdown() {
     }
 

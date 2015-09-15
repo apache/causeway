@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
  */
 public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
 
+    public void init();
+
     // //////////////////////////////////////
     // application-scoped
     // //////////////////////////////////////

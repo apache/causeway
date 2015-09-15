@@ -24,6 +24,9 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 public interface AuthenticationManager extends ApplicationScopedComponent {
 
+    public void init();
+    public void shutdown();
+
     /**
      * Caches and returns an authentication {@link AuthenticationSession} if the
      * {@link AuthenticationRequest request} is valid; otherwise returns

@@ -26,6 +26,8 @@ import org.apache.isis.core.commons.config.IsisConfigurationAware;
 
 public interface ServicesInstaller extends Installer, IsisConfigurationAware {
 
+    void init();
+
     /**
      * NB: this has the suffix '-installer' because in the command line we must
      * distinguish from the '--services' flag meaning a particular set of

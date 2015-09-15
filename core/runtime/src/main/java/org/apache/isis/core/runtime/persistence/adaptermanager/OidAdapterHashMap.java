@@ -48,12 +48,10 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
     // open, close
     // ///////////////////////////////////////////////////////
 
-    @Override
     public void open() {
         // nothing to do
     }
 
-    @Override
     public void close() {
         LOG.debug("close");
         adapterByOidMap.clear();

@@ -88,12 +88,10 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // open, close
     // ////////////////////////////////////////////////////////////////
 
-    @Override
     public void open() {
         ensureThatState(session, is(notNullValue()), "session is required");
     }
 
-    @Override
     public void close() {
         if (getTransaction() != null) {
             try {

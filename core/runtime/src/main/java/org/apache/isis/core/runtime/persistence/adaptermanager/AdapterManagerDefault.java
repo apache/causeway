@@ -67,11 +67,9 @@ public class AdapterManagerDefault implements AdapterManager,
     //endregion
 
     //region > open, close
-    @Override
     public void open() {
     }
 
-    @Override
     public void close() {
     }
     //endregion

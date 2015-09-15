@@ -24,6 +24,9 @@ import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 public interface Authorizor extends ApplicationScopedComponent {
 
+    public void init();
+    public void shutdown();
+
     public boolean isVisibleInAnyRole(final Identifier identifier);
     public boolean isUsableInAnyRole(final Identifier identifier);
 

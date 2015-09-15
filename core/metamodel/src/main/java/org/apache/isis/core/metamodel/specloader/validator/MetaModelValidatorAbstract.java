@@ -33,12 +33,10 @@ public abstract class MetaModelValidatorAbstract implements MetaModelValidator {
     // init, shutdown
     // ////////////////////////////////////////////////////////////////////
 
-    @Override
     public void init() {
         ensureThatState(specificationLoaderSpi, is(notNullValue()));
     }
 
-    @Override
     public void shutdown() {
     }
 

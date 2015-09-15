@@ -32,16 +32,5 @@ package org.apache.isis.core.commons.components;
  */
 public interface SessionScopedComponent extends Component {
 
-    /**
-     * Indicates to the component that it is to initialise itself as it will
-     * soon be receiving requests.
-     */
-    void open();
-
-    /**
-     * Indicates to the component that no more requests will be made of it and
-     * it can safely release any services it has hold of.
-     */
-    void close();
 
 }

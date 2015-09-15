@@ -48,11 +48,9 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
     // init, shutdown
     // ////////////////////////////////////////////////////////////
 
-    @Override
     public void init() {
     }
 
-    @Override
     public void shutdown() {
     }
 
