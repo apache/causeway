@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
@@ -76,14 +77,16 @@ public class JavaReflectorInstallerNoDecorators extends InstallerAbstract implem
     @Override
     public SpecificationLoaderSpi createReflector(
             final DeploymentCategory deploymentCategory,
-            final Collection<MetaModelRefiner> metaModelRefiners) {
+            final Collection<MetaModelRefiner> metaModelRefiners,
+            final ServicesInjectorSpi servicesInjector) {
 
         final ProgrammingModel programmingModel = createProgrammingModel(getConfiguration());
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
         final MetaModelValidator mmv = createMetaModelValidator(getConfiguration());
         final List<LayoutMetadataReader> layoutMetadataReaders = createLayoutMetadataReaders(getConfiguration());
 
-        return JavaReflectorHelper.createObjectReflector(deploymentCategory, getConfiguration(), programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv);
+        return JavaReflectorHelper.createObjectReflector(deploymentCategory, getConfiguration(), programmingModel, metaModelRefiners, facetDecorators, layoutMetadataReaders, mmv,
+                servicesInjector);
     }
 
 

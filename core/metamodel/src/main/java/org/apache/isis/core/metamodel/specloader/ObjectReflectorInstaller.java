@@ -23,6 +23,7 @@ import java.util.Collection;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
 /**
@@ -34,7 +35,7 @@ public interface ObjectReflectorInstaller extends Installer {
 
     SpecificationLoaderSpi createReflector(
             final DeploymentCategory deploymentCategory,
-            final Collection<MetaModelRefiner> metaModelRefiners);
+            final Collection<MetaModelRefiner> metaModelRefiners, final ServicesInjectorSpi servicesInjector);
 
     void addFacetDecoratorInstaller(final FacetDecoratorInstaller decoratorInstaller);
 

@@ -127,8 +127,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
             sessionFactory = createSessionFactory(deploymentType);
 
             // temporarily make a configuration available
-            // REVIEW: would rather inject this, or perhaps even the
-            // ConfigurationBuilder
+            // TODO: REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
             IsisContext.setConfiguration(getConfiguration());
 
             initContext(sessionFactory);
@@ -174,9 +173,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
                 refiners(authenticationManager, authorizationManager,
                         new PersistenceSessionFactoryMetamodelRefiner());
         final SpecificationLoaderSpi specificationLoader =
-                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
-
-        specificationLoader.setServiceInjector(servicesInjector);
+                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, servicesInjector, metaModelRefiners);
 
         // persistenceSessionFactory
         final PersistenceSessionFactory persistenceSessionFactory =

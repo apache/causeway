@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -49,7 +50,8 @@ public final class JavaReflectorHelper  {
             final Collection<MetaModelRefiner> metaModelRefiners,
             final Set<FacetDecorator> facetDecorators,
             final List<LayoutMetadataReader> layoutMetadataReaders,
-            final MetaModelValidator mmv) {
+            final MetaModelValidator mmv,
+            final ServicesInjectorSpi servicesInjector) {
 
         MetaModelValidatorComposite metaModelValidator = MetaModelValidatorComposite.asComposite(mmv);
         for (MetaModelRefiner metaModelRefiner : metaModelRefiners) {
@@ -64,7 +66,7 @@ public final class JavaReflectorHelper  {
 
         return new ObjectReflectorDefault(
                 deploymentCategory, configuration,
-                programmingModel, facetDecorators, metaModelValidator, layoutMetadataReaders);
+                programmingModel, facetDecorators, metaModelValidator, layoutMetadataReaders, servicesInjector);
     }
 
 }

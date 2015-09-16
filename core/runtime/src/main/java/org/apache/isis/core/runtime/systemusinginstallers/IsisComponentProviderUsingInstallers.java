@@ -168,19 +168,21 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
             final DeploymentType deploymentType,
+            final ServicesInjectorSpi servicesInjector,
             final Collection<MetaModelRefiner> metaModelRefiners) {
-        return reflectorInstaller.createReflector(deploymentType.getDeploymentCategory(), metaModelRefiners);
+        return reflectorInstaller.createReflector(deploymentType.getDeploymentCategory(), metaModelRefiners,
+                servicesInjector);
     }
 
 
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi,
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
         return persistenceMechanismInstaller.createPersistenceSessionFactory(
                     deploymentType, getConfiguration(),
-                    servicesInjectorSpi);
+                servicesInjector);
     }
 
     //region > helpers

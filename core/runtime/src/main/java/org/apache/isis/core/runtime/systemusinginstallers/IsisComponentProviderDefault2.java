@@ -244,7 +244,8 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
             final DeploymentType deploymentType,
-            Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
+            final ServicesInjectorSpi servicesInjector,
+            final Collection<MetaModelRefiner> metaModelRefiners) throws IsisSystemException {
 
         final DeploymentCategory deploymentCategory = deploymentType.getDeploymentCategory();
 
@@ -258,8 +259,8 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
                         deploymentCategory, getConfiguration(), programmingModel,
                         metaModelRefiners,
                         facetDecorators, layoutMetadataReaders,
-                        metaModelValidator
-                );
+                        metaModelValidator,
+                        servicesInjector);
     }
 
     @Override
@@ -275,12 +276,12 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
     @Override
     public PersistenceSessionFactory providePersistenceSessionFactory(
             DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi,
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader) {
         DataNucleusPersistenceMechanismInstaller installer =
                 new DataNucleusPersistenceMechanismInstaller();
         return installer.createPersistenceSessionFactory(
-                deploymentType, configuration, servicesInjectorSpi
+                deploymentType, configuration, servicesInjector
         );
     }
 

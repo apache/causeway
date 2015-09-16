@@ -128,15 +128,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      */
     private final FacetDecoratorSet facetDecoratorSet;
 
-    /**
-     * Can optionally be injected, but will default (to
-     * {@link RuntimeContextNoRuntime}) otherwise.
-     * 
-     * <p>
-     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
-     * being used standalone (eg for a code-generator).
-     */
-    private RuntimeContext runtimeContext;
+    private final ServicesInjectorSpi servicesInjector;
 
     private final SpecificationTraverser specificationTraverser = new SpecificationTraverser();
 
@@ -144,11 +136,17 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private final SpecificationCacheDefault cache = new SpecificationCacheDefault();
     private final List<LayoutMetadataReader> layoutMetadataReaders;
 
-    private boolean initialized = false;
     /**
-     * Populated in {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi)}.
+     * Can optionally be injected, but will default (to
+     * {@link RuntimeContextNoRuntime}) otherwise.
+     *
+     * <p>
+     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
+     * being used standalone (eg for a code-generator).
      */
-    private ServicesInjectorSpi servicesInjector;
+    private RuntimeContext runtimeContext;
+
+    private boolean initialized = false;
     private ValidationFailures validationFailures;
 
     // /////////////////////////////////////////////////////////////
@@ -161,10 +159,12 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             final ProgrammingModel programmingModel,
             final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator metaModelValidator,
-            final List<LayoutMetadataReader> layoutMetadataReaders) {
+            final List<LayoutMetadataReader> layoutMetadataReaders,
+            final ServicesInjectorSpi servicesInjector) {
 
         ensureThatArg(deploymentCategory, is(notNullValue()));
         ensureThatArg(configuration, is(notNullValue()));
+        ensureThatArg(servicesInjector, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
         ensureThatArg(metaModelValidator, is(notNullValue()));
@@ -173,6 +173,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         this.deploymentCategory = deploymentCategory;
         this.configuration = configuration;
+        this.servicesInjector = servicesInjector;
+
         this.programmingModel = programmingModel;
 
         this.facetDecoratorSet = new FacetDecoratorSet();
@@ -197,7 +199,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     /**
      * Initializes and wires up, and primes the cache based on any service
-     * classes that may have been {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi) injected}.
+     * classes (provided by the {@link ServicesInjectorSpi}).
      */
     public void init() {
 
@@ -623,11 +625,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     public boolean isServiceClass(Class<?> cls) {
         return this.servicesInjector.isRegisteredService(cls);
-    }
-
-    @Override
-    public void setServiceInjector(final ServicesInjectorSpi services) {
-        servicesInjector = services;
     }
 
     // ////////////////////////////////////////////////////////////////////

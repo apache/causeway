@@ -111,11 +111,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     }
 
     @Override
-    public void setServiceInjector(final ServicesInjectorSpi serviceInjector) {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
     public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
         throw new NotYetImplementedException();
     }

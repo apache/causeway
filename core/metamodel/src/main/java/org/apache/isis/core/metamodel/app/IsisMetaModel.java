@@ -104,8 +104,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
         this.specificationLoader = new ObjectReflectorDefault(
                 deploymentCategory, configuration,
                 this.programmingModel, facetDecorators,
-                metaModelValidator, layoutMetadataReaders);
-        specificationLoader.setServiceInjector(servicesInjector);
+                metaModelValidator, layoutMetadataReaders, servicesInjector);
 
         this.runtimeContext = new RuntimeContextNoRuntime(
                 deploymentCategory, configuration, servicesInjector, specificationLoader);

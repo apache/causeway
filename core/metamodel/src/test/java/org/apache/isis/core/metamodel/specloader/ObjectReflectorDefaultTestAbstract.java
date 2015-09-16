@@ -21,7 +21,9 @@ package org.apache.isis.core.metamodel.specloader;
 
 import java.util.Collections;
 import java.util.HashSet;
+
 import com.google.common.collect.Lists;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Assert;
@@ -29,6 +31,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -44,7 +47,7 @@ import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidator
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.unittestsupport.jmocking.InjectIntoJMockAction;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -63,7 +66,9 @@ public abstract class ObjectReflectorDefaultTestAbstract {
 
     @Mock
     private IsisConfiguration mockConfiguration;
-    
+    @Mock
+    private ServicesInjectorSpi mockServicesInjector;
+
     // is loaded by subclasses
     protected ObjectSpecification specification;
 
@@ -86,12 +91,11 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new ProgrammingModelFacetsJava5(),
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault(),
-                        Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()));
+                        Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()), mockServicesInjector);
         runtimeContext =
                 new RuntimeContextNoRuntime(
                         new ServicesInjectorDefault(Collections.emptyList()), reflector);
         reflector.setRuntimeContext(runtimeContext);
-        reflector.setServiceInjector(new ServicesInjectorDefault(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
         reflector.init();
         
         specification = loadSpecification(reflector);
@@ -109,7 +113,8 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                 new ProgrammingModelFacetsJava5(),
                 new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault(),
-                Lists.<LayoutMetadataReader>newArrayList());
+                Lists.<LayoutMetadataReader>newArrayList(),
+                mockServicesInjector);
     }
 
     @Test
@@ -122,7 +127,8 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                 new ProgrammingModelFacetsJava5(),
                 new HashSet<FacetDecorator>(),
                 new MetaModelValidatorDefault(),
-                null);
+                null,
+                mockServicesInjector);
     }
 
     @Test

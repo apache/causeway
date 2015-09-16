@@ -30,11 +30,6 @@ public interface SpecificationLoaderSpi extends ApplicationScopedComponent, Debu
     public void init();
     public void shutdown();
 
-    /**
-     * Specify the services to pro-actively prime the cache, and to initialize them also.
-     */
-    void setServiceInjector(ServicesInjectorSpi services);
-
     void invalidateCacheFor(Object domainObject);
     
     void invalidateCache(Class<?> domainClass);

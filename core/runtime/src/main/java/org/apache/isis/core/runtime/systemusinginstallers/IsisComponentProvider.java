@@ -51,12 +51,13 @@ public interface IsisComponentProvider {
 
     SpecificationLoaderSpi provideSpecificationLoaderSpi(
             final DeploymentType deploymentType,
-            Collection<MetaModelRefiner> metaModelRefiners)
+            final ServicesInjectorSpi servicesInjector,
+            final Collection<MetaModelRefiner> metaModelRefiners)
             throws IsisSystemException;
 
     PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjectorSpi,
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader);
 
 }
