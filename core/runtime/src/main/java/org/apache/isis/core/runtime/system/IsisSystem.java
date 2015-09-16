@@ -124,7 +124,51 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         timeZoneInitializer.initTimeZone(getConfiguration());
 
         try {
-            sessionFactory = createSessionFactory(deploymentType);
+
+            // configuration
+            final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
+
+            // services
+            final List<Object> services = isisComponentProvider.provideServices();
+            ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(services);
+            servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
+            servicesInjector.validateServices();
+
+            // authentication, authorization
+            final AuthenticationManager authenticationManager =
+                    isisComponentProvider.provideAuthenticationManager(deploymentType);
+            final AuthorizationManager authorizationManager =
+                    isisComponentProvider.provideAuthorizationManager(deploymentType);
+
+            // specificationLoader
+            final Collection<MetaModelRefiner> metaModelRefiners =
+                    refiners(authenticationManager, authorizationManager,
+                            new PersistenceSessionFactoryMetamodelRefiner());
+            final SpecificationLoaderSpi specificationLoader1 =
+                    isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, servicesInjector, metaModelRefiners);
+
+            // persistenceSessionFactory
+            final PersistenceSessionFactory persistenceSessionFactory =
+                    isisComponentProvider.providePersistenceSessionFactory(
+                            deploymentType, servicesInjector, specificationLoader1);
+
+            // runtimeContext
+            final RuntimeContextFromSession runtimeContext =
+                    new RuntimeContextFromSession(
+                            deploymentType.getDeploymentCategory(), configuration,
+                            servicesInjector, specificationLoader1);
+
+            // wire up components and components into services...
+            runtimeContext.injectInto(specificationLoader1);
+
+            for (Object service : servicesInjector.getRegisteredServices()) {
+                runtimeContext.injectInto(service);
+            }
+
+            // finally instantiate
+            sessionFactory = new IsisSessionFactory(
+                    deploymentType, configuration, servicesInjector, specificationLoader1,
+                    authenticationManager, authorizationManager, persistenceSessionFactory);
 
             // temporarily make a configuration available
             // TODO: REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
@@ -148,55 +192,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
             LOG.error("failed to initialise", ex);
             throw new RuntimeException(ex);
         }
-    }
-
-
-    private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
-
-        // configuration
-        final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
-
-        // services
-        final List<Object> services = isisComponentProvider.provideServices();
-        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(services);
-        servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
-        servicesInjector.validateServices();
-
-        // authentication, authorization
-        final AuthenticationManager authenticationManager =
-                isisComponentProvider.provideAuthenticationManager(deploymentType);
-        final AuthorizationManager authorizationManager =
-                isisComponentProvider.provideAuthorizationManager(deploymentType);
-
-        // specificationLoader
-        final Collection<MetaModelRefiner> metaModelRefiners =
-                refiners(authenticationManager, authorizationManager,
-                        new PersistenceSessionFactoryMetamodelRefiner());
-        final SpecificationLoaderSpi specificationLoader =
-                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, servicesInjector, metaModelRefiners);
-
-        // persistenceSessionFactory
-        final PersistenceSessionFactory persistenceSessionFactory =
-                isisComponentProvider.providePersistenceSessionFactory(
-                        deploymentType, servicesInjector, specificationLoader);
-
-        // runtimeContext
-        final RuntimeContextFromSession runtimeContext =
-                new RuntimeContextFromSession(
-                        deploymentType.getDeploymentCategory(), configuration,
-                        servicesInjector, specificationLoader);
-
-        // wire up components and components into services...
-        runtimeContext.injectInto(specificationLoader);
-
-        for (Object service : servicesInjector.getRegisteredServices()) {
-            runtimeContext.injectInto(service);
-        }
-
-        // finally instantiate
-        return new IsisSessionFactory (
-                deploymentType, configuration, servicesInjector, specificationLoader,
-                authenticationManager, authorizationManager, persistenceSessionFactory);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
