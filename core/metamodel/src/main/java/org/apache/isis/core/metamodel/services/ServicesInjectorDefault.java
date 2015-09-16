@@ -56,7 +56,7 @@ import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 /**
  * Must be a thread-safe.
  */
-public class ServicesInjectorDefault implements ServicesInjectorSpi, SpecificationLoaderAware {
+public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static final Logger LOG = LoggerFactory.getLogger(ServicesInjectorDefault.class);
 
@@ -72,6 +72,8 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
     private final Map<Class<?>, List<Object>> servicesAssignableToType = Maps.newHashMap();
 
     private final Map<Class<?>, Object> serviceByConcreteType = Maps.newHashMap();
+
+    private final InjectorMethodEvaluator injectorMethodEvaluator;
 
     public ServicesInjectorDefault(final List<Object> services) {
         this(services, null);
@@ -452,14 +454,4 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi, Specificati
 
     //endregion
 
-    //region > injected dependencies
-
-    private InjectorMethodEvaluator injectorMethodEvaluator;
-
-    @Override
-    public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
-        injectorMethodEvaluator = specificationLookup;
-    }
-
-    //endregion
 }

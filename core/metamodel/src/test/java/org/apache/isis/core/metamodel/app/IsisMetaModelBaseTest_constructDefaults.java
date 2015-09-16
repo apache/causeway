@@ -23,14 +23,11 @@ import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 public class IsisMetaModelBaseTest_constructDefaults {
 
@@ -48,28 +45,9 @@ public class IsisMetaModelBaseTest_constructDefaults {
     @Before
     public void setUp() {
         context.ignoring(mockProgrammingModel);
-        metaModel = new IsisMetaModel(mockContext, mockProgrammingModel);
+        metaModel = new IsisMetaModel(mockProgrammingModel);
     }
 
-    @Test
-    public void shouldDefaultConfiguration() {
-        assertThat(metaModel.getConfiguration(), is(notNullValue()));
-    }
-
-    @Test
-    public void shouldDefaultProgrammingModelFacets() {
-        assertThat(metaModel.getProgrammingModelFacets(), is(notNullValue()));
-    }
-
-    @Test
-    public void shouldDefaultFacetDecorators() {
-        assertThat(metaModel.getFacetDecorators(), is(notNullValue()));
-    }
-
-    @Test
-    public void shouldHaveNoFacetDecorators() {
-        assertThat(metaModel.getFacetDecorators().size(), is(0));
-    }
 
     @Test(expected = IllegalStateException.class)
     public void shouldNotBeAbleToShutdown() {

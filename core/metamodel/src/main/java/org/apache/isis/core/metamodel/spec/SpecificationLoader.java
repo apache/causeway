@@ -18,11 +18,11 @@ package org.apache.isis.core.metamodel.spec;
 
 import java.util.Collection;
 import java.util.List;
-import org.apache.isis.core.commons.components.Injectable;
+
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.object.autocomplete.AutoCompleteFacet;
 
-public interface SpecificationLoader extends Injectable, InjectorMethodEvaluator {
+public interface SpecificationLoader {
 
     ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId);
 

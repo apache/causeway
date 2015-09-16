@@ -24,6 +24,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -68,6 +70,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
     private final SpecificationLoaderSpi specificationLoaderSpi;
+    private final ServicesInjectorSpi servicesInjector;
     private final AuthenticationManager authenticationManager;
     private final AuthorizationManager authorizationManager;
     private final PersistenceSessionFactory persistenceSessionFactory;
@@ -76,6 +79,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public IsisSessionFactory(
             final DeploymentType deploymentType,
             final IsisConfiguration configuration,
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationManager authenticationManager,
             final AuthorizationManager authorizationManager,
@@ -84,6 +88,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         ensureThatArg(deploymentType, is(not(nullValue())));
         ensureThatArg(configuration, is(not(nullValue())));
         ensureThatArg(specificationLoader, is(not(nullValue())));
+        ensureThatArg(servicesInjector, is(not(nullValue())));
         ensureThatArg(authenticationManager, is(not(nullValue())));
         ensureThatArg(authorizationManager, is(not(nullValue())));
         ensureThatArg(persistenceSessionFactory, is(not(nullValue())));
@@ -93,8 +98,9 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         this.specificationLoaderSpi = specificationLoader;
         this.authenticationManager = authenticationManager;
         this.authorizationManager = authorizationManager;
+        this.servicesInjector = servicesInjector;
         this.persistenceSessionFactory = persistenceSessionFactory;
-        this.oidMarshaller = new OidMarshaller();;
+        this.oidMarshaller = new OidMarshaller();
     }
 
 
@@ -107,8 +113,17 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      * Wires components as necessary, and then init}ializes all.
      */
     public void init() {
-        final ServicesInjectorSpi servicesInjector = persistenceSessionFactory.getServicesInjector();
-        specificationLoaderSpi.setServiceInjector(servicesInjector);
+
+        // a bit of a workaround, but required if anything in the metamodel (for
+        // example, a
+        // ValueSemanticsProvider for a date value type) needs to use the Clock
+        // singleton
+        // we do this after loading the services to allow a service to prime a
+        // different clock
+        // implementation (eg to use an NTP time service).
+        if (!deploymentType.isProduction() && !Clock.isInitialized()) {
+            FixtureClock.initialize();
+        }
 
         specificationLoaderSpi.init();
 
@@ -117,6 +132,9 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
         authenticationManager.init();
         authorizationManager.init();
+
+        servicesInjector.init();
+
         persistenceSessionFactory.init();
     }
 
@@ -135,7 +153,8 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
      */
     public IsisSession openSession(final AuthenticationSession authenticationSession) {
         final PersistenceSession persistenceSession =
-                persistenceSessionFactory.createPersistenceSession(getSpecificationLoader(), authenticationSession);
+                persistenceSessionFactory.createPersistenceSession(
+                        servicesInjector, getSpecificationLoader(), authenticationSession);
         ensureThatArg(persistenceSession, is(not(nullValue())));
 
         return newIsisSession(authenticationSession, persistenceSession);
@@ -199,7 +218,7 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     }
 
     public List<Object> getServices() {
-        return getPersistenceSessionFactory().getServicesInjector().getRegisteredServices();
+        return servicesInjector.getRegisteredServices();
     }
 
     /**

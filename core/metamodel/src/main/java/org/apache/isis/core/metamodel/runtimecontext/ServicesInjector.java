@@ -17,12 +17,14 @@
 package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.List;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.publish.PublishingService;
-import org.apache.isis.core.commons.components.Injectable;
 
-public interface ServicesInjector extends Injectable {
+public interface ServicesInjector {
+
+    void injectInto(final Object candidate);
 
     /**
      * All registered services, as an immutable {@link List}.

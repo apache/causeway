@@ -45,7 +45,7 @@ public class IsisMetaModelTest_getDomainObjectContainer {
 
     @Before
     public void setUp() {
-        metaModel = new IsisMetaModel(mockContext, mockProgrammingModel);
+        metaModel = new IsisMetaModel(mockProgrammingModel);
         expectingMetaModelToBeInitialized();
         metaModel.init();
     }

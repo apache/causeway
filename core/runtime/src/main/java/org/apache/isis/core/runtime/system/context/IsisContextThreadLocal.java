@@ -117,6 +117,11 @@ public class IsisContextThreadLocal extends IsisContext {
         }
     }
 
+
+    // /////////////////////////////////////////////////////////
+    // open, close
+    // /////////////////////////////////////////////////////////
+
     @Override
     protected IsisSession getSessionInstance(final String executionContextId) {
         for (final IsisSession data : sessionsByThread.values()) {
@@ -126,10 +131,6 @@ public class IsisContextThreadLocal extends IsisContext {
         }
         return null;
     }
-
-    // /////////////////////////////////////////////////////////
-    // open, close
-    // /////////////////////////////////////////////////////////
 
     /**
      * Is only intended to be called through
@@ -152,15 +153,6 @@ public class IsisContextThreadLocal extends IsisContext {
             session.open();
             return session;
         }
-    }
-
-    protected IsisSession createAndOpenSession(final Thread thread, final AuthenticationSession authenticationSession) {
-        final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
-        session.open();
-        if (LOG.isInfoEnabled()) {
-            LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
-        }
-        return session;
     }
 
     private IsisSession saveSession(final Thread thread, final IsisSession session) {

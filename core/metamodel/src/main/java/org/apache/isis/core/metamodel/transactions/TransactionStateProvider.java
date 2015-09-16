@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.transactions;
 
-import org.apache.isis.core.commons.components.Injectable;
+public interface TransactionStateProvider {
 
-public interface TransactionStateProvider extends Injectable {
+    void injectInto(final Object candidate);
+
     public TransactionState getTransactionState();
 }

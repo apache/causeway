@@ -19,11 +19,13 @@
 package org.apache.isis.tool.mavenplugin;
 
 import java.util.Set;
+
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.apache.isis.core.metamodel.app.IsisMetaModel;
+
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 
 interface MetaModelProcessor {
 
@@ -42,5 +44,6 @@ interface MetaModelProcessor {
         void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
     }
 
-    public void process(final IsisMetaModel isisMetaModel, final Context context) throws MojoFailureException, MojoExecutionException;
+    void process(final ObjectReflectorDefault specificationLoader, final Context context) throws MojoFailureException;
+
 }

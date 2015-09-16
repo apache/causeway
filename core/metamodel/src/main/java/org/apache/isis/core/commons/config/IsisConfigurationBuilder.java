@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.commons.config;
 
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsibility;
 
@@ -33,7 +32,9 @@ import org.apache.isis.core.commons.resource.ResourceStreamSourceChainOfResponsi
  * @see IsisConfiguration for more details on the mutable/immutable pair
  *      pattern.
  */
-public interface IsisConfigurationBuilder extends Injectable {
+public interface IsisConfigurationBuilder {
+
+    void injectInto(Object candidate);
 
     /**
      * Returns a currently known {@link IsisConfiguration}.

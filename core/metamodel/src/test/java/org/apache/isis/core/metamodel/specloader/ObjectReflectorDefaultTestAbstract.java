@@ -30,6 +30,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -79,14 +80,16 @@ public abstract class ObjectReflectorDefaultTestAbstract {
             }
         });
 
-        runtimeContext = new RuntimeContextNoRuntime(new ServicesInjectorDefault(Collections.emptyList()));
-        final ObjectReflectorDefault reflector = 
-                new ObjectReflectorDefault(
+        final ObjectReflectorDefault reflector =
+                new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
                         mockConfiguration,
                         new ProgrammingModelFacetsJava5(),
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault(),
                         Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()));
+        runtimeContext =
+                new RuntimeContextNoRuntime(
+                        new ServicesInjectorDefault(Collections.emptyList()), reflector);
         reflector.setRuntimeContext(runtimeContext);
         reflector.setServiceInjector(new ServicesInjectorDefault(Collections.<Object>singletonList(new DomainObjectContainerDefault())));
         reflector.init();
@@ -101,13 +104,12 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("illegal argument, expected: is not an empty collection");
 
-        new ObjectReflectorDefault(
-            mockConfiguration,
-            new ProgrammingModelFacetsJava5(),
-            new HashSet<FacetDecorator>(),
-            new MetaModelValidatorDefault(),
-            Lists.<LayoutMetadataReader>newArrayList()
-        );
+        new ObjectReflectorDefault(DeploymentCategory.PRODUCTION ,
+                mockConfiguration,
+                new ProgrammingModelFacetsJava5(),
+                new HashSet<FacetDecorator>(),
+                new MetaModelValidatorDefault(),
+                Lists.<LayoutMetadataReader>newArrayList());
     }
 
     @Test
@@ -115,13 +117,12 @@ public abstract class ObjectReflectorDefaultTestAbstract {
         expectedException.expect(IllegalArgumentException.class);
         expectedException.expectMessage("illegal argument, expected: is not null");
 
-        new ObjectReflectorDefault(
-            mockConfiguration,
-            new ProgrammingModelFacetsJava5(),
-            new HashSet<FacetDecorator>(),
-            new MetaModelValidatorDefault(),
-            null
-        );
+        new ObjectReflectorDefault(DeploymentCategory.PRODUCTION,
+                mockConfiguration,
+                new ProgrammingModelFacetsJava5(),
+                new HashSet<FacetDecorator>(),
+                new MetaModelValidatorDefault(),
+                null);
     }
 
     @Test

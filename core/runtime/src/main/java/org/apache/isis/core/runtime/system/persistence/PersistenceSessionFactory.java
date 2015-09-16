@@ -22,45 +22,26 @@ package org.apache.isis.core.runtime.system.persistence;
 import java.util.Map;
 import java.util.Set;
 
+import javax.jdo.PersistenceManagerFactory;
+
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
-import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.runtime.persistence.FixturesInstalledFlag;
-import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechanismInstaller;
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableAnnotationInJdoApplibFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.auditable.AuditableMarkerInterfaceInJdoApplibFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.datastoreidentity.JdoDatastoreIdentityAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.discriminator.JdoDiscriminatorAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.query.JdoQueryAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.object.version.JdoVersionAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.BigDecimalDerivedFromJdoColumnAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.MandatoryFromJdoColumnAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.column.MaxLengthDerivedFromJdoColumnAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.notpersistent.JdoNotPersistentAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.facets.prop.primarykey.JdoPrimaryKeyAnnotationFacetFactory;
-import org.apache.isis.objectstore.jdo.metamodel.specloader.validator.JdoMetaModelValidator;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
-public class PersistenceSessionFactory implements MetaModelRefiner,
-        SpecificationLoaderSpiAware, ApplicationScopedComponent, FixturesInstalledFlag {
+public class PersistenceSessionFactory implements ApplicationScopedComponent, FixturesInstalledFlag {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory.class);
 
@@ -69,32 +50,11 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     private final DeploymentType deploymentType;
     private final IsisConfigurationDefault configuration;
 
-    private final ServicesInjectorSpi servicesInjector;
-    private final RuntimeContextFromSession runtimeContext;
-
-    private SpecificationLoaderSpi specificationLoader;
-
     public PersistenceSessionFactory(
             final DeploymentType deploymentType,
-            final ServicesInjectorSpi servicesInjector,
-            final IsisConfigurationDefault isisConfiguration,
-            final RuntimeContextFromSession runtimeContext) {
+            final IsisConfigurationDefault isisConfiguration) {
         this.deploymentType = deploymentType;
         this.configuration = isisConfiguration;
-        this.servicesInjector = servicesInjector;
-        this.runtimeContext = runtimeContext;
-    }
-
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
-    }
-
-    public IsisConfigurationDefault getConfiguration() {
-        return configuration;
-    }
-
-    public ServicesInjectorSpi getServicesInjector() {
-        return servicesInjector;
     }
 
     //endregion
@@ -104,29 +64,6 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
     private DataNucleusApplicationComponents applicationComponents;
 
     public final void init() {
-
-        // a bit of a workaround, but required if anything in the metamodel (for
-        // example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock
-        // singleton
-        // we do this after loading the services to allow a service to prime a
-        // different clock
-        // implementation (eg to use an NTP time service).
-        if (!deploymentType.isProduction() && !Clock.isInitialized()) {
-            FixtureClock.initialize();
-        }
-
-        runtimeContext.injectInto(servicesInjector);
-
-        // wire up components
-        getSpecificationLoader().injectInto(runtimeContext);
-
-        for (Object service : servicesInjector.getRegisteredServices()) {
-            runtimeContext.injectInto(service);
-        }
-
-        servicesInjector.init();
-
         this.applicationComponents = createDataNucleusApplicationComponents(configuration);
     }
 
@@ -215,49 +152,24 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
 
     //endregion
 
-    //region > MetaModelRefiner impl
 
-    @Override
-    public void refineProgrammingModel(ProgrammingModel programmingModel, IsisConfiguration configuration) {
-        programmingModel.addFactory(
-                JdoPersistenceCapableAnnotationFacetFactory.class, ProgrammingModel.Position.BEGINNING);
-        programmingModel.addFactory(JdoDatastoreIdentityAnnotationFacetFactory.class);
-
-        programmingModel.addFactory(JdoPrimaryKeyAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoNotPersistentAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoDiscriminatorAnnotationFacetFactory.class);
-        programmingModel.addFactory(JdoVersionAnnotationFacetFactory.class);
-
-        programmingModel.addFactory(JdoQueryAnnotationFacetFactory.class);
-
-        programmingModel.addFactory(BigDecimalDerivedFromJdoColumnAnnotationFacetFactory.class);
-        programmingModel.addFactory(MaxLengthDerivedFromJdoColumnAnnotationFacetFactory.class);
-        // must appear after JdoPrimaryKeyAnnotationFacetFactory (above)
-        // and also MandatoryFacetOnPropertyMandatoryAnnotationFactory
-        // and also PropertyAnnotationFactory
-        programmingModel.addFactory(MandatoryFromJdoColumnAnnotationFacetFactory.class);
-
-        programmingModel.addFactory(AuditableAnnotationInJdoApplibFacetFactory.class);
-        programmingModel.addFactory(AuditableMarkerInterfaceInJdoApplibFacetFactory.class);
-    }
-
-    @Override
-    public void refineMetaModelValidator(MetaModelValidatorComposite metaModelValidator, IsisConfiguration configuration) {
-        metaModelValidator.add(new JdoMetaModelValidator());
-    }
-
-    //endregion
-
-    //region > createPersisenceSession
-
+    //region > createPersistenceSession
 
     /**
      * Called by {@link org.apache.isis.core.runtime.system.session.IsisSessionFactory#openSession(AuthenticationSession)}.
      */
     public PersistenceSession createPersistenceSession(
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader,
             final AuthenticationSession authenticationSession) {
-        return new PersistenceSession(this, getConfiguration(), specificationLoader, authenticationSession);
+
+        final FixturesInstalledFlag fixturesInstalledFlag = this;
+        final PersistenceManagerFactory persistenceManagerFactory =
+                applicationComponents.getPersistenceManagerFactory();
+
+        return new PersistenceSession(
+                configuration, servicesInjector, specificationLoader,
+                authenticationSession, persistenceManagerFactory, fixturesInstalledFlag);
     }
 
     DataNucleusApplicationComponents getApplicationComponents() {
@@ -282,17 +194,5 @@ public class PersistenceSessionFactory implements MetaModelRefiner,
 
     //endregion
 
-    //region > dependencies (from init)
-
-    protected SpecificationLoaderSpi getSpecificationLoader() {
-        return specificationLoader;
-    }
-
-    @Override
-    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
-        this.specificationLoader = specificationLoader;
-    }
-
-    //endregion
 
 }

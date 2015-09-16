@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -57,7 +56,6 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.FreeStandingList;
-import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
@@ -118,23 +116,12 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     private final ClassSubstitutor classSubstitutor = new ClassSubstitutor();
 
-    /**
-     * Injected in the constructor.
-     */
+    private final DeploymentCategory deploymentCategory;
     private final IsisConfiguration configuration;
-    /**
-     * Injected in the constructor.
-     */
     private final ProgrammingModel programmingModel;
-
-    /**
-     * Defaulted in the constructor.
-     */
     private final FacetProcessor facetProcessor;
 
     /**
-     * Initialized in the constructor.
-     * 
      * <p>
      * {@link FacetDecorator}s must be added prior to {@link #init()
      * initialization.}
@@ -146,9 +133,8 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      * {@link RuntimeContextNoRuntime}) otherwise.
      * 
      * <p>
-     * Should be injected when used by framework, but will default to a no-op
-     * implementation if the metamodel is being used standalone (eg for a
-     * code-generator).
+     * Should be injected when used by framework, but will default to a no-op implementation if the metamodel is
+     * being used standalone (eg for a code-generator).
      */
     private RuntimeContext runtimeContext;
 
@@ -163,19 +149,21 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
      * Populated in {@link SpecificationLoaderSpi#setServiceInjector(org.apache.isis.core.metamodel.services.ServicesInjectorSpi)}.
      */
     private ServicesInjectorSpi servicesInjector;
-
+    private ValidationFailures validationFailures;
 
     // /////////////////////////////////////////////////////////////
     // Constructor
     // /////////////////////////////////////////////////////////////
 
     public ObjectReflectorDefault(
+            final DeploymentCategory deploymentCategory,
             final IsisConfiguration configuration,
             final ProgrammingModel programmingModel,
             final Set<FacetDecorator> facetDecorators,
             final MetaModelValidator metaModelValidator,
             final List<LayoutMetadataReader> layoutMetadataReaders) {
 
+        ensureThatArg(deploymentCategory, is(notNullValue()));
         ensureThatArg(configuration, is(notNullValue()));
         ensureThatArg(programmingModel, is(notNullValue()));
         ensureThatArg(facetDecorators, is(notNullValue()));
@@ -183,6 +171,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         ensureThatArg(layoutMetadataReaders, is(notNullValue()));
         ensureThatArg(layoutMetadataReaders, is(not(emptyCollectionOf(LayoutMetadataReader.class))));
 
+        this.deploymentCategory = deploymentCategory;
         this.configuration = configuration;
         this.programmingModel = programmingModel;
 
@@ -227,8 +216,10 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     }
 
     public ValidationFailures validate() {
-        ValidationFailures validationFailures = new ValidationFailures();
-        metaModelValidator.validate(validationFailures);
+        if(validationFailures == null) {
+            validationFailures = new ValidationFailures();
+            metaModelValidator.validate(validationFailures);
+        }
         return validationFailures;
     }
 
@@ -239,10 +230,9 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
         // default subcomponents
         if (runtimeContext == null) {
-            runtimeContext = new RuntimeContextNoRuntime(servicesInjector);
+            runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
         }
-        injectInto(runtimeContext);
-        injectInto(specificationTraverser);
+
         injectInto(metaModelValidator);
 
         // wire subcomponents into each other
@@ -323,13 +313,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         }
     }
 
-    //region > isInjectorMethodFor
-    private final InjectorMethodEvaluator injectorMethodEvaluator = new InjectorMethodEvaluatorDefault();
-
-    public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
-        return injectorMethodEvaluator.isInjectorMethodFor(method, serviceClass);
-    }
-    //endregion
 
     private void recache(final ObjectSpecification newSpec) {
         getCache().recache(newSpec);
@@ -443,17 +426,13 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     private ObjectSpecification createSpecification(final Class<?> cls) {
 
         final ServicesInjector servicesInjector = getRuntimeContext().getServicesInjector();
-        final PersistenceSessionService persistenceSessionService =
-                getRuntimeContext().getPersistenceSessionService();
+        final PersistenceSessionService persistenceSessionService = getRuntimeContext().getPersistenceSessionService();
 
         final ObjectSpecificationDependencies specContext =
-                new ObjectSpecificationDependencies(
-                        getDeploymentCategory(), servicesInjector, this, facetProcessor);
+                new ObjectSpecificationDependencies(deploymentCategory, servicesInjector, this, facetProcessor);
 
         final ObjectMemberDependencies objectMemberDependencies =
-                new ObjectMemberDependencies(
-                this, servicesInjector,
-                        persistenceSessionService);
+                new ObjectMemberDependencies(this, servicesInjector, persistenceSessionService);
 
         // ... and create the specs
         if (FreeStandingList.class.isAssignableFrom(cls)) {
@@ -465,10 +444,6 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
             return new ObjectSpecificationDefault(cls, facetedMethodsBuilderContext, specContext,
                     objectMemberDependencies);
         }
-    }
-
-    private DeploymentCategory getDeploymentCategory() {
-        return runtimeContext.getDeploymentCategoryProvider().getDeploymentCategory();
     }
 
     private Class<?> loadBuiltIn(final String className) throws ClassNotFoundException {

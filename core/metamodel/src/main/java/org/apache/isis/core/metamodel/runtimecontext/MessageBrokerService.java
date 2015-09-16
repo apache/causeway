@@ -16,9 +16,9 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import org.apache.isis.core.commons.components.Injectable;
+public interface MessageBrokerService {
 
-public interface MessageBrokerService extends Injectable {
+    void injectInto(final Object candidate);
 
     /**
      * Provided by <tt>MessageBroker</tt> when used by framework.

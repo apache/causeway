@@ -153,6 +153,7 @@
                 </dependency>
             </dependencies>
         </profile>
+
         <profile>
             <id>isis-validate</id>
             <activation>
@@ -165,6 +166,7 @@
                         <artifactId>isis-maven-plugin</artifactId>
                         <version>${isis.version}</version>
                         <configuration>
+                            <appManifest>domainapp.dom.DomainAppDomManifest</appManifest>
                             <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>
                         </configuration>
                         <dependencies>
@@ -195,6 +197,7 @@
                 </plugins>
             </build>
         </profile>
+
     </profiles>
 
 </project>

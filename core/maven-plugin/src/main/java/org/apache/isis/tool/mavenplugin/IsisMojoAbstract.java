@@ -31,14 +31,18 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.app.IsisMetaModel;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromAnnotation;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
 import org.apache.isis.progmodels.dflt.ProgrammingModelFacetsJava5;
 import org.apache.isis.tool.mavenplugin.util.IsisMetaModels;
 import org.apache.isis.tool.mavenplugin.util.MavenProjects;
@@ -53,6 +57,9 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     @Parameter(required = true, readonly = false, property = "isisConfigDir")
     private String isisConfigDir;
 
+    @Parameter(required = false, readonly = false, property = "appManifest")
+    private String appManifest;
+
     private final MetaModelProcessor metaModelProcessor;
     private final ContextForMojo context;
 
@@ -64,30 +71,49 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
-        final List<Object> serviceList = plugin != null ? serviceListFor(plugin) : null;
-        if(serviceList == null || serviceList.size() == 0) {
-            return;
-        }
-        getLog().info("Found " + serviceList.size() + " services");
 
-        usingIsisMetaModel(serviceList, metaModelProcessor);
+        if(this.appManifest != null) {
+
+            final AppManifest manifest = InstanceUtil.createInstance(this.appManifest, AppManifest.class);
+            final IsisComponentProviderDefault2 componentProvider = new IsisComponentProviderDefault2(
+                    DeploymentType.UNIT_TESTING, manifest, null, null, null, null, null);
+
+            final IsisSystem isisSystem = new IsisSystem(componentProvider);
+            try {
+                isisSystem.init();
+
+            } catch(RuntimeException ex) {
+                ;
+                // ignore
+            } finally {
+                isisSystem.shutdown();
+            }
+
+            final ObjectReflectorDefault specificationLoader =
+                    (ObjectReflectorDefault) isisSystem.getSessionFactory().getSpecificationLoader();
+            metaModelProcessor.process(specificationLoader, context);
+
+
+        } else {
+
+            final IsisConfiguration isisConfiguration = getIsisConfiguration();
+            final List<Object> serviceList = plugin != null ? serviceListFor(plugin, isisConfiguration) : null;
+            if (serviceList == null || serviceList.size() == 0) {
+                return;
+            }
+            getLog().info("Found " + serviceList.size() + " services");
+
+            IsisMetaModel isisMetaModel = null;
+            try {
+                isisMetaModel = bootstrapIsis(serviceList);
+                metaModelProcessor.process((ObjectReflectorDefault) isisMetaModel.getSpecificationLoader(), context);
+            } finally {
+                IsisMetaModels.disposeSafely(isisMetaModel);
+            }
+        }
     }
 
-    private void usingIsisMetaModel(
-            final List<Object> serviceList,
-            final MetaModelProcessor metaModelProcessor) throws MojoExecutionException, MojoFailureException {
-
-        IsisMetaModel isisMetaModel = null;
-        try {
-            isisMetaModel = bootstrapIsis(serviceList);
-            metaModelProcessor.process(isisMetaModel, context);
-        } finally {
-            IsisMetaModels.disposeSafely(isisMetaModel);
-        }
-    }
-
-    private List<Object> serviceListFor(Plugin plugin) throws MojoFailureException {
-        IsisConfiguration isisConfiguration = getIsisConfiguration();
+    private List<Object> serviceListFor(Plugin plugin, final IsisConfiguration isisConfiguration) throws MojoFailureException {
 
         final ServicesInstaller servicesInstaller;
         if(isisConfiguration == null) {
@@ -126,13 +152,7 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     }
 
     private static IsisMetaModel bootstrapIsis(List<Object> serviceList) {
-        final RuntimeContextNoRuntime runtimeContext =
-                new RuntimeContextNoRuntime(
-                new ServicesInjectorDefault(serviceList));
-        IsisMetaModel isisMetaModel = new IsisMetaModel(
-                runtimeContext,
-                                            new ProgrammingModelFacetsJava5(),
-                                            serviceList);
+        IsisMetaModel isisMetaModel = new IsisMetaModel(new ProgrammingModelFacetsJava5(), serviceList);
         isisMetaModel.init();
         return isisMetaModel;
     }

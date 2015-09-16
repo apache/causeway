@@ -42,6 +42,7 @@ import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAb
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
@@ -55,15 +56,17 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
     private final MessageBrokerServiceAbstract messageBrokerService;
 
     public RuntimeContextNoRuntime(
-            final ServicesInjector servicesInjector) {
-        this(DeploymentCategory.PRODUCTION, new IsisConfigurationDefault(null), servicesInjector);
+            final ServicesInjector servicesInjector,
+            final SpecificationLoaderSpi specificationLoader) {
+        this(DeploymentCategory.PRODUCTION, new IsisConfigurationDefault(null), servicesInjector, specificationLoader);
     }
 
     public RuntimeContextNoRuntime(
             final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault isisConfiguration,
-            final ServicesInjector servicesInjector) {
-        super(deploymentCategory, isisConfiguration, servicesInjector);
+            final ServicesInjector servicesInjector,
+            final SpecificationLoaderSpi specificationLoader) {
+        super(deploymentCategory, isisConfiguration, servicesInjector, specificationLoader);
         authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
             @Override
             public AuthenticationSession getAuthenticationSession() {

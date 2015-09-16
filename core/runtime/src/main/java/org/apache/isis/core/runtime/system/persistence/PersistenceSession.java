@@ -28,6 +28,7 @@ import java.util.UUID;
 import javax.jdo.FetchGroup;
 import javax.jdo.FetchPlan;
 import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -43,7 +44,6 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
@@ -101,9 +101,6 @@ import org.apache.isis.core.runtime.persistence.PojoRecreationException;
 import org.apache.isis.core.runtime.persistence.PojoRefreshException;
 import org.apache.isis.core.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.persistence.adaptermanager.OidAdapterHashMap;
-import org.apache.isis.core.runtime.persistence.adaptermanager.PojoAdapterHashMap;
-import org.apache.isis.core.runtime.persistence.adaptermanager.RootAndCollectionAdapters;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -113,6 +110,9 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllIns
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.core.runtime.runner.opts.OptionHandlerFixtureAbstract;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.OidAdapterHashMap;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.PojoAdapterHashMap;
+import org.apache.isis.core.runtime.system.persistence.adaptermanager.RootAndCollectionAdapters;
 import org.apache.isis.core.runtime.system.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.TransactionalClosure;
@@ -132,6 +132,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 
+/**
+ * A wrapper around the JDO {@link PersistenceManager}, which also manages concurrency
+ * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
+ * identities} for each and every POJO that is being used by the framework.
+ */
 public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
         MessageBrokerService, PersistenceSessionService, ConfigurationService {
 
@@ -153,7 +158,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > constructor, fields, finalize()
 
-    private final PersistenceSessionFactory persistenceSessionFactory;
+    private final FixturesInstalledFlag fixturesInstalledFlag;
 
     private final PersistenceQueryFactory persistenceQueryFactory;
     private final IsisConfigurationDefault configuration;
@@ -161,11 +166,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final AuthenticationSession authenticationSession;
 
     private final ServicesInjectorSpi servicesInjector;
+    /**
+     * Used to create the {@link #persistenceManager} when {@link #open()}ed.
+     */
+    private final PersistenceManagerFactory jdoPersistenceManagerFactory;
 
     // not final only for testing purposes
     private IsisTransactionManager transactionManager;
 
-    private final OidMarshaller oidMarshaller;
+    private final OidMarshaller oidMarshaller = new OidMarshaller();
 
     /**
      * populated only when {@link #open()}ed.
@@ -178,7 +187,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final Map<Class<?>, PersistenceQueryProcessor<?>> persistenceQueryProcessorByClass = Maps.newHashMap();
 
     private final Map<ObjectSpecId, RootOid> registeredServices = Maps.newHashMap();
-    private final DataNucleusApplicationComponents applicationComponents;
 
     private final boolean concurrencyCheckingGloballyEnabled;
 
@@ -187,37 +195,31 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * persisted objects and persist changes to the object that are saved.
      */
     public PersistenceSession(
-            final PersistenceSessionFactory persistenceSessionFactory,
             final IsisConfigurationDefault configuration,
+            final ServicesInjectorSpi servicesInjector,
             final SpecificationLoaderSpi specificationLoader,
-            final AuthenticationSession authenticationSession) {
+            final AuthenticationSession authenticationSession,
+            final PersistenceManagerFactory jdoPersistenceManagerFactory,
+            final FixturesInstalledFlag fixturesInstalledFlag) {
 
-        ensureThatArg(persistenceSessionFactory, is(not(nullValue())), "persistence session factory required");
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("creating " + this);
+        }
 
         // injected
         this.configuration = configuration;
         this.specificationLoader = specificationLoader;
         this.authenticationSession = authenticationSession;
-        this.persistenceSessionFactory = persistenceSessionFactory;
+        this.fixturesInstalledFlag = fixturesInstalledFlag;
 
-        this.servicesInjector = persistenceSessionFactory.getServicesInjector();
-        this.applicationComponents = persistenceSessionFactory.getApplicationComponents();
+        this.servicesInjector = servicesInjector;
+        this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
 
         // sub-components
-
-        this.oidMarshaller = new OidMarshaller();
-
-
-        this.persistenceQueryFactory = new PersistenceQueryFactory(this, getSpecificationLoader());
-        this.transactionManager = new IsisTransactionManager(this, servicesInjector);
+        this.persistenceQueryFactory = new PersistenceQueryFactory(this, this.specificationLoader);
+        this.transactionManager = new IsisTransactionManager(this, this.servicesInjector);
 
         setState(State.NOT_INITIALIZED);
-
-        // to implement DomainObjectServices
-
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("creating " + this);
-        }
 
         final boolean concurrencyCheckingGloballyDisabled =
                 configuration.getBoolean("isis.persistor.disableConcurrencyChecking", false);
@@ -235,12 +237,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > open
 
+    /**
+     * Only populated once {@link #open()}'d
+     */
     public PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
 
     /**
-     * Injects components, calls  {@link org.apache.isis.core.commons.components.SessionScopedComponent#open()} on subcomponents, and then creates service
+     * Injects components, calls open on subcomponents, and then creates service
      * adapters.
      */
     public void open() {
@@ -253,10 +258,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         oidAdapterMap.open();
         pojoAdapterMap.open();
 
-        persistenceManager = applicationComponents.getPersistenceManagerFactory().getPersistenceManager();
+        persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
         final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(this);
-        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[])null);
+        persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
 
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
@@ -308,8 +313,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     //region > close
 
     /**
-     * Calls {@link org.apache.isis.core.commons.components.SessionScopedComponent#close()}
-     * on the subcomponents.
+     * Closes the subcomponents.
      *
      * <p>
      * Automatically {@link IsisTransactionManager#endTransaction() ends
@@ -347,6 +351,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             LOG.error(
                 "close: failed to close JDO persistenceManager; continuing to avoid memory leakage");
         }
+        // TODO: REVIEW ... ??? this is a guess: don't set to null, because we need for -> transactionManager -> transaction -> messageBroker
+        // persistenceManager = null;
 
         try {
             oidAdapterMap.close();
@@ -657,8 +663,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * up objects.
      * 
      * <p>
-     * This method is called only once after the
-     * {@link ApplicationScopedComponent#init()} has been called. If this flag
+     * This method is called only once after the init has been called. If this flag
      * returns <code>false</code> the framework will run the fixtures to
      * initialise the persistor.
      * 
@@ -674,10 +679,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * @see FixturesInstalledFlag
      */
     public boolean isFixturesInstalled() {
-        if (persistenceSessionFactory.isFixturesInstalled() == null) {
-            persistenceSessionFactory.setFixturesInstalled(objectStoreIsFixturesInstalled());
+        if (fixturesInstalledFlag.isFixturesInstalled() == null) {
+            fixturesInstalledFlag.setFixturesInstalled(objectStoreIsFixturesInstalled());
         }
-        return persistenceSessionFactory.isFixturesInstalled();
+        return fixturesInstalledFlag.isFixturesInstalled();
     }
 
 
@@ -900,7 +905,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * Makes an {@link ObjectAdapter} persistent. The specified object should be
      * stored away via this object store's persistence mechanism, and have a
      * new and unique OID assigned to it. The object, should also be added to
-     * the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault} as the object is implicitly 'in use'.
+     * the {@link PersistenceSession} as the object is implicitly 'in use'.
      *
      * <p>
      * If the object has any associations then each of these, where they aren't
@@ -1166,7 +1171,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         debug.appendln();
 
         debug.appendTitle("Services");
-        for (final Object servicePojo : persistenceSessionFactory.getServicesInjector().getRegisteredServices()) {
+        for (final Object servicePojo : servicesInjector.getRegisteredServices()) {
             final String id = ServiceUtil.id(servicePojo);
             final Class<? extends Object> serviceClass = servicePojo.getClass();
             final ObjectSpecification serviceSpecification = getSpecificationLoader().loadSpecification(serviceClass);
@@ -1210,7 +1215,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
      * The configured {@link ServicesInjectorSpi}.
      */
     public ServicesInjectorSpi getServicesInjector() {
-        return persistenceSessionFactory.getServicesInjector();
+        return servicesInjector;
     }
 
 

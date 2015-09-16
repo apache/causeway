@@ -54,6 +54,7 @@ import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactoryMetamodelRefiner;
 import org.apache.isis.core.runtime.system.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManagerException;
@@ -137,7 +138,8 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
             final SpecificationLoaderSpi specificationLoader = sessionFactory.getSpecificationLoader();
             specificationLoader.validateAndAssert();
 
-            serviceInitializer = initializeServices();
+            // store simply so can do postConstruct when shutdown
+            this.serviceInitializer = initializeServices();
 
             installFixturesIfRequired();
 
@@ -152,35 +154,52 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     private IsisSessionFactory createSessionFactory(final DeploymentType deploymentType) throws IsisSystemException {
 
+        // configuration
         final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
+
+        // services
         final List<Object> services = isisComponentProvider.provideServices();
+        ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(services);
+        servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
+        servicesInjector.validateServices();
 
-        ServicesInjectorSpi servicesInjectorSpi = new ServicesInjectorDefault(services);
-        servicesInjectorSpi.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
-        servicesInjectorSpi.validateServices();
-
-        final RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession(deploymentType.getDeploymentCategory(), configuration, servicesInjectorSpi);
-
-        final PersistenceSessionFactory persistenceSessionFactory =
-                isisComponentProvider.providePersistenceSessionFactory(deploymentType, servicesInjectorSpi, runtimeContext);
-
+        // authentication, authorization
         final AuthenticationManager authenticationManager =
                 isisComponentProvider.provideAuthenticationManager(deploymentType);
         final AuthorizationManager authorizationManager =
                 isisComponentProvider.provideAuthorizationManager(deploymentType);
 
+        // specificationLoader
         final Collection<MetaModelRefiner> metaModelRefiners =
-                refiners(authenticationManager, authorizationManager, persistenceSessionFactory);
+                refiners(authenticationManager, authorizationManager,
+                        new PersistenceSessionFactoryMetamodelRefiner());
         final SpecificationLoaderSpi specificationLoader =
-                isisComponentProvider.provideSpecificationLoaderSpi(metaModelRefiners);
+                isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, metaModelRefiners);
 
-        // bind metamodel to the (runtime) framework
+        specificationLoader.setServiceInjector(servicesInjector);
+
+        // persistenceSessionFactory
+        final PersistenceSessionFactory persistenceSessionFactory =
+                isisComponentProvider.providePersistenceSessionFactory(
+                        deploymentType, servicesInjector, specificationLoader);
+
+        // runtimeContext
+        final RuntimeContextFromSession runtimeContext =
+                new RuntimeContextFromSession(
+                        deploymentType.getDeploymentCategory(), configuration,
+                        servicesInjector, specificationLoader);
+
+        // wire up components and components into services...
         runtimeContext.injectInto(specificationLoader);
 
+        for (Object service : servicesInjector.getRegisteredServices()) {
+            runtimeContext.injectInto(service);
+        }
+
+        // finally instantiate
         return new IsisSessionFactory (
-                deploymentType, configuration, specificationLoader,
-                authenticationManager, authorizationManager,
-                persistenceSessionFactory);
+                deploymentType, configuration, servicesInjector, specificationLoader,
+                authenticationManager, authorizationManager, persistenceSessionFactory);
     }
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
@@ -307,20 +326,24 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
     private void shutdownServices(final ServiceInitializer serviceInitializer) {
 
         // call @PostDestroy (in a session)
-        IsisContext.openSession(new InitialisationSession());
-        try {
-            getTransactionManager().startTransaction();
+        if(serviceInitializer != null) {
+            IsisContext.openSession(new InitialisationSession());
             try {
-                serviceInitializer.preDestroy();
+                getTransactionManager().startTransaction();
+                try {
 
-            } catch(RuntimeException ex) {
-                getTransactionManager().getTransaction().setAbortCause(new IsisTransactionManagerException(ex));
+                    serviceInitializer.preDestroy();
+
+                } catch (RuntimeException ex) {
+                    getTransactionManager().getTransaction().setAbortCause(
+                            new IsisTransactionManagerException(ex));
+                } finally {
+                    // will commit or abort
+                    getTransactionManager().endTransaction();
+                }
             } finally {
-                // will commit or abort
-                getTransactionManager().endTransaction();
+                IsisContext.closeSession();
             }
-        } finally {
-            IsisContext.closeSession();
         }
     }
 

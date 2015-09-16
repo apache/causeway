@@ -33,9 +33,8 @@
  * </ul>
  * 
  * <p>
- * Many {@link org.apache.isis.core.commons.components.Component}s may also be
- * {@link org.apache.isis.core.commons.components.Injectable}, meaning that
- * they know hot to inject themselves to a candidate object &quot;if appropriate&quot;.
+ * Many {@link org.apache.isis.core.commons.components.Component}s may also be injectable,
+ * meaning that they know hot to inject themselves to a candidate object &quot;if appropriate&quot;.
  * The convention adopted in most cases is for an object requiring injection of
  * component <tt>Xxx</tt> to implement an <tt>XxxAware</tt> interface that
  * defines a <tt>setXxx(Xxx)</tt> method.

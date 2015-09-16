@@ -22,7 +22,6 @@ package org.apache.isis.core.runtime.systemusinginstallers;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
@@ -30,7 +29,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
-import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystemException;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
@@ -51,12 +49,14 @@ public interface IsisComponentProvider {
 
     FixturesInstaller provideFixturesInstaller();
 
-    SpecificationLoaderSpi provideSpecificationLoaderSpi(Collection<MetaModelRefiner> metaModelRefiners)
+    SpecificationLoaderSpi provideSpecificationLoaderSpi(
+            final DeploymentType deploymentType,
+            Collection<MetaModelRefiner> metaModelRefiners)
             throws IsisSystemException;
 
     PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi,
-            final RuntimeContextFromSession runtimeContext);
+            final SpecificationLoaderSpi specificationLoader);
 
 }

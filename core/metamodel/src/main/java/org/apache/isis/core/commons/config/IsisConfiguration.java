@@ -24,7 +24,7 @@ import java.awt.Font;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
@@ -42,7 +42,9 @@ import org.apache.isis.core.commons.resource.ResourceStreamSource;
  * Thus the {@link IsisConfiguration} held by different components may vary, but
  * with each being a possible superset of the previous.
  */
-public interface IsisConfiguration extends DebuggableWithTitle, Injectable, Iterable<String> {
+public interface IsisConfiguration extends DebuggableWithTitle, Iterable<String>, ApplicationScopedComponent {
+
+    void injectInto(Object candidate);
 
     /**
      * Creates a new IsisConfiguration containing the properties starting with

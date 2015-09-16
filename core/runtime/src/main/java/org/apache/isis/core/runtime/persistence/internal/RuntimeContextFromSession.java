@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -44,6 +43,7 @@ import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAw
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.transactions.TransactionState;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
@@ -73,8 +73,9 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     public RuntimeContextFromSession(
             final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault configuration,
-            final ServicesInjector servicesInjector) {
-        super(deploymentCategory, configuration, servicesInjector);
+            final ServicesInjector servicesInjector,
+            final SpecificationLoaderSpi specificationLoader) {
+        super(deploymentCategory, configuration, servicesInjector, specificationLoader);
 
         this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
 

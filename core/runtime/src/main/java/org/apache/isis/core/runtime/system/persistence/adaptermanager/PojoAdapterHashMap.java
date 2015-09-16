@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adaptermanager;
+package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -57,10 +57,7 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
 
     protected final Map<Object, ObjectAdapter> adapterByPojoMap;
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Constructors, finalize
-    // ///////////////////////////////////////////////////////////////////////////
-
+    //region > Constructors, finalize
     public PojoAdapterHashMap() {
         this(DEFAULT_POJO_ADAPTER_MAP_SIZE);
     }
@@ -72,26 +69,28 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.debug("finalizing hash of pojos");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("finalizing hash of pojos");
+        }
     }
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // open, close
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > open, close
 
     public void open() {
         // nothing to do
     }
 
     public void close() {
-        LOG.debug("close");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("close");
+        }
         adapterByPojoMap.clear();
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // add, remove
-    // ///////////////////////////////////////////////////////////////////////////
+    //region > add, remove
 
     public void add(final Object pojo, final ObjectAdapter adapter) {
         adapterByPojoMap.put(key(pojo), adapter);
@@ -109,9 +108,9 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         adapterByPojoMap.remove(key(object.getObject()));
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // get, contains
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > getAdapter, containsPojo
 
     public boolean containsPojo(final Object pojo) {
         return adapterByPojoMap.containsKey(key(pojo));
@@ -121,10 +120,9 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         return adapterByPojoMap.get(key(pojo));
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // elements
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > iterator, key
     @Override
     public Iterator<ObjectAdapter> iterator() {
         return adapterByPojoMap.values().iterator();
@@ -134,9 +132,9 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
         return new IdentityHashKey(pojo);
     }
 
-    // ///////////////////////////////////////////////////////////////////////////
-    // Debugging
-    // ///////////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Debugging
 
     @Override
     public void debugData(final DebugBuilder debug) {
@@ -157,4 +155,7 @@ public class PojoAdapterHashMap implements DebuggableWithTitle, Iterable<ObjectA
     public String debugTitle() {
         return "POJO Adapter Hashtable";
     }
+
+    //endregion
+
 }

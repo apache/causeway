@@ -48,12 +48,12 @@ public class IsisInjectModule extends AbstractModule {
         return new InstallerLookup();
     }
 
-    private static IsisConfigurationBuilderDefault defaultConfigurationBuider() {
+    private static IsisConfigurationBuilderDefault defaultConfigurationBuilder() {
         return new IsisConfigurationBuilderDefault();
     }
 
     public IsisInjectModule(final DeploymentType deploymentType) {
-        this(deploymentType, defaultConfigurationBuider(), defaultInstallerLookup());
+        this(deploymentType, defaultConfigurationBuilder(), defaultInstallerLookup());
     }
 
     public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder) {
@@ -61,7 +61,7 @@ public class IsisInjectModule extends AbstractModule {
     }
 
     public IsisInjectModule(final DeploymentType deploymentType, final InstallerLookup installerLookup) {
-        this(deploymentType, defaultConfigurationBuider(), installerLookup);
+        this(deploymentType, defaultConfigurationBuilder(), installerLookup);
     }
 
     public IsisInjectModule(final DeploymentType deploymentType, final IsisConfigurationBuilder isisConfigurationBuilder, final InstallerLookup installerLookup) {

@@ -72,7 +72,8 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
 
     public ObjectSpecificationStub(final Class<?> type) {
         this(type.getName());
-        runtimeContext = new RuntimeContextNoRuntime(new ServicesInjectorDefault(Collections.emptyList()));
+        runtimeContext = new RuntimeContextNoRuntime(
+                new ServicesInjectorDefault(Collections.emptyList()), null);
     }
 
     @Override

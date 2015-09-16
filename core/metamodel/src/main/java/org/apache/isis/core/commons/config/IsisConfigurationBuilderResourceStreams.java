@@ -243,7 +243,6 @@ public class IsisConfigurationBuilderResourceStreams implements IsisConfiguratio
     // Injectable
     // ////////////////////////////////////////////////////////////
 
-    @Override
     public void injectInto(final Object candidate) {
         if (IsisConfigurationBuilderAware.class.isAssignableFrom(candidate.getClass())) {
             final IsisConfigurationBuilderAware cast = IsisConfigurationBuilderAware.class.cast(candidate);

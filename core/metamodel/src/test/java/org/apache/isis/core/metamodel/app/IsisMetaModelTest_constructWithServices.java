@@ -62,13 +62,13 @@ public class IsisMetaModelTest_constructWithServices {
 
     @Test
     public void shouldSucceedWithoutThrowingAnyExceptions() {
-        metaModel = new IsisMetaModel(mockContext, mockProgrammingModel);
+        metaModel = new IsisMetaModel(mockProgrammingModel);
     }
 
     @Test
     public void shouldBeAbleToRegisterServices() {
-        metaModel = new IsisMetaModel(mockContext, mockProgrammingModel, mockService1, mockService2);
-        final List<Object> services = metaModel.getServices();
+        metaModel = new IsisMetaModel(mockProgrammingModel, mockService1, mockService2);
+        final List<Object> services = metaModel.getServicesInjector().getRegisteredServices();
         assertThat(services.size(), is(3));
         assertThat(services, IsisMatchers.containsObjectOfType(SomeRepo.class));
         assertThat(services, IsisMatchers.containsObjectOfType(SomeOtherRepo.class));

@@ -34,7 +34,6 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixtures.FixturesInstallerFromConfiguration;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
 import org.apache.isis.core.runtime.installerregistry.installerapi.PersistenceMechanismInstaller;
-import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.services.ServicesInstaller;
 import org.apache.isis.core.runtime.services.ServicesInstallerFromConfigurationAndAnnotation;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -168,8 +167,9 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
 
     @Override
     public SpecificationLoaderSpi provideSpecificationLoaderSpi(
+            final DeploymentType deploymentType,
             final Collection<MetaModelRefiner> metaModelRefiners) {
-        return reflectorInstaller.createReflector(metaModelRefiners);
+        return reflectorInstaller.createReflector(deploymentType.getDeploymentCategory(), metaModelRefiners);
     }
 
 
@@ -177,10 +177,10 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
     public PersistenceSessionFactory providePersistenceSessionFactory(
             final DeploymentType deploymentType,
             final ServicesInjectorSpi servicesInjectorSpi,
-            final RuntimeContextFromSession runtimeContext) {
-        return persistenceMechanismInstaller.createPersistenceSessionFactory(deploymentType, servicesInjectorSpi,
-                getConfiguration(),
-                runtimeContext);
+            final SpecificationLoaderSpi specificationLoader) {
+        return persistenceMechanismInstaller.createPersistenceSessionFactory(
+                    deploymentType, getConfiguration(),
+                    servicesInjectorSpi);
     }
 
     //region > helpers

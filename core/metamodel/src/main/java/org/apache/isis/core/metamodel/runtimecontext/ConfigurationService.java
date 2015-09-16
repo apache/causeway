@@ -18,14 +18,11 @@ package org.apache.isis.core.metamodel.runtimecontext;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 
-public interface ConfigurationService extends Injectable {
+public interface ConfigurationService {
 
-    // //////////////////////////////////////////////////////////////////
-    // properties
-    // //////////////////////////////////////////////////////////////////
+    void injectInto(final Object candidate);
 
     /**
      * Provided by {@link RuntimeContextAbstract} itself, cloned properties from

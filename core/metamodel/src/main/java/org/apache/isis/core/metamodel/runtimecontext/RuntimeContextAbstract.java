@@ -19,42 +19,35 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.List;
-
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProviderAbstract;
-import org.apache.isis.core.metamodel.spec.ObjectSpecId;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderDelegator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpiAware;
 
-public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderSpiAware {
-
-    private final SpecificationLoaderDelegator specificationLookupDelegator = new SpecificationLoaderDelegator();
+public abstract class RuntimeContextAbstract implements RuntimeContext {
 
     private final DeploymentCategory deploymentCategory;
     private final IsisConfigurationDefault configuration;
     private final ServicesInjector servicesInjector;
+    private final SpecificationLoaderSpi specificationLoader;
 
     public RuntimeContextAbstract(
             final DeploymentCategory deploymentCategory,
             final IsisConfigurationDefault configuration,
-            final ServicesInjector servicesInjector) {
+            final ServicesInjector servicesInjector,
+            final SpecificationLoaderSpi specificationLoader) {
         this.deploymentCategory = deploymentCategory;
         this.configuration = configuration;
         this.servicesInjector = servicesInjector;
+        this.specificationLoader = specificationLoader;
     }
 
 
     @Override
     public DeploymentCategoryProvider getDeploymentCategoryProvider() {
         return new DeploymentCategoryProviderAbstract() {
+
             @Override
             public DeploymentCategory getDeploymentCategory() {
                 return deploymentCategory;
@@ -73,14 +66,13 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         return servicesInjector;
     }
 
-    public void init() {
-    }
-
-    public void shutdown() {
-    }
-
-
     @Override
+    public SpecificationLoaderSpi getSpecificationLoader() {
+        return specificationLoader;
+    }
+
+
+    //@Override
     public void injectInto(final Object candidate) {
         if (RuntimeContextAware.class.isAssignableFrom(candidate.getClass())) {
             final RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
@@ -99,90 +91,6 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getPersistenceSessionService().injectInto(candidate);
         getMessageBrokerService().injectInto(candidate);
         getSpecificationLoader().injectInto(candidate);
-    }
-
-    @Override
-    public SpecificationLoader getSpecificationLoader() {
-        return specificationLookupDelegator;
-    }
-
-    /**
-     * Is injected into when the reflector is initialized.
-     */
-    @Override
-    public void setSpecificationLoaderSpi(final SpecificationLoaderSpi specificationLoader) {
-        this.specificationLookupDelegator.setDelegate(new SpecificationLoader() {
-
-            @Override
-            public void injectInto(final Object candidate) {
-                specificationLoader.injectInto(candidate);
-            }
-
-            @Override
-            public ObjectSpecification loadSpecification(final Class<?> cls) {
-                return specificationLoader.loadSpecification(cls);
-            }
-
-            @Override
-            public Collection<ObjectSpecification> allSpecifications() {
-                return specificationLoader.allSpecifications();
-            }
-
-            @Override
-            public ObjectSpecification lookupBySpecId(ObjectSpecId objectSpecId) {
-                return specificationLoader.lookupBySpecId(objectSpecId);
-            }
-
-            @Override
-            public ObjectSpecification loadSpecification(String fullyQualifiedClassName) {
-                return specificationLoader.loadSpecification(fullyQualifiedClassName);
-            }
-
-            @Override
-            public boolean loadSpecifications(List<Class<?>> typesToLoad) {
-                return specificationLoader.loadSpecifications(typesToLoad);
-            }
-
-            @Override
-            public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
-                return specificationLoader.loadSpecifications(typesToLoad, typeToIgnore);
-            }
-
-            @Override
-            public boolean loaded(Class<?> cls) {
-                return specificationLoader.loaded(cls);
-            }
-
-            @Override
-            public boolean loaded(String fullyQualifiedClassName) {
-                return specificationLoader.loaded(fullyQualifiedClassName);
-            }
-
-            @Override
-            public ObjectSpecification introspectIfRequired(ObjectSpecification spec) {
-                return specificationLoader.introspectIfRequired(spec);
-            }
-
-            @Override
-            public List<Class<?>> getServiceClasses() {
-                return specificationLoader.getServiceClasses();
-            }
-
-            @Override
-            public boolean isServiceClass(Class<?> cls) {
-                return specificationLoader.isServiceClass(cls);
-            }
-
-            @Override
-            public void invalidateCache(Class<?> domainClass) {
-                specificationLoader.invalidateCache(domainClass);
-            }
-
-            @Override
-            public boolean isInjectorMethodFor(Method method, Class<? extends Object> serviceClass) {
-                return specificationLoader.isInjectorMethodFor(method, serviceClass);
-            }
-        });
     }
 
 }

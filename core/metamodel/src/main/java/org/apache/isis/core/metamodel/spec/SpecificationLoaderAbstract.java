@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.spec;
 
 public abstract class SpecificationLoaderAbstract implements SpecificationLoader {
 
-    @Override
     public void injectInto(final Object candidate) {
         if (SpecificationLoaderAware.class.isAssignableFrom(candidate.getClass())) {
             final SpecificationLoaderAware cast = SpecificationLoaderAware.class.cast(candidate);

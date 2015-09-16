@@ -21,6 +21,8 @@ package org.apache.isis.core.runtime.system.persistence;
 
 import java.util.Collections;
 
+import javax.jdo.PersistenceManagerFactory;
+
 import org.jmock.Expectations;
 import org.jmock.Sequence;
 import org.jmock.auto.Mock;
@@ -39,11 +41,11 @@ import org.apache.isis.core.metamodel.app.IsisMetaModel;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.runtime.persistence.adapter.PojoAdapter;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -61,7 +63,6 @@ public class PersistenceSessionTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
 
     private ServicesInjectorDefault servicesInjector;
-    private AdapterManagerDefault adapterManager;
 
     
     private PersistenceSession persistenceSession;
@@ -95,15 +96,18 @@ public class PersistenceSessionTest {
     private RuntimeContext mockRuntimeContext;
 
     @Mock
+    private ServicesInjectorSpi mockServicesInjector;
+
+    @Mock
     private IsisConfigurationDefault mockConfiguration;
-    
+
+    @Mock
+    private PersistenceManagerFactory mockPersistenceManager;
+
     @Mock
     private MessageBroker mockMessageBroker;
-    
 
     private IsisMetaModel isisMetaModel;
-
-
 
     public static class Customer {
     }
@@ -120,7 +124,7 @@ public class PersistenceSessionTest {
         context.ignoring(mockConfiguration);
         context.ignoring(mockAuditingService3);
 
-        isisMetaModel = new IsisMetaModel(mockRuntimeContext, new ProgrammingModelFacetsJava5(), new CustomerRepository());
+        isisMetaModel = new IsisMetaModel(new ProgrammingModelFacetsJava5(), new CustomerRepository());
         isisMetaModel.init();
         
         context.checking(new Expectations() {
@@ -140,7 +144,8 @@ public class PersistenceSessionTest {
                 new RuntimeContextFromSession(
                         DeploymentCategory.PRODUCTION,
                         mockConfiguration,
-                        servicesInjector);
+                        servicesInjector,
+                        mockSpecificationLoader);
         final DomainObjectContainerDefault container = new DomainObjectContainerDefault();
 
         runtimeContext.injectInto(container);
@@ -148,16 +153,16 @@ public class PersistenceSessionTest {
         servicesInjector = new ServicesInjectorDefault(
                 Collections.<Object>singletonList(container),new InjectorMethodEvaluatorDefault());
 
-        persistenceSession = new PersistenceSession(mockPersistenceSessionFactory, mockConfiguration,
-                mockSpecificationLoader, mockAuthenticationSession) {
+        persistenceSession = new PersistenceSession(mockConfiguration, mockServicesInjector, mockSpecificationLoader,
+                mockAuthenticationSession,
+                mockPersistenceManager, mockPersistenceSessionFactory
+        ) {
             @Override
             protected SpecificationLoaderSpi getSpecificationLoader() {
                 return isisMetaModel.getSpecificationLoader();
             }
             
         };
-        adapterManager = new AdapterManagerDefault(persistenceSession
-        );
 
         context.checking(new Expectations(){{
             allowing(mockAuthenticationSession).getUserName();

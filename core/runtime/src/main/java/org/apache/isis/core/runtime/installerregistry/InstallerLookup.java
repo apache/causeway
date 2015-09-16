@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
@@ -91,7 +90,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * even if it has not been registered in <tt>installer-registry.properties</tt>
  * : just specify the {@link Installer}'s fully qualified class name.
  */
-public class InstallerLookup implements InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, Injectable, SystemDependencyInjector {
+public class InstallerLookup implements InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, SystemDependencyInjector {
 
     private static final Logger LOG = LoggerFactory.getLogger(InstallerLookup.class);
 
@@ -323,7 +322,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
         return candidate;
     }
 
-    @Override
     public void injectInto(final Object candidate) {
         if (SystemDependencyInjectorAware.class.isAssignableFrom(candidate.getClass())) {
             final SystemDependencyInjectorAware cast = SystemDependencyInjectorAware.class.cast(candidate);
@@ -346,10 +344,6 @@ public class InstallerLookup implements InstallerRepository, ApplicationScopedCo
      * @see #setConfigurationBuilder(IsisConfigurationBuilder)
      */
     private IsisConfigurationBuilder isisConfigurationBuilder;
-
-    public IsisConfigurationBuilder getConfigurationBuilder() {
-        return isisConfigurationBuilder;
-    }
 
     @Override
     @Inject

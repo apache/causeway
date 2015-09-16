@@ -428,7 +428,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
      *
      * <p>
      *     Specifically, if an action which has been annotated (is copied by {@link org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet action invocation facet}), and for a parented collection
-     *     (is copied by the {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault adapter manager} when {@link org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
+     *     (is copied by the {@link PersistenceSession} when {@link PersistenceSession#adapterFor(Object, ObjectAdapter, OneToManyAssociation) creating} an adapter for a collection.
      * </p>
      */
     @Override

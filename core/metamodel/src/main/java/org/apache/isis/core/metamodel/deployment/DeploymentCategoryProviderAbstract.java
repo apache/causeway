@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.deployment;
 
 public abstract class DeploymentCategoryProviderAbstract implements DeploymentCategoryProvider {
 
-    @Override
     public void injectInto(final Object candidate) {
         if (DeploymentCategoryAware.class.isAssignableFrom(candidate.getClass())) {
             final DeploymentCategoryAware cast = DeploymentCategoryAware.class.cast(candidate);

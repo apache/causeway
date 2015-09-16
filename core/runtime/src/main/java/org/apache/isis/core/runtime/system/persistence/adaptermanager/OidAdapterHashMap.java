@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adaptermanager;
+package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -43,25 +43,22 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
 
     private final Map<Oid, ObjectAdapter> adapterByOidMap = Maps.newHashMapWithExpectedSize(DEFAULT_OID_ADAPTER_MAP_SIZE);
 
-
-    // ///////////////////////////////////////////////////////
-    // open, close
-    // ///////////////////////////////////////////////////////
+    //region > open, close
 
     public void open() {
         // nothing to do
     }
 
     public void close() {
-        LOG.debug("close");
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("close");
+        }
         adapterByOidMap.clear();
     }
 
+    //endregion
 
-    // ///////////////////////////////////////////////////////
-    // add, remove
-    // ///////////////////////////////////////////////////////
-
+    //region > add, remove
     /**
      * Add an adapter for a given oid
      */
@@ -90,7 +87,9 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
         return adapterByOidMap.remove(oid) != null;
     }
 
+    //endregion
 
+    //region > getAdapter, iterator
     /**
      * Get the adapter identified by the specified OID.
      */
@@ -98,18 +97,14 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
         return adapterByOidMap.get(oid);
     }
 
-    // ///////////////////////////////////////////////////////
-    // iterator
-    // ///////////////////////////////////////////////////////
-
     @Override
     public Iterator<Oid> iterator() {
         return adapterByOidMap.keySet().iterator();
     }
 
-    // ///////////////////////////////////////////////////////
-    // debugging
-    // ///////////////////////////////////////////////////////
+    //endregion
+
+    //region > debugging
 
     @Override
     public String debugTitle() {
@@ -131,5 +126,6 @@ public class OidAdapterHashMap implements DebuggableWithTitle, Iterable<Oid>, Se
         }
     }
 
+    //endregion
 
 }

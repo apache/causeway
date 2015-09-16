@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.persistence.adaptermanager;
+package org.apache.isis.core.runtime.system.persistence.adaptermanager;
 
 import java.util.Collections;
 import java.util.Iterator;

@@ -80,14 +80,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
     public void injectInto(final Object candidate) {
     }
 
-    //region > isInjectorMethodFor
-
-    private final Map<Method, Map<Class<?>, Boolean>> isInjectorMethod = Maps.newConcurrentMap();
-
-    public boolean isInjectorMethodFor(Method method, final Class<?> serviceClass) {
-        return false;
-    }
-    //endregion
 
     @Override
     public void setRuntimeContext(final RuntimeContext runtimeContext) {

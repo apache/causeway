@@ -19,8 +19,9 @@
 
 package org.apache.isis.core.metamodel.deployment;
 
-import org.apache.isis.core.commons.components.Injectable;
+public interface DeploymentCategoryProvider {
 
-public interface DeploymentCategoryProvider extends Injectable {
-    public DeploymentCategory getDeploymentCategory();
+    void injectInto(final Object candidate);
+
+    DeploymentCategory getDeploymentCategory();
 }

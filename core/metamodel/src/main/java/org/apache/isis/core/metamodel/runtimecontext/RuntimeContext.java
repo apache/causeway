@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.runtimecontext;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
@@ -31,9 +30,9 @@ import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
  * Decouples the metamodel from a runtime.
  * 
  */
-public interface RuntimeContext extends Injectable, ApplicationScopedComponent {
+public interface RuntimeContext extends ApplicationScopedComponent {
 
-    public void init();
+    void injectInto(Object candidate);
 
     // //////////////////////////////////////
     // application-scoped

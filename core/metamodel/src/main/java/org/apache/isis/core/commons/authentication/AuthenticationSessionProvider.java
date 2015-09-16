@@ -16,9 +16,9 @@
  */
 package org.apache.isis.core.commons.authentication;
 
-import org.apache.isis.core.commons.components.Injectable;
+public interface AuthenticationSessionProvider {
 
-public interface AuthenticationSessionProvider extends Injectable {
+    void injectInto(final Object candidate);
 
     /**
      * Provided by <tt>AuthenticationManager</tt> when used by framework.

@@ -20,7 +20,6 @@
 package org.apache.isis.core.metamodel.services;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 /**
@@ -29,7 +28,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
  * <p>
  * Can be considered a mutable SPI to the {@link org.apache.isis.core.metamodel.runtimecontext.ServicesInjector} immutable API.
  */
-public interface ServicesInjectorSpi extends ApplicationScopedComponent, Injectable, ServicesInjector {
+public interface ServicesInjectorSpi extends ApplicationScopedComponent, ServicesInjector {
 
     public void init();
 
