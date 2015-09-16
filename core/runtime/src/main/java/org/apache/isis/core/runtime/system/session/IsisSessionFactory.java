@@ -24,21 +24,20 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.installerregistry.InstallerLookup;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.persistence.PersistenceSessionFactory;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
@@ -104,18 +103,12 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     }
 
 
-
-    // ///////////////////////////////////////////
-    // init, shutdown
-    // ///////////////////////////////////////////
-
     public void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();
         specificationLoaderSpi.shutdown();
     }
 
-    // //////////////////////////////////////
 
 
     /**
@@ -138,6 +131,14 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
+     * {@link DeploymentType}.
+     */
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
+    }
+
+    /**
+     * The {@link ApplicationScopedComponent application-scoped}
      * {@link IsisConfiguration}.
      */
     public IsisConfiguration getConfiguration() {
@@ -145,12 +146,22 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     }
 
     /**
-     * The {@link ApplicationScopedComponent application-scoped}
-     * {@link DeploymentType}.
+     * The {@link ApplicationScopedComponent application-scoped} {@link ServicesInjector}.
      */
-    public DeploymentType getDeploymentType() {
-        return deploymentType;
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
+
+    /**
+     * Derived from {@link #getServicesInjector()}.
+     * 
+     * @deprecated - use {@link #getServicesInjector()} instead.
+     */
+    @Deprecated
+    public List<Object> getServices() {
+        return servicesInjector.getRegisteredServices();
+    }
+
 
     /**
      * The {@link ApplicationScopedComponent application-scoped}
@@ -187,10 +198,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
         return persistenceSessionFactory;
     }
 
-    public List<Object> getServices() {
-        return servicesInjector.getRegisteredServices();
-    }
-
     /**
      * The {@link OidMarshaller} to use for marshalling and unmarshalling {@link Oid}s
      * into strings.
@@ -198,6 +205,5 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     public OidMarshaller getOidMarshaller() {
         return oidMarshaller;
     }
-
 
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 /**
@@ -26,5 +27,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 public interface RendererContext5 extends RendererContext4 {
 
     public SpecificationLoader getSpecificationLoader();
+    public ServicesInjector getServicesInjector();
 
 }

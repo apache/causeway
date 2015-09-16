@@ -40,6 +40,10 @@ public interface RendererContext {
     
     public PersistenceSession getPersistenceSession();
 
+    /**
+     * @deprecated - replaced by {@link #getPersistenceSession()}.
+     */
+    @Deprecated
     public AdapterManager getAdapterManager();
 
     public Where getWhere();

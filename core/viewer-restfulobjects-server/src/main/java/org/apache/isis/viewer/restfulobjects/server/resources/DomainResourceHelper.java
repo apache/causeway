@@ -29,15 +29,16 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext4;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext5;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -52,13 +53,13 @@ import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context4 {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context5 {
 
-        private final RendererContext4 rendererContext;
+        private final RendererContext5 rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
 
         RepresentationServiceContextAdapter(
-                final RendererContext4 rendererContext,
+                final RendererContext5 rendererContext,
                 final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
@@ -91,7 +92,7 @@ public class DomainResourceHelper {
 
         @Override
         public AdapterManager getAdapterManager() {
-            return rendererContext.getAdapterManager();
+            return rendererContext.getPersistenceSession();
         }
 
         @Override
@@ -167,6 +168,16 @@ public class DomainResourceHelper {
         @Override
         public InteractionInitiatedBy getInteractionInitiatedBy() {
             return rendererContext.getInteractionInitiatedBy();
+        }
+
+        @Override
+        public SpecificationLoader getSpecificationLoader() {
+            return rendererContext.getSpecificationLoader();
+        }
+
+        @Override
+        public ServicesInjector getServicesInjector() {
+            return rendererContext.getServicesInjector();
         }
     }
 
@@ -347,14 +358,15 @@ public class DomainResourceHelper {
     // //////////////////////////////////////
 
     private PersistenceSession getPersistenceSession() {
-        return IsisContext.getPersistenceSession();
+        return resourceContext.getPersistenceSession();
     }
 
-    /**
-     * Service locator
-     */
+    private ServicesInjector getServicesInjector() {
+        return resourceContext.getServicesInjector();
+    }
+
     private <T> T lookupService(Class<T> serviceType) {
-        return getPersistenceSession().getServiceOrNull(serviceType);
+        return getServicesInjector().lookupService(serviceType);
     }
 
 }

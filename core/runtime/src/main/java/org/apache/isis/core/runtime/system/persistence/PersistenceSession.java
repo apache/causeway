@@ -301,13 +301,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
     }
 
-    /**
-     * @return - the service, or <tt>null</tt> if no service registered of specified type.
-     */
-    public <T> T getServiceOrNull(final Class<T> serviceType) {
-        return servicesInjector.lookupService(serviceType);
-    }
-
     //endregion
 
     //region > close

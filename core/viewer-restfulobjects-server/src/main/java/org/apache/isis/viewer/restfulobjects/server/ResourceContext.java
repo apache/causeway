@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
@@ -65,17 +66,17 @@ public class ResourceContext implements RendererContext5 {
     private final HttpServletResponse httpServletResponse;
     private final SecurityContext securityContext;
 
-    private final Localization localization;
+    private final DeploymentType deploymentType;
     private final IsisConfiguration configuration;
-    private final AuthenticationSession authenticationSession;
-    private final PersistenceSession persistenceSession;
-    private final AdapterManager adapterManager;
+    private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
+    private final AuthenticationSession authenticationSession;
+    private final Localization localization;
+    private final PersistenceSession persistenceSession;
 
     private List<List<String>> followLinks;
 
     private final Where where;
-    private final DeploymentType deploymentType;
     private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
 
@@ -94,13 +95,13 @@ public class ResourceContext implements RendererContext5 {
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
             final SecurityContext securityContext,
-            final Localization localization,
-            final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession,
-            final AdapterManager objectAdapterLookup,
-            final SpecificationLoader specificationLoader,
-            final IsisConfiguration configuration,
             final DeploymentType deploymentType,
+            final IsisConfiguration configuration,
+            final ServicesInjector servicesInjector,
+            final SpecificationLoader specificationLoader,
+            final AuthenticationSession authenticationSession,
+            final Localization localization,
+            final PersistenceSession persistenceSession,
             final InteractionInitiatedBy interactionInitiatedBy) {
 
         this.httpHeaders = httpHeaders;
@@ -111,11 +112,11 @@ public class ResourceContext implements RendererContext5 {
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
         this.securityContext = securityContext;
+        this.servicesInjector = servicesInjector;
         this.localization = localization;
         this.configuration = configuration;
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
-        this.adapterManager = objectAdapterLookup;
         this.specificationLoader = specificationLoader;
         this.where = where;
         this.deploymentType = deploymentType;
@@ -264,6 +265,7 @@ public class ResourceContext implements RendererContext5 {
         return securityContext;
     }
 
+    @Override
     public DeploymentType getDeploymentType() {
         return deploymentType;
     }
@@ -288,9 +290,18 @@ public class ResourceContext implements RendererContext5 {
         return authenticationSession;
     }
 
+    /**
+     * @deprecated - use {@link #getPersistenceSession()}.
+     */
+    @Deprecated
     @Override
     public AdapterManager getAdapterManager() {
-        return adapterManager;
+        return persistenceSession;
+    }
+
+    @Override
+    public ServicesInjector getServicesInjector() {
+        return servicesInjector;
     }
 
     @Override
@@ -302,6 +313,7 @@ public class ResourceContext implements RendererContext5 {
         return persistenceSession.getServices();
     }
 
+    @Override
     public SpecificationLoader getSpecificationLoader() {
         return specificationLoader;
     }
