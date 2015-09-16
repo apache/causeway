@@ -32,7 +32,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.9.0</isis.version>
+        <isis.version>1.10.0-SNAPSHOT</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -231,14 +231,6 @@
             <dependency>
                 <groupId>org.apache.isis.core</groupId>
                 <artifactId>isis</artifactId>
-                <version>${isis.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.isis.viewer</groupId>
-                <artifactId>isis-viewer-wicket</artifactId>
                 <version>${isis.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
