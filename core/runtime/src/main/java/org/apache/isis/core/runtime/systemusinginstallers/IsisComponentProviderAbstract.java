@@ -41,6 +41,7 @@ import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsing
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.fixtures.FixturesInstaller;
@@ -204,7 +205,7 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     //endregion
 
     //region > API impl.
-    
+
     @Override
     public DeploymentType getDeploymentType() {
         return deploymentType;
@@ -231,9 +232,11 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
     }
 
     @Override
-    public List<Object> provideServices() {
-        return services;
+    public ServicesInjectorDefault provideServiceInjector() {
+        return new ServicesInjectorDefault(services);
     }
+
     //endregion
+
 
 }

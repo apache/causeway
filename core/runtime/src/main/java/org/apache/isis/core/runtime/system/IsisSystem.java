@@ -142,8 +142,7 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
             final IsisConfigurationDefault configuration = isisComponentProvider.getConfiguration();
 
             // services
-            final List<Object> services = isisComponentProvider.provideServices();
-            ServicesInjectorDefault servicesInjector = new ServicesInjectorDefault(services);
+            ServicesInjectorDefault servicesInjector = isisComponentProvider.provideServiceInjector();
             servicesInjector.addFallbackIfRequired(FixtureScripts.class, new FixtureScriptsDefault());
             servicesInjector.validateServices();
 

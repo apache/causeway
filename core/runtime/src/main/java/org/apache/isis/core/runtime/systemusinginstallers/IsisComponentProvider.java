@@ -20,10 +20,10 @@
 package org.apache.isis.core.runtime.systemusinginstallers;
 
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.MetaModelRefiner;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -45,7 +45,8 @@ public interface IsisComponentProvider {
     AuthenticationManager provideAuthenticationManager(DeploymentType deploymentType);
     AuthorizationManager provideAuthorizationManager(final DeploymentType deploymentType);
 
-    List<Object> provideServices();
+    ServicesInjectorDefault provideServiceInjector();
+
 
     FixturesInstaller provideFixturesInstaller();
 
