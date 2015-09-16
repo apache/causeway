@@ -19,25 +19,21 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 
-public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware {
+public class ProgrammableReflector extends SpecificationLoaderAbstract implements SpecificationLoaderSpi, ApplicationScopedComponent {
 
-    public void init() {
+    public void init(final RuntimeContext runtimeContext) {
     }
 
     public void shutdown() {
@@ -78,12 +74,6 @@ public class ProgrammableReflector extends SpecificationLoaderAbstract implement
 
     @Override
     public void injectInto(final Object candidate) {
-    }
-
-
-    @Override
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-        // ignored
     }
 
     @Override

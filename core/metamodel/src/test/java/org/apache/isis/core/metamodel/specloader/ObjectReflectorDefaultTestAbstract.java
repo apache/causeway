@@ -91,12 +91,12 @@ public abstract class ObjectReflectorDefaultTestAbstract {
                         new ProgrammingModelFacetsJava5(),
                         new HashSet<FacetDecorator>(),
                         new MetaModelValidatorDefault(),
-                        Lists.<LayoutMetadataReader>newArrayList(new LayoutMetadataReaderFromJson()), mockServicesInjector);
+                        Lists.<LayoutMetadataReader>newArrayList(
+                                new LayoutMetadataReaderFromJson()), mockServicesInjector);
         runtimeContext =
                 new RuntimeContextNoRuntime(
                         new ServicesInjectorDefault(Collections.emptyList()), reflector);
-        reflector.setRuntimeContext(runtimeContext);
-        reflector.init();
+        reflector.init(runtimeContext);
         
         specification = loadSpecification(reflector);
     }

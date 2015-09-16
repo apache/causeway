@@ -48,8 +48,6 @@ import org.apache.isis.core.commons.util.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.InjectorMethodEvaluator;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.InjectorMethodEvaluatorDefault;
 import org.apache.isis.core.metamodel.specloader.ServiceInitializer;
 
@@ -81,12 +79,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     /**
      * For testing.  
-     * 
-     * <p>
-     *     In production code, {@link #setSpecificationLoader(org.apache.isis.core.metamodel.spec.SpecificationLoader)}
-     *     Pis used instead.
-     * </p>
-     * @param injectorMethodEvaluator
      */
     public ServicesInjectorDefault(final List<Object> services, final InjectorMethodEvaluator injectorMethodEvaluator) {
         this.services.addAll(services);
@@ -94,17 +86,6 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
         autowireServicesAndContainer();
     }
-
-//region > init, shutdown
-
-    public void init() {
-        autowireServicesAndContainer();
-    }
-
-    public void shutdown() {
-    }
-
-    //endregion
 
     //region > replaceServices
 

@@ -109,36 +109,6 @@ public class IsisSessionFactory implements ApplicationScopedComponent {
     // init, shutdown
     // ///////////////////////////////////////////
 
-    /**
-     * Wires components as necessary, and then init}ializes all.
-     */
-    public void init() {
-
-        // a bit of a workaround, but required if anything in the metamodel (for
-        // example, a
-        // ValueSemanticsProvider for a date value type) needs to use the Clock
-        // singleton
-        // we do this after loading the services to allow a service to prime a
-        // different clock
-        // implementation (eg to use an NTP time service).
-        if (!deploymentType.isProduction() && !Clock.isInitialized()) {
-            FixtureClock.initialize();
-        }
-
-        specificationLoaderSpi.init();
-
-        // must come after init of spec loader.
-        specificationLoaderSpi.injectInto(persistenceSessionFactory);
-
-        authenticationManager.init();
-        authorizationManager.init();
-
-        servicesInjector.init();
-
-        persistenceSessionFactory.init();
-    }
-
-
     public void shutdown() {
         persistenceSessionFactory.shutdown();
         authenticationManager.shutdown();

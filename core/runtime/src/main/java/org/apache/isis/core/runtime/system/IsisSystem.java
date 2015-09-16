@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
@@ -123,6 +125,17 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
         localeInitializer.initLocale(getConfiguration());
         timeZoneInitializer.initTimeZone(getConfiguration());
 
+        // a bit of a workaround, but required if anything in the metamodel (for
+        // example, a
+        // ValueSemanticsProvider for a date value type) needs to use the Clock
+        // singleton
+        // we do this after loading the services to allow a service to prime a
+        // different clock
+        // implementation (eg to use an NTP time service).
+        if (!deploymentType.isProduction() && !Clock.isInitialized()) {
+            FixtureClock.initialize();
+        }
+
         try {
 
             // configuration
@@ -144,41 +157,48 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
             final Collection<MetaModelRefiner> metaModelRefiners =
                     refiners(authenticationManager, authorizationManager,
                             new PersistenceSessionFactoryMetamodelRefiner());
-            final SpecificationLoaderSpi specificationLoader1 =
+            final SpecificationLoaderSpi specificationLoader =
                     isisComponentProvider.provideSpecificationLoaderSpi(deploymentType, servicesInjector, metaModelRefiners);
 
             // persistenceSessionFactory
             final PersistenceSessionFactory persistenceSessionFactory =
                     isisComponentProvider.providePersistenceSessionFactory(
-                            deploymentType, servicesInjector, specificationLoader1);
+                            deploymentType, servicesInjector, specificationLoader);
 
             // runtimeContext
             final RuntimeContextFromSession runtimeContext =
                     new RuntimeContextFromSession(
                             deploymentType.getDeploymentCategory(), configuration,
-                            servicesInjector, specificationLoader1);
+                            servicesInjector, specificationLoader);
 
             // wire up components and components into services...
-            runtimeContext.injectInto(specificationLoader1);
+            runtimeContext.injectInto(specificationLoader);
 
             for (Object service : servicesInjector.getRegisteredServices()) {
                 runtimeContext.injectInto(service);
             }
 
-            // finally instantiate
+            // instantiate
             sessionFactory = new IsisSessionFactory(
-                    deploymentType, configuration, servicesInjector, specificationLoader1,
+                    deploymentType, configuration, servicesInjector, specificationLoader,
                     authenticationManager, authorizationManager, persistenceSessionFactory);
 
             // temporarily make a configuration available
             // TODO: REVIEW: would rather inject this, or perhaps even the ConfigurationBuilder
-            IsisContext.setConfiguration(getConfiguration());
+            IsisContext.setConfiguration(configuration);
 
-            initContext(sessionFactory);
-            sessionFactory.init();
+            // set up the "appropriate" IsisContext (usually IsisContextThreadLocal) to hold
+            // a reference to the sessionFactory just created
+            deploymentType.initContext(sessionFactory);
+
+            specificationLoader.init(runtimeContext);
+
+            authenticationManager.init();
+            authorizationManager.init();
+
+            persistenceSessionFactory.init();
 
             // validate here after all entities have been registered in the persistence session factory
-            final SpecificationLoaderSpi specificationLoader = sessionFactory.getSpecificationLoader();
             specificationLoader.validateAndAssert();
 
             // store simply so can do postConstruct when shutdown
@@ -196,11 +216,6 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     private static Collection<MetaModelRefiner> refiners(Object... possibleRefiners ) {
         return ListExtensions.filtered(Arrays.asList(possibleRefiners), MetaModelRefiner.class);
-    }
-
-
-    private void initContext(final IsisSessionFactory sessionFactory) {
-        getDeploymentType().initContext(sessionFactory);
     }
 
     /**

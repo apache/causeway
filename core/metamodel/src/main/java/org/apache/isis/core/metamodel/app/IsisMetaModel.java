@@ -122,9 +122,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
     public void init() {
         ensureNotInitialized();
 
-        runtimeContext.injectInto(specificationLoader);
-
-        specificationLoader.initialize();
+        specificationLoader.initialize(runtimeContext);
 
         for (final Object service : servicesInjector.getRegisteredServices()) {
             final ObjectSpecification serviceSpec = specificationLoader.loadSpecification(service.getClass());

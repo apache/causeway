@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
@@ -100,7 +99,7 @@ import static org.hamcrest.Matchers.notNullValue;
  * <p>
  * In addition, the {@link RuntimeContext} can optionally be injected, but will
  * default to {@link RuntimeContextNoRuntime} if not provided prior to
- * {@link #init() initialization}. The purpose of {@link RuntimeContext} is to
+ * {@link SpecificationLoaderSpi#init(RuntimeContext) initialization}. The purpose of {@link RuntimeContext} is to
  * allow the metamodel to be used standalone, for example in a Maven plugin. The
  * {@link RuntimeContextNoRuntime} implementation will through an exception for
  * any methods (such as finding an {@link ObjectAdapter adapter}) because there
@@ -110,7 +109,8 @@ import static org.hamcrest.Matchers.notNullValue;
  * to its <tt>IsisContext</tt>.
  */
 
-public final class ObjectReflectorDefault implements SpecificationLoaderSpi, ApplicationScopedComponent, RuntimeContextAware, DebuggableWithTitle {
+public final class ObjectReflectorDefault
+        implements SpecificationLoaderSpi, ApplicationScopedComponent, DebuggableWithTitle {
 
     private final static Logger LOG = LoggerFactory.getLogger(ObjectReflectorDefault.class);
 
@@ -123,7 +123,7 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
 
     /**
      * <p>
-     * {@link FacetDecorator}s must be added prior to {@link #init()
+     * {@link FacetDecorator}s must be added prior to {@link SpecificationLoaderSpi#init(RuntimeContext)
      * initialization.}
      */
     private final FacetDecoratorSet facetDecoratorSet;
@@ -200,10 +200,11 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     /**
      * Initializes and wires up, and primes the cache based on any service
      * classes (provided by the {@link ServicesInjectorSpi}).
+     * @param runtimeContext
      */
-    public void init() {
+    public void init(final RuntimeContext runtimeContext) {
 
-        initialize();
+        initialize(runtimeContext);
 
         cacheBySpecId();
         
@@ -225,20 +226,22 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
         return validationFailures;
     }
 
-    public void initialize() {
+    public void initialize(final RuntimeContext runtimeContext) {
+        this.runtimeContext = runtimeContext;
+
         if (LOG.isDebugEnabled()) {
             LOG.debug("initialising " + this);
         }
 
         // default subcomponents
-        if (runtimeContext == null) {
-            runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
+        if (this.runtimeContext == null) {
+            this.runtimeContext = new RuntimeContextNoRuntime(servicesInjector, this);
         }
 
         injectInto(metaModelValidator);
 
         // wire subcomponents into each other
-        runtimeContext.injectInto(facetProcessor);
+        this.runtimeContext.injectInto(facetProcessor);
 
         // initialize subcomponents
         facetDecoratorSet.init();
@@ -595,19 +598,12 @@ public final class ObjectReflectorDefault implements SpecificationLoaderSpi, App
     // ////////////////////////////////////////////////////////////////////
 
     /**
-     * As per {@link #setRuntimeContext(RuntimeContext)}.
+     * Injected in {@link #initialize(RuntimeContext)}.
      */
     public RuntimeContext getRuntimeContext() {
         return runtimeContext;
     }
 
-    /**
-     * Due to {@link RuntimeContextAware}.
-     */
-    @Override
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
-    }
 
     // ////////////////////////////////////////////////////////////////////
     // Dependencies (setters, optional)
