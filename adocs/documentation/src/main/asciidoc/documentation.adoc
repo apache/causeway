@@ -98,8 +98,8 @@ including:
 * Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
 * link:./guides/cg.html#_cg_ide-templates[*IDE templates*] (IntelliJ and Eclipse)
 * link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
-* link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release]
-* link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
+* link:./guides/cg.html#_cg_isis-maven-plugin[Isis Maven plugin]
+* link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release] ; link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
 
 
 
@@ -116,6 +116,8 @@ including:
 * http://github.com/estatio/estatio[Estatio] (not ASF)
 * http://github.com/isisaddons/isis-app-todoapp[TodoApp Example App] (not ASF)
 * http://github.com/isisaddons/isis-app-kitchensink[Kitchensink App] (not ASF)
+* http://github.com/isisaddons/isis-app-neoapp[Neo4J Example App] (not ASF)
+* http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example App] (not ASF)
 
 
 

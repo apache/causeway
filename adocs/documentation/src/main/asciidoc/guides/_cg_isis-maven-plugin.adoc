@@ -5,6 +5,257 @@
 :_imagesdir: images/
 :toc: right
 
-NOTE: TODO
+
+The Apache Isis programming model requires that a number of naming conventions are followed.
+
+For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.  Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
+
+When running the application these are enforced by the `MetaModelValidator` component that detects these errors, failing fast.
+
+The purpose of the `isis-maven-plugin` is to enforce these naming conventions at build time, typically enforced by way of a continuous integration server.
+
+[NOTE]
+====
+The instructions given here relate to `1.10.0-SNAPSHOT`.   The plugin was also released for `1.9.0`, but with a slightly different configuration; see the final section for differences.
+====
+
+== `dom` project
+
+To start with, we need an xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at so that it knows which services and entities are to be validated.
+
+This can be extremely minimal.  For example, the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp]'s manifest is:
+
+[source,java]
+----
+package domainapp.dom;
+...
+public class DomainAppDomManifest implements AppManifest {
+    @Override
+    public List<Class<?>> getModules() {
+        return Arrays.asList(
+                DomainAppDomainModule.class  // domain (entities and repositories)
+        );
+    }
+    @Override
+    public List<Class<?>> getAdditionalServices() { return Collections.emptyList(); }
+    @Override
+    public String getAuthenticationMechanism() { return null; }
+    @Override
+    public String getAuthorizationMechanism() { return null; }
+    @Override
+    public List<Class<? extends FixtureScript>> getFixtures() { return null; }
+    @Override
+    public Map<String, String> getConfigurationProperties() { return null; }
+}
+----
+
+where `DomainAppDomainModule` simply identifies the package for the manifest to search under:
+
+[source,java]
+----
+package domainapp.dom;
+public final class DomainAppDomainModule {
+}
+----
+
+Next, update the `pom.xml` (in your project's `dom` module):
+
+[source,xml]
+----
+<profile>
+    <id>isis-validate</id>
+    <activation>
+        <property>
+            <name>isis-validate</name>                                                  <!-- 1 -->
+        </property>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>${isis.version}</version>                                      <!-- 2 -->
+                <configuration>
+                    <appManifest>domainapp.dom.DomainAppDomManifest</appManifest>       <!-- 3 -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.isis.example.application</groupId>          <!-- 4 -->
+                        <artifactId>simpleapp-dom</artifactId>
+                        <version>1.10.0-SNAPSHOT</version>
+                    </dependency>
+                    <!-- workaround to avoid conflict with plexus-default -->
+                    <dependency>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>16.0.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>validate</goal>                                       <!-- 5 -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+----
+<1> the profile can be activated using `-Disis-validate`
+<2> set to `1.10.0-SNAPSHOT` or any later version
+<3> the manifest discussed previously; adjust as required
+<4> the `dom` module containing itself; adjust as required
+<5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie will be called using `mvn test`).
+
+
+
+
+== To run
+
+The plugin is activated by enabling the profile and invoking the `test` phase:
+
+[source,bash]
+----
+mvn test -Disis-validate
+----
+
+This will run any tests, and then also - because the plugin is activated by the `isis-validate` property and bound to the `test` phase, will run the plugin's `validate` goal.
+
+
+
+
+== Example of failure
+
+In the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp] application the `SimpleObject` defines an `updateName` action.  This has a supporting method:
+
+
+[source,java]
+----
+public SimpleObject updateName( ... ) { ... }
+public String default0UpdateName() { ... }
+----
+
+We can introduce an error by misspelling the supporting method, for example:
+
+[source,java]
+----
+public String default0XUpdateName() { ... }
+----
+
+Running `mvn -Disis-valdate test` then generates this output:
+
+
+[source,bash]
+----
+[error]
+[error]
+[error]
+[error] domainapp.dom.simple.SimpleObject#default0XUpdateName: has prefix default, is probably a supporting method for a property, collection or action.  If the method is intended to be an action, then rename and use @ActionLayout(named="...") or ignore completely using @Programmatic
+[error]
+[error]
+[error]
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO]
+[INFO] Simple App ......................................... SUCCESS [  0.087 s]
+[INFO] Simple App DOM ..................................... FAILURE [  4.182 s]
+[INFO] Simple App Fixtures ................................ SKIPPED
+[INFO] Simple App Application ............................. SKIPPED
+[INFO] Simple App Integration Tests ....................... SKIPPED
+[INFO] Simple App Webapp .................................. SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] ...
+[ERROR] Failed to execute goal org.apache.isis.tool:isis-maven-plugin:1.10.0-SNAPSHOT:validate (default) on project simpleapp-dom: 1 problems found. -> [Help 1]
+----
+
+If one were to attempt to run the application, the same error would appear in the log files on startup (and the application would not boot).
+
+
+
+
+== Custom validation rules
+
+It is also possible to customize the validation, explained xref:ug.adoc#_ug_extending_programming-model_custom-validator[here].  For example, you could enforce project-specific conventions by implementing a custom `MetaModelValidator`, and registering using a configuration property.
+
+To support this using `AppManifest`s, override its `getConfigurationProperties()` method:
+
+[source,ini]
+----
+public class DomainAppDomManifest implements AppManifest {
+    ...
+    public Map<String, String> getConfigurationProperties() {
+        final Map<String, String> map = Maps.newTreeMap();
+        map.put("isis.reflector.validator","com.mycompany.myapp.MyMetaModelValidator");
+        return map;
+    }
+}
+----
+
+
+== 1.9.0 version
+
+The `1.9.0` version of the plugin requires slightly different configuratoin.  Rather than using an `AppManifest`, instead the configuration directory containing `isis.properties` is specified:
+
+[source,xml]
+----
+<profile>
+    <id>isis-validate</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>                                        <!-- 1 -->
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.isis.tool</groupId>
+                <artifactId>isis-maven-plugin</artifactId>
+                <version>1.9.0-SNAPSHOT</version>
+                <configuration>
+                    <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>    <!-- 2 -->
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.isis.example.application</groupId>
+                        <artifactId>simpleapp-dom</artifactId>
+                        <version>1.9.0-SNAPSHOT</version>
+                    </dependency>
+                    <!-- workaround to avoid conflict with plexus-default -->
+                    <dependency>
+                        <groupId>com.google.guava</groupId>
+                        <artifactId>guava</artifactId>
+                        <version>16.0.1</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+----
+<1> activated using the `-P` profile flag rather than a `-D` system property
+<2> specify the `isisConfigDir` directory (containing the `isis.properties` file).
+
+To use the `1.9.0` version, use:
+
+[source,bash]
+----
+mvn -P isis-validate test
+----
+
+[NOTE]
+====
+Note that the `isisConfigDir` property was removed in `1.10.0`; only the `AppManifest` approach is supported.
+====
 
 

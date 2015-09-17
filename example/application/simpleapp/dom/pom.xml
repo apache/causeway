@@ -157,7 +157,9 @@
         <profile>
             <id>isis-validate</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>isis-validate</name>
+                </property>
             </activation>
             <build>
                 <plugins>
@@ -167,7 +169,6 @@
                         <version>${isis.version}</version>
                         <configuration>
                             <appManifest>domainapp.dom.DomainAppDomManifest</appManifest>
-                            <isisConfigDir>../webapp/src/main/webapp/WEB-INF</isisConfigDir>
                         </configuration>
                         <dependencies>
                             <dependency>

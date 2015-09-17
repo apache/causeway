@@ -140,15 +140,15 @@ Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
 
 Set `MAVEN_OPTS` environment variable:
 
-[source,ini]
+[source,bash]
 ----
-MAVEN_OPTS=-Xms512m -Xmx1024m -XX:MaxPermSize=256m
+export MAVEN_OPTS="-Xms512m -Xmx1024m"
 ----
 
 
 [NOTE]
 ====
-Previously we suggested `128m` for the `MaxPermSize`, but that would no longer seem to be sufficient.
+Previously we suggested `-XX:MaxPermSize=256m`, but this option has been removed in Java 8.  (As of 1.9.0, Apache Isis is built using Java 8 but with source and target set to JDK 1.7).
 ====
 
 
@@ -168,7 +168,7 @@ Thereafter you can speed up the build by adding the `-o` (offline flag).  To sav
 
 [source,bash]
 ----
-export MAVEN_OPTS="-XX:+TieredCompilation -XX:TieredStopAtLevel=1"
+export MAVEN_OPTS="-Xms512m -Xmx1024m -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 mvn clean install -o -T1C
 ----
 

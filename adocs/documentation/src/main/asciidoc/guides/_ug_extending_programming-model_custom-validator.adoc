@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-Apache Isis' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent with itself.
+Apache Isis' programming model includes a validator component that detects and prevents (by failing fast) a number of situations where the domain model is logically inconsistent.
 
 For example, the validator will detect any orphaned supporting methods (eg `hideXxx()`) if the corresponding property or action has been renamed or deleted but the supporting method was not also updated.  Another example is that a class cannot have a title specified both using `title()` method and also using `@Title` annotation.
 

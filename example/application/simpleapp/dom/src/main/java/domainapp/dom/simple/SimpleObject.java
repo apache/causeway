@@ -112,7 +112,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return this;
     }
 
-
     public String default0UpdateName() {
         return getName();
     }
