@@ -11,20 +11,32 @@
 
 This table summarises all releases of Apache Isis to date.
 
-[cols="1,1,2a,3a"]
+[cols="1,1,2a,2a,>1,>1,>1"]
 |===
-| Version | Date | Components | Notes
+| Version
+| Date
+| Components
+| Notes
+| Features
+| Improves
+| Bugs
 
 | xref:r1.9.0[1.9.0]
 | 1-sep-2015
 | * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12332806[1.9.0]
 | Combined release notes for core and simpleapp-archetype.
+| 18
+| 50
+| 25
 
 | xref:r1.8.0[1.8.0]
 | 24-feb-2015
 | * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328845[core-1.8.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12328847[archetype-1.8.0]
 | Wicket viewer moved into core; todoapp archetype moved to link:http://www.isisaddons.org[Isis Addons] (non-ASF).
+| 27
+| 41
+| 20
 
 | xref:r1.7.0[1.7.0]
 | 18-oct-2014
@@ -33,6 +45,9 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327441[archetype-simpleapp-1.7.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12327440[archetype-todoapp-1.7.0]
 | Module functionality previously in 1.6.0 now retired; use http://isisaddons.org[Isis Addons] (non-ASF) instead.
+| 4
+| 9
+| 20
 
 | xref:r1.6.0[1.6.0]
 | 28-jul-2014
@@ -41,6 +56,9 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326462[archetype-simpleapp-1.6.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326461[archetype-todoapp-1.6.0]
 | Restful Objects viewer, JDO/Datanucleus Objectstore and Shiro Security all moved into core.  Quickstart-wrj archetype renamed to todoapp; simple-wrj archetype renamed to simpleapp.  Some functionality copied/refactored as link:http://www.isisaddons.org[Isis Addons] (non-ASF).
+| 6
+| 12
+| 15
 
 | xref:r1.5.0[1.5.0]
 | 08-jun-2014
@@ -52,6 +70,9 @@ This table summarises all releases of Apache Isis to date.
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326528[archetype-simple-wrj-1.5.0]
 * link:https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12326527[archetype-quickstart-wrj-1.5.0]
 | No longer releasing security-file
+| 3
+| 19
+| 13
 
 | xref:r1.4.1[1.4.1]
 | 14-mar-2014
@@ -60,6 +81,9 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.4.1
 * archetype-quickstart-wrj-1.4.1
 | Patch release
+| 0
+| 2
+| 2
 
 | xref:r1.4.0[1.4.0]
 | 11-mar-2014
@@ -72,6 +96,9 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.4.0
 * archetype-quickstart-wrj-1.4.0
 |
+| 56
+| 62
+| 26
 
 | xref:r1.3.1[1.3.1]
 | 7-nov-2013
@@ -79,6 +106,9 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.3.1
 * archetype-quickstart-wrj-1.3.1
 | Patch release
+| 1
+| 0
+| 3
 
 | xref:r1.8.0[1.3.0]
 | 25-oct-2013
@@ -91,6 +121,9 @@ This table summarises all releases of Apache Isis to date.
 * archetype-simple-wrj-1.3.0
 * archetype-quickstart-wrj-1.3.0
 | WRJ archetype renamed to Quickstart WRJ.  Simple WRJ archetype added.
+| 52
+| 61
+| 30
 
 | xref:r1.2.0[1.2.0]
 | 30-may-2013
@@ -102,6 +135,9 @@ This table summarises all releases of Apache Isis to date.
 * viewer-wicket-1.2.0
 * archetype-wrj-1.0.3
 |
+| 22
+| 41
+| 15
 
 | xref:r1.1.0[1.1.0]
 | 31-jan-2013
@@ -110,12 +146,18 @@ This table summarises all releases of Apache Isis to date.
 * viewer-wicket-1.1.0
 * archetype-wrj-1.0.2
 |
+| 9
+| 18
+| 8
 
 | xref:r1.0.1[1.0.1]
 | 10-jan-2013
 | * security-shiro-1.0.0
 * archetype-wrj-1.0.1
 | Combining RestfulObjects and Wicket viewers into a single webapp, along with Shiro security
+| 1
+|
+|
 
 | xref:r1.0.0[1.0.0]
 | 24-dec-2012
@@ -125,17 +167,26 @@ This table summarises all releases of Apache Isis to date.
 * viewer-restfulobjects-1.0.0
 * archetype-wrj-1.0.0
 | First release having graduated
+| 8
+| 33
+| 6
 
 
 | 0.2.0-incubating
 | 20-feb-2012
 | * 0.2.0-incubating
 |
+|
+|
+|
 
 | 0.1.2-incubating
 | 13-jul-2011
 | * 0.1.2-incubating
 | First release in the ASF incubator
+|
+|
+|
 |===
 
 
@@ -1204,7 +1255,6 @@ Isis core 1.6.0 also incorporates the Restful Objects viewer, Shiro Security and
                               
 ==== Improvement
 
-<li>Updated to run against Apache Isis Core 1.3.0
 * link:https://issues.apache.org/jira/browse/ISIS-362[ISIS-362] - Upgrade to JMock 2.6.0
 * link:https://issues.apache.org/jira/browse/ISIS-509[ISIS-509] - Tidy up and rationalize Util classes in core (and all dependents)
 
