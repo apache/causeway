@@ -49,7 +49,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember {
+public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember2 {
 
     private final Object servicePojo;
     private final ObjectActionImpl serviceAction;
@@ -334,5 +334,10 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
 
     public ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
+    }
+
+    @Override
+    public ObjectSpecification getServiceContributedBy() {
+        return getServiceAdapter().getSpecification();
     }
 }

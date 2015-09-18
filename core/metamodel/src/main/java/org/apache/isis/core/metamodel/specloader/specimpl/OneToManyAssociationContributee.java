@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember {
+public class OneToManyAssociationContributee extends OneToManyAssociationImpl implements ContributeeMember2 {
 
     private final Object servicePojo;
     private final ObjectAction serviceAction;
@@ -214,4 +214,10 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     public ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
     }
+
+    @Override
+    public ObjectSpecification getServiceContributedBy() {
+        return getServiceAdapter().getSpecification();
+    }
+
 }

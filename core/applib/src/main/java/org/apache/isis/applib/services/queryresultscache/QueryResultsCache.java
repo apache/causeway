@@ -73,18 +73,26 @@ public class QueryResultsCache {
             if (getClass() != obj.getClass())
                 return false;
             Key other = (Key) obj;
+
+            // compare callingClass
             if (callingClass == null) {
                 if (other.callingClass != null)
                     return false;
             } else if (!callingClass.equals(other.callingClass))
                 return false;
-            if (!Arrays.equals(keys, other.keys))
-                return false;
+
+            // compare methodName
             if (methodName == null) {
                 if (other.methodName != null)
                     return false;
             } else if (!methodName.equals(other.methodName))
                 return false;
+
+            // compare keys
+            if (!Arrays.equals(keys, other.keys))
+                return false;
+
+            // ok, matches
             return true;
         }
         
