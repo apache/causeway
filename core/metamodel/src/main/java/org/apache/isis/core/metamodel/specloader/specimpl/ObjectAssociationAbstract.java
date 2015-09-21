@@ -49,6 +49,12 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     }
 
     @Override
+    public ObjectAdapter get(
+            final ObjectAdapter fromObject) {
+        return get(fromObject, InteractionInitiatedBy.USER);
+    }
+
+    @Override
     public abstract ObjectAdapter get(
             final ObjectAdapter fromObject,
             final InteractionInitiatedBy interactionInitiatedBy);

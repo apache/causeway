@@ -45,6 +45,11 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 public interface ObjectAssociation extends ObjectMember, CurrentHolder {
 
     /**
+     * As per {@link #get(ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
+     */
+    ObjectAdapter get(final ObjectAdapter owner);
+
+    /**
      * Returns the referenced {@link ObjectAdapter} for the owning
      * {@link ObjectAdapter}.
      *
