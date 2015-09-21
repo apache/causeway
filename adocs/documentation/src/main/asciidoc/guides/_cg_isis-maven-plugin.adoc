@@ -80,9 +80,9 @@ Next, update the `pom.xml` (in your project's `dom` module):
                 </configuration>
                 <dependencies>
                     <dependency>
-                        <groupId>org.apache.isis.example.application</groupId>          <!-- 4 -->
-                        <artifactId>simpleapp-dom</artifactId>
-                        <version>1.10.0-SNAPSHOT</version>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>simpleapp-dom</artifactId>                          <!-- 4 -->
+                        <version>${project.version}</version>
                     </dependency>
                     <!-- workaround to avoid conflict with plexus-default -->
                     <dependency>
@@ -107,8 +107,8 @@ Next, update the `pom.xml` (in your project's `dom` module):
 <1> the profile can be activated using `-Disis-validate`
 <2> set to `1.10.0-SNAPSHOT` or any later version
 <3> the manifest discussed previously; adjust as required
-<4> the `dom` module containing itself; adjust as required
-<5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie will be called using `mvn test`).
+<4> the `dom` module for the project; adjust as required
+<5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie the goal will be called when `mvn test` is run).
 
 
 

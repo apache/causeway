@@ -172,9 +172,9 @@
                         </configuration>
                         <dependencies>
                             <dependency>
-                                <groupId>org.apache.isis.example.application</groupId>
+                                <groupId>${project.groupId}</groupId>
                                 <artifactId>simpleapp-dom</artifactId>
-                                <version>1.10.0-SNAPSHOT</version>
+                                <version>${project.version}</version>
                             </dependency>
                             <!--
                             ... workaround to avoid conflict with plexus-default
