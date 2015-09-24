@@ -186,7 +186,7 @@ public class OidMarshaller {
         if(collectionName == null) {
             if(aggregateOidParts.isEmpty()) {
                 ensureCorrectType(oidStr, requestedType, RootOid.class);
-                return (T)new RootOid(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
+                return (T) new RootOid(ObjectSpecId.of(rootObjectType), rootIdentifier, state, version);
             } else {
                 throw new RuntimeException("Aggregated Oids are no longer supported");
             }

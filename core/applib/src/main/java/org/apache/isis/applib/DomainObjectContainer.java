@@ -404,7 +404,7 @@ public interface DomainObjectContainer {
     void raiseError(String message);
 
     /**
-     * Notify the user of an application error with the specified message, , translated (if possible) to user's locale.
+     * Notify the user of an application error with the specified message, translated (if possible) to user's locale.
      *
      * <p>
      *     More precisely, the locale is as provided by the configured

@@ -173,6 +173,13 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public void set(
             final ObjectAdapter ownerAdapter,
+            final ObjectAdapter newReferencedAdapter) {
+        set(ownerAdapter, newReferencedAdapter, InteractionInitiatedBy.USER);
+    }
+
+    @Override
+    public void set(
+            final ObjectAdapter ownerAdapter,
             final ObjectAdapter newReferencedAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
         if (newReferencedAdapter != null) {

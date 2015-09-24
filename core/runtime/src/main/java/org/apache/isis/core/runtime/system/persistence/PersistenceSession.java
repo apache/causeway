@@ -1252,6 +1252,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     private final PojoAdapterHashMap pojoAdapterMap = new PojoAdapterHashMap();
     private final OidAdapterHashMap oidAdapterMap = new OidAdapterHashMap();
 
+    /**
+     * @deprecated
+     * @return - simply returns this {@link PersistenceSession}.
+     */
+    @Deprecated
+    public AdapterManager getAdapterManager() {
+        return this;
+    }
+
     @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         ensureThatArg(pojo, is(notNullValue()));
@@ -2255,6 +2264,8 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     //endregion
+
+
 }
 
 

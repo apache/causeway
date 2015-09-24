@@ -16,10 +16,16 @@
  */
 package org.apache.isis.core.metamodel.runtimecontext;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
+
 public abstract class PersistenceSessionServiceAbstract implements PersistenceSessionService {
 
     @Override
     public void injectInto(final Object candidate) {
+        if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
+            final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
+            cast.setAdapterManager(this);
+        }
         if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
             final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
             cast.setPersistenceSessionService(this);

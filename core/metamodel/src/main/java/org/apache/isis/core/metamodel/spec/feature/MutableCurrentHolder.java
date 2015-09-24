@@ -51,4 +51,13 @@ public interface MutableCurrentHolder extends CurrentHolder {
             final ObjectAdapter newValue,
             final InteractionInitiatedBy interactionInitiatedBy);
 
+    /**
+     * As per {@link #set(ObjectAdapter, ObjectAdapter, InteractionInitiatedBy)}, with {@link InteractionInitiatedBy#USER}.
+     * @param owner
+     * @param newValue
+     */
+    void set(
+            final ObjectAdapter owner,
+            final ObjectAdapter newValue);
+
 }

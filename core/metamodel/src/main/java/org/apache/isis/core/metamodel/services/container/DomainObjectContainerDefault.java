@@ -499,7 +499,9 @@ public class DomainObjectContainerDefault
 
     @Override
     public String raiseError(final TranslatableString message, final Class<?> contextClass, final String contextMethod) {
-        return message.translate(translationService, context(contextClass, contextMethod));
+        final String translatedMessage = message.translate(translationService, context(contextClass, contextMethod));
+        messageBrokerService.raiseError(translatedMessage);
+        return translatedMessage;
     }
 
     private static String context(final Class<?> contextClass, final String contextMethod) {

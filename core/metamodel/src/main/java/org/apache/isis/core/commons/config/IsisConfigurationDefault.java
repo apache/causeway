@@ -38,6 +38,7 @@ import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
+import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
 
 public class IsisConfigurationDefault implements IsisConfiguration, ConfigurationService {
     
@@ -476,6 +477,10 @@ public class IsisConfigurationDefault implements IsisConfiguration, Configuratio
 
     @Override
     public void injectInto(final Object candidate) {
+        if (ConfigurationServiceAware.class.isAssignableFrom(candidate.getClass())) {
+            final ConfigurationServiceAware cast = ConfigurationServiceAware.class.cast(candidate);
+            cast.setConfigurationService(this);
+        }
         if (IsisConfigurationAware.class.isAssignableFrom(candidate.getClass())) {
             final IsisConfigurationAware cast = IsisConfigurationAware.class.cast(candidate);
             cast.setConfiguration(this);

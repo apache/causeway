@@ -31,7 +31,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.runtimecontext.LocalizationProviderAbstract;
@@ -39,7 +38,6 @@ import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerService;
 import org.apache.isis.core.metamodel.runtimecontext.MessageBrokerServiceAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -154,7 +152,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
                 return new DomainObjectContainerResolve().bookmarkFor(cls, identifier);
             }
 
-
             @Override
             public void resolve(final Object parent) {
                 new DomainObjectContainerResolve().resolve(parent);
@@ -183,18 +180,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             @Override
             public <T> ObjectAdapter firstMatchingQuery(final Query<T> query) {
                 return getPersistenceSession().firstMatchingQuery(query);
-            }
-
-            @Override
-            public void injectInto(Object candidate) {
-                if (AdapterManagerAware.class.isAssignableFrom(candidate.getClass())) {
-                    final AdapterManagerAware cast = AdapterManagerAware.class.cast(candidate);
-                    cast.setAdapterManager(this);
-                }
-                if (PersistenceSessionServiceAware.class.isAssignableFrom(candidate.getClass())) {
-                    final PersistenceSessionServiceAware cast = PersistenceSessionServiceAware.class.cast(candidate);
-                    cast.setPersistenceSessionService(this);
-                }
             }
         };
 
