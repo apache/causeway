@@ -150,7 +150,7 @@ public class JodaLocalDateValueSemanticsProvider extends ValueSemanticsProviderA
             final FacetHolder holder, final IsisConfiguration configuration, final ValueSemanticsProviderContext context) {
         super(type(), holder, LocalDate.class, TYPICAL_LENGTH, MAX_LENGTH, Immutability.IMMUTABLE, EqualByContent.HONOURED, DEFAULT_VALUE, configuration, context);
 
-        String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").toLowerCase().trim();
+        String configuredNameOrPattern = getConfiguration().getString(CFG_FORMAT_KEY, "medium").trim();
         updateTitleStringFormatter(configuredNameOrPattern);
     }
 
