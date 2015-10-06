@@ -46,7 +46,27 @@ public enum SemanticsOf {
      * <p>
      * An example is increasing the quantity of a line item in an Order by 1.
      */
-    NON_IDEMPOTENT;
+    NON_IDEMPOTENT,
+    /**
+     * Post-conditions are always the same, irrespective as to how many times called.
+     *
+     * <p>
+     * If supported the UI viewer will show a confirmation dialog before executing the action.
+     *
+     * <p>
+     * An example might be <tt>placeOrder()</tt>, that is a no-op if the order has already been placed.
+     */
+    IDEMPOTENT_ARE_YOU_SURE,
+    /**
+     * Neither safe nor idempotent; every invocation is likely to change the state of the object.
+     *
+     * <p>
+     * If supported the UI viewer will show a confirmation dialog before executing the action.
+     *
+     * <p>
+     * An example is increasing the quantity of a line item in an Order by 1.
+     */
+    NON_IDEMPOTENT_ARE_YOU_SURE;
 
     public String getFriendlyName() {
         return Enums.getFriendlyNameOf(this);
@@ -60,7 +80,7 @@ public enum SemanticsOf {
      * Any of {@link #SAFE}, {@link #SAFE_AND_REQUEST_CACHEABLE} or (obviously) {@link #IDEMPOTENT}.
      */
     public boolean isIdempotentInNature() {
-        return isSafeInNature() || this == IDEMPOTENT;
+        return isSafeInNature() || this == IDEMPOTENT || this == IDEMPOTENT_ARE_YOU_SURE;
     }
 
     /**
@@ -88,7 +108,9 @@ public enum SemanticsOf {
         if(semantics == SAFE_AND_REQUEST_CACHEABLE) return ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE;
         if(semantics == SAFE) return ActionSemantics.Of.SAFE;
         if(semantics == IDEMPOTENT) return ActionSemantics.Of.IDEMPOTENT;
+        if(semantics == IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE;
         if(semantics == NON_IDEMPOTENT) return ActionSemantics.Of.NON_IDEMPOTENT;
+        if(semantics == NON_IDEMPOTENT_ARE_YOU_SURE) return ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE;
         // shouldn't happen
         throw new IllegalArgumentException("Unrecognized of: " + semantics);
     }
@@ -99,7 +121,9 @@ public enum SemanticsOf {
         if(semantics == ActionSemantics.Of.SAFE_AND_REQUEST_CACHEABLE) return SAFE_AND_REQUEST_CACHEABLE;
         if(semantics == ActionSemantics.Of.SAFE) return SAFE;
         if(semantics == ActionSemantics.Of.IDEMPOTENT) return IDEMPOTENT;
+        if(semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE) return IDEMPOTENT_ARE_YOU_SURE;
         if(semantics == ActionSemantics.Of.NON_IDEMPOTENT) return NON_IDEMPOTENT;
+        if(semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) return NON_IDEMPOTENT_ARE_YOU_SURE;
         // shouldn't happen
         throw new IllegalArgumentException("Unrecognized semantics: " + semantics);
     }

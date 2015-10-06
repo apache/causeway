@@ -55,10 +55,20 @@ public @interface ActionSemantics {
         @Deprecated
         IDEMPOTENT,
         /**
-         * @deprecated - see {@link SemanticsOf#IDEMPOTENT}
+         * @deprecated - see {@link SemanticsOf#NON_IDEMPOTENT}
          */
         @Deprecated
-        NON_IDEMPOTENT;
+        NON_IDEMPOTENT,
+        /**
+         * @deprecated - see {@link SemanticsOf#IDEMPOTENT_ARE_YOU_SURE}
+         */
+        @Deprecated
+        IDEMPOTENT_ARE_YOU_SURE,
+        /**
+         * @deprecated - see {@link SemanticsOf#NON_IDEMPOTENT_ARE_YOU_SURE}
+         */
+        @Deprecated
+        NON_IDEMPOTENT_ARE_YOU_SURE;
 
         /**
          * @deprecated - see {@link SemanticsOf#getFriendlyName()}
