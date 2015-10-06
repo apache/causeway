@@ -58,7 +58,7 @@ Generally we recommend using `@javax.inject.Inject`; it involves less code, and 
 
 
 
-== Injecting collection of services
+== Injecting collection of services (1.10.0-SNAPSHOT)
 
 It can sometimes be useful to have declared multiple implementations of a particular domain service.  For example,
 you may have a module that defines an SPI service, where multiple other modules might provide implementations of that SPI
