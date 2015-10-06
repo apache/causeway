@@ -25,7 +25,6 @@ import java.net.URL;
 import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,30 +182,47 @@ public interface AppManifest {
             return instance;
         }
 
+        //region > persistenceCapableTypes
         private Set<Class<?>> persistenceCapableTypes;
+        /**
+         * @return <tt>null</tt> if no appManifest is defined
+         */
         public Set<Class<?>> getPersistenceCapableTypes() {
             return persistenceCapableTypes;
         }
         public void setPersistenceCapableTypes(final Set<Class<?>> persistenceCapableTypes) {
             this.persistenceCapableTypes = persistenceCapableTypes;
         }
+        //endregion
 
+        //region > fixtureScriptTypes
         private Set<Class<? extends FixtureScript>> fixtureScriptTypes;
+
+        /**
+         * @return <tt>null</tt> if no appManifest is defined
+         */
         public Set<Class<? extends FixtureScript>> getFixtureScriptTypes() {
-            return fixtureScriptTypes == null ? new HashSet<Class<? extends FixtureScript>>() : fixtureScriptTypes;
+            return fixtureScriptTypes;
         }
         public void setFixtureScriptTypes(final Set<Class<? extends FixtureScript>> fixtureScriptTypes) {
             this.fixtureScriptTypes = fixtureScriptTypes;
         }
+        //endregion
 
+        //region > domainServiceTypes
         private Set<Class<?>> domainServiceTypes;
+        /**
+         * @return <tt>null</tt> if no appManifest is defined
+         */
         public Set<Class<?>> getDomainServiceTypes() {
             return domainServiceTypes;
         }
         public void setDomainServiceTypes(final Set<Class<?>> domainServiceTypes) {
             this.domainServiceTypes = domainServiceTypes;
         }
+        //endregion
 
+        //region > urlTypes
         public List<Vfs.UrlType> getUrlTypes() {
             final List<Vfs.UrlType> urlTypes = Lists.newArrayList();
             urlTypes.add(new EmptyIfFileEndingsUrlType(".pom", ".jnilib", "QTJava.zip"));
@@ -215,6 +231,7 @@ public interface AppManifest {
 
             return urlTypes;
         }
+        //endregion
 
         private static class EmptyIfFileEndingsUrlType implements Vfs.UrlType {
 
@@ -260,7 +277,6 @@ public interface AppManifest {
                 };
             }
         }
-
 
         private static class JettyConsoleUrlType implements Vfs.UrlType {
             public boolean matches(URL url) {
@@ -315,7 +331,6 @@ public interface AppManifest {
                 return null;
             }
         }
-
 
     }
 }

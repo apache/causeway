@@ -18,20 +18,14 @@
  */
 package org.apache.isis.applib.services.classdiscovery;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import com.google.common.collect.Lists;
+
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 import org.reflections.util.ClasspathHelper;
-import org.reflections.vfs.SystemDir;
 import org.reflections.vfs.Vfs;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.annotation.DomainService;
@@ -75,7 +69,9 @@ public class ClassDiscoveryServiceUsingReflections
 
         if(type == FixtureScript.class) {
             Set fixtureScriptTypes = AppManifest.Registry.instance().getFixtureScriptTypes();
-            return fixtureScriptTypes;
+            if (fixtureScriptTypes != null) {
+                return fixtureScriptTypes;
+            }
         }
 
         // no appManifest or not asking for FixtureScripts
@@ -98,5 +94,6 @@ public class ClassDiscoveryServiceUsingReflections
     public static List<Vfs.UrlType> getUrlTypes() {
         return AppManifest.Registry.instance().getUrlTypes();
     }
+
 
 }
