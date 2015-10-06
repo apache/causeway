@@ -58,6 +58,50 @@ Generally we recommend using `@javax.inject.Inject`; it involves less code, and 
 
 
 
+== Injecting collection of services
+
+It can sometimes be useful to have declared multiple implementations of a particular domain service.  For example,
+you may have a module that defines an SPI service, where multiple other modules might provide implementations of that SPI
+ (akin to the chain of responsibility pattern).  To support these scenarios, it is possible to annotate a `List` or `Collection`.
+
+For example, suppose that we provide an SPI service to veto the placing of ``Order``s for certain ``Customer``s:
+
+[source,java]
+----
+public interface CustomerOrderAdvisorService {
+    @Programmatic
+    String vetoPlaceOrder(Customer c);
+----
+
+We could then inject a collection of these services:
+
+[source,java]
+----
+public class Customer {
+    public Order placeOrder(Product p, int quantity) { ... }
+    public String disablePlaceOrder(Product p, int quantity) {
+        for(CustomerOrderAdvisorService advisor: advisors) {
+            String reason = advisor.vetoPlaceOrder(this);
+            if(reason != null) { return reason; }
+        }
+        return null;
+    }
+    @Inject
+    Collection<CustomerOrderAdvisorService> advisors;       // <1>
+}
+----
+<1> inject a collection of the services.
+
+[NOTE]
+====
+An alternative and almost equivalent design would be to publish an event using the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] and implement the domain services as subscribers to
+the event.  This alternative design is used in the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module, for example.
+====
+
+
+
+
+
 == Manually injecting services
 
 Isis performs dependency injection when domain entities are recreated.  It will also perform dependency injection if an object is created through the `DomainObjectContainer`.

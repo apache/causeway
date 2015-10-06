@@ -22,6 +22,8 @@ package org.apache.isis.core.metamodel.services;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -294,26 +296,58 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
             autowire(object, field, services);
         }
         
-        // recurse up the hierarchy
+        // recurse up the object's class hierarchy
         final Class<?> superclass = cls.getSuperclass();
         if(superclass != null) {
             autowireViaFields(object, services, superclass);
         }
     }
 
-    private void autowire(final Object object, final Field field, final List<Object> services) {
+    private void autowire(
+            final Object object,
+            final Field field,
+            final List<Object> services) {
+
+        final Class<?> type = field.getType();
+        // don't think that type can ever be null,
+        // but Javadoc for java.lang.reflect.Field doesn't say
+        if(type == null) {
+            return;
+        }
+
+        // inject into Collection<T> or List<T>
+        if(Collection.class.isAssignableFrom(type) || List.class.isAssignableFrom(type)) {
+            final Type genericType = field.getGenericType();
+            if(genericType instanceof ParameterizedType) {
+                final ParameterizedType listParameterizedType = (ParameterizedType) genericType;
+                final Class<?> listType = (Class<?>) listParameterizedType.getActualTypeArguments()[0];
+                final List<Object> listOfServices =
+                        Collections.unmodifiableList(
+                            Lists.newArrayList(
+                                Iterables.filter(services, new Predicate<Object>() {
+                                    @Override
+                                    public boolean apply(final Object input) {
+                                        return input != null && listType.isAssignableFrom(input.getClass());
+                                    }
+                                })));
+                invokeInjectorField(field, object, listOfServices);
+            }
+        }
+
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
-            final boolean canInject = isInjectorFieldFor(field, serviceClass);
-            if(canInject) {
-                field.setAccessible(true);
+            if(type.isAssignableFrom(serviceClass)) {
                 invokeInjectorField(field, object, service);
                 return;
             }
         }
     }
 
-    private void autowireViaPrefixedMethods(final Object object, final List<Object> services, final Class<?> cls, final String prefix) {
+    private void autowireViaPrefixedMethods(
+            final Object object,
+            final List<Object> services,
+            final Class<?> cls,
+            final String prefix) {
         final List<Method> methods = Arrays.asList(cls.getMethods());
         final Iterable<Method> prefixedMethods = Iterables.filter(methods, new Predicate<Method>(){
             public boolean apply(final Method method) {
@@ -327,7 +361,10 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private void autowire(final Object object, final Method prefixedMethod, final List<Object> services) {
+    private void autowire(
+            final Object object,
+            final Method prefixedMethod,
+            final List<Object> services) {
         for (final Object service : services) {
             final Class<?> serviceClass = service.getClass();
             final boolean isInjectorMethod = injectorMethodEvaluator.isInjectorMethodFor(prefixedMethod, serviceClass);
@@ -339,22 +376,13 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
         }
     }
 
-    private boolean isInjectorFieldFor(final Field field, final Class<?> serviceClass) {
-        final Class<?> type = field.getType();
-        // don't think that type can ever be null, but Javadoc for java.lang.reflect.Field doesn't say
-        return type != null && type.isAssignableFrom(serviceClass);
-    }
-
-
     private static void invokeMethod(final Method method, final Object target, final Object[] parameters) {
         try {
             method.invoke(target, parameters);
-        } catch (final SecurityException e) {
+        } catch (final SecurityException | IllegalAccessException e) {
             throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass().getName()));
         } catch (final IllegalArgumentException e1) {
             throw new MetaModelException(e1);
-        } catch (final IllegalAccessException e1) {
-            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass().getName()));
         } catch (final InvocationTargetException e) {
             final Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {
@@ -367,6 +395,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
 
     private static void invokeInjectorField(final Field field, final Object target, final Object parameter) {
         try {
+            field.setAccessible(true);
             field.set(target, parameter);
         } catch (final IllegalArgumentException e) {
             throw new MetaModelException(e);
@@ -405,7 +434,7 @@ public class ServicesInjectorDefault implements ServicesInjectorSpi {
     @Override
     public <T> List<T> lookupServices(final Class<T> serviceClass) {
         locateAndCache(serviceClass);
-        return (List<T>) servicesAssignableToType.get(serviceClass);
+        return Collections.unmodifiableList((List<T>) servicesAssignableToType.get(serviceClass));
     };
 
     private void locateAndCache(final Class<?> serviceClass) {
