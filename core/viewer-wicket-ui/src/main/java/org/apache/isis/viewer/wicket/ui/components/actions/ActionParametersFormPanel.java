@@ -19,11 +19,10 @@
 
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
-
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -32,7 +31,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
-import org.apache.isis.applib.annotation.ActionSemantics;
+
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -56,7 +56,11 @@ import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-import static org.hamcrest.CoreMatchers.*;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
+import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action
@@ -218,8 +222,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
         private void applyAreYouSure(AjaxButton button) {
             ActionModel actionModel = getActionModel();
             final ObjectAction action = actionModel.getActionMemento().getAction();
-            ActionSemantics.Of semantics = action.getSemantics();
-            if (semantics == ActionSemantics.Of.IDEMPOTENT_ARE_YOU_SURE || semantics == ActionSemantics.Of.NON_IDEMPOTENT_ARE_YOU_SURE) {
+            SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
+            if (semanticsOf.isAreYouSure()) {
                 ConfirmationConfig confirmationConfig = new ConfirmationConfig();
                 // TODO ISIS-1007 Use i18n for the title and the labels
                 confirmationConfig.withTitle("Are you sure?");

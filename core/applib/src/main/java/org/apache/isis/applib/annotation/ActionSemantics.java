@@ -122,6 +122,14 @@ public @interface ActionSemantics {
         public boolean isSafeAndRequestCacheable() {
             return SemanticsOf.from(this).isSafeAndRequestCacheable();
         }
+
+        /**
+         * @deprecated - see {@link SemanticsOf#isAreYouSure()}.
+         */
+        @Deprecated
+        public boolean isAreYouSure() {
+            return SemanticsOf.from(this).isAreYouSure();
+        }
     }
 
     /**

@@ -102,6 +102,10 @@ public enum SemanticsOf {
         return this == SAFE_AND_REQUEST_CACHEABLE;
     }
 
+    public boolean isAreYouSure() {
+        return this == IDEMPOTENT_ARE_YOU_SURE || this == NON_IDEMPOTENT_ARE_YOU_SURE;
+    }
+
     @Deprecated
     public static ActionSemantics.Of from(final SemanticsOf semantics) {
         if(semantics == null) return null;

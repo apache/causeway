@@ -17,9 +17,19 @@
 
 package org.apache.isis.viewer.wicket.ui.components.widgets.linkandlabel;
 
+import org.apache.wicket.Application;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.link.AbstractLink;
+import org.apache.wicket.request.IRequestHandler;
+
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -33,13 +43,6 @@ import org.apache.isis.viewer.wicket.ui.components.actions.ActionPanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-import org.apache.wicket.Application;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.html.link.AbstractLink;
-import org.apache.wicket.request.IRequestHandler;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
 
@@ -180,9 +183,10 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
         final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
         final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
+        final ActionSemantics.Of semantics = objectAction.getSemantics();
 
         return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier,
-                cssClass, cssClassFa, cssClassFaPosition, position);
+                cssClass, cssClassFa, cssClassFaPosition, position, SemanticsOf.from(semantics));
     }
 
     // ////////////////////////////////////////////////////////////

@@ -25,6 +25,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 
 public class LinkAndLabel implements Serializable {
@@ -49,6 +50,7 @@ public class LinkAndLabel implements Serializable {
     private final String cssClassFa;
     private final CssClassFaPosition cssClassFaPosition;
     private final ActionLayout.Position position;
+    private final SemanticsOf semanticsOf;
 
     public LinkAndLabel(
             final AbstractLink link,
@@ -61,7 +63,8 @@ public class LinkAndLabel implements Serializable {
             final String cssClass,
             final String cssClassFa,
             final CssClassFaPosition cssClassFaPosition,
-            final ActionLayout.Position position) {
+            final ActionLayout.Position position,
+            final SemanticsOf semanticsOf) {
         this.link = link;
         this.label = label;
         this.disabledReasonIfAny = disabledReasonIfAny;
@@ -73,6 +76,7 @@ public class LinkAndLabel implements Serializable {
         this.cssClassFa = cssClassFa;
         this.cssClassFaPosition = cssClassFaPosition;
         this.position = position;
+        this.semanticsOf = semanticsOf;
     }
 
     public AbstractLink getLink() {
@@ -117,6 +121,10 @@ public class LinkAndLabel implements Serializable {
 
     public ActionLayout.Position getPosition() {
         return position;
+    }
+
+    public SemanticsOf getSemantics() {
+        return semanticsOf;
     }
 
     public static class Predicates {

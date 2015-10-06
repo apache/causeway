@@ -26,6 +26,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
+import org.apache.isis.applib.annotation.ActionSemantics;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bulk;
@@ -217,8 +219,10 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
         final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
         final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
+        final ActionSemantics.Of semantics = objectAction.getSemantics();
 
-        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position);
+        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position,
+                SemanticsOf.from(semantics));
     }
 
 
