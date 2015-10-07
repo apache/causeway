@@ -43,8 +43,10 @@ For example, the Isis addons example https://github.com/isisaddons/isis-app-todo
 
 [source,java]
 ----
-@ActionSemantics(Of.SAFE)
-@Bulk(AppliesTo.BULK_ONLY)
+@Action(
+    semantics=SemanticsOf.SAFE,
+    invokeOn=InvokeOn.COLLECTION_ONLY
+)
 public BigDecimal totalCost() {
     BigDecimal total = (BigDecimal) scratchpad.get("runningTotal");
     if(getCost() != null) {

@@ -64,11 +64,12 @@ To indicate that a safe (query only) action is bookmarkable, use the xref:rg.ado
 [source,java]
 ----
 public class ToDoItem ... {
-    ...
+    @Action(
+        semantics=SemanticsOf.SAFE
+    )
     @ActionLayout(
          bookmarking=BookmarkPolicy.AS_ROOT
      )
-    @ActionSemantics(Of.SAFE)
     public List<ToDoItem> notYetComplete() { ... }
     ...
 }

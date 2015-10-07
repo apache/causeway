@@ -34,9 +34,13 @@ Suppose you have a `CustomerService` providing a `findCustomer` action:
 [source,java]
 ----
 public class CustomerService {
-  public String id() { return "customers"; }
-  @ActionSemantics(Of.SAFE)
-  public Customer findCustomer(@Named("customerName") String customerName) { ... }
+    public String id() { return "customers"; }
+    @Action(semantics=SemanticsOf.SAFE)
+    public Customer findCustomer(
+            @ParameterLayout(named="customerName")
+            final String customerName) {
+        ...
+    }
 }
 ----
 

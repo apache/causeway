@@ -73,9 +73,13 @@ Currently this is only supported for no-arg actions.
 |whether the action is only available in prototyping mode, or whether it is available also in production mode.
 
 |xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`semantics()`]
-|`SAFE_AND_REQUEST_CACHEABLE`, `SAFE`, `IDEMPOTENT`, `NON_IDEMPOTENT` +
+|`SAFE_AND_REQUEST_CACHEABLE`, `SAFE`, +
+`IDEMPOTENT`, `IDEMPOTENT_ARE_YOU_SURE` +
+`NON_IDEMPOTENT`, `NON_IDEMPOTENT_ARE_YOU_SURE` + +
 (`NON_IDEMPOTENT`)
-|the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request)
+|the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
+
+The `...ARE_YOU_SURE` variants (1.10.0-SNAPSHOT) cause a confirmation dialog to be displayed in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer].
 
 |xref:rg.adoc#_rg_annotations_manpage-Action_typeOf[`typeOf()`]
 |(none)
@@ -116,6 +120,12 @@ public class ToDoItem {
 <3> default value, so could be omitted
 <4> default value, so could be omitted
 
+
+
+[NOTE]
+====
+Currently are you sure semantics (1.10.0-SNAPSHOT) only work for actions that take one or more parameters (that is, generate a dialog).
+====
 
 
 
