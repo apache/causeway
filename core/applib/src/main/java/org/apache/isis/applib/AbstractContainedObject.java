@@ -20,8 +20,9 @@
 package org.apache.isis.applib;
 
 import java.util.List;
+
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.annotation.Aggregated;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -44,6 +45,8 @@ public abstract class AbstractContainedObject {
      * this method, though the framework will also handle the case when 
      * the object is simply <i>new()</i>ed up.  The benefits of using
      * {@link #newTransientInstance(Class)} are:
+     * </p>
+     *
      * <ul>
      * <li>any services will be injected into the object immediately
      *     (otherwise they will not be injected until the framework
@@ -59,52 +62,49 @@ public abstract class AbstractContainedObject {
      * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt> 
      * supporting methods or the <tt>created()</tt> callback, then you can
      * alternatively just <i>new()</i> up the object rather than call this
-     * method. 
-
+     * method.
+     *
      * <p>
-     * If the type is annotated with {@link Aggregated}, then as per
-     * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
-     * aggregate root.
-     * 
-     * @see #newAggregatedInstance(Object, Class)
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#newTransientInstance(Class)
      */
     protected <T> T newTransientInstance(final Class<T> ofType) {
         return getContainer().newTransientInstance(ofType);
     }
 
     /**
-     * Create a new {@link ViewModel} of specified type, identified by memento.
-     * 
-     * @param ofType
-     * @param memento
-     * @return
+     * Create a new {@link ViewModel} instance of the specified type, initializing with the specified memento.
+     *
+     * <p>
+     *     Rather than use this constructor it is generally preferable to simply instantiate a
+     *     class annotated with {@link org.apache.isis.applib.annotation.ViewModel annotation}.
+     *     If services need injecting into it, use {@link DomainObjectContainer#injectServicesInto(Object)}.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#newViewModelInstance(Class, String)
      */
     protected <T extends ViewModel> T newViewModelInstance(final Class<T> ofType, final String memento) {
         return getContainer().newViewModelInstance(ofType, memento);
     }
 
     /**
-     * Create an instance that will be persisted as part of this domain object
-     * (ie this domain object is its parent in the aggregate).
-     * 
-     * <p>
-     * The type provided should be annotated with {@link Aggregated}.
-     * 
-     *  @see #newAggregatedInstance(Object, Class)
+     * @deprecated - not supported, will throw a RuntimeException
      */
+    @Deprecated
     protected <T> T newAggregatedInstance(final Class<T> ofType) {
         return newAggregatedInstance(this, ofType);
     }
 
     /**
-     * Create an instance that will be persisted as part of specified paremt domain object
-     * (ie that domain object will be its parent in the aggregate).
-     * 
-     * <p>
-     * The type provided should be annotated with {@link Aggregated}.
-     * 
-     *  @see #newAggregatedInstance(Class)
+     * @deprecated - not supported, will throw a RuntimeException
      */
+    @Deprecated
     protected <T> T newAggregatedInstance(final Object parent, final Class<T> ofType) {
         return getContainer().newAggregatedInstance(parent, ofType);
     }
@@ -112,9 +112,30 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns all the instances of the specified type (including subtypes).
+     * If the optional range parameters are used, the dataset returned starts
+     * from (0 based) index, and consists of only up to count items.
+     *
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     * This method should only be called where the number of instances is known
+     * to be relatively low, unless the optional range parameters (2 longs) are
+     * specified. The range parameters are "start" and "count".
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#allInstances(Class, long...)
+     *
+     * @param range 2 longs, specifying 0-based start and count.
      */
     protected <T> List<T> allInstances(final Class<T> ofType, long... range) {
         return getContainer().allInstances(ofType, range);
@@ -123,20 +144,39 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns all the instances of the specified type (including subtypes) that
+     * the predicate object accepts. If the optional range parameters are used, the
+     * dataset returned starts from (0 based) index, and consists of only up to
+     * count items.
+     *
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#allMatches(Class, Predicate, long...)
+     * @see #allMatches(Query)
+     *
+     * @param range 2 longs, specifying 0-based start and count.
      */
+    @Programmatic
     protected <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range) {
         return getContainer().allMatches(ofType, predicate, range);
     }
     
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
-     * @see DomainObjectContainer#allMatches(Class, Filter, long...)
-     * 
-     * @deprecated - use {@link #allMatches(Class, Predicate, long...)}
+     * @deprecated - use {@link #allMatches(Class, Predicate, long...)} or (better) {@link #allMatches(Query)} instead
      */
     @Deprecated
     protected <T> List<T> allMatches(final Class<T> ofType, final Filter<? super T> filter, long... range) {
@@ -144,26 +184,82 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns all the instances of the specified type (including subtypes) that
+     * match the given object: where any property that is set will be tested and
+     * properties that are not set will be ignored.
+     * If the optional range parameters are used, the dataset returned starts
+     * from (0 based) index, and consists of only up to count items.
+     *
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#allMatches(Class, Object, long...)
+     *
+     * @param range 2 longs, specifying 0-based start and count.
      */
     protected <T> List<T> allMatches(final Class<T> ofType, final T pattern, long... range) {
         return getContainer().allMatches(ofType, pattern, range);
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns all the instances of the specified type (including subtypes) that
+     * have the given title.
+     * If the optional range parameters are used, the dataset returned starts
+     * from (0 based) index, and consists of only up to count items.
+     *
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#allMatches(Class, String, long...)
+     *
+     * @param range 2 longs, specifying 0-based start and count.
      */
     protected <T> List<T> allMatches(final Class<T> ofType, final String title, long... range) {
         return getContainer().allMatches(ofType, title, range);
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns all the instances that match the given {@link Query}.
+     *
+     * <p>
+     * If there are no instances the list will be empty. This method creates a
+     * new {@link List} object each time it is called so the caller is free to
+     * use or modify the returned {@link List}, but the changes will not be
+     * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#allMatches(Query)
      */
     protected <T> List<T> allMatches(final Query<T> query) {
@@ -173,30 +269,47 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns the first instance of the specified type (including subtypes)
+     * that matches the supplied {@link Predicate}, or <tt>null</tt> if none.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#firstMatch(Class, Predicate)
-     * 
      */
     protected <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate) {
         return getContainer().firstMatch(ofType, predicate);
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
-     * @see DomainObjectContainer#firstMatch(Class, Filter)
-     * 
      * @deprecated - use {@link #firstMatch(Class, Predicate)}
      */
     @Deprecated
     protected <T> T firstMatch(final Class<T> ofType, final Filter<T> filter) {
         return getContainer().firstMatch(ofType, filter);
     }
-    
+
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns the first instance of the specified type (including subtypes)
+     * that matches the supplied object as a pattern, or <tt>null</tt> if none.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#firstMatch(Class, Object)
      */
     protected <T> T firstMatch(final Class<T> ofType, final T pattern) {
@@ -204,8 +317,19 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns the first instance of the specified type (including subtypes)
+     * that matches the supplied title, or <tt>null</tt> if none.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#firstMatch(Class, String)
      */
     protected <T> T firstMatch(final Class<T> ofType, final String title) {
@@ -213,9 +337,19 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
+     *
+     * <p>
+     *     This method is the recommended way of querying for an instance when one or more may match.  See also
+     *     {@link #uniqueMatch(Query)}.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#firstMatch(Query)
+     * @see #uniqueMatch(Query)
      */
     protected <T> T firstMatch(final Query<T> query) {
         return getContainer().firstMatch(query);
@@ -225,8 +359,23 @@ public abstract class AbstractContainedObject {
 
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Find the only instance of the specified type (including subtypes) that
+     * has the specified title.
+     *
+     * <p>
+     * If no instance is found then <tt>null</tt> will be return, while if there
+     * is more that one instances a run-time exception will be thrown.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#uniqueMatch(Class, Predicate)
      */
     protected <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate) {
@@ -234,20 +383,31 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
-     * @see DomainObjectContainer#uniqueMatch(Class, Filter)
-     * 
      * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
      */
     @Deprecated
     protected <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter) {
         return getContainer().uniqueMatch(ofType, filter);
     }
-    
+
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Find the only instance of the specified type (including subtypes) that
+     * has the specified title.
+     *
+     * <p>
+     * If no instance is found then <tt>null</tt> will be returned, while if
+     * there is more that one instances a run-time exception will be thrown.
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#uniqueMatch(Class, String)
      */
     protected <T> T uniqueMatch(final Class<T> ofType, final String title) {
@@ -255,8 +415,26 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Find the only instance of the patterned object type (including subtypes)
+     * that matches the set fields in the pattern object: where any property
+     * that is set will be tested and properties that are not set will be
+     * ignored.
+     *
+     * <p>
+     * If no instance is found then null will be return, while if there is more
+     * that one instances a run-time exception will be thrown.
+     * </p>
+     *
+     * <p>
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see DomainObjectContainer#uniqueMatch(Class, Object)
      */
     protected <T> T uniqueMatch(final Class<T> ofType, final T pattern) {
@@ -264,8 +442,23 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience method that delegates to {@link DomainObjectContainer}.
-     * 
+     * Find the only instance that matches the provided query.
+     *
+     * <p>
+     * If no instance is found then null will be return, while if there is more
+     * that one instances a run-time exception will be thrown.
+     * </p>
+     *
+     * <p>
+     *     This method is the recommended way of querying for (precisely) one instance.  See also {@link #firstMatch(Query)}
+     *     for less strict querying.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see #firstMatch(Query)
      * @see DomainObjectContainer#uniqueMatch(Query)
      */
     protected <T> T uniqueMatch(final Query<T> query) {
@@ -275,8 +468,14 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Convenience methods that delegates to {@link DomainObjectContainer}.
-     * 
+     * Whether the object is in a valid state, that is that none of the
+     * validation of properties, collections and object-level is vetoing.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see #validate(Object)
      * @see DomainObjectContainer#isValid(Object)
      */
     protected boolean isValid(final Object domainObject) {
@@ -284,8 +483,18 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Convenience methods that delegates to {@link DomainObjectContainer}.
-     * 
+     * The reason, if any why the object is in a invalid state
+     *
+     * <p>
+     * Checks the validation of all of the properties, collections and
+     * object-level.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see #isValid(Object)
      * @see DomainObjectContainer#validate(Object)
      */
     protected String validate(final Object domainObject) {
@@ -295,29 +504,44 @@ public abstract class AbstractContainedObject {
     // //////////////////////////////////////
 
     /**
-     * Determines if the specified object is persistent (that it is stored
-     * permanently outside of the virtual machine).
+     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
+     * in the object store).
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#isPersistent(Object)
      */
     protected boolean isPersistent(final Object domainObject) {
         return getContainer().isPersistent(domainObject);
     }
 
     /**
-     * Persist the specified transient object.
-     * 
+     * Queues up a request to persist this object to the object store.  The object is persisted either
+     * when the transaction is committed, or when it is flushed.  Flushing is performed either implicitly whenever a subsequent query is run,
+     * or can be performed explicitly using {@link DomainObjectContainer#flush()}.
+     *
      * <p>
      * It is recommended that the object be initially instantiated using
      * {@link #newTransientInstance(Class)}.  However, the framework will also
      * handle the case when the object is simply <i>new()</i>ed up.  See
      * {@link #newTransientInstance(Class)} for more information.
-     * 
+     * </p>
+     *
      * <p>
-     * Throws an exception if object is already persistent, or if the object
-     * is not yet known to the framework.
-     * 
+     * This method will throw an exception if the object {@link #isPersistent(Object) is persistent} already.  For this reason
+     * {@link #persistIfNotAlready(Object)} is generally preferred.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
      * @see #newTransientInstance(Class)
      * @see #isPersistent(Object)
      * @see #persistIfNotAlready(Object)
+     * @see DomainObjectContainer#persist(Object)
      */
     protected <T> T persist(final T transientDomainObject) {
         getContainer().persist(transientDomainObject);
@@ -325,17 +549,24 @@ public abstract class AbstractContainedObject {
     }
 
     /**
-     * Persist the specified object (or do nothing if already persistent).
-     * 
+     * Queues up a request to persist this object to the object store (as per {@link #persist(Object)}) (or do
+     * nothing if the object is already {@link #isPersistent(Object) persistent}).
+     *
      * <p>
      * It is recommended that the object be initially instantiated using
      * {@link #newTransientInstance(Class)}.  However, the framework will also
      * handle the case when the object is simply <i>new()</i>ed up.  See
      * {@link #newTransientInstance(Class)} for more information.
+     * </p>
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
      *
      * @see #newTransientInstance(Class)
      * @see #isPersistent(Object)
      * @see #persist(Object)
+     * @see {@link DomainObjectContainer#persistIfNotAlready(Object)}
      */
     protected <T> T persistIfNotAlready(final T domainObject) {
         getContainer().persistIfNotAlready(domainObject);
@@ -344,6 +575,12 @@ public abstract class AbstractContainedObject {
 
     /**
      * Delete the provided object from the persistent object store.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#remove(Object)
      */
     protected <T> T remove(final T persistentDomainObject) {
         getContainer().remove(persistentDomainObject);
@@ -352,6 +589,12 @@ public abstract class AbstractContainedObject {
 
     /**
      * Delete the provided object from the persistent object store.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#removeIfNotAlready(Object)
      */
     protected <T> T removeIfNotAlready(final T persistentDomainObject) {
         getContainer().removeIfNotAlready(persistentDomainObject);
@@ -362,13 +605,25 @@ public abstract class AbstractContainedObject {
 
     /**
      * Display the specified message to the user, in a non-intrusive fashion.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#informUser(String)
      */
     protected void informUser(final String message) {
         getContainer().informUser(message);
     }
 
     /**
-     * Display the specified message to the user, in a non-intrusive fashion.
+     * Display the specified i18n message to the user, in a non-intrusive fashion.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#informUser(TranslatableString, Class, String)
      */
     protected void informUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         getContainer().informUser(message, contextClass, contextMethod);
@@ -377,12 +632,27 @@ public abstract class AbstractContainedObject {
     /**
      * Display the specified message as a warning to the user, in a more visible
      * fashion, but without requiring explicit acknowledgement.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#warnUser(String)
      */
     protected void warnUser(final String message) {
         getContainer().warnUser(message);
     }
 
-
+    /**
+     * Display the specified i18n message as a warning to the user, in a more visible
+     * fashion, but without requiring explicit acknowledgement.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#warnUser(TranslatableString, Class, String)
+     */
     protected void warnUser(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         getContainer().warnUser(message, contextClass, contextMethod);
     }
@@ -390,17 +660,42 @@ public abstract class AbstractContainedObject {
     /**
      * Display the specified message as an error to the user, ensuring that it
      * is acknowledged.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#raiseError(String)
      */
     protected void raiseError(final String message) {
         getContainer().raiseError(message);
     }
 
+    /**
+     * Display the specified i18n message as an error to the user, ensuring that it
+     * is acknowledged.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#raiseError(TranslatableString, Class, String)
+     */
     protected String raiseError(TranslatableString message, final Class<?> contextClass, final String contextMethod) {
         return getContainer().raiseError(message, contextClass, contextMethod);
     }
 
     // //////////////////////////////////////
 
+    /**
+     * Get the details about the current user.
+     *
+     * <p>
+     * The method simply delegates to the {@link DomainObjectContainer}.
+     * </p>
+     *
+     * @see DomainObjectContainer#getUser()
+     */
     protected UserMemento getUser() {
         return getContainer().getUser();
     }

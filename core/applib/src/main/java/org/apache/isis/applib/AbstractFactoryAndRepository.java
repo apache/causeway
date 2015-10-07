@@ -19,32 +19,29 @@
 
 package org.apache.isis.applib;
 
+/**
+ * @deprecated - annotate with DomainService#repositoryFor()} instead.
+ */
+@Deprecated
 public abstract class AbstractFactoryAndRepository extends AbstractService {
 
-    // {{ newPersistenceInstance, newInstance
     /**
-     * Returns a new instance of the specified class that will have been
-     * persisted.
-     * 
-     * <p>
-     * This method isn't quite deprecated, but generally consider using
-     * {@link #newTransientInstance(Class)} instead.
+     * @see DomainObjectContainer#newPersistentInstance(Class)
+     * @deprecated - see {@link DomainObjectContainer#newPersistentInstance(Class)} for rationale.
      */
+    @Deprecated
     protected <T> T newPersistentInstance(final Class<T> ofClass) {
         return getContainer().newPersistentInstance(ofClass);
     }
 
     /**
-     * Returns a new instance of the specified class that has the sane persisted
-     * state as the specified object.
-     * 
-     * <p>
-     * This method isn't quite deprecated, but generally consider using
-     * {@link #newTransientInstance(Class)} instead.
+     * @see DomainObjectContainer#newInstance(Class, Object)
+     *
+     * @deprecated - this method supports a rare use case, causing unnecessary interface bloat for very little gain.
      */
+    @Deprecated
     protected <T> T newInstance(final Class<T> ofClass, final Object object) {
         return getContainer().newInstance(ofClass, object);
     }
-    // }}
 
 }

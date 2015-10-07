@@ -233,20 +233,36 @@ public class DomainObjectContainerDefault
     //region > resolve, objectChanged (deprecated)
 
     /**
-     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     * Re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
+     * <p>
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
-    @Deprecated
     @Programmatic
+    @Deprecated
     @Override
     public void resolve(final Object parent) {
         getPersistenceSessionService().resolve(unwrapped(parent));
     }
 
     /**
-     * Deprecated because all supported objectstores provide lazy loading and dirty object tracking.
+     * Provided that the <tt>field</tt> parameter is <tt>null</tt>, re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
+     * <p>
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
-    @Deprecated
     @Programmatic
+    @Deprecated
     @Override
     public void resolve(final Object parent, final Object field) {
         getPersistenceSessionService().resolve(unwrapped(parent), field);

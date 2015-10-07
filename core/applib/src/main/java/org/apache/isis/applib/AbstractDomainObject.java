@@ -19,7 +19,7 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Programmatic;
 
 /**
  * Convenience super class for all domain objects that wish to interact with the
@@ -33,88 +33,112 @@ import org.apache.isis.applib.annotation.Hidden;
  */
 public abstract class AbstractDomainObject extends AbstractContainedObject {
 
-    // {{ resolve, objectChanged
+    //region > resolve, objectChanged
+
     /**
-     * Resolve this object, populating references to other objects.
+     * Re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
+     * <p>
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
-    @Hidden
+    @Programmatic
+    @Deprecated
     protected void resolve() {
         getContainer().resolve(this);
     }
 
     /**
-     * Resolve this object if the referenced object is still unknown.
+     * Provided that the <tt>field</tt> parameter is <tt>null</tt>, re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
+     * <p>
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
-    @Hidden
+    @Programmatic
+    @Deprecated
     protected void resolve(final Object referencedObject) {
         getContainer().resolve(this, referencedObject);
     }
 
     /**
-     * Notifies the container that this object has changed, so that it can be
-     * persisted.
+     * This method does nothing (is a no-op).
+     *
+     * <p>
+     *     Previous this method was provided for manual control of object dirtyng; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated
      */
-    @Hidden
+    @Programmatic
+    @Deprecated
     protected void objectChanged() {
         getContainer().objectChanged(this);
     }
 
-    // }}
+    //endregion
 
-    // {{ isPersistent, makePersistent (overloads)
+    //region > isPersistent, makePersistent (overloads)
     /**
-     * Whether this object is persistent.
-     * 
-     * @deprecated - instead use {@link #isPersistent(Object)}.
+     * Deprecated, recommend use {@link #isPersistent(Object)} instead.
+     *
+     * @see #isPersistent(Object)
+     *
+     * @deprecated - instead recommend that {@link #isPersistent(Object)} or simply {@link DomainObjectContainer#isPersistent(Object)} be used instead.
      */
     @Deprecated
-    @Hidden
+    @Programmatic
     protected boolean isPersistent() {
         return isPersistent(this);
     }
 
     /**
-     * Save this object to the persistent object store.
-     * 
-     * <p>
-     * If the object {@link #isPersistent(Object) is persistent} already, then
-     * will throw an exception.
-     * 
-     * @see #persistIfNotAlready(Object)
-     * 
+     * Deprecated, has been renamed to {@link #persist(Object)}.
+     *
+     * @see #persist(Object)
+     *
      * @deprecated - instead use {@link #persist(Object)}.
      */
     @Deprecated
-    @Hidden
+    @Programmatic
     protected void makePersistent() {
         persist(this);
     }
 
     /**
-     * Saves the object, but only if not already {@link #isPersistent(Object)
-     * persistent}.
-     * 
-     * @see #isPersistent(Object)
-     * @see #persist(Object)
+     * Deprecated, has been renamed to {@link #persistIfNotAlready(Object)}.
+     *
+     * @see #persistIfNotAlready(Object)
      * 
      * @deprecated - instead use {@link #persistIfNotAlready(Object)}.
      */
     @Deprecated
-    @Hidden
+    @Programmatic
     protected void makePersistentIfNotAlready() {
         persistIfNotAlready(this);
     }
 
     /**
-     * Delete this object from the persistent object store.
+     * Deprecated, has been renamed to {@link #remove(Object)}.
+     *
+     * @see #remove(Object).
      * 
      * @deprecated - instead use {@link #remove(Object)}.
      */
     @Deprecated
-    @Hidden
+    @Programmatic
     protected void disposeInstance() {
         remove(this);
     }
-    // }}
+    //endregion
 
 }

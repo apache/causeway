@@ -225,9 +225,9 @@ a hyperlink to the "man page" for a superclass, where:
 
 for example:
 
-pass:[<pre>xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainService[`AbstractDomainService`\]</pre>]
+pass:[<pre>xref:rg.adoc#_rg_classes_super_manpage-AbstractService[`AbstractService`\]</pre>]
 
-|xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainService[`AbstractDomainService`]
+|xref:rg.adoc#_rg_classes_super_manpage-AbstractService[`AbstractService`]
 
 
 

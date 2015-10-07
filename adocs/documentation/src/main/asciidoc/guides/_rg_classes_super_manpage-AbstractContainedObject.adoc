@@ -4,6 +4,29 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
 
+This class is a convenience superclass for domain objects and services, providing general purpose methods for interacting with the framework.  These include:
+
+* `allMatches(Query)` - search for all objects matching the specified `Query`. +
++
++ Note that this, and other similar methods (eg `firstMatch(...)`, `uniqueMatch(...)`) will automatically flush the
+current transactoin.
+
+* `newTransientInstance(Class)` - to create a new instance of an object, with any services injected into it
+
+* `persistIfNotAlready(Object)` - to persist an object +
++
+In fact, the object is queued up to be persisted, and is only actually persisted either when the transaction commits, or
+when the transaction is flushed (typically when a query is performed).
+
+* `warnUser(String)` - generate a warning to the user
+
+* `getContainer()` - which returns the `DomainObjectContainer`
+
+Each of these methods simply delegates to an equivalent method in xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`].
+
+[TIP]
+====
+In practice we find that there's little to gain from subclassing; it's easier/less obscure to simply inject xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] into a simple pojo class.
+====
 

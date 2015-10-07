@@ -4,6 +4,14 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
+
+Subclass of xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainEvent[`AbstractDomainEvent`] for properties.
+
+The class has a couple of responsibilities (in addition to those it inherits):
+
+* capture the target object being interacted with
+
+* capture the old and new values of the property
 
 
+The class itself is instantiated automatically by the framework whenever interacting with a rendered object's property.

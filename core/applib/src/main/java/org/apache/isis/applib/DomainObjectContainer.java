@@ -20,9 +20,10 @@
 package org.apache.isis.applib;
 
 import java.util.List;
+
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import org.apache.isis.applib.annotation.Aggregated;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
@@ -50,48 +51,43 @@ public interface DomainObjectContainer {
     //region > resolve, objectChanged
 
     /**
-     * Ensure that the specified object is completely loaded into memory.
-     * 
+     * Re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
      * <p>
-     * This forces the lazy loading mechanism to load the object if it is not
-     * already loaded.
-     * 
-     * <p>
-     * This method has been deprecated because lazy loading is now typically performed
-     * by the framework, rather than by application code.
-     * 
-     * @deprecated
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
     void resolve(Object domainObject);
 
     /**
-     * Ensure that the specified object is completely loaded into memory, though
-     * only if the supplied field reference is <tt>null</tt>.
-     * 
+     * Provided that the <tt>field</tt> parameter is <tt>null</tt>, re-initialises the fields of an object, using the
+     * JDO {@link javax.jdo.PersistenceManager#refresh(Object) refresh} API.
+     *
      * <p>
-     * This forces the lazy loading mechanism to load the object if it is not
-     * already loaded.
-     * 
-     * <p>
-     * This method has been deprecated because lazy loading is now typically performed
-     * by the framework, rather than by application code.
-     * 
-     * @deprecated
+     *     Previously this method was provided for manual control of lazy loading; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
+     * @deprecated - equivalent to {@link org.apache.isis.applib.services.jdosupport.IsisJdoSupport#refresh(Object)}.
      */
     @Programmatic
     @Deprecated
     void resolve(Object domainObject, Object field);
 
     /**
-     * Flags that the specified object's state has changed and its changes need
-     * to be saved.
-     * 
+     * This method does nothing (is a no-op).
+     *
      * <p>
-     * This method has been deprecated because object dirtying is now typically performed
-     * by the framework, rather than by application code.
-     * 
+     *     Previous this method was provided for manual control of object dirtyng; with the JDO/DataNucleus objectstore
+     *     that original functionality is performed automatically by the framework.
+     * </p>
+     *
      * @deprecated
      */
     @Programmatic
@@ -141,6 +137,8 @@ public interface DomainObjectContainer {
      * this method, though the framework will also handle the case when 
      * the object is simply <i>new()</i>ed up.  The benefits of using
      * {@link #newTransientInstance(Class)} are:
+     * </p>
+     *
      * <ul>
      * <li>any services will be injected into the object immediately
      *     (otherwise they will not be injected until the framework
@@ -156,23 +154,18 @@ public interface DomainObjectContainer {
      * The corollary is: if your code never uses <tt>default<i>Xxx</i>()</tt> 
      * supporting methods or the <tt>created()</tt> callback, then you can
      * alternatively just <i>new()</i> up the object rather than call this
-     * method. 
+     * method.
+     * </p>
 
-     * <p>
-     * If the type is annotated with {@link Aggregated}, then as per
-     * {@link #newAggregatedInstance(Object, Class)}.  Otherwise will be an
-     * aggregate root.
-     * 
+     *
      * @see #newPersistentInstance(Class)
-     * @see #newAggregatedInstance(Object, Class)
      */
     @Programmatic
     <T> T newTransientInstance(final Class<T> ofType);
 
     
     /**
-     * Create a new instance of the specified view model class, initializing with the
-     * specified memento.
+     * Create a new {@link ViewModel} instance of the specified type, initializing with the specified memento.
      *
      * <p>
      *     Rather than use this constructor it is generally preferable to simply instantiate a
@@ -191,18 +184,14 @@ public interface DomainObjectContainer {
     <T> T newAggregatedInstance(Object parent, Class<T> ofType);
 
     /**
-     * Returns a new instance of the specified class that will have been
+     * (Deprecated) returns a new instance of the specified class that will have been
      * persisted.
-     * 
-     * <p>
-     * This method has been deprecated because in almost all cases the
-     * workflow is to {@link #newTransientInstance(Class)}, populate the object
-     * (eg with the arguments to an action) and then to 
+     *
+     * @deprecated - in almost all cases the workflow is to {@link #newTransientInstance(Class)}, populate the object
+     * (eg with the arguments to an action) and then to
      * {@link #persist(Object) persist) the object.  It is exceptionally rare for
      * an object to be created, and with no further data required - be in a state
      * to be persisted immediately.
-     *  
-     * @deprecated
      */
     @Programmatic
     @Deprecated
@@ -215,6 +204,7 @@ public interface DomainObjectContainer {
      * <p>
      * This method has been deprecated because it is a rare use case, causing
      * unnecessary interface bloat for very little gain.
+     * <p></p>
      * 
      * @deprecated
      */
@@ -255,7 +245,8 @@ public interface DomainObjectContainer {
      * <p>
      * Checks the validation of all of the properties, collections and
      * object-level.
-     * 
+     * </p>
+     *
      * @see #isValid(Object)
      */
     @Programmatic
@@ -273,8 +264,8 @@ public interface DomainObjectContainer {
     //region > isPersistent, persist, remove
 
     /**
-     * Determines if the specified object is persistent (that it is stored
-     * permanently outside of the virtual machine).
+     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine
+     * in the object store).
      */
     @Programmatic
     boolean isPersistent(Object domainObject);
@@ -459,17 +450,20 @@ public interface DomainObjectContainer {
     /**
      * Returns all the instances of the specified type (including subtypes).
      * If the optional range parameters are used, the dataset returned starts 
-     * from (0 based) index, and consists of only up to count items.  
+     * from (0 based) index, and consists of only up to count items.
+     *
      * <p>
      * If there are no instances the list will be empty. This method creates a
      * new {@link List} object each time it is called so the caller is free to
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
+     * </p>
      * 
      * <p>
      * This method should only be called where the number of instances is known
      * to be relatively low, unless the optional range parameters (2 longs) are
      * specified. The range parameters are "start" and "count".
+     * </p>
      * 
      * @param range 2 longs, specifying 0-based start and count.
      */
@@ -487,35 +481,23 @@ public interface DomainObjectContainer {
      * new {@link List} object each time it is called so the caller is free to
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
+     * </p>
      * 
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
-     * 
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     * </p>
+     *
+     * @see #allMatches(Class, Predicate, long...)
+     *
      * @param range 2 longs, specifying 0-based start and count.
      */
     @Programmatic
     <T> List<T> allMatches(final Class<T> ofType, final Predicate<? super T> predicate, long... range);
     
     /**
-     * Returns all the instances of the specified type (including subtypes) that
-     * the filter object accepts. If the optional range parameters are used, the 
-     * dataset returned starts from (0 based) index, and consists of only up to 
-     * count items. 
-     * 
-     * <p>
-     * If there are no instances the list will be empty. This method creates a
-     * new {@link List} object each time it is called so the caller is free to
-     * use or modify the returned {@link List}, but the changes will not be
-     * reflected back to the repository.
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
-     * 
-     * @param range 2 longs, specifying 0-based start and count.
-     * 
-     * @deprecated - use {@link #allMatches(Class, Predicate, long...)} instead.
+     * @deprecated - use {@link #allMatches(Class, Predicate, long...)} or (better) {@link #allMatches(Query)} instead
      */
     @Programmatic
     @Deprecated
@@ -532,11 +514,14 @@ public interface DomainObjectContainer {
      * new {@link List} object each time it is called so the caller is free to
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
-     * 
+     * </p>
+     *
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query)} for production code.
-     * 
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     * </p>
+     *
      * @param range 2 longs, specifying 0-based start and count.
      */
     @Programmatic
@@ -554,11 +539,14 @@ public interface DomainObjectContainer {
      * new {@link List} object each time it is called so the caller is free to
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
-     * 
+     * </p>
+     *
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #allMatches(Query, long...)} for production code.
-     * 
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #allMatches(Query)} for production code.
+     * </p>
+     *
      * @param range 2 longs, specifying 0-based start and count.
      */
     @Programmatic
@@ -566,12 +554,17 @@ public interface DomainObjectContainer {
 
     /**
      * Returns all the instances that match the given {@link Query}.
-     * 
+     *
      * <p>
      * If there are no instances the list will be empty. This method creates a
      * new {@link List} object each time it is called so the caller is free to
      * use or modify the returned {@link List}, but the changes will not be
      * reflected back to the repository.
+     * </p>
+     *
+     * <p>
+     *     This method is the recommended way of querying for multiple instances.
+     * </p>
      */
     @Programmatic
     <T> List<T> allMatches(Query<T> query);
@@ -583,20 +576,15 @@ public interface DomainObjectContainer {
      * that matches the supplied {@link Predicate}, or <tt>null</tt> if none.
      * 
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #firstMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T firstMatch(final Class<T> ofType, final Predicate<T> predicate);
     
     /**
-     * Returns the first instance of the specified type (including subtypes)
-     * that matches the supplied {@link Filter}, or <tt>null</tt> if none.
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #firstMatch(Query)} for production code.
-     * 
      * @deprecated - use {@link #firstMatch(Class, Predicate)}
      */
     @Programmatic
@@ -606,10 +594,12 @@ public interface DomainObjectContainer {
     /**
      * Returns the first instance of the specified type (including subtypes)
      * that matches the supplied title, or <tt>null</tt> if none.
-     * 
+     *
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #firstMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T firstMatch(Class<T> ofType, String title);
@@ -617,17 +607,25 @@ public interface DomainObjectContainer {
     /**
      * Returns the first instance of the specified type (including subtypes)
      * that matches the supplied object as a pattern, or <tt>null</tt> if none.
-     * 
+     *
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #firstMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #firstMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T firstMatch(Class<T> ofType, T pattern);
 
     /**
-     * Returns the first instance that matches the supplied query, or
-     * <tt>null</tt> if none.
+     * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
+     *
+     * <p>
+     *     This method is the recommended way of querying for an instance when one or more may match.  See also
+     *     {@link #uniqueMatch(Query)}.
+     * </p>
+     *
+     * @see #uniqueMatch(Query)
      */
     @Programmatic
     <T> T firstMatch(Query<T> query);
@@ -643,24 +641,15 @@ public interface DomainObjectContainer {
      * is more that one instances a run-time exception will be thrown.
      * 
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #uniqueMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T uniqueMatch(final Class<T> ofType, final Predicate<T> predicate);
 
     /**
-     * Find the only instance of the specified type (including subtypes) that
-     * has the specified title.
-     * 
-     * <p>
-     * If no instance is found then <tt>null</tt> will be return, while if there
-     * is more that one instances a run-time exception will be thrown.
-     * 
-     * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #uniqueMatch(Query)} for production code.
-     * 
      * @deprecated - use {@link #uniqueMatch(Class, Predicate)}
      */
     @Programmatic
@@ -676,8 +665,10 @@ public interface DomainObjectContainer {
      * there is more that one instances a run-time exception will be thrown.
      * 
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #uniqueMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T uniqueMatch(Class<T> ofType, String title);
@@ -691,10 +682,13 @@ public interface DomainObjectContainer {
      * <p>
      * If no instance is found then null will be return, while if there is more
      * that one instances a run-time exception will be thrown.
-     * 
+     * </p>
+     *
      * <p>
-     * This method is useful during exploration/prototyping, but you may want to
-     * use {@link #uniqueMatch(Query)} for production code.
+     * This method is useful during exploration/prototyping, but - because the filtering is performed client-side -
+     * this method is only really suitable for initial development/prototyping, or for classes with very few
+     * instances.  Use {@link #uniqueMatch(Query)} for production code.
+     * </p>
      */
     @Programmatic
     <T> T uniqueMatch(Class<T> ofType, T pattern);
@@ -705,6 +699,14 @@ public interface DomainObjectContainer {
      * <p>
      * If no instance is found then null will be return, while if there is more
      * that one instances a run-time exception will be thrown.
+     * </p>
+     *
+     * <p>
+     *     This method is the recommended way of querying for (precisely) one instance.  See also {@link #firstMatch(Query)}
+     *     for less strict querying.
+     * </p>
+     *
+     * @see #firstMatch(Query)
      */
     @Programmatic
     <T> T uniqueMatch(Query<T> query);

@@ -4,6 +4,12 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
 
+This class extends xref:rg.adoc#_rg_classes_super_manpage-AbstractContainedObject[`AbstractContainedObject`], also
+implementing the xref:rg.adoc#_rg_classes_super_manpage-ViewModel[`ViewModel`] interface.  In and of itself it provides no new behaviour.
+
+[TIP]
+====
+As an alternative, consider simply annotating the view model class with {@link org.apache.isis.applib.annotation.ViewModel}.
+====
 

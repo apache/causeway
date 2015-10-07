@@ -4,6 +4,15 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
 
+This class is the superclass for all domain events that are raised by the framework when interacting with actions, properties or collections.
 
+Its immediate subclasses are:
+
+* xref:rg.adoc#_rg_classes_super_manpage-ActionDomainEvent[`ActionDomainEvent`]
+
+* xref:rg.adoc#_rg_classes_super_manpage-PropertyDomainEvent[`PropertyDomainEvent`]
+
+This class defines the `Phase` enum that is common to all domain events (hide/disable/validate/pre-execute/post-execute), and provides methods such as `veto(...)` by which subscribers can influence the interaction (eg hide a collection, disable a property, validate action arguments).
+
+It class also provides `get(...)` and `put(...)` methods that allow adhoc sharing of user data between different phases.  One event instance is used for both the hide and disable phases, and a different event instance is shared between validate/pre-execute/post-execute.

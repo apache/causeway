@@ -82,7 +82,7 @@ NOTE: TODO
 
 
 .Isis Applib classes
-[cols="1,1,1", options="header"]
+[cols="1,1", options="header"]
 |===
 
 |Type

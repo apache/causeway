@@ -4,6 +4,17 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
 
+Subclass of xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainEvent[`AbstractDomainEvent`] for actions.
 
+The class has a number of responsibilities (in addition to those it inherits):
+
+* capture the target object being interacted with
+
+* capture the arguments for each of the action's parameters
+
+* provide selected metadata about the action parameters from the metamodel (names, types)
+
+* link back to the xref:rg.adoc#_rg_services-api_manpage-CommandContext[`CommandContext`] service's `Command` object
+
+The class itself is instantiated automatically by the framework whenever interacting with a rendered object's action.

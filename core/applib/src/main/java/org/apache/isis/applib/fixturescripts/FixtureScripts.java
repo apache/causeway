@@ -49,6 +49,10 @@ import org.apache.isis.applib.services.memento.MementoService;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.applib.util.ObjectContracts;
 
+/**
+ * @deprecated - instead implement {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.
+ */
+@Deprecated
 public abstract class FixtureScripts extends AbstractService {
 
 
