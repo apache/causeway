@@ -42,6 +42,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 public class RootOid implements TypedOid, Serializable {
 
+    //region > fields
     private final static Logger LOG = LoggerFactory.getLogger(RootOid.class);
 
     private static final long serialVersionUID = 1L;
@@ -54,13 +55,9 @@ public class RootOid implements TypedOid, Serializable {
     private Version version;
 
     private int cachedHashCode;
+    //endregion
 
-
-
-    // ////////////////////////////////////////////
-    // Constructor, factory methods
-    // ////////////////////////////////////////////
-
+    //region > Constructor, factory methods
     public static RootOid createTransient(final ObjectSpecId objectSpecId, final String identifier) {
         return new RootOid(objectSpecId, identifier, State.TRANSIENT);
     }
@@ -89,8 +86,6 @@ public class RootOid implements TypedOid, Serializable {
         return new RootOid(objectSpecId, identifier, State.PERSISTENT, Version.create(versionSequence,
                 versionUser, versionUtcTimestamp));
     }
-
-
 
     public RootOid(final ObjectSpecId objectSpecId, final String identifier, final State state) {
         this(objectSpecId, identifier, state, (Version)null);
@@ -139,11 +134,9 @@ public class RootOid implements TypedOid, Serializable {
         cacheState();
     }
 
+    //endregion
 
-    // ////////////////////////////////////////////
-    // Encodeable
-    // ////////////////////////////////////////////
-
+    //region > Encodeable
     public RootOid(final DataInputExtended input) throws IOException {
         final String oidStr = input.readUTF();
         final RootOid oid = getEncodingMarshaller().unmarshal(oidStr, RootOid.class);
@@ -167,11 +160,9 @@ public class RootOid implements TypedOid, Serializable {
         return new OidMarshaller();
     }
 
+    //endregion
 
-    // ////////////////////////////////////////////
-    // deString'able, enString
-    // ////////////////////////////////////////////
-
+    //region > deString'able, enString
     public static RootOid deStringEncoded(final String urlEncodedOidStr, final OidMarshaller oidMarshaller) {
         final String oidStr = UrlEncodingUtils.urlDecode(urlEncodedOidStr);
         return deString(oidStr, oidMarshaller);
@@ -190,11 +181,9 @@ public class RootOid implements TypedOid, Serializable {
     public String enStringNoVersion(final OidMarshaller oidMarshaller) {
         return oidMarshaller.marshalNoVersion(this);
     }
+    //endregion
 
-    // ////////////////////////////////////////////
-    // Properties
-    // ////////////////////////////////////////////
-
+    //region > Properties
     public ObjectSpecId getObjectSpecId() {
         return objectSpecId;
     }
@@ -218,12 +207,9 @@ public class RootOid implements TypedOid, Serializable {
         return state.isPersistent();
     }
 
+    //endregion
 
-
-
-    // ////////////////////////////////////////////
-    // Version
-    // ////////////////////////////////////////////
+    //region > Version
 
     public Version getVersion() {
         return version;
@@ -233,21 +219,17 @@ public class RootOid implements TypedOid, Serializable {
     public void setVersion(final Version version) {
         this.version = version;
     }
+    //endregion
 
-
-    // ////////////////////////////////////////////
-    // bookmark
-    // ////////////////////////////////////////////
-
+    //region > bookmark
     public Bookmark asBookmark() {
         final String objectType = state.asBookmarkObjectState().getCode() + getObjectSpecId().asString();
         final String identifier = getIdentifier();
         return new Bookmark(objectType, identifier);
     }
+    //endregion
 
-    // ////////////////////////////////////////////
-    // equals, hashCode
-    // ////////////////////////////////////////////
+    //region > equals, hashCode
 
     private void cacheState() {
         cachedHashCode = 17;
@@ -279,15 +261,14 @@ public class RootOid implements TypedOid, Serializable {
         return cachedHashCode;
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////
-    // toString
-    // /////////////////////////////////////////////////////////
-
+    //region > toString
     @Override
     public String toString() {
         return enString(new OidMarshaller());
     }
 
+    //endregion
 
 }

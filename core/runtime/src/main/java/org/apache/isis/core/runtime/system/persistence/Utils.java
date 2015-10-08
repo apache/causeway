@@ -18,12 +18,14 @@
  */
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class Utils {
@@ -42,8 +44,13 @@ public class Utils {
     static Version getVersionIfAny(final Persistable pojo, final AuthenticationSession authenticationSession) {
         Object jdoVersion = pojo.dnGetVersion();
         if(jdoVersion instanceof Long) {
-            return SerialNumberVersion.create((Long) jdoVersion, authenticationSession.getUserName(), null); 
-        } 
+            final Long longVersion = (Long) jdoVersion;
+            return Version.create(longVersion, authenticationSession.getUserName(), (Date) null);
+        }
+        if(jdoVersion instanceof java.sql.Timestamp) {
+            final Timestamp timestampVersion = (Timestamp) jdoVersion;
+            return Version.create(timestampVersion.getTime(), authenticationSession.getUserName(), (Date) null);
+        }
         return null;
     }
 

@@ -81,8 +81,12 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecId;
  */
 public class OidMarshaller {
 
-	private static final String TRANSIENT_INDICATOR = "!";
+    //region > public constants
     public static final String VIEWMODEL_INDICATOR = "*";
+    //endregion
+
+    //region > private constants
+    private static final String TRANSIENT_INDICATOR = "!";
 	private static final String SEPARATOR = ":";
 	private static final String SEPARATOR_NESTING = "~";
 	private static final String SEPARATOR_COLLECTION = "$";
@@ -113,19 +117,10 @@ public class OidMarshaller {
     		 		     SEPARATOR + DIGITS_GROUP + "?" +  // optional version UTC time
     		 		 ")?" + 
             		 "$");
+    //endregion
 
-    ////////////////////////////////////////////////////////////////
-    // constructor
-    ////////////////////////////////////////////////////////////////
-
-	public OidMarshaller() {}
-
-	
-    ////////////////////////////////////////////////////////////////
-    // join, split
-    ////////////////////////////////////////////////////////////////
-
-	public String joinAsOid(String domainType, String instanceId) {
+    //region > join, split
+    public String joinAsOid(String domainType, String instanceId) {
 	    return domainType + SEPARATOR + instanceId;
 	}
 	
@@ -134,9 +129,9 @@ public class OidMarshaller {
         return indexOfSeperator > 0? oidStr.substring(indexOfSeperator+1): null;
     }
 
-    ////////////////////////////////////////////////////////////////
-    // unmarshal
-    ////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > unmarshal
 
     @SuppressWarnings("unchecked")
 	public <T extends Oid> T unmarshal(String oidStr, Class<T> requestedType) {
@@ -232,11 +227,10 @@ public class OidMarshaller {
         return Strings.emptyToNull(val);
     }
 
-    
-    ////////////////////////////////////////////////////////////////
-    // marshal
-    ////////////////////////////////////////////////////////////////
 
+    //endregion
+
+    //region > marshal
     public final String marshal(RootOid rootOid) {
         return marshalNoVersion(rootOid) + marshal(rootOid.getVersion());
     }
@@ -267,5 +261,6 @@ public class OidMarshaller {
     private static String nullToEmpty(Object obj) {
         return obj == null? "": "" + obj;
     }
+    //endregion
 
 }
