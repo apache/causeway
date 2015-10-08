@@ -1,0 +1,25 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?><launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+    <listEntry value="/isis-core-webserver/src/main/java/org/apache/isis/WebServer.java"/>
+  </listAttribute>
+  <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+    <listEntry value="1"/>
+  </listAttribute>
+  <mapAttribute key="org.eclipse.debug.core.preferred_launchers">
+    <mapEntry value="org.eclipse.jdt.launching.localJavaApplication" key="[debug]"/>
+    <mapEntry value="org.eclipse.jdt.launching.localJavaApplication" key="[run]"/>
+  </mapAttribute>
+  <stringAttribute value="org.eclipse.jdt.launching.sourceLocator.JavaSourceLookupDirector" key="org.eclipse.debug.core.source_locator_id"/>
+  <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+    <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+  </listAttribute>
+  <booleanAttribute value="true" key="org.eclipse.jdt.debug.ui.INCLUDE_EXTERNAL_JARS"/>
+  <stringAttribute value="org.eclipse.m2e.launchconfig.classpathProvider" key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER"/>
+  <stringAttribute value="org.apache.isis.WebServer" key="org.eclipse.jdt.launching.MAIN_TYPE"/>
+  <stringAttribute value="--port 8080 --type SERVER" key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS"/>
+  <stringAttribute value="${rootArtifactId}-webapp" key="org.eclipse.jdt.launching.PROJECT_ATTR"/>
+  <stringAttribute value="org.eclipse.m2e.launchconfig.sourcepathProvider" key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER"/>
+</launchConfiguration>

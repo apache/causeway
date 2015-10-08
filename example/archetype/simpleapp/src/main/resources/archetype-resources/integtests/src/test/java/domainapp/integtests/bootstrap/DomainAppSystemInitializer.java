@@ -35,8 +35,8 @@ public class DomainAppSystemInitializer {
                     .withLoggingAt(org.apache.log4j.Level.INFO)
                     .with(new DomainAppAppManifest())
                     .with(new IsisConfigurationForJdoIntegTests())
-                    .build()
-                    .setUpSystem();
+                    .build();
+            isft.setUpSystem();
             IsisSystemForTest.set(isft);
         }
     }

@@ -49,7 +49,8 @@ import org.apache.isis.applib.util.ObjectContracts;
         strategy=javax.jdo.annotations.IdGeneratorStrategy.IDENTITY,
          column="id")
 @javax.jdo.annotations.Version(
-        strategy=VersionStrategy.VERSION_NUMBER, 
+//        strategy=VersionStrategy.VERSION_NUMBER,
+        strategy= VersionStrategy.DATE_TIME,
         column="version")
 @javax.jdo.annotations.Queries({
         @javax.jdo.annotations.Query(
@@ -126,8 +127,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
     //endregion
 
     //region > version (derived property)
-    public Long getVersionSequence() {
-        return (Long) JDOHelper.getVersion(this);
+//    public Long getVersionSequence() {
+//        return (Long) JDOHelper.getVersion(this);
+//    }
+    public java.sql.Timestamp getVersionSequence() {
+        return (java.sql.Timestamp) JDOHelper.getVersion(this);
     }
     //endregion
 
