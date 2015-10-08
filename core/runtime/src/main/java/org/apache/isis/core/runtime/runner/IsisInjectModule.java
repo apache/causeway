@@ -116,6 +116,7 @@ public class IsisInjectModule extends AbstractModule {
         requireBinding(DeploymentType.class);
         requireBinding(IsisConfigurationBuilder.class);
         requireBinding(InstallerLookup.class);
+        bind(AppManifest.class).toInstance(IsisSystemThatUsesInstallersFactory.APP_MANIFEST_NOOP);
     }
 
     @SuppressWarnings("unused")

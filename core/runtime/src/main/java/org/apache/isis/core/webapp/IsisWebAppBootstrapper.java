@@ -26,14 +26,12 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import com.google.common.collect.Lists;
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
@@ -49,7 +47,6 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.systemusinginstallers.IsisSystemThatUsesInstallersFactory;
 import org.apache.isis.core.webapp.config.ResourceStreamSourceForWebInf;
 
 /**
@@ -135,12 +132,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
     private Injector createGuiceInjector(final IsisConfigurationBuilder isisConfigurationBuilder, final DeploymentType deploymentType, final InstallerLookup installerLookup) {
         final IsisInjectModule isisModule = new IsisInjectModule(deploymentType, isisConfigurationBuilder, installerLookup);
-        return Guice.createInjector(isisModule, new AbstractModule(){
-            @Override
-            protected void configure() {
-                bind(AppManifest.class).toInstance(IsisSystemThatUsesInstallersFactory.NOOP);
-            }
-        });
+        return Guice.createInjector(isisModule);
     }
 
     @SuppressWarnings("unchecked")

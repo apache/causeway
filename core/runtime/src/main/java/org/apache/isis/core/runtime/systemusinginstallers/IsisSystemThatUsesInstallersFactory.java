@@ -38,13 +38,9 @@ import org.apache.isis.core.runtime.system.IsisSystemFactory;
 public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
 
     /**
-     * Placeholder for no {@link AppManifest}.
-     *
-     * <p>
-     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
-     *     null in {@link #createSystem(DeploymentType, AppManifest)}.
-     * </p>
+     * @deprecated - renamed to {@link #APP_MANIFEST_NOOP}
      */
+    @Deprecated
     public static final AppManifest NOOP = new AppManifest() {
         @Override public List<Class<?>> getModules() {
             return null;
@@ -69,6 +65,17 @@ public class IsisSystemThatUsesInstallersFactory implements IsisSystemFactory {
             return null;
         }
     };
+
+    /**
+     * Placeholder for no {@link AppManifest}.
+     *
+     * <p>
+     *     This is bound in by default in <tt>IsisWicketModule</tt>, but is replaced with
+     *     null in {@link #createSystem(DeploymentType, AppManifest)}.
+     * </p>
+     */
+    public static final AppManifest APP_MANIFEST_NOOP = NOOP;
+
     private final InstallerLookup installerLookup;
 
     @Inject
