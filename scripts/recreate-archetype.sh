@@ -72,8 +72,13 @@ groovy ../../../scripts/updateGeneratedArchetypeSources.groovy -n $ISISCPN -v $I
 echo "deleting old archetype ..."
 git rm -rf ../../archetype/$ISISCPN
 rm -rf ../../archetype/$ISISCPN
+mkdir -p ../../archetype
+
 
 echo "adding new archetype ..."
+ls target/generated-sources/archetype 
+ls  ../../archetype/$ISISCPN
+
 mv target/generated-sources/archetype ../../archetype/$ISISCPN
 git add ../../archetype/$ISISCPN
 git commit -m "$JIRA: recreating $ISISCPN archetype"
