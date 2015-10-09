@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PropertyLayout {
 

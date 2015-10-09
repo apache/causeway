@@ -34,7 +34,7 @@ import org.apache.isis.applib.spec.Specification;
  * Domain semantics for domain object property.
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Property {
 

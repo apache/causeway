@@ -33,7 +33,7 @@ import org.apache.isis.applib.services.eventbus.CollectionDomainEvent;
  * Domain semantics for domain object collection.
  */
 @Inherited
-@Target({ ElementType.METHOD })
+@Target({ ElementType.METHOD, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Collection {
 

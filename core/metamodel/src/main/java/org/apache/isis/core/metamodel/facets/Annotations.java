@@ -20,7 +20,17 @@
 package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.isis.applib.annotation.Collection;
+import org.apache.isis.applib.annotation.CollectionLayout;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 
 public final class Annotations  {
     
@@ -91,30 +101,46 @@ public final class Annotations  {
     /**
      * Searches for annotation on provided method, and if not found for any
      * inherited methods up from the superclass.
-     * 
-     * <p>
-     * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-    public static <T extends Annotation> T getAnnotation(final Method method, final Class<T> annotationClass) {
+    public static <T extends Annotation> T getAnnotation(
+            final Method method,
+            final Class<T> annotationClass) {
         if (method == null) {
             return null;
         }
+        final Class<?> methodDeclaringClass = method.getDeclaringClass();
+        final String methodName = method.getName();
+
         final T annotation = method.getAnnotation(annotationClass);
         if (annotation != null) {
             return annotation;
         }
 
-        final Class<?> methodDeclaringClass = method.getDeclaringClass();
+
+        // search for field
+        if ( shouldSearchForField(annotationClass) ) {
+
+            List<String> fieldNameCandidates = fieldNameCandidatesFor(methodName);
+            for (String fieldNameCandidate : fieldNameCandidates) {
+                try {
+                    final Field field = methodDeclaringClass.getDeclaredField(fieldNameCandidate);
+                    final T fieldAnnotation = field.getAnnotation(annotationClass);
+                    if(fieldAnnotation != null) {
+                        return fieldAnnotation;
+                    }
+                } catch (NoSuchFieldException e) {
+                    // fall through
+                }
+            }
+        }
 
         // search superclasses
         final Class<?> superclass = methodDeclaringClass.getSuperclass();
         if (superclass != null) {
             try {
-                final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
+                final Method parentClassMethod = superclass.getMethod(methodName, method.getParameterTypes());
                 return getAnnotation(parentClassMethod, annotationClass);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }
@@ -123,15 +149,45 @@ public final class Annotations  {
         final Class<?>[] interfaces = methodDeclaringClass.getInterfaces();
         for (final Class<?> iface : interfaces) {
             try {
-                final Method ifaceMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+                final Method ifaceMethod = iface.getMethod(methodName, method.getParameterTypes());
                 return getAnnotation(ifaceMethod, annotationClass);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }
+
         return null;
+    }
+
+    private static List<Class<?>> fieldAnnotationClasses = Collections.unmodifiableList(
+            Arrays.<Class<?>>asList(
+                    Property.class,
+                    PropertyLayout.class,
+                    Collection.class,
+                    CollectionLayout.class,
+                    MemberOrder.class,
+                    javax.jdo.annotations.Column.class
+            )
+    );
+    private static boolean shouldSearchForField(final Class<?> annotationClass) {
+        return fieldAnnotationClasses.contains(annotationClass);
+    }
+
+    static List<String> fieldNameCandidatesFor(final String methodName) {
+        if(methodName == null) {
+            return Collections.emptyList();
+        }
+        if(!methodName.startsWith("get")) {
+            return Collections.emptyList();
+        }
+        final String suffix = methodName.substring(3);
+        if(suffix.length() == 0) {
+            return Collections.emptyList();
+        }
+        final char c = suffix.charAt(0);
+        final char lower = Character.toLowerCase(c);
+        final String candidate = "" + lower + suffix.substring(1);
+        return Arrays.asList(candidate, "_" + candidate);
     }
 
     /**
@@ -158,9 +214,7 @@ public final class Annotations  {
             try {
                 final Method parentClassMethod = superclass.getMethod(method.getName(), method.getParameterTypes());
                 return isAnnotationPresent(parentClassMethod, annotationClass);
-            } catch (final SecurityException e) {
-                // fall through
-            } catch (final NoSuchMethodException e) {
+            } catch (final SecurityException | NoSuchMethodException e) {
                 // fall through
             }
         }
