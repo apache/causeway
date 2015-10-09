@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
+import java.util.EventObject;
 import java.util.Map;
 import com.google.common.collect.Maps;
 import org.apache.isis.applib.Identifier;
@@ -29,11 +30,26 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * If used then the framework will set state via (non-API) setters.
+     *
+     * <p>
+     *     Because the {@link EventObject} superclass prohibits a null source, a dummy value is temporarily used.
+     * </p>
+     */
+    public AbstractDomainEvent() {
+        this(null, null);
+    }
+
     public AbstractDomainEvent(
             final S source,
             final Identifier identifier) {
-        super(source);
+        super(sourceElseDummy(source));
         this.identifier = identifier;
+    }
+
+    private static Object sourceElseDummy(final Object source) {
+        return source != null ? source : new Object();
     }
 
     //region > Phase
@@ -94,12 +110,29 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     public S getSource() {
         return (S)source;
     }
+
+    /**
+     * Not API, set by the framework if the no-arg constructor is used.
+     */
+    public void setSource(S source) {
+        this.source = source;
+    }
     //endregion
 
     //region > identifier
-    private final Identifier identifier;
+    /**
+     * If the no-arg constructor is used, then the framework will populate this field reflectively.
+     */
+    private Identifier identifier;
     public Identifier getIdentifier() {
         return identifier;
+    }
+
+    /**
+     * Not API, set by the framework if the no-arg constructor is used.
+     */
+    public void setIdentifier(final Identifier identifier) {
+        this.identifier = identifier;
     }
     //endregion
 

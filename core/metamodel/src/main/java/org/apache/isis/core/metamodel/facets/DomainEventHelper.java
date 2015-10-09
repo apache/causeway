@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -135,7 +136,24 @@ public class DomainEventHelper {
             final Identifier identifier,
             final S source,
             final Object... arguments) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+
         final Constructor<?>[] constructors = type.getConstructors();
+
+        // no-arg constructor
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length == 0) {
+                final Object event = constructor.newInstance();
+                final ActionDomainEvent<S> ade = (ActionDomainEvent<S>) event;
+
+                ade.setSource(source);
+                ade.setIdentifier(identifier);
+                ade.setArguments(asList(arguments));
+                return ade;
+            }
+        }
+
+
         for (final Constructor<?> constructor : constructors) {
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length != 3) {
@@ -154,6 +172,13 @@ public class DomainEventHelper {
             return (ActionDomainEvent<S>) event;
         }
         throw new NoSuchMethodException(type.getName()+".<init>(? super " + source.getClass().getName() + ", " + Identifier.class.getName() + ", [Ljava.lang.Object;)");
+    }
+
+    // same as in ActionDomainEvent's constructor.
+    private static List<Object> asList(final Object[] arguments) {
+        return arguments != null
+                ? Arrays.asList(arguments)
+                : Collections.emptyList();
     }
     //endregion
 
@@ -209,6 +234,22 @@ public class DomainEventHelper {
             final T newValue) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException  {
 
         final Constructor<?>[] constructors = type.getConstructors();
+
+        // no-arg constructor
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length == 0) {
+                final Object event = constructor.newInstance();
+                final PropertyDomainEvent<S, T> pde = (PropertyDomainEvent<S, T>) event;
+                pde.setSource(source);
+                pde.setIdentifier(identifier);
+                pde.setOldValue(oldValue);
+                pde.setNewValue(newValue);
+                return pde;
+            }
+        }
+
+        // else
         for (final Constructor<?> constructor : constructors) {
             final Class<?>[] parameterTypes = constructor.getParameterTypes();
             if(parameterTypes.length != 4) {
@@ -281,6 +322,21 @@ public class DomainEventHelper {
             IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         final Constructor<?>[] constructors = type.getConstructors();
+
+        // no-arg constructor
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if(parameterTypes.length ==0) {
+                final Object event = constructor.newInstance();
+                final CollectionDomainEvent<S, T> cde = (CollectionDomainEvent<S, T>) event;
+
+                cde.setSource(source);
+                cde.setIdentifier(identifier);
+                cde.setOf(of);
+                cde.setValue(value);
+                return cde;
+            }
+        }
 
         // search for constructor accepting source, identifier, type, value
         for (final Constructor<?> constructor : constructors) {

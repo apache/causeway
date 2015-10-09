@@ -43,6 +43,21 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
     //endregion
 
     //region > constructors
+
+    /**
+     * If used then the framework will set state via (non-API) setters.
+     *
+     * <p>
+     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
+     * </p>
+     */
+    public CollectionDomainEvent() {
+    }
+
+    /**
+     * @deprecated - the {@link #CollectionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public CollectionDomainEvent(
             final S source,
             final Identifier identifier,
@@ -51,6 +66,10 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
         this.of = of;
     }
 
+    /**
+     * @deprecated - the {@link #CollectionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public CollectionDomainEvent(
             final S source,
             final Identifier identifier,

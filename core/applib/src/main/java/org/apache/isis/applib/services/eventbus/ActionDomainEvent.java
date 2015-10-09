@@ -46,19 +46,49 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     //endregion
 
     //region > constructors
+
+    /**
+     * If used then the framework will set state via (non-API) setters.
+     *
+     * <p>
+     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
+     * </p>
+     */
+    public ActionDomainEvent() {
+    }
+
+    /**
+     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public ActionDomainEvent(
             final S source,
             final Identifier identifier) {
         super(source, identifier);
     }
 
+    /**
+     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public ActionDomainEvent(
             final S source,
             final Identifier identifier,
             final Object... arguments) {
-        this(source, identifier, arguments != null? Arrays.asList(arguments): Collections.emptyList());
+        this(source, identifier,
+                asList(arguments));
     }
 
+    private static List<Object> asList(final Object[] arguments) {
+        return arguments != null
+                ? Arrays.asList(arguments)
+                : Collections.emptyList();
+    }
+
+    /**
+     * @deprecated - the {@link #ActionDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public ActionDomainEvent(
             final S source,
             final Identifier identifier,

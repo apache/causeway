@@ -39,12 +39,31 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
     //endregion
 
     //region > constructors
+
+    /**
+     * If used then the framework will set state via (non-API) setters.
+     *
+     * <p>
+     *     Recommended because it reduces the amount of boilerplate in the domain object classes.
+     * </p>
+     */
+    public PropertyDomainEvent() {
+    }
+
+    /**
+     * @deprecated - the {@link #PropertyDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public PropertyDomainEvent(
             final S source,
             final Identifier identifier) {
         super(source, identifier);
     }
 
+    /**
+     * @deprecated - the {@link #PropertyDomainEvent() no-arg constructor} is recommended instead, to reduce boilerplate.
+     */
+    @Deprecated
     public PropertyDomainEvent(
             final S source,
             final Identifier identifier,

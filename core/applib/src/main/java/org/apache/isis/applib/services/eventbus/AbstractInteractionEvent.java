@@ -27,6 +27,11 @@ import org.apache.isis.applib.Identifier;
 @Deprecated
 public abstract class AbstractInteractionEvent<S> extends AbstractDomainEvent<S> {
 
+    /**
+     * If used then the framework will set state via (non-API) setters.
+     */
+    public AbstractInteractionEvent() {}
+
     public AbstractInteractionEvent(
             final S source,
             final Identifier identifier) {
