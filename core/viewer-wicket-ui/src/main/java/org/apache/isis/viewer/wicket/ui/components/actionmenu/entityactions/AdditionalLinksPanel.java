@@ -125,7 +125,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (    semantics.isAreYouSure() && false /* ISIS-1007, for martin-g */ ) {
+                if (    semantics.isAreYouSure() ) {
                     ConfirmationConfig confirmationConfig = new ConfirmationConfig();
                     // TODO ISIS-1007 Use i18n for the title and the labels
                     confirmationConfig.withTitle("Are you sure?");
@@ -134,16 +134,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     confirmationConfig.withBtnOkClass("btn btn-danger");
                     confirmationConfig.withBtnCancelClass("btn btn-default");
 
-                    // link.add(new PopoverBehavior(Model.of(""), Model.of("")));
                     link.add(new ConfirmationBehavior(confirmationConfig));
-//                        @Override
-//                        public void renderHead(final Component component, final IHeaderResponse response) {
-//                            response.render(
-//                                    JavaScriptHeaderItem.forReference(
-//                                            Bootstrap.getSettings().getJsResourceReference()));
-//                            super.renderHead(component, response);
-//                        }
-
                 }
 
 

@@ -344,6 +344,7 @@ public class IsisWicketApplication
 
     protected void configureWicketBootstrap() {
         final IBootstrapSettings settings = new BootstrapSettings();
+        settings.setDeferJavascript(false);
         Bootstrap.install(this, settings);
 
         getHeaderContributorListenerCollection().add(new IHeaderContributor() {
