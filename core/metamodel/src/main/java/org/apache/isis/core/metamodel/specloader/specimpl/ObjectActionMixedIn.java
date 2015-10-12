@@ -19,6 +19,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
@@ -29,6 +31,7 @@ import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
+import org.apache.isis.core.commons.lang.ObjectExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -69,6 +72,11 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
      */
     private final FacetHolder facetHolder = new FacetHolderImpl();
 
+    /**
+     * Lazily initialized by {@link #getParameters()} (so don't use directly!)
+     */
+    private List<ObjectActionParameterMixedIn> parameters;
+
     private final Identifier identifier;
 
     public ObjectActionMixedIn(
@@ -102,7 +110,29 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
     }
 
     public synchronized List<ObjectActionParameter> getParameters() {
-        return mixinAction.getParameters();
+        //return mixinAction.getParameters();
+
+        if (this.parameters == null) {
+            final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
+            final List<ObjectActionParameterMixedIn> mixedInParameters = Lists.newArrayList();
+
+            for (int paramNum = 0; paramNum < mixinActionParameters.size(); paramNum++ ) {
+
+                final ObjectActionParameterAbstract mixinParameter =
+                        (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
+                final ObjectActionParameterMixedIn mixedInParameter;
+                if(mixinParameter instanceof ObjectActionParameterParseable) {
+                    mixedInParameter = new ObjectActionParameterParseableMixedIn(mixinParameter, this);
+                } else if(mixinParameter instanceof OneToOneActionParameterImpl) {
+                    mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
+                } else {
+                    throw new RuntimeException("Unknown implementation of ObjectActionParameter; " + mixinParameter.getClass().getName());
+                }
+                mixedInParameters.add(mixedInParameter);
+            }
+            this.parameters = mixedInParameters;
+        }
+        return ObjectExtensions.asListT(parameters, ObjectActionParameter.class);
     }
 
     @Override
@@ -258,7 +288,7 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
     
     // //////////////////////////////////////
 
-    private ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
+    ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
         final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
         final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
         final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());
