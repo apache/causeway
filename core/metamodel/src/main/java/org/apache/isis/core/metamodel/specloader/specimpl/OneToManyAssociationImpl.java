@@ -280,16 +280,6 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     }
 
     // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Instance getInstance(final ObjectAdapter adapter) {
-        final OneToManyAssociation specification = this;
-        return adapter.getInstance(specification);
-    }
-
-    // /////////////////////////////////////////////////////////////
     // debug, toString
     // /////////////////////////////////////////////////////////////
 

@@ -60,23 +60,13 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     }
 
 
-    // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Instance getInstance(final ObjectAdapter adapter) {
-        final OneToOneActionParameter specification = this;
-        return adapter.getInstance(specification);
-    }
-
     // //////////////////////////////////////////////////////////////////////
     // get, set
     // //////////////////////////////////////////////////////////////////////
 
     /**
      * Gets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, wrapping the proposed value into a
+     * {@link MutableProposedHolder}, wrapping the proposed value into a
      * {@link ObjectAdapter}.
      */
     @Override
@@ -88,7 +78,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
 
     /**
      * Sets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposed}, unwrapped the proposed value from a
+     * {@link MutableProposedHolder}, unwrapped the proposed value from a
      * {@link ObjectAdapter}.
      */
     public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {

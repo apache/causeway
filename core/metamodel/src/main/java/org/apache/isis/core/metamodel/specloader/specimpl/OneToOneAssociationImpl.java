@@ -326,16 +326,6 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
 
     // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Instance getInstance(final ObjectAdapter ownerAdapter) {
-        final OneToOneAssociation specification = this;
-        return ownerAdapter.getInstance(specification);
-    }
-
-    // /////////////////////////////////////////////////////////////
     // debug, toString
     // /////////////////////////////////////////////////////////////
 

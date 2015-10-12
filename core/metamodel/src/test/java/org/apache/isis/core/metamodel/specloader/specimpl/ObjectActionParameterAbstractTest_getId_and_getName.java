@@ -76,11 +76,6 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
         }
 
         @Override
-        public Instance getInstance(final ObjectAdapter adapter) {
-            return null;
-        }
-
-        @Override
         public FeatureType getFeatureType() {
             return null;
         }

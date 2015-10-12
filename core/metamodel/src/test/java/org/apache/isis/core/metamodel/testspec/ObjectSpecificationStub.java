@@ -363,15 +363,11 @@ public class ObjectSpecificationStub extends FacetHolderImpl implements ObjectSp
         return null;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public ObjectAdapter getInstance(final ObjectAdapter adapter) {
-        return adapter;
-    }
-
+    /**
+     * @deprecated - unused ?
+     * @return
+     */
+    @Deprecated
     public RuntimeContext getRuntimeContext() {
         return runtimeContext;
     }

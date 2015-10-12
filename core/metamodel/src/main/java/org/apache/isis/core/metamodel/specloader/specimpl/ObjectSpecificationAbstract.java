@@ -423,18 +423,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
     //endregion
 
-    //region > getInstance (unused)
-
-    /**
-     * simply returns the input parameter.
-     */
-    @Deprecated
-    @Override
-    public Instance getInstance(final ObjectAdapter adapter) {
-        return adapter;
-    }
-    //endregion
-
     //region > Hierarchical
     /**
      * Determines if this class represents the same class, or a subclass, of the

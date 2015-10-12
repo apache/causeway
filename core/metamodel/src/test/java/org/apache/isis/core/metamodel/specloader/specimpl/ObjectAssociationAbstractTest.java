@@ -122,11 +122,6 @@ public class ObjectAssociationAbstractTest {
             }
 
             @Override
-            public Instance getInstance(final ObjectAdapter adapter) {
-                return null;
-            }
-
-            @Override
             public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
                 return false;
             }

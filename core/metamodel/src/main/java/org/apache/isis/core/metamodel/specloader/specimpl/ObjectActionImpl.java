@@ -137,15 +137,6 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Instance getInstance(final ObjectAdapter adapter) {
-        final ObjectAction specification = this;
-        return adapter.getInstance(specification);
-    }
 
     // /////////////////////////////////////////////////////////////
     // Type, IsContributed

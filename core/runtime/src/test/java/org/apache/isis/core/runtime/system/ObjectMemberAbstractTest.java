@@ -280,6 +280,10 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         return null;
     }
 
+    /**
+     * @deprecated - unused ?
+     */
+    @Deprecated
     public Consent isUsable(final ObjectAdapter target) {
         return null;
     }
@@ -304,13 +308,5 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
                 where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // getInstance
-    // /////////////////////////////////////////////////////////////
-
-    @Override
-    public Instance getInstance(final ObjectAdapter adapter) {
-        return null;
-    }
 
 }
