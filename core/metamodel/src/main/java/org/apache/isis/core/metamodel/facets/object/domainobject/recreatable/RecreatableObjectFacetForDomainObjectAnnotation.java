@@ -43,7 +43,7 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends Recreatable
 
         final Nature nature = domainObject.nature();
 
-        if(nature == null || nature == Nature.JDO_ENTITY) {
+        if(nature == null) {
             return null;
         }
 
@@ -51,6 +51,7 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends Recreatable
         {
             case NOT_SPECIFIED:
             case JDO_ENTITY:
+            case MIXIN:
                 // not a recreatable object, so no facet
                 return null;
 

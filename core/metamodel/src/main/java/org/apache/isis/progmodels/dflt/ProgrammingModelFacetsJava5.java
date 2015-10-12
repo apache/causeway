@@ -109,6 +109,7 @@ import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForMixinAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.multiline.annotation.MultiLineFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.named.annotation.NamedFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.notpersistableannot.NotPersistableFacetAnnotationFactory;
@@ -362,6 +363,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ImmutableFacetMarkerInterfaceFactory.class);
 
         addFactory(RecreatableObjectFacetFactory.class);
+        addFactory(MixinFacetForMixinAnnotationFactory.class);
 
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnActionAnnotationFactory.class);

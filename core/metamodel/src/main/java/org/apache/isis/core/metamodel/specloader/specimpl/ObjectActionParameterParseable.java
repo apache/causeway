@@ -126,12 +126,10 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     }
 
     private MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-        final Instance instance = getInstance(owner);
-        if (!(instance instanceof MutableProposedHolder)) {
+        if (!(owner instanceof MutableProposedHolder)) {
             throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
         }
-        final MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
-        return proposedHolder;
+        return (MutableProposedHolder) owner;
     }
 
     @Override

@@ -57,7 +57,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract implemen
 
         // ViewModel interface
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
-            FacetUtil.addFacet(new RecreatableObjectFacetForViewModelInterface(processClassContext.getFacetHolder()));
+            FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(processClassContext.getFacetHolder()));
         }
 
         // ViewModel annotation
@@ -73,7 +73,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract implemen
     }
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
-        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector) : null;
+        return annotation != null ? new RecreatableObjectFacetForRecreatableObjectAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector) : null;
     }
 
     // //////////////////////////////////////

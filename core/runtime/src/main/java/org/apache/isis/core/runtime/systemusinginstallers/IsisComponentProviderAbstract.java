@@ -28,14 +28,19 @@ import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import org.reflections.Reflections;
 import org.reflections.vfs.Vfs;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
 import org.apache.isis.applib.services.classdiscovery.ClassDiscoveryServiceUsingReflections;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -129,7 +134,14 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
         }
     }
 
+    /**
+     * @deprecated - unused, renamed to {@link #findAndRegisterTypes(AppManifest)}.
+     */
+    @Deprecated
     protected void registerPackageNames(final AppManifest appManifest) {
+        findAndRegisterTypes(appManifest);
+    }
+    protected void findAndRegisterTypes(final AppManifest appManifest) {
         final Iterable<String> packageNameList = modulePackageNamesFrom(appManifest);
         final AppManifest.Registry registry = AppManifest.Registry.instance();
 
@@ -144,9 +156,24 @@ public abstract class IsisComponentProviderAbstract implements IsisComponentProv
         final Set<Class<?>> persistenceCapableTypes = reflections.getTypesAnnotatedWith(PersistenceCapable.class);
         final Set<Class<? extends FixtureScript>> fixtureScriptTypes = reflections.getSubTypesOf(FixtureScript.class);
 
+        final Set<Class<?>> mixinTypes = Sets.newHashSet();
+        mixinTypes.addAll(reflections.getTypesAnnotatedWith(Mixin.class));
+        final Set<Class<?>> domainObjectTypes = reflections.getTypesAnnotatedWith(DomainObject.class);
+        mixinTypes.addAll(
+                Lists.newArrayList(Iterables.filter(domainObjectTypes, new Predicate<Class<?>>() {
+                    @Override
+                    public boolean apply(@Nullable final Class<?> input) {
+                        if(input == null) { return false; }
+                        final DomainObject annotation = input.getAnnotation(DomainObject.class);
+                        return annotation.nature() == Nature.MIXIN;
+                    }
+                }))
+        );
+
         registry.setDomainServiceTypes(domainServiceTypes);
         registry.setPersistenceCapableTypes(persistenceCapableTypes);
         registry.setFixtureScriptTypes(fixtureScriptTypes);
+        registry.setMixinTypes(mixinTypes);
     }
 
     private Iterable<String> modulePackageNamesFrom(final AppManifest appManifest) {

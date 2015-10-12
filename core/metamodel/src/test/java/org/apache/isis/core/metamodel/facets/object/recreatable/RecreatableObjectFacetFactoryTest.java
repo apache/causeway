@@ -60,7 +60,7 @@ public class RecreatableObjectFacetFactoryTest extends AbstractFacetFactoryTest 
 
         final Facet facet = facetedMethod.getFacet(ViewModelFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RecreatableObjectFacetForViewModelInterface);
+        assertTrue(facet instanceof RecreatableObjectFacetForRecreatableObjectInterface);
 
         assertNoMethodsRemoved();
     }

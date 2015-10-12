@@ -160,7 +160,6 @@ public interface AppManifest {
      */
     public Map<String,String> getConfigurationProperties();
 
-
     /**
      * Holds the set of domain services, persistent entities and fixture scripts.services
      */
@@ -192,6 +191,20 @@ public interface AppManifest {
         }
         public void setPersistenceCapableTypes(final Set<Class<?>> persistenceCapableTypes) {
             this.persistenceCapableTypes = persistenceCapableTypes;
+        }
+        //endregion
+
+        //region > mixinTypes
+        private Set<Class<?>> mixinTypes;
+
+        /**
+         * @return <tt>null</tt> if no appManifest is defined
+         */
+        public Set<Class<?>> getMixinTypes() {
+            return mixinTypes;
+        }
+        public void setMixinTypes(final Set<Class<?>> mixinTypes) {
+            this.mixinTypes = mixinTypes;
         }
         //endregion
 

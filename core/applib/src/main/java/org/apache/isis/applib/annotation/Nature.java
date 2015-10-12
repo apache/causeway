@@ -75,6 +75,16 @@ public enum Nature {
      *     The identity of a view model is determined solely by the state of object's properties (that have
      *     not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
      * </p>
+     *
+     * @see ViewModel
      */
-    VIEW_MODEL
+    VIEW_MODEL,
+
+    /**
+     * An object that acts as a mix-in to some other object, contributing behaviour and/or derived state based on the
+     * domain object.
+     *
+     * @see Mixin
+     */
+    MIXIN
 }

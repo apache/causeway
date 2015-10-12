@@ -492,7 +492,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     /**
      * Apply changes to the underlying adapter (possibly returning a new adapter).
      *
-     * @return adapter, which may be different from the original (if a {@link org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
+     * @return adapter, which may be different from the original (if a {@link ViewModelFacet#isCloneable(Object) cloneable} view model, for example.
      */
     public ObjectAdapter apply() {
         ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);

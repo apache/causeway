@@ -50,9 +50,10 @@ import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.applib.util.ObjectContracts;
 
 /**
- * @deprecated - instead implement {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.
+ * Rather than subclassing, instead implement
+ * {@link org.apache.isis.applib.services.fixturespec.FixtureScriptsSpecificationProvider}.  The framework will
+ * automatically provide a default implementation configured using that provider service.
  */
-@Deprecated
 public abstract class FixtureScripts extends AbstractService {
 
 

@@ -68,7 +68,7 @@ public class IsisComponentProviderUsingInstallers extends IsisComponentProviderA
         if(appManifest != null) {
 
             putAppManifestKey(appManifest);
-            registerPackageNames(appManifest);
+            findAndRegisterTypes(appManifest);
             specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             putConfigurationProperty(SystemConstants.SERVICES_INSTALLER_KEY, ServicesInstallerFromConfigurationAndAnnotation.NAME);

@@ -39,7 +39,6 @@ import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.metamodelvalidator.dflt.MetaModelValidatorDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -83,7 +82,7 @@ public class IsisComponentProviderDefault2 extends IsisComponentProviderAbstract
         if(appManifest != null) {
 
             putAppManifestKey(appManifest);
-            registerPackageNames(appManifest);
+            findAndRegisterTypes(appManifest);
             specifyServicesAndRegisteredEntitiesUsing(appManifest);
 
             List<Class<? extends FixtureScript>> fixtureClasses = appManifest.getFixtures();

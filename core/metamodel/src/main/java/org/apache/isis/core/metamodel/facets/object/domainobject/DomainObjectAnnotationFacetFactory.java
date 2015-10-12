@@ -18,10 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
-
 import java.util.Collection;
 import java.util.Map;
+
 import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.Audited;
 import org.apache.isis.applib.annotation.AutoComplete;
 import org.apache.isis.applib.annotation.Bounded;
@@ -32,8 +33,6 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
-import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -59,8 +58,12 @@ import org.apache.isis.core.metamodel.facets.object.domainobject.publishing.Publ
 import org.apache.isis.core.metamodel.facets.object.domainobject.recreatable.RecreatableObjectFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.ImmutableFacetForImmutableAnnotation;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.publishedobject.PublishedObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
+import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionServiceAware;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -271,10 +274,12 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final ViewModelFacet facet = RecreatableObjectFacetForDomainObjectAnnotation.create(
+        final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
                 domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+        FacetUtil.addFacet(recreatableObjectFacet);
 
-        FacetUtil.addFacet(facet);
+        final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(cls, facetHolder, servicesInjector);
+        FacetUtil.addFacet(mixinFacet);
     }
 
 

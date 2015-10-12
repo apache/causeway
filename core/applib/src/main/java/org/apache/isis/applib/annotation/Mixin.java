@@ -17,21 +17,22 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.object.recreatable;
+package org.apache.isis.applib.annotation;
 
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class RecreatableObjectFacetForViewModelAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
+/**
+ * An object that acts as a mix-in to some other object, contributing behaviour and/or derived state based on the
+ * domain object.
+ */
+@Inherited
+@Target({ ElementType.TYPE })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Mixin {
 
-    public RecreatableObjectFacetForViewModelAnnotation(
-            final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
-    }
 
 }

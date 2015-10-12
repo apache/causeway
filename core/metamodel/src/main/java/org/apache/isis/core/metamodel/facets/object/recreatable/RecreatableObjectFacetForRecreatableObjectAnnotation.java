@@ -19,24 +19,19 @@
 
 package org.apache.isis.core.metamodel.facets.object.recreatable;
 
-import org.apache.isis.applib.ViewModel;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class RecreatableObjectFacetForViewModelInterface extends RecreatableObjectFacetAbstract {
+public class RecreatableObjectFacetForRecreatableObjectAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
 
-    public RecreatableObjectFacetForViewModelInterface(final FacetHolder holder) {
-        super(holder, ArchitecturalLayer.APPLICATION);
+    public RecreatableObjectFacetForRecreatableObjectAnnotation(
+            final FacetHolder holder,
+            final SpecificationLoader specificationLoader,
+            final AdapterManager adapterManager,
+            final ServicesInjector servicesInjector) {
+        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
     }
 
-    @Override
-    public void initialize(Object pojo, String memento) {
-        final ViewModel viewModel = (ViewModel) pojo;
-        viewModel.viewModelInit(memento);
-    }
-
-    @Override
-    public String memento(Object pojo) {
-        final ViewModel viewModel = (ViewModel) pojo;
-        return viewModel.viewModelMemento();
-    }
 }

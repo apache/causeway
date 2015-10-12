@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
@@ -34,6 +35,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.When;
@@ -65,6 +67,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.facets.object.parented.ParentedCollectionFacet;
@@ -118,6 +121,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
+    //region > fields
+
     private final DeploymentCategory deploymentCategory;
     private final ServicesInjector servicesInjector;
     private final SpecificationLoader specificationLoader;
@@ -168,11 +173,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     private CssClassFacet cssClassFacet;
 
     private IntrospectionState introspected = IntrospectionState.NOT_INTROSPECTED;
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Constructor
-    // //////////////////////////////////////////////////////////////////////
-
+    //region > Constructor
     public ObjectSpecificationAbstract(
             final Class<?> introspectedClass, 
             final String shortName,
@@ -198,11 +201,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     protected DeploymentCategory getDeploymentCategory() {
         return deploymentCategory;
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Stuff immediately derivable from class
-    // //////////////////////////////////////////////////////////////////////
-
+    //region > Stuff immediately derivable from class
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.OBJECT;
@@ -273,10 +274,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return !(getIntrospectionState() == IntrospectionState.INTROSPECTED);
     }
 
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Introspection (part 1)
-    // //////////////////////////////////////////////////////////////////////
+    //region > Introspection (part 1)
 
     public abstract void introspectTypeHierarchyAndMembers();
 
@@ -356,9 +356,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Introspection (part 2)
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Introspection (part 2)
 
     public void updateFromFacetValues() {
 
@@ -384,11 +384,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
+    //endregion
 
-
-    // //////////////////////////////////////////////////////////////////////
-    // Title, Icon
-    // //////////////////////////////////////////////////////////////////////
+    //region > Title, Icon
 
     @Override
     public String getTitle(final ObjectAdapter targetAdapter, final Localization localization) {
@@ -423,19 +421,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return cssClassFacet == null ? null : cssClassFacet.cssClass(reference);
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Specification
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > getInstance (unused)
+
+    /**
+     * simply returns the input parameter.
+     */
+    @Deprecated
     @Override
     public Instance getInstance(final ObjectAdapter adapter) {
         return adapter;
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Hierarchical
-    // //////////////////////////////////////////////////////////////////////
-
+    //region > Hierarchical
     /**
      * Determines if this class represents the same class, or a subclass, of the
      * specified class.
@@ -474,10 +474,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return superclassSpec != null ? superclassSpec.isOfType(specification) : false;
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Name, Description, Persistability
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Name, Description, Persistability
     /**
      * The name according to any available {@link org.apache.isis.core.metamodel.facets.all.named.NamedFacet},
      * but falling back to {@link #getFullIdentifier()} otherwise.
@@ -525,9 +524,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-    // //////////////////////////////////////////////////////////////////////
-    // Facet Handling
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Facet Handling
 
     @Override
     public <Q extends Facet> Q getFacet(final Class<Q> facetType) {
@@ -573,38 +572,38 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return facet != null && !facet.isNoop();
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // DefaultValue
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > DefaultValue - unused
+    /**
+     * @deprecated  - never called.
+     * @return - always returns <tt>null</tt>
+     */
+    @Deprecated
     @Override
     public Object getDefaultValue() {
         return null;
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // Identifier
-    // //////////////////////////////////////////////////////////////////////
-
+    //region > Identifier
     @Override
     public Identifier getIdentifier() {
         return identifier;
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // create InteractionContext
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > createTitleInteractionContext
     @Override
     public ObjectTitleContext createTitleInteractionContext(final AuthenticationSession session, final InteractionInitiatedBy interactionMethod, final ObjectAdapter targetObjectAdapter) {
         return new ObjectTitleContext(targetObjectAdapter, getIdentifier(), targetObjectAdapter.titleString(null),
                 interactionMethod);
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Superclass, Interfaces, Subclasses, isAbstract
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Superclass, Interfaces, Subclasses, isAbstract
     @Override
     public ObjectSpecification superclass() {
         return superclassSpec;
@@ -630,10 +629,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return isAbstract;
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Associations
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Associations
     @Override
     public List<ObjectAssociation> getAssociations(final Contributed contributed) {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
@@ -738,10 +736,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return list;
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // getObjectActions
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > getObjectActions
     @Override
     public List<ObjectAction> getObjectActions(
             final List<ActionType> types,
@@ -756,6 +753,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
                 actions.addAll(createContributeeActions());
+                actions.addAll(createMixinActions());
                 sortCacheAndUpdateActions(actions);
                 contributeeActionsAdded = true;
             }
@@ -787,10 +785,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return getObjectActions(Collections.singletonList(type), contributed, filter);
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // sorting
-    // //////////////////////////////////////////////////////////////////////
-    
+    //endregion
+
+    //region > sorting
+
     protected List<ObjectAssociation> sortAssociations(final List<ObjectAssociation> associations) {
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(associations);
         final MemberGroupLayoutFacet memberGroupLayoutFacet = this.getFacet(MemberGroupLayoutFacet.class);
@@ -848,18 +846,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // getServiceActionsReturning
-    // //////////////////////////////////////////////////////////////////////
-
     private Iterable<Object> getServicePojos() {
         return getServicesInjector().getRegisteredServices();
     }
 
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // contributee associations (properties and collections)
-    // //////////////////////////////////////////////////////////////////////
+    //region > contributee associations (properties and collections)
 
     private List<ObjectAssociation> createContributeeAssociations() {
         if (isService() || isValue()) {
@@ -882,17 +875,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         final List<ObjectAssociation> contributeeAssociations = createContributeeAssociations(servicePojo);
         contributeeAssociationsToAppendTo.addAll(contributeeAssociations);
-    }
-
-    /**
-     * Synthesises {@link ObjectAssociation}s from matching {@link ObjectAction}s of any of the services
-     * that accept one parameter
-     */
-    private List<ObjectAssociation> createContributeeAssociations(
-            final ObjectAdapter serviceAdapter) {
-
-        final Object servicePojo = serviceAdapter.getObject();
-        return createContributeeAssociations(servicePojo);
     }
 
     private List<ObjectAssociation> createContributeeAssociations(final Object servicePojo) {
@@ -930,12 +912,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
     private Function<ObjectActionImpl, ObjectAssociation> createContributeeAssociationFunctor(
-            final ObjectAdapter serviceAdapter, final ObjectSpecification contributeeType) {
-        final Object servicePojo = serviceAdapter.getObject();
-        return createContributeeAssociationFunctor(servicePojo, contributeeType);
-    }
-
-    private Function<ObjectActionImpl, ObjectAssociation> createContributeeAssociationFunctor(
             final Object servicePojo,
             final ObjectSpecification contributeeType) {
         return new Function<ObjectActionImpl, ObjectAssociation>(){
@@ -953,10 +929,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         };
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // contributee actions
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > contributee actions
     /**
      * All contributee actions (each wrapping a service's contributed action) for this spec.
      * 
@@ -1032,11 +1007,71 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         }
         return -1;
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // validity
-    // //////////////////////////////////////////////////////////////////////
+    //region > mixin actions
+    /**
+     * All contributee actions (each wrapping a service's contributed action) for this spec.
+     *
+     * <p>
+     * If this specification {@link #isService() is actually for} a service,
+     * then returns an empty list.
+     */
+    protected List<ObjectAction> createMixinActions() {
+        if (isService() || isValue()) {
+            return Collections.emptyList();
+        }
+        final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
+        if(mixinTypes == null) {
+            return Collections.emptyList();
+        }
 
+        final List<ObjectAction> mixinActions = Lists.newArrayList();
+
+        for (final Class<?> mixinType : mixinTypes) {
+            addMixinActionsIfAny(mixinType, mixinActions);
+        }
+        return mixinActions;
+    }
+
+    private void addMixinActionsIfAny(
+            final Class<?> mixinType,
+            final List<ObjectAction> mixinActionsToAppendTo) {
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType);
+        if (specification == this) {
+            return;
+        }
+        final MixinFacet mixinFacet = specification.getFacet(MixinFacet.class);
+        if(mixinFacet == null) {
+            // this shouldn't happen; perhaps it would be more correct to throw an exception?
+            return;
+        }
+        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
+            return;
+        }
+
+        final List<ObjectAction> actions = Lists.newArrayList();
+        final List<ObjectAction> mixinActions = specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters
+                .<ObjectAction>any());
+        for (final ObjectAction mixinTypeAction : mixinActions) {
+            if (isAlwaysHidden(mixinTypeAction)) {
+                continue;
+            }
+            if(!(mixinTypeAction instanceof ObjectActionImpl)) {
+                continue;
+            }
+            final ObjectActionImpl mixinAction = (ObjectActionImpl) mixinTypeAction;
+
+            ObjectActionMixedIn mixedInAction =
+                    new ObjectActionMixedIn(mixinType, mixinAction, this, objectMemberDependencies);
+            facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
+            actions.add(mixedInAction);
+        }
+        mixinActionsToAppendTo.addAll(actions);
+    }
+
+    //endregion
+    //region > validity
     @Override
     public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return isValidResult(targetAdapter, interactionInitiatedBy).createConsent();
@@ -1061,11 +1096,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {
         return new ObjectValidityContext(targetAdapter, getIdentifier(), interactionInitiatedBy);
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////////
-    // convenience isXxx (looked up from facets)
-    // //////////////////////////////////////////////////////////////////////
-
+    //region > convenience isXxx (looked up from facets)
     @Override
     public boolean isImmutable() {
         return containsFacet(ImmutableFacet.class);
@@ -1112,9 +1145,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     }
 
 
-    // //////////////////////////////////////////////////////////////////////
-    // toString
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > toString
 
     @Override
     public String toString() {
@@ -1123,10 +1156,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return str.toString();
     }
 
-    // //////////////////////////////////////////////////////////////////////
-    // Dependencies (injected in constructor)
-    // //////////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Dependencies (injected in constructor)
     private ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
@@ -1135,5 +1167,6 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return specificationLoader;
     }
 
+    //endregion
 
 }
