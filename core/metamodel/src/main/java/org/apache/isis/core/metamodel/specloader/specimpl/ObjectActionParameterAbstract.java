@@ -31,6 +31,7 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.commons.lang.ListExtensions;
 import org.apache.isis.core.commons.lang.StringExtensions;
+import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -38,6 +39,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
@@ -53,6 +55,7 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.PersistenceSessionService;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -64,11 +67,42 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     private final ObjectActionImpl parentAction;
     private final TypedHolder peer;
 
+
+
     protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
     }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION_PARAMETER;
+    }
+
+
+    /**
+     * Gets the proposed value of the {@link Instance} (downcast as a
+     * {@link MutableProposedHolder}, wrapping the proposed value into a
+     * {@link ObjectAdapter}.
+     */
+    @Override
+    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
+        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+        final Object proposed = proposedHolder.getProposed();
+        return getAdapterMap().adapterFor(proposed);
+    }
+
+
+    protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
+        if (!(owner instanceof MutableProposedHolder)) {
+            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
+        }
+        return (MutableProposedHolder) owner;
+    }
+
+
+
 
     /**
      * Subclasses should override either {@link #isObject()} or
@@ -449,14 +483,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         ObjectSpecification proposedValueSpec;
         if(proposedValue != null) {
             proposedValueAdapter = getAdapterMap().adapterFor(proposedValue);
-            proposedValueSpec = proposedValueAdapter.getSpecification();
-            if(!proposedValueSpec.isOfType(proposedValueSpec)) {
-                proposedValueAdapter = doCoerceProposedValue(adapter, proposedValue, interactionInitiatedBy,
-                        localization
-                );
-            }
-            
-            // check has been coerced into correct type; otherwise give up
             if(proposedValueAdapter == null) {
                 return null;
             }
@@ -478,17 +504,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
         return null;
 
-    }
-
-    /**
-     * Optional hook for parsing.
-     */
-    protected ObjectAdapter doCoerceProposedValue(
-            final ObjectAdapter adapter,
-            final Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Localization localization) {
-        return null;
     }
 
     /**

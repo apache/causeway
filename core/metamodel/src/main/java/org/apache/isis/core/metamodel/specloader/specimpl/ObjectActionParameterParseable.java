@@ -19,15 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.applib.profiles.Localization;
-import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.spec.Instance;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements OneToOneActionParameter {
@@ -36,67 +28,6 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         super(index, action, peer);
     }
 
-    protected ObjectAdapter doCoerceProposedValue(
-            final ObjectAdapter adapter,
-            final Object proposedValue,
-            final InteractionInitiatedBy interactionInitiatedBy,
-            final Localization localization) {
-        // try to parse
-        if (!(proposedValue instanceof String)) {
-            return null;
-        }
-        final String proposedString = (String) proposedValue;
 
-        final ObjectSpecification parameterSpecification = getSpecification();
-        final ParseableFacet p = parameterSpecification.getFacet(ParseableFacet.class);
-        try {
-            final ObjectAdapter parsedAdapter = p.parseTextEntry(null, proposedString, interactionInitiatedBy,
-                    localization
-            );
-            return parsedAdapter;
-        } catch(Exception ex) {
-            return null;
-        }
-    }
-
-
-    // //////////////////////////////////////////////////////////////////////
-    // get, set
-    // //////////////////////////////////////////////////////////////////////
-
-    /**
-     * Gets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposedHolder}, wrapping the proposed value into a
-     * {@link ObjectAdapter}.
-     */
-    @Override
-    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
-        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        final Object proposed = proposedHolder.getProposed();
-        return getAdapterMap().adapterFor(proposed);
-    }
-
-    /**
-     * Sets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposedHolder}, unwrapped the proposed value from a
-     * {@link ObjectAdapter}.
-     */
-    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
-        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        final Object newValuePojo = newValue.getObject();
-        proposedHolder.setProposed(newValuePojo);
-    }
-
-    private MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-        if (!(owner instanceof MutableProposedHolder)) {
-            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
-        }
-        return (MutableProposedHolder) owner;
-    }
-
-    @Override
-    public FeatureType getFeatureType() {
-        return FeatureType.ACTION_PARAMETER;
-    }
 
 }

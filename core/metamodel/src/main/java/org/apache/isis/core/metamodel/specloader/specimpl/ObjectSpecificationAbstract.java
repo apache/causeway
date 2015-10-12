@@ -82,7 +82,6 @@ import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.layout.DeweyOrderSet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ActionType;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecificationDependencies;
@@ -459,7 +458,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             }
         }
         final ObjectSpecification superclassSpec = superclass();
-        return superclassSpec != null ? superclassSpec.isOfType(specification) : false;
+        return superclassSpec != null && superclassSpec.isOfType(specification);
     }
 
     //endregion

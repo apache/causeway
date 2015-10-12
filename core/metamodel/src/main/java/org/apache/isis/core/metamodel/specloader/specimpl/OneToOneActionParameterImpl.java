@@ -19,12 +19,7 @@
 
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
@@ -33,10 +28,6 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
         super(index, actionImpl, peer);
     }
 
-    @Override
-    public FeatureType getFeatureType() {
-        return FeatureType.ACTION_PARAMETER;
-    }
 
     @Override
     public boolean isObject() {
@@ -44,39 +35,21 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     }
 
 
-    // //////////////////////////////////////////////////////////////////////
-    // get, set
-    // //////////////////////////////////////////////////////////////////////
+//    // //////////////////////////////////////////////////////////////////////
+//    // get, set
+//    // //////////////////////////////////////////////////////////////////////
+//
+//    /**
+//     * Sets the proposed value of the {@link Instance} (downcast as a
+//     * {@link MutableProposedHolder}, unwrapped the proposed value from a
+//     * {@link ObjectAdapter}.
+//     */
+//    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
+//        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
+//        final Object newValuePojo = newValue.getObject();
+//        proposedHolder.setProposed(newValuePojo);
+//    }
 
-    /**
-     * Gets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposedHolder}, wrapping the proposed value into a
-     * {@link ObjectAdapter}.
-     */
-    @Override
-    public ObjectAdapter get(final ObjectAdapter owner, final InteractionInitiatedBy interactionInitiatedBy) {
-        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        final Object proposed = proposedHolder.getProposed();
-        return getAdapterMap().adapterFor(proposed);
-    }
-
-    /**
-     * Sets the proposed value of the {@link Instance} (downcast as a
-     * {@link MutableProposedHolder}, unwrapped the proposed value from a
-     * {@link ObjectAdapter}.
-     */
-    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
-        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-        final Object newValuePojo = newValue.getObject();
-        proposedHolder.setProposed(newValuePojo);
-    }
-
-    private MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
-        if (!(owner instanceof MutableProposedHolder)) {
-            throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
-        }
-        return (MutableProposedHolder) owner;
-    }
 
 
 }
