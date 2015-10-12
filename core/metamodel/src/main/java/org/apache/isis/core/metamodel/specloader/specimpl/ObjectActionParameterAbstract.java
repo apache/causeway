@@ -191,12 +191,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return peer != null ? peer.containsFacet(facetType) : false;
+        return peer != null && peer.containsFacet(facetType);
     }
 
     @Override
     public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        return peer == null ? false : peer.containsDoOpFacet(facetType);
+        return peer != null && peer.containsDoOpFacet(facetType);
     }
 
     @Override
@@ -332,7 +332,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             addAllInstancesForType(adapters);
         }
         */
-        return adapters.toArray(new ObjectAdapter[0]);
+        return adapters.toArray(new ObjectAdapter[adapters.size()]);
     }
     
     // /////////////////////////////////////////////////////////////

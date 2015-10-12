@@ -25,45 +25,17 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 
-public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements ParseableEntryActionParameter {
+public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
     public ObjectActionParameterParseable(final int index, final ObjectActionImpl action, final TypedHolder peer) {
         super(index, action, peer);
     }
 
-    @Override
-    public int getNoLines() {
-        final MultiLineFacet facet = getFacet(MultiLineFacet.class);
-        return facet.numberOfLines();
-    }
-
-    @Override
-    public boolean canWrap() {
-        final MultiLineFacet facet = getFacet(MultiLineFacet.class);
-        return !facet.preventWrapping();
-    }
-
-    @Override
-    public int getMaximumLength() {
-        final MaxLengthFacet facet = getFacet(MaxLengthFacet.class);
-        return facet.value();
-    }
-
-    @Override
-    public int getTypicalLineLength() {
-        final TypicalLengthFacet facet = getFacet(TypicalLengthFacet.class);
-        return facet.value();
-    }
-    
     protected ObjectAdapter doCoerceProposedValue(
             final ObjectAdapter adapter,
             final Object proposedValue,
