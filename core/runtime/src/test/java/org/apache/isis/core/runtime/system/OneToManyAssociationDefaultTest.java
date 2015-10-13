@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -49,7 +49,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-public class OneToManyAssociationImplTest {
+public class OneToManyAssociationDefaultTest {
 
     private static final String COLLECTION_ID = "orders";
 
@@ -94,7 +94,7 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberDependencies(
+        association = new OneToManyAssociationDefault(mockPeer, new ObjectMemberDependencies(
                 mockSpecificationLookup, mockServicesInjector,
                 mockPersistenceSessionService));
     }

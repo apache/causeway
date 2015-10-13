@@ -19,6 +19,7 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
@@ -32,6 +33,7 @@ import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
+import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
@@ -42,6 +44,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -50,7 +53,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMember {
+public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInMember {
 
     /**
      * The type of the mixin (providing the action), eg annotated with {@link org.apache.isis.applib.annotation.Mixin}.
@@ -58,9 +61,9 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
     private final Class<?> mixinType;
 
     /**
-     * The {@link ObjectActionImpl} for the action being mixed in (ie on the {@link #mixinType}.
+     * The {@link ObjectActionDefault} for the action being mixed in (ie on the {@link #mixinType}.
      */
-    private final ObjectActionImpl mixinAction;
+    private final ObjectActionDefault mixinAction;
 
     /**
      * The domain object type being mixed in to (being supplemented).
@@ -81,7 +84,7 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
 
     public ObjectActionMixedIn(
             final Class<?> mixinType,
-            final ObjectActionImpl mixinAction,
+            final ObjectActionDefault mixinAction,
             final ObjectSpecification mixedInType,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(mixinAction.getFacetedMethod(), objectMemberDependencies);
@@ -90,14 +93,45 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
         this.mixinAction = mixinAction;
         this.mixedInType = mixedInType;
 
-        // copy over facets from mixin type to own.
+        // copy over facets from mixin action to self
         FacetUtil.copyFacets(mixinAction.getFacetedMethod(), facetHolder);
+
+        // adjust name if necessary
+        final String name = getName();
+
+        String memberName = null;
+        if(Objects.equal(name, "_")) {
+            memberName = determineNameFrom(mixinAction);
+            FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
+        }
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        final String memberName = mixinIdentifier.getMemberName();
+        memberName = memberName != null? memberName : mixinIdentifier.getMemberName();
         List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
         identifier = Identifier.actionIdentifier(getOnType().getCorrespondingClass().getName(), memberName, memberParameterNames);
+    }
+
+    private static String determineNameFrom(final ObjectActionDefault mixinAction) {
+        return suffixAfterUnderscore(mixinAction.getOnType().getSingularName());
+    }
+
+    static String suffixAfterUnderscore(final String singularName) {
+        return StringExtensions.asCapitalizedName(suffix(singularName));
+    }
+
+    private static String suffix(final String singularName) {
+        if (singularName.endsWith("_")) {
+            if (Objects.equal(singularName, "_")) {
+                return singularName;
+            }
+            return singularName;
+        }
+        final int indexOfUnderscore = singularName.lastIndexOf('_');
+        if (indexOfUnderscore == -1) {
+            return singularName;
+        }
+        return singularName.substring(indexOfUnderscore + 1);
     }
 
     @Override

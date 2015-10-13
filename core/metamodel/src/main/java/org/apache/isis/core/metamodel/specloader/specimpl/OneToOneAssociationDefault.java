@@ -55,25 +55,23 @@ import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
+public class OneToOneAssociationDefault extends ObjectAssociationAbstract implements OneToOneAssociation {
 
-    public OneToOneAssociationImpl(
+    public OneToOneAssociationDefault(
             final FacetedMethod facetedMethod,
             final ObjectMemberDependencies objectMemberDependencies) {
         this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
                 objectMemberDependencies);
     }
     
-    protected OneToOneAssociationImpl(
+    protected OneToOneAssociationDefault(
             final FacetedMethod facetedMethod,
             final ObjectSpecification objectSpec,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(facetedMethod, FeatureType.PROPERTY, objectSpec, objectMemberDependencies);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
+    //region > visible, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -82,9 +80,6 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return new PropertyVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
@@ -93,10 +88,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return new PropertyUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Validate
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Validity
     private ValidityContext<?> createValidateInteractionContext(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToReferenceAdapter,
@@ -124,10 +118,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // init
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > init
     @Override
     public void initAssociation(final ObjectAdapter ownerAdapter, final ObjectAdapter referencedAdapter) {
         final PropertyInitializationFacet initializerFacet = getFacet(PropertyInitializationFacet.class);
@@ -136,9 +129,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         }
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Access (get, isEmpty)
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Access (get, isEmpty)
 
     @Override
     public ObjectAdapter get(
@@ -170,10 +163,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return get(ownerAdapter, interactionInitiatedBy) == null;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Set
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Set
     @Override
     public void set(
             final ObjectAdapter ownerAdapter,
@@ -238,10 +230,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         facet.clearProperty(ownerAdapter, interactionInitiatedBy);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // defaults
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > defaults
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
         PropertyDefaultFacet propertyDefaultFacet = getFacet(PropertyDefaultFacet.class);
@@ -271,10 +262,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         }
     }
 
-    // /////////////////////////////////////////////////////////////
-    // choices and autoComplete
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > choices and autoComplete
     @Override
     public boolean hasChoices() {
         return getFacet(PropertyChoicesFacet.class) != null;
@@ -328,11 +318,9 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         return propertyAutoCompleteFacet != null? propertyAutoCompleteFacet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // debug, toString
-    // /////////////////////////////////////////////////////////////
-
+    //region > debug, toString
     @Override
     public String debugData() {
         final DebugString debugString = new DebugString();
@@ -351,6 +339,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
         str.append("type", getSpecification().getShortIdentifier());
         return str.toString();
     }
+    //endregion
 
 
 }

@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
@@ -96,13 +97,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return id;
     }
 
-    /**
-     * @return the facetedMethod
-     */
-    public FacetedMethod getFacetedMethod() {
-        return facetedMethod;
-    }
-
     @Override
     public Identifier getIdentifier() {
         return getFacetedMethod().getIdentifier();
@@ -117,49 +111,57 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     //region > Facets
 
+    public FacetedMethod getFacetedMethod() {
+        return facetedMethod;
+    }
+
+    protected FacetHolder getFacetHolder() {
+        return getFacetedMethod();
+    }
+
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return getFacetedMethod().containsFacet(facetType);
+        return getFacetHolder().containsFacet(facetType);
     }
 
     @Override
     public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        return getFacetedMethod().containsDoOpFacet(facetType);
+        return getFacetHolder().containsDoOpFacet(facetType);
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
-        return getFacetedMethod().getFacet(cls);
+        return getFacetHolder().getFacet(cls);
     }
 
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
-        return getFacetedMethod().getFacetTypes();
+        return getFacetHolder().getFacetTypes();
     }
 
     @Override
     public List<Facet> getFacets(final Filter<Facet> filter) {
-        return getFacetedMethod().getFacets(filter);
+        return getFacetHolder().getFacets(filter);
     }
 
     @Override
     public void addFacet(final Facet facet) {
-        getFacetedMethod().addFacet(facet);
+        getFacetHolder().addFacet(facet);
     }
 
     @Override
     public void addFacet(final MultiTypedFacet facet) {
-        getFacetedMethod().addFacet(facet);
+        getFacetHolder().addFacet(facet);
     }
 
     @Override
     public void removeFacet(final Facet facet) {
-        getFacetedMethod().removeFacet(facet);
+        getFacetHolder().removeFacet(facet);
     }
 
     @Override
     public void removeFacet(final Class<? extends Facet> facetType) {
-        getFacetedMethod().removeFacet(facetType);
+        getFacetHolder().removeFacet(facetType);
     }
 
     //endregion

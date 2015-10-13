@@ -46,18 +46,18 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {
+public class OneToManyAssociationDefault extends ObjectAssociationAbstract implements OneToManyAssociation {
 
-    public OneToManyAssociationImpl(
-            final FacetedMethod facetedMethod, 
+    public OneToManyAssociationDefault(
+            final FacetedMethod facetedMethod,
             final ObjectMemberDependencies objectMemberDependencies) {
         this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
                 objectMemberDependencies);
     }
 
-    protected OneToManyAssociationImpl(
-            final FacetedMethod facetedMethod, 
-            final ObjectSpecification objectSpec, 
+    protected OneToManyAssociationDefault(
+            final FacetedMethod facetedMethod,
+            final ObjectSpecification objectSpec,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(facetedMethod, FeatureType.COLLECTION, objectSpec, objectMemberDependencies);
     }

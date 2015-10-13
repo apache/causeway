@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
@@ -64,10 +65,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
     private final int number;
-    private final ObjectActionImpl parentAction;
+    private final ObjectActionDefault parentAction;
     private final TypedHolder peer;
 
-    protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
+    protected ObjectActionParameterAbstract(final int number, final ObjectActionDefault objectAction, final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
@@ -198,57 +199,70 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     //region > FacetHolder
 
+    protected FacetHolder getFacetHolder() {
+        return peer;
+    }
+
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
-        return peer != null && peer.containsFacet(facetType);
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null && facetHolder.containsFacet(facetType);
     }
 
     @Override
     public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
-        return peer != null && peer.containsDoOpFacet(facetType);
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null && facetHolder.containsDoOpFacet(facetType);
     }
 
     @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
-        return peer != null ? peer.getFacet(cls) : null;
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null ? facetHolder.getFacet(cls) : null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
-        return peer != null ? peer.getFacetTypes() : new Class[] {};
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null ? facetHolder.getFacetTypes() : new Class[] {};
     }
 
     @Override
     public List<Facet> getFacets(final Filter<Facet> filter) {
-        return peer != null ? peer.getFacets(filter) : Lists.<Facet> newArrayList();
+        final FacetHolder facetHolder = getFacetHolder();
+        return facetHolder != null ? facetHolder.getFacets(filter) : Lists.<Facet> newArrayList();
     }
 
     @Override
     public void addFacet(final Facet facet) {
-        if (peer != null) {
-            peer.addFacet(facet);
+        final FacetHolder facetHolder = getFacetHolder();
+        if (facetHolder != null) {
+            facetHolder.addFacet(facet);
         }
     }
 
     @Override
     public void addFacet(final MultiTypedFacet facet) {
-        if (peer != null) {
-            peer.addFacet(facet);
+        final FacetHolder facetHolder = getFacetHolder();
+        if (facetHolder != null) {
+            facetHolder.addFacet(facet);
         }
     }
 
     @Override
     public void removeFacet(final Facet facet) {
-        if (peer != null) {
-            peer.removeFacet(facet);
+        final FacetHolder facetHolder = getFacetHolder();
+        if (facetHolder != null) {
+            facetHolder.removeFacet(facet);
         }
     }
 
     @Override
     public void removeFacet(final Class<? extends Facet> facetType) {
-        if (peer != null) {
-            peer.removeFacet(facetType);
+        final FacetHolder facetHolder = getFacetHolder();
+        if (facetHolder != null) {
+            facetHolder.removeFacet(facetType);
         }
     }
 

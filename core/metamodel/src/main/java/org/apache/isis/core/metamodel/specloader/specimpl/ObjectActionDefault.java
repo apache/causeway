@@ -66,9 +66,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
+public class ObjectActionDefault extends ObjectMemberAbstract implements ObjectAction {
 
-    private final static Logger LOG = LoggerFactory.getLogger(ObjectActionImpl.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ObjectActionDefault.class);
 
     public static ActionType getType(final String typeStr) {
         final ActionType type = ActionType.valueOf(typeStr);
@@ -89,7 +89,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     //region > constructors
 
-    public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberDependencies objectMemberDependencies) {
+    public ObjectActionDefault(
+            final FacetedMethod facetedMethod,
+            final ObjectMemberDependencies objectMemberDependencies) {
         super(facetedMethod, FeatureType.ACTION, objectMemberDependencies);
     }
 
@@ -190,16 +192,10 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 final TypedHolder paramPeer = paramPeers.get(i);
                 final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLoader(), paramPeer.getType());
                 
-                final ObjectActionParameter parameter;
-                if (specification.isParseable()) {
-                    parameter = new OneToOneActionParameterImpl(i, this, paramPeer);
-                } else if (specification.isNotCollection()) {
-                    parameter = new OneToOneActionParameterImpl(i, this, paramPeer);
-                } else if (specification.isParentedOrFreeCollection()) {
+                if (!specification.isNotCollection()) {
                     throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
-                } else {
-                    throw new UnknownTypeException(specification);
                 }
+                final ObjectActionParameter parameter = new OneToOneActionParameterDefault(i, this, paramPeer);
                 parameters.add(parameter);
             }
             this.parameters = parameters;

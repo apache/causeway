@@ -870,7 +870,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         final List<ObjectAction> serviceActions = specification.getObjectActions(ActionType.USER, Contributed.INCLUDED, Filters
                 .<ObjectAction>any());
 
-        final List<ObjectActionImpl> contributedActions = Lists.newArrayList();
+        final List<ObjectActionDefault> contributedActions = Lists.newArrayList();
         for (final ObjectAction serviceAction : serviceActions) {
             if (isAlwaysHidden(serviceAction)) {
                 continue;
@@ -885,25 +885,25 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (serviceAction.getParameterCount() != 1 || contributeeParameterMatchOf(serviceAction) == -1) {
                 continue;
             }
-            if(!(serviceAction instanceof ObjectActionImpl)) {
+            if(!(serviceAction instanceof ObjectActionDefault)) {
                 continue;
             }
             if(!serviceAction.getSemantics().isSafeInNature()) {
                 continue;
             }
-            contributedActions.add((ObjectActionImpl) serviceAction);
+            contributedActions.add((ObjectActionDefault) serviceAction);
         }
 
         return Lists.newArrayList(Iterables.transform(contributedActions, createContributeeAssociationFunctor(
                 servicePojo, this)));
     }
 
-    private Function<ObjectActionImpl, ObjectAssociation> createContributeeAssociationFunctor(
+    private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
             final Object servicePojo,
             final ObjectSpecification contributeeType) {
-        return new Function<ObjectActionImpl, ObjectAssociation>(){
+        return new Function<ObjectActionDefault, ObjectAssociation>(){
             @Override
-            public ObjectAssociation apply(ObjectActionImpl input) {
+            public ObjectAssociation apply(ObjectActionDefault input) {
                 final ObjectSpecification returnType = input.getReturnType();
                 final ObjectAssociationAbstract association = returnType.isNotCollection()
                         ? new OneToOneAssociationContributee(servicePojo, input, contributeeType,
@@ -957,10 +957,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if(notContributed != null && notContributed.toActions()) {
                 continue;
             }
-            if(!(serviceAction instanceof ObjectActionImpl)) {
+            if(!(serviceAction instanceof ObjectActionDefault)) {
                 continue;
             }
-            final ObjectActionImpl contributedAction = (ObjectActionImpl) serviceAction;
+            final ObjectActionDefault contributedAction = (ObjectActionDefault) serviceAction;
 
             // see if qualifies by inspecting all parameters
             final int contributeeParam = contributeeParameterMatchOf(contributedAction);
@@ -1044,10 +1044,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             if (isAlwaysHidden(mixinTypeAction)) {
                 continue;
             }
-            if(!(mixinTypeAction instanceof ObjectActionImpl)) {
+            if(!(mixinTypeAction instanceof ObjectActionDefault)) {
                 continue;
             }
-            final ObjectActionImpl mixinAction = (ObjectActionImpl) mixinTypeAction;
+            final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
 
             ObjectActionMixedIn mixedInAction =
                     new ObjectActionMixedIn(mixinType, mixinAction, this, objectMemberDependencies);

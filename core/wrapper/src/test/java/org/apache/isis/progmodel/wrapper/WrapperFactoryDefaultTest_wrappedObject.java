@@ -54,7 +54,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
@@ -157,7 +157,7 @@ public class WrapperFactoryDefaultTest_wrappedObject {
         final Method employeeDisableNameMethod = methodOf(Employee.class, "disableName");
         final Method employeeValidateNameMethod = methodOf(Employee.class, "validateName", String.class);
         final Method employeeClearNameMethod = methodOf(Employee.class, "clearName");
-        employeeNameMember = new OneToOneAssociationImpl(
+        employeeNameMember = new OneToOneAssociationDefault(
                 facetedMethodForProperty(
                         employeeSetNameMethod, employeeGetNameMethod, employeeModifyNameMethod, employeeClearNameMethod, employeeHideNameMethod, employeeDisableNameMethod, employeeValidateNameMethod),
                 objectMemberDependencies);

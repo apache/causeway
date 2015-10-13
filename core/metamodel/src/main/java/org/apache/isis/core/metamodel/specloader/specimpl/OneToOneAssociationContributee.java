@@ -21,15 +21,12 @@ import java.util.List;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
@@ -42,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class OneToOneAssociationContributee extends OneToOneAssociationImpl implements ContributeeMember2 {
+public class OneToOneAssociationContributee extends OneToOneAssociationDefault implements ContributeeMember2 {
 
     private final Object servicePojo;
     private final ObjectAction serviceAction;
@@ -57,7 +54,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
 
     public OneToOneAssociationContributee(
             final Object servicePojo,
-            final ObjectActionImpl serviceAction,
+            final ObjectActionDefault serviceAction,
             final ObjectSpecification contributeeType,
             final ObjectMemberDependencies objectMemberDependencies) {
         super(serviceAction.getFacetedMethod(), serviceAction.getReturnType(), objectMemberDependencies);
@@ -145,62 +142,21 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-    //region > FacetHolder
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
-        return facetHolder.getFacetTypes();
+    protected FacetHolder getFacetHolder() {
+        return facetHolder;
     }
-
-    @Override
-    public <T extends Facet> T getFacet(Class<T> cls) {
-        return facetHolder.getFacet(cls);
-    }
-
-    @Override
-    public boolean containsFacet(Class<? extends Facet> facetType) {
-        return facetHolder.containsFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpFacet(java.lang.Class<? extends Facet> facetType) {
-        return facetHolder.containsDoOpFacet(facetType);
-    }
-
-    @Override
-    public List<Facet> getFacets(Filter<Facet> filter) {
-        return facetHolder.getFacets(filter);
-    }
-
-    @Override
-    public void addFacet(Facet facet) {
-        facetHolder.addFacet(facet);
-    }
-
-    @Override
-    public void addFacet(MultiTypedFacet facet) {
-        facetHolder.addFacet(facet);
-    }
-    
-    @Override
-    public void removeFacet(Facet facet) {
-        facetHolder.removeFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(Class<? extends Facet> facetType) {
-        facetHolder.removeFacet(facetType);
-    }
-
-    //endregion
 
     private ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
     }
 
+    //region > Contributee2 impl - getServiceContributedBy()
     @Override
     public ObjectSpecification getServiceContributedBy() {
         return getServiceAdapter().getSpecification();
     }
 
+    //endregion
 
 }

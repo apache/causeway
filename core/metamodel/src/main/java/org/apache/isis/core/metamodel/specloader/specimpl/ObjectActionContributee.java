@@ -19,13 +19,15 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -39,8 +41,8 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
+import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -49,10 +51,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-public class ObjectActionContributee extends ObjectActionImpl implements ContributeeMember2 {
+public class ObjectActionContributee extends ObjectActionDefault implements ContributeeMember2 {
 
     private final Object servicePojo;
-    private final ObjectActionImpl serviceAction;
+    private final ObjectActionDefault serviceAction;
     private final int contributeeParam;
     private final ObjectSpecification contributeeType;
     
@@ -75,7 +77,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
      */
     public ObjectActionContributee(
             final Object servicePojo,
-            final ObjectActionImpl serviceAction,
+            final ObjectActionDefault serviceAction,
             final int contributeeParam,
             final ObjectSpecification contributeeType,
             final ObjectMemberDependencies objectMemberDependencies) {
@@ -132,9 +134,10 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
                     // skip so is omitted from the Contributed action
                     continue;
                 }
-                
-                final ObjectActionParameterAbstract serviceParameter = 
+
+                final ObjectActionParameterAbstract serviceParameter =
                         (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
+
                 final ObjectActionParameterContributee contributedParam;
                 contributedParam = new OneToOneActionParameterContributee(
                         getServiceAdapter(), serviceParameter,

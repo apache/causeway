@@ -560,7 +560,9 @@ public final class StringExtensions {
     }
 
     public static String asCapitalizedName(final String extendee) {
-        return Character.toUpperCase(extendee.charAt(0)) + extendee.substring(1);
+
+        return Character.toUpperCase(extendee.charAt(0)) +
+                extendee.substring(1);
     }
 
 

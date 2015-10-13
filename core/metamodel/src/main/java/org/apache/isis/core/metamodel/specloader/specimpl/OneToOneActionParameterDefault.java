@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
-public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
+public class OneToOneActionParameterDefault extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
-    public OneToOneActionParameterImpl(
+    public OneToOneActionParameterDefault(
             final int index,
-            final ObjectActionImpl actionImpl,
+            final ObjectActionDefault actionImpl,
             final TypedHolder peer) {
         super(index, actionImpl, peer);
     }

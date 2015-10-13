@@ -22,7 +22,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-public class OneToOneActionParameterMixedIn extends OneToOneActionParameterImpl implements ObjectActionParameterMixedIn {
+public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefault implements ObjectActionParameterMixedIn {
 
     private final ObjectActionParameter mixinParameter;
     private final ObjectActionMixedIn mixedInAction;
@@ -54,6 +54,7 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterImpl 
     private ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
         return mixedInAction.mixinAdapterFor(mixedInAdapter);
     }
+
 
 
 }

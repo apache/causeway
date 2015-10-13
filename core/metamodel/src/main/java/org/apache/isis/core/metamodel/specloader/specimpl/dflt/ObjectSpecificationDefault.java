@@ -65,10 +65,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilder;
 import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationDefault;
 
 public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
@@ -223,9 +223,9 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAssociation createAssociation(final FacetedMethod facetMethod) {
         if (facetMethod.getFeatureType().isCollection()) {
-            return new OneToManyAssociationImpl(facetMethod, objectMemberDependencies);
+            return new OneToManyAssociationDefault(facetMethod, objectMemberDependencies);
         } else if (facetMethod.getFeatureType().isProperty()) {
-            return new OneToOneAssociationImpl(facetMethod, objectMemberDependencies);
+            return new OneToOneAssociationDefault(facetMethod, objectMemberDependencies);
         } else {
             return null;
         }
@@ -246,7 +246,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
 
     private ObjectAction createAction(final FacetedMethod facetedMethod) {
         if (facetedMethod.getFeatureType().isAction()) {
-            return new ObjectActionImpl(facetedMethod, objectMemberDependencies);
+            return new ObjectActionDefault(facetedMethod, objectMemberDependencies);
         } else {
             return null;
         }

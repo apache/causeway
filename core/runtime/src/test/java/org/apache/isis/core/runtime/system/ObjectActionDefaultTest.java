@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
-import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectActionDefault;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
 
@@ -45,13 +45,13 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ObjectActionImplTest {
+public class ObjectActionDefaultTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);
     
     
-    private ObjectActionImpl action;
+    private ObjectActionDefault action;
     
     @Mock
     private FacetedMethod mockFacetedMethod;
@@ -79,7 +79,7 @@ public class ObjectActionImplTest {
             }
         });
 
-        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberDependencies(
+        action = new ObjectActionDefault(mockFacetedMethod, new ObjectMemberDependencies(
                 mockSpecificationLookup, mockServicesInjector,
                 mockPersistenceSessionService));
     }
