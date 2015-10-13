@@ -34,22 +34,6 @@ import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 public interface ObjectActionParameter extends ObjectFeature, CurrentHolder {
 
     /**
-     * If true then can cast to a {@link OneToOneActionParameter}.
-     * 
-     * <p>
-     * Either this or {@link #isCollection()} will be true.
-     * </p>
-     */
-    boolean isObject();
-
-    /**
-     * Only for symmetry with {@link ObjectAssociation}, however since the NOF
-     * does not support collections as actions all implementations should return
-     * <tt>false</tt>.
-     */
-    boolean isCollection();
-
-    /**
      * Owning {@link ObjectAction}.
      */
     ObjectAction getAction();

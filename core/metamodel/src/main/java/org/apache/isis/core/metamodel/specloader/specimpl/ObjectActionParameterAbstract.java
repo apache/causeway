@@ -102,26 +102,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
 
-
-
-    /**
-     * Subclasses should override either {@link #isObject()} or
-     * {@link #isCollection()}.
-     */
-    @Override
-    public boolean isObject() {
-        return false;
-    }
-
-    /**
-     * Subclasses should override either {@link #isObject()} or
-     * {@link #isCollection()}.
-     */
-    @Override
-    public boolean isCollection() {
-        return false;
-    }
-
     /**
      * Parameter number, 0-based.
      */

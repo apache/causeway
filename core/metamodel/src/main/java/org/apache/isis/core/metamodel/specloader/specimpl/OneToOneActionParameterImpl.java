@@ -24,32 +24,12 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
-    public OneToOneActionParameterImpl(final int index, final ObjectActionImpl actionImpl, final TypedHolder peer) {
+    public OneToOneActionParameterImpl(
+            final int index,
+            final ObjectActionImpl actionImpl,
+            final TypedHolder peer) {
         super(index, actionImpl, peer);
     }
-
-
-    @Override
-    public boolean isObject() {
-        return true;
-    }
-
-
-//    // //////////////////////////////////////////////////////////////////////
-//    // get, set
-//    // //////////////////////////////////////////////////////////////////////
-//
-//    /**
-//     * Sets the proposed value of the {@link Instance} (downcast as a
-//     * {@link MutableProposedHolder}, unwrapped the proposed value from a
-//     * {@link ObjectAdapter}.
-//     */
-//    public void set(final ObjectAdapter owner, final ObjectAdapter newValue) {
-//        final MutableProposedHolder proposedHolder = getProposedHolder(owner);
-//        final Object newValuePojo = newValue.getObject();
-//        proposedHolder.setProposed(newValuePojo);
-//    }
-
 
 
 }
