@@ -121,13 +121,7 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
                 final ObjectActionParameterAbstract mixinParameter =
                         (ObjectActionParameterAbstract) mixinActionParameters.get(paramNum);
                 final ObjectActionParameterMixedIn mixedInParameter;
-                if(mixinParameter instanceof ObjectActionParameterParseable) {
-                    mixedInParameter = new ObjectActionParameterParseableMixedIn(mixinParameter, this);
-                } else if(mixinParameter instanceof OneToOneActionParameterImpl) {
-                    mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
-                } else {
-                    throw new RuntimeException("Unknown implementation of ObjectActionParameter; " + mixinParameter.getClass().getName());
-                }
+                mixedInParameter = new OneToOneActionParameterMixedIn(mixinParameter, this);
                 mixedInParameters.add(mixedInParameter);
             }
             this.parameters = mixedInParameters;

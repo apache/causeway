@@ -43,13 +43,13 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
+import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.core.metamodel.facets.actions.action.invocation.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.facets.actions.semantics.ActionSemanticsFacet;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
@@ -61,7 +61,6 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -196,7 +195,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 
                 final ObjectActionParameter parameter;
                 if (specification.isParseable()) {
-                    parameter = new ObjectActionParameterParseable(i, this, paramPeer);
+                    parameter = new OneToOneActionParameterImpl(i, this, paramPeer);
                 } else if (specification.isNotCollection()) {
                     parameter = new OneToOneActionParameterImpl(i, this, paramPeer);
                 } else if (specification.isParentedOrFreeCollection()) {

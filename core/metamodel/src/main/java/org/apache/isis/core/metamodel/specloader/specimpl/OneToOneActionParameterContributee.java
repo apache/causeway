@@ -26,12 +26,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 public class OneToOneActionParameterContributee extends OneToOneActionParameterImpl implements ObjectActionParameterContributee{
 
     private final ObjectAdapter serviceAdapter;
-    @SuppressWarnings("unused")
     private final ObjectActionImpl serviceAction;
     private final ObjectActionParameter serviceActionParameter;
-    @SuppressWarnings("unused")
     private final int serviceParamNumber;
-    @SuppressWarnings("unused")
     private final int contributeeParamNumber;
     private final ObjectActionContributee contributeeAction;
 

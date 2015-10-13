@@ -24,14 +24,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 public class OneToOneActionParameterMixedIn extends OneToOneActionParameterImpl implements ObjectActionParameterMixedIn {
 
-    private final ObjectActionParameter mixinActionParameter;
+    private final ObjectActionParameter mixinParameter;
     private final ObjectActionMixedIn mixedInAction;
 
     public OneToOneActionParameterMixedIn(
-            final ObjectActionParameterAbstract mixinActionParameter,
+            final ObjectActionParameterAbstract mixinParameter,
             final ObjectActionMixedIn mixedInAction) {
-        super(mixinActionParameter.getNumber(), mixedInAction, mixinActionParameter.getPeer());
-        this.mixinActionParameter = mixinActionParameter;
+        super(mixinParameter.getNumber(), mixedInAction, mixinParameter.getPeer());
+        this.mixinParameter = mixinParameter;
         this.mixedInAction = mixedInAction;
     }
 
@@ -40,7 +40,7 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterImpl 
             final ObjectAdapter mixedInAdapter,
             final String searchArg,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinActionParameter.getAutoComplete(
+        return mixinParameter.getAutoComplete(
                 mixinAdapterFor(mixedInAdapter), searchArg,
                 interactionInitiatedBy);
     }

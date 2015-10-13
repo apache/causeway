@@ -136,17 +136,9 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
                 final ObjectActionParameterAbstract serviceParameter = 
                         (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
                 final ObjectActionParameterContributee contributedParam;
-                if(serviceParameter instanceof ObjectActionParameterParseable) {
-                    contributedParam = new ObjectActionParameterParseableContributee(
-                            getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
-                            contributeeParamNum, this);
-                } else if(serviceParameter instanceof OneToOneActionParameterImpl) {
-                    contributedParam = new OneToOneActionParameterContributee(
-                            getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
-                            contributeeParamNum, this);
-                } else {
-                    throw new RuntimeException("Unknown implementation of ObjectActionParameter; " + serviceParameter.getClass().getName());
-                }
+                contributedParam = new OneToOneActionParameterContributee(
+                        getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
+                        contributeeParamNum, this);
                 contributeeParameters.add(contributedParam);
                 
                 contributeeParamNum++;
