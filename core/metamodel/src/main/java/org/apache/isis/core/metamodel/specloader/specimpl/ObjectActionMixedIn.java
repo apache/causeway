@@ -110,7 +110,6 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
     }
 
     public synchronized List<ObjectActionParameter> getParameters() {
-        //return mixinAction.getParameters();
 
         if (this.parameters == null) {
             final List<ObjectActionParameter> mixinActionParameters = mixinAction.getParameters();
@@ -195,8 +194,6 @@ public class ObjectActionMixedIn extends ObjectActionImpl implements MixedInMemb
                 bulkInteractionContext.setInvokedAs(Bulk.InteractionContext.InvokedAs.REGULAR);
                 actionInvocationContext.setDomainObjects(Collections.singletonList(mixedInAdapter.getObject()));
             }
-
-
         }
 
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);

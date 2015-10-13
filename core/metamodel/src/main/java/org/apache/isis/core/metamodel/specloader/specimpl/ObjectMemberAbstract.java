@@ -27,7 +27,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -56,12 +55,11 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    private final PersistenceSessionService persistenceSessionService;
-
     public static ObjectSpecification getSpecification(final SpecificationLoader specificationLookup, final Class<?> type) {
         return type == null ? null : specificationLookup.loadSpecification(type);
     }
 
+    //region > fields
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     protected final String defaultName;
@@ -70,6 +68,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     private final FeatureType featureType;
     private final SpecificationLoader specificationLookup;
     private final ServicesInjector servicesInjector;
+    private final PersistenceSessionService persistenceSessionService;
+    //endregion
 
     protected ObjectMemberAbstract(
             final FacetedMethod facetedMethod,
@@ -89,10 +89,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.persistenceSessionService = objectMemberDependencies.getPersistenceSessionService();
     }
 
-
-    // /////////////////////////////////////////////////////////////
-    // Identifiers
-    // /////////////////////////////////////////////////////////////
+    //region > Identifiers
 
     @Override
     public String getId() {
@@ -116,9 +113,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return featureType;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Facets
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Facets
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
@@ -165,10 +162,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         getFacetedMethod().removeFacet(facetType);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Name, Description, Help (convenience for facets)
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Name, Description, Help (convenience for facets)
     /**
      * Return the default label for this member. This is based on the name of
      * this member.
@@ -200,10 +196,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return facet.value();
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Hidden (or visible)
     /**
      * Create an {@link InteractionContext} to represent an attempt to view this
      * member (that is, to check if it is visible or not).
@@ -251,11 +246,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         final VisibilityContext<?> ic = createVisibleInteractionContext(target, interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic);
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
-
+    //region > Disabled (or enabled)
     /**
      * Create an {@link InteractionContext} to represent an attempt to
      * use this member (that is, to check if it is usable or not).
@@ -291,10 +284,9 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return InteractionUtils.isUsableResult(this, ic);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // isAssociation, isAction
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > isAssociation, isAction
     @Override
     public boolean isAction() {
         return featureType.isAction();
@@ -314,21 +306,18 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public boolean isOneToOneAssociation() {
         return featureType.isProperty();
     }
+    //endregion
 
-
-    // //////////////////////////////////////////////////////////////////
-    // toString
-    // //////////////////////////////////////////////////////////////////
+    //region > toString
 
     @Override
     public String toString() {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Dependencies
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Dependencies
 
     public SpecificationLoader getSpecificationLoader() {
         return specificationLookup;
@@ -345,4 +334,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public CollectionTypeRegistry getCollectionTypeRegistry() {
         return collectionTypeRegistry;
     }
+
+    //endregion
+
 }

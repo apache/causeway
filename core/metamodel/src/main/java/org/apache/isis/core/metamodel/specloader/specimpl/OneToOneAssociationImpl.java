@@ -50,7 +50,6 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.MutableCurrentHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
@@ -58,12 +57,17 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
-    public OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectMemberDependencies objectMemberDependencies) {
+    public OneToOneAssociationImpl(
+            final FacetedMethod facetedMethod,
+            final ObjectMemberDependencies objectMemberDependencies) {
         this(facetedMethod, getSpecification(objectMemberDependencies.getSpecificationLoader(), facetedMethod.getType()),
                 objectMemberDependencies);
     }
     
-    protected OneToOneAssociationImpl(final FacetedMethod facetedMethod, final ObjectSpecification objectSpec, final ObjectMemberDependencies objectMemberDependencies) {
+    protected OneToOneAssociationImpl(
+            final FacetedMethod facetedMethod,
+            final ObjectSpecification objectSpec,
+            final ObjectMemberDependencies objectMemberDependencies) {
         super(facetedMethod, FeatureType.PROPERTY, objectSpec, objectMemberDependencies);
     }
 

@@ -67,8 +67,6 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     private final ObjectActionImpl parentAction;
     private final TypedHolder peer;
 
-
-
     protected ObjectActionParameterAbstract(final int number, final ObjectActionImpl objectAction, final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
@@ -93,14 +91,12 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return getAdapterMap().adapterFor(proposed);
     }
 
-
     protected MutableProposedHolder getProposedHolder(final ObjectAdapter owner) {
         if (!(owner instanceof MutableProposedHolder)) {
             throw new IllegalArgumentException("Instance should implement MutableProposedHolder");
         }
         return (MutableProposedHolder) owner;
     }
-
 
     /**
      * Parameter number, 0-based.
@@ -116,9 +112,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     /**
-     * NOT API, but exposed for the benefit of {@link ObjectActionParameterContributee}.
+     * NOT API, but exposed for the benefit of {@link ObjectActionParameterContributee}
+     * and {@link ObjectActionParameterMixedIn}.
      */
-    public TypedHolder getPeer() {
+    TypedHolder getPeer() {
         return peer;
     }
 
@@ -199,9 +196,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return Allow.DEFAULT;
     }
 
-    // //////////////////////////////////////////////////////////
-    // FacetHolder
-    // //////////////////////////////////////////////////////////
+    //region > FacetHolder
 
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
@@ -257,10 +252,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // AutoComplete
-    // /////////////////////////////////////////////////////////////
+    //region > AutoComplete
 
     @Override
     public boolean hasAutoComplete() {
@@ -300,10 +294,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return facet != null? facet.getMinLength(): MinLengthUtil.MIN_LENGTH_DEFAULT;
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // Choices
-    // /////////////////////////////////////////////////////////////
+    //region > Choices
 
     @Override
     public boolean hasChoices() {
@@ -348,10 +341,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         */
         return adapters.toArray(new ObjectAdapter[adapters.size()]);
     }
-    
-    // /////////////////////////////////////////////////////////////
-    // Defaults
-    // /////////////////////////////////////////////////////////////
+
+    //endregion
+
+    //region > Defaults
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
@@ -437,10 +430,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
 
-    
-    // /////////////////////////////////////////////////////////////
-    // Validation
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Validation
 
     @Override
     public ActionArgumentContext createProposedArgumentInteractionContext(
@@ -499,9 +491,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return arguments;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Dependencies (from parent)
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > Dependencies (from parent)
 
     protected SpecificationLoader getSpecificationLoader() {
         return parentAction.getSpecificationLoader();
@@ -514,5 +506,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     protected PersistenceSessionService getObjectPersistor() {
         return parentAction.getPersistenceSessionService();
     }
+
+    //endregion
 
 }

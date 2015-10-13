@@ -29,11 +29,11 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
 import org.apache.isis.core.metamodel.interactions.CollectionUsabilityContext;
@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -69,9 +68,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return getCollectionTypeRegistry().semanticsOf(underlyingClass);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Hidden (or visible)
-    // /////////////////////////////////////////////////////////////
+    //region > visible, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -80,9 +77,6 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return new CollectionVisibilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Disabled (or enabled)
-    // /////////////////////////////////////////////////////////////
 
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
@@ -91,10 +85,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return new CollectionUsabilityContext(ownerAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Validate Add
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Validate Add
     // Not API
     private ValidityContext<?> createValidateAddInteractionContext(
             final InteractionInitiatedBy interactionInitiatedBy,
@@ -121,10 +114,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return InteractionUtils.isValidResult(this, validityContext);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Validate Remove
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > Validate Remove
     private ValidityContext<?> createValidateRemoveInteractionContext(
             final ObjectAdapter ownerAdapter,
             final ObjectAdapter proposedToRemoveAdapter,
@@ -156,9 +148,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return !isNotPersisted();
     }
 
-    // /////////////////////////////////////////////////////////////
-    // get, isEmpty, add, clear
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > get, isEmpty, add, clear
 
     @Override
     public ObjectAdapter get(
@@ -183,9 +175,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return facet.size(collection) == 0;
     }
 
-    // /////////////////////////////////////////////////////////////
-    // add, clear
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > add, clear
 
     @Override
     public void addElement(
@@ -231,10 +223,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         }
     }
 
-    // /////////////////////////////////////////////////////////////
-    // defaults
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > defaults
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter ownerAdapter) {
         return null;
@@ -244,9 +235,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public void toDefault(final ObjectAdapter ownerAdapter) {
     }
 
-    // /////////////////////////////////////////////////////////////
-    // choices & autoComplete
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > choices & autoComplete
 
     @Override
     public ObjectAdapter[] getChoices(
@@ -279,10 +270,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         return 0; // n/a
     }
 
-    // /////////////////////////////////////////////////////////////
-    // debug, toString
-    // /////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > debug, toString
     @Override
     public String debugData() {
         final DebugString debugString = new DebugString();
@@ -301,6 +291,8 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         str.append("type", getSpecification() == null ? "unknown" : getSpecification().getShortIdentifier());
         return str.toString();
     }
+
+    //endregion
 
 
 }

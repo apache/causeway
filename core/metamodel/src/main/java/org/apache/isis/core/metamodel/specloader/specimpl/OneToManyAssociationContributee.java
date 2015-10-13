@@ -161,11 +161,8 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-    
-    // //////////////////////////////////////
-    // FacetHolder
-    // //////////////////////////////////////
-    
+    //region > FacetHolder
+
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return facetHolder.getFacetTypes();
@@ -219,5 +216,7 @@ public class OneToManyAssociationContributee extends OneToManyAssociationImpl im
     public ObjectSpecification getServiceContributedBy() {
         return getServiceAdapter().getSpecification();
     }
+
+    //endregion
 
 }

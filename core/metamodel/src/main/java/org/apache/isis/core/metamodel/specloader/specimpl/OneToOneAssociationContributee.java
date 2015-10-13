@@ -145,11 +145,7 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
-    
-    // //////////////////////////////////////
-    // FacetHolder
-    // //////////////////////////////////////
-    
+    //region > FacetHolder
     @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return facetHolder.getFacetTypes();
@@ -195,6 +191,8 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
         facetHolder.removeFacet(facetType);
     }
 
+    //endregion
+
     private ObjectAdapter getServiceAdapter() {
         return getPersistenceSessionService().adapterFor(servicePojo);
     }
@@ -203,5 +201,6 @@ public class OneToOneAssociationContributee extends OneToOneAssociationImpl impl
     public ObjectSpecification getServiceContributedBy() {
         return getServiceAdapter().getSpecification();
     }
+
 
 }

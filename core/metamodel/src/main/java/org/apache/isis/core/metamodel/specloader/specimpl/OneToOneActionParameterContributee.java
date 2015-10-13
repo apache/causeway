@@ -26,25 +26,17 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 public class OneToOneActionParameterContributee extends OneToOneActionParameterImpl implements ObjectActionParameterContributee{
 
     private final ObjectAdapter serviceAdapter;
-    private final ObjectActionImpl serviceAction;
     private final ObjectActionParameter serviceActionParameter;
-    private final int serviceParamNumber;
-    private final int contributeeParamNumber;
     private final ObjectActionContributee contributeeAction;
 
     public OneToOneActionParameterContributee(
             final ObjectAdapter serviceAdapter,
-            final ObjectActionImpl serviceAction,
             final ObjectActionParameterAbstract serviceActionParameter,
-            final int serviceParamNumber,
             final int contributeeParamNumber,
             final ObjectActionContributee contributeeAction) {
         super(contributeeParamNumber, contributeeAction, serviceActionParameter.getPeer());
         this.serviceAdapter = serviceAdapter;
-        this.serviceAction = serviceAction;
         this.serviceActionParameter = serviceActionParameter;
-        this.serviceParamNumber = serviceParamNumber;
-        this.contributeeParamNumber = contributeeParamNumber;
         this.contributeeAction = contributeeAction;
     }
 

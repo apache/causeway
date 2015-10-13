@@ -137,7 +137,7 @@ public class ObjectActionContributee extends ObjectActionImpl implements Contrib
                         (ObjectActionParameterAbstract) serviceParameters.get(serviceParamNum);
                 final ObjectActionParameterContributee contributedParam;
                 contributedParam = new OneToOneActionParameterContributee(
-                        getServiceAdapter(), serviceAction, serviceParameter, serviceParamNum,
+                        getServiceAdapter(), serviceParameter,
                         contributeeParamNum, this);
                 contributeeParameters.add(contributedParam);
                 

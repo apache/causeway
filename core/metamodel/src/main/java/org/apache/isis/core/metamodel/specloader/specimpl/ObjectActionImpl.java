@@ -67,6 +67,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
+
     private final static Logger LOG = LoggerFactory.getLogger(ObjectActionImpl.class);
 
     public static ActionType getType(final String typeStr) {
@@ -77,25 +78,24 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return type;
     }
 
+    //region > fields
 
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
     private List<ObjectActionParameter> parameters;
 
-    
-    // //////////////////////////////////////////////////////////////////
-    // Constructors
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > constructors
 
     public ObjectActionImpl(final FacetedMethod facetedMethod, final ObjectMemberDependencies objectMemberDependencies) {
         super(facetedMethod, FeatureType.ACTION, objectMemberDependencies);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // ReturnType, OnType, Actions (set)
-    // //////////////////////////////////////////////////////////////////
+    //endregion
 
+    //region > ReturnType, OnType, Actions (set)
     /**
      * Always returns <tt>null</tt>.
      */
@@ -136,11 +136,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return facet != null? facet.value(): ActionSemantics.Of.NON_IDEMPOTENT;
     }
 
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // Type, IsContributed
-    // /////////////////////////////////////////////////////////////
-
+    //region > Type
     @Override
     public ActionType getType() {
         return getType(this);
@@ -161,10 +159,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         }
         return ActionType.USER;
     }
+    //endregion
 
-    // /////////////////////////////////////////////////////////////
-    // Parameters
-    // /////////////////////////////////////////////////////////////
+    //region > Parameters
 
     @Override
     public int getParameterCount() {
@@ -264,9 +261,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return parameters.get(position);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Visible (or hidden)
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > visable, usable
 
     @Override
     public VisibilityContext<?> createVisibleInteractionContext(
@@ -275,20 +272,15 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return new ActionVisibilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // Usable (or disabled)
-    // /////////////////////////////////////////////////////////////
-
     @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final ObjectAdapter targetObjectAdapter, final InteractionInitiatedBy interactionInitiatedBy,
             Where where) {
         return new ActionUsabilityContext(targetObjectAdapter, getIdentifier(), interactionInitiatedBy, where);
     }
+    //endregion
 
-    // //////////////////////////////////////////////////////////////////
-    // validate
-    // //////////////////////////////////////////////////////////////////
+    //region > validate
 
     @Override
     public Consent isProposedArgumentSetValid(
@@ -331,9 +323,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 interactionInitiatedBy);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // executeWithRuleChecking, execute
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > executeWithRuleChecking, execute
 
     @Override
     public ObjectAdapter executeWithRuleChecking(
@@ -381,9 +373,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
 
-    // //////////////////////////////////////////////////////////////////
-    // defaults
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > defaults
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
@@ -437,9 +429,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return pojo == null ? null : getPersistenceSessionService().adapterFor(pojo);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // options (choices)
-    // /////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > choices
 
     @Override
     public ObjectAdapter[][] getChoices(
@@ -506,9 +498,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return parameterChoicesAdapters;
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // debug, toString
-    // //////////////////////////////////////////////////////////////////
+    //endregion
+
+    //region > debug, toString
 
     @Override
     public String debugData() {
@@ -536,6 +528,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         sb.append("}]");
         return sb.toString();
     }
+
+    //endregion
 
 
 }

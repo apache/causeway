@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMemberDependencies;
 
-// TODO need to pull up the common methods. like getName(), from subclasses
 public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract implements ObjectAssociation {
 
     private final ObjectSpecification specification;

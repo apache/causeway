@@ -18,7 +18,6 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
-
 public interface ObjectActionParameterContributee extends ObjectActionParameter {
 
 }
