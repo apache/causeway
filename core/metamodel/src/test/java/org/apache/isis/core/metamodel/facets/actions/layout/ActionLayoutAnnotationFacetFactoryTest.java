@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFace
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
@@ -67,6 +68,9 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
                 allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
 
+                allowing(mockObjSpec).getFacet(MixinFacet.class);
+                will(returnValue(null));
+
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                 will(returnValue(null));
             }
@@ -98,6 +102,9 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
             {
                 allowing(mockSpecificationLoaderSpi).loadSpecification(Customer.class);
                 will(returnValue(mockObjSpec));
+
+                allowing(mockObjSpec).getFacet(MixinFacet.class);
+                will(returnValue(null));
 
                 allowing(mockObjSpec).getFacet(DomainServiceFacet.class);
                 will(returnValue(null));
