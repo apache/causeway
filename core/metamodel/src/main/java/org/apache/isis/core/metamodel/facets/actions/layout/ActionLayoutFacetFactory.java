@@ -18,9 +18,9 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-
 import java.lang.reflect.Method;
 import java.util.Properties;
+
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
@@ -122,7 +123,7 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
 
         // contributing
 
-        if (isContributingService(processMethodContext)) {
+        if (isContributingServiceOrMixinObject(processMethodContext)) {
             NotContributedFacet notContributedFacet = NotContributedFacetForLayoutProperties.create(properties, holder);
             if(notContributedFacet == null) {
                 notContributedFacet = NotContributedFacetForActionLayoutAnnotation.create(actionLayout, holder);
@@ -131,18 +132,28 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
         }
     }
 
-    protected boolean isContributingService(final ProcessMethodContext processMethodContext) {
+    protected boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
         final Class<?> declaringClass = method.getDeclaringClass();
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
 
+        return isContributingService(spec) || isMixinObject(spec);
+    }
+
+    private static boolean isContributingService(final ObjectSpecification spec) {
         final DomainServiceFacet domainServiceFacet = spec.getFacet(DomainServiceFacet.class);
         return domainServiceFacet != null && !domainServiceFacet.isNoop() &&
                 domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_MENU_ONLY &&
                 domainServiceFacet.getNatureOfService() != NatureOfService.DOMAIN;
     }
 
+    private static boolean isMixinObject(final ObjectSpecification spec) {
+        final MixinFacet mixinFacet = spec.getFacet(MixinFacet.class);
+        final boolean b = mixinFacet != null && !mixinFacet.isNoop();
+        return b;
+    }
 
+    // UNUSED
     protected boolean skipContributing(final DomainServiceFacet domainServiceFacet) {
         return domainServiceFacet == null || domainServiceFacet.isNoop() || domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_MENU_ONLY || domainServiceFacet.getNatureOfService() == NatureOfService.DOMAIN;
     }

@@ -32,6 +32,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -250,11 +251,18 @@ public final class ObjectReflectorDefault
         metaModelValidator.init();
 
         loadSpecificationsForServices();
+        loadSpecificationsForMixins();
     }
 
     private void loadSpecificationsForServices() {
         for (final Class<?> serviceClass : getServiceClasses()) {
             internalLoadSpecification(serviceClass);
+        }
+    }
+
+    private void loadSpecificationsForMixins() {
+        for (final Class<?> mixinType : AppManifest.Registry.instance().getMixinTypes()) {
+            internalLoadSpecification(mixinType);
         }
     }
 

@@ -28,6 +28,7 @@ import org.apache.isis.core.metamodel.facets.actions.interaction.ActionNamedDebu
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionLayoutFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.annotation.NotContributedFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromDomainServiceFacetFactory;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.derived.NotContributedFacetDerivedFromMixinFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.derived.NotInServiceMenuFacetDerivedFromDomainServiceFacetFactory;
 import org.apache.isis.core.metamodel.facets.actions.notinservicemenu.method.NotInServiceMenuFacetViaMethodFactory;
@@ -365,6 +366,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RecreatableObjectFacetFactory.class);
         addFactory(MixinFacetForMixinAnnotationFactory.class);
 
+
         addFactory(MaxLengthFacetOnTypeAnnotationFactory.class);
         addFactory(MaxLengthFacetOnActionAnnotationFactory.class);
 
@@ -389,6 +391,8 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory
         addFactory(DisabledFacetOnPropertyDerivedFromRecreatableObjectFacetFactory.class);
         addFactory(DisabledFacetOnCollectionDerivedFromViewModelFacetFactory.class);
+        // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
+        addFactory(NotContributedFacetDerivedFromMixinFacetFactory.class);
 
         addFactory(DomainServiceLayoutFactory.class);
         addFactory(DomainObjectLayoutFacetFactory.class);

@@ -27,6 +27,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -148,8 +149,8 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         return map;
     }
 
-    private boolean contributeeAssociationsAdded;
-    private boolean contributeeActionsAdded;
+    private boolean contributeeAndMixedInAssociationsAdded;
+    private boolean contributeeAndMixedInActionsAdded;
 
 
     private final List<ObjectSpecification> interfaces = Lists.newArrayList();
@@ -623,12 +624,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAssociation> getAssociations(final Contributed contributed) {
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
-        if(contributed.isIncluded() && !contributeeAssociationsAdded) {
+        if(contributed.isIncluded() && !contributeeAndMixedInAssociationsAdded) {
             synchronized (this.associations) {
                 List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
                 associations.addAll(createContributeeAssociations());
+                associations.addAll(createMixedInAssociations());
                 sortAndUpdateAssociations(associations);
-                contributeeAssociationsAdded = true;
+                contributeeAndMixedInAssociationsAdded = true;
             }
         }
         final List<ObjectAssociation> associations = Lists.newArrayList(this.associations);
@@ -736,13 +738,13 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         // and they have not yet been added
         // the "contributed.isIncluded()" guard is required because we cannot do this too early;
         // there must be a session available
-        if(contributed.isIncluded() && !contributeeActionsAdded) {
+        if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
                 actions.addAll(createContributeeActions());
-                actions.addAll(createMixinActions());
+                actions.addAll(createMixedInActions());
                 sortCacheAndUpdateActions(actions);
-                contributeeActionsAdded = true;
+                contributeeAndMixedInActionsAdded = true;
             }
         }
 
@@ -894,8 +896,11 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             contributedActions.add((ObjectActionDefault) serviceAction);
         }
 
-        return Lists.newArrayList(Iterables.transform(contributedActions, createContributeeAssociationFunctor(
-                servicePojo, this)));
+        return Lists.newArrayList(
+                Iterables.transform(
+                    contributedActions,
+                    createContributeeAssociationFunctor(servicePojo, this)
+                ));
     }
 
     private Function<ObjectActionDefault, ObjectAssociation> createContributeeAssociationFunctor(
@@ -905,13 +910,113 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             @Override
             public ObjectAssociation apply(ObjectActionDefault input) {
                 final ObjectSpecification returnType = input.getReturnType();
-                final ObjectAssociationAbstract association = returnType.isNotCollection()
-                        ? new OneToOneAssociationContributee(servicePojo, input, contributeeType,
-                        objectMemberDependencies)
-                        : new OneToManyAssociationContributee(servicePojo, input, contributeeType,
-                        objectMemberDependencies);
+                final ObjectAssociationAbstract association = createObjectAssociation(input, returnType);
                 facetProcessor.processMemberOrder(metadataProperties, association);
                 return association;
+            }
+
+            ObjectAssociationAbstract createObjectAssociation(
+                    final ObjectActionDefault input,
+                    final ObjectSpecification returnType) {
+                if (returnType.isNotCollection()) {
+                    return new OneToOneAssociationContributee(servicePojo, input, contributeeType,
+                            objectMemberDependencies);
+                } else {
+                    return new OneToManyAssociationContributee(servicePojo, input, contributeeType,
+                            objectMemberDependencies);
+                }
+            }
+        };
+    }
+
+    //endregion
+
+    //region > mixin associations (properties and collections)
+
+    private List<ObjectAssociation> createMixedInAssociations() {
+        if (isService() || isValue()) {
+            return Collections.emptyList();
+        }
+
+        final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
+        if(mixinTypes == null) {
+            return Collections.emptyList();
+        }
+
+        final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList();
+
+        for (final Class<?> mixinType : mixinTypes) {
+            addMixedInAssociationsIfAny(mixinType, mixedInAssociations);
+        }
+        return mixedInAssociations;
+    }
+
+    private void addMixedInAssociationsIfAny(
+            final Class<?> mixinType, final List<ObjectAssociation> toAppendTo) {
+
+        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType);
+        if (specification == this) {
+            return;
+        }
+        final MixinFacet mixinFacet = specification.getFacet(MixinFacet.class);
+        if(mixinFacet == null) {
+            // this shouldn't happen; perhaps it would be more correct to throw an exception?
+            return;
+        }
+        if(!mixinFacet.isMixinFor(getCorrespondingClass())) {
+            return;
+        }
+
+        final List<ObjectActionDefault> mixinActions = getObjectActions(specification);
+
+        final List<ObjectAssociation> mixedInAssociations = Lists.newArrayList(
+                Iterables.transform(
+                        Iterables.filter(mixinActions, new Predicate<ObjectActionDefault>() {
+                            @Override public boolean apply(final ObjectActionDefault input) {
+                                final NotContributedFacet notContributedFacet = input.getFacet(NotContributedFacet.class);
+                                if (notContributedFacet == null || !notContributedFacet.toActions()) {
+                                    return false;
+                                }
+                                if(input.getParameterCount() != 0) {
+                                    return false;
+                                }
+                                if(!input.getSemantics().isSafeInNature()) {
+                                    return false;
+                                }
+                                return true;
+                            }
+                        }),
+                        createMixedInAssociationFunctor(this, mixinType)
+                ));
+
+        toAppendTo.addAll(mixedInAssociations);
+    }
+
+    private List getObjectActions(final ObjectSpecification specification) {
+        return specification.getObjectActions(ActionType.ALL, Contributed.INCLUDED, Filters.<ObjectAction>any());
+    }
+
+    private Function<ObjectActionDefault, ObjectAssociation> createMixedInAssociationFunctor(
+            final ObjectSpecification mixedInType,
+            final Class<?> mixinType) {
+        return new Function<ObjectActionDefault, ObjectAssociation>(){
+            @Override
+            public ObjectAssociation apply(final ObjectActionDefault mixinAction) {
+                final ObjectAssociationAbstract association = createObjectAssociation(mixinAction);
+                facetProcessor.processMemberOrder(metadataProperties, association);
+                return association;
+            }
+
+            ObjectAssociationAbstract createObjectAssociation(
+                    final ObjectActionDefault mixinAction) {
+                final ObjectSpecification returnType = mixinAction.getReturnType();
+                if (returnType.isNotCollection()) {
+                    return new OneToOneAssociationMixedIn(
+                            mixinAction, mixedInType, mixinType, objectMemberDependencies);
+                } else {
+                    return new OneToManyAssociationMixedIn(
+                            mixinAction, mixedInType, mixinType, objectMemberDependencies);
+                }
             }
         };
     }
@@ -1004,7 +1109,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * If this specification {@link #isService() is actually for} a service,
      * then returns an empty list.
      */
-    protected List<ObjectAction> createMixinActions() {
+    protected List<ObjectAction> createMixedInActions() {
         if (isService() || isValue()) {
             return Collections.emptyList();
         }
@@ -1013,17 +1118,17 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
             return Collections.emptyList();
         }
 
-        final List<ObjectAction> mixinActions = Lists.newArrayList();
+        final List<ObjectAction> mixedInActions = Lists.newArrayList();
 
         for (final Class<?> mixinType : mixinTypes) {
-            addMixinActionsIfAny(mixinType, mixinActions);
+            addMixedInActionsIfAny(mixinType, mixedInActions);
         }
-        return mixinActions;
+        return mixedInActions;
     }
 
-    private void addMixinActionsIfAny(
+    private void addMixedInActionsIfAny(
             final Class<?> mixinType,
-            final List<ObjectAction> mixinActionsToAppendTo) {
+            final List<ObjectAction> mixedInActionsToAppendTo) {
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(mixinType);
         if (specification == this) {
             return;
@@ -1048,16 +1153,21 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
                 continue;
             }
             final ObjectActionDefault mixinAction = (ObjectActionDefault) mixinTypeAction;
+            final NotContributedFacet notContributedFacet = mixinAction.getFacet(NotContributedFacet.class);
+            if(notContributedFacet.toActions()) {
+                continue;
+            }
 
             ObjectActionMixedIn mixedInAction =
                     new ObjectActionMixedIn(mixinType, mixinAction, this, objectMemberDependencies);
             facetProcessor.processMemberOrder(metadataProperties, mixedInAction);
             actions.add(mixedInAction);
         }
-        mixinActionsToAppendTo.addAll(actions);
+        mixedInActionsToAppendTo.addAll(actions);
     }
 
     //endregion
+
     //region > validity
     @Override
     public Consent isValid(final ObjectAdapter targetAdapter, final InteractionInitiatedBy interactionInitiatedBy) {

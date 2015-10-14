@@ -72,9 +72,6 @@ public class ObjectActionContributee extends ObjectActionDefault implements Cont
     
     private final Identifier identifier;
 
-    /**
-     * @param contributeeParam - the parameter number which corresponds to the contributee, and so should be suppressed.
-     */
     public ObjectActionContributee(
             final Object servicePojo,
             final ObjectActionDefault serviceAction,

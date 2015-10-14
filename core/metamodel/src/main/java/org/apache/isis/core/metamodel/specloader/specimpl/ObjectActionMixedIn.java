@@ -25,27 +25,25 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
+import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.bookmark.Bookmark;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
 import org.apache.isis.core.commons.lang.ObjectExtensions;
-import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
+import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
@@ -99,39 +97,20 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         // adjust name if necessary
         final String name = getName();
 
-        String memberName = null;
         if(Objects.equal(name, "_")) {
-            memberName = determineNameFrom(mixinAction);
+            String memberName = determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
 
         // calculate the identifier
         final Identifier mixinIdentifier = mixinAction.getFacetedMethod().getIdentifier();
-        memberName = memberName != null? memberName : mixinIdentifier.getMemberName();
         List<String> memberParameterNames = mixinIdentifier.getMemberParameterNames();
-        identifier = Identifier.actionIdentifier(getOnType().getCorrespondingClass().getName(), memberName, memberParameterNames);
+        identifier = Identifier.actionIdentifier(getOnType().getCorrespondingClass().getName(), getId(), memberParameterNames);
     }
 
-    private static String determineNameFrom(final ObjectActionDefault mixinAction) {
-        return suffixAfterUnderscore(mixinAction.getOnType().getSingularName());
-    }
-
-    static String suffixAfterUnderscore(final String singularName) {
-        return StringExtensions.asCapitalizedName(suffix(singularName));
-    }
-
-    private static String suffix(final String singularName) {
-        if (singularName.endsWith("_")) {
-            if (Objects.equal(singularName, "_")) {
-                return singularName;
-            }
-            return singularName;
-        }
-        final int indexOfUnderscore = singularName.lastIndexOf('_');
-        if (indexOfUnderscore == -1) {
-            return singularName;
-        }
-        return singularName.substring(indexOfUnderscore + 1);
+    @Override
+    public String getId() {
+        return determineIdFrom(this.mixinAction);
     }
 
     @Override
@@ -166,9 +145,10 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public Consent isVisible(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
-            Where where) {
-        final VisibilityContext<?> ic = mixinAction.createVisibleInteractionContext(mixinAdapterFor(mixedInAdapter),
-                interactionInitiatedBy, where);
+            final Where where) {
+        final VisibilityContext<?> ic =
+                mixinAction.createVisibleInteractionContext(
+                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
         return InteractionUtils.isVisibleResult(this, ic).createConsent();
     }
 
@@ -176,28 +156,29 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     public Consent isUsable(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy, final Where where) {
-        final UsabilityContext<?> ic = mixinAction.createUsableInteractionContext(mixinAdapterFor(mixedInAdapter),
-                interactionInitiatedBy, where);
+        final UsabilityContext<?> ic =
+                mixinAction.createUsableInteractionContext(
+                        mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy, where);
         return InteractionUtils.isUsableResult(this, ic).createConsent();
     }
 
     @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter mixedInAdapter) {
-        return mixinAction.getDefaults(mixinAdapterFor(mixedInAdapter));
+        return mixinAction.getDefaults(mixinAdapterFor(mixinType, mixedInAdapter));
     }
 
     @Override
     public ObjectAdapter[][] getChoices(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.getChoices(mixinAdapterFor(mixedInAdapter), interactionInitiatedBy);
+        return mixinAction.getChoices(mixinAdapterFor(mixinType, mixedInAdapter), interactionInitiatedBy);
     }
 
     public Consent isProposedArgumentSetValid(
             final ObjectAdapter mixedInAdapter,
             final ObjectAdapter[] proposedArguments,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return mixinAction.isProposedArgumentSetValid(mixinAdapterFor(mixedInAdapter), proposedArguments, interactionInitiatedBy);
+        return mixinAction.isProposedArgumentSetValid(mixinAdapterFor(mixinType, mixedInAdapter), proposedArguments, interactionInitiatedBy);
     }
 
     @Override
@@ -248,61 +229,22 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
             }
         }
 
-        return mixinAction.execute(mixinAdapterFor(mixedInAdapter), arguments, interactionInitiatedBy);
+        return mixinAction.execute(mixinAdapterFor(mixinType, mixedInAdapter), arguments, interactionInitiatedBy);
     }
 
-    // //////////////////////////////////////
-    // FacetHolder
-    // //////////////////////////////////////
 
+    //region > facetHolder
     @Override
-    public Class<? extends Facet>[] getFacetTypes() {
-        return facetHolder.getFacetTypes();
+    protected FacetHolder getFacetHolder() {
+        return facetHolder;
+    }
+    //endregion
+
+
+    ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
+        return mixinAdapterFor(mixinType, mixedInAdapter);
     }
 
-    @Override
-    public <T extends Facet> T getFacet(Class<T> cls) {
-        return facetHolder.getFacet(cls);
-    }
-
-    @Override
-    public boolean containsFacet(Class<? extends Facet> facetType) {
-        return facetHolder.containsFacet(facetType);
-    }
-
-    @Override
-    public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
-        return facetHolder.containsDoOpFacet(facetType);
-    }
-
-    @Override
-    public List<Facet> getFacets(Filter<Facet> filter) {
-        return facetHolder.getFacets(filter);
-    }
-
-    @Override
-    public void addFacet(Facet facet) {
-        facetHolder.addFacet(facet);
-    }
-
-    @Override
-    public void addFacet(MultiTypedFacet facet) {
-        facetHolder.addFacet(facet);
-    }
-    
-    @Override
-    public void removeFacet(Facet facet) {
-        facetHolder.removeFacet(facet);
-    }
-
-    @Override
-    public void removeFacet(Class<? extends Facet> facetType) {
-        facetHolder.removeFacet(facetType);
-    }
-
-    
-    // //////////////////////////////////////
-    
     /* (non-Javadoc)
      * @see org.apache.isis.core.metamodel.specloader.specimpl.ObjectMemberAbstract#getIdentifier()
      */
@@ -311,12 +253,5 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         return identifier;
     }
     
-    // //////////////////////////////////////
 
-    ObjectAdapter mixinAdapterFor(final ObjectAdapter mixedInAdapter) {
-        final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
-        final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
-        final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());
-        return getPersistenceSessionService().adapterFor(mixinPojo);
-    }
 }

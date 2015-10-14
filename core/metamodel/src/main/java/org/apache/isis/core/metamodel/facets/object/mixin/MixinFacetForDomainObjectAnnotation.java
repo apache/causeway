@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.facets.object.mixin;
 
 import java.lang.reflect.Constructor;
 
+import org.apache.isis.applib.annotation.DomainObject;
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
@@ -42,6 +44,13 @@ public class MixinFacetForDomainObjectAnnotation extends MixinFacetAbstract {
     public static MixinFacet create(
             final Class<?> candidateMixinType, final FacetHolder facetHolder,
             final ServicesInjector servicesInjector) {
+        final DomainObject domainObject = candidateMixinType.getAnnotation(DomainObject.class);
+        if(domainObject == null) {
+            return null;
+        }
+        if(domainObject.nature() != Nature.MIXIN) {
+            return null;
+        }
         final Constructor<?>[] constructors = candidateMixinType.getConstructors();
         for (Constructor<?> constructor : constructors) {
             final Class<?>[] constructorTypes = constructor.getParameterTypes();

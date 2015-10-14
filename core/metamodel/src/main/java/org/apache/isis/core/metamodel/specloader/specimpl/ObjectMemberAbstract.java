@@ -21,6 +21,8 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 
 import java.util.List;
 
+import com.google.common.base.Objects;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
@@ -39,6 +41,7 @@ import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.interactions.AccessContext;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -63,7 +66,6 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     //region > fields
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
-    protected final String defaultName;
     private final String id;
     private final FacetedMethod facetedMethod;
     private final FeatureType featureType;
@@ -78,12 +80,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             final ObjectMemberDependencies objectMemberDependencies) {
         final String id = facetedMethod.getIdentifier().getMemberName();
         if (id == null) {
-            throw new IllegalArgumentException("Name must always be set");
+            throw new IllegalArgumentException("Id must always be set");
         }
         this.facetedMethod = facetedMethod;
         this.featureType = featureType;
         this.id = id;
-        this.defaultName = StringExtensions.asNaturalName2(this.id);
 
         this.specificationLookup = objectMemberDependencies.getSpecificationLoader();
         this.servicesInjector = objectMemberDependencies.getServicesInjector();
@@ -182,7 +183,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         }
         else {
             // this should now be redundant, see NamedFacetDefault
-            return defaultName;
+            return StringExtensions.asNaturalName2(getId());
         }
     }
 
@@ -308,6 +309,52 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public boolean isOneToOneAssociation() {
         return featureType.isProperty();
     }
+    //endregion
+
+    //region > mixinAdapterFor
+    /**
+     * For mixins
+     */
+    protected ObjectAdapter mixinAdapterFor(
+            final Class<?> mixinType,
+            final ObjectAdapter mixedInAdapter) {
+        final ObjectSpecification objectSpecification = getSpecificationLoader().loadSpecification(mixinType);
+        final MixinFacet mixinFacet = objectSpecification.getFacet(MixinFacet.class);
+        final Object mixinPojo = mixinFacet.instantiate(mixedInAdapter.getObject());
+        return getPersistenceSessionService().adapterFor(mixinPojo);
+    }
+
+    static String determineNameFrom(final ObjectActionDefault mixinAction) {
+        return StringExtensions.asCapitalizedName(suffix(mixinAction));
+    }
+
+    static String determineIdFrom(final ObjectActionDefault mixinAction) {
+        final String id = compress(suffix(mixinAction));
+        return id;
+    }
+
+    private static String compress(final String suffix) {
+        return suffix.replaceAll(" ","");
+    }
+
+    static String suffix(final ObjectActionDefault mixinAction) {
+        return suffix(mixinAction.getOnType().getSingularName());
+    }
+
+    static String suffix(final String singularName) {
+        if (singularName.endsWith("_")) {
+            if (Objects.equal(singularName, "_")) {
+                return singularName;
+            }
+            return singularName;
+        }
+        final int indexOfUnderscore = singularName.lastIndexOf('_');
+        if (indexOfUnderscore == -1) {
+            return singularName;
+        }
+        return singularName.substring(indexOfUnderscore + 1);
+    }
+
     //endregion
 
     //region > toString

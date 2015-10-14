@@ -26,15 +26,14 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  * Interface indicating an a contributed association or action.
  */
 public interface ContributeeMember extends ObjectMember {
-    
+
+
     public static class Predicates {
         
         private Predicates(){}
-        
+
         /**
-         * Evaluates the supplied {@link ObjectMember} and includes either if it is not a {@link ContributeeMember}
-         * (ie is a regular member) or is a {@link ContributeeMember} and contributed are to be
-         * {@link Contributed#isIncluded() included}.  
+         * Now generalized to handle {@link MixedInMember}s as well as {@link ContributeeMember}s.
          */
         public static <T extends ObjectMember> Predicate<T> regularElse(final Contributed contributed) {
             return com.google.common.base.Predicates.or(regular(), is(contributed));
@@ -44,7 +43,7 @@ public interface ContributeeMember extends ObjectMember {
             return new Predicate<T>() {
                 @Override
                 public boolean apply(ObjectMember input) {
-                    return !(input instanceof ContributeeMember);
+                    return !(input instanceof ContributeeMember) && !(input instanceof MixedInMember);
                 }
             };
         }
@@ -53,7 +52,7 @@ public interface ContributeeMember extends ObjectMember {
             return new Predicate<T>() {
                 @Override
                 public boolean apply(ObjectMember input) {
-                    return input instanceof ContributeeMember && contributed.isIncluded();
+                    return contributed.isIncluded();
                 }
             };
         }
