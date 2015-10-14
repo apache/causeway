@@ -71,7 +71,7 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract
                 final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.EXCLUDED);
                 for (final ObjectAction objectAction : objectActions) {
                     for (final String prefix : prefixes) {
-                        final String actionId = objectAction.getId();
+                        String actionId = objectAction.getId();
                         if (actionId.startsWith(prefix) && prefix.length() < actionId.length()) {
                             validationFailures.add(
                                     "%s#%s: has prefix %s, is probably a supporting method for a property, collection or action.  If the method is intended to be an action, then rename and use @ActionLayout(named=\"...\") or ignore completely using @Programmatic",

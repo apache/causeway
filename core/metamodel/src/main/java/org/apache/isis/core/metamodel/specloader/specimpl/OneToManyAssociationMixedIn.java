@@ -158,6 +158,11 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     }
 
     @Override
+    public String getOriginalId() {
+        return super.getId();
+    }
+
+    @Override
     public Consent isVisible(
             final ObjectAdapter mixedInAdapter,
             final InteractionInitiatedBy interactionInitiatedBy,
@@ -185,6 +190,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
     protected FacetHolder getFacetHolder() {
         return facetHolder;
     }
+
 
     //endregion
 

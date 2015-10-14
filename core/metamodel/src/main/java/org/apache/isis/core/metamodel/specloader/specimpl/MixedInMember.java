@@ -23,6 +23,11 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
  */
 public interface MixedInMember extends ObjectMember {
 
+    /**
+     * The id before it has been messed around with if was '_'.
+     */
+    String getOriginalId();
+
     // not actually required, as of yet
     // boolean isMixinOf(ObjectAction mixinAction);
 

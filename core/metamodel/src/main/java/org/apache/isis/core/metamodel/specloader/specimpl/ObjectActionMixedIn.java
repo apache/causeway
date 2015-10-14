@@ -25,7 +25,6 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
 import org.apache.isis.applib.services.bookmark.Bookmark;
@@ -41,8 +40,6 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.action.invocation.CommandUtil;
 import org.apache.isis.core.metamodel.facets.actions.bulk.BulkFacet;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
@@ -111,6 +108,11 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
     @Override
     public String getId() {
         return determineIdFrom(this.mixinAction);
+    }
+
+    @Override
+    public String getOriginalId() {
+        return super.getId();
     }
 
     @Override

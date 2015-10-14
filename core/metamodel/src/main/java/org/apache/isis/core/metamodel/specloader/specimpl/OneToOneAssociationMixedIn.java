@@ -21,7 +21,6 @@ import java.util.List;
 import com.google.common.base.Objects;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,8 +29,6 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacet;
-import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetForContributee;
@@ -143,6 +140,11 @@ public class OneToOneAssociationMixedIn extends OneToOneAssociationDefault imple
     @Override
     public String getId() {
         return determineIdFrom(this.mixinAction);
+    }
+
+    @Override
+    public String getOriginalId() {
+        return super.getId();
     }
 
     @Override

@@ -62,11 +62,20 @@ public class DisableForContextFacetViaMethodFactory extends MethodPrefixBasedFac
         final String capitalizedName = StringExtensions.asJavaBaseNameStripAccessorPrefixIfRequired(method.getName());
 
         final Class<?> cls = processMethodContext.getCls();
+        // search for exact match
         Method disableMethod = MethodFinderUtils.findMethod(
                 cls, MethodScope.OBJECT,
                 MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
                 new Class<?>[]{String.class, TranslatableString.class},
                 method.getParameterTypes());
+        if (disableMethod == null) {
+            // search for no-arg version
+            disableMethod = MethodFinderUtils.findMethod(
+                    cls, MethodScope.OBJECT,
+                    MethodPrefixConstants.DISABLE_PREFIX + capitalizedName,
+                    new Class<?>[]{String.class, TranslatableString.class},
+                    new Class<?>[0]);
+        }
         if (disableMethod == null) {
             return;
         }
