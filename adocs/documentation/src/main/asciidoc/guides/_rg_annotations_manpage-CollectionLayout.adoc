@@ -105,6 +105,13 @@ As an alternative to using the `@CollectionLayout` annotation, a dynamic layout 
 
 
 
+[TIP]
+====
+The annotation is one of a handful (others including xref:rg.adoc#_rg_annotations_manpage-Collection[`@Collection`], xref:rg.adoc#_rg_annotations_manpage-Property[`@Property`] and xref:rg.adoc#_rg_annotations_manpage-PropertyLayout[`@PropertyLayout`]) that can also be applied to the field, rather than the getter method.  This is specifically
+so that boilerplate-busting tools such as link:https://projectlombok.org/[Project Lombok] can be used.
+====
+
+
 
 include::_rg_annotations_manpage-CollectionLayout_cssClass.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-CollectionLayout_describedAs.adoc[leveloffset=+1]

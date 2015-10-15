@@ -7,13 +7,14 @@
 
 
 
-We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis domain objects, and also for unit tests (JUnit and JMock).
+We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis domain objects, and also for unit tests (JUnit and JMock).  We also provide them for IntelliJ for writing Asciidoc documentation (see also the xref:cg.adoc#_cg__cg_asciidoc-templates[appendix]).
+
 
 == Download
 
 The following table lists the templates available to download:
 
-[cols="1a,1a,1a,1a", options="header"]
+[cols="1a,1a,1a,1a,1a", options="header"]
 |===
 
 |Template

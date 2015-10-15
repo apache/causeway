@@ -59,6 +59,20 @@ public class ToDoItem {
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
 
+As of `1.10.0-SNAPSHOT` this can be simplified to just:
+
+[source,java]
+----
+public class ToDoItem {
+    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { }
+    @Property(domainEvent=ToDoItem.DueByChangedEvent)
+    public LocalDate getDueBy() { ... }
+    ...
+}
+----
+
+where the framework will initialize the domain event using setters rather than through the constructor.  This substantially reduces the boilerplate.
+
 
 
 == Subscribers

@@ -93,32 +93,25 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> {
-        private static final long serialVersionUID = 1L;
-        public CompletedEvent(
-                final ToDoItem source,
-                final Identifier identifier,
-                final Object... arguments) {
-            super("completed", source, identifier, arguments);
-        }
-    }
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { } // <1>
     @Action(
         command=CommandReification.ENABLED,
-        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <1>
-        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <2>
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <2>
+        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <3>
         domainEvent=CompletedEvent.class,
-        hidden = Where.NOWHERE,                                // <3>
-        invokeOn = InvokeOn.OBJECT_ONLY,                       // <4>
+        hidden = Where.NOWHERE,                                // <4>
+        invokeOn = InvokeOn.OBJECT_ONLY,                       // <5>
         publishing = Publishing.ENABLED,
         semantics = SemanticsOf.IDEMPOTENT
     )
     public ToDoItem completed() { ... }
 }
 ----
-<1> default value, so could be omitted
+<1> `1.10.0-SNAPSHOT`, can use no-arg constructor.
 <2> default value, so could be omitted
 <3> default value, so could be omitted
 <4> default value, so could be omitted
+<5> default value, so could be omitted
 
 
 

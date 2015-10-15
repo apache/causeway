@@ -14,6 +14,7 @@ The website and guides are created by running build tools (documented below) whi
 
 Publishing is performed by copying the generated HTML to a different git repository (link:https://git-wip-us.apache.org/repos/asf?p=isis-site.git[isis-site]).  This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
 
+And to help write the Asciidoc text itself, we provide some xref:cg.adoc#_cg__cg_ide-templates[templates].
 
 
 == Where to find the Docs
