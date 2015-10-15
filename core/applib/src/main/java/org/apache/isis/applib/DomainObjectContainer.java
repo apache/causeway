@@ -211,7 +211,7 @@ public interface DomainObjectContainer {
     @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
 
-
+    @Programmatic
     <T> T mixin( Class<T> mixinClass, Object mixedIn);
 
     //endregion
