@@ -133,7 +133,6 @@ export ISISCOR="Y"
 
 env | grep ISIS | sort
 ----
-<1> adjust by platform
 
 
 
