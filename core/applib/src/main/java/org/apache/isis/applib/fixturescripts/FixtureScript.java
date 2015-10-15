@@ -849,6 +849,13 @@ public abstract class FixtureScript
         return wrapperFactory.unwrap(possibleWrappedDomainObject);
     }
 
+    /**
+     * Convenience method
+     */
+    protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
+        return container.mixin(mixinClass, mixedIn);
+    }
+
     //endregion
 
     //region > helpers (local)
