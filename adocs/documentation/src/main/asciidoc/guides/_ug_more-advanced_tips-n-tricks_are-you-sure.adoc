@@ -4,13 +4,37 @@
 :_basedir: ../
 :_imagesdir: images/
 
-If providing an action that will perform irreversible changes, include a
-mandatory boolean parameter that must be explicitly checked by the end-user
-in order for the action to proceed.
+
+Sometimes an action might perform irreversible changes.  In such a case it's probably a good idea for the UI to require that the
+end-user explicitly confirms that they intended to invoke the action.
+
+== Using action semantics (`1.10.0-SNAPSHOT`)
+
+One way to meet this requirement is using the framework's built-in xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`@Action#semantics()`] attribute:
+
+[source,java]
+----
+@Action(
+        semantics = SemanticsOf.IDEMPOTENT_ARE_YOU_SURE
+)
+public SimpleObject updateName(
+        @Parameter(maxLength = NAME_LENGTH)
+        @ParameterLayout(named = "New name")
+        final String name) {
+    setName(name);
+    return this;
+}
+----
 
 
+This will render as:
 
-== Screenshots
+image::{_imagesdir}/how-tos/tips-n-tricks/action-semantics-are-you-sure.png[]
+
+
+== Using a checkbox
+
+An alternative approach (for all versions of the framework) is to require the end-user to check a dummy checkbox parameter (and prevent the action from being invoked if the user hasn't checked that parameter).
 
 For example:
 
@@ -32,9 +56,6 @@ However, if the user fails to check the box, then a validation message is shown:
 image::{_imagesdir}/how-tos/tips-n-tricks/are-you-sure-sad-case.png[]
 
 
-
-
-== Code example
 
 The code for this is pretty simple:
 
