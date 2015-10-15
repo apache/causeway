@@ -163,7 +163,6 @@ public interface DomainObjectContainer {
     @Programmatic
     <T> T newTransientInstance(final Class<T> ofType);
 
-    
     /**
      * Create a new {@link ViewModel} instance of the specified type, initializing with the specified memento.
      *
@@ -211,6 +210,9 @@ public interface DomainObjectContainer {
     @Programmatic
     @Deprecated
     <T> T newInstance(final Class<T> ofType, final Object object);
+
+
+    <T> T mixin( Class<T> mixinClass, Object mixedIn);
 
     //endregion
 

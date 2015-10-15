@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.metamodel.services.container;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ import javax.annotation.PreDestroy;
 import com.google.common.base.Predicate;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.PersistFailedException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.RepositoryException;
@@ -60,6 +63,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationService;
 import org.apache.isis.core.metamodel.runtimecontext.ConfigurationServiceAware;
@@ -165,6 +169,34 @@ public class DomainObjectContainerDefault
         } else {
             return newTransientInstance(ofClass);
         }
+    }
+
+    @Override
+    public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
+        final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(mixinClass);
+        final MixinFacet mixinFacet = objectSpec.getFacet(MixinFacet.class);
+        if(mixinFacet == null) {
+            throw new NonRecoverableException("Class '" + mixinClass.getName() + " is not a mixin");
+        }
+        if(!mixinFacet.isMixinFor(mixinClass.getClass())) {
+            throw new NonRecoverableException("Mixin class '" + mixinClass.getName() + " is not a mixin for supplied object");
+        }
+        final Constructor<?>[] constructors = mixinClass.getConstructors();
+        for (Constructor<?> constructor : constructors) {
+            if(constructor.getParameterCount() == 1 &&
+               constructor.getParameterTypes()[0].isAssignableFrom(mixedIn.getClass())) {
+                final Object mixin;
+                try {
+                    mixin = constructor.newInstance(mixedIn);
+                    return (T)injectServicesInto(mixin);
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                    throw new NonRecoverableException(e);
+                }
+            }
+        }
+        // should never get here because of previous guards
+        throw new NonRecoverableException( String.format(
+                "Failed to locate constructor in %s to instantiate using %s", mixinClass.getName(), mixedIn));
     }
 
     /**

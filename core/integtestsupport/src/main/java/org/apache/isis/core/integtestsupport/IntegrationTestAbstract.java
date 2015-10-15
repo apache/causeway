@@ -188,6 +188,12 @@ public abstract class IntegrationTestAbstract {
         return scenarioExecution().wrapperFactory().unwrap(obj);
     }
 
+    /**
+     * Convenience method
+     */
+    protected <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
+        return container().mixin(mixinClass, mixedIn);
+    }
 
     
     // //////////////////////////////////////

@@ -94,7 +94,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         // adjust name if necessary
         final String name = getName();
 
-        if(Objects.equal(name, "_")) {
+        if(Objects.equal(name, DEFAULT_MEMBER_NAME)) {
             String memberName = determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }

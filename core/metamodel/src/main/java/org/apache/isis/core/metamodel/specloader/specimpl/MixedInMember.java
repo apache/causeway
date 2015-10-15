@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 /**
@@ -24,7 +25,23 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 public interface MixedInMember extends ObjectMember {
 
     /**
-     * The id before it has been messed around with if was '_'.
+     * If the mixin uses a method of precisely this name, then the corresponding {@link ObjectMember#getName() name} and
+     * {@link ObjectMember#getId() id} will instead be inferred from the mixin class' {@link ObjectSpecification#getShortIdentifier() name}.
+     *
+     * <p>
+     *     This makes it easier to avoid silly spelling mistakes in supporting methods, with the name of the member
+     *     in essence specified in only just one place, namely the mixin class' name.
+     * </p>
+     *
+     * <p>
+     *     Remarks: two underscores, not one, because a single underscore may not be supported as a valid identifier
+     *     after Java 8.
+     * </p>
+     */
+    public static final String DEFAULT_MEMBER_NAME = "__";
+
+    /**
+     * The id if it was originally {@link #DEFAULT_MEMBER_NAME the default member name}.
      */
     String getOriginalId();
 
