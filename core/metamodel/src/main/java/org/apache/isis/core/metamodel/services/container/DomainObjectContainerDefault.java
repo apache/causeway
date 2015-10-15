@@ -178,8 +178,8 @@ public class DomainObjectContainerDefault
         if(mixinFacet == null) {
             throw new NonRecoverableException("Class '" + mixinClass.getName() + " is not a mixin");
         }
-        if(!mixinFacet.isMixinFor(mixinClass.getClass())) {
-            throw new NonRecoverableException("Mixin class '" + mixinClass.getName() + " is not a mixin for supplied object");
+        if(!mixinFacet.isMixinFor(mixedIn.getClass())) {
+            throw new NonRecoverableException("Mixin class '" + mixinClass.getName() + " is not a mixin for supplied object '" + mixedIn + "'");
         }
         final Constructor<?>[] constructors = mixinClass.getConstructors();
         for (Constructor<?> constructor : constructors) {
