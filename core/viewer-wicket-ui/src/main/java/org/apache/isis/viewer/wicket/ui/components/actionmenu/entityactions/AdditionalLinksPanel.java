@@ -32,8 +32,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
@@ -86,12 +88,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
     }
 
 
-    private List<LinkAndLabel> linkAndLabels;
-
     protected AdditionalLinksPanel(final String id, final List<LinkAndLabel> links) {
         super(id, new ListOfLinksModel(links));
 
-        this.linkAndLabels = getModel().getObject();
+        final List<LinkAndLabel> linkAndLabels = getModel().getObject();
 
         final WebMarkupContainer container = new WebMarkupContainer(ID_ADDITIONAL_LINK_LIST);
         addOrReplace(container);
@@ -100,7 +100,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
         setOutputMarkupId(true);
 
-        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, this.linkAndLabels) {
+        final ListView<LinkAndLabel> listView = new ListView<LinkAndLabel>(ID_ADDITIONAL_LINK_ITEM, linkAndLabels) {
 
             private static final long serialVersionUID = 1L;
 
@@ -127,10 +127,18 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 SemanticsOf semantics = linkAndLabel.getSemantics();
                 if (    semantics.isAreYouSure() && linkAndLabel.getParameters().isNoParameters() ) {
                     ConfirmationConfig confirmationConfig = new ConfirmationConfig();
-                    // TODO ISIS-1007 Use i18n for the title and the labels
-                    confirmationConfig.withTitle("Are you sure?");
-                    confirmationConfig.withBtnOkLabel("Confirm");
-                    confirmationConfig.withBtnCancelLabel("Cancel");
+
+                    final TranslationService translationService =
+                            getPersistenceSession().getServicesInjector().lookupService(TranslationService.class);
+
+                    final String areYouSure = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_ARE_YOU_SURE);
+                    final String confirm = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CONFIRM);
+                    final String cancel = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CANCEL);
+
+                    confirmationConfig.withTitle(areYouSure);
+                    confirmationConfig.withBtnOkLabel(confirm);
+                    confirmationConfig.withBtnCancelLabel(cancel);
+
                     confirmationConfig.withBtnOkClass("btn btn-danger");
                     confirmationConfig.withBtnCancelClass("btn btn-default");
 

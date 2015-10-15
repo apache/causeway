@@ -20,12 +20,15 @@
 package org.apache.isis.viewer.wicket.ui.components.actions;
 
 import java.util.List;
+
 import com.google.common.base.Throwables;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
 import org.apache.isis.applib.services.command.CommandContext;
@@ -34,7 +37,6 @@ import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
@@ -328,10 +330,6 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
-    }
-
-    protected ServicesInjector getServicesInjector() {
-        return IsisContext.getPersistenceSession().getServicesInjector();
     }
 
     protected MessageBroker getMessageBroker() {

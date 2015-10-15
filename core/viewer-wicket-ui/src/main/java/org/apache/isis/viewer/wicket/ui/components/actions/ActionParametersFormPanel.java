@@ -33,10 +33,12 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -225,10 +227,18 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
             if (semanticsOf.isAreYouSure()) {
                 ConfirmationConfig confirmationConfig = new ConfirmationConfig();
-                // TODO ISIS-1007 Use i18n for the title and the labels
-                confirmationConfig.withTitle("Are you sure?");
-                confirmationConfig.withBtnOkLabel("Confirm");
-                confirmationConfig.withBtnCancelLabel("Cancel");
+
+                final TranslationService translationService =
+                        getPersistenceSession().getServicesInjector().lookupService(TranslationService.class);
+
+                final String areYouSure = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_ARE_YOU_SURE);
+                final String confirm = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CONFIRM);
+                final String cancel = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CANCEL);
+
+                confirmationConfig.withTitle(areYouSure);
+                confirmationConfig.withBtnOkLabel(confirm);
+                confirmationConfig.withBtnCancelLabel(cancel);
+
                 confirmationConfig.withBtnOkClass("btn btn-danger");
                 confirmationConfig.withBtnCancelClass("btn btn-default");
                 button.add(new ConfirmationBehavior(confirmationConfig));

@@ -31,6 +31,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryProvider;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -147,6 +148,10 @@ public abstract class PanelAbstract<T extends IModel<?>> extends Panel implement
     @Override
     public PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
+    }
+
+    protected ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
     }
 
     // /////////////////////////////////////////////////

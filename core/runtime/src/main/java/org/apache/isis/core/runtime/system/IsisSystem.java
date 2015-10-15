@@ -33,6 +33,7 @@ import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.fixturescripts.FixtureScripts;
 import org.apache.isis.applib.services.fixturespec.FixtureScriptsDefault;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.commons.config.IsisConfiguration;
@@ -65,6 +66,10 @@ import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProvider;
 public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
     public static final Logger LOG = LoggerFactory.getLogger(IsisSystem.class);
+
+    public static final String MSG_ARE_YOU_SURE = "Are you sure?";
+    public static final String MSG_CONFIRM = "Confirm";
+    public static final String MSG_CANCEL = "Cancel";
 
     private final IsisLocaleInitializer localeInitializer;
     private final IsisTimeZoneInitializer timeZoneInitializer;
@@ -292,6 +297,13 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
                     }
                 }
             }
+
+            // as used by the Wicket UI
+            final TranslationService translationService = lookupService(TranslationService.class);
+            translationService.translate(IsisSystem.class.getName(), MSG_ARE_YOU_SURE);
+            translationService.translate(IsisSystem.class.getName(), MSG_CONFIRM);
+            translationService.translate(IsisSystem.class.getName(), MSG_CANCEL);
+
         } finally {
             IsisContext.closeSession();
         }
