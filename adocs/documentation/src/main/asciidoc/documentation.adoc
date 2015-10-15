@@ -34,7 +34,8 @@ pass:[<br/>]
 
 |*Learning More*
 
-* link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
+// * link:http://isisdemo.mmyco.co.uk/[Online demo] (todoapp)
+
 * link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px" link="screencasts.html"]
 * link:./guides/tg.html[Tutorials]
 
