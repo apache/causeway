@@ -26,13 +26,9 @@ import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.isis.applib.RecoverableException;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.actinvoc.ActionInvocationContext;
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.applib.annotation.InvokedOn;
 import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.command.Command.Executor;
@@ -212,19 +208,12 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
         };
         link.add(new JGrowlBehaviour());
 
-        final boolean explorationOrPrototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
-        final String description = ObjectAction.Utils.descriptionOf(objectAction);
-        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, null);
-        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
-        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
-        final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
-        final ActionSemantics.Of semantics = objectAction.getSemantics();
+        final String disabledReasonIfAny = null;
+        final boolean blobOrClob = false;
+        final ObjectAdapter objectAdapter = null;
 
-        return new LinkAndLabel(link, objectAction.getName(), null, description, false, explorationOrPrototype, actionIdentifier, cssClass, cssClassFa, cssClassFaPosition, position,
-                SemanticsOf.from(semantics));
+        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, blobOrClob);
     }
-
 
     ///////////////////////////////////////////////////////
     // Dependencies (from context)

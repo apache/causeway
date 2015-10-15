@@ -125,7 +125,7 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (    semantics.isAreYouSure() ) {
+                if (    semantics.isAreYouSure() && linkAndLabel.getParameters().isNoParameters() ) {
                     ConfirmationConfig confirmationConfig = new ConfirmationConfig();
                     // TODO ISIS-1007 Use i18n for the title and the labels
                     confirmationConfig.withTitle("Are you sure?");

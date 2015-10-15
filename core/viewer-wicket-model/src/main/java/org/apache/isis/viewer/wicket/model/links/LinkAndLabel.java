@@ -25,8 +25,11 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class LinkAndLabel implements Serializable {
 
@@ -38,6 +41,49 @@ public class LinkAndLabel implements Serializable {
         return Lists.newArrayList(Iterables.filter(entityActionLinks, Predicates.positioned(position)));
     }
 
+    public static LinkAndLabel newLinkAndLabel(
+            final ObjectAdapter objectAdapter,
+            final ObjectAction objectAction,
+            final AbstractLink link,
+            final String disabledReasonIfAny,
+            final boolean blobOrClob) {
+
+        final String name = ObjectAction.Utils.nameFor(objectAction);
+
+        final boolean explorationOrPrototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
+        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
+        final String description = ObjectAction.Utils.descriptionOf(objectAction);
+        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
+        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
+        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
+        final ActionLayout.Position actionLayoutPosition = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
+        final ActionSemantics.Of semantics = objectAction.getSemantics();
+
+        return new LinkAndLabel(
+                link, name,
+                disabledReasonIfAny, description,
+                blobOrClob, explorationOrPrototype,
+                actionIdentifier,
+                cssClass, cssClassFa, cssClassFaPosition, actionLayoutPosition,
+                SemanticsOf.from(semantics),
+                Parameters.fromParameterCount(objectAction.getParameterCount()));
+    }
+
+    public enum Parameters {
+        NO_PARAMETERS,
+        TAKES_PARAMETERS;
+
+        public static Parameters fromParameterCount(final int parameterCount) {
+            return parameterCount > 0? TAKES_PARAMETERS: NO_PARAMETERS;
+        }
+
+        public boolean isNoParameters() {
+            return this == NO_PARAMETERS;
+        }
+        public boolean isTakesParameters() {
+            return this == TAKES_PARAMETERS;
+        }
+    }
 
     private final AbstractLink link;
     private final String label;
@@ -51,8 +97,9 @@ public class LinkAndLabel implements Serializable {
     private final CssClassFaPosition cssClassFaPosition;
     private final ActionLayout.Position position;
     private final SemanticsOf semanticsOf;
+    private Parameters parameters;
 
-    public LinkAndLabel(
+    private LinkAndLabel(
             final AbstractLink link,
             final String label,
             final String disabledReasonIfAny,
@@ -64,7 +111,8 @@ public class LinkAndLabel implements Serializable {
             final String cssClassFa,
             final CssClassFaPosition cssClassFaPosition,
             final ActionLayout.Position position,
-            final SemanticsOf semanticsOf) {
+            final SemanticsOf semanticsOf,
+            final Parameters parameters) {
         this.link = link;
         this.label = label;
         this.disabledReasonIfAny = disabledReasonIfAny;
@@ -77,6 +125,7 @@ public class LinkAndLabel implements Serializable {
         this.cssClassFaPosition = cssClassFaPosition;
         this.position = position;
         this.semanticsOf = semanticsOf;
+        this.parameters = parameters;
     }
 
     public AbstractLink getLink() {
@@ -125,6 +174,10 @@ public class LinkAndLabel implements Serializable {
 
     public SemanticsOf getSemantics() {
         return semanticsOf;
+    }
+
+    public Parameters getParameters() {
+        return parameters;
     }
 
     public static class Predicates {

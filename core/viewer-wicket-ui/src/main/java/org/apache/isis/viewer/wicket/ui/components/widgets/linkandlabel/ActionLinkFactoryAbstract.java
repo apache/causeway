@@ -25,11 +25,7 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.request.IRequestHandler;
 
-import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.annotation.ActionSemantics;
-import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
@@ -174,19 +170,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
             final AbstractLink link,
             final String disabledReasonIfAny) {
 
-        final String label = ObjectAction.Utils.nameFor(objectAction);
         final boolean blobOrClob = ObjectAction.Utils.returnsBlobOrClob(objectAction);
-        final boolean prototype = ObjectAction.Utils.isExplorationOrPrototype(objectAction);
-        final String actionIdentifier = ObjectAction.Utils.actionIdentifierFor(objectAction);
-        final String description = ObjectAction.Utils.descriptionOf(objectAction);
-        final ActionLayout.Position position = ObjectAction.Utils.actionLayoutPositionOf(objectAction);
-        final String cssClass = ObjectAction.Utils.cssClassFor(objectAction, objectAdapter);
-        final String cssClassFa = ObjectAction.Utils.cssClassFaFor(objectAction);
-        final CssClassFaPosition cssClassFaPosition = ObjectAction.Utils.cssClassFaPositionFor(objectAction);
-        final ActionSemantics.Of semantics = objectAction.getSemantics();
 
-        return new LinkAndLabel(link, label, disabledReasonIfAny, description, blobOrClob, prototype, actionIdentifier,
-                cssClass, cssClassFa, cssClassFaPosition, position, SemanticsOf.from(semantics));
+        return LinkAndLabel.newLinkAndLabel(objectAdapter, objectAction, link, disabledReasonIfAny, blobOrClob);
     }
 
     // ////////////////////////////////////////////////////////////
