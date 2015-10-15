@@ -261,7 +261,11 @@ public final class ObjectReflectorDefault
     }
 
     private void loadSpecificationsForMixins() {
-        for (final Class<?> mixinType : AppManifest.Registry.instance().getMixinTypes()) {
+        final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
+        if(mixinTypes == null) {
+            return;
+        }
+        for (final Class<?> mixinType : mixinTypes) {
             internalLoadSpecification(mixinType);
         }
     }
