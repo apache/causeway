@@ -81,7 +81,7 @@ public class ObjectActionParameterAbstractTest_getId_and_getName {
 
         @Override
         public String isValid(
-                final ObjectAdapter adapter,
+                final ObjectAdapter objectAdapter,
                 final Object proposedValue,
                 final InteractionInitiatedBy interactionInitiatedBy, final Localization localization) {
             return null;

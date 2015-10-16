@@ -16,8 +16,6 @@
  */
 package org.apache.isis.core.metamodel.specloader.specimpl;
 
-import java.util.List;
-
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -45,9 +43,7 @@ public class OneToOneActionParameterMixedIn extends OneToOneActionParameterDefau
                 interactionInitiatedBy);
     }
 
-    protected ObjectAdapter targetForDefaultOrChoices(
-            final ObjectAdapter mixedInAdapter,
-            final List<ObjectAdapter> argumentsIfAvailable) {
+    protected ObjectAdapter targetForDefaultOrChoicesOrValidate(final ObjectAdapter mixedInAdapter) {
         return mixinAdapterFor(mixedInAdapter);
     }
 

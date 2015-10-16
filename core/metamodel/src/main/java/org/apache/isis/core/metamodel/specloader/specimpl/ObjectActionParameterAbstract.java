@@ -325,7 +325,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             final InteractionInitiatedBy interactionInitiatedBy) {
         final List<ObjectAdapter> argListIfAvailable = ListExtensions.mutableCopy(argumentsIfAvailable);
         
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter, argListIfAvailable);
+        final ObjectAdapter target = targetForDefaultOrChoicesOrValidate(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, argListIfAvailable);
         
         return findChoices(target, args, interactionInitiatedBy);
@@ -363,7 +363,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         
-        final ObjectAdapter target = targetForDefaultOrChoices(adapter, null);
+        final ObjectAdapter target = targetForDefaultOrChoicesOrValidate(adapter);
         final List<ObjectAdapter> args = argsForDefaultOrChoices(adapter, null);
         
         return findDefault(target, args);
@@ -388,9 +388,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Hook method; {@link ObjectActionParameterContributee contributed action parameter}s override.
      */
-    protected ObjectAdapter targetForDefaultOrChoices(
-            final ObjectAdapter adapter,
-            final List<ObjectAdapter> argumentsIfAvailable) {
+    protected ObjectAdapter targetForDefaultOrChoicesOrValidate(final ObjectAdapter adapter) {
         return adapter;
     }
 
@@ -450,21 +448,22 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ActionArgumentContext createProposedArgumentInteractionContext(
-            final ObjectAdapter targetObject,
+            final ObjectAdapter objectAdapter,
             final ObjectAdapter[] proposedArguments,
             final int position,
             final InteractionInitiatedBy interactionInitiatedBy) {
-        return new ActionArgumentContext(targetObject, getIdentifier(), proposedArguments,
-                position, interactionInitiatedBy);
+        //final ObjectAdapter targetAdapter = targetForDefaultOrChoicesOrValidate(objectAdapter);
+        return new ActionArgumentContext(
+                objectAdapter, getIdentifier(), proposedArguments, position, interactionInitiatedBy);
     }
 
     @Override
     public String isValid(
-            final ObjectAdapter adapter,
+            final ObjectAdapter objectAdapter,
             final Object proposedValue,
             final InteractionInitiatedBy interactionInitiatedBy,
             final Localization localization) {
-        
+
         ObjectAdapter proposedValueAdapter = null;
         ObjectSpecification proposedValueSpec;
         if(proposedValue != null) {
@@ -478,9 +477,10 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
 
+        final ObjectAdapter targetAdapter = targetForDefaultOrChoicesOrValidate(objectAdapter);
         final ObjectAdapter[] argumentAdapters = arguments(proposedValueAdapter);
         final ValidityContext<?> ic = createProposedArgumentInteractionContext(
-                adapter, argumentAdapters, getNumber(), interactionInitiatedBy
+                targetAdapter, argumentAdapters, getNumber(), interactionInitiatedBy
         );
 
         final InteractionResultSet buf = new InteractionResultSet();

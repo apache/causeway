@@ -40,6 +40,13 @@ indicates that the domain object is a wrapper/proxy/stub to a "synthetic" entity
 +
 The identity of an inmemory entity is determined solely by the state of entity's properties.  The framework will automatically recreate the domain object each time it is interacted with.
 
+* `MIXIN` +
++
+(`1.10.0-SNAPSHOT`) indicates that the domain object is part of the domain layer, and is contributing behaviour to objects of some other type as a mixin (also known as a trait).
+
+Equivalent to annotating with xref:rg.adoc#_rg_annotations_manpage-Mixin[`@Mixin`].  For further discussion on using mixins, see xref:ug.adoc#_ug_more-advanced_decoupling_mixins[mixins] in the user guide.
+
+
 * `VIEW_MODEL` +
 +
 indicates that the domain object is conceptually part of the application layer, and exists to surfaces behaviour and/or state that is aggregate of one or more domain entities.

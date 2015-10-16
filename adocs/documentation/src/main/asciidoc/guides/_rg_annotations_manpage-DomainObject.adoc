@@ -49,8 +49,8 @@ The table below summarizes the annotation's attributes.
 
 
 |xref:rg.adoc#_rg_annotations_manpage-DomainObject_nature[`nature()`]
-|`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `VIEW_MODEL` (`NOT_SPECIFIED`)
-|whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); and if an entity, how is its persistence managed
+|`NOT_SPECIFIED`, `JDO_ENTITY`, `EXTERNAL_ENTITY`, `INMEMORY_ENTITY`, `MIXIN`, `VIEW_MODEL` (`NOT_SPECIFIED`)
+|whether the domain object logically is an entity (part of the domain layer) or is a view model (part of the application layer); or is a mixin.  If an entity, indicates how its persistence is managed.
 
 
 |xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`objectType()`]

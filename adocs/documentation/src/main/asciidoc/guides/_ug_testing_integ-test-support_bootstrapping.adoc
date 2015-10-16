@@ -218,7 +218,7 @@ public abstract class DomainAppIntegTest {
 <3> primarily exists to support the writing of xref:ug.adoc#_ug_testing_bdd-spec-support[BDD specifications], but also enables finer-grained management of sessions/transactions (discussed below).
 
 
-
+[[_ug_testing_integ-test-support_bootstrapping_IntegrationTestAbstract]]
 === `IntegrationTestAbstract`
 
 In fact, we recommend that your base class inherit from Apache Isis' `IntegrationTestAbstract` class:

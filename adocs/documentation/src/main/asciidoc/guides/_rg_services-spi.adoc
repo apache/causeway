@@ -142,9 +142,9 @@ a configured `EmailService`
 ``isis-module-publishing``
 |related services:
 `PublishingService-` ++
-`Contributions`,
+``Contributions``,
 `PublishingService-` ++
-`Repository`.  +
+``Repository``.  +
 depends on: +
 `EventSerializer`
 

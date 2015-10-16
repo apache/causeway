@@ -4,5 +4,20 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO
+
+Contributed services provide many of the same benefits as xref:ug.adoc#_ug_more-advanced_decoupling_mixins[mixins];
+indeed mixins (`1.10.0-SNAPSHOT`) are an evolution and refinement of the contributions concept.
+
+The main difference between contributed services and mixins is that the actions of a contributed service will
+contribute to _all_ the parameters of its actions, whereas a mixin only contributes to the type accepted in its
+constructor.  Also, contributed services are long-lived
+singletons, whereas mixins are instantiated as required (by the framework) and then discarded almost immediately.
+
+For more on contributed services:
+
+* the syntax of writing contributed actions/properties/collections is described in this xref:ug.adoc#_ug_how-tos_contributed-members[how-to]
+
+* there's also useful information in the reference guide, discussing the xref:rg.adoc#_rg_annotations_manpage-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
+
+
 

@@ -172,7 +172,8 @@ public OrderContributions {
 <2> contributed as an association, in particular as a collection because returns a `List<T>`.
 <3> Only actions with a single argument can be contributed as associations
 
-More information about contributions can be found xref:ug.adoc#_ug_how-tos_contributed-members[here].
+More information about contributions can be found xref:ug.adoc#_ug_how-tos_contributed-members[here].  More information
+about using contributions and mixins to keep your domain application decoupled can be found xref:ug.adoc#_ug_more-advanced_decoupling_contributions[here] and xref:ug.adoc#_ug_more-advanced_decoupling_mixins[here].
 
 
 === Event Subscribers

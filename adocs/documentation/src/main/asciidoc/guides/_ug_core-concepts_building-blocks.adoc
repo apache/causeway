@@ -15,7 +15,7 @@ NOTE: TODO
 * layout hints are overridable, to avoid restarting the app/speed up feedback
 
 
-## Domain Objects and Domain Services
+## Objects & Services
 
 NOTE: TODO
 
