@@ -118,7 +118,7 @@ public class OneToManyAssociationMixedIn extends OneToManyAssociationDefault imp
         // adjust name if necessary
         final String name = getName();
 
-        if(Objects.equal(name, "_")) {
+        if(Objects.equal(name, DEFAULT_MEMBER_NAME)) {
             String memberName = ObjectActionMixedIn.determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }
