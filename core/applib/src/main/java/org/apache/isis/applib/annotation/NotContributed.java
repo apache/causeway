@@ -55,7 +55,8 @@ public @interface NotContributed {
     public enum As {
         ACTION,
         ASSOCIATION,
-        EITHER;
+        EITHER,
+        NEITHER; /* ie contributed as both ! */
 
         /**
          * @deprecated

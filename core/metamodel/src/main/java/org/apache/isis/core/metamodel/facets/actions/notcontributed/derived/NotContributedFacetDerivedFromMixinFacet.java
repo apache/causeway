@@ -18,15 +18,20 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.notcontributed.derived;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.notcontributed.NotContributedFacetAbstract;
 
+/**
+ * By default, any mixin actions are contributed as both actions and associations.  This can be overridden using
+ * {@link ActionLayout#contributed()}.
+ */
 public class NotContributedFacetDerivedFromMixinFacet extends NotContributedFacetAbstract {
 
     public NotContributedFacetDerivedFromMixinFacet(
             final FacetHolder holder) {
-        super(NotContributed.As.EITHER, holder, Derivation.DERIVED);
+        super(NotContributed.As.NEITHER, holder, Derivation.DERIVED);
     }
 
 }
