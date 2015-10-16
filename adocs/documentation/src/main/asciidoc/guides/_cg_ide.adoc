@@ -14,3 +14,5 @@ This chapter shows how to setup and use two of the most popular IDEs, IntelliJ I
 
 include::_cg_ide_intellij.adoc[leveloffset=+1]
 include::_cg_ide_eclipse.adoc[leveloffset=+1]
+include::_cg_ide_project-lombok.adoc[leveloffset=+1]
+
