@@ -32,9 +32,12 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         public String foo(final int x, final String y) { return null; }
     }
     
-    public static class SomeDomainObjectFooInvokedEvent extends ActionDomainEvent<SomeDomainObject> {
+    public static class SomeDomainObjectFooInvokedDomainEvent extends ActionDomainEvent<SomeDomainObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectFooInvokedEvent(final SomeDomainObject source, final Identifier identifier, final Object... arguments) {
+        public SomeDomainObjectFooInvokedDomainEvent(
+                final SomeDomainObject source,
+                final Identifier identifier,
+                final Object... arguments) {
             super(source, identifier, arguments);
         }
     }
@@ -73,7 +76,7 @@ public class DomainEventHelperTest_newActionInteractionEvent {
         final Identifier identifier = Identifier.actionIdentifier(SomeDomainObject.class, "foo", new Class[]{int.class, String.class});
         
         final ActionDomainEvent<SomeDomainObject> ev = new DomainEventHelper(null).newActionDomainEvent(
-                SomeDomainObjectFooInvokedEvent.class, identifier, sdo, new Object[]{1, "bar"});
+                SomeDomainObjectFooInvokedDomainEvent.class, identifier, sdo, new Object[]{1, "bar"});
         assertThat((SomeDomainObject)ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getArguments(), is(not(nullValue())));

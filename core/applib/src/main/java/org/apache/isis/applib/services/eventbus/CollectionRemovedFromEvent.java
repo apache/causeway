@@ -37,8 +37,8 @@ public abstract class CollectionRemovedFromEvent<S,T> extends CollectionInteract
     }
 
     public CollectionRemovedFromEvent(
-            final S source, 
-            final Identifier identifier, 
+            final S source,
+            final Identifier identifier,
             final T value) {
         super(source, identifier, Of.REMOVE_FROM, value);
     }

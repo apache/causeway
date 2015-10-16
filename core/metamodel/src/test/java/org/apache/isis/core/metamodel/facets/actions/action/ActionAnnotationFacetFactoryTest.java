@@ -166,13 +166,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvoked extends ActionInvokedEvent<Customer> {
-                    public SomeActionInvoked(final Customer source, final Identifier identifier, final Object... arguments) {
+                class SomeActionInvokedDomainEvent extends ActionInvokedEvent<Customer> {
+                    public SomeActionInvokedDomainEvent(
+                            final Customer source,
+                            final Identifier identifier,
+                            final Object... arguments) {
                         super(source, identifier, arguments);
                     }
                 }
 
-                @PostsActionInvokedEvent(Customer.SomeActionInvoked.class)
+                @PostsActionInvokedEvent(SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -200,7 +203,7 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForPostsActionInvokedEventAnnotation);
             final ActionInvocationFacetForPostsActionInvokedEventAnnotation invocationFacetImpl = (ActionInvocationFacetForPostsActionInvokedEventAnnotation) invocationFacet;
-            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
         @Test
@@ -208,13 +211,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvoked extends ActionInteractionEvent<Customer> {
-                    public SomeActionInvoked(final Customer source, final Identifier identifier, final Object... arguments) {
+                class SomeActionInvokedDomainEvent extends ActionInteractionEvent<Customer> {
+                    public SomeActionInvokedDomainEvent(
+                            final Customer source,
+                            final Identifier identifier,
+                            final Object... arguments) {
                         super(source, identifier, arguments);
                     }
                 }
 
-                @ActionInteraction(Customer.SomeActionInvoked.class)
+                @ActionInteraction(SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -236,13 +242,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionInteractionAnnotation);
             final ActionDomainEventFacetForActionInteractionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionInteractionAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionInteractionAnnotation);
             final ActionInvocationFacetForDomainEventFromActionInteractionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionInteractionAnnotation) invocationFacet;
-            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
         @Test
@@ -250,13 +256,16 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
 
             class Customer {
 
-                class SomeActionInvoked extends ActionDomainEvent<Customer> {
-                    public SomeActionInvoked(final Customer source, final Identifier identifier, final Object... arguments) {
+                class SomeActionInvokedDomainEvent extends ActionDomainEvent<Customer> {
+                    public SomeActionInvokedDomainEvent(
+                            final Customer source,
+                            final Identifier identifier,
+                            final Object... arguments) {
                         super(source, identifier, arguments);
                     }
                 }
 
-                @Action(domainEvent=Customer.SomeActionInvoked.class)
+                @Action(domainEvent= SomeActionInvokedDomainEvent.class)
                 public void someAction() {
                 }
             }
@@ -278,13 +287,13 @@ public class ActionAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof ActionDomainEventFacetForActionAnnotation);
             final ActionDomainEventFacetForActionAnnotation domainEventFacetImpl = (ActionDomainEventFacetForActionAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
+            assertThat(domainEventFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
 
             final Facet invocationFacet = facetedMethod.getFacet(ActionInvocationFacet.class);
             Assert.assertNotNull(invocationFacet);
             Assert.assertTrue(invocationFacet instanceof ActionInvocationFacetForDomainEventFromActionAnnotation);
             final ActionInvocationFacetForDomainEventFromActionAnnotation invocationFacetImpl = (ActionInvocationFacetForDomainEventFromActionAnnotation) invocationFacet;
-            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvoked.class));
+            assertThat(invocationFacetImpl.getEventType(), classEqualTo(Customer.SomeActionInvokedDomainEvent.class));
         }
 
         @Test

@@ -162,20 +162,26 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             class Order {
             }
             class Customer {
-                class OrdersAddedTo extends CollectionAddedToEvent<Customer, Order> {
-                    public OrdersAddedTo(final Customer source, final Identifier identifier, final Order value) {
+                class OrdersAddedToDomainEvent extends CollectionAddedToEvent<Customer, Order> {
+                    public OrdersAddedToDomainEvent(
+                            final Customer source,
+                            final Identifier identifier,
+                            final Order value) {
                         super(source, identifier, value);
                     }
                 }
 
-                class OrdersRemovedFrom extends CollectionRemovedFromEvent<Customer, Order> {
-                    public OrdersRemovedFrom(final Customer source, final Identifier identifier, final Order value) {
+                class OrdersRemovedFromDomainEvent extends CollectionRemovedFromEvent<Customer, Order> {
+                    public OrdersRemovedFromDomainEvent(
+                            final Customer source,
+                            final Identifier identifier,
+                            final Order value) {
                         super(source, identifier, value);
                     }
                 }
 
-                @PostsCollectionAddedToEvent(OrdersAddedTo.class)
-                @PostsCollectionRemovedFromEvent(OrdersRemovedFrom.class)
+                @PostsCollectionAddedToEvent(OrdersAddedToDomainEvent.class)
+                @PostsCollectionRemovedFromEvent(OrdersRemovedFromDomainEvent.class)
                 public List<Order> getOrders() {
                     return null;
                 }
@@ -218,14 +224,14 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertNotNull(addToFacet);
             Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForPostsCollectionAddedToEventAnnotation);
             final CollectionAddToFacetForPostsCollectionAddedToEventAnnotation addToFacetImpl = (CollectionAddToFacetForPostsCollectionAddedToEventAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersAddedTo.class));
+            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersAddedToDomainEvent.class));
 
             // then
             final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
             Assert.assertNotNull(removeFromFacet);
             Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation);
             final CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForPostsCollectionRemovedFromEventAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersRemovedFrom.class));
+            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersRemovedFromDomainEvent.class));
         }
 
         // @Test
@@ -234,18 +240,19 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             class Order {
             }
             class Customer {
-                class OrdersChanged extends CollectionInteractionEvent<Customer, Order> {
-                    public OrdersChanged(final Customer source, final Identifier identifier, final Of of) {
+                class OrdersChangedDomainEvent extends CollectionInteractionEvent<Customer, Order> {
+                    public OrdersChangedDomainEvent(final Customer source, final Identifier identifier, final Of of) {
                         super(source, identifier, of);
                     }
 
-                    public OrdersChanged(final Customer source, final Identifier identifier, final Of of,
+                    public OrdersChangedDomainEvent(
+                            final Customer source, final Identifier identifier, final Of of,
                             final Order value) {
                         super(source, identifier, of, value);
                     }
                 }
 
-                @CollectionInteraction(OrdersChanged.class)
+                @CollectionInteraction(OrdersChangedDomainEvent.class)
                 public List<Order> getOrders() {
                     return null;
                 }
@@ -275,21 +282,21 @@ public class CollectionAnnotationFacetFactoryTest extends AbstractFacetFactoryJU
             Assert.assertNotNull(domainEventFacet);
             Assert.assertTrue(domainEventFacet instanceof CollectionDomainEventFacetForCollectionInteractionAnnotation);
             final CollectionDomainEventFacetForCollectionInteractionAnnotation domainEventFacetImpl = (CollectionDomainEventFacetForCollectionInteractionAnnotation) domainEventFacet;
-            assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.OrdersChanged.class));
+            assertThat(domainEventFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
 
             // then
             final Facet addToFacet = facetedMethod.getFacet(CollectionAddToFacet.class);
             Assert.assertNotNull(addToFacet);
             Assert.assertTrue(addToFacet instanceof CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation);
             final CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation addToFacetImpl = (CollectionAddToFacetForDomainEventFromCollectionInteractionAnnotation) addToFacet;
-            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersChanged.class));
+            assertThat(addToFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
 
             // then
             final Facet removeFromFacet = facetedMethod.getFacet(CollectionRemoveFromFacet.class);
             Assert.assertNotNull(removeFromFacet);
             Assert.assertTrue(removeFromFacet instanceof CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation);
             final CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation removeFromFacetImpl = (CollectionRemoveFromFacetForDomainEventFromCollectionInteractionAnnotation) removeFromFacet;
-            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersChanged.class));
+            assertThat(removeFromFacetImpl.value(), classEqualTo(Customer.OrdersChangedDomainEvent.class));
         }
 
         // @Test

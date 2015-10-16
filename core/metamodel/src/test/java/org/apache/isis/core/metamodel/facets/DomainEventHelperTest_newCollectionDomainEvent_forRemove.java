@@ -33,9 +33,13 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
     }
     public static class SomeReferencedObject {}
     
-    public static class SomeDomainObjectCollectionRemovedFromEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
+    public static class SomeDomainObjectCollectionRemovedFromDomainEvent extends CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> {
         private static final long serialVersionUID = 1L;
-        public SomeDomainObjectCollectionRemovedFromEvent(SomeDomainObject source, Identifier identifier, Of of, SomeReferencedObject value) {
+        public SomeDomainObjectCollectionRemovedFromDomainEvent(
+                SomeDomainObject source,
+                Identifier identifier,
+                Of of,
+                SomeReferencedObject value) {
             super(source, identifier, of, value);
         }
     }
@@ -75,7 +79,7 @@ public class DomainEventHelperTest_newCollectionDomainEvent_forRemove {
         Identifier identifier = Identifier.propertyOrCollectionIdentifier(SomeDomainObject.class, "references");
 
         final CollectionDomainEvent<SomeDomainObject, SomeReferencedObject> ev = new DomainEventHelper(null).newCollectionDomainEvent(
-                SomeDomainObjectCollectionRemovedFromEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
+                SomeDomainObjectCollectionRemovedFromDomainEvent.class, AbstractDomainEvent.Phase.EXECUTED, identifier, sdo, CollectionDomainEvent.Of.REMOVE_FROM, other);
         assertThat(ev.getSource(), is(sdo));
         assertThat(ev.getIdentifier(), is(identifier));
         assertThat(ev.getOf(), is(CollectionDomainEvent.Of.REMOVE_FROM));
