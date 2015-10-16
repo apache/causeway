@@ -131,9 +131,10 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                     final TranslationService translationService =
                             getPersistenceSession().getServicesInjector().lookupService(TranslationService.class);
 
-                    final String areYouSure = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_ARE_YOU_SURE);
-                    final String confirm = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CONFIRM);
-                    final String cancel = translationService.translate(IsisSystem.class.getName(), IsisSystem.MSG_CANCEL);
+                    final String context = IsisSystem.class.getName();
+                    final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
+                    final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
+                    final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
 
                     confirmationConfig.withTitle(areYouSure);
                     confirmationConfig.withBtnOkLabel(confirm);

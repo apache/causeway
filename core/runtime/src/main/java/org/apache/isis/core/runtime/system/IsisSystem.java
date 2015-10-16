@@ -300,9 +300,10 @@ public class IsisSystem implements DebugSelection, ApplicationScopedComponent {
 
             // as used by the Wicket UI
             final TranslationService translationService = lookupService(TranslationService.class);
-            translationService.translate(IsisSystem.class.getName(), MSG_ARE_YOU_SURE);
-            translationService.translate(IsisSystem.class.getName(), MSG_CONFIRM);
-            translationService.translate(IsisSystem.class.getName(), MSG_CANCEL);
+            final String context = IsisSystem.class.getName();
+            translationService.translate(context, MSG_ARE_YOU_SURE);
+            translationService.translate(context, MSG_CONFIRM);
+            translationService.translate(context, MSG_CANCEL);
 
         } finally {
             IsisContext.closeSession();
