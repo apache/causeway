@@ -132,7 +132,7 @@ xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] for persi
 `services.` +
 `fixturespec` +
 `FixtureScriptsDefault`]
-|Fallback implementation of xref:rg.adoc#_rg_classes_utility_manpage-FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
+|Fallback implementation of xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
