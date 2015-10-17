@@ -34,11 +34,11 @@ public interface MixedInMember extends ObjectMember {
      * </p>
      *
      * <p>
-     *     Remarks: two underscores, not one, because a single underscore may not be supported as a valid identifier
-     *     after Java 8.
+     *     Remarks: originally intended to use a single (or perhaps two) underscore, however these may not be valid
+     *     identifiers after Java 8.
      * </p>
      */
-    public static final String DEFAULT_MEMBER_NAME = "__";
+    public static final String DEFAULT_MEMBER_NAME = "$$";
 
     /**
      * The id if it was originally {@link #DEFAULT_MEMBER_NAME the default member name}.
