@@ -26,7 +26,6 @@ import java.util.List;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -95,8 +94,6 @@ public class ActionParameterAutoCompleteFacetViaMethod extends ActionParameterAu
         final FacetedMethodParameter facetedMethodParameter = (FacetedMethodParameter) getFacetHolder();
         final Class<?> parameterType = facetedMethodParameter.getType();
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         final List<ObjectAdapter> visibleAdapters =
                 ObjectAdapter.Util.visibleAdapters(
                         collectionAdapter,

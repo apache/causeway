@@ -22,8 +22,10 @@ For an action parameter in (0-based) position _N_, and of type `T`, the signatur
 
 [source,java]
 ----
-public Collection<T> autoCompleteNXxx(String search) { ... }
+public List<T> autoCompleteNXxx(String search) { ... }
 ----
+
+It is also valid to return `T[]` or (from `1.10.0-SNAPSHOT onwards`) either `Set<T>` or `Collection<T>`.
 
 
 For example:
@@ -60,15 +62,18 @@ public class ShoppingCartItem {
 
 
 
+
+
 == Properties
 
 For a property of type `T`, the signature is:
 
 [source,java]
 ----
-public Collection<T> autoCompleteXxx(String search) { ... }
+public List<T> autoCompleteXxx(String search) { ... }
 ----
 
+(As for action parameters) it is also valid to return `T[]` or (from `1.10.0-SNAPSHOT onwards`) either `Set<T>` or `Collection<T>`.
 
 For example:
 

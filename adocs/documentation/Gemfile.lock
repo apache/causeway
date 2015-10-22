@@ -43,3 +43,6 @@ DEPENDENCIES
   tilt
   wdm (>= 0.1.0)
   webrick
+
+BUNDLED WITH
+   1.10.6
