@@ -142,9 +142,18 @@ public class QueryResultsCache {
             if(cacheValue != null) { 
                 return (T) cacheValue.getResult();
             }
-            // cache miss, so get the result, and cache
+
+            // cache miss, so get the result...
             T result = callable.call();
+
+            // ... and cache
+            //
+            // (it is possible that the callable just invoked might also have updated the cache, eg if there was
+            // some sort of recursion.  However, Map#put(...) is idempotent, so valid to call more than once.
+            //
+            // note: there's no need for thread-safety synchronization... remember that QueryResultsCache is @RequestScoped
             put(cacheKey, result);
+
             return result;
         } catch (Exception e) {
             throw new RuntimeException(e);
