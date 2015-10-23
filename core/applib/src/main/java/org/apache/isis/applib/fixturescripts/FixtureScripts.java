@@ -71,14 +71,27 @@ public abstract class FixtureScripts extends AbstractService {
 
     /**
      * How to handle fixture scripts that are submitted to be executed more than once.
+     *
+     * <p>
+     *     Note that this is a {@link FixtureScripts#getMultipleExecutionStrategy() global setting} of the
+     *     {@link FixtureScripts} service; there isn't (currently) any way to mix-and-match fixture scripts that are
+     *     written with differing semantics in mind.  Ideally it should be the responsibility of the fixture script
+     *     itself to determine whether it should be run.  As a partial solution to this, the
+     *
+     * </p>
      */
     public enum MultipleExecutionStrategy {
+        /**
+         * @deprecated - renamed to {@link #EXECUTE_ONCE_BY_CLASS}.
+         */
+        @Deprecated
+        IGNORE,
         /**
          * Any given fixture script (or more precisely, any fixture script instance for a particular fixture script
          * class) can only be run once.
          *
          * <p>
-         *     This strategy represents the original design of fixture scripts service.  Specifically,it allows an
+         *     This strategy represents the original design of fixture scripts service.  Specifically, it allows an
          *     arbitrary graph of fixture scripts (eg A -> B -> C, A -> B -> D, A -> C -> D) to be created each
          *     specifying its dependencies, and without having to worry or co-ordinate whether those prerequisite
          *     fixture scripts have already been run.
@@ -92,10 +105,32 @@ public abstract class FixtureScripts extends AbstractService {
          *     call) and the also the 'what' (what the arguments are to those actions).
          * </p>
          */
-        IGNORE,
+        EXECUTE_ONCE_BY_CLASS,
         /**
-         * Allow fixture scripts to run as requested, even if that another instance of the fixture script's class
-         * has already been invoked.
+         * Any given fixture script can only be run once, where the check to determine if a fixture script has already
+         * been run is performed using value semantics.
+         *
+         * <p>
+         *     This strategy is a half-way house between the {@link #EXECUTE_ONCE_BY_VALUE} and {@link #EXECUTE}
+         *     strategies, where we want to prevent a fixture from running more than once, where by "fixture" we mean
+         *     the 'what' - the data to be loaded up; the 'how' is unimportant.
+         * </p>
+         *
+         * <p>
+         *     This strategy was introduced in order to better support the <tt>ExcelFixture</tt> fixture script
+         *     (provided by the (non-ASF) Isis Addons'
+         *     <a href="https://github.com/isisaddons/isis-module-excel">Excel module</a>.  The <tt>ExcelFixture</tt>
+         *     takes an Excel spreadsheet as the 'what' and loads up each row.  So the 'how' is re-usable (therefore
+         *     the {@link #EXECUTE_ONCE_BY_CLASS} doesn't apply) on the other hand we don't want the 'what' to be
+         *     loaded more than once (so the {@link #EXECUTE} strategy doesn't apply either).  The solution is for
+         *     <tt>ExcelFixture</tt> to have value semantics (a digest of the spreadsheet argument).
+         * </p>
+         *
+         * @see #IGNORE
+         */
+        EXECUTE_ONCE_BY_VALUE,
+        /**
+         * Allow fixture scripts to run as requested.
          *
          * <p>
          *     This strategy is conceptually the simplest; all fixtures are run as requested.  However, it is then
@@ -111,8 +146,19 @@ public abstract class FixtureScripts extends AbstractService {
          */
         EXECUTE;
 
+        /**
+         * @deprecated - use {@link #isExecuteOnceByClass()}.
+         * @return
+         */
+        @Deprecated
         public boolean isIgnore() {
             return this == IGNORE;
+        }
+        public boolean isExecuteOnceByClass() {
+            return this == EXECUTE_ONCE_BY_CLASS;
+        }
+        public boolean isExecuteOnceByValue() {
+            return this == EXECUTE_ONCE_BY_VALUE;
         }
         public boolean isExecute() {
             return this == EXECUTE;
@@ -145,7 +191,7 @@ public abstract class FixtureScripts extends AbstractService {
      * strategy (if non-persisted objects are {@link FixtureScripts#newFixtureResult(FixtureScript, String, Object, boolean) added} to a {@link FixtureResultList}).
      *
      * @param packagePrefix - to search for fixture script implementations, eg "com.mycompany".    Note that this is ignored if an {@link org.apache.isis.applib.AppManifest} is in use.
-     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times
+     * @param multipleExecutionStrategy - whether more than one instance of the same fixture script class can be run multiple times.  See {@link MultipleExecutionStrategy} for more details.
      *
      * @deprecated - use {@link #FixtureScripts(FixtureScriptsSpecification)} instead.
      */
@@ -233,6 +279,11 @@ public abstract class FixtureScripts extends AbstractService {
     public NonPersistedObjectsStrategy getNonPersistedObjectsStrategy() {
         return specification.getNonPersistedObjectsStrategy();
     }
+
+    /**
+     * Global setting as to how to handle fixture scripts that are executed more than once.  See
+     * {@link MultipleExecutionStrategy} for more details.
+     */
     @Programmatic
     public MultipleExecutionStrategy getMultipleExecutionStrategy() {
         return specification.getMultipleExecutionStrategy();

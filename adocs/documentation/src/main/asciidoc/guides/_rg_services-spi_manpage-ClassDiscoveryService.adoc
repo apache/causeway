@@ -43,27 +43,29 @@ This implementation is also used to discover domain services annotated with xref
 
 == Usage
 
-The usage will vary depending upon the conventions of the design.  In the case of fixture scripts, the convention is to implement scripts by subclassing xref:rg.adoc#_rg_classes_super_manpage-FixtureScript[`FixtureScript`], and to specify the package prefix in the constructor for xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[`FixtureScripts`].
+The usage will vary depending upon the conventions of the design.  As of 1.9.0, the usage of the service has been
+centralized such that the packages to be scanned are located from the xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
 
-For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] has its fixture scripts in the `todoapp.fixture` package.  the `ToDoAppFixturesService` (its subclass of xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[`FixtureScripts`] is in the same package, so its constructor is:
+For example, the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
 
 [source,java]
 ----
-package todoapp.fixture;
-...
-@DomainService(nature = NatureOfService.VIEW_MENU_ONLY)
-public class ToDoAppFixturesService extends FixtureScripts {
-    public ToDoAppFixturesService() {
-        super(
-                ToDoAppFixturesService.class.getPackage().getName(),    // <1>
-                MultipleExecutionStrategy.EXECUTE);
+public class DomainAppAppManifest implements AppManifest {
+    @Override
+    public List<Class<?>> getModules() {
+        return Arrays.asList(
+                DomainAppDomainModule.class,  // domain (entities and repositories)
+                DomainAppFixtureModule.class, // fixtures
+                DomainAppAppModule.class      // home page service etc
+        );
     }
     ...
 }
 ----
-<1> specify the package prefix to search under for fixture scripts
 
-Other designs using this service are likely to work in a similar way, requiring some sort of scope to be specified.
+where the three module classes in effect define three different package prefixes to search under (for domain services, fixture scripts and persistent entities).
+
+Other usages of the `ClassDiscoveryService` are likely to work in a similar way, requiring some sort of scope to be specified.
 
 
 == Registering the Services

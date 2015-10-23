@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.joda.time.LocalDate;
@@ -555,16 +556,72 @@ public abstract class FixtureScript
             }
         }
 
-        //region > shouldExecute
+        //region > previouslyExecuted
 
+        /**
+         * Always populated, irrespective of {@link FixtureScripts#getMultipleExecutionStrategy() execution strategy},
+         * but used only by {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_VALUE} to determine whether
+         * should execute or not.
+         */
+        private final List<FixtureScript> previouslyExecuted = Lists.newArrayList();
+
+        /**
+         * Returns a list of the {@link FixtureScript} instances that have already been executed.
+         *
+         * <p>
+         *     This allows each individual {@link FixtureScript} to determine whether they need to execute; the
+         *     {@link FixtureScripts#getMultipleExecutionStrategy()} can then be left as simply
+         *     {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE}.
+         * </p>
+         */
+        @Programmatic
+        public List<FixtureScript> getPreviouslyExecuted() {
+            return Collections.unmodifiableList(previouslyExecuted);
+        }
+
+        //endregion
+
+        //region > shouldExecute
+        private boolean shouldExecute(final FixtureScript fixtureScript) {
+
+            final boolean previouslyExecuted = this.previouslyExecuted.contains(fixtureScript);
+            if(!previouslyExecuted) {
+                this.previouslyExecuted.add(fixtureScript);
+            }
+
+            final FixtureScripts.MultipleExecutionStrategy executionStrategy =
+                    fixtureScripts.getMultipleExecutionStrategy();
+
+            switch (executionStrategy) {
+
+                case IGNORE:
+                case EXECUTE_ONCE_BY_CLASS:
+                    return shouldExecuteForExecuteOnceByClassStrategy(fixtureScript);
+
+                case EXECUTE_ONCE_BY_VALUE:
+                    return !previouslyExecuted;
+
+                case EXECUTE:
+                    return true;
+
+                default:
+                    throw new IllegalArgumentException("Execution strategy: '" + executionStrategy + "' not recognized");
+            }
+
+        }
+
+        /**
+         * used and populated only if the {@link FixtureScripts.MultipleExecutionStrategy#EXECUTE_ONCE_BY_CLASS}
+         * strategy is in use.
+         */
         private final Map<String,Class> fixtureScriptClasses = Maps.newLinkedHashMap();
 
-        private boolean shouldExecute(final FixtureScript fixtureScript) {
+        private boolean shouldExecuteForExecuteOnceByClassStrategy(final FixtureScript fixtureScript) {
             final boolean alreadyExecuted = fixtureScriptClasses.values().contains(fixtureScript.getClass());
             if(!alreadyExecuted) {
                 fixtureScriptClasses.put(fixtureScript.getQualifiedName(), fixtureScript.getClass());
             }
-            return !alreadyExecuted || fixtureScripts.getMultipleExecutionStrategy().isExecute();
+            return !alreadyExecuted;
         }
         //endregion
 
