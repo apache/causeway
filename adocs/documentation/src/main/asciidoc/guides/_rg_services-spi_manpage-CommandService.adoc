@@ -70,7 +70,8 @@ The typical way to indicate that an action should be reified into a `Command` is
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured:
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
 
 [source,ini]
 ----

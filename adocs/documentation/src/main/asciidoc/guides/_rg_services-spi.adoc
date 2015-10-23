@@ -93,6 +93,13 @@ Subtypes of a given type (eg xref:rg.adoc#_rg_classes_super_manpage-FixtureScrip
 |depends on: +
 a configured `EmailService`
 
+|xref:rg.adoc#_rg_services-spi_manpage-ErrorReportingService[`o.a.i.applib.` +
+`services.error` +
+`ErrorReportingService`]
+|Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
+|(none)
+|`1.10.0-SNAPSHOT`
+
 |xref:rg.adoc#_rg_services-spi_manpage-EventSerializer[`o.a.i.applib.` +
 `services.publish` +
 `EventSerializer`]
@@ -267,6 +274,7 @@ include::_rg_services-spi_manpage-CommandService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-ContentMappingService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-ContentNegotiationService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-EmailNotificationService.adoc[leveloffset=+1]
+include::_rg_services-spi_manpage-ErrorReportingService.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-EventSerializer.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-ExceptionRecognizer.adoc[leveloffset=+1]
 include::_rg_services-spi_manpage-FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]

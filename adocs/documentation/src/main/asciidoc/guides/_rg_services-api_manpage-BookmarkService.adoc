@@ -104,7 +104,8 @@ Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-modul
 
 == Registering the Service
 
-Assuming that the `configuration-and-annotation` services installer is configured:
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
 
 [source,ini]
 ----

@@ -371,7 +371,8 @@ Late registration refers to the idea that a domain service can register itself w
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured:
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
 
 [source,ini]
 ----

@@ -33,7 +33,8 @@ include::_rg_services-api_manpage-DomainObjectContainer_services-api.adoc[levelo
 
 == Registering the Service
 
-Assuming that the `configuration-and-annotation` services installer is configured:
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
 
 [source,ini]
 ----
