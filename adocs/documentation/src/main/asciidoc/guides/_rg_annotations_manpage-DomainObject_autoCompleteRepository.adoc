@@ -74,3 +74,8 @@ public interface Customers {
 ----
 
 
+
+[IMPORTANT]
+====
+The method specified must be an action, that is, part of the Isis metamodel.  Said another way: it must not be annotated with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`].  However, it *can* be hidden or placed on a domain service with xref:rg.adoc#_rg_annotations_manpage-DomainService_nature[nature] of `DOMAIN`, such that the action would not be rendered otherwise in the UI.  Also, the action cannot be xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[restricted to] prototyping only.
+====

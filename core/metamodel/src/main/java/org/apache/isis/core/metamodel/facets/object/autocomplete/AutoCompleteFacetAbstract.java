@@ -102,11 +102,8 @@ public abstract class AutoCompleteFacetAbstract extends FacetAbstract implements
         }
 
         final CollectionFacet facet = CollectionFacet.Utils.getCollectionFacetFromSpec(resultAdapter);
-
         final Iterable<ObjectAdapter> adapterList = facet.iterable(resultAdapter);
 
-        final AuthenticationSession authenticationSession = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
         return ObjectAdapter.Util.visibleAdapters(
                         adapterList, interactionInitiatedBy);
     }
