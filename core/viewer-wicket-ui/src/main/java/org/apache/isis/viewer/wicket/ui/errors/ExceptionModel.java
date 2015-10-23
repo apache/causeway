@@ -20,10 +20,14 @@ package org.apache.isis.viewer.wicket.ui.errors;
 
 import java.util.Iterator;
 import java.util.List;
+
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.NonRecoverableException;
+import org.apache.isis.applib.services.error.ErrorReportingService;
+import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.wicket.model.models.ModelAbstract;
 
@@ -96,6 +100,20 @@ public class ExceptionModel extends ModelAbstract<List<StackTraceDetail>> {
             return;
         }
         this.stackTraceDetailList = stackTraceDetail;
+    }
+
+
+    private Ticket ticket;
+    public Ticket getTicket() {
+        return ticket;
+    }
+
+    /**
+     * Optionally called if an {@link ErrorReportingService} has been configured and returns a <tt>non-null</tt> ticket
+     * to represent the fact that the error has been recorded.
+     */
+    public void setTicket(final Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public boolean isRecognized() {

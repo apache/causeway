@@ -19,10 +19,22 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.error;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
+
+import org.apache.isis.applib.services.error.ErrorDetails;
+import org.apache.isis.applib.services.error.ErrorReportingService;
+import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
+import org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 
 /**
@@ -40,6 +52,32 @@ public class ErrorPage extends PageAbstract {
         super(PageParametersUtils.newPageParameters(), null);
 
         addBookmarkedPages(themeDiv);
+
+        final ErrorReportingService errorReportingService = getServicesInjector()
+                .lookupService(ErrorReportingService.class);
+        if(errorReportingService != null) {
+
+            final String mainMessage = exceptionModel.getMainMessage();
+            final boolean recognized = exceptionModel.isRecognized();
+            final boolean authorizationException = exceptionModel.isAuthorizationException();
+
+            final List<StackTraceDetail> stackTrace = exceptionModel.getStackTrace();
+            final List<String> stackDetails = Lists.transform(stackTrace, new Function<StackTraceDetail, String>() {
+                @Nullable @Override public String apply(final StackTraceDetail stackTraceDetail) {
+                    return stackTraceDetail.getLine();
+                }
+            });
+
+            final ErrorDetails errorDetails = new ErrorDetails(mainMessage, recognized, authorizationException,
+                    stackDetails);
+
+            final Ticket ticket = errorReportingService.reportError(errorDetails);
+
+            if (ticket != null) {
+                exceptionModel.setTicket(ticket);
+            }
+
+        }
 
         themeDiv.add(new ExceptionStackTracePanel(ID_EXCEPTION_STACK_TRACE, exceptionModel));
 

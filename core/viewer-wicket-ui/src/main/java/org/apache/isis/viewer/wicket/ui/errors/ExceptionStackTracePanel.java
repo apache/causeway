@@ -24,8 +24,12 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+
+import org.apache.isis.applib.services.error.Ticket;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
 public class ExceptionStackTracePanel extends Panel {
@@ -34,6 +38,8 @@ public class ExceptionStackTracePanel extends Panel {
 
     private static final String ID_MAIN_MESSAGE = "mainMessage";
 
+    private static final String ID_USER_DETAIL = "userDetail";
+    private static final String ID_DETAILS = "details";
     private static final String ID_EXCEPTION_DETAIL = "exceptionDetail";
 
     private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
@@ -44,7 +50,12 @@ public class ExceptionStackTracePanel extends Panel {
     public ExceptionStackTracePanel(String id, ExceptionModel exceptionModel) {
         super(id, exceptionModel);
 
-        final String mainMessage = exceptionModel.getMainMessage();
+        final Ticket ticket = exceptionModel.getTicket();
+        final String mainMessage =
+                ticket != null && ticket.getUserMessage() != null
+                        ? ticket.getUserMessage()
+                        : exceptionModel.getMainMessage();
+
         final Label label = new Label(ID_MAIN_MESSAGE, mainMessage);
 
         // to avoid potential XSS attacks, no longer escape model strings
@@ -53,8 +64,18 @@ public class ExceptionStackTracePanel extends Panel {
 
         add(label);
 
-        final boolean suppressDetail = exceptionModel.isAuthorizationException() || exceptionModel.isRecognized();
-        if(suppressDetail) {
+        final String ticketDetail = ticket != null ? ticket.getDetails(): null;
+        if(ticketDetail == null) {
+            Components.permanentlyHide(this, ID_USER_DETAIL);
+        } else {
+            final WebMarkupContainer panel = new WebMarkupContainer(ID_USER_DETAIL);
+            final MultiLineLabel details = new MultiLineLabel(ID_DETAILS, Model.of(ticketDetail));
+            panel.add(details);
+            add(panel);
+        }
+
+        final boolean suppressExceptionDetail = exceptionModel.isAuthorizationException() || exceptionModel.isRecognized();
+        if(suppressExceptionDetail) {
             Components.permanentlyHide(this, ID_EXCEPTION_DETAIL);
         } else {
 
