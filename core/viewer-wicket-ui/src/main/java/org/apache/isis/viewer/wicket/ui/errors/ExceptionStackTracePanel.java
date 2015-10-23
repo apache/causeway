@@ -38,9 +38,13 @@ public class ExceptionStackTracePanel extends Panel {
 
     private static final String ID_MAIN_MESSAGE = "mainMessage";
 
-    private static final String ID_USER_DETAIL = "userDetail";
-    private static final String ID_DETAILS = "details";
-    private static final String ID_EXCEPTION_DETAIL = "exceptionDetail";
+    private static final String ID_TICKET_DETAILS_DIV = "ticketDetailsDiv";
+    private static final String ID_TICKET_DETAILS = "ticketDetails";
+
+    private static final String ID_TICKET_REFERENCE_DIV = "ticketReferenceDiv";
+    private static final String ID_TICKET_REFERENCE = "ticketReference";
+
+    private static final String ID_EXCEPTION_DETAIL_DIV = "exceptionDetailDiv";
 
     private static final String ID_STACK_TRACE_ELEMENT = "stackTraceElement";
     private static final String ID_LINE = "stackTraceElementLine";
@@ -61,25 +65,34 @@ public class ExceptionStackTracePanel extends Panel {
         // to avoid potential XSS attacks, no longer escape model strings
         // (risk is low but could just happen: error message being rendered might accidentally or deliberately contain rogue Javascript)
         // label.setEscapeModelStrings(false);
-
         add(label);
 
         final String ticketDetail = ticket != null ? ticket.getDetails(): null;
         if(ticketDetail == null) {
-            Components.permanentlyHide(this, ID_USER_DETAIL);
+            Components.permanentlyHide(this, ID_TICKET_DETAILS_DIV);
         } else {
-            final WebMarkupContainer panel = new WebMarkupContainer(ID_USER_DETAIL);
-            final MultiLineLabel details = new MultiLineLabel(ID_DETAILS, Model.of(ticketDetail));
+            final WebMarkupContainer panel = new WebMarkupContainer(ID_TICKET_DETAILS_DIV);
+            final MultiLineLabel details = new MultiLineLabel(ID_TICKET_DETAILS, Model.of(ticketDetail));
             panel.add(details);
+            add(panel);
+        }
+
+        final String ticketReference = ticket != null ? ticket.getReference(): null;
+        if(ticketReference == null) {
+            Components.permanentlyHide(this, ID_TICKET_REFERENCE_DIV);
+        } else {
+            final WebMarkupContainer panel = new WebMarkupContainer(ID_TICKET_REFERENCE_DIV);
+            final Label reference = new Label(ID_TICKET_REFERENCE, Model.of(ticketReference));
+            panel.add(reference);
             add(panel);
         }
 
         final boolean suppressExceptionDetail = exceptionModel.isAuthorizationException() || exceptionModel.isRecognized();
         if(suppressExceptionDetail) {
-            Components.permanentlyHide(this, ID_EXCEPTION_DETAIL);
+            Components.permanentlyHide(this, ID_EXCEPTION_DETAIL_DIV);
         } else {
 
-                MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL) {
+                MarkupContainer container = new WebMarkupContainer(ID_EXCEPTION_DETAIL_DIV) {
                 private static final long serialVersionUID = 1L;
                 @Override
                 public void renderHead(IHeaderResponse response) {
