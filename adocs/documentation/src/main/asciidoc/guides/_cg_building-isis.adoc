@@ -178,3 +178,23 @@ When using Eclipse, a Maven profile is configured such that Eclipse compiles to 
 
 
 
+== Checking for Vulnerabilities
+
+Apache Isis configures the link:https://www.owasp.org/index.php/Main_Page[OWASP] link:https://www.owasp.org/index.php/OWASP_Dependency_Check[dependency check] link:http://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[Maven plugin] to determine whether the framework uses libraries that are known to have security vulnerabilities.
+
+To check, run:
+
+[source,bash]
+----
+cd core
+mvn org.owasp:dependency-check-maven:aggregate
+----
+
+This will generate a single report under `core/target/dependency-check-report.html`.
+
+
+[NOTE]
+====
+The first time this runs can take 10~20 minutes to download the NVD data feeds.
+====
+
