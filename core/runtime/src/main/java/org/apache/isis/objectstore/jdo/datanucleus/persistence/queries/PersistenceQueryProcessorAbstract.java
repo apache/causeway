@@ -20,6 +20,7 @@ package org.apache.isis.objectstore.jdo.datanucleus.persistence.queries;
 
 import java.util.List;
 
+import javax.jdo.Query;
 import javax.jdo.listener.InstanceLifecycleEvent;
 
 import com.google.common.collect.Lists;
@@ -28,23 +29,31 @@ import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 import org.apache.isis.core.runtime.system.persistence.PersistenceQuery;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.IsisLifecycleListener;
 
 public abstract class PersistenceQueryProcessorAbstract<T extends PersistenceQuery>
         implements PersistenceQueryProcessor<T> {
 
-    final PersistenceSession persistenceSession;
+    /**
+     * The internal contract between PersistenceSession and this class.
+     */
+    public interface PersistenceSessionQueryProcessorManagement extends AdapterManagerBase {
+        void initializeMapAndCheckConcurrency(Persistable pojo);
 
-    protected PersistenceQueryProcessorAbstract(final PersistenceSession persistenceSession) {
-        this.persistenceSession = persistenceSession;
+        Query newJdoQuery(Class<?> cls);
+        Query newJdoQuery(Class<?> cls, String filter);
+        Query newJdoNamedQuery(Class<?> cls, String queryName);
     }
 
 
-    // /////////////////////////////////////////////////////////////
-    // helpers for subclasses
-    // /////////////////////////////////////////////////////////////
+    final PersistenceSessionQueryProcessorManagement persistenceSession;
+
+    protected PersistenceQueryProcessorAbstract(final PersistenceSessionQueryProcessorManagement persistenceSession) {
+        this.persistenceSession = persistenceSession;
+    }
+
 
     /**
      * Traversing the provided list causes (or should cause) the

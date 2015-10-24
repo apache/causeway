@@ -95,7 +95,6 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyO
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PublishingServiceWithDefaultPayloadFactories;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
@@ -233,7 +232,7 @@ public class IsisTransaction implements TransactionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransaction.class);
 
-    private final PersistenceSession persistenceSession;
+    private final IsisTransactionManager.PersistenceSessionTransactionManagement persistenceSession;
     private final List<PersistenceCommand> persistenceCommands = Lists.newArrayList();
     private final IsisTransactionManager transactionManager;
     private final MessageBroker messageBroker;
@@ -272,7 +271,7 @@ public class IsisTransaction implements TransactionScopedComponent {
     public IsisTransaction(
             final IsisTransactionManager transactionManager,
             final MessageBroker messageBroker,
-            final PersistenceSession persistenceSession,
+            final IsisTransactionManager.PersistenceSessionTransactionManagement persistenceSession,
             final ServicesInjector servicesInjector) {
         
         ensureThatArg(transactionManager, is(not(nullValue())), "transaction manager is required");
@@ -1411,14 +1410,14 @@ public class IsisTransaction implements TransactionScopedComponent {
     ////////////////////////////////////////////////////////////////////////
 
     protected OidMarshaller getOidMarshaller() {
-        return persistenceSession.getOidMarshaller();
+        return IsisContext.getOidMarshaller();
     }
 
     protected IsisConfiguration getConfiguration() {
-        return persistenceSession.getConfiguration();
+        return IsisContext.getConfiguration();
     }
 
-    protected PersistenceSession getPersistenceSession() {
+    protected IsisTransactionManager.PersistenceSessionTransactionManagement getPersistenceSession() {
         return persistenceSession;
     }
 

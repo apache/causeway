@@ -36,12 +36,13 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugBuilder;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.services.RequestScopedService;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.system.session.IsisSession;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -55,7 +56,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisTransactionManager.class);
 
-    private final PersistenceSession persistenceSession;
+    private final PersistenceSessionTransactionManagement persistenceSession;
 
     private int transactionLevel;
     
@@ -73,14 +74,28 @@ public class IsisTransactionManager implements SessionScopedComponent {
     // constructor
     // ////////////////////////////////////////////////////////////////
 
+    /**
+     * The internal contract between PersistenceSession and this class.
+     */
+    public interface PersistenceSessionTransactionManagement extends AdapterManagerBase {
+
+        void startTransaction();
+        void endTransaction();
+        void abortTransaction();
+
+        void execute(List<PersistenceCommand> persistenceCommandList);
+
+        ObjectAdapter adapterFor(Object object);
+    }
+
     public IsisTransactionManager(
-            final PersistenceSession persistenceSession,
+            final PersistenceSessionTransactionManagement persistenceSession,
             final ServicesInjector servicesInjector) {
         this.persistenceSession = persistenceSession;
         this.servicesInjector = servicesInjector;
     }
 
-    public PersistenceSession getPersistenceSession() {
+    public PersistenceSessionTransactionManagement getPersistenceSession() {
         return persistenceSession;
     }
 
@@ -241,7 +256,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
      */
     private IsisTransaction createTransaction(
             final MessageBroker messageBroker,
-            final PersistenceSession persistenceSession) {
+            final PersistenceSessionTransactionManagement persistenceSession) {
         ensureThatArg(messageBroker, is(not(nullValue())));
 
         return new IsisTransaction(this, messageBroker, persistenceSession, servicesInjector);
@@ -538,7 +553,7 @@ public class IsisTransactionManager implements SessionScopedComponent {
 
     /**
      * Overridable hook, used in
-     * {@link #createTransaction(org.apache.isis.core.commons.authentication.MessageBroker, PersistenceSession)}
+     * {@link #createTransaction(MessageBroker, PersistenceSessionTransactionManagement)}
      * 
      * <p> Called when a new {@link IsisTransaction} is created.
      */

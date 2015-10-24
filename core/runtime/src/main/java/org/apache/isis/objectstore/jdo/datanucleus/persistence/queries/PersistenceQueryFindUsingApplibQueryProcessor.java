@@ -35,14 +35,14 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.objectstore.jdo.datanucleus.metamodel.JdoPropertyUtils;
 
 public class PersistenceQueryFindUsingApplibQueryProcessor extends PersistenceQueryProcessorAbstract<PersistenceQueryFindUsingApplibQueryDefault> {
     
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceQueryFindUsingApplibQueryProcessor.class);
 
-    public PersistenceQueryFindUsingApplibQueryProcessor(final PersistenceSession persistenceSession) {
+    public PersistenceQueryFindUsingApplibQueryProcessor(
+            final PersistenceSessionQueryProcessorManagement persistenceSession) {
         super(persistenceSession);
     }
 

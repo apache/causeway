@@ -16,24 +16,14 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.persistence;
+package org.apache.isis.applib.services.eventbus;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
 
-import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener2;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+    private static final long serialVersionUID = 1L;
 
-/**
- * @deprecated - retained only for backward compatibility of logging (in logging.properties file).
- */
-@Deprecated
-public class IsisLifecycleListener extends IsisLifecycleListener2 {
-
-    public static final Logger LOG = LoggerFactory.getLogger(IsisLifecycleListener.class);
-
-    public IsisLifecycleListener(final PersistenceSession persistenceSession) {
-        super(persistenceSession);
-        throw new RuntimeException("Use IsisLifecycleListener2 instead");
+    public ObjectUpdatedEvent(final S source) {
+        super(source);
     }
+
 }

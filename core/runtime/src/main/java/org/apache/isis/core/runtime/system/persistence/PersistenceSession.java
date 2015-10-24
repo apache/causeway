@@ -41,6 +41,15 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
+import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectLoadedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer2;
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
@@ -122,6 +131,7 @@ import org.apache.isis.objectstore.jdo.datanucleus.persistence.commands.DataNucl
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindAllInstancesProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryFindUsingApplibQueryProcessor;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessor;
+import org.apache.isis.objectstore.jdo.datanucleus.persistence.queries.PersistenceQueryProcessorAbstract;
 import org.apache.isis.objectstore.jdo.datanucleus.persistence.spi.JdoObjectIdSerializer;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
@@ -137,8 +147,17 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * and maintains an identity map of {@link ObjectAdapter adapter}s and {@link Oid
  * identities} for each and every POJO that is being used by the framework.
  */
-public class PersistenceSession implements TransactionalResource, SessionScopedComponent, DebuggableWithTitle, AdapterManager,
-        MessageBrokerService, PersistenceSessionService, ConfigurationService {
+public class PersistenceSession implements
+        TransactionalResource,
+        SessionScopedComponent,
+        DebuggableWithTitle,
+        AdapterManager,
+        MessageBrokerService,
+        PersistenceSessionService,
+        ConfigurationService,
+        IsisLifecycleListener2.PersistenceSessionLifecycleManagement,
+        IsisTransactionManager.PersistenceSessionTransactionManagement,
+        PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSession.class);
 
@@ -216,8 +235,10 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         this.jdoPersistenceManagerFactory = jdoPersistenceManagerFactory;
 
         // sub-components
-        this.persistenceQueryFactory = new PersistenceQueryFactory(this, this.specificationLoader);
-        this.transactionManager = new IsisTransactionManager(this, this.servicesInjector);
+        final AdapterManager adapterManager = this;
+        this.persistenceQueryFactory = new PersistenceQueryFactory(adapterManager, specificationLoader);
+        final IsisTransactionManager.PersistenceSessionTransactionManagement psTranManagement = this;
+        this.transactionManager = new IsisTransactionManager(psTranManagement, servicesInjector);
 
         setState(State.NOT_INITIALIZED);
 
@@ -260,15 +281,17 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
         persistenceManager = jdoPersistenceManagerFactory.getPersistenceManager();
 
-        final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(this);
+        final IsisLifecycleListener2.PersistenceSessionLifecycleManagement psLifecycleMgmt = this;
+        final IsisLifecycleListener2 isisLifecycleListener = new IsisLifecycleListener2(psLifecycleMgmt);
         persistenceManager.addInstanceLifecycleListener(isisLifecycleListener, (Class[]) null);
 
+        final PersistenceQueryProcessorAbstract.PersistenceSessionQueryProcessorManagement psQueryProcessorMgmt = this;
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindAllInstances.class,
-                new PersistenceQueryFindAllInstancesProcessor(this));
+                new PersistenceQueryFindAllInstancesProcessor(psQueryProcessorMgmt));
         persistenceQueryProcessorByClass.put(
                 PersistenceQueryFindUsingApplibQueryDefault.class,
-                new PersistenceQueryFindUsingApplibQueryProcessor(this));
+                new PersistenceQueryFindUsingApplibQueryProcessor(psQueryProcessorMgmt));
 
         initServices();
 
@@ -605,9 +628,11 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         for (ObjectAssociation field : fields) {
             field.toDefault(adapter);
         }
-        servicesInjector.injectServicesInto(adapter.getObject());
+        final Object pojo = adapter.getObject();
+        servicesInjector.injectServicesInto(pojo);
 
         CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
+        postEvent(new ObjectCreatedEvent<>(pojo));
 
         return adapter;
     }
@@ -617,7 +642,6 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
 
     //region > getServices, getService
 
-    // REVIEW why does this get called multiple times when starting up
     public List<ObjectAdapter> getServices() {
         final List<Object> services = servicesInjector.getRegisteredServices();
         final List<ObjectAdapter> serviceAdapters = Lists.newArrayList();
@@ -648,6 +672,15 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
     }
 
     //endregion
+
+    //region > helper: postEvent
+    void postEvent(final AbstractLifecycleEvent<?> event) {
+        final EventBusService eventBusService = getServicesInjector().lookupService(EventBusService.class);
+        eventBusService.post(event);
+    }
+    //endregion
+
+
 
     //region > fixture installation
 
@@ -1945,7 +1978,9 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         transaction.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
+        postEvent(new ObjectRemovingEvent<>(pojo));
     }
+
 
     public void initializeMapAndCheckConcurrency(final Persistable pojo) {
         final Persistable pc = pojo;
@@ -2000,6 +2035,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             } else {
                 adapter = mapRecreatedPojo(originalOid, pojo);
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
+                postEvent(new ObjectLoadedEvent<>(pojo));
             }
         }
 
@@ -2095,6 +2131,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             // persisting
             // previously this was performed in the DataNucleusSimplePersistAlgorithm.
             CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
+            postEvent(new ObjectPersistingEvent<>(pojo));
         } else {
             // updating
 
@@ -2125,6 +2162,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             remapAsPersistent(adapter, persistentOid);
 
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
+            postEvent(new ObjectPersistedEvent<>(pojo));
 
             final IsisTransaction transaction = getCurrentTransaction();
             transaction.enlistCreated(adapter);
@@ -2134,12 +2172,12 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
             // the callback and transaction.enlist are done in the preDirty callback
             // (can't be done here, as the enlist requires to capture the 'before' values)
             CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
+            postEvent(new ObjectUpdatedEvent<>(pojo));
         }
 
         Version versionIfAny = getVersionIfAny(pojo);
         adapter.setVersion(versionIfAny);
     }
-
 
     public void enlistUpdatingAndInvokeIsisUpdatingCallback(final Persistable pojo) {
         ObjectAdapter adapter = getAdapterFor(pojo);
@@ -2169,6 +2207,7 @@ public class PersistenceSession implements TransactionalResource, SessionScopedC
         }
 
         CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
+        postEvent(new ObjectUpdatingEvent<>(pojo));
 
         getCurrentTransaction().enlistUpdating(adapter);
 

@@ -16,24 +16,32 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.objectstore.jdo.datanucleus.persistence;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.apache.isis.core.metamodel.adapter.mgr;
 
-import org.apache.isis.core.runtime.system.persistence.IsisLifecycleListener2;
-import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
-/**
- * @deprecated - retained only for backward compatibility of logging (in logging.properties file).
- */
-@Deprecated
-public class IsisLifecycleListener extends IsisLifecycleListener2 {
+public interface AdapterManagerBase {
 
-    public static final Logger LOG = LoggerFactory.getLogger(IsisLifecycleListener.class);
+    /**
+     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
+     * it exists in the identity map.
+     *
+     * <p>
+     * Provided by the <tt>AdapterManager</tt> when used by framework.
+     *
+     * @param pojo
+     *            - must not be <tt>null</tt>
+     * @return adapter, or <tt>null</tt> if doesn't exist.
+     */
+    ObjectAdapter getAdapterFor(Object pojo);
 
-    public IsisLifecycleListener(final PersistenceSession persistenceSession) {
-        super(persistenceSession);
-        throw new RuntimeException("Use IsisLifecycleListener2 instead");
-    }
+
+
+    /**
+     * Looks up or creates a standalone (value) or root adapter.
+     */
+    ObjectAdapter adapterFor(Object domainObject);
+
+
 }

@@ -35,16 +35,30 @@ import com.google.common.collect.Maps;
 import org.datanucleus.enhancement.Persistable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerBase;
 
 public class IsisLifecycleListener2
         implements AttachLifecycleListener, ClearLifecycleListener, CreateLifecycleListener, DeleteLifecycleListener,
         DetachLifecycleListener, DirtyLifecycleListener, LoadLifecycleListener, StoreLifecycleListener,
         SuspendableListener {
 
-    private final PersistenceSession persistenceSession;
+    /**
+     * The internal contract between PersistenceSession and this class.
+     */
+    interface PersistenceSessionLifecycleManagement extends AdapterManagerBase {
 
-    public IsisLifecycleListener2(
-            final PersistenceSession persistenceSession) {
+        void ensureRootObject(Persistable pojo);
+        void initializeMapAndCheckConcurrency(Persistable pojo);
+
+        void enlistCreatedAndRemapIfRequiredThenInvokeIsisInvokePersistingOrUpdatedCallback(Persistable pojo);
+        void invokeIsisPersistingCallback(Persistable pojo);
+        void enlistUpdatingAndInvokeIsisUpdatingCallback(Persistable pojo);
+        void enlistDeletingAndInvokeIsisRemovingCallbackFacet(Persistable pojo);
+    }
+
+    private final PersistenceSessionLifecycleManagement persistenceSession;
+
+    public IsisLifecycleListener2(final PersistenceSessionLifecycleManagement persistenceSession) {
         this.persistenceSession = persistenceSession;
     }
 
@@ -109,6 +123,8 @@ public class IsisLifecycleListener2
     public void preDelete(InstanceLifecycleEvent event) {
         final Persistable pojo = Utils.persistenceCapableFor(event);
         persistenceSession.enlistDeletingAndInvokeIsisRemovingCallbackFacet(pojo);
+
+
     }
 
     @Override

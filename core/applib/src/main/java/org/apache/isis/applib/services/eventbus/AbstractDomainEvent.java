@@ -299,7 +299,7 @@ public abstract class AbstractDomainEvent<S> extends java.util.EventObject {
     //region > toString
     @Override
     public String toString() {
-        return ObjectContracts.toString(this, "source,identifier,mode");
+        return ObjectContracts.toString(this, "source","identifier","eventPhase");
     }
     //endregion
 }

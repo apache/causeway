@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
-public interface AdapterManager {
+public interface AdapterManager extends AdapterManagerBase {
 
     /**
      * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists
@@ -38,18 +38,6 @@ public interface AdapterManager {
      */
     ObjectAdapter getAdapterFor(Oid oid);
 
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the specified domain object if
-     * it exists in the identity map.
-     *
-     * <p>
-     * Provided by the <tt>AdapterManager</tt> when used by framework.
-     *
-     * @param pojo
-     *            - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     */
-    ObjectAdapter getAdapterFor(Object pojo);
 
 
     public enum ConcurrencyChecking {
@@ -120,11 +108,6 @@ public interface AdapterManager {
 
 
 
-
-    /**
-     * Looks up or creates a standalone (value) or root adapter.
-     */
-    ObjectAdapter adapterFor(Object domainObject);
 
     /**
      * Looks up or creates a collection adapter.
