@@ -25,6 +25,11 @@ public abstract class ObjectPersistedEvent<S> extends AbstractLifecycleEvent<S> 
     public static class Default extends ObjectPersistedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectPersistedEvent$Default{source=" + getSource() + "}";
+        }
     }
 
     public ObjectPersistedEvent() {

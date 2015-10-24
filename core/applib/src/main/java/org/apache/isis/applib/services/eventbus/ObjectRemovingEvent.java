@@ -25,6 +25,11 @@ public abstract class ObjectRemovingEvent<S> extends AbstractLifecycleEvent<S> {
     public static class Default extends ObjectRemovingEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectRemovingEvent$Default{source=" + getSource() + "}";
+        }
     }
 
     public ObjectRemovingEvent() {

@@ -25,6 +25,11 @@ public abstract class ObjectCreatedEvent<S> extends AbstractLifecycleEvent<S> {
     public static class Default extends ObjectCreatedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectCreatedEvent$Default{source=" + getSource() + "}";
+        }
     }
 
     public ObjectCreatedEvent() {

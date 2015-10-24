@@ -25,6 +25,11 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
     public static class Default extends ObjectUpdatedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
+
+        @Override
+        public String toString() {
+            return "ObjectUpdatedEvent$Default{source=" + getSource() + "}";
+        }
     }
 
     public ObjectUpdatedEvent() {
