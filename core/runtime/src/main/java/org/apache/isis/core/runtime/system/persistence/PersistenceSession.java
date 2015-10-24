@@ -41,6 +41,7 @@ import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.services.bookmark.Bookmark;
+import org.apache.isis.applib.services.command.Command;
 import org.apache.isis.applib.services.eventbus.AbstractLifecycleEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
@@ -632,7 +633,32 @@ public class PersistenceSession implements
         servicesInjector.injectServicesInto(pojo);
 
         CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
-        postEvent(new ObjectCreatedEvent.Default(), pojo);
+
+        if (Command.class.isAssignableFrom(pojo.getClass())) {
+
+            // special case... the command object is created while the transaction is being started and before
+            // the event bus service is initialized (nb: we initialize services *within* a transaction).  To resolve
+            // this catch-22 situation, we simply suppress the posting of this event for this domain class.
+
+            // this seems the least unpleasant of the various options available:
+            // * we could have put a check in the EventBusService to ignore the post if not yet initialized;
+            //   however this might hide other genuine errors
+            // * we could have used the thread-local in JdoStateManagerForIsis and the "skip(...)" hook in EventBusServiceJdo
+            //   to have this event be skipped; but that seems like co-opting some other design
+            // * we could have the transaction initialize the EventBusService as a "special case" before creating the Command;
+            //   but then do we worry about it being re-init'd later by the ServicesInitializer?
+
+            // so, doing it this way is this simplest, least obscure.
+
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("Skipping postEvent for creation of Command pojo");
+            }
+
+
+        } else {
+            postEvent(new ObjectCreatedEvent.Default(), pojo);
+
+        }
 
         return adapter;
     }

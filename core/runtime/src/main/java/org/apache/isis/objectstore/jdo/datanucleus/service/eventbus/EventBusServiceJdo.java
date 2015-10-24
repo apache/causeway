@@ -17,6 +17,7 @@
 package org.apache.isis.objectstore.jdo.datanucleus.service.eventbus;
 
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.runtime.services.eventbus.EventBusServiceDefault;
@@ -41,6 +42,9 @@ import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis.Hint;
  */
 @DomainService(
         nature = NatureOfService.DOMAIN
+)
+@DomainServiceLayout(
+        menuOrder = "0" // initialize first, so available for any services that persist objects in their @PostConstruct
 )
 public class EventBusServiceJdo extends EventBusServiceDefault {
 

@@ -106,7 +106,10 @@ public class ServiceInitializer {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
 
-            LOG.info("... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
+            if(LOG.isDebugEnabled()) {
+                LOG.debug(
+                        "... calling @PostConstruct method: " + service.getClass().getName() + ": " + method.getName());
+            }
             
             final int numParams = method.getParameterTypes().length;
             
@@ -114,7 +117,7 @@ public class ServiceInitializer {
             if(numParams == 0) {
                 MethodExtensions.invoke(method, service);
             } else {
-                MethodExtensions.invoke(method, service, new Object[]{props});
+                MethodExtensions.invoke(method, service, new Object[] { props });
             }
         }
     }
@@ -124,8 +127,10 @@ public class ServiceInitializer {
         for (final Map.Entry<Object, Method> entry : preDestroyMethodsByService.entrySet()) {
             final Object service = entry.getKey();
             final Method method = entry.getValue();
-            
-            LOG.info("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
+
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("... calling @PreDestroy method: " + service.getClass().getName() + ": " + method.getName());
+            }
             
             try {
                 MethodExtensions.invoke(method, service);

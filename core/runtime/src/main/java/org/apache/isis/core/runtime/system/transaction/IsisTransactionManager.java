@@ -273,9 +273,12 @@ public class IsisTransactionManager implements SessionScopedComponent {
         if (getTransaction() == null || getTransaction().getState().isComplete()) {
             noneInProgress = true;
 
-
             startRequestOnRequestScopedServices();
+
+            // note that at this point there may not be an EventBusService initialized.  The PersistenceSession has
+            // logic to suppress the posting of the ObjectCreatedEvent for the special case of Command objects.
             createCommandIfConfigured();
+
             initOtherApplibServicesIfConfigured();
             
             IsisTransaction isisTransaction = createTransaction();
@@ -293,7 +296,6 @@ public class IsisTransactionManager implements SessionScopedComponent {
         }
     }
 
-    
     private void initOtherApplibServicesIfConfigured() {
         
         final Bulk.InteractionContext bic = getServiceOrNull(Bulk.InteractionContext.class);
