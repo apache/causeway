@@ -116,31 +116,50 @@ And then restart:
 image::{_imagesdir}appendices/dev-env/intellij-idea/030-import-settings/030-restart.png[width="200px"]
 
 
+[[_cg_ide_intellij_other-settings-compiler]]
+=== Other Settings (Compiler)
 
-=== Other Settings
+There are also some other settings that influence the compiler.  We highly recommend you set these.
 
-There are also some other miscellaneous settings that we recommend that you adjust (though these are not critical).
+On the *Compiler* Settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
+
+.IntelliJ Compiler Settings
+image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings-compiler/010-build-automatically.png[width="600px"]
+
+
+On the *Annotation Processors* page, enable and adjust:
+
+.IntelliJ Annotation Processor Settings
+image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings-compiler/020-annotation-processor.png[width="600px"]
+
+This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required
+for frameworks such as xref:_cg_ide_project-lombok[Project Lombok].
+
+
+[[_cg_ide_intellij_other-settings-maven]]
+=== Other Settings (Maven)
+
+There are also some other settings for Maven that we recommend you adjust (though these are less critical):
 
 First, specify an up-to-date Maven installation, using `File > Settings` (or `IntelliJ > Preferences` if on MacOS):
 
-.IntelliJ Other Settings - Maven Installation
-image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/010-maven-installation.png[width="600px"]
+.IntelliJ Maven Settings - Installation
+image::{_imagesdir}appendices/dev-env/intellij-idea/042-other-settings-maven/010-maven-installation.png[width="600px"]
 
 Still on the Maven settings page, configure as follows:
 
-.IntelliJ Other Settings - Maven Configuration
-image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/020-maven-configuration.png[width="600px"]
+.IntelliJ Maven Settings - Configuration
+image::{_imagesdir}appendices/dev-env/intellij-idea/042-other-settings-maven/020-maven-configuration.png[width="600px"]
 
-On the compiler settings page, ensure that `build automatically` is enabled (and optionally `compile independent modules in parallel`):
 
-.IntelliJ Other Settings - Compiler Settings
-image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/030-build-automatically.png[width="600px"]
+=== Other Settings (Misc)
 
-On the auto import page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
+These settings are optional but also recommended.
 
-.IntelliJ Other Settings - Auto Import
-image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings/040-auto-import.png[width="600px"]
+On the *auto import* page, check the `optimize imports on the fly` and `add unambiguous imports on the fly`
 
+.IntelliJ Maven Settings - Auto Import
+image::{_imagesdir}appendices/dev-env/intellij-idea/044-other-settings-misc/010-auto-import.png[width="600px"]
 
 
 
@@ -381,6 +400,13 @@ To fix the issue, try:
 
 One thing worth knowing; IntelliJ actively scans the filesystem all the time.  It's therefore (almost always) fine to build the app from the Maven command line; IntelliJ will detect the changes and keep in sync.  If you want to force that, use `File > Synchronize`, `ctrl-alt-Y`.
 
+If you hit an error of "duplicate classes":
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/060-troubleshooting/010-duplicate-classes.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/060-troubleshooting/010-duplicate-classes.png"]
+
+then make sure you have correctly configured the xref:_cg_ide_intellij_other-settings-compiler[annotation processor]
+settings.  Pay attention in particular to the "Production sources directory" and "Test sources directory", that these
+are set up correctly.
 
 
 
@@ -401,9 +427,15 @@ In this section are a couple of options that will reduce the length of the chang
 
 === Setting up Dynamic Reloading
 
-NOTE: TODO - see link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog].
+See the link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog] for setting up DCEVM.
+
+This is supported for Eclipse, too.
 
 
 === Setting up JRebel
 
-NOTE: TODO
+See the repo for the (non-ASF) link:https://github.com/isisaddons/isis-jrebel-plugin[Isis JRebel] plugin.  With some
+modification, this should work for IntelliJ too.
+
+Note that JRebel is a commercial product, requiring a license.  At the time of writing there is also currently a
+non-commercial free license (though note this comes with some usage conditions).
