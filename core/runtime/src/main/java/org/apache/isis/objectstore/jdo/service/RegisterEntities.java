@@ -39,7 +39,6 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 public class RegisterEntities {
@@ -51,21 +50,9 @@ public class RegisterEntities {
 
     // //////////////////////////////////////
 
-    // determines how to handle missing entities in a package
-    // if appManifest is in use, just log it (because we use packages also to indicate presence of services);
-    // if appManifest is NOT in use, then treat this as an error.
-    private final boolean appManifestSpecified;
-
-    //region > domPackages
-    private final List<String> domPackages;
-
-    public List<String> getDomPackages() {
-        return domPackages;
-    }
-    //endregion
 
     //region > entityTypes
-    private final Set<String> entityTypes;
+    private final Set<String> entityTypes = Sets.newLinkedHashSet();
 
     public Set<String> getEntityTypes() {
         return entityTypes;
@@ -73,55 +60,59 @@ public class RegisterEntities {
     //endregion
 
     public RegisterEntities(Map<String,String> configuration) {
-        String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
-        if(Strings.isNullOrEmpty(packagePrefixes)) {
-            throw new IllegalArgumentException(String.format(
-                    "Could not locate '%s' key in property files - aborting",
-                    PACKAGE_PREFIX_KEY));
-        }
-        domPackages = parseDomPackages(packagePrefixes);
-        this.appManifestSpecified = configuration.get(SystemConstants.APP_MANIFEST_KEY) != null;
-
-        this.entityTypes = scanForEntityTypesIn(this.domPackages, this.appManifestSpecified);
-    }
-
-    private static List<String> parseDomPackages(String packagePrefixes) {
-        return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
-    }
-
-    private static Set<String> scanForEntityTypesIn(final List<String> domPackages, final boolean appManifestSpecified) {
-
-        final Set<String> entityTypes = Sets.newLinkedHashSet();
 
         Set<Class<?>> persistenceCapableTypes = AppManifest.Registry.instance().getPersistenceCapableTypes();
+
         if(persistenceCapableTypes == null) {
-            // if no appManifest
-            persistenceCapableTypes = Sets.newLinkedHashSet();
-
-            for (final String packageName : domPackages) {
-                Reflections reflections = new Reflections(packageName);
-                final Set<Class<?>> entityTypesInPackage =
-                        reflections.getTypesAnnotatedWith(PersistenceCapable.class);
-
-                if(!entitiesIn(entityTypesInPackage)) {
-                    throw new IllegalArgumentException(String.format(
-                            "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
-                                    "Check value of '%s' key in WEB-INF/*.properties\n",
-                            packageName,
-                            PACKAGE_PREFIX_KEY));
-                }
-                persistenceCapableTypes.addAll(entityTypesInPackage);
-            }
+            persistenceCapableTypes = searchForPersistenceCapables(configuration);
         }
 
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {
             if(ignore(persistenceCapableType)) {
                 continue;
             }
-            entityTypes.add(persistenceCapableType.getCanonicalName());
+            this.entityTypes.add(persistenceCapableType.getCanonicalName());
         }
-        return entityTypes;
+    }
 
+    /**
+     * only called if no appManifest
+     */
+    Set<Class<?>> searchForPersistenceCapables(final Map<String, String> configuration) {
+
+        final String packagePrefixes = lookupPackagePrefixes(configuration);
+
+        final Set<Class<?>> persistenceCapableTypes = Sets.newLinkedHashSet();
+        final List<String> domPackages = parseDomPackages(packagePrefixes);
+        for (final String packageName : domPackages) {
+            Reflections reflections = new Reflections(packageName);
+            final Set<Class<?>> entityTypesInPackage =
+                    reflections.getTypesAnnotatedWith(PersistenceCapable.class);
+
+            if(!entitiesIn(entityTypesInPackage)) {
+                throw new IllegalArgumentException(String.format(
+                        "Bad configuration.\n\nCould not locate any @PersistenceCapable entities in package '%s'\n" +
+                                "Check value of '%s' key in WEB-INF/*.properties\n",
+                        packageName,
+                        PACKAGE_PREFIX_KEY));
+            }
+            persistenceCapableTypes.addAll(entityTypesInPackage);
+        }
+        return persistenceCapableTypes;
+    }
+
+    private String lookupPackagePrefixes(final Map<String, String> configuration) {
+        final String packagePrefixes = configuration.get(PACKAGE_PREFIX_KEY);
+        if(Strings.isNullOrEmpty(packagePrefixes)) {
+            throw new IllegalArgumentException(String.format(
+                    "Could not locate '%s' key in property files - aborting",
+                    PACKAGE_PREFIX_KEY));
+        }
+        return packagePrefixes;
+    }
+
+    private static List<String> parseDomPackages(String packagePrefixes) {
+        return Collections.unmodifiableList(Lists.newArrayList(Iterables.transform(Splitter.on(",").split(packagePrefixes), trim())));
     }
 
     private static boolean ignore(final Class<?> entityType) {
@@ -166,7 +157,6 @@ public class RegisterEntities {
     SpecificationLoaderSpi getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
     }
-
 
     
 }
