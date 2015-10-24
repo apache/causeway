@@ -632,7 +632,7 @@ public class PersistenceSession implements
         servicesInjector.injectServicesInto(pojo);
 
         CallbackFacet.Util.callCallback(adapter, CreatedCallbackFacet.class);
-        postEvent(new ObjectCreatedEvent<>(pojo));
+        postEvent(new ObjectCreatedEvent.Default(), pojo);
 
         return adapter;
     }
@@ -674,8 +674,9 @@ public class PersistenceSession implements
     //endregion
 
     //region > helper: postEvent
-    void postEvent(final AbstractLifecycleEvent<?> event) {
+    void postEvent(final AbstractLifecycleEvent<Object> event, final Object pojo) {
         final EventBusService eventBusService = getServicesInjector().lookupService(EventBusService.class);
+        event.setSource(pojo);
         eventBusService.post(event);
     }
     //endregion
@@ -1978,7 +1979,7 @@ public class PersistenceSession implements
         transaction.enlistDeleting(adapter);
 
         CallbackFacet.Util.callCallback(adapter, RemovingCallbackFacet.class);
-        postEvent(new ObjectRemovingEvent<>(pojo));
+        postEvent(new ObjectRemovingEvent.Default(), pojo);
     }
 
 
@@ -2035,7 +2036,7 @@ public class PersistenceSession implements
             } else {
                 adapter = mapRecreatedPojo(originalOid, pojo);
                 CallbackFacet.Util.callCallback(adapter, LoadedCallbackFacet.class);
-                postEvent(new ObjectLoadedEvent<>(pojo));
+                postEvent(new ObjectLoadedEvent.Default(), pojo);
             }
         }
 
@@ -2131,7 +2132,7 @@ public class PersistenceSession implements
             // persisting
             // previously this was performed in the DataNucleusSimplePersistAlgorithm.
             CallbackFacet.Util.callCallback(adapter, PersistingCallbackFacet.class);
-            postEvent(new ObjectPersistingEvent<>(pojo));
+            postEvent(new ObjectPersistingEvent.Default(), pojo);
         } else {
             // updating
 
@@ -2162,7 +2163,7 @@ public class PersistenceSession implements
             remapAsPersistent(adapter, persistentOid);
 
             CallbackFacet.Util.callCallback(adapter, PersistedCallbackFacet.class);
-            postEvent(new ObjectPersistedEvent<>(pojo));
+            postEvent(new ObjectPersistedEvent.Default(), pojo);
 
             final IsisTransaction transaction = getCurrentTransaction();
             transaction.enlistCreated(adapter);
@@ -2172,7 +2173,7 @@ public class PersistenceSession implements
             // the callback and transaction.enlist are done in the preDirty callback
             // (can't be done here, as the enlist requires to capture the 'before' values)
             CallbackFacet.Util.callCallback(adapter, UpdatedCallbackFacet.class);
-            postEvent(new ObjectUpdatedEvent<>(pojo));
+            postEvent(new ObjectUpdatedEvent.Default(), pojo);
         }
 
         Version versionIfAny = getVersionIfAny(pojo);
@@ -2207,7 +2208,7 @@ public class PersistenceSession implements
         }
 
         CallbackFacet.Util.callCallback(adapter, UpdatingCallbackFacet.class);
-        postEvent(new ObjectUpdatingEvent<>(pojo));
+        postEvent(new ObjectUpdatingEvent.Default(), pojo);
 
         getCurrentTransaction().enlistUpdating(adapter);
 

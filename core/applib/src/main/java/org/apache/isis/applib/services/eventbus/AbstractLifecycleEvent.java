@@ -26,9 +26,33 @@ public abstract class AbstractLifecycleEvent<S> extends EventObject {
 
     private static final long serialVersionUID = 1L;
 
-    public AbstractLifecycleEvent(final S source) {
-        super(source);
+    public AbstractLifecycleEvent() {
+        this(null);
     }
+
+    public AbstractLifecycleEvent(final S source) {
+        super(sourceElseDummy(source));
+    }
+
+    private static Object sourceElseDummy(final Object source) {
+        return source != null ? source : new Object();
+    }
+
+    //region > source (downcast to S)
+    @Override
+    @SuppressWarnings("unchecked")
+    public S getSource() {
+        return (S)source;
+    }
+
+    /**
+     * Not API, set by the framework if the no-arg constructor is used.
+     */
+    public void setSource(S source) {
+        this.source = source;
+    }
+    //endregion
+
 
     @Override
     public String toString() {

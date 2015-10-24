@@ -18,10 +18,17 @@
  */
 package org.apache.isis.applib.services.eventbus;
 
-public class ObjectUpdatingEvent<S> extends AbstractLifecycleEvent<S> {
+public abstract class ObjectUpdatingEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
+    public static class Default extends ObjectUpdatingEvent<Object> {
+        private static final long serialVersionUID = 1L;
+        public Default() {}
+    }
+
+    public ObjectUpdatingEvent() {
+    }
     public ObjectUpdatingEvent(final S source) {
         super(source);
     }
