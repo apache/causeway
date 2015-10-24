@@ -10,6 +10,8 @@ This chapter describes the usage of various classes and interfaces that are not 
 
 include::_rg_classes_AppManifest-bootstrapping.adoc[leveloffset=+1]
 include::_rg_classes_super.adoc[leveloffset=+1]
+include::_rg_classes_domainevent.adoc[leveloffset=+1]
+include::_rg_classes_lifecycleevent.adoc[leveloffset=+1]
 include::_rg_classes_value-types.adoc[leveloffset=+1]
 include::_rg_classes_utility.adoc[leveloffset=+1]
 include::_rg_classes_spec.adoc[leveloffset=+1]

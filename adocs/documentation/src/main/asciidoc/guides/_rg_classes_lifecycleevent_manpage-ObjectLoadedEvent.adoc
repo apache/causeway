@@ -1,15 +1,17 @@
-[[_rg_methods_reserved_manpage-loaded]]
-= `loaded()`
+[[_rg_classes_lifecycleevent_manpage-ObjectLoadedEvent]]
+= `ObjectLoadedEvent`
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 
 
 
-The `loaded()` lifecycle callback method is called when a (persistent) object has just been loaded from the object store.
+Subclass of xref:rg.adoc#_rg_classes_lifecycleevent_manpage-AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
+when an object is retrieved from the database.
 
+`ObjectLoadedEvent.Default` is the concrete implementation that is used.
 
-[TIP]
+[NOTE]
 ====
-Alternatively, consider using a xref:rg.adoc#_rg_services-api_manpage-EventBusService[event bus] xref:rg.adoc#_rg_classes_super_manpage-AbstractSubscriber[subscriber] on the xref:rg.adoc#_rg_classes_lifecycleevent_manpage-ObjectLoadedEvent[`ObjectLoadedEvent`].
+In the future this may be generalized to allow arbitrary subclasses to be broadcast, see ISIS-803.
 ====

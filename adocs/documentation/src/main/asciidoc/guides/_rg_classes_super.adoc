@@ -5,7 +5,8 @@
 :_imagesdir: images/
 
 
-This section catalogues the various convenience superclasses defined by Apache Isis.  These are listed in the table below.
+This section catalogues the various convenience (non event) superclasses defined by Apache Isis.  These are listed in the table below.
+
 
 .Convenience Superclasses
 [cols="2,4a,1,1", options="header"]
@@ -21,15 +22,6 @@ Impl'n (g: a:)
 |xref:rg.adoc#_rg_classes_super_manpage-AbstractContainedObject[`o.a.i.applib.` +
 `AbstractContainedObject`]
 |``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:rg.adoc#_rg_classes_super_manpage-AbstractDomainEvent[`o.a.i.applib.` +
-`AbstractDomainEvent`]
-|``o.a.i.core`` +
-``services.eventbus`` +
 ``isis-core-applib``
 |(abstract class)
 |
@@ -59,27 +51,17 @@ Impl'n (g: a:)
 |
 
 
+|xref:rg.adoc#_rg_classes_super_manpage-AbstractSubscriber[`o.a.i.applib.` +
+`AbstractSubscriber`]
+|``o.a.i.core`` +
+``isis-core-applib``
+|(abstract class)
+|
+
+
 |xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:rg.adoc#_rg_classes_super_manpage-ActionDomainEvent[`o.a.i.applib.` +
-`ActionDomainEvent`]
-|``o.a.i.core`` +
-``services.eventbus`` +
-``isis-core-applib``
-|(abstract class)
-|
-
-
-|xref:rg.adoc#_rg_classes_super_manpage-CollectionDomainEvent[`o.a.i.applib.` +
-`CollectionDomainEvent`]
-|``o.a.i.core`` +
-``services.eventbus`` +
 ``isis-core-applib``
 |(abstract class)
 |
@@ -99,19 +81,11 @@ Impl'n (g: a:)
 `FixtureScripts`]
 |``o.a.i.core`` +
 ``isis-core-applib``
-|(abstract class)
+|(abstract class). +
+`FixtureScriptsDefault` is a default implementation that is used when the alternative xref:rg.adoc#_rg_services-api_manpage-FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] is provided
+  (and no other implementation of `FixtureScripts` was found).
 |depends on: +
 `ClassDiscoveryService`
-
-
-|xref:rg.adoc#_rg_classes_super_manpage-PropertyDomainEvent[`o.a.i.applib.` +
-`PropertyDomainEvent`]
-|``o.a.i.core`` +
-``services.eventbus`` +
-``isis-core-applib``
-|(abstract class)
-|
-
 
 
 |===
@@ -120,15 +94,12 @@ Impl'n (g: a:)
 
 
 include::_rg_classes_super_manpage-AbstractContainedObject.adoc[leveloffset=+1]
-include::_rg_classes_super_manpage-AbstractDomainEvent.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-AbstractDomainObject.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-AbstractFactoryAndRepository.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-AbstractService.adoc[leveloffset=+1]
+include::_rg_classes_super_manpage-AbstractSubscriber.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-AbstractViewModel.adoc[leveloffset=+1]
-include::_rg_classes_super_manpage-ActionDomainEvent.adoc[leveloffset=+1]
-include::_rg_classes_super_manpage-CollectionDomainEvent.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-FixtureScript.adoc[leveloffset=+1]
 include::_rg_classes_super_manpage-FixtureScripts.adoc[leveloffset=+1]
-include::_rg_classes_super_manpage-PropertyDomainEvent.adoc[leveloffset=+1]
 
 
