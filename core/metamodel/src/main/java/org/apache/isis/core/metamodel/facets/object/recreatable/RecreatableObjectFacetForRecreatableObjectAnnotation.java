@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
@@ -30,8 +31,10 @@ public class RecreatableObjectFacetForRecreatableObjectAnnotation extends Recrea
             final FacetHolder holder,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, ArchitecturalLayer.APPLICATION, specificationLoader, adapterManager, servicesInjector);
+            final ServicesInjector servicesInjector,
+            final PostConstructMethodCache postConstructMethodCache) {
+        super(holder, ArchitecturalLayer.APPLICATION,
+                specificationLoader, adapterManager, servicesInjector, postConstructMethodCache);
     }
 
 }

@@ -17,15 +17,14 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.methodutils;
+package org.apache.isis.core.metamodel.facets;
 
-import java.util.Map;
+import java.lang.reflect.Method;
 
-import com.google.common.collect.Maps;
+/**
+ * Contract between implementations of RecreatableObjectFacet and their creating facet factories.
+ */
+public interface PostConstructMethodCache {
+    Method postConstructMethodFor(final Object pojo);
 
-public final class MethodFinderUtils {
-    
-
-    private MethodFinderUtils() {
-    }
 }

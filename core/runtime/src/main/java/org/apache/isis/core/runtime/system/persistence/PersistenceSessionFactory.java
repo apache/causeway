@@ -19,10 +19,15 @@
 
 package org.apache.isis.core.runtime.system.persistence;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 import javax.jdo.PersistenceManagerFactory;
+
+import com.google.common.collect.Maps;
 
 import org.datanucleus.PropertyNames;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -41,7 +46,8 @@ import org.apache.isis.objectstore.jdo.datanucleus.DataNucleusPersistenceMechani
 import org.apache.isis.objectstore.jdo.datanucleus.JDOStateManagerForIsis;
 import org.apache.isis.objectstore.jdo.service.RegisterEntities;
 
-public class PersistenceSessionFactory implements ApplicationScopedComponent, FixturesInstalledFlag {
+public class PersistenceSessionFactory
+        implements ApplicationScopedComponent, FixturesInstalledFlag {
 
     private static final Logger LOG = LoggerFactory.getLogger(PersistenceSessionFactory.class);
 
@@ -169,12 +175,11 @@ public class PersistenceSessionFactory implements ApplicationScopedComponent, Fi
 
         return new PersistenceSession(
                 configuration, servicesInjector, specificationLoader,
-                authenticationSession, persistenceManagerFactory, fixturesInstalledFlag);
+                authenticationSession, persistenceManagerFactory,
+                fixturesInstalledFlag);
     }
 
-    DataNucleusApplicationComponents getApplicationComponents() {
-        return applicationComponents;
-    }
+
 
     //endregion
 

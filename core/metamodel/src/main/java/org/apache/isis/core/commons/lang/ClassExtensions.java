@@ -27,19 +27,14 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
 
 public final class ClassExtensions {
-
-
 
 
     // //////////////////////////////////////

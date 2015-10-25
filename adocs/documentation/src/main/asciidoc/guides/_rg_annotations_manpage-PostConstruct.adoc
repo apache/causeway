@@ -7,31 +7,33 @@
 
 The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250],  is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
 
+It is also recognized (`1.10.0-SNAPSHOT`) for xref:ug.adoc#http://localhost:4000/guides/ug.html#_ug_more-advanced_view-models[view models] (eg annotated with xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`]).
+
 For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:rg.adoc#_rg_annotations_manpage-RequestScoped[`@RequestScoped`] domain services, the method is called at the beginning of the request.
 
 The signature of the method is:
 
 [source,java]
 ----
-@PostConstruct                          <1>
-public void postConstruct() { ... }     <2>
+@PostConstruct                 <1>
+public void init() { ... }     <2>
 ----
-<1> (As of 1.9.0) it is not necessary to annotate the method with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
+<1> It is not necessary to annotate the method with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`]; it will be automatically excluded from the Apache Isis metamodel.
 <2> the method can have any name, but must have `public` visibility.
 
-In the form shown above the method can either accept no arguments.  Alternatively, the method can accept a parameter of type `Map<String,String>`:
+In the form shown above the method accepts no arguments.  Alternatively - for domain services only, not view models - the method can accept a parameter of type `Map<String,String>`:
 
 [source,java]
 ----
 @PostConstruct
 @Programmatic
-public void postConstruct(Map<String,String> properties) { ... }
+public void init(Map<String,String> properties) { ... }
 ----
 Isis uses argument to pass in the configuration properties read from all xref:rg.adoc#_rg_runtime_configuration-files[configuration files]:
 
 [TIP]
 ====
-Alternatively, you could inject xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.
+Alternatively, you could inject xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] into the service and read configuration properties using `DomainObjectContainer#getProperty(...)` and related methods.  Note that when using this latter API only those configuration properties prefixes `application.` key are provided.
 ====
 
 A common use case is for domain services that interact with the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`].  For example:
@@ -40,12 +42,10 @@ A common use case is for domain services that interact with the xref:rg.adoc#_rg
 ----
 @DomainService(nature=NatureOfService.DOMAIN)
 public class MySubscribingService {
-    @Programmatic
     @PostConstruct
     public void postConstruct() {
         eventBusService.register(this);
     }
-    @Programmatic
     @PreDestroy
     public void preDestroy() {
         eventBusService.unregister(this);
@@ -55,6 +55,12 @@ public class MySubscribingService {
     EventBusService eventBusService;
 }
 ----
+
+[TIP]
+====
+In this particular use case, it is generally simpler to just subclass from xref:rg.adoc#_rg_classes_super_manpage-AbstractSubscriber[`AbstractSubscriber`].
+====
+
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.
 

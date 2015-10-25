@@ -210,6 +210,7 @@ public class PersistenceSession implements
 
     private final boolean concurrencyCheckingGloballyEnabled;
 
+
     /**
      * Initialize the object store so that calls to this object store access
      * persisted objects and persist changes to the object that are saved.
@@ -588,12 +589,13 @@ public class PersistenceSession implements
 
         if(variant == Variant.VIEW_MODEL) {
             final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-            facet.initialize(pojo, memento);
+            initialize(facet, pojo, memento);
         }
 
         final ObjectAdapter adapter = adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
     }
+
 
     public Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
@@ -1582,17 +1584,14 @@ public class PersistenceSession implements
             }
 
             final String memento = rootOid.getIdentifier();
-
-            facet.initialize(pojo, memento);
+            initialize(facet, pojo, memento);
         }
         return pojo;
     }
 
-
-
-
-
-
+    private void initialize(final ViewModelFacet facet, final Object pojo, final String memento) {
+        facet.initialize(pojo, memento);
+    }
 
     /**
      * {@inheritDoc}
@@ -1668,7 +1667,6 @@ public class PersistenceSession implements
 
         return collectionAdapter;
     }
-
 
 
     /**
@@ -1862,8 +1860,6 @@ public class PersistenceSession implements
         }
         pojoAdapterMap.remove(adapter);
     }
-
-
 
 
     public void remapRecreatedPojo(ObjectAdapter adapter, final Object pojo) {

@@ -18,8 +18,11 @@
  */
 package org.apache.isis.core.metamodel.facets.object.domainobject;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+
+import javax.annotation.PostConstruct;
 
 import com.google.common.collect.Maps;
 
@@ -33,6 +36,7 @@ import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
+import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManagerAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -42,6 +46,8 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MetaModelValidatorRefiner;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
@@ -76,8 +82,10 @@ import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 
-public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware, SpecificationLoaderAware, MetaModelValidatorRefiner,
-        PersistenceSessionServiceAware {
+public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
+        implements IsisConfigurationAware, AdapterManagerAware, ServicesInjectorAware,
+        SpecificationLoaderAware, MetaModelValidatorRefiner, PersistenceSessionServiceAware,
+        PostConstructMethodCache {
 
     private final MetaModelValidatorForDeprecatedAnnotation auditedValidator = new MetaModelValidatorForDeprecatedAnnotation(Audited.class);
     private final MetaModelValidatorForDeprecatedAnnotation publishedObjectValidator = new MetaModelValidatorForDeprecatedAnnotation(PublishedObject.class);
@@ -274,8 +282,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
         final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
+        final PostConstructMethodCache postConstructMethodCache = this;
         final ViewModelFacet recreatableObjectFacet = RecreatableObjectFacetForDomainObjectAnnotation.create(
-                domainObject, getSpecificationLoader(), adapterManager, servicesInjector, facetHolder);
+                domainObject, getSpecificationLoader(), adapterManager, servicesInjector,
+                facetHolder, postConstructMethodCache);
         FacetUtil.addFacet(recreatableObjectFacet);
 
         final MixinFacet mixinFacet = MixinFacetForDomainObjectAnnotation.create(cls, facetHolder, servicesInjector);
@@ -355,4 +365,14 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract imp
     public void setPersistenceSessionService(final PersistenceSessionService persistenceSessionService) {
         this.persistenceSessionService = persistenceSessionService;
     }
+
+
+    // //////////////////////////////////////
+
+    private final Map<Class, Nullable<Method>> postConstructMethods = Maps.newHashMap();
+
+    public Method postConstructMethodFor(final Object pojo) {
+        return MethodFinderUtils.findAnnotatedMethod(pojo, PostConstruct.class, postConstructMethods);
+    }
+
 }

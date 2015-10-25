@@ -21,7 +21,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.core.commons.lang.Nullable;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
@@ -194,6 +196,39 @@ public final class MethodFinderUtils {
             }
         }
         return true;
+    }
+
+
+    public static Method findAnnotatedMethod(
+            final Object pojo,
+            final Class<? extends Annotation> annotationClass,
+            final Map<Class, Nullable<Method>> methods) {
+
+        final Class<?> clz = pojo.getClass();
+        Nullable<Method> nullableMethod = methods.get(clz);
+        if(nullableMethod == null) {
+            nullableMethod = search(clz, annotationClass, methods);
+        }
+        return nullableMethod.value();
+    }
+
+    private static Nullable<Method> search(
+            final Class<?> clz,
+            final Class<? extends Annotation> annotationClass,
+            final Map<Class, Nullable<Method>> postConstructMethods) {
+
+        final Method[] methods = clz.getMethods();
+
+        Nullable<Method> nullableMethod = Nullable.none();
+        for (final Method method : methods) {
+            final Annotation annotation = method.getAnnotation(annotationClass);
+            if(annotation != null) {
+                nullableMethod = Nullable.some(method);
+                break;
+            }
+        }
+        postConstructMethods.put(clz, nullableMethod);
+        return nullableMethod;
     }
 
 }

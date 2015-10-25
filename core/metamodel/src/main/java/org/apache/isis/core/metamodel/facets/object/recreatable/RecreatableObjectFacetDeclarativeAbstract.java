@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.properties.update.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
@@ -51,15 +52,16 @@ public abstract class RecreatableObjectFacetDeclarativeAbstract extends Recreata
             final ArchitecturalLayer architecturalLayer,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
-            final ServicesInjector servicesInjector) {
-        super(holder, architecturalLayer);
+            final ServicesInjector servicesInjector,
+            final PostConstructMethodCache postConstructMethodCache) {
+        super(holder, architecturalLayer, postConstructMethodCache);
         this.specificationLoader = specificationLoader;
         this.servicesInjector = servicesInjector;
         this.adapterManager = adapterManager;
     }
 
     @Override
-    public void initialize(
+    protected void doInitialize(
             final Object viewModelPojo,
             final String mementoStr) {
 
