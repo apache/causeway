@@ -625,8 +625,8 @@ and also push tags for both core and the archetype:
 
 [source]
 ----
-git push origin refs/tags/isis-$ISISREL-$ISISRC:refs/tags/isis-$ISISREL-$ISISRC
-git push origin refs/tags/simpleapp-archetype-$ISISREL-$ISISRC:refs/tags/simpleapp-archetype-$ISISREL-$ISISRC
+git push origin refs/tags/isis-$ISISREL:refs/tags/isis-$ISISREL-$ISISRC
+git push origin refs/tags/simpleapp-archetype-$ISISREL:refs/tags/simpleapp-archetype-$ISISREL-$ISISRC
 git fetch
 ----
 
