@@ -92,7 +92,7 @@ Double check that the version number of the core POM (`core/pom.xml`) should ref
 ----
 <groupId>org.apache.isis.core</groupId>
 <artifactId>isis</artifactId>
-<version>1.11.0-SNAPSHOT</version>
+<version>1.10.0-SNAPSHOT</version>
 ----
 
 Also, check that there are no snapshot dependencies:

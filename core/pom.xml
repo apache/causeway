@@ -444,6 +444,7 @@
                             <exclude>**/MANIFEST.MF</exclude>
                             <exclude>**/*.ucd</exclude>
                             <exclude>**/*.ucls</exclude>
+                            <exclude>**/*.iml</exclude>
 
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
@@ -452,7 +453,9 @@
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
-
+                            
+                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+                            
                             <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                             <exclude>**/bootstrap-datetimepicker.css</exclude>
                             <exclude>**/select2-bootstrap.css</exclude>
