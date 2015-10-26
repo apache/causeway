@@ -217,7 +217,7 @@ Commit any changes from the preceding steps:
 
 [source,bash]
 ----
-git commit -am "ISIS-nnnn: updates to pom.xml etc for release"
+git commit -am "$ISISJIRA: updates to pom.xml etc for release"
 ----
 
 
@@ -482,7 +482,7 @@ Then, run the script:
 
 [source,bash]
 ----
-sh ../../../scripts/recreate-archetype.sh ISIS-nnnn
+sh ../../../scripts/recreate-archetype.sh $ISISJIRA
 ----
 
 The script automatically commits changes; if you wish use `git log` and
