@@ -69,9 +69,9 @@ Changing the code means changing the model; refining the model requires a change
 ****
 
 
-Here also the word  *design* might mislead; some might again be thinking of design documents and design diagrams. But by  *design* we mean a way of organizing the domain concepts, which in turn leads to the way in which we organize their representation in code.
+Here also the word  *design* might mislead; some might be thinking of design documents and design diagrams, or perhaps of user interface (UX) design. But by  *design* we mean a way of organizing the domain concepts, which in turn leads to the way in which we organize their representation in code.
 
-Luckily, using *_object-oriented_* ( _OO_) languages such as Java, this is relatively easy to do;  _OO_ is based on a modeling paradigm anyway. We can express domain concepts using classes and interfaces, and we can express the relationships between those concepts using associations.
+Luckily, using *_object-oriented_* (_OO_) languages such as Java, this is relatively easy to do;  _OO_ is based on a modeling paradigm anyway. We can express domain concepts using classes and interfaces, and we can express the relationships between those concepts using associations.
 
 So far so good. Or maybe, so far so much motherhood and apple pie. Understanding the  _DDD_ concepts isn't the same as being able to apply them, and some of the  _DDD_ ideas can be difficult to put into practice. Time to discuss the naked objects pattern and how it eases that path by applying these central ideas of _DDD_ in a very concrete way.
 

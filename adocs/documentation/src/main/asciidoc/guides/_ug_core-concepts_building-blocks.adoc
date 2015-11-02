@@ -4,35 +4,142 @@
 :_basedir: ../
 :_imagesdir: images/
 
+In this section we run through the main building blocks that make up an Apache Isis application.
+
+[[_ug_core-concepts_building-blocks_metamodel]]
+## A MetaModel
+
+At its core, Apache Isis is a metamodel that is built at runtime from the domain classes (eg `Customer.java`), along
+with optional supporting metadata (eg `Customer.layout.json`).
+
+The contents of this metamodel is inferred from the Java classes discovered on the classpath: the entities and
+supporting services, as well the members of those classes.  The detail of the metamodel is generally explicit, usually
+represented by Java annotations such as `@Title` or `@Action`.  Notably the metamodel is
+xref:ug.adoc#_ug_extending_programming-model[extensible]; it is possible to teach Apache Isis new programming
+conventions/rules (and conversely to remove those that are built in).
+
+Most of the annotations recognized by the framework are defined by the Apache Isis framework itself.  For example the
+`@Title` annotation - which identifies how the framework should derive a human-readable label for each rendered
+domain object - is part of the `org.apache.isis.applib.annotations` package.  However the framework also recognizes
+certain other JEE annotations such as `@javax.inject.Inject` (used for dependency injection).
+
+The framework uses DataNucleus for its persistence mechanism.  This is an ORM that implements the JDO and JPA APIs, and
+which can map domain objects either to an RDBMS or to various NoSQL objectstores such as MongoDB or Neo4J.  Apache Isis
+recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowNulls=...)`.
+
+In addition, the framework builds up the metamodel for each domain object using
+xref:rg.adoc#_rg_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as
+grouping elements of the UI together, using multi-column layouts, and so on.  The layout file can be modified while the
+application is still running, and are picked up automatically; a useful way to speed up feedback.
+
+[TIP]
+====
+At the time of writing Apache Isis only recognizes and supports the JDO API, though we expect JPA to be supported
+in the future.  We also expect to generalize support for `.layout.json` to be able to read such metadata from other
+sources.
+====
+
+
+[[_ug_core-concepts_building-blocks_types-of-domain-objects]]
+## Type of Domain Objects
+
+Most domain objects that the end-user interacts with are domain entities, such as `Customer`, `Order`, `Product` and
+so on.  These are persistent objects and which are mapped to a database (usually relational), using JDO/DataNucleus
+annotations.  From the end-user's perspective the UI displays a single domain object per page; they can then inspect
+and modify its state, and navigate to related objects.
+
+The next type of domain object to discuss is domain services.  These are (usually) singleton stateless services
+that provide additional functionality.  The behaviour of these services is rendered in various ways, though the most
+obvious is as the menu actions on the top-level menu bars in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]'s UI.
+
+Domain objects can also delegate to domain services; domain services are automatically injected into every other domain
+object; this includes domain entities as well as other services.  This injection of domain services into entities is
+significant: it allows business logic to be implemented in the domain entities, rather than have it "leach away" into
+supporting service layers.  Said another way: it is the means by which Apache Isis helps you avoid the anaemic
+domain model anti-pattern.
+
+As well as domain entities - mapped to a datastore - Apache Isis also supports view models.  End users interact with
+view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.  However
+view models are _not_ mapped to the underlying database, rather they represent some aggregation of state from one or
+more underlying entities.  Their state is serialized and recreated from their internal identifier; this identifier is
+visible as the object's URL in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] or
+xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
+
+There's no need though for the view model to aggregate the state of regular domain entities.  A view model could also be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a representation
+ of state held in-memory (such as user preferences, for example).
+
+There are also several types of domain services.  Most easily described are those domain services (discussed above)
+that are represented as the menu actions on top-level menu bars.  Another variation are domain services that contribute
+behaviour or (derived) state to entities/view models.  Finally domain services may also simply provide additional non-UI
+functionality; an example being to perform an address geocoding lookup against the google-maps API.
+
+Also worth mentioning: domain services can also be either singletons (discussed above) or request-scoped; the latter
+being annotated with `@javax.enterprise.context.RequestScoped`.  An example of the request-scoped service is the
+xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
+
+The final type of domain object is mixins.  These are similar to contributed services in that they also contribute (or rather,
+mixin) both behaviour or (derived) state to entities/view models.  However, they provide a more control over contributed services,
+with a cleaner programming model similar to traits found in other languages.
+
+The diagram below summarizes the various types of domain object:
+
+image::{_imagesdir}core-concepts/building-blocks/types-of-domain-object.png[width="860px",link="{_imagesdir}core-concepts/building-blocks/types-of-domain-object.png"]
+
+
+The Apache Isis programming model offers some equivalent ways
+
+
+... todo
+
+
+[[_ug_core-concepts_building-blocks_objects-members]]
+## Object Members
+
+Every domain object in Apache Isis consists of these three types of members: properties, collections and actions.  Some (eg domain services and mixins) only contain
+
 NOTE: TODO
 
-## A MetaModel with Explicit and Inferred Semantics
+For example, with:
 
-NOTE: TODO
+[source,java]
+----
+public class Customer
+    private String firstName;
+    public String getFirstName() { return firstName; }
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    ...
+}
+----
 
-* use of annotations
-** reuse JEE annotations where possible
-* layout hints are overridable, to avoid restarting the app/speed up feedback
+the framework infers the `Customer` domain entity, which in turn has a `firstName` string _property_.
+
+Similarly, from:
+
+[source,java]
+----
+public class Customer
+    private SortedSet<Order> orders = new TreeSet<Order>();
+    public SortedSet<Order> getOrders() { return orders; }
+    public void setOrders(SortedSet<Order> orders) { this.orders = orders; }
+    ...
+}
+----
+
+the framework infers the `orders` _collection_.
+
+Finally:
+
+[source,java]
+----
+public class Customer
+    public Customer placeOrder(Product p, int quantity) { ... }
+    ...
+}
+----
+
+corresponds to the `placeOrder` _action_.
 
 
-## Objects & Services
-
-NOTE: TODO
-
-* domain model
-** domain objects
-*** domain entity
-*** view model
-** domain service
-** value type
-
-Anything else can be (should be) ignored by annotating with `@Programmatic`.
-
-
-
-## Properties, Collections and Actions
-
-NOTE: TODO
 
 
 ## Domain Entities vs View Models
@@ -43,6 +150,7 @@ NOTE: TODO
 
 
 
+[[_ug_core-concepts_building-blocks_domain-services]]
 ## Domain Services
 
 Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities. However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
@@ -68,24 +176,24 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 
 
 
+[[_ug_core-concepts_building-blocks_value-objects]]
 ## Value Objects (Primitives)
 
 NOTE: TODO
 
 
 
-## Contributions
+[[_ug_core-concepts_building-blocks_mixins-and-contributions]]
+## Mixins & Contributions
 
 NOTE: TODO
 
 
 
-
-## Event Bus
+[[_ug_core-concepts_building-blocks_domain-events]]
+## Domain Events
 
 NOTE: TODO
-
-
 
 
 

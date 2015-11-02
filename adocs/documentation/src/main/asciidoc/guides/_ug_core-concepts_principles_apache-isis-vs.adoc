@@ -9,28 +9,8 @@ do they compare to Apache Isis?
 
 
 include::_ug_core-concepts_principles_apache-isis-vs_mvc-server-side-frameworks.adoc[leveloffset=+1]
-
-
-
-== vs CQRS
-
-NOTE: TODO
-
-== vs Event Sourcing
-
-NOTE: TODO
-
-
-== vs Angular
-
-NOTE: TODO
-
-
-
+include::_ug_core-concepts_principles_apache-isis-vs_cqrs.adoc[leveloffset=+1]
+include::_ug_core-concepts_principles_apache-isis-vs_event-sourcing.adoc[leveloffset=+1]
 include::_ug_core-concepts_principles_apache-isis-vs_metawidget.adoc[leveloffset=+1]
 
 
-
-== vs OpenXava
-
-NOTE: TODO
