@@ -30,7 +30,7 @@ public final class JarManifestListView extends ListView<JarManifestAttributes> {
     private static final long serialVersionUID = 1L;
     private final String idLine;
 
-    public JarManifestListView(String id, String idLine, List<? extends JarManifestAttributes> list) {
+    public JarManifestListView(String id, String idLine, List<JarManifestAttributes> list) {
         super(id, list);
         this.idLine = idLine;
     }

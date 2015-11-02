@@ -122,15 +122,14 @@
 
         <jetty.version>9.2.11.v20150529</jetty.version>
 
-        <wicket.version>6.20.0</wicket.version>
-        <wicketstuff.version>6.20.0</wicketstuff.version>
+        <wicket.version>7.1.0</wicket.version>
+        <wicketstuff.version>7.1.0</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.7</wicket-webjars.version>
-        <wicket-bootstrap.version>0.9.13</wicket-bootstrap.version>
-        <wicket-source.version>6.0.0.8</wicket-source.version>
+        <wicket-webjars.version>0.5.3</wicket-webjars.version>
+        <wicket-bootstrap.version>0.10.4</wicket-bootstrap.version>
+        <wicket-source.version>7.0.0</wicket-source.version>
 
-        <wicket-select2.version>6.20.0</wicket-select2.version>
-        <select2.version>3.5.2</select2.version>
+        <select2.version>4.0.0-2</select2.version>
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>3.0</guice.version>
@@ -1583,7 +1582,7 @@ ${license.additional-notes}
 
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-select2</artifactId>
-                <version>${wicket-select2.version}</version>
+                <version>${wicketstuff.version}</version>
                 <exclusions>
                     <exclusion>
                         <!-- for dependency convergence -->

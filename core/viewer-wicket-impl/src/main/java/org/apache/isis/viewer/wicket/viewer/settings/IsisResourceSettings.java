@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 import java.util.List;
 import org.apache.wicket.Application;
 import org.apache.wicket.resource.loader.*;
-import org.apache.wicket.settings.def.ResourceSettings;
+import org.apache.wicket.settings.ResourceSettings;
 import org.apache.wicket.util.lang.Generics;
 
 public class IsisResourceSettings extends ResourceSettings {
@@ -91,7 +91,7 @@ public class IsisResourceSettings extends ResourceSettings {
     }
 
     /**
-     * @see org.apache.wicket.settings.IResourceSettings#getStringResourceLoaders()
+     * @see org.apache.wicket.settings.ResourceSettings#getStringResourceLoaders()
      */
     @Override
     public List<IStringResourceLoader> getStringResourceLoaders()

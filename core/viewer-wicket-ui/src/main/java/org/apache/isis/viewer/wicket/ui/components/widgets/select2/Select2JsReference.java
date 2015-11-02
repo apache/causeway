@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
 import de.agilecoders.wicket.webjars.request.resource.WebjarsJavaScriptResourceReference;
 
+import java.util.List;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Application;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -37,8 +38,8 @@ public class Select2JsReference extends WebjarsJavaScriptResourceReference {
     }
 
     @Override
-    public Iterable<? extends HeaderItem> getDependencies() {
+    public List<HeaderItem> getDependencies() {
         ResourceReference jQueryReference = Application.get().getJavaScriptLibrarySettings().getJQueryReference();
-        return Lists.newArrayList(JavaScriptHeaderItem.forReference(jQueryReference));
+        return Lists.<HeaderItem>newArrayList(JavaScriptHeaderItem.forReference(jQueryReference));
     }
 }

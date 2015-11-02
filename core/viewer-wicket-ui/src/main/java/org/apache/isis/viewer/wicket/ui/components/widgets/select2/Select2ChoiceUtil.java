@@ -38,7 +38,7 @@ public final class Select2ChoiceUtil  {
         return select2Choice;
     }
 
-    private static class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
+    private static class EmptyChoiceProvider implements ChoiceProvider<ObjectAdapterMemento> {
 
         private static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
 
@@ -55,6 +55,11 @@ public final class Select2ChoiceUtil  {
         @Override
         public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
             return null;
+        }
+
+        @Override
+        public void detach() {
+
         }
     }
 }

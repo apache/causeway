@@ -21,7 +21,6 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
-import org.apache.wicket.markup.html.IHeaderContributor;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -45,7 +44,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Convenience adapter for {@link Panel}s built up using {@link ComponentType}s.
  */
 // TODO mgrigorov: extend GenericPanel and make T the type of the model object, not the model
-public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements IHeaderContributor, PersistenceSessionProvider, AuthenticationSessionProvider,
+public abstract class PanelAbstract<T extends IModel<?>> extends Panel implements PersistenceSessionProvider, AuthenticationSessionProvider,
         DeploymentCategoryProvider {
 
     private static final long serialVersionUID = 1L;

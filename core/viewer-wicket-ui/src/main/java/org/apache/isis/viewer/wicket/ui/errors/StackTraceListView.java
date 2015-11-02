@@ -30,7 +30,7 @@ public final class StackTraceListView extends ListView<StackTraceDetail> {
     private static final long serialVersionUID = 1L;
     private final String idLine;
 
-    public StackTraceListView(String id, String idLine, List<? extends org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail> list) {
+    public StackTraceListView(String id, String idLine, List<org.apache.isis.viewer.wicket.ui.errors.StackTraceDetail> list) {
         super(id, list);
         this.idLine = idLine;
     }

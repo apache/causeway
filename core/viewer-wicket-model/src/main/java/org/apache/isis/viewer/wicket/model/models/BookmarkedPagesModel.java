@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
 
-public class BookmarkedPagesModel extends ModelAbstract<List<? extends BookmarkTreeNode>> {
+public class BookmarkedPagesModel extends ModelAbstract<List<BookmarkTreeNode>> {
 
 
     private static final long serialVersionUID = 1L;

@@ -21,7 +21,6 @@ import org.apache.wicket.ajax.attributes.IAjaxCallListener;
 import org.apache.wicket.extensions.ajax.markup.html.repeater.data.sort.AjaxFallbackOrderByBorder;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
-import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -36,7 +35,7 @@ public class IsisAjaxFallbackOrderByBorder<T> extends AjaxFallbackOrderByBorder<
     private final ISortStateLocator<T> stateLocator;
     
     public IsisAjaxFallbackOrderByBorder(String id, IsisAjaxFallbackDataTable<?, ?> dataTable, T sortProperty, ISortStateLocator<T> stateLocator, IAjaxCallListener ajaxCallListener) {
-        super(id, sortProperty, stateLocator, new OrderByLink.VoidCssProvider<T>(), ajaxCallListener);
+        super(id, sortProperty, stateLocator, ajaxCallListener);
         this.dataTable = dataTable;
         this.stateLocator = stateLocator;
         this.sortProperty = sortProperty;

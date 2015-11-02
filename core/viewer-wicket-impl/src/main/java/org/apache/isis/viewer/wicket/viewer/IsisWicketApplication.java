@@ -56,7 +56,7 @@ import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.PageRequestHandlerTracker;
 import org.apache.wicket.request.cycle.RequestCycleListenerCollection;
 import org.apache.wicket.request.resource.CssResourceReference;
-import org.apache.wicket.settings.IRequestCycleSettings.RenderStrategy;
+import org.apache.wicket.settings.RequestCycleSettings.RenderStrategy;
 import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -215,7 +215,7 @@ public class IsisWicketApplication
 
     /**
      * Although there are warnings about not overriding this method, it doesn't seem possible
-     * to call {@link #setResourceSettings(org.apache.wicket.settings.IResourceSettings)} in the
+     * to call {@link #setResourceSettings(org.apache.wicket.settings.ResourceSettings)} in the
      * {@link #init()} method.
      */
     @Override
@@ -318,7 +318,6 @@ public class IsisWicketApplication
         ApplicationSettings select2Settings = ApplicationSettings.get();
         select2Settings.setCssReference(new Select2BootstrapCssReference());
         select2Settings.setJavaScriptReference(new Select2JsReference());
-        select2Settings.setIncludeJqueryUI(false);
     }
 
     private void configureWicketSourcePlugin() {
@@ -347,7 +346,7 @@ public class IsisWicketApplication
         settings.setDeferJavascript(false);
         Bootstrap.install(this, settings);
 
-        getHeaderContributorListenerCollection().add(new IHeaderContributor() {
+        getHeaderContributorListeners().add(new IHeaderContributor() {
             @Override
             public void renderHead(IHeaderResponse response) {
                 BootstrapBaseBehavior bootstrapBaseBehavior = new BootstrapBaseBehavior();

@@ -74,7 +74,7 @@ public class MmvErrorPage extends WebPage {
     private static final String ID_ERROR = "error";
     private static final String ID_ERROR_MESSAGE = "errorMessage";
 
-    public MmvErrorPage(final IModel<List<? extends String>> model) {
+    public MmvErrorPage(final IModel<List<String>> model) {
         super(model);
         addPageTitle();
         addApplicationName();
@@ -82,8 +82,8 @@ public class MmvErrorPage extends WebPage {
     }
 
     @SuppressWarnings("unchecked")
-    private IModel<List<? extends String>> getModel() {
-        return (IModel<List<? extends String>>) getDefaultModel();
+    private IModel<List<String>> getModel() {
+        return (IModel<List<String>>) getDefaultModel();
     }
 
     private MarkupContainer addPageTitle() {
