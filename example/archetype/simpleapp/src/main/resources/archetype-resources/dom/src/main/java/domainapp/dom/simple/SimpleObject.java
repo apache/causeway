@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
@@ -94,9 +95,11 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
+
     public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}
     @Action(
-            domainEvent = UpdateNameDomainEvent.class
+            domainEvent = UpdateNameDomainEvent.class,
+            semantics = SemanticsOf.IDEMPOTENT
     )
     public SimpleObject updateName(
             @Parameter(maxLength = NAME_LENGTH)
