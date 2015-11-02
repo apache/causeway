@@ -38,9 +38,19 @@ public final class Select2ChoiceUtil  {
         return select2Choice;
     }
 
-    private static class EmptyChoiceProvider implements ChoiceProvider<ObjectAdapterMemento> {
+    private static class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
 
         private static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+
+        @Override
+        public String getDisplayValue(ObjectAdapterMemento object) {
+            return null;
+        }
+
+        @Override
+        public String getIdValue(ObjectAdapterMemento object) {
+            return null;
+        }
 
         @Override
         public void query(String term, int page, Response<ObjectAdapterMemento> response) {

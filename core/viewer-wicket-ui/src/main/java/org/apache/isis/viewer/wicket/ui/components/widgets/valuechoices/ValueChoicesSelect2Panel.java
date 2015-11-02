@@ -173,7 +173,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
             final Predicate<ObjectAdapterMemento> lookupOam = new Predicate<ObjectAdapterMemento>() {
                 @Override
                 public boolean apply(ObjectAdapterMemento input) {
-                    final String id = (String) getId(input);
+                    final String id = getIdValue(input);
                     return ids.contains(id);
                 }
             };

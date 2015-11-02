@@ -1586,7 +1586,8 @@ ${license.additional-notes}
 
                 <groupId>org.wicketstuff</groupId>
                 <artifactId>wicketstuff-select2</artifactId>
-                <version>${wicketstuff.version}</version>
+                <version>7.2.0-SNAPSHOT</version>
+                <!--<version>${wicketstuff.version}</version>-->
                 <exclusions>
                     <exclusion>
                         <!-- for dependency convergence -->

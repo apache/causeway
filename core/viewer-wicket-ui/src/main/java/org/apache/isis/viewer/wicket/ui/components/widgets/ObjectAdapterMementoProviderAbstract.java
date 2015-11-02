@@ -22,7 +22,7 @@ import java.util.Locale;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.wicketstuff.select2.TextChoiceProvider;
+import org.wicketstuff.select2.ChoiceProvider;
 import org.apache.wicket.Session;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.string.Strings;
@@ -34,7 +34,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.IsisConverterLocator;
 
-public abstract class ObjectAdapterMementoProviderAbstract extends TextChoiceProvider<ObjectAdapterMemento> {
+public abstract class ObjectAdapterMementoProviderAbstract extends ChoiceProvider<ObjectAdapterMemento> {
 
     private static final long serialVersionUID = 1L;
     
@@ -50,7 +50,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     }
     
     @Override
-    protected String getDisplayText(final ObjectAdapterMemento choice) {
+    public String getDisplayValue(final ObjectAdapterMemento choice) {
         if (choice == null) {
             return NULL_DISPLAY_TEXT;
         }
@@ -71,7 +71,7 @@ public abstract class ObjectAdapterMementoProviderAbstract extends TextChoicePro
     }
 
     @Override
-    protected Object getId(final ObjectAdapterMemento choice) {
+    public String getIdValue(final ObjectAdapterMemento choice) {
         return choice != null? choice.asString(): NULL_PLACEHOLDER;
     }
 
