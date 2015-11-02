@@ -16,9 +16,14 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.select2;
 
-import com.vaynberg.wicket.select2.Select2Choice;
+import java.util.Collection;
 
+import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONWriter;
 import org.apache.wicket.model.IModel;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.Select2Choice;
 
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -28,8 +33,28 @@ public final class Select2ChoiceUtil  {
     private Select2ChoiceUtil(){}
 
     public static Select2Choice<ObjectAdapterMemento> newSelect2Choice(String id, final IModel<ObjectAdapterMemento> modelObject, ScalarModel scalarModel) {
-        Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<>(id, modelObject);
+        Select2Choice<ObjectAdapterMemento> select2Choice = new Select2Choice<>(id, modelObject, EmptyChoiceProvider.INSTANCE);
         select2Choice.setRequired(scalarModel.isRequired());
         return select2Choice;
+    }
+
+    private static class EmptyChoiceProvider extends ChoiceProvider<ObjectAdapterMemento> {
+
+        private static final EmptyChoiceProvider INSTANCE = new EmptyChoiceProvider();
+
+        @Override
+        public void query(String term, int page, Response<ObjectAdapterMemento> response) {
+
+        }
+
+        @Override
+        public void toJson(ObjectAdapterMemento choice, JSONWriter writer) throws JSONException {
+
+        }
+
+        @Override
+        public Collection<ObjectAdapterMemento> toChoices(Collection<String> ids) {
+            return null;
+        }
     }
 }

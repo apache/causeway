@@ -17,14 +17,14 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
-import com.vaynberg.wicket.select2.Response;
-import com.vaynberg.wicket.select2.Select2Choice;
-import com.vaynberg.wicket.select2.Settings;
-import com.vaynberg.wicket.select2.TextChoiceProvider;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.wicketstuff.select2.Response;
+import org.wicketstuff.select2.Select2Choice;
+import org.wicketstuff.select2.Settings;
+import org.wicketstuff.select2.TextChoiceProvider;
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -51,7 +51,37 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         
         final IModel<EntityModel> entityModel = new Model<EntityModel>();
-        final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<EntityModel>(ID_BREADCRUMBS, entityModel);
+        TextChoiceProvider<EntityModel> choiceProvider = new TextChoiceProvider<EntityModel>() {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected String getDisplayText(EntityModel choice) {
+                return breadcrumbModel.titleFor(choice);
+            }
+
+            @Override
+            protected Object getId(EntityModel choice) {
+                try {
+                    return PageParameterNames.OBJECT_OID.getStringFrom(choice.getPageParameters());
+                } catch (Exception ex) {
+                    breadcrumbModel.remove(choice);
+                    return null;
+                }
+            }
+
+            @Override
+            public void query(String term, int page, Response<EntityModel> response) {
+                response.addAll(breadcrumbModel.getList());
+            }
+
+            @Override
+            public Collection<EntityModel> toChoices(Collection<String> ids) {
+                return breadcrumbModel.getList();
+            }
+
+        };
+        final Select2Choice<EntityModel> breadcrumbChoice = new Select2Choice<>(ID_BREADCRUMBS, entityModel, choiceProvider);
 
         breadcrumbChoice.add(
             new AjaxFormComponentUpdatingBehavior("change"){
@@ -78,36 +108,6 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         settings.setMinimumInputLength(0);
         settings.setWidth("100%");
         
-        breadcrumbChoice.setProvider(new TextChoiceProvider<EntityModel>() {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected String getDisplayText(EntityModel choice) {
-                return breadcrumbModel.titleFor(choice);
-            }
-
-            @Override
-            protected Object getId(EntityModel choice) {
-                try {
-                    return PageParameterNames.OBJECT_OID.getStringFrom(choice.getPageParameters());
-                } catch(Exception ex) {
-                    breadcrumbModel.remove(choice);
-                    return null;
-                }
-            }
-
-            @Override
-            public void query(String term, int page, Response<EntityModel> response) {
-                response.addAll(breadcrumbModel.getList());
-            }
-
-            @Override
-            public Collection<EntityModel> toChoices(Collection<String> ids) {
-                return breadcrumbModel.getList();
-            }
-            
-        });
         addOrReplace(breadcrumbChoice);
     }
 

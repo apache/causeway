@@ -35,7 +35,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.vaynberg.wicket.select2.ApplicationSettings;
+import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;

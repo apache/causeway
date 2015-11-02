@@ -16,6 +16,7 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.valuechoices;
 
+
 import java.util.Collection;
 import java.util.List;
 
@@ -25,8 +26,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import com.vaynberg.wicket.select2.ChoiceProvider;
-import com.vaynberg.wicket.select2.Select2Choice;
+import org.wicketstuff.select2.ChoiceProvider;
+import org.wicketstuff.select2.Select2Choice;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -192,6 +193,7 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
         @Override
         protected List<ObjectAdapterMemento> obtainMementos(String term) {
+            // return choicesMementos;  // ISIS-1020: as of Jan 2015
             return obtainMementos(term, choicesMementos);
         }
 
@@ -272,7 +274,6 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
 
     
     // //////////////////////////////////////
-
 
     public ObjectAdapterMemento getPending() {
         return pending;

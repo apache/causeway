@@ -129,9 +129,9 @@
         <wicket-bootstrap.version>0.9.12</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
-        <wicket-select2.version>2.2.3</wicket-select2.version>
-        <select2.version>3.5.1</select2.version>
-        <jquery-ui.version>1.10.4</jquery-ui.version>
+        <wicket-select2.version>6.20.0</wicket-select2.version>
+        <select2.version>3.5.2</select2.version>
+        <jquery-ui.version>1.11.4</jquery-ui.version>
 
         <guice.version>3.0</guice.version>
         <picocontainer.version>2.14.3</picocontainer.version>
@@ -1580,8 +1580,9 @@ ${license.additional-notes}
 
             <!-- Wicket-Select2 -->
             <dependency>
-                <groupId>com.vaynberg.wicket.select2</groupId>
-                <artifactId>wicket-select2</artifactId>
+
+                <groupId>org.wicketstuff</groupId>
+                <artifactId>wicketstuff-select2</artifactId>
                 <version>${wicket-select2.version}</version>
                 <exclusions>
                     <exclusion>

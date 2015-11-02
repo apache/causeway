@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 /**
- * For widgets that use a <tt>com.vaynberg.wicket.select2.Select2Choice</tt>; 
+ * For widgets that use a <tt>org.wicketstuff.select2.Select2Choice</tt>;
  * synchronizes the {@link Model} of the <tt>Select2Choice</tt>  
  * with the parent {@link ScalarModel}, allowing also for pending values.
  */
