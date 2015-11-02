@@ -163,6 +163,7 @@ public abstract class EventBusService {
         }
     }
 
+
     /**
      * Notionally allows subscribers to unregister from the event bus; however this is a no-op.
      *
@@ -207,13 +208,18 @@ public abstract class EventBusService {
         getEventBusImplementation().post(event);
     }
 
+
+    protected boolean hasPosted() {
+        return this.eventBusImplementation != null;
+    }
+
     //endregion
 
 
     //region > getEventBus
 
     /**
-     * Lazily populated in {@link #getEventBusImplementation()}.
+     * Lazily populated in {@link #getEventBusImplementation()} as result of the first {@link #post(Object)}.
      */
     protected EventBusImplementation eventBusImplementation;
 

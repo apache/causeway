@@ -61,14 +61,14 @@ public abstract class EventBusServiceDefault extends EventBusService {
                 throw new IllegalArgumentException("Request-scoped services must register their proxy, not themselves");
             }
             // a singleton
-            if (!allowLateRegistration && this.eventBusImplementation != null) {
+            if (!allowLateRegistration && hasPosted()) {
                 // ... coming too late to the party.
-                throw new IllegalStateException("Event bus has already been created; too late to register any further (singleton) subscribers");
+                throw new IllegalStateException("Events have already been posted; too late to register any further (singleton) subscribers");
             }
         }
         super.register(domainService);
     }
-    
+
     //endregion
 
     //region > init, shutdown
