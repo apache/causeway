@@ -52,23 +52,27 @@ Tidy up remote branches in the git repo:
 +
 [source,bash]
 ----
-git push origin –delete isis-1.9.0 # $ISISART-$SISREL
+git push --delete origin release-1.10.0-RC1
 ----
 
 
-* delete the remote origin server's tag, for example: +
+* delete the remote origin server's tags, for example: +
 +
 [source,bash]
 ----
-git push origin –delete refs/tags/isis-1.9.0-RC1
+git push --delete origin isis-1.10.0-RC1
+git push --delete origin simpleapp-archetype-1.10.0-RC1
 ----
 
 
-* delete the tag that was created locally, for example: +
+* delete the tags that were created locally, for example: +
 +
 [source,bash]
 ----
-git tag -d isis-1.9.0 # $ISISART-$SISREL
+git tag -d isis-1.10.0
+git tag -d isis-1.10.0-RC1
+git tag -d simpleapp-archetype-1.10.0
+git tag -d simpleapp-archetype-1.10.0-RC1
 ----
 
 
