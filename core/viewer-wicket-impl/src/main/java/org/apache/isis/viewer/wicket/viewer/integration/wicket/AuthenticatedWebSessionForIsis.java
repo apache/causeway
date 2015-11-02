@@ -113,7 +113,13 @@ public class AuthenticatedWebSessionForIsis extends AuthenticatedWebSession impl
         final List<String> roles = authenticationSession.getRoles();
         return new Roles(roles.toArray(new String[roles.size()]));
     }
-    
+
+    @Override
+    public void detach() {
+        breadcrumbModel.detach();
+        super.detach();
+    }
+
     // /////////////////////////////////////////////////
     // Breadcrumbs and Bookmarks support
     // /////////////////////////////////////////////////

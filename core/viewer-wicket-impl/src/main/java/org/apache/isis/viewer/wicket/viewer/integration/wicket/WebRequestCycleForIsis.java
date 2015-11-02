@@ -98,7 +98,9 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         if(LOG.isDebugEnabled()) {
             LOG.debug("onRequestHandlerExecuted: handler: " + handler);
         }
-        
+
+        final AuthenticatedWebSessionForIsis authenticatedWebSessionForIsis = AuthenticatedWebSessionForIsis.get();
+
         final IsisSession session = getIsisContext().getSessionInstance();
         if (session != null) {
             try {

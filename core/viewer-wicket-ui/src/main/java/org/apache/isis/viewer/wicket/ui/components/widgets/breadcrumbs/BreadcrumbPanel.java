@@ -17,10 +17,13 @@
 package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 
 import java.util.Collection;
+import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
@@ -63,7 +66,9 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
             @Override
             protected Object getId(EntityModel choice) {
                 try {
-                    return PageParameterNames.OBJECT_OID.getStringFrom(choice.getPageParameters());
+                    final PageParameters pageParameters = choice.getPageParameters();
+                    final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+                    return oidStr;
                 } catch (Exception ex) {
                     breadcrumbModel.remove(choice);
                     return null;
@@ -72,7 +77,8 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
-                response.addAll(breadcrumbModel.getList());
+                final List<EntityModel> list = breadcrumbModel.getList();
+                response.addAll(list);
             }
 
             @Override

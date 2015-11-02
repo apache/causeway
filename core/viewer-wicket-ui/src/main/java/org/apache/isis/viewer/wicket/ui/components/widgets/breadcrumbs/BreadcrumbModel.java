@@ -118,9 +118,13 @@ public class BreadcrumbModel implements Serializable {
         if(oidStr == null) {
             return null;
         }
-        return entityModelByOidStr.get(oidStr);
+        final EntityModel entityModel = entityModelByOidStr.get(oidStr);
+        return entityModel;
     }
 
-
-
+    public void detach() {
+        for (EntityModel entityModel : list) {
+            entityModel.detach();
+        }
+    }
 }
