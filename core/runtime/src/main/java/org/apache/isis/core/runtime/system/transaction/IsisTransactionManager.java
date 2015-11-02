@@ -350,6 +350,8 @@ public class IsisTransactionManager implements SessionScopedComponent {
                 commandService != null 
                     ? commandService.create() 
                     : new CommandDefault();
+        servicesInjector.injectServicesInto(command);
+
         commandContext.setCommand(command);
 
         if(command.getTimestamp() == null) {
