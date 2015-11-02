@@ -43,12 +43,12 @@ sources.
 [[_ug_core-concepts_building-blocks_types-of-domain-objects]]
 ## Type of Domain Objects
 
-Most domain objects that the end-user interacts with are domain entities, such as `Customer`, `Order`, `Product` and
+Most domain objects that the end-user interacts with are *domain entities*, such as `Customer`, `Order`, `Product` and
 so on.  These are persistent objects and which are mapped to a database (usually relational), using JDO/DataNucleus
 annotations.  From the end-user's perspective the UI displays a single domain object per page; they can then inspect
 and modify its state, and navigate to related objects.
 
-The next type of domain object to discuss is domain services.  These are (usually) singleton stateless services
+The next type of domain object to discuss is *domain services*.  These are (usually) singleton stateless services
 that provide additional functionality.  The behaviour of these services is rendered in various ways, though the most
 obvious is as the menu actions on the top-level menu bars in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]'s UI.
 
@@ -58,26 +58,28 @@ significant: it allows business logic to be implemented in the domain entities, 
 supporting service layers.  Said another way: it is the means by which Apache Isis helps you avoid the anaemic
 domain model anti-pattern.
 
-As well as domain entities - mapped to a datastore - Apache Isis also supports view models.  End users interact with
+As well as domain entities - mapped to a datastore - Apache Isis also supports *view models*.  End users interact with
 view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.  However
 view models are _not_ mapped to the underlying database, rather they represent some aggregation of state from one or
 more underlying entities.  Their state is serialized and recreated from their internal identifier; this identifier is
 visible as the object's URL in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] or
 xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
 
-There's no need though for the view model to aggregate the state of regular domain entities.  A view model could also be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a representation
- of state held in-memory (such as user preferences, for example).
+There's no need though for the view model to aggregate the state of regular domain entities.  A view model could also
+be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a
+representation of state held in-memory (such as user preferences, for example).
 
 There are also several types of domain services.  Most easily described are those domain services (discussed above)
-that are represented as the menu actions on top-level menu bars.  Another variation are domain services that contribute
-behaviour or (derived) state to entities/view models.  Finally domain services may also simply provide additional non-UI
-functionality; an example being to perform an address geocoding lookup against the google-maps API.
+that are represented as the menu actions on top-level menu bars.  Another variation are *contributed services* - domain
+services that contribute behaviour or (derived) state to entities/view models.  Finally domain services may also
+simply provide additional non-UI functionality; an example being to perform an address geocoding lookup against the
+google-maps API.
 
 Also worth mentioning: domain services can also be either singletons (discussed above) or request-scoped; the latter
 being annotated with `@javax.enterprise.context.RequestScoped`.  An example of the request-scoped service is the
 xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
 
-The final type of domain object is mixins.  These are similar to contributed services in that they also contribute (or rather,
+The final type of domain object is the *mixin*.  These are similar to contributed services in that they also contribute (or rather,
 mixin) both behaviour or (derived) state to entities/view models.  However, they provide a more control over contributed services,
 with a cleaner programming model similar to traits found in other languages.
 
@@ -86,18 +88,58 @@ The diagram below summarizes the various types of domain object:
 image::{_imagesdir}core-concepts/building-blocks/types-of-domain-object.png[width="860px",link="{_imagesdir}core-concepts/building-blocks/types-of-domain-object.png"]
 
 
-The Apache Isis programming model offers some equivalent ways
+The Apache Isis programming model uses annotations to distinguish these object types:
 
+* *view models* are annotated either with `@DomainObject(nature=VIEW_MODEL)` or using `@ViewModel`.  Which is used is
+a matter of personal preference.  +
++
+It is also possible to implement the `ViewModel` interface, for finer-grained control.
 
-... todo
+* *domain entities* that are persisted to the database (as the vast majority will) are annotated with
+`@DomainObject(nature=ENTITY)`. In addition such domain entities are annotated with the JDO/DataNucleus annotation of
+`@javax.jdo.annotations.PersistenceCapable`. +
++
+In addition, if a domain entity is a proxy for state managed in an external system, or merely for some state held
+in-memory, then `@DomainObject(nature=EXTERNAL_ENTITY)` or `@DomainObject(nature=INMEMORY_ENTITY)` can be used.
+
+* *mixins* are annotated either with `@DomainObject(nature=MIXIN)` or using `@Mixin`.  As for view models, which is
+used is a matter of personal preference.
+
+* finally, *domain services*` are annotated with `@DomainService(nature=...)` where the nature is either
+`VIEW_MENU_ONLY` (for domain services whose actions appear on the top-level menu bars), or `VIEW_CONTRIBUTIONS_ONLY`
+(for domain services whose actions are contributed to entities or view models), or `DOMAIN` (for domain services whose
+functionality is simply for other domain objects to invoke programmatically).
++
+It is also possible to specify a nature of simply `VIEW`, this combining `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`.
+This is in fact the default, useful for initial prototyping.  A final nature is `VIEW_REST_ONLY` which is for domain
+services whose functionality is surfaced only by the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
+
+Worth emphasising is that domain entities and view models hold state, whereas domain services are generally
+stateless.  If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be
+`@RequestScoped` so that this state is short-lived and usable only within a single request.
+
 
 
 [[_ug_core-concepts_building-blocks_objects-members]]
-## Object Members
+== Object Members
 
-Every domain object in Apache Isis consists of these three types of members: properties, collections and actions.  Some (eg domain services and mixins) only contain
+Every domain object in Apache Isis consists of (at most) three types of members:
 
-NOTE: TODO
+* properties, such as a `Customer`'s `firstName
+
+* collections, such as a `Customer`'s `orders` collection of ``Order``s
+
+* actions, such as a `Customer'`s `placeOrder(...)` method.
+
+Some domain objects - specifically domain services and mixins - only have actions.  In the case of contributing services
+and mixins these actions can (depending upon their semantics and signatures) be represented as derived properties or
+collections on the entity/view model to which they contribute/mix-in.
+
+
+=== Properties
+
+Properties follow the standard getter/setter pattern, with the return type being a scalar (a value object or another
+entity or view model).
 
 For example, with:
 
@@ -113,7 +155,12 @@ public class Customer
 
 the framework infers the `Customer` domain entity, which in turn has a `firstName` string _property_.
 
-Similarly, from:
+
+=== Collections
+
+Collections are also represented by a getter and setter, however the return type is a `Collection` or subtype.
+
+For example, with:
 
 [source,java]
 ----
@@ -127,7 +174,20 @@ public class Customer
 
 the framework infers the `orders` _collection_.
 
-Finally:
+[TIP]
+====
+The most commonly used collection type is `java.util.SortedSet`; entities are most commonly mapped to a relational
+database (ie a datastore with set semantics) and we recommend that all entities define a natural ordering so that when
+rendered in the UI they will be ordered "meaningfully" to the end-user.
+====
+
+
+=== Actions
+
+The third type of object member is actions.  (To a first approximation), actions are all public methods that do not
+represent properties or collections.
+
+For example:
 
 [source,java]
 ----
@@ -139,6 +199,12 @@ public class Customer
 
 corresponds to the `placeOrder` _action_.
 
+[NOTE]
+====
+The above _is_ a simplification; the Apache Isis programming model also recognizes a number of other supporting methods
+each of which has its own prefix such as `hide`, `disable` or `validate`.  These can be considered as "reserved words"
+in Apache Isis, and do _not_ correspond to actions even though they have public visibility.
+====
 
 
 
