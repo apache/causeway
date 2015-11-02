@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.objectvalue.mustsatisfyspec;
 
 import java.util.List;
+
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.spec.Specification;
@@ -55,6 +56,7 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
             final FacetHolder holder,
             final ServicesInjector servicesInjector) {
         super(type(), holder, Derivation.NOT_DERIVED);
+        inject(specifications, servicesInjector);
         this.specifications = specifications;
 
         final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
@@ -62,6 +64,12 @@ public abstract class MustSatisfySpecificationFacetAbstract extends FacetAbstrac
         final String translationContext = ((IdentifiedHolder) holder).getIdentifier().toClassAndNameIdentityString();
 
         specificationEvaluator = new SpecificationEvaluator(translationService, translationContext);
+    }
+
+    private static void inject(
+            final List specifications, final ServicesInjector servicesInjector) {
+        final List<Object> specificationsAsObjects = specifications;
+        servicesInjector.injectServicesInto(specificationsAsObjects);
     }
 
     @Override

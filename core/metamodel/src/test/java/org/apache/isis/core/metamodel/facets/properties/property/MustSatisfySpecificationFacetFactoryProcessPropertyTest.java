@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.property;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
@@ -70,6 +71,9 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
+        }});
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).injectServicesInto(with(any(List.class)));
         }});
 
         domainObjectClassWithoutAnnotation = DomainObjectWithoutMustSatisfyAnnotations.class;

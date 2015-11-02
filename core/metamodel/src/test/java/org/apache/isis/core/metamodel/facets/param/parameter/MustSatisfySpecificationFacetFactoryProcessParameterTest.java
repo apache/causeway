@@ -20,11 +20,14 @@
 package org.apache.isis.core.metamodel.facets.param.parameter;
 
 import java.lang.reflect.Method;
+import java.util.List;
+
 import org.jmock.Expectations;
 import org.jmock.auto.Mock;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
@@ -67,6 +70,9 @@ public class MustSatisfySpecificationFacetFactoryProcessParameterTest {
         context.checking(new Expectations() {{
             allowing(mockServicesInjector).lookupService(TranslationService.class);
             will(returnValue(mockTranslationService));
+        }});
+        context.checking(new Expectations() {{
+            allowing(mockServicesInjector).injectServicesInto(with(any(List.class)));
         }});
 
 
