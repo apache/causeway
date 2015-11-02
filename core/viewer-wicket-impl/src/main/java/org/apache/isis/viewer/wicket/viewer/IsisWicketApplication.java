@@ -46,7 +46,6 @@ import org.apache.wicket.SharedResources;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.guice.GuiceComponentInjector;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.IHeaderContributor;
@@ -100,6 +99,7 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
+import org.apache.isis.viewer.wicket.viewer.guice.GuiceComponentInjector;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -689,8 +689,6 @@ public class IsisWicketApplication
 
 
     protected void initWicketComponentInjection(final Injector injector) {
-        // if serializable, then brings in dependency on cglib, and in turn asm.
-        // This would block us from migrating to DN 4.0.x
         getComponentInstantiationListeners().add(new GuiceComponentInjector(this, injector, false));
     }
 
