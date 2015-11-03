@@ -32,7 +32,7 @@
                         },
                         "versionSequence": {
                             "propertyLayout": {
-                                "name": "version"
+                                "named": "Version"
                             }
                         }
                     }
