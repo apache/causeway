@@ -1021,24 +1021,6 @@ ${license.additional-notes}
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>1.3.1</version>
-                <executions>
-                    <execution>
-                        <id>owasp-aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <configuration>
-                            <skipProvidedScope>true</skipProvidedScope>
-                            <skipRuntimeScope>true</skipRuntimeScope>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
         </plugins>
     </build>
 
@@ -1987,12 +1969,33 @@ ${license.additional-notes}
             </build>
         </profile>
         <profile>
-            <id>owasp-check</id>
+            <id>owasp</id>
             <activation>
                 <property>
                     <name>owasp</name>
                 </property>
             </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.owasp</groupId>
+                        <artifactId>dependency-check-maven</artifactId>
+                        <version>1.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>owasp-aggregate</id>
+                                <goals>
+                                    <goal>aggregate</goal>
+                                </goals>
+                                <configuration>
+                                    <skipProvidedScope>true</skipProvidedScope>
+                                    <skipRuntimeScope>true</skipRuntimeScope>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

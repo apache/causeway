@@ -186,11 +186,10 @@ To check, run:
 
 [source,bash]
 ----
-cd core
-mvn org.owasp:dependency-check-maven:aggregate
+mvn org.owasp:dependency-check-maven:aggregate -Dowasp
 ----
 
-This will generate a single report under `core/target/dependency-check-report.html`.
+This will generate a single report under `target/dependency-check-report.html`.
 
 
 [NOTE]
@@ -198,3 +197,4 @@ This will generate a single report under `core/target/dependency-check-report.ht
 The first time this runs can take 10~20 minutes to download the NVD data feeds.
 ====
 
+To disable, either run in offline mode (add `-o` or `--offline`) or omit the `owasp` property.
