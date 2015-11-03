@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.util;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -55,9 +56,9 @@ public final class Components {
      * on JDK6u18 (Ubuntu)
      */
     private static void permanentlyHideSingle(final MarkupContainer container, final String id) {
-        final Label label = new Label(id, "");
-        label.setVisible(false);
-        container.addOrReplace(label);
+        final WebMarkupContainer invisible = new WebMarkupContainer(id);
+        invisible.setVisible(false);
+        container.addOrReplace(invisible);
     }
 
     /**
