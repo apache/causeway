@@ -40,6 +40,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
+
 /**
  * A page being shown when the meta model validation has failed
  */
@@ -109,7 +111,8 @@ public class MmvErrorPage extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
-        
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(BootstrapJavaScriptReference.instance())));
+
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));
         }

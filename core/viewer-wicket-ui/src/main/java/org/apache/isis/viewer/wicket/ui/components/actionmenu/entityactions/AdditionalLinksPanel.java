@@ -32,19 +32,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.ListOfLinksModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.CssClassFaBehavior;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
-
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 
 public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
 
@@ -125,25 +120,8 @@ public class AdditionalLinksPanel extends PanelAbstract<ListOfLinksModel> {
                 link.add(new CssClassAppender(linkAndLabel.getActionIdentifier()));
 
                 SemanticsOf semantics = linkAndLabel.getSemantics();
-                if (    semantics.isAreYouSure() && linkAndLabel.getParameters().isNoParameters() ) {
-                    ConfirmationConfig confirmationConfig = new ConfirmationConfig();
-
-                    final TranslationService translationService =
-                            getPersistenceSession().getServicesInjector().lookupService(TranslationService.class);
-
-                    final String context = IsisSystem.class.getName();
-                    final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
-                    final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
-                    final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
-
-                    confirmationConfig.withTitle(areYouSure);
-                    confirmationConfig.withBtnOkLabel(confirm);
-                    confirmationConfig.withBtnCancelLabel(cancel);
-
-                    confirmationConfig.withBtnOkClass("btn btn-danger");
-                    confirmationConfig.withBtnCancelClass("btn btn-default");
-
-                    link.add(new ConfirmationBehavior(confirmationConfig));
+                if (linkAndLabel.getParameters().isNoParameters()) {
+                    addConfirmationDialogIfAreYouSureSemantics(link, semantics);
                 }
 
 
