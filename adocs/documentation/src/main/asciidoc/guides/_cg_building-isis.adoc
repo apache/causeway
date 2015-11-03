@@ -198,3 +198,25 @@ The first time this runs can take 10~20 minutes to download the NVD data feeds.
 ====
 
 To disable, either run in offline mode (add `-o` or `--offline`) or omit the `owasp` property.
+
+
+
+== Checking for use of internal JDK APIs
+
+Apache Isis configures the link:https://maven.apache.org/plugins-archives/maven-jdeps-plugin-3.0.0/[jdeps maven plugin] to check for any usage of internal JDK APIs.  This is in preparation for Java 9 module system (Jigsaw) which will prevent such usage of APIs.
+
+To check, run:
+
+[source,bash]
+----
+mvn clean install -Djdeps
+----
+
+This will fail the build on any module that currently uses an internal JDK API.
+
+
+[NOTE]
+====
+At the time of writing the `isis-core-schema` module fails the build.
+====
+
