@@ -80,11 +80,11 @@ public class CollectionContentsMultipleViewsPanel
     /**
      * Build UI only after added to parent.
      */
+    @Override
     public void onInitialize() {
         super.onInitialize();
         addUnderlyingViews();
     }
-
 
     private void addUnderlyingViews() {
         final EntityCollectionModel model = getModel();
