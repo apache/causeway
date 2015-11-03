@@ -5,9 +5,36 @@
 :_imagesdir: images/
 
 
-Existing projects written against v1.9.0 should run against v1.10.0 with few if any changes.  If you *do* encounter
+Existing projects written against v1.9.0 should run against v1.10.0 with only a few minor changes.  If you *do* encounter
 any difficulties then let us know via the link:support.html[users mailing list], so we can support you and document
 issues here.
+
+
+== Remove references to `isis-viewer-wicket` parent pom.
+
+In earlier releases the Wicket viewer defined its own parent `pom.xml` for dependency management and its dependencies
+and to declare the various submodules that make up the viewer.  This `pom.xml` has now been incorporated into the
+parent `pom.xml` for the Core framework.
+
+Therefore, in the parent `pom.xml` of your own domain applications, remove:
+
+[source,xml]
+----
+<dependencyManagement>
+    <dependencies>
+        ...
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>isis-viewer-wicket</artifactId>
+            <version>${isis.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        ...
+    </dependencies>
+</dependencyManagement>
+----
+
 
 
 
