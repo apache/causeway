@@ -127,13 +127,19 @@ On the *Compiler* Settings page, ensure that `build automatically` is enabled (a
 image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings-compiler/010-build-automatically.png[width="600px"]
 
 
-On the *Annotation Processors* page, enable and adjust:
+On the *Annotation Processors* page, enable and adjust for the 'default' setting:
 
 .IntelliJ Annotation Processor Settings
 image::{_imagesdir}appendices/dev-env/intellij-idea/040-other-settings-compiler/020-annotation-processor.png[width="600px"]
 
 This setting enables the generation of the `Q*` classes for DataNucleus type-safe queries, as well as being required
 for frameworks such as xref:_cg_ide_project-lombok[Project Lombok].
+
+[NOTE]
+====
+IntelliJ may also have inferred these settings for specific projects/modules when importing; review the list on the left to see if the default is overridden and fix/delete as required.
+====
+
 
 
 [[_cg_ide_intellij_other-settings-maven]]
