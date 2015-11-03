@@ -55,42 +55,34 @@ First, delete all Isis artifacts from your local Maven repo:
 rm -rf ~/.m2/repository/org/apache/isis
 ----
 
-Next, check that the releasable module builds independently. The build process depends on whether the artifact is of Apache Isis core or of one of its components:
+Next, check that the framework builds ok:
 
-* For Apache Isis core, build using the `-o` offline flag: +
-+
 [source,bash]
 ----
+cd core
 mvn clean install -o
 ----
-+
-Confirm that the versions of the Isis artifacts now cached in your local repository are correct.
 
-* For an Apache Isis component, build without the offline flag; Maven should pull down the component's dependencies from the Maven central repo: +
-+
-[source,bash]
-----
-mvn clean install
-----
-+
 Confirm that the versions of the Isis artifacts now cached in your local repository are correct (both those pulled down from Maven central repo, as well as those of the component built locally).
 
 
 
-== Deploy All Modules
+== Deploy
 
-Deploy all modules using:
+Deploy the framework using:
 
 [source,bsah]
 ----
+cd core
 mvn -D deploy=snapshot deploy
 ----
 
 This will deploy all the modules that make up a release.
 
-To confirm that they are present, browse to Apache's https://repository.apache.org[Nexus repository manager] and search for "isis".
-
 [TIP]
 ====
-Depending on the module being released, the deploy process could take a long time. Go grab a bite of lunch.
+Expect this to take about 10 minutes, give or take.
 ====
+
+To confirm that they are present, browse to Apache's https://repository.apache.org[Nexus repository manager] and search for "isis".
+
