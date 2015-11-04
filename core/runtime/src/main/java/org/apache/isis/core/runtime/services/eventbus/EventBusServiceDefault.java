@@ -63,7 +63,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
             // a singleton
             if (!allowLateRegistration && hasPosted()) {
                 // ... coming too late to the party.
-                throw new IllegalStateException("Events have already been posted; too late to register any further (singleton) subscribers");
+                throw new IllegalStateException("Events have already been posted; too late to register any further (singleton) subscribers.  Either use @DomainServiceLayout(menuOrder=...) to ensure that subscribers are initialized before any services that might post events, or alternatively use '" + KEY_ALLOW_LATE_REGISTRATION + "' configuration property to relax this check (meaning that some subscribers will miss some posted events)");
             }
         }
         super.register(domainService);
