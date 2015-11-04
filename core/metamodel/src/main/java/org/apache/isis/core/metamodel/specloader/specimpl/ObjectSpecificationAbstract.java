@@ -741,8 +741,12 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                actions.addAll(createContributeeActions());
-                actions.addAll(createMixedInActions());
+                if (containsDoOpFacet(MixinFacet.class)) {
+                    // don't contribute to mixins themselves!
+                } else {
+                    actions.addAll(createContributeeActions());
+                    actions.addAll(createMixedInActions());
+                }
                 sortCacheAndUpdateActions(actions);
                 contributeeAndMixedInActionsAdded = true;
             }
