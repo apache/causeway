@@ -426,16 +426,59 @@ image::{_imagesdir}appendices/dev-env/intellij-idea/400-running-integtests/run-d
 If this radio button is set to one of the other options then you may obtain class loading issues; these result from IntelliJ attempting to run unit tests of the `dom` project that depend on test classes in that module, but using the classpath of the `integtests` module whereby the `dom` test-classes (`test-jar` artifact) are not exposed on the Maven classpath.
 
 
+[[_cg_ide_intellij_advanced]]
 == Advanced
 
 In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
 
 
+[[_cg_ide_intellij_advanced_dcevm]]
 === Setting up Dynamic Reloading
 
-See the link:http://blog.jetbrains.com/idea/2013/07/get-true-hot-swap-in-java-with-dcevm-and-intellij-idea/[IntelliJ blog] for setting up DCEVM.
+link:github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
+reliable hot swapping of the implementation of existing methods.
 
-This is supported for Eclipse, too.
+In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should
+then be able to write these actions and have them be picked up without restarting the application.
+
+Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on
+domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
+actions will work, but adding new properties or collections is much less likely to.
+
+To set up DCEVM, download the appropriate JAR from the link:https://dcevm.github.io/[github page], and run the
+installer.  For example:
+
+[source,bash]
+----
+java -jar DCEVM-light-8u51-installer.jar
+----
+
+[TIP]
+====
+Be sure to run with appropriate privileges to be able to write to the installation directories of the JDK.  If running
+on Windows, that means running as `Administrator`.
+====
+
+
+After a few seconds this will display a dialog listing all installations of JDK that have been found:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/010-dcevm-list-of-found-jdk-installations.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/010-dcevm-list-of-found-jdk-installations.png"]
+
+
+Select the corresponding installation, and select `Replace by DCEVM`.
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/020-dcevm-once-installed.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/020-dcevm-once-installed.png"]
+
+
+In IntelliJ, register the JDK in `File > Project Structure` dialog:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/030-dcevm-intellij-project-structure.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/030-dcevm-intellij-project-structure.png"]
+
+Finally, in the run configuration, select the patched JDK:
+
+image::{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/040-dcevm-run-configuration.png[width="600px",link="{_imagesdir}appendices/dev-env/intellij-idea/070-advanced/040-dcevm-run-configuration.png"]
+
+
 
 
 === Setting up JRebel
