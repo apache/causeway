@@ -108,17 +108,17 @@ public class CollectionSelectorHelper implements Serializable {
      * otherwise first factory.
      */
     private int determineInitialFactory() {
-        if (!hasRenderEagerlyFacet(model)) {
-            for (int i = 0; i < componentFactories.size(); i++) {
-                if (componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
-                    return i;
-                }
-            }
-        }
         if (hasDefaultViewFacet(model)) {
             DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
             for (int i = 0; i < componentFactories.size(); i++) {
                 if (componentFactories.get(i).getName().equals(defaultViewFacet.value())) {
+                    return i;
+                }
+            }
+        }
+        if (!hasRenderEagerlyFacet(model)) {
+            for (int i = 0; i < componentFactories.size(); i++) {
+                if (componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
                     return i;
                 }
             }

@@ -36,5 +36,7 @@ can be used instead, eg:
 [NOTE]
 ====
 Note that xref:ug.adoc#_ug_how-tos_contributed-members[contributed collections] (which, under the covers are just action invocations against a domain service) are always rendered eagerly.
+
+Also, if a xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_defaultView[`@CollectionLayout#defaultView()`] attribute has been specified then that will take precedence over the value of the `render()` attribute.
 ====
 
