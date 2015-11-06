@@ -48,6 +48,12 @@ public @interface CollectionLayout {
      */
     String describedAs() default "";
 
+    // //////////////////////////////////////
+
+    /**
+     * Indicates which view is used
+     */
+    String defaultView() default "table";
 
     // //////////////////////////////////////
 
