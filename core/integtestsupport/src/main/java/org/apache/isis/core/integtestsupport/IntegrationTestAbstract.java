@@ -19,6 +19,9 @@
 package org.apache.isis.core.integtestsupport;
 
 import java.util.List;
+
+import javax.enterprise.context.RequestScoped;
+
 import com.google.common.base.Throwables;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
@@ -30,6 +33,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.fixtures.FixtureClock;
 import org.apache.isis.applib.fixturescripts.FixtureScript;
+import org.apache.isis.applib.services.queryresultscache.QueryResultsCache;
 import org.apache.isis.applib.services.wrapper.WrapperFactory;
 import org.apache.isis.core.specsupport.scenarios.ScenarioExecution;
 import org.apache.isis.core.specsupport.specs.CukeGlueAbstract;
@@ -61,8 +65,7 @@ public abstract class IntegrationTestAbstract {
 
   
     /**
-     * Intended to be called whenever there is a logically distinct interaction
-     * with the system.
+     * Intended to be called whenever there is a logically distinct interaction with the system.
      *
      * <p>
      *     Each transaction has its own instances of request-scoped services, most notably
@@ -71,9 +74,9 @@ public abstract class IntegrationTestAbstract {
      * 
      * <p>
      *     (Unlike {@link #nextSession()}), it <i>is</i> valid to hold references to objects across transactions.
+     *     Also, note that {@link RequestScoped} services (such as {@link QueryResultsCache} will <i>not</i> be reset.
      * </p>
      *
-     * @see #nextRequest()
      * @see #nextSession()
      */
     protected void nextTransaction() {
@@ -86,20 +89,23 @@ public abstract class IntegrationTestAbstract {
      *
      * @see #nextTransaction()
      * @see #nextSession()
+     *
+     * @deprecated - confusing because does NOT clear out and reset any {@link javax.enterprise.context.RequestScoped} services.  For this, use {@link #nextSession()}.
      */
+    @Deprecated
     protected void nextRequest() {
         nextTransaction();
     }
 
     /**
-     * Completes the transaction and session, then opens another session and transaction.
+     * Completes the transaction and session, then opens another session and transaction.  Any
+     * {@link RequestScoped} services (eg {@link QueryResultsCache} will be reset.
      *
      * <p>
      *     Note that any references to objects must be discarded and reacquired.
      * </p>
      *
      * @see #nextTransaction()
-     * @see #nextRequest()
      */
     protected void nextSession() {
         scenarioExecution().endTran(true);
