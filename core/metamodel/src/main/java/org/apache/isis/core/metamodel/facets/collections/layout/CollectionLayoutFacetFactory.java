@@ -30,6 +30,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetForCollectionLayoutAnnotation;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetOnCollectionFromLayoutProperties;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
@@ -78,6 +81,14 @@ public class CollectionLayoutFacetFactory extends FacetFactoryAbstract implement
         }
         FacetUtil.addFacet(hiddenFacet);
 
+
+        // defaultView
+        DefaultViewFacet defaultViewFacet = DefaultViewFacetOnCollectionFromLayoutProperties.create(properties, holder);
+        if(defaultViewFacet == null) {
+            defaultViewFacet = DefaultViewFacetForCollectionLayoutAnnotation.create(collectionLayout, holder);
+        }
+        FacetUtil.addFacet(defaultViewFacet);
+        
 
         // named
         NamedFacet namedFacet = NamedFacetOnCollectionFromLayoutProperties.create(properties, holder);
