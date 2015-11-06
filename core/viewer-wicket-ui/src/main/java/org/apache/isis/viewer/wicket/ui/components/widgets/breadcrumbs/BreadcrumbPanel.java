@@ -19,6 +19,10 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
@@ -28,6 +32,7 @@ import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
 import org.wicketstuff.select2.TextChoiceProvider;
+
 import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
@@ -77,8 +82,17 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
-                final List<EntityModel> list = breadcrumbModel.getList();
-                response.addAll(list);
+                final List<EntityModel> breadCrumbList = Lists.newArrayList(breadcrumbModel.getList());
+                final List<EntityModel> checkedList = Lists.newArrayList(
+                        Iterables.filter(breadCrumbList, new Predicate<EntityModel>() {
+                            @Override
+                            public boolean apply(final EntityModel input) {
+                                final Object id = getId(input);
+                                return id != null;
+                            }
+                        })
+                );
+                response.addAll(checkedList);
             }
 
             @Override
