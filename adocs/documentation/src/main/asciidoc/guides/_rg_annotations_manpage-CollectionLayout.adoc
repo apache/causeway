@@ -24,7 +24,8 @@ The table below summarizes the annotation's attributes.
 |the css class that a collection should have, to allow more targetted styling in xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`]
 
 
-|xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_defaultView[`defaultView()`]
+|xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_defaultView[`defaultView()`] +
+(`1.10.0-SNAPSHOT`)
 |`table`, `excel`, `calendar`, `map`, ...
 |Which view is selected by default, if multiple views are available.
 
