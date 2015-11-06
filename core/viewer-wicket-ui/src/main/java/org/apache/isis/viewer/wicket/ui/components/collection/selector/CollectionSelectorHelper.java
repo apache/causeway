@@ -111,7 +111,9 @@ public class CollectionSelectorHelper implements Serializable {
         if (hasDefaultViewFacet(model)) {
             DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
             for (int i = 0; i < componentFactories.size(); i++) {
-                if (componentFactories.get(i).getName().equals(defaultViewFacet.value())) {
+                final String componentName = componentFactories.get(i).getName();
+                final String viewName = defaultViewFacet.value();
+                if (componentName.equalsIgnoreCase(viewName)) {
                     return i;
                 }
             }
