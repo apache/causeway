@@ -434,7 +434,11 @@
                             <exclude>**/.classpath</exclude>
                             <exclude>**/.settings/**</exclude>
                             <exclude>**/*.launch</exclude>
+                            <!--
                             <exclude>src/site/resources/ide/eclipse/**</exclude>
+                            -->
+
+                            <exclude>**/*.iml</exclude>
 
                             <exclude>**/*.pdn</exclude>
                             <exclude>**/*.svg</exclude>
@@ -448,7 +452,7 @@
                             <exclude>**/xml/objects/**</exclude>
                             <exclude>**/test.data</exclude>
                             <exclude>**/fixture-data/**</exclude>
-
+                            
                             <exclude>**/jquery.zclip.js</exclude>
                             <exclude>**/bootstrap-growl.js</exclude>
                             <exclude>**/moment.js</exclude>
@@ -456,7 +460,9 @@
                             <exclude>**/bootstrap-datetimepicker.min.css</exclude>
                             <exclude>**/bootstrap-datetimepicker.css</exclude>
                             <exclude>**/select2-bootstrap.css</exclude>
-
+                            
+                            <exclude>**/wicket-xhtml1.4-strict.dtd</exclude>
+                            
                             <exclude>**/src/main/appended-resources/supplemental-models.xml</exclude>
                             <exclude>**/datanucleus.log</exclude>
                         </excludes>
