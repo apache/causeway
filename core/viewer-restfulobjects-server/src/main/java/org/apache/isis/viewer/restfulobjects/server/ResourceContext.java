@@ -197,12 +197,14 @@ public class ResourceContext implements RendererContext5 {
             final JsonRepresentation map = JsonRepresentation.newMap();
             for(String paramName: params.keySet()) {
                 String paramValue = params.get(paramName)[0];
+                // this is rather hacky :-(
+                final String key = paramName.startsWith("x-ro") ? paramName : paramName + ".value";
                 try {
-                    // this is rather hacky
+                    // and this is even more hacky :-(
                     int paramValueAsInt = Integer.parseInt(paramValue);
-                    map.mapPut(paramName+".value", paramValueAsInt);
+                    map.mapPut(key, paramValueAsInt);
                 } catch(Exception ex) {
-                    map.mapPut(paramName+".value", stripQuotes(paramValue));
+                    map.mapPut(key, stripQuotes(paramValue));
                 }
             }
             return map;

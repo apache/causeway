@@ -152,7 +152,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         }
 
         // members
-        withMembers(objectAdapter);
+        if(!mode.isUpdatePropertiesLinkArgs()) {
+            withMembers(objectAdapter);
+        }
 
         // described by
         if (mode.includeDescribedBy() && !rendererContext.suppressDescribedByLinks()) {
@@ -225,7 +227,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         addProperties(objectAdapter, appendTo, associations);
 
         if(!rendererContext.objectPropertyValuesOnly()) {
-            if (!mode.isArgs()) {
+            if (!mode.isArgs() ) {
                 addCollections(objectAdapter, appendTo, associations);
             }
 
@@ -241,7 +243,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addProperties(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
-        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
@@ -255,7 +256,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             }
 
             final OneToOneAssociation property = (OneToOneAssociation) assoc;
-            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollower, property.getId(), JsonRepresentation.newMap());
+            final LinkFollowSpecs linkFollowerForProp = getLinkFollowSpecs().follow("members[" + property.getId() + "]");
+            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollowerForProp, property.getId(), JsonRepresentation.newMap());
             renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
@@ -274,7 +276,6 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     }
 
     private void addCollections(final ObjectAdapter objectAdapter, final JsonRepresentation members, final List<ObjectAssociation> associations) {
-        final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("members");
         for (final ObjectAssociation assoc : associations) {
 
             if (mode.checkVisibility()) {
@@ -290,7 +291,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             final OneToManyAssociation collection = (OneToManyAssociation) assoc;
 
-            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollower, collection.getId(), JsonRepresentation.newMap());
+            final LinkFollowSpecs linkFollowerForColl = getLinkFollowSpecs().follow(
+                    "members[" + collection.getId() + "]");
+            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollowerForColl, collection.getId(), JsonRepresentation.newMap());
 
             renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
@@ -364,7 +367,7 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
-        if(!rendererContext.suppressUpdateLink()) {
+        if(!getRendererContext().suppressUpdateLink()) {
             final LinkBuilder updateLinkBuilder = LinkBuilder.newBuilder(getRendererContext(), Rel.UPDATE.getName(), RepresentationType.DOMAIN_OBJECT, "objects/%s/%s", getDomainType(), getInstanceId()).withHttpMethod(RestfulHttpMethod.PUT).withArguments(domainObjectRepr);
             getLinks().arrayAdd(updateLinkBuilder.build());
         }
