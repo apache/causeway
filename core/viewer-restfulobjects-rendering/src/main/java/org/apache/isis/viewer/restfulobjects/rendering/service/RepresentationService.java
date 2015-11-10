@@ -47,10 +47,31 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
  */
 public interface RepresentationService {
 
+    public enum Intent {
+        /**
+         * ie return a 201
+         */
+        JUST_CREATED,
+        /**
+         * ie return a 200
+         */
+        ALREADY_PERSISTENT
+    }
+
+    /**
+     * @deprecated - use {@link #objectRepresentation(Context, ObjectAdapter, Intent)}.
+     */
+    @Deprecated
     @Programmatic
     Response objectRepresentation(
             Context resourceContext,
             ObjectAdapter objectAdapter);
+
+    @Programmatic
+    Response objectRepresentation(
+            Context resourceContext,
+            ObjectAdapter objectAdapter,
+            Intent intent);
 
     @Programmatic
     Response propertyDetails(
@@ -87,7 +108,7 @@ public interface RepresentationService {
     public static interface Context4 extends Context3, RendererContext4 {
         InteractionInitiatedBy getInteractionInitiatedBy();
     }
-    public static interface Context5 extends Context3, RendererContext5 {
+    public static interface Context5 extends Context4, RendererContext5 {
         public SpecificationLoader getSpecificationLoader();
         public ServicesInjector getServicesInjector();
     }

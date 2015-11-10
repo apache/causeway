@@ -60,6 +60,15 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
     public Response objectRepresentation(
             final Context rendererContext,
             final ObjectAdapter objectAdapter) {
+        return objectRepresentation(rendererContext, objectAdapter, Intent.ALREADY_PERSISTENT);
+    }
+
+    @Override
+    @Programmatic
+    public Response objectRepresentation(
+            final Context rendererContext,
+            final ObjectAdapter objectAdapter,
+            final Intent intent) {
 
         ResponseBuilder responseBuilder = null;
 
@@ -88,6 +97,10 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             if (version != null && version.getTime() != null) {
                 responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
             }
+        }
+
+        if(intent == Intent.JUST_CREATED) {
+            responseBuilder.status(Response.Status.CREATED);
         }
 
         return buildResponse(responseBuilder);

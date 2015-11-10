@@ -214,9 +214,22 @@ public class DomainResourceHelper {
     /**
      * Simply delegates to the {@link org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService} to
      * render a representation of the object.
+     *
+     * @deprecated - use {@link #objectRepresentation(RepresentationService.Intent)}
      */
+    @Deprecated
     public Response objectRepresentation() {
-        return representationService.objectRepresentation(representationServiceContext, objectAdapter);
+        return representationService
+                .objectRepresentation(representationServiceContext, objectAdapter);
+    }
+
+    /**
+     * Simply delegates to the {@link org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService} to
+     * render a representation of the object.
+     */
+    public Response objectRepresentation(final RepresentationService.Intent intent) {
+        return representationService
+                .objectRepresentation(representationServiceContext, objectAdapter, intent);
     }
 
     /**
