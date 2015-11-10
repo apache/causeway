@@ -197,6 +197,20 @@ public class LinkFollowSpecsTest_follow {
         assertThat(followRelVersion.follow("x").isFollowing(), is(true));
     }
 
+    @Test
+    public void example_of_eager_loading_of_collection() throws Exception {
+        final List<List<String>> links = asListOfLists("members[children].value");
+
+        final LinkFollowSpecs linkFollower = LinkFollowSpecs.create(links);
+
+        LinkFollowSpecs followMembers = linkFollower.follow("members[children]");
+        assertThat(followMembers.isFollowing(), is(true));
+        assertThat(followMembers.isTerminated(), is(false));
+
+        assertThat(followMembers.follow("value").isFollowing(), is(true));
+        assertThat(followMembers.follow("value").isTerminated(), is(false));
+    }
+
 
     private List<List<String>> asListOfLists(final String string) {
         return Parser.forListOfListOfStrings().valueOf(string);
