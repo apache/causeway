@@ -255,21 +255,19 @@ The Apache Isis team is pleased to announce the release of Apache Isis v1.11.0.
 New features in this release include:
 * ...
 
-Full release notes are available on the Apache Isis website at [1].
+Full release notes are available on the Apache Isis website at [1].  Please also read the migration notes [2].
 
-Note that:
-* ...
-
-You can access this release directly from the Maven central repo [2],
-or download the release and build it from source [3].
+You can access this release directly from the Maven central repo [3], or download the release and build it from
+source [4].
 
 Enjoy!
 
 --The Apache Isis team
 
 [1] http://isis.apache.org/release-notes.html#r1.11.0
-[2] http://search.maven.org
-[3] http://isis.apache.org/downloads.html
+[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.10.0-to-1.11.0
+[3] http://search.maven.org
+[4] http://isis.apache.org/downloads.html
 ----
 
 
