@@ -49,8 +49,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
-`filterVisibility` +
-(1.10.0-SNAPSHOT)
+`filterVisibility`
 | `true`,`false` (`true`)
 |Whether objects should be filtered for visibility. +
 
@@ -257,7 +256,7 @@ See xref:ug.adoc#_ug_more-advanced_i18n[i18n support] to learn more about the tr
 
 
 [[_rg_runtime_configuring-core_filterVisibility]]
-== Filtering visibility (1.10.0-SNAPSHOT)
+== Filtering visibility
 
 The framework provides the `isis.reflector.facet.filterVisibility` configuration property that influences whether a returned object is visible to the end-user:
 

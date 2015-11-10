@@ -33,40 +33,25 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { // <1>
-        private static final long serialVersionUID = 1L;
-        public CompletedEvent(                                               // <2>
-                final ToDoItem source,                                       // <3>
-                final Identifier identifier,                                 // <4>
-                final Object... arguments) {                                 // <5>
-            super("completed", source, identifier, arguments);
-        }
-    }
-    @Action(domainEvent=CompletedEvent.class)
-    public ToDoItem completed() { ... }
-}
-----
-<1> inherit from `ActionDomainEvent<T>` where `T` is the type of the domain object being interacted with.
-<2> constructor called reflectively by the framework
-<3> populated with the object being interacted with (the source of the event)
-<4> identifier of the collection
-<5> action argument(s)
-
-The benefit is that subscribers can be more targetted as to the events that they subscribe to.
-
-
-As of `1.10.0-SNAPSHOT` this can be simplified to just:
-
-[source,java]
-----
-public class ToDoItem {
-    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }  // <1>
     @Action(domainEvent=CompletedEvent.class)
     public ToDoItem completed() { ... }
 }
 ----
 
-where the framework will initialize the domain event using setters rather than through the constructor.  This substantially reduces the boilerplate.
+The benefit is that subscribers can be more targeted as to the events that they subscribe to.
+
+
+[NOTE]
+====
+As of `1.10.0` the framework provides no-arg constructor and will initialize the domain event using (non-API) setters
+rather than through the constructor.  This substantially reduces the boilerplate.
+====
+
+
+
+
+
 
 
 

@@ -65,7 +65,7 @@ Then, continue onto the next section for the steps to promote and announce the r
 
 == Release to Maven Central
 
-From the Nexus pages, select the staging repository and select 'release' from the top menu.
+From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
 
 
 image::{_imagesdir}release-process/nexus-release-1.png[width="600px",link="{_imagesdir}release-process/nexus-release-1.png"]
@@ -194,13 +194,17 @@ Close all JIRA tickets for the release, or moved to future releases if not yet a
 
 === Mark the version as released
 
-In JIRA, go to the administration section for the Apache Isis project and update the versions as released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the versions as released.
 
 
 === Create new JIRA
 
 Create a new JIRA ticket as a catch-all for the _next_ release.
 
+
+=== Update the ASF Reporter website
+
+Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
 
 
 

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `ErrorReportingService` service (`1.10.0-SNAPSHOT`) is an optional SPI that providies the ability to record any errors/exceptions that
+The `ErrorReportingService` service is an optional SPI that providies the ability to record any errors/exceptions that
  might occur in the application into an external incident recording system (such as JIRA).  The service also allows
  a user-friendly (jargon-free) error message to be returned and rendered to the end-user, along with an optional
  incident reference (eg a JIRA issue `XXX-1234`).

@@ -16,7 +16,7 @@ The purpose of the `isis-maven-plugin` is to enforce these naming conventions at
 
 [NOTE]
 ====
-The instructions given here relate to `1.10.0-SNAPSHOT`.   The plugin was also released for `1.9.0`, but with a slightly different configuration; see the final section for differences.
+The instructions given here relate to `1.10.0`.   The plugin was also released for `1.9.0`, but with a slightly different configuration; see the final section for differences.
 ====
 
 == `dom` project
@@ -105,7 +105,7 @@ Next, update the `pom.xml` (in your project's `dom` module):
 </profile>
 ----
 <1> the profile can be activated using `-Disis-validate`
-<2> set to `1.10.0-SNAPSHOT` or any later version
+<2> set to `1.10.0` (or any later version)
 <3> the manifest discussed previously; adjust as required
 <4> the `dom` module for the project; adjust as required
 <5> binds the plugin's `validate` goal to the Maven `test` lifecycle phase (ie the goal will be called when `mvn test` is run).
@@ -170,7 +170,7 @@ Running `mvn -Disis-valdate test` then generates this output:
 [INFO] BUILD FAILURE
 [INFO] ------------------------------------------------------------------------
 [INFO] ...
-[ERROR] Failed to execute goal org.apache.isis.tool:isis-maven-plugin:1.10.0-SNAPSHOT:validate (default) on project simpleapp-dom: 1 problems found. -> [Help 1]
+[ERROR] Failed to execute goal org.apache.isis.tool:isis-maven-plugin:1.11.0-SNAPSHOT:validate (default) on project simpleapp-dom: 1 problems found. -> [Help 1]
 ----
 
 If one were to attempt to run the application, the same error would appear in the log files on startup (and the application would not boot).

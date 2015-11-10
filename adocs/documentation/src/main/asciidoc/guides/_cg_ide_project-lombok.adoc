@@ -33,7 +33,7 @@ private String name;
 Under the covers it is implemented as an annotation processor; it basically hooks into the Java compiler
 so that it can emit additional bytecode (eg for the getter and setter).  See xref:_cg_ide_intellij_other-settings-compiler[here] for details of setting up in IntelliJ (Eclipse has very similar support).
 
-(As of `1.10.0-SNAPSHOT`), Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:rg.adoc#_rg_annotations_manpage-Property[`Property`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout[`@PropertyLayout`], xref:rg.adoc#_rg_annotations_manpage-Collection[`@Collection`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout[`@CollectionLayout`] and xref:rg.adoc#_rg_annotations_manpage-MemberOrder[`@MemberOrder`]) can be placed on the field instead.
+Apache Isis supports link:https://projectlombok.org/[Project Lombok], in that the annotations that would normally be placed on the getter (namely xref:rg.adoc#_rg_annotations_manpage-Property[`Property`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout[`@PropertyLayout`], xref:rg.adoc#_rg_annotations_manpage-Collection[`@Collection`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout[`@CollectionLayout`] and xref:rg.adoc#_rg_annotations_manpage-MemberOrder[`@MemberOrder`]) can be placed on the field instead.
 
 
 There are plugins for Lombok for maven; it's just a matter of adding the required dependency.  To compile the code
