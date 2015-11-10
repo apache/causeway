@@ -127,3 +127,10 @@ public class ToDoItem {
 ----
 
 
+
+== isis-maven-plugin
+
+The way that the Isis Maven plugin is configured has changed slightly; check out its
+xref:cg.adoc#_cg_isis-maven-plugin[documentation] for full details.
+
+

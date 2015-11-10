@@ -36,7 +36,7 @@ pass:[<br/>]
 
 * link:./screencasts.html[Screencasts] image:{_imagesdir}tv_show-25.png[width="25px" link="screencasts.html"]
 * link:./guides/tg.html[Tutorials]
-* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.9.0[Javadoc (for Applib)] (not ASF)
+* link:http://www.javadoc.io/doc/org.apache.isis.core/isis-core-applib/1.10.0[Javadoc (for Applib)] (not ASF)
 
 
 
