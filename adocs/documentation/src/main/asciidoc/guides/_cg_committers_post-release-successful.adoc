@@ -25,7 +25,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.9.0
+[RESULT] [VOTE] Apache Isis Core release 1.11.0
 ----
 
 using the body (alter last line as appropriate):
@@ -53,8 +53,8 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.9.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.9.0 RC1
+sh scripts/promoterctag.sh isis-1.11.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.11.0 RC1
 ----
 
 
@@ -159,7 +159,7 @@ For example:
 
 [source,bash]
 ----
-sh upd.sh 1.9.0 1.10.0
+sh upd.sh 1.10.0 1.11.0
 ----
 
 The script downloads the artefacts from the Nexus release repository, adds the artefacts to subsversion and deletes the previous version.
@@ -182,7 +182,7 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.10.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 1.11.0 > /tmp/1
 ----
 
 
@@ -239,14 +239,14 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.10.0 Released
+[ANN] Apache Isis version 1.11.0 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.10.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v1.11.0.
 
 New features in this release include:
 * ...
@@ -263,7 +263,7 @@ Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.10.0
+[1] http://isis.apache.org/release-notes.html#r1.11.0
 [2] http://search.maven.org
 [3] http://isis.apache.org/downloads.html
 ----
@@ -287,9 +287,9 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.10.0-RC1                  # merge branch onto master
-git branch -d release-1.10.0-RC1              # branch no longer needed
-git push origin --delete release-1.10.0-RC1   # remote branch no longer needed
+git merge release-1.11.0-RC1                  # merge branch onto master
+git branch -d release-1.11.0-RC1              # branch no longer needed
+git push origin --delete release-1.11.0-RC1   # remote branch no longer needed
 ----
 
 
