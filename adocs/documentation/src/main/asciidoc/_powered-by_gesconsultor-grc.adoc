@@ -105,3 +105,5 @@ link:http://www.govertis.com[GOVERTIS company] that originally developed it, and
 
 All this could not have been achieved as quickly nor as effectively without the Apache Isis platform.
 
+
+_Case study provided by Oscar Bou, GOVERTIS_

@@ -17,6 +17,7 @@ This page catalogues a few notable applications that are powered by Apache Isis 
 
 * xref:powered-by.adoc#_powered-by_estatio[Estatio]
 * xref:powered-by.adoc#_powered-by_gesconsultor-grc[GESCONSULTOR GRC]
+* xref:powered-by.adoc#_powered-by_commapp[CommApp]
 * xref:powered-by.adoc#_powered-by_transport-planner[TransportPlanner]
 
 If you have written an app in Apache Isis that you'd like to share, please mention it on the link:./support.html[mailing list].
@@ -24,6 +25,7 @@ If you have written an app in Apache Isis that you'd like to share, please menti
 
 include::_powered-by_estatio.adoc[leveloffset=+1]
 include::_powered-by_gesconsultor-grc.adoc[leveloffset=+1]
+include::_powered-by_commapp.adoc[leveloffset=+1]
 include::_powered-by_transport-planner.adoc[leveloffset=+1]
 
 

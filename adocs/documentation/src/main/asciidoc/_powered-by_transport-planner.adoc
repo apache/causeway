@@ -44,12 +44,12 @@ is necessary).
 
 The author, Christian Steinebach, wrote this demo part-time over the course of a few weeks.  He commented:
 
-* I did not have too much time to get 'something done' ... But although I had a hard time in the beginning with Isis I don't think I would have made it in time using 'conventional' development with database, GUI etc...
+pass:[<div class="extended-quote"><p>]
+I did not have too much time to get 'something done' ... But although I had a hard time in the beginning with Isis I don't think I would have made it in time using 'conventional' development with database, GUI etc.
+using Apache Isis.
+pass:[</p></div>]
 
-He went on:
-
-* Because this is a demo, there is a lot of room for improvement, but it does show how a relatively simple domain model can be brought 'alive' using Apache Isis.
-
-The source code is available link:https://www.assembla.com/code/transportplanner/git/nodes[here] (note: it was written against a snapshot version of Apache Isis).
+Because this is a demo, there is a lot of room for improvement, but it does show how a relatively simple domain model can be brought 'alive'. The source code is available link:https://www.assembla.com/code/transportplanner/git/nodes[here] (note: it was written against a snapshot version of Apache Isis).
 
 
+_Case study provided by Christian Steinebach, Marintech_

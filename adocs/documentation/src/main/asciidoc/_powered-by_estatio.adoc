@@ -37,5 +37,5 @@ The Apache Isis committers are extremely grateful for Eurocommercial's investmen
 And to learn a little more about the Estatio domain model itself, take a look at both the source code (of course) and also at https://github.com/estatio/estatio/blob/master/adocs/documentation/src/main/asciidoc/auditability.adoc[this documentation], developed to allow Eurocommercial's accountants to understand and audit the application.
 
 
-
+_Case study provided by Jeroen van der Wal, http://incode.org_
 
