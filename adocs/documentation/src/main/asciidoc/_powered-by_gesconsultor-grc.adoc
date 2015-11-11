@@ -90,7 +90,7 @@ functionality available in Apache Isis, along with many of the (non-ASF) link:ht
 as http://github.com/isisaddons/isis-module-audit[audit], http://github.com/isisaddons/isis-module-security[security]
 and the http://github.com/isisaddons/isis-module-excel[excel] modules).
 
-The GRC platform currently has more than 4600 automated tests, about 2000 being
+The GRC platform currently has more than 5600 automated tests, about 2000 being
 xref:ug.adoc#_ug_testing_bdd-spec-support[BDD tests] and 3600 xref:ug.adoc#_ug_testing_integ-test-support[integration
 tests], all leveraging Apache Isis' extensive testing capabilities.
 

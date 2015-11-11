@@ -392,10 +392,34 @@ git push
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
 
-For each add-on:
+Using this https://gist.github.com/danhaywood/3129b688be3628322c01[gist] to invoke operations across all (or selected) addons:
 
-* update its dependency on Apache Isis to reference the newly released version
-** all the addons define their dependency in the `<isis.version>` property, so search for this string across all `pom.xml` files
-* use the `release.sh` script (that each provides) to release.
+* update its dependency on Apache Isis to reference the newly released version: +
++
+[source,bash]
+----
+sh all.sh -r "1.11.0" bumpisis
+----
 
-You can use this https://gist.github.com/danhaywood/3129b688be3628322c01[gist] to invoke `release.sh` across all (or selected) addons.
+* confirm compiles: +
++
+[source,bash]
+----
+sh all.sh mcio
+----
+
+* release to mvn central: +
++
+[source,bash]
+----
+sh all.sh -r "1.11.0" -s "1.12.0-SNAPSHOT" -k "dan@haywood-associates.co.uk" -p "this is not my password" release
+----
+
+* update its dependency on Apache Isis to reference the next SNAPSHOT version: +
++
+[source,bash]
+----
+sh all.sh -r "1.12.0-SNAPSHOT" bumpisis
+----
+
+
