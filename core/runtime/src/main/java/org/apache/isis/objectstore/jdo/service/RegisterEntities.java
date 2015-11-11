@@ -26,6 +26,7 @@ import java.util.Set;
 import javax.jdo.annotations.PersistenceCapable;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
@@ -67,11 +68,20 @@ public class RegisterEntities {
             persistenceCapableTypes = searchForPersistenceCapables(configuration);
         }
 
+        final List<String> classNamesNotEnhanced = Lists.newArrayList();
         for (Class<?> persistenceCapableType : persistenceCapableTypes) {
             if(ignore(persistenceCapableType)) {
                 continue;
             }
+            if(!org.datanucleus.enhancement.Persistable.class.isAssignableFrom(persistenceCapableType)) {
+                classNamesNotEnhanced.add(persistenceCapableType.getCanonicalName());
+            }
             this.entityTypes.add(persistenceCapableType.getCanonicalName());
+        }
+
+        if(!classNamesNotEnhanced.isEmpty()) {
+            final String classNamesNotEnhancedStr = Joiner.on("\n* ").join(classNamesNotEnhanced);
+            throw new IllegalStateException("Non-enhanced @PersistenceCapable classes found, will abort.  The classes in error are:\n\n* " + classNamesNotEnhancedStr + "\n\nDid the DataNucleus enhancer run correctly?\n");
         }
     }
 
