@@ -98,7 +98,7 @@ a configured `EmailService`
 `ErrorReportingService`]
 |Record details of an error occurring in the system (eg in an external incident recording system such as JIRA), and return a more friendly (jargon-free) message to display to the end user, with optional reference (eg `XXX-1234`).
 |(none)
-|`1.10.0-SNAPSHOT`
+|
 
 |xref:rg.adoc#_rg_services-spi_manpage-EventSerializer[`o.a.i.applib.` +
 `services.publish` +

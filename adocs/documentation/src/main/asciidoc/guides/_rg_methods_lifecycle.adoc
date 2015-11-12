@@ -16,7 +16,7 @@ Note that these callbacks are fired by Apache Isis rather than JDO.  In the futu
 * in Isis 1.9.0 and earlier, you may therefore want to consider using the JDO API directly to set up a lifecycle
 listener; see xref:rg.adoc#_rg_methods_lifecycle_jdo-api[here] for further discussion.
 
-* alternatively (1.10.0-SNAPSHOT), you can use a subscriber for the xref:rg.adoc#_rg_classes_lifecycleevent[lifecycle event]s fired in Isis.
+* alternatively, you can use a subscriber for the xref:rg.adoc#_rg_classes_lifecycleevent[lifecycle event]s fired in Isis.
 ====
 
 The lifecycle callback methods supported by Isis are:

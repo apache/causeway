@@ -33,12 +33,10 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.ResourceModel;
 
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
@@ -59,7 +57,6 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationBehavior;
-import de.agilecoders.wicket.extensions.markup.html.bootstrap.confirmation.ConfirmationConfig;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -225,25 +222,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
             ActionModel actionModel = getActionModel();
             final ObjectAction action = actionModel.getActionMemento().getAction();
             SemanticsOf semanticsOf = SemanticsOf.from(action.getSemantics());
-            if (semanticsOf.isAreYouSure()) {
-                ConfirmationConfig confirmationConfig = new ConfirmationConfig();
 
-                final TranslationService translationService =
-                        getPersistenceSession().getServicesInjector().lookupService(TranslationService.class);
-
-                final String context = IsisSystem.class.getName();
-                final String areYouSure = translationService.translate(context, IsisSystem.MSG_ARE_YOU_SURE);
-                final String confirm = translationService.translate(context, IsisSystem.MSG_CONFIRM);
-                final String cancel = translationService.translate(context, IsisSystem.MSG_CANCEL);
-
-                confirmationConfig.withTitle(areYouSure);
-                confirmationConfig.withBtnOkLabel(confirm);
-                confirmationConfig.withBtnCancelLabel(cancel);
-
-                confirmationConfig.withBtnOkClass("btn btn-danger");
-                confirmationConfig.withBtnCancelClass("btn btn-default");
-                button.add(new ConfirmationBehavior(confirmationConfig));
-            }
+            addConfirmationDialogIfAreYouSureSemantics(button, semanticsOf);
         }
 
         @Override

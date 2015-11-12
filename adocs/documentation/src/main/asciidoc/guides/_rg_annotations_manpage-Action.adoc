@@ -79,7 +79,7 @@ Currently this is only supported for no-arg actions.
 (`NON_IDEMPOTENT`)
 |the action's semantics (ie whether objects are modified as the result of invoking this action, and if so whether reinvoking the action would result in no further change; if not whether the results can be cached for the remainder of the request).
 
-The `...ARE_YOU_SURE` variants (1.10.0-SNAPSHOT) cause a confirmation dialog to be displayed in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer].
+The `...ARE_YOU_SURE` variants cause a confirmation dialog to be displayed in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer].
 
 |xref:rg.adoc#_rg_annotations_manpage-Action_typeOf[`typeOf()`]
 |(none)
@@ -93,32 +93,26 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { } // <1>
+    public static class CompletedEvent extends ActionDomainEvent<ToDoItem> { }
     @Action(
         command=CommandReification.ENABLED,
-        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <2>
-        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <3>
+        commandExecuteIn=CommandExecuteIn.FOREGROUND,          // <1>
+        commandPersistence=CommandPersistence.NOT_PERSISTED,   // <2>
         domainEvent=CompletedEvent.class,
-        hidden = Where.NOWHERE,                                // <4>
-        invokeOn = InvokeOn.OBJECT_ONLY,                       // <5>
+        hidden = Where.NOWHERE,                                // <3>
+        invokeOn = InvokeOn.OBJECT_ONLY,                       // <4>
         publishing = Publishing.ENABLED,
         semantics = SemanticsOf.IDEMPOTENT
     )
     public ToDoItem completed() { ... }
 }
 ----
-<1> `1.10.0-SNAPSHOT`, can use no-arg constructor.
+<1> default value, so could be omitted
 <2> default value, so could be omitted
 <3> default value, so could be omitted
 <4> default value, so could be omitted
-<5> default value, so could be omitted
 
 
-
-[NOTE]
-====
-Currently are you sure semantics (1.10.0-SNAPSHOT) only work for actions that take one or more parameters (that is, generate a dialog).
-====
 
 
 

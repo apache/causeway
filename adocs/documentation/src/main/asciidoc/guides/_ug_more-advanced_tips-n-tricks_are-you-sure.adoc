@@ -8,7 +8,7 @@
 Sometimes an action might perform irreversible changes.  In such a case it's probably a good idea for the UI to require that the
 end-user explicitly confirms that they intended to invoke the action.
 
-== Using action semantics (`1.10.0-SNAPSHOT`)
+== Using action semantics
 
 One way to meet this requirement is using the framework's built-in xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`@Action#semantics()`] attribute:
 

@@ -34,45 +34,21 @@ For example:
 [source,java]
 ----
 public class ToDoItem {
-    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { // <1>
-        private static final long serialVersionUID = 1L;
-        public DueByChangedEvent(                                                            // <2>
-                ToDoItem source,                                                             // <3>
-                Identifier identifier,                                                       // <4>
-                LocalDate oldValue,                                                          // <5>
-                LocalDate newValue) {                                                        // <6>
-            super(source, identifier, oldValue, newValue);
-        }
-    }
+    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { }  // <1>
     @Property(domainEvent=ToDoItem.DueByChangedEvent)
     public LocalDate getDueBy() { ... }
     ...
 }
 ----
 <1> inherit from `PropertyDomainEvent<T,P>` where `T` is the type of the domain object being interacted with, and `P` is the type of the property (`LocalDate` in this example)
-<2> constructor called reflectively by the framework
-<3> populated with the object being interacted with (the source of the event)
-<4> identifier of the property
-<5> current value of the property
-<6> proposed new value for the property; if being cleared then will be `null`.
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
-
-As of `1.10.0-SNAPSHOT` this can be simplified to just:
-
-[source,java]
-----
-public class ToDoItem {
-    public static class DueByChangedEvent extends PropertyDomainEvent<ToDoItem, LocalDate> { }
-    @Property(domainEvent=ToDoItem.DueByChangedEvent)
-    public LocalDate getDueBy() { ... }
-    ...
-}
-----
-
-where the framework will initialize the domain event using setters rather than through the constructor.  This substantially reduces the boilerplate.
-
+[NOTE]
+====
+As of `1.10.0` the framework provides no-arg constructor and will initialize the domain event using (non-API) setters
+rather than through the constructor.  This substantially reduces the boilerplate.
+====
 
 
 == Subscribers

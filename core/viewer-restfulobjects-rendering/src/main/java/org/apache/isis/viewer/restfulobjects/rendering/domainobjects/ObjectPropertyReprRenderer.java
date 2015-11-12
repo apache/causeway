@@ -61,7 +61,10 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     public JsonRepresentation render() {
 
         renderMemberContent();
-        addValue();
+
+        final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
+
+        addValue(followValue);
 
         putDisabledReasonIfDisabled();
 
@@ -77,7 +80,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
     // value
     // ///////////////////////////////////////////////////
 
-    private Object addValue() {
+    private Object addValue(final LinkFollowSpecs linkFollower) {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         
         // use the runtime type if we have a value, else the compile time type of the member otherwise
@@ -112,7 +115,8 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
         }
 
         final RenderFacet renderFacet = objectMember.getFacet(RenderFacet.class);
-        boolean eagerlyRender = renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter);
+        boolean eagerlyRender =
+                renderFacet != null && renderFacet.value() == Type.EAGERLY && rendererContext.canEagerlyRender(valueAdapter) || !linkFollower.isTerminated();
 
         if(valueAdapter == null) {
             final NullNode value = NullNode.getInstance();
@@ -124,7 +128,7 @@ public class ObjectPropertyReprRenderer extends AbstractObjectMemberReprRenderer
             
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, valueAdapter).withTitle(title);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, getLinkFollowSpecs(), JsonRepresentation.newMap());
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, linkFollower, JsonRepresentation.newMap());
                 renderer.with(valueAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();

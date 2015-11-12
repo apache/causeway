@@ -24,6 +24,14 @@ The table below summarizes the annotation's attributes.
 |the css class that a collection should have, to allow more targetted styling in xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`]
 
 
+|xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_defaultView[`defaultView()`]
+|`table`, `excel`, `calendar`, `map`, ...
+|Which view is selected by default, if multiple views are available.
+
+See (non-ASF) link:http://isisaddons.org[Isis Addons] for further views.
+
+
+
 |xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[`describedAs()`]
 |String.
 |description of this collection, eg to be rendered in a tooltip.
@@ -114,6 +122,7 @@ so that boilerplate-busting tools such as link:https://projectlombok.org/[Projec
 
 
 include::_rg_annotations_manpage-CollectionLayout_cssClass.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-CollectionLayout_defaultView.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-CollectionLayout_describedAs.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-CollectionLayout_hidden.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-CollectionLayout_named.adoc[leveloffset=+1]

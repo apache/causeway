@@ -48,6 +48,20 @@ public @interface CollectionLayout {
      */
     String describedAs() default "";
 
+    // //////////////////////////////////////
+
+    /**
+     * Indicates which view is used by default to render the collection.
+     *
+     * <p>
+     *     The only view available within the core framework is &quot;table&quot;.  However, other views can be added
+     *     as extensions.  Examples are those provided by the (non-ASF) <a href="isisaddons.org">Isis addons</a>, eg
+     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-excel">excel</a>&quot;,
+     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-fullcalendar2">calendar</a>&quot; and
+     *     &quot;<a href="https://github.com/isisaddons/isis-wicket-gmap3">map</a>&quot;.
+     * </p>
+     */
+    String defaultView() default "";
 
     // //////////////////////////////////////
 

@@ -34,14 +34,14 @@ The table below summarizes the semantics:
 `IDEMPOTENT_ARE_YOU_SURE`
 | Yes
 | Will make no further changes if called multiple times (eg sets a property or adds to a `Set`). +
-The "are you sure" variant (`1.10.0-SNAPSHOT`) requires that the user must explicitly confirm the action.
+The "are you sure" variant requires that the user must explicitly confirm the action.
 | `PUT`
 
 | `NON_IDEMPOTENT` +
 `NON_IDEMPOTENT_ARE_YOU_SURE`
 | Yes
 | Might change the state of the system each time called (eg increments a counter or adds to a `List`). +
-The "are you sure" variant (`1.10.0-SNAPSHOT`) requires that the user must explicitly confirm the action.
+The "are you sure" variant requires that the user must explicitly confirm the action.
 | `POST`
 
 |===

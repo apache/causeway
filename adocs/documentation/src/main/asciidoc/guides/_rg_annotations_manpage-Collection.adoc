@@ -78,7 +78,7 @@ public class ToDoItem {
     ...
 }
 ----
-<1> `1.10.0-SNAPSHOT`, can use no-arg constructor.
+<1> as of `1.10.0`, can use no-arg constructor.
 <2> default value, so could be omitted
 <3> default value, so could be omitted
 <4> default value, so could be omitted

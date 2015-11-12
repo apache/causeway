@@ -43,16 +43,7 @@ For example:
 ----
 public class ToDoItem {
     public static class DependenciesChangedEvent
-            extends CollectionDomainEvent<ToDoItem, ToDoItem> { // <1>
-        private static final long serialVersionUID = 1L;
-        public DependenciesChangedEvent(                        // <2>
-                ToDoItem source,                                // <3>
-                Identifier identifier,                          // <4>
-                Of of,                                          // <5>
-                ToDoItem value) {                               // <6>
-            super(source, identifier, of, value);
-        }
-    }
+            extends CollectionDomainEvent<ToDoItem, ToDoItem> { } // <1>
     @Collection(
         domainEvent=DependenciesChangedEvent.class
     )
@@ -61,32 +52,17 @@ public class ToDoItem {
 }
 ----
 <1> inherit from `CollectionDomainEvent<T,E>` where `T` is the type of the domain object being interacted with, and `E` is the type of the element in the collection (both `ToDoItem` in this example)
-<2> constructor called reflectively by the framework
-<3> populated with the object being interacted with (the source of the event)
-<4> identifier of the collection
-<5> indicates if the collection is being accessed, added to or removed from.
-<6> the element being added or removed from the collection
 
 
 The benefit is that subscribers can be more targetted as to the events that they subscribe to.
 
 
-As of `1.10.0-SNAPSHOT` this can be simplified to just:
+[NOTE]
+====
+As of `1.10.0` the framework provides no-arg constructor and will initialize the domain event using (non-API) setters
+rather than through the constructor.  This substantially reduces the boilerplate.
+====
 
-[source,java]
-----
-public class ToDoItem {
-    public static class DependenciesChangedEvent
-            extends CollectionDomainEvent<ToDoItem, ToDoItem> { }
-    @Collection(
-        domainEvent=DependenciesChangedEvent.class
-    )
-    public SortedSet<ToDoItem> getDependencies() { ... }
-    ...
-}
-----
-
-where the framework will initialize the domain event using setters rather than through the constructor.  This substantially reduces the boilerplate.
 
 
 

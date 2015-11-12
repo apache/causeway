@@ -178,12 +178,15 @@ package com.mycompany.modules.libmem;
 public static class LibMemModule {
     private LibMemModule() {}
     public abstract static class ActionDomainEvent<S>
-                extends org.apache.isis.applib.event.ActionDomainEvent<S> {} // <1>
-...                                                                          // <2>
+                extends org.apache.isis.applib.event.ActionDomainEvent<S> {}
+    ...                                                                             // <1>
+    public abstract static class PropertyDomainEvent<S,T>
+                extends org.apache.isis.applib.event.PropertyDomainEvent<S,T> {}
+    public abstract static class CollectionDomainEvent<S,E>
+                extends org.apache.isis.applib.event.CollectionDomainEvent<S,E> {}
 }
 ----
-<1> as of 1.10.0-SNAPSHOT, can use the no-arg constructor
-<2> similar events for properties and collections should also be defined
+<1> similar events for properties and collections should also be defined
 
 For the class-level we can define:
 
@@ -191,27 +194,23 @@ For the class-level we can define:
 ----
 public static class LibraryMember {
     public abstract static class ActionDomainEvent
-            extends LibMemModule.ActionDomainEvent<LibraryMember> { }       // <1>
-    ...                                                                     // <2>
+            extends LibMemModule.ActionDomainEvent<LibraryMember> { }
+    ...                                                                             // <1>
 }
 ----
-<1> as of 1.10.0-SNAPSHOT, can use the no-arg constructor
-<2> similar events for properties and collections should also be defined
+<1> similar events for properties and collections should also be defined
 
 and finally at the action level we can define:
 
 [source,java]
 ----
 public class LibraryMember {
-    public static class LeaveEvent
-            extends LibraryMember.ActionDomainEvent { } // <1>
-    }
+    public static class LeaveEvent extends LibraryMember.ActionDomainEvent { }
     @Action(domainEvent=LeaveEvent.class)
     public void leave() { ... }
     ...
 }
 ----
-<1> as of 1.10.0-SNAPSHOT, can use the no-arg constructor
 
 The subscriber can subscribe either to the general superclass (as before), or to any of the classes in the hierarchy.
 

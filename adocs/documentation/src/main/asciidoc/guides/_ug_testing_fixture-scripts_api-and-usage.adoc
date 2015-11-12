@@ -325,7 +325,7 @@ The composite style tends to combine these, which one could argue does not separ
 
 === Further approaches
 
-As of `1.10.0-SNAPSHOT` there are two other approaches.
+As of there are two other approaches.
 
 The first is to take advantage of a new `MultipleExecutionStrategy`, namely `EXECUTE_ONCE_BY_VALUE`.  Under this strategy the determination as to whether to run a given fixture script is by comparing the fixture script against all others that have run.  If all fixture scripts implement value semantics, then they can effectively determine
 whether they need to run or not.
@@ -339,7 +339,7 @@ value semantics of the `ExcelFixture`, which is based on the contents of the spr
 
 [NOTE]
 ====
-Note that in `1.10.0-SNAPSHOT` the `IGNORE` enum has been deprecated, replaced by `EXECUTE_ONCE_BY_CLASS`
+Note that as of `1.10.0` the `IGNORE` enum has been deprecated, replaced by `EXECUTE_ONCE_BY_CLASS`
 ====
 
 The second approach is in recognition that there is, in fact, something of a design flaw with the concept of

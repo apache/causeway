@@ -132,3 +132,24 @@ If you do this, make sure that each project has its own `persistence.xml` file.
 
 And, remember also to configure Eclipse's DataNucleus plugin for these other domain projects.
 
+
+
+== Advanced
+
+In this section are a couple of options that will reduce the length of the change code/build/deploy/review feedback loop.
+
+
+=== Setting up Dynamic Reloading
+
+link:github.com/dcevm/dcevm[DCEVM] enhances the JVM with true hot-swap adding/removing of methods as well as more
+reliable hot swapping of the implementation of existing methods.
+
+In the context of Apache Isis, this is very useful for contributed actions and mixins and also view models; you should
+then be able to write these actions and have them be picked up without restarting the application.
+
+Changing persisting domain entities is more problematic, for two reasons: the JDO/DataNucleus enhancer needs to run on
+domain entities, and also at runtime JDO/DataNucleus would need to rebuild its own metamodel.  You may find that adding
+actions will work, but adding new properties or collections is much less likely to.
+
+For details of setting up DCEVM, see the xref:cg.adoc#_cg_ide_intellij_advanced_dcevm[corresponding section] in the IntelliJ documentation.
+

@@ -19,18 +19,22 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.breadcrumbs;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Response;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
+
 import org.apache.isis.core.commons.authentication.MessageBroker;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlUtil;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -53,7 +57,7 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
         final BreadcrumbModel breadcrumbModel = session.getBreadcrumbModel();
         
-        final IModel<EntityModel> entityModel = new Model<EntityModel>();
+        final IModel<EntityModel> entityModel = new Model<>();
         ChoiceProvider<EntityModel> choiceProvider = new ChoiceProvider<EntityModel>() {
 
             private static final long serialVersionUID = 1L;
@@ -65,20 +69,24 @@ public class BreadcrumbPanel extends PanelAbstract<IModel<Void>> {
 
             @Override
             public String getIdValue(EntityModel choice) {
-                try {
-                    final PageParameters pageParameters = choice.getPageParameters();
-                    final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
-                    return oidStr;
-                } catch (Exception ex) {
-                    breadcrumbModel.remove(choice);
-                    return null;
-                }
+                RootOid rootOid = breadcrumbModel.getId(choice);
+                String id = IsisContext.getOidMarshaller().marshal(rootOid);
+                return id;
             }
 
             @Override
             public void query(String term, int page, Response<EntityModel> response) {
-                final List<EntityModel> list = breadcrumbModel.getList();
-                response.addAll(list);
+                final List<EntityModel> breadCrumbList = Lists.newArrayList(breadcrumbModel.getList());
+                final List<EntityModel> checkedList = Lists.newArrayList(
+                        Iterables.filter(breadCrumbList, new Predicate<EntityModel>() {
+                            @Override
+                            public boolean apply(final EntityModel input) {
+                                final Object id = getIdValue(input);
+                                return id != null;
+                            }
+                        })
+                );
+                response.addAll(checkedList);
             }
 
             @Override

@@ -86,7 +86,7 @@ public enum PageParameterNames {
 
     /**
      * Returns the {@link #name()} formatted as
-     * {@link Strings#camelCase(String) camel case}.
+     * {@link StringExtensions#asCamel(String) camel case}.
      * 
      * <p>
      * For example, <tt>ACTION_TYPE</tt> becomes <tt>actionType</tt>.

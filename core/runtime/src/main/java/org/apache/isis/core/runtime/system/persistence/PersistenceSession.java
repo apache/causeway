@@ -1405,25 +1405,47 @@ public class PersistenceSession implements
 
     private void ensurePojoAdapterMapConsistent(final ObjectAdapter adapter) {
         final Object adapterPojo = adapter.getObject();
-        final ObjectAdapter adapterAccordingToPojoAdapterMap = pojoAdapterMap.getAdapter(adapterPojo);
-        // take care not to touch the pojo, since it might have been deleted.
-        ensureThatArg(
-                adapter, is(adapterAccordingToPojoAdapterMap),
-                "mismatch in PojoAdapterMap: provided adapter's OID: " + adapter.getOid() + "; \n"
-                        + " but map's adapter's OID was : " + adapterAccordingToPojoAdapterMap.getOid());
+        final ObjectAdapter adapterAccordingToMap = pojoAdapterMap.getAdapter(adapterPojo);
+
+        if(adapterPojo == null) {
+            // nothing to check
+            return;
+        }
+        ensureMapConsistent(adapter, adapterAccordingToMap, "PojoAdapterMap");
     }
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         final Oid adapterOid = adapter.getOid();
-        final ObjectAdapter adapterAccordingToOidAdapterMap = oidAdapterMap
-                .getAdapter(adapterOid);
-        // take care not to touch the pojo, since it might have been deleted.
-        ensureThatArg(
-                adapter, is(adapterAccordingToOidAdapterMap),
-                "mismatch in OidAdapter map: " + "adapter's Oid: " + adapterOid + ", " + "provided adapter's OID: "
-                        + adapter.getOid() + "; " + "map's adapter's Oid: " + adapterAccordingToOidAdapterMap.getOid());
+        final ObjectAdapter adapterAccordingToMap = oidAdapterMap.getAdapter(adapterOid);
+
+        if(adapterOid == null) {
+            // nothing to check
+            return;
+        }
+        ensureMapConsistent(adapter, adapterAccordingToMap, "OidAdapterMap");
     }
 
+    private void ensureMapConsistent(
+            final ObjectAdapter adapter,
+            final ObjectAdapter adapterAccordingToMap,
+            final String mapName) {
+
+        final Oid adapterOid = adapter.getOid();
+
+        // take care not to touch the pojo, since it might have been deleted.
+
+        if(adapterAccordingToMap == null) {
+            throw new IllegalStateException("mismatch in "
+                    + mapName
+                    + ": provided adapter's OID: " + adapterOid + "; but no adapter found in map");
+        }
+        ensureThatArg(
+                adapter, is(adapterAccordingToMap),
+                "mismatch in "
+                        + mapName
+                        + ": provided adapter's OID: " + adapterOid + ", \n"
+                        + "but map's adapter's OID was: " + adapterAccordingToMap.getOid());
+    }
 
     public ObjectAdapter adapterForAny(RootOid rootOid) {
 

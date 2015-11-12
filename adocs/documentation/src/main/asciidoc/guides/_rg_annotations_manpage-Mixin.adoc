@@ -6,7 +6,7 @@
 
 
 
-The `@Mixin` annotation (`1.10.0-SNAPSHOT`) indicates that the class acts as a mixin, contributing behaviour -
+The `@Mixin` annotation indicates that the class acts as a mixin, contributing behaviour -
 actions, (derived) properties and (derived) collections - to another domain object.
 
 For example:

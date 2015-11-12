@@ -19,10 +19,9 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.accmngt;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+
 import org.apache.wicket.Application;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.Page;
@@ -37,6 +36,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.PageType;
@@ -47,6 +47,9 @@ import org.apache.isis.viewer.wicket.ui.errors.ExceptionModel;
 import org.apache.isis.viewer.wicket.ui.errors.ExceptionStackTracePanel;
 import org.apache.isis.viewer.wicket.ui.pages.PageAbstract;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.behavior.BootstrapJavascriptBehavior;
+import de.agilecoders.wicket.core.markup.html.references.BootstrapJavaScriptReference;
 
 /**
  * Boilerplate, pick up our HTML and CSS.
@@ -133,6 +136,8 @@ public class AccountManagementPageAbstract extends WebPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(Application.get().getJavaScriptLibrarySettings().getJQueryReference())));
+        response.render(new PriorityHeaderItem(JavaScriptHeaderItem.forReference(
+                BootstrapJavaScriptReference.instance())));
 
         if(applicationCss != null) {
             response.render(CssReferenceHeaderItem.forUrl(applicationCss));

@@ -18,26 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.widgets.themepicker;
 
-import de.agilecoders.wicket.core.Bootstrap;
-import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
-import de.agilecoders.wicket.core.settings.IBootstrapSettings;
-import de.agilecoders.wicket.core.settings.ITheme;
-import de.agilecoders.wicket.core.settings.SingleThemeProvider;
-import de.agilecoders.wicket.core.util.Attributes;
-import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
-import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
-import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
-import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -50,8 +40,22 @@ import org.apache.wicket.util.cookies.CookieUtils;
 import org.apache.wicket.util.string.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+
+import de.agilecoders.wicket.core.Bootstrap;
+import de.agilecoders.wicket.core.settings.ActiveThemeProvider;
+import de.agilecoders.wicket.core.settings.IBootstrapSettings;
+import de.agilecoders.wicket.core.settings.ITheme;
+import de.agilecoders.wicket.core.settings.SessionThemeProvider;
+import de.agilecoders.wicket.core.settings.SingleThemeProvider;
+import de.agilecoders.wicket.core.util.Attributes;
+import de.agilecoders.wicket.themes.markup.html.bootstrap.BootstrapThemeTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchTheme;
+import de.agilecoders.wicket.themes.markup.html.bootswatch.BootswatchThemeProvider;
+import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitTheme;
+import de.agilecoders.wicket.themes.markup.html.vegibit.VegibitThemeProvider;
 
 /**
  * A panel used as a Navbar item to change the application theme/skin
@@ -84,7 +88,13 @@ public class ThemeChooser extends Panel {
     public ThemeChooser(String id) {
         super(id);
 
-        initializeActiveThemeFromCookie();
+        final ActiveThemeProvider activeThemeProvider = getActiveThemeProvider();
+        if(activeThemeProvider.getClass() == SessionThemeProvider.class) {
+            initializeActiveThemeFromCookie();
+        } else {
+            // if anything other than the default, then we do NOT initialize
+            // (on the assumption that it is a persistent store and we don't want to overwrite).
+        }
 
         ListView<String> themesView = new ListView<String>("themes", getThemeNames()) {
 

@@ -17,9 +17,12 @@
 package org.apache.isis.core.runtime.services.eventbus;
 
 import java.util.Map;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+
 import com.google.common.base.Strings;
+
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusImplementation;
@@ -63,7 +66,7 @@ public abstract class EventBusServiceDefault extends EventBusService {
             // a singleton
             if (!allowLateRegistration && hasPosted()) {
                 // ... coming too late to the party.
-                throw new IllegalStateException("Events have already been posted; too late to register any further (singleton) subscribers");
+                throw new IllegalStateException("Attempting to register '" + domainService.getClass().getSimpleName() + "' as a subscriber.  However events have already been posted and it is too late to register any further (singleton) subscribers.  Either use @DomainServiceLayout(menuOrder=...) on subscribing services to ensure that subscribers are initialized before any services that might post events, or alternatively use '" + KEY_ALLOW_LATE_REGISTRATION + "' configuration property to relax this check (meaning that some subscribers will miss some posted events)");
             }
         }
         super.register(domainService);

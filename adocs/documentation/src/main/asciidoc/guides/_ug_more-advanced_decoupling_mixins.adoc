@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-A mixin object (`1.10.0-SNAPSHOT`) allows one class to contribute behaviour - actions, (derived) properties and
+A mixin object allows one class to contribute behaviour - actions, (derived) properties and
 (derived) collections - to another domain object, either a domain entity or view model.
 
 Some programming languages use the term "trait" instead of mixin, and some languages (such as AspectJ) define their own

@@ -26,6 +26,10 @@ import com.google.common.collect.Maps;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
+import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -36,7 +40,6 @@ public class BreadcrumbModel implements Serializable {
     private static final int MAX_SIZE = 5;
 
     private final Map<String, EntityModel> entityModelByOidStr = Maps.newHashMap();
-    private final Map<EntityModel, String> titleByEntityModel = Maps.newHashMap();
     private final Map<EntityModel, String> oidStrByEntityModel = Maps.newHashMap();
     private final List<EntityModel> list = Lists.newArrayList();
     
@@ -51,31 +54,36 @@ public class BreadcrumbModel implements Serializable {
             return;
         }
 
-        final String oidStr = oidStrFor(entityModel);
+        final String oidStr = oidStrFrom(entityModel);
         
-        removeExisting(oidStr);
+        remove(oidStr);
         addToStart(oidStr, entityModel);
         
         trimTo(MAX_SIZE);
     }
 
-    private String oidStrFor(final EntityModel entityModel) {
+    private String oidStrFrom(final EntityModel entityModel) {
         final PageParameters pageParameters = entityModel.getPageParametersWithoutUiHints();
-        return PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        return oidStrFrom(pageParameters);
+    }
+
+    private String oidStrFrom(final PageParameters pageParameters) {
+        String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+        if(oidStr == null) {
+            return null;
+        }
+        try {
+            final RootOid unmarshal = getOidMarshaller().unmarshal(oidStr, RootOid.class);
+            return unmarshal.enStringNoVersion(getOidMarshaller());
+        } catch(Exception ex) {
+            return null;
+        }
     }
 
     private void addToStart(final String oidStr, final EntityModel entityModel) {
         entityModelByOidStr.put(oidStr, entityModel);
-        titleByEntityModel.put(entityModel, entityModel.getTitle());
         oidStrByEntityModel.put(entityModel, oidStr);
         list.add(0, entityModel);
-    }
-
-    private void removeExisting(final String oidStr) {
-        final EntityModel existingModel = entityModelByOidStr.get(oidStr);
-        if(existingModel != null) {
-            remove(oidStr, existingModel);
-        }
     }
 
     private void trimTo(final int size) {
@@ -89,37 +97,15 @@ public class BreadcrumbModel implements Serializable {
         }
     }
 
-    private void remove(final String oidStr, final EntityModel model) {
-        entityModelByOidStr.remove(oidStr);
-        titleByEntityModel.remove(model);
-        oidStrByEntityModel.remove(model);
-        list.remove(model);
-    }
-
-    public void remove(String oidStr) {
-        EntityModel removedModel = entityModelByOidStr.remove(oidStr);
-        if(removedModel != null) {
-            remove(removedModel);
-        }
-    }
-
-    public void remove(EntityModel entityModel) {
-        String oidStr = oidStrByEntityModel.get(entityModel);
-        if(oidStr != null) {
-            remove(oidStr, entityModel);
-        }
-    }
-
     public String titleFor(final EntityModel model) {
-        return titleByEntityModel.get(model);
+        return model.getObjectAdapterMemento().getObjectAdapter(AdapterManager.ConcurrencyChecking.NO_CHECK).titleString(null);
     }
 
-    public EntityModel lookup(String oidStr) {
+    public EntityModel lookup(final String oidStr) {
         if(oidStr == null) {
             return null;
         }
-        final EntityModel entityModel = entityModelByOidStr.get(oidStr);
-        return entityModel;
+        return entityModelByOidStr.get(oidStr);
     }
 
     public void detach() {
@@ -127,4 +113,45 @@ public class BreadcrumbModel implements Serializable {
             entityModel.detach();
         }
     }
+
+    public RootOid getId(final EntityModel choice) {
+        try {
+            final PageParameters pageParameters = choice.getPageParameters();
+            final String oidStr = PageParameterNames.OBJECT_OID.getStringFrom(pageParameters);
+            return RootOid.deString(oidStr, getOidMarshaller());
+        } catch (Exception ex) {
+            remove(choice);
+            return null;
+        }
+
+    }
+
+
+    void remove(final String rootOid) {
+        final EntityModel existingModel = entityModelByOidStr.get(rootOid);
+        if(existingModel != null) {
+            remove(rootOid, existingModel);
+        }
+    }
+
+    public void remove(final EntityModel entityModel) {
+        final String oidStr = oidStrByEntityModel.get(entityModel);
+        if(oidStr != null) {
+            remove(oidStr, entityModel);
+        }
+    }
+
+    private void remove(final String rootOid, final EntityModel model) {
+        entityModelByOidStr.remove(rootOid);
+        oidStrByEntityModel.remove(model);
+        list.remove(model);
+    }
+
+
+
+    protected OidMarshaller getOidMarshaller() {
+        return IsisContext.getOidMarshaller();
+    }
+
+
 }

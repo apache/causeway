@@ -47,6 +47,7 @@ import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpS
 import org.apache.isis.viewer.restfulobjects.applib.domainobjects.DomainObjectResource;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.PrettyPrinting;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
@@ -99,8 +100,9 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         }
         getResourceContext().getPersistenceSession().makePersistentInTransaction(objectAdapter);
 
-        return getDomainResourceHelper(objectAdapter).objectRepresentation();
+        return getDomainResourceHelper(objectAdapter).objectRepresentation(RepresentationService.Intent.JUST_CREATED);
     }
+
 
     // //////////////////////////////////////////////////////////
     // domain object
@@ -123,9 +125,10 @@ public class DomainObjectResourceServerside extends ResourceAbstract implements 
         return getDomainResourceHelper(objectAdapter).objectRepresentation();
     }
 
-    private DomainResourceHelper getDomainResourceHelper(ObjectAdapter objectAdapter) {
+    private DomainResourceHelper getDomainResourceHelper(final ObjectAdapter objectAdapter) {
         return new DomainResourceHelper(getResourceContext(), objectAdapter);
     }
+
 
     @Override
     @PUT

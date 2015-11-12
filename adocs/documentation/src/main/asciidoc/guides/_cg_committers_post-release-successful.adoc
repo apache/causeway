@@ -25,7 +25,7 @@ Post the results to the `dev@isis.a.o` mailing list:
 
 [source,bash]
 ----
-[RESULT] [VOTE] Apache Isis Core release 1.9.0
+[RESULT] [VOTE] Apache Isis Core release 1.11.0
 ----
 
 using the body (alter last line as appropriate):
@@ -53,8 +53,8 @@ You can do this using the `scripts/promoterctag.sh` script; for example:
 
 [source,bash]
 ----
-sh scripts/promoterctag.sh isis-1.9.0 RC1
-sh scripts/promoterctag.sh simpleapp-archetype-1.9.0 RC1
+sh scripts/promoterctag.sh isis-1.11.0 RC1
+sh scripts/promoterctag.sh simpleapp-archetype-1.11.0 RC1
 ----
 
 
@@ -65,7 +65,7 @@ Then, continue onto the next section for the steps to promote and announce the r
 
 == Release to Maven Central
 
-From the Nexus pages, select the staging repository and select 'release' from the top menu.
+From the http://repository.apache.org[ASF Nexus repository], select the staging repository and select 'release' from the top menu.
 
 
 image::{_imagesdir}release-process/nexus-release-1.png[width="600px",link="{_imagesdir}release-process/nexus-release-1.png"]
@@ -159,7 +159,7 @@ For example:
 
 [source,bash]
 ----
-sh upd.sh 1.9.0 1.10.0
+sh upd.sh 1.10.0 1.11.0
 ----
 
 The script downloads the artefacts from the Nexus release repository, adds the artefacts to subsversion and deletes the previous version.
@@ -182,7 +182,7 @@ From the root directory, generate the release notes for the current release, in 
 
 [source,bash]
 ----
-sh scripts/jira-release-notes.sh ISIS 1.10.0 > /tmp/1
+sh scripts/jira-release-notes.sh ISIS 1.11.0 > /tmp/1
 ----
 
 
@@ -194,13 +194,17 @@ Close all JIRA tickets for the release, or moved to future releases if not yet a
 
 === Mark the version as released
 
-In JIRA, go to the administration section for the Apache Isis project and update the versions as released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the versions as released.
 
 
 === Create new JIRA
 
 Create a new JIRA ticket as a catch-all for the _next_ release.
 
+
+=== Update the ASF Reporter website
+
+Log the new release in the link:https://reporter.apache.org/addrelease.html?isis[ASF Reporter website].
 
 
 
@@ -239,33 +243,31 @@ For example, for a release of Apache Isis Core, use the following subject:
 
 [source,bash]
 ----
-[ANN] Apache Isis version 1.10.0 Released
+[ANN] Apache Isis version 1.11.0 Released
 ----
 
 And use the following body (summarizing the main points as required):
 
 [source]
 ----
-The Apache Isis team is pleased to announce the release of Apache Isis v1.10.0.
+The Apache Isis team is pleased to announce the release of Apache Isis v1.11.0.
 
 New features in this release include:
 * ...
 
-Full release notes are available on the Apache Isis website at [1].
+Full release notes are available on the Apache Isis website at [1].  Please also read the migration notes [2].
 
-Note that:
-* ...
-
-You can access this release directly from the Maven central repo [2],
-or download the release and build it from source [3].
+You can access this release directly from the Maven central repo [3], or download the release and build it from
+source [4].
 
 Enjoy!
 
 --The Apache Isis team
 
-[1] http://isis.apache.org/release-notes.html#r1.10.0
-[2] http://search.maven.org
-[3] http://isis.apache.org/downloads.html
+[1] http://isis.apache.org/release-notes.html#r1.11.0
+[2] http://isis.apache.org/migration-notes.html#_migration-notes_1.10.0-to-1.11.0
+[3] http://search.maven.org
+[4] http://isis.apache.org/downloads.html
 ----
 
 
@@ -287,9 +289,9 @@ Because we release from a branch, the changes made in the branch (changes to `po
 ----
 git checkout master                           # update master with latest
 git pull
-git merge release-1.10.0-RC1                  # merge branch onto master
-git branch -d release-1.10.0-RC1              # branch no longer needed
-git push origin --delete release-1.10.0-RC1   # remote branch no longer needed
+git merge release-1.11.0-RC1                  # merge branch onto master
+git branch -d release-1.11.0-RC1              # branch no longer needed
+git push origin --delete release-1.11.0-RC1   # remote branch no longer needed
 ----
 
 
@@ -390,10 +392,34 @@ git push
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
 
-For each add-on:
+Using this https://gist.github.com/danhaywood/3129b688be3628322c01[gist] to invoke operations across all (or selected) addons:
 
-* update its dependency on Apache Isis to reference the newly released version
-** all the addons define their dependency in the `<isis.version>` property, so search for this string across all `pom.xml` files
-* use the `release.sh` script (that each provides) to release.
+* update its dependency on Apache Isis to reference the newly released version: +
++
+[source,bash]
+----
+sh all.sh -r "1.11.0" bumpisis
+----
 
-You can use this https://gist.github.com/danhaywood/3129b688be3628322c01[gist] to invoke `release.sh` across all (or selected) addons.
+* confirm compiles: +
++
+[source,bash]
+----
+sh all.sh mcio
+----
+
+* release to mvn central: +
++
+[source,bash]
+----
+sh all.sh -r "1.11.0" -s "1.12.0-SNAPSHOT" -k "dan@haywood-associates.co.uk" -p "this is not my password" release
+----
+
+* update its dependency on Apache Isis to reference the next SNAPSHOT version: +
++
+[source,bash]
+----
+sh all.sh -r "1.12.0-SNAPSHOT" bumpisis
+----
+
+

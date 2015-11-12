@@ -25,7 +25,7 @@ For an action parameter in (0-based) position _N_, and of type `T`, the signatur
 public List<T> autoCompleteNXxx(String search) { ... }
 ----
 
-It is also valid to return `T[]` or (from `1.10.0-SNAPSHOT onwards`) either `Set<T>` or `Collection<T>`.
+It is also valid to return `T[]`, a `Set<T>` or a `Collection<T>`.
 
 
 For example:
@@ -73,7 +73,7 @@ For a property of type `T`, the signature is:
 public List<T> autoCompleteXxx(String search) { ... }
 ----
 
-(As for action parameters) it is also valid to return `T[]` or (from `1.10.0-SNAPSHOT onwards`) either `Set<T>` or `Collection<T>`.
+(As for action parameters) it is also valid to return `T[]`, a `Set<T>` or a `Collection<T>`.
 
 For example:
 
