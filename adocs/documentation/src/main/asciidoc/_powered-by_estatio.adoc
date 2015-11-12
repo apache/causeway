@@ -9,7 +9,7 @@
 
 Estatio is an estate management application being developed for and deployed at link:http://www.eurocommercialproperties.com/[Eurocommercial Properties].
 
-Eurocommercial Properties is a Dutch-listed company that owns and operates over 50 shopping centres across Italy, France and Sweden, with a turnover of well over EUR1bn a year.  Previously the company had used one of the leading software packages for its invoicing;
+Eurocommercial Properties is a Dutch-listed company that owns and operates over 50 shopping centres across Italy, France and Sweden, with income from property of approx. EUR150m per year.  Previously the company had used one of the leading software packages for its invoicing;
 however this had proven on the one hand lacking in key features/functionality for some locales, while
  overlapping/duplicating the features/capabilities of the general ledger system.  It had also been found to be
  extremely difficult to upgrade to new versions of the product (eg multiple regressions).
@@ -23,7 +23,7 @@ The application developed, and deployed initially in Italy, is called Estatio:
 
 image::{_imagesdir}powered-by/estatio/estatio-1.png[width="900px",link="{_imagesdir}powered-by/estatio/estatio-1.png"]
 
-The development team for the original implementation consisted of just two developers (both of which are Apache Isis committers); the first version of the application was developed over 2 years and 2 man-years effort.  Since the initial release - as the scope of the application has grown - the team has expanded to take on a further part-time developer and also some interns.
+The development team for the original implementation consisted of just two developers (both of whom are Apache Isis committers); the first version of the application was developed over 2 years and 2 man-years effort.  Since the initial release - as the scope of the application has grown - the team has expanded to take on a further part-time developer and also some interns.
 
 
 == Supporting Open Source
