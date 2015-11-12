@@ -1,0 +1,112 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.apache.isis.applib.services.jaxb;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.activation.MimeType;
+import javax.activation.MimeTypeParseException;
+import javax.inject.Inject;
+
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.FatalException;
+import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.value.Blob;
+import org.apache.isis.applib.value.Clob;
+
+@Mixin
+public class Dto_downloadXsd {
+
+    private final Dto dto;
+
+    final MimeType mimeTypeApplicationZip;
+
+    public Dto_downloadXsd(final Dto dto) {
+        this.dto = dto;
+        try {
+            mimeTypeApplicationZip = new MimeType("application", "zip");
+        } catch (final MimeTypeParseException ex) {
+            throw new FatalException(ex);
+        }
+    }
+
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto> {}
+
+    @Action(
+            domainEvent = ActionDomainEvent.class,
+            semantics = SemanticsOf.SAFE
+    )
+    @MemberOrder(sequence = "500.2")
+    public Object $$(final String fileName) {
+
+        final Map<String, String> map = jaxbService.toXsd(dto);
+
+        if(map.isEmpty()) {
+            container.warnUser("No schemas were generated for " + dto.getClass().getName() + "; programming error?");
+            return null;
+        }
+
+        if(map.size() == 1) {
+            final Map.Entry<String, String> entry = map.entrySet().iterator().next();
+            return new Clob(Util.withSuffix(fileName, "xsd"), "text/xml", entry.getValue());
+        }
+
+        try {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            final ZipOutputStream zos = new ZipOutputStream(baos);
+            final OutputStreamWriter writer = new OutputStreamWriter(zos);
+
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                final String namespaceUri = entry.getKey();
+                final String schemaText = entry.getValue();
+                zos.putNextEntry(new ZipEntry(zipEntryNameFor(namespaceUri)));
+                writer.write(schemaText);
+                writer.flush();
+                zos.closeEntry();
+            }
+
+            writer.close();
+            return new Blob(Util.withSuffix(fileName, "zip"), mimeTypeApplicationZip, baos.toByteArray());
+        } catch (final IOException ex) {
+            throw new FatalException("Unable to create zip", ex);
+        }
+    }
+
+    public String default0$$() {
+        return Util.withSuffix(dto.getClass().getName(), "xsd");
+    }
+
+    private static String zipEntryNameFor(final String namespaceUri) {
+        return Util.withSuffix(namespaceUri, "xsd");
+    }
+
+
+    @Inject
+    DomainObjectContainer container;
+
+    @Inject
+    JaxbService jaxbService;
+}
+
