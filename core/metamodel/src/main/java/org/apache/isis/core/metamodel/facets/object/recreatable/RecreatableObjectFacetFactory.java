@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.google.common.collect.Maps;
 
@@ -77,6 +78,10 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
         final org.apache.isis.applib.annotation.ViewModel annotation = Annotations.getAnnotation(processClassContext.getCls(), org.apache.isis.applib.annotation.ViewModel.class);
         FacetUtil.addFacet(create(annotation, processClassContext.getFacetHolder()));
 
+        // XmlRootElement annotation
+        final XmlRootElement xmlRootElement = Annotations.getAnnotation(processClassContext.getCls(), XmlRootElement.class);
+        FacetUtil.addFacet(create(xmlRootElement, processClassContext.getFacetHolder()));
+
         // RecreatableDomainObject interface
         if (RecreatableDomainObject.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
@@ -89,7 +94,12 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
     private ViewModelFacet create(final org.apache.isis.applib.annotation.ViewModel annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForRecreatableObjectAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector, postConstructMethodCache) : null;
+        return annotation != null ? new RecreatableObjectFacetForViewModelAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector, postConstructMethodCache) : null;
+    }
+
+    private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
+        final PostConstructMethodCache postConstructMethodCache = this;
+        return annotation != null ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector, postConstructMethodCache) : null;
     }
 
     // //////////////////////////////////////
