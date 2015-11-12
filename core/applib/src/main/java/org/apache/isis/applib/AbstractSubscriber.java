@@ -19,36 +19,34 @@
 package org.apache.isis.applib;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+
+import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 
 /**
  * Convenience class for services that act as subscribers.
  */
+@DomainServiceLayout(
+        menuOrder = "1"
+)
 public abstract class AbstractSubscriber {
 
-    //region > postConstruct, preDestroy
-
-    @Programmatic
     @PostConstruct
     public void postConstruct() {
         eventBusService.register(this);
     }
 
     @Programmatic
-    @PreDestroy
     public void preDestroy() {
         eventBusService.unregister(this);
     }
-    //endregion
 
-    //region > injected services
+
     @javax.inject.Inject
     protected DomainObjectContainer container;
 
     @javax.inject.Inject
     protected EventBusService eventBusService;
-    //endregion
 
 }
