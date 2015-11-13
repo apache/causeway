@@ -34,14 +34,26 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     //region > Default class
 
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
+     * The default for {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute, will be
+     * used as the event class to be posted if some other subclass wasn't specified (though setting to
+     * {@link org.apache.isis.applib.services.eventbus.ActionDomainEvent.Noop} will disable).
      */
     public static class Default extends ActionInteractionEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default(Object source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
         }
+    }
+    //endregion
+
+    //region > Noop class
+
+    /**
+     * Disables event propogation if explicitly set as the value of
+     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
+     */
+    public static class Noop extends ActionDomainEvent<Object> {
+        private static final long serialVersionUID = 1L;
     }
     //endregion
 

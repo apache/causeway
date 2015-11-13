@@ -199,7 +199,9 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionDomainEventFacet = new ActionDomainEventFacetDefault(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             }
-            FacetUtil.addFacet(actionDomainEventFacet);
+            if(!ActionDomainEvent.Noop.class.isAssignableFrom(actionDomainEventFacet.getEventType())) {
+                FacetUtil.addFacet(actionDomainEventFacet);
+            }
 
 
             // replace the current actionInvocationFacet with one that will

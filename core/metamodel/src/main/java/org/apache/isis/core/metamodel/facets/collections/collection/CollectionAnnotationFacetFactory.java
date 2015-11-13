@@ -166,7 +166,9 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             collectionDomainEventFacet = new CollectionDomainEventFacetDefault(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
         }
-        FacetUtil.addFacet(collectionDomainEventFacet);
+        if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
+            FacetUtil.addFacet(collectionDomainEventFacet);
+        }
 
 
         //

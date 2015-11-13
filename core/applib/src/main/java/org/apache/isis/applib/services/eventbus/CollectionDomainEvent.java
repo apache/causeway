@@ -27,8 +27,9 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
 
     //region > Default class
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.
+     * The default for {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute, will be
+     * used as the event class to be posted if some other subclass wasn't specified (though setting to
+     * {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Noop} will disable).
      */
     public static class Default extends CollectionInteractionEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
@@ -39,6 +40,17 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
                 final Object value) {
             super(source, identifier, of, value);
         }
+    }
+    //endregion
+
+    //region > Noop class
+
+    /**
+     * Disables event propogation if explicitly set as the value of
+     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.
+     */
+    public static class Noop extends CollectionDomainEvent<Object,Object> {
+        private static final long serialVersionUID = 1L;
     }
     //endregion
 

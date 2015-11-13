@@ -167,7 +167,10 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         }
-        FacetUtil.addFacet(propertyDomainEventFacet);
+        if(!PropertyDomainEvent.Noop.class.isAssignableFrom(propertyDomainEventFacet.getEventType())) {
+            FacetUtil.addFacet(propertyDomainEventFacet);
+        }
+
 
 
         //
