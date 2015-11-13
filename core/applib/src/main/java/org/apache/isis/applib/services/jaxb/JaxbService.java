@@ -23,7 +23,7 @@ import org.apache.isis.applib.annotation.Programmatic;
 public interface JaxbService {
 
     @Programmatic
-    <T> T fromXml(Class<T> domainClass, String memento);
+    <T> T fromXml(Class<T> domainClass, String xml);
 
     @Programmatic
     public String toXml(final Object domainObject);

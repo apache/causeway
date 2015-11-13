@@ -38,12 +38,24 @@ public class PersistentEntityAdapter extends XmlAdapter<OidDto, Object> {
 
     @Override
     public OidDto marshal(final Object domainObject) throws Exception {
+        if(domainObject == null) {
+            return null;
+        }
         final Bookmark bookmark = bookmarkService.bookmarkFor(domainObject);
         final OidDto oidDto = new OidDto();
         oidDto.setObjectIdentifier(bookmark.getIdentifier());
-        oidDto.setObjectState(BookmarkObjectState.PERSISTENT);
+        oidDto.setObjectState(convert(bookmark.getObjectState()));
         oidDto.setObjectType(bookmark.getObjectType());
         return oidDto;
+    }
+
+    private BookmarkObjectState convert(final Bookmark.ObjectState objectState) {
+        switch (objectState) {
+            case VIEW_MODEL:return BookmarkObjectState.VIEW_MODEL;
+            case TRANSIENT:return BookmarkObjectState.TRANSIENT;
+            case PERSISTENT:return BookmarkObjectState.PERSISTENT;
+        }
+        throw new IllegalArgumentException("Not recognized: " + objectState.name());
     }
 
     @Inject
