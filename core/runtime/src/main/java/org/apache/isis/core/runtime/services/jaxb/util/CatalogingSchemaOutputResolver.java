@@ -34,7 +34,12 @@ import com.google.common.collect.Maps;
  */
 public class CatalogingSchemaOutputResolver extends SchemaOutputResolver
 {
+    private final boolean includeIsisSchema;
     private List<String> namespaceUris = Lists.newArrayList();
+
+    public CatalogingSchemaOutputResolver(final boolean includeIsisSchema) {
+        this.includeIsisSchema = includeIsisSchema;
+    }
 
     public List<String> getNamespaceUris() {
         return namespaceUris;
@@ -55,8 +60,12 @@ public class CatalogingSchemaOutputResolver extends SchemaOutputResolver
 
         result.setSystemId(namespaceUri);
 
-        namespaceUris.add(namespaceUri);
-        schemaResultByNamespaceUri.put(namespaceUri, result);
+        if (namespaceUri.matches(".*isis\\.apache\\.org.*") && !includeIsisSchema) {
+            // ignore
+        } else {
+            namespaceUris.add(namespaceUri);
+            schemaResultByNamespaceUri.put(namespaceUri, result);
+        }
 
         return result;
     }
