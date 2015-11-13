@@ -25,11 +25,12 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
-import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeAbstract;
+import org.apache.isis.core.metamodel.facets.object.recreatable.RecreatableObjectFacetDeclarativeInitializingAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class RecreatableObjectFacetForDomainObjectAnnotation extends RecreatableObjectFacetDeclarativeAbstract {
+public class RecreatableObjectFacetForDomainObjectAnnotation extends
+        RecreatableObjectFacetDeclarativeInitializingAbstract {
 
     public static ViewModelFacet create(
             final DomainObject domainObject,
@@ -92,7 +93,7 @@ public class RecreatableObjectFacetForDomainObjectAnnotation extends Recreatable
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, architecturalLayer, specificationLoader, adapterManager, servicesInjector,
+        super(holder, architecturalLayer, RecreationMechanism.INITIALIZES, specificationLoader, adapterManager, servicesInjector,
                 postConstructMethodCache);
     }
 

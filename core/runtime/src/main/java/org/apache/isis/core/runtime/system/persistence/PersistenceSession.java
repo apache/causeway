@@ -579,23 +579,40 @@ public class PersistenceSession implements
     }
 
     private ObjectAdapter createInstance(
-            final ObjectSpecification objectSpec,
+            final ObjectSpecification spec,
             final Variant variant,
             final String memento) {
         if (LOG.isDebugEnabled()) {
-            LOG.debug("creating " + variant + " instance of " + objectSpec);
+            LOG.debug("creating " + variant + " instance of " + spec);
         }
-        final Object pojo = instantiateAndInjectServices(objectSpec);
+        final Object pojo;
 
         if(variant == Variant.VIEW_MODEL) {
-            final ViewModelFacet facet = objectSpec.getFacet(ViewModelFacet.class);
-            initialize(facet, pojo, memento);
+            pojo = recreateViewModel(spec, memento);
+        } else {
+            pojo = instantiateAndInjectServices(spec);
+
         }
 
         final ObjectAdapter adapter = adapterFor(pojo);
         return initializePropertiesAndDoCallback(adapter);
     }
 
+    private Object recreateViewModel(final ObjectSpecification spec, final String memento) {
+        final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
+        if(facet == null) {
+            throw new IllegalArgumentException("spec does not have ViewModelFacet; spec is " + spec.getFullIdentifier());
+        }
+
+        final Object viewModelPojo;
+        if(facet.getRecreationMechanism().isInitializes()) {
+            viewModelPojo = instantiateAndInjectServices(spec);
+            facet.initialize(viewModelPojo, memento);
+        } else {
+            viewModelPojo = facet.instantiate(spec.getCorrespondingClass(), memento);
+        }
+        return viewModelPojo;
+    }
 
     public Object instantiateAndInjectServices(final ObjectSpecification objectSpec) {
 
@@ -1596,23 +1613,18 @@ public class PersistenceSession implements
     private Object recreatePojoDefault(final RootOid rootOid) {
         final ObjectSpecification spec =
                 specificationLoader.lookupBySpecId(rootOid.getObjectSpecId());
-        final Object pojo = instantiateAndInjectServices(spec);
-        if(rootOid.isViewModel()) {
-            // initialize the view model pojo from the oid's identifier
+        final Object pojo;
 
-            final ViewModelFacet facet = spec.getFacet(ViewModelFacet.class);
-            if(facet == null) {
-                throw new IllegalArgumentException("spec does not have RecreatableObjectFacet; " + rootOid.toString() + "; spec is " + spec.getFullIdentifier());
-            }
+        if(rootOid.isViewModel()) {
 
             final String memento = rootOid.getIdentifier();
-            initialize(facet, pojo, memento);
+            pojo = recreateViewModel(spec, memento);
+
+        } else {
+            pojo = instantiateAndInjectServices(spec);
+
         }
         return pojo;
-    }
-
-    private void initialize(final ViewModelFacet facet, final Object pojo, final String memento) {
-        facet.initialize(pojo, memento);
     }
 
     /**

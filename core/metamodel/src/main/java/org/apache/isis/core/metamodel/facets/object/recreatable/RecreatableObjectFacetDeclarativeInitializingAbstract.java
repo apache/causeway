@@ -41,22 +41,21 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public abstract class RecreatableObjectFacetDeclarativeAbstract extends RecreatableObjectFacetAbstract {
+public abstract class RecreatableObjectFacetDeclarativeInitializingAbstract extends RecreatableObjectFacetAbstract {
 
     private final SpecificationLoader specificationLoader;
-    private final ServicesInjector servicesInjector;
     private final AdapterManager adapterManager;
 
-    public RecreatableObjectFacetDeclarativeAbstract(
+    public RecreatableObjectFacetDeclarativeInitializingAbstract(
             final FacetHolder holder,
             final ArchitecturalLayer architecturalLayer,
+            final RecreationMechanism recreationMechanism,
             final SpecificationLoader specificationLoader,
             final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, architecturalLayer, postConstructMethodCache);
+        super(holder, architecturalLayer, recreationMechanism, postConstructMethodCache, servicesInjector);
         this.specificationLoader = specificationLoader;
-        this.servicesInjector = servicesInjector;
         this.adapterManager = adapterManager;
     }
 

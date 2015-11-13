@@ -71,7 +71,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
         if (ViewModel.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache));
+                    processClassContext.getFacetHolder(), postConstructMethodCache, servicesInjector));
         }
 
         // ViewModel annotation
@@ -86,7 +86,7 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
         if (RecreatableDomainObject.class.isAssignableFrom(processClassContext.getCls())) {
             final PostConstructMethodCache postConstructMethodCache = this;
             FacetUtil.addFacet(new RecreatableObjectFacetForRecreatableDomainObjectInterface(
-                    processClassContext.getFacetHolder(), postConstructMethodCache));
+                    processClassContext.getFacetHolder(), postConstructMethodCache, servicesInjector));
         }
 
         // DomainObject(nature=VIEW_MODEL) is managed by the DomainObjectFacetFactory

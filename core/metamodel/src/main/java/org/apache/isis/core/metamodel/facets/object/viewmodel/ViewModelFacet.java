@@ -19,6 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.viewmodel;
 
+import org.apache.isis.applib.annotation.Nature;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -38,13 +39,52 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ViewModelFacet extends Facet {
 
+
     public enum ArchitecturalLayer {
         APPLICATION,
         DOMAIN
     }
 
+    public enum RecreationMechanism {
+        /**
+         * Instantiates a new instance and then populates
+         */
+        INSTANTIATES,
+        /**
+         * Initializes an instance already created by the framework
+         */
+        INITIALIZES;
+
+        public boolean isInstantiates() {
+            return this == INSTANTIATES;
+        }
+        public boolean isInitializes() {
+            return this == INITIALIZES;
+        }
+    }
+
+    /**
+     * Whether this implementation supports the recreation of objects by {@link RecreationMechanism#INSTANTIATES instantiating} (and implicitly also initializing) a new pojo, or by {@link RecreationMechanism#INITIALIZES initializing} a pojo created and passed to it by the framework.
+     *
+     * <p>
+     *     Determines whether the framework then calls {@link #instantiate(Class, String)} or if it calls {@link #initialize(Object, String)}.
+     * </p>
+     */
+    RecreationMechanism getRecreationMechanism();
+
+    /**
+     * Will be called if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INITIALIZES}.
+     */
     void initialize(Object pojo, String memento);
 
+    /**
+     * Will be called only call if {@link #getRecreationMechanism()} is {@link RecreationMechanism#INSTANTIATES}.
+     */
+    Object instantiate(final Class<?> viewModelClass, String memento);
+
+    /**
+     * Obtain a memento of the pojo, which can then be used to reinstantiate (either by {@link #instantiate(Class, String)} or {@link #initialize(Object, String)}) subsequently.
+     */
     String memento(Object pojo);
 
     /**
@@ -52,7 +92,16 @@ public interface ViewModelFacet extends Facet {
      */
     boolean isCloneable(Object pojo);
 
+    /**
+     * View models are implicitly immutable (their state is determined by their {@link #memento(Object)}), so this
+     * method allows the framework to clone an existing view model to mutate it, thereby simulating editable
+     * view models.
+     */
     Object clone(Object pojo);
 
+    /**
+     * Currently metadata only, capturing the nature of the view model, eg {@link Nature#EXTERNAL_ENTITY} is a {@link ArchitecturalLayer#DOMAIN domain} layer where as {@link Nature#VIEW_MODEL} is {@link ArchitecturalLayer#APPLICATION application} layer.
+     * @return
+     */
     ArchitecturalLayer getArchitecturalLayer();
 }

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.jaxb.util;
+package org.apache.isis.schema.utils.jaxbadapters;
 
 import javax.inject.Inject;
 import javax.xml.bind.annotation.adapters.XmlAdapter;

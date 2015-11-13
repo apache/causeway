@@ -14,20 +14,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.jaxb;
+package org.apache.isis.applib.services.urlencoding;
 
-import java.util.Map;
+import java.nio.charset.Charset;
 
+import com.google.common.io.BaseEncoding;
+
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
-public interface JaxbService {
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+public class UrlEncodingService {
 
     @Programmatic
-    <T> T fromXml(Class<T> domainClass, String memento);
+    public String decode(String str) {
+        final byte[] bytes = BaseEncoding.base64Url().decode(str);
+        return new String(bytes, Charset.forName("UTF-8"));
+    }
 
     @Programmatic
-    public String toXml(final Object domainObject);
+    public String encode(final String xmlStr) {
+        byte[] bytes = xmlStr.getBytes(Charset.forName("UTF-8"));
+        return BaseEncoding.base64Url().encode(bytes);
+    }
 
-    @Programmatic
-    public Map<String, String> toXsd(final Object domainObject);
 }
