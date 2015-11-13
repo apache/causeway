@@ -25,6 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.services.eventbus.CssClassFaUiEvent;
+import org.apache.isis.applib.services.eventbus.CssClassUiEvent;
+import org.apache.isis.applib.services.eventbus.IconUiEvent;
+import org.apache.isis.applib.services.eventbus.TitleUiEvent;
+
 /**
  * Layout hints for domain objects.
  */
@@ -32,6 +37,38 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DomainObjectLayout {
+
+
+    /**
+     * Which subclass of {@link TitleUiEvent} should be used to obtain a title.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
+
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link IconUiEvent} should be used to obtain an icon.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;
+
+    // //////////////////////////////////////
+
+    /**
+     * Which subclass of {@link CssClassUiEvent} should be used to obtain a CSS class.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
 
     /**
      * Indicates the css class that a domain class (type) should have.
@@ -41,12 +78,19 @@ public @interface DomainObjectLayout {
     // //////////////////////////////////////
 
     /**
+     * Which subclass of {@link CssClassFaUiEvent} should be used to obtain a CSS font-awesome class and position.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends CssClassFaUiEvent<?>> cssClassFaUiEvent() default CssClassFaUiEvent.Default.class;
+
+    /**
      * Indicates the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a> CSS class to decorate an
      * domain object.
      */
     String cssClassFa() default "";
-
-    // //////////////////////////////////////
 
     /**
      * Indicates the position of the <a href="http://fortawesome.github.io/Font-Awesome/">Font Awesome</a>

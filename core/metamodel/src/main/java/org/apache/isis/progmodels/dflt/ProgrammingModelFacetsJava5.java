@@ -310,8 +310,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ObjectValidPropertiesFacetImplFactory.class);
         addFactory(PluralFacetStaticMethodFactory.class);
         addFactory(org.apache.isis.core.metamodel.facets.object.named.staticmethod.NamedFacetStaticMethodFactory.class);
-        addFactory(TitleAnnotationFacetFactory.class);
-        addFactory(TitleFacetViaMethodsFactory.class);
 
         addFactory(MemberOrderFacetFactory.class);
         addFactory(ActionOrderFacetAnnotationFactory.class);
@@ -401,6 +399,10 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(ParameterLayoutFacetFactory.class);
         addFactory(ActionLayoutFacetFactory.class);
         addFactory(CollectionLayoutFacetFactory.class);
+
+        // must come after DomainObjectLayoutFacetFactory
+        addFactory(TitleAnnotationFacetFactory.class);
+        addFactory(TitleFacetViaMethodsFactory.class);
 
         addFactory(NamedFacetOnTypeAnnotationFactory.class);
         addFactory(NamedFacetOnMemberFactory.class);

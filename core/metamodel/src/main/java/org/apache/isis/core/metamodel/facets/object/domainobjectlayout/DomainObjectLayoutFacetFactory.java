@@ -23,8 +23,11 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
+public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+
 
     public DomainObjectLayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
@@ -38,6 +41,10 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
 
         final DomainObjectLayout domainObjectLayout = Annotations.getAnnotation(cls, DomainObjectLayout.class);
         final ViewModelLayout viewModelLayout = Annotations.getAnnotation(cls, ViewModelLayout.class);
+
+        FacetUtil.addFacet(
+                TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent.create(
+                        domainObjectLayout, servicesInjector, facetHolder));
 
         FacetUtil.addFacet(
                 CssClassFacetForDomainObjectLayoutAnnotation.create(domainObjectLayout, facetHolder));
@@ -77,4 +84,11 @@ public class DomainObjectLayoutFacetFactory extends FacetFactoryAbstract {
         return;
     }
 
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 }
