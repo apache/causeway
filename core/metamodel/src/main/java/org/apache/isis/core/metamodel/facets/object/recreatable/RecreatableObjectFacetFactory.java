@@ -99,7 +99,9 @@ public class RecreatableObjectFacetFactory extends FacetFactoryAbstract
 
     private ViewModelFacet create(final XmlRootElement annotation, final FacetHolder holder) {
         final PostConstructMethodCache postConstructMethodCache = this;
-        return annotation != null ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, getSpecificationLoader(), adapterManager, servicesInjector, postConstructMethodCache) : null;
+        return annotation != null
+                ? new RecreatableObjectFacetForXmlRootElementAnnotation(holder, servicesInjector, postConstructMethodCache)
+                : null;
     }
 
     // //////////////////////////////////////

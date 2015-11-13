@@ -21,53 +21,45 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 public class RecreatableObjectFacetForXmlRootElementAnnotation extends RecreatableObjectFacetAbstract {
 
-    private final SpecificationLoader specificationLoader;
-    private final AdapterManager adapterManager;
-    private final ServicesInjector servicesInjector;
 
     public RecreatableObjectFacetForXmlRootElementAnnotation(
             final FacetHolder holder,
-            final SpecificationLoader specificationLoader,
-            final AdapterManager adapterManager,
             final ServicesInjector servicesInjector,
             final PostConstructMethodCache postConstructMethodCache) {
         super(holder, ArchitecturalLayer.APPLICATION, RecreationMechanism.INSTANTIATES,
                 postConstructMethodCache, servicesInjector);
-
-        this.specificationLoader = specificationLoader;
-        this.adapterManager = adapterManager;
-        this.servicesInjector = servicesInjector;
     }
 
     @Override
     protected Object doInstantiate(final Class<?> viewModelClass, final String mementoStr) {
 
-        final JaxbService jaxbService = servicesInjector.lookupService(JaxbService.class);
-        final UrlEncodingService urlEncodingService =
-                servicesInjector.lookupService(UrlEncodingService.class);
+        final String xmlStr = getUrlEncodingService().decode(mementoStr);
+        final Object viewModelPojo = getJaxbService().fromXml(viewModelClass, xmlStr);
 
-        final String xmlStr = urlEncodingService.decode(mementoStr);
-        final Object viewModelPojo = jaxbService.fromXml(viewModelClass, xmlStr);
         return viewModelPojo;
     }
 
     @Override
     public String memento(final Object pojo) {
 
-        final JaxbService jaxbService = servicesInjector.lookupService(JaxbService.class);
-        final UrlEncodingService urlEncodingService =
-                servicesInjector.lookupService(UrlEncodingService.class);
+        final String xml = getJaxbService().toXml(pojo);
+        final String encoded = getUrlEncodingService().encode(xml);
 
-        final String xml = jaxbService.toXml(pojo);
-        final String encoded = urlEncodingService.encode(xml);
         return encoded;
     }
+
+    private JaxbService getJaxbService() {
+        return servicesInjector.lookupService(JaxbService.class);
+    }
+
+    private UrlEncodingService getUrlEncodingService() {
+        return servicesInjector.lookupService(UrlEncodingService.class);
+    }
+
 }

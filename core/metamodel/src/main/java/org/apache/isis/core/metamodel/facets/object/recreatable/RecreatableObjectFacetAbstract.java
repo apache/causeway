@@ -22,6 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.ViewModel;
+import org.apache.isis.applib.services.urlencoding.UrlEncodingService;
 import org.apache.isis.core.commons.lang.MethodExtensions;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -121,5 +122,7 @@ public abstract class RecreatableObjectFacetAbstract extends MarkerFacetAbstract
             MethodExtensions.invoke(postConstructMethod, viewModel);
         }
     }
+
+
 
 }
