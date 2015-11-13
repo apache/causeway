@@ -36,12 +36,14 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
     private final String validation;
     private final String format;
     private final boolean caseSensitive;
+    private final String replacement;
 
-    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
+    public RegExFacetAbstract(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder, final String replacement) {
         super(type(), holder);
         this.validation = validation;
         this.format = format;
         this.caseSensitive = caseSensitive;
+        this.replacement = replacement;
     }
 
     @Override
@@ -57,6 +59,11 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
     @Override
     public boolean caseSensitive() {
         return caseSensitive;
+    }
+
+    @Override
+    public String replacement() {
+        return replacement;
     }
 
     // //////////////////////////////////////////////////////////
@@ -75,7 +82,8 @@ public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract impl
         if (!doesNotMatch(titleString)) {
             return null;
         }
-        return "Doesn't match pattern";
+
+        return replacement();
     }
 
 }
