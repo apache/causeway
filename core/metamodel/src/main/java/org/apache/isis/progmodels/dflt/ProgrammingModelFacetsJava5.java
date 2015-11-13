@@ -295,10 +295,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(HideForContextFacetViaMethodFactory.class);
         addFactory(RenderFacetOrResolveFactory.class);
 
-        // objects
-        addFactory(IconFacetMethodFactory.class);
-        addFactory(CssClassFacetMethodFactory.class);
-
         addFactory(CreatedCallbackFacetFactory.class);
         addFactory(LoadCallbackFacetFactory.class);
         addFactory(PersistCallbackViaSaveMethodFacetFactory.class);
@@ -403,6 +399,9 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after DomainObjectLayoutFacetFactory
         addFactory(TitleAnnotationFacetFactory.class);
         addFactory(TitleFacetViaMethodsFactory.class);
+
+        addFactory(IconFacetMethodFactory.class);
+        addFactory(CssClassFacetMethodFactory.class);
 
         addFactory(NamedFacetOnTypeAnnotationFactory.class);
         addFactory(NamedFacetOnMemberFactory.class);
