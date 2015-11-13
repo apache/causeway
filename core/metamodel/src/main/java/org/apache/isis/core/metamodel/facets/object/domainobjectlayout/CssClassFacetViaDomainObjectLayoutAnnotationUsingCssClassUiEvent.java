@@ -24,17 +24,21 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
+import org.apache.isis.applib.services.eventbus.CssClassUiEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
-import org.apache.isis.applib.services.eventbus.IconUiEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
+public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
+        CssClassFacet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent.class);
 
     public static Facet create(
             final DomainObjectLayout domainObjectLayout,
@@ -43,50 +47,50 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
         if(domainObjectLayout == null) {
             return null;
         }
-        final Class<? extends IconUiEvent<?>> iconUiEventClass = domainObjectLayout.iconUiEvent();
-        if(IconUiEvent.Noop.class.isAssignableFrom(iconUiEventClass)) {
+        final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass = domainObjectLayout.cssClassUiEvent();
+        if(CssClassUiEvent.Noop.class.isAssignableFrom(cssClassUiEventClass)) {
             return null;
         }
 
         final EventBusService eventBusService = servicesInjector.lookupService(EventBusService.class);
 
-        return new IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-                iconUiEventClass, eventBusService, facetHolder);
+        return new CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+                cssClassUiEventClass, eventBusService, facetHolder);
     }
 
-    private final Class<? extends IconUiEvent<?>> iconUiEventClass;
+    private final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass;
     private final EventBusService eventBusService;
 
-    public IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent(
-            final Class<? extends IconUiEvent<?>> iconUiEventClass,
+    public CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent(
+            final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass,
             final EventBusService eventBusService,
             final FacetHolder holder) {
-        super(holder);
-        this.iconUiEventClass = iconUiEventClass;
+        super(CssClassFacetAbstract.type(), holder, Derivation.NOT_DERIVED);
+        this.cssClassUiEventClass = cssClassUiEventClass;
         this.eventBusService = eventBusService;
     }
 
     @Override
-    public String iconName(final ObjectAdapter owningAdapter) {
+    public String cssClass(final ObjectAdapter objectAdapter) {
 
-        final IconUiEvent<Object> iconUiEvent = newIconUiEvent(owningAdapter);
+        final CssClassUiEvent<Object> cssClassUiEvent = newCssClassUiEvent(objectAdapter);
 
-        eventBusService.post(iconUiEvent);
+        eventBusService.post(cssClassUiEvent);
 
-        final String iconName = iconUiEvent.getIconName();
-        return iconName; // could be null
+        final String cssClass = cssClassUiEvent.getCssClass();
+        return cssClass; // could be null
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final ObjectAdapter owningAdapter) {
+    private CssClassUiEvent<Object> newCssClassUiEvent(final ObjectAdapter owningAdapter) {
         final Object domainObject = owningAdapter.getObject();
-        return newIconUiEvent(domainObject);
+        return newCssClassUiEvent(domainObject);
     }
 
-    private IconUiEvent<Object> newIconUiEvent(final Object domainObject) {
+    private CssClassUiEvent<Object> newCssClassUiEvent(final Object domainObject) {
         try {
-            final IconUiEvent<Object> iconUiEvent = (IconUiEvent<Object>) iconUiEventClass.newInstance();
-            iconUiEvent.setSource(domainObject);
-            return iconUiEvent;
+            final CssClassUiEvent<Object> cssClassUiEvent = (CssClassUiEvent<Object>) cssClassUiEventClass.newInstance();
+            cssClassUiEvent.setSource(domainObject);
+            return cssClassUiEvent;
         } catch (InstantiationException | IllegalAccessException ex) {
             throw new NonRecoverableException(ex);
         }

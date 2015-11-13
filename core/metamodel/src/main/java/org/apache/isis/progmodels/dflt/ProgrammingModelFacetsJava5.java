@@ -399,7 +399,6 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after DomainObjectLayoutFacetFactory
         addFactory(TitleAnnotationFacetFactory.class);
         addFactory(TitleFacetViaMethodsFactory.class);
-
         addFactory(IconFacetMethodFactory.class);
         addFactory(CssClassFacetMethodFactory.class);
 

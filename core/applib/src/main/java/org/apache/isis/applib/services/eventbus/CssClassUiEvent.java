@@ -50,10 +50,21 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     //region > Default class
 
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.
+     * Implementation provided as a convenience for domain objects that have no custom subclass.
      */
     public static class Default extends CssClassUiEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
+    //region > Noop class
+
+    /**
+     * Marker class that is the default for
+     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()} annotation attribute, meaning that
+     * an event should <i>not</i> be emitted by default.
+     */
+    public static class Noop extends CssClassUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion

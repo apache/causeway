@@ -25,8 +25,10 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.Action;
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
@@ -50,7 +52,11 @@ public class Dto_downloadXml {
 
     @Action(
             domainEvent = ActionDomainEvent.class,
-            semantics = SemanticsOf.SAFE
+            semantics = SemanticsOf.SAFE,
+            restrictTo = RestrictTo.PROTOTYPING
+    )
+    @ActionLayout(
+            cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "500.1")
     public Object $$(final String fileName) throws JAXBException, IOException {

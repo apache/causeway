@@ -49,6 +49,9 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
         }
         final Class<? extends TitleUiEvent<?>> titleUiEventClass = domainObjectLayout.titleUiEvent();
 
+        if(TitleUiEvent.Noop.class.isAssignableFrom(titleUiEventClass)) {
+            return null;
+        }
         final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
         final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
         final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();
