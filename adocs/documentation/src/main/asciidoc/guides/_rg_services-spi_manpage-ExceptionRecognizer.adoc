@@ -96,16 +96,10 @@ If you want to recognize and handle additional exceptions (for example to captur
 
 == Registering the Services
 
-
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
-
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
-
-then the default implementations provided by the framework (`DomainObjectContainerDefault` and `ExceptionRecognizerCompositeForJdoObjectStore`) will be registered.
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then the default
+implementations provided by the framework (`DomainObjectContainerDefault` and
+`ExceptionRecognizerCompositeForJdoObjectStore`) will be registered.
 
 In addition, you can register any further exception recognizers in `isis.properties`:
 
@@ -120,7 +114,6 @@ isis.services=...,\
 ====
 Prior to 1.9.0, the `ExceptionRecognizerCompositeForJdoObjectStore` also required manual registration.
 ====
-
 
 If the JDO exception recognizers are not required (rather unlikely), then they can be disabled en-masse using the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.services.ExceptionRecognizerCompositeForJdoObjectStore.disable`.
 

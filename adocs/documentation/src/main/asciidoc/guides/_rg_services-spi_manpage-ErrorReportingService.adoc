@@ -99,7 +99,8 @@ image::{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-exam
 
 == Registering the Services
 
-Assuming that the `AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app], then just
- ensure that the implementation is on the classpath and the module containing the implementation is returned in
- `AppManifest#getModules()`.
+There is no default implementation of this service.  To register your own implementation (and assuming that an
+`AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]), then just
+ensure that the implementation is on the classpath and the module containing the implementation is returned in
+`AppManifest#getModules()`.
 

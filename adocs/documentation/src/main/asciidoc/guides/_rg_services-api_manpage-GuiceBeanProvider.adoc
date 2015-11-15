@@ -80,12 +80,12 @@ should return "ToDo App".
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the
+xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] is being used, then an implementation of `GuiceBeanProvider` is
+automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+To use an alternative implementation, use
+xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
-and that the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] is being used then an implementation of `GuiceBeanProvider` is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 

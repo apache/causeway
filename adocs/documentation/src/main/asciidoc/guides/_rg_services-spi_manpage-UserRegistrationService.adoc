@@ -58,16 +58,32 @@ This is needed so that the self-registered users are assigned automatically to y
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+There is no default implementation of this service provided by the core Apache Isis framework.
 
-[source,ini]
+If using the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module) for
+authentication and authorization, then note that it provides an adapter class,
+`SecurityModuleAppUserRegistrationServiceAbstract`, that provides most of the implementation.  You are still required
+to implement a subclass and register.
+
+For example:
+
+[source,java]
 ----
-isis.services-installer=configuration-and-annotation
+@DomainService(nature=NatureOfService.DOMAIN)
+public class AppUserRegistrationService extends SecurityModuleAppUserRegistrationServiceAbstract {
+    protected ApplicationRole getInitialRole() {
+    return findRole("regular-user");
+    }
+    protected Set<ApplicationRole> getAdditionalInitialRoles() {
+        return Collections.singleton(findRole("self-registered-user"));
+    }
+    private ApplicationRole findRole(final String roleName) {
+        return applicationRoles.findRoleByName(roleName);
+    }
+    @Inject
+    private ApplicationRoles applicationRoles;
+}
 ----
-
-then (if using the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module) you will need to register your concrete implementation of `SecurityModuleAppUserRegistrationServiceAbstract`.
-
 
 
 

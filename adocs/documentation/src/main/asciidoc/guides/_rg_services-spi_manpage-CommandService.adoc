@@ -70,18 +70,18 @@ The typical way to indicate that an action should be reified into a `Command` is
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation
+of this service (`CommandService`), and also provides a number of related domain services
+(`CommandJdoRepository` and `CommandServiceJdoContributions`).  This
+module also provides service implementations of the
+xref:rg.adoc#_rg_services-spi_manpage-CommandService[`BackgroundCommandService`].
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a
+xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
-then adding the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module to the classpath will automatically register the `CommandServiceJdo`, `CommandJdoRepository` and `CommandServiceJdoContributions` services.  If contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
-
-Note that this module also provides service implementations of the xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`].
 
 
 

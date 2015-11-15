@@ -160,6 +160,16 @@ SpecificationProvider`].
 |
 
 
+|xref:rg.adoc#_rg_services-api_manpage-JaxbService[`o.a.i.applib.` +
+`services.jaxb` +
+`JaxbService`]
+|Marshal and unmarshal JAXB-annotated view models to/from XML.
+|`JaxbServiceDefault` +
+``o.a.i.core`` +
+``isis-core-schema``
+|`1.11.0-SNAPSHOT`.
+
+
 |xref:rg.adoc#_rg_services-api_manpage-MementoService[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]

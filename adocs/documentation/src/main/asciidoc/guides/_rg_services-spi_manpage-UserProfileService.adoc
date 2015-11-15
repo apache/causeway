@@ -33,7 +33,10 @@ In the future this API may be expanded; one obvious possibility is to return a p
 
 == Implementation
 
-The (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] has a simple implementation of this service:
+There is no default implementation of this service provided by the core Apache Isis framework.
+
+An example implementation can be found in the (non-ASF)
+http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]:
 
 image::{_imagesdir}reference-services-spi/UserProfileService/todoapp.png[width="800px",link="{_imagesdir}reference-services-spi/UserProfileService/todoapp.png"]
 

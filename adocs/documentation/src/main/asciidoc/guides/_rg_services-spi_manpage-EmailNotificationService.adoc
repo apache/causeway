@@ -39,7 +39,8 @@ If `isConfigured()` returns false then it is _not_ valid to call `send(...)` (an
 
 == Implementation
 
-The framework provides a default implementation, `o.a.i.core.runtime.services.userreg.EmailNotificationServiceDefault` that constructs the emails to send.
+The framework provides a default implementation, `o.a.i.core.runtime.services.userreg.EmailNotificationServiceDefault`
+that constructs the emails to send.
 
 
 
@@ -63,14 +64,13 @@ To ensure that your alternative implementation takes the place of the default im
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
+implementation of `EmailNotificationService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
-
-then Isis' default implementation of `EmailNotificationService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+To use an alternative implementation, use
+xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
 == Related Services

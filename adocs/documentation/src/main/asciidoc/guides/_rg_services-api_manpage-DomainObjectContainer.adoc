@@ -34,11 +34,7 @@ include::_rg_services-api_manpage-DomainObjectContainer_services-api.adoc[levelo
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
-
-then Apache Isis' core implementation of `DomainObjectContainer` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.

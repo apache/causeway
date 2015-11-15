@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.jaxb;
+package org.apache.isis.applib.services.dto;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +35,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 
@@ -67,7 +68,7 @@ public class Dto_downloadXsd {
     @MemberOrder(sequence = "500.2")
     public Object $$(final String fileName) {
 
-        final Map<String, String> map = jaxbService.toXsd(dto);
+        final Map<String, String> map = jaxbService.toXsd(dto, JaxbService.IsisSchemas.IGNORE);
 
         if(map.isEmpty()) {
             container.warnUser("No schemas were generated for " + dto.getClass().getName() + "; programming error?");

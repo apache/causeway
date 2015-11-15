@@ -14,22 +14,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.jaxb;
+package org.apache.isis.applib.services.dto;
 
 import java.io.IOException;
 
-import javax.activation.MimeType;
-import javax.activation.MimeTypeParseException;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBException;
 
-import org.apache.isis.applib.FatalException;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
 @Mixin

@@ -133,7 +133,11 @@ public class ActionInvocationMementoDtoUtils {
     //endregion
 
     //region > addArgValue, addArgReference
-    public static boolean addArgValue(final ActionInvocationMementoDto aim, final String parameterName, final Class<?> parameterType, final Object arg) {
+    public static boolean addArgValue(
+            final ActionInvocationMementoDto aim,
+            final String parameterName,
+            final Class<?> parameterType,
+            final Object arg) {
 
         ParamDto paramDto = null;
         if(parameterType == String.class) {
@@ -265,7 +269,9 @@ public class ActionInvocationMementoDtoUtils {
         return setValue(valueDto, returnType, returnVal);
     }
 
-    public static void addReturnReference(final ActionInvocationMementoDto aim, final Bookmark bookmark) {
+    public static void addReturnReference(
+            final ActionInvocationMementoDto aim,
+            final Bookmark bookmark) {
         final ValueDto valueDto = returnValueDtoFor(aim);
         OidDto argValue = asOidDto(bookmark);
         valueDto.setReference(argValue);

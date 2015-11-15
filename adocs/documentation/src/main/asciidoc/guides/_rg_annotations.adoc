@@ -55,8 +55,10 @@ include::_rg_annotations_manpage-Property.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-PropertyLayout.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-RequestScoped.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-Title.adoc[leveloffset=+1]
-include::_rg_annotations_manpage-Viewmodel.adoc[leveloffset=+1]
-include::_rg_annotations_manpage-ViewmodelLayout.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-ViewModel.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-ViewModelLayout.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-XmlRootElement.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-XmlValueTypeAdapter.adoc[leveloffset=+1]
 
 
 

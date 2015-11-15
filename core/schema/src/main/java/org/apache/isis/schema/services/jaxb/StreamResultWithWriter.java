@@ -14,8 +14,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.jaxb;
+package org.apache.isis.schema.services.jaxb;
 
-public interface Dto {
+import java.io.StringWriter;
 
+import javax.xml.transform.stream.StreamResult;
+
+/**
+ * A {@link StreamResult} that contains its own writer.
+ *
+ * <p>
+ *     The point is that the writer is only ever queried lazily AFTER the result has been generated.
+ * </p>
+ */
+class StreamResultWithWriter extends StreamResult {
+    private final StringWriter writer;
+
+    public StreamResultWithWriter() {
+        this(new StringWriter());
+    }
+
+    private StreamResultWithWriter(StringWriter writer) {
+        super(writer);
+        this.writer = writer;
+    }
+
+    public String asString() {
+        return writer.toString();
+    }
 }

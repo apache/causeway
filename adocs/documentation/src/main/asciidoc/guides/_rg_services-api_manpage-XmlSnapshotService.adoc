@@ -194,14 +194,14 @@ public interface XmlSnapshotService {
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `XmlSnapshotService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+To use an alternative implementation, use
+xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
-then Apache Isis' core implementation of `XmlSnapshotService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 
 == Related Services
@@ -209,6 +209,11 @@ then Apache Isis' core implementation of `XmlSnapshotService` service is automat
 The xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`] provides a mechanism for obtaining a string representations of a single domain object.
 
 The xref:rg.adoc#_rg_services-api_manpage-MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
+
+The xref:rg.adoc#_rg_services-api_manpage-JaxbService[`JaxbService`] (`1.11.0-SNAPSHOT`) is a simple wrapper around
+standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that (as of
+`1.11.0-SNAPSHOT`) there is built-in support for JAXB classes (ie annotated with
+xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]) to be used as view models.
 
 
 

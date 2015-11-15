@@ -1,0 +1,31 @@
+[[_migration-notes_1.10.0-to-1.11.0]]
+= From v1.10.0 to 1.11.0
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+Existing projects written against v1.10.0 should run against v1.11.0 with few if any changes.  If you *do* encounter
+any difficulties then let us know via the link:support.html[users mailing list], so we can support you and document
+issues here.
+
+
+[NOTE]
+====
+At the time of writing `1.11.0` has not been released; these notes relate to `1.11.0-SNAPSHOT`.
+====
+
+
+== JAXB view models
+
+This version recognizes classes annotated with xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]
+as view models.  These are serialized out into XML and converted into URL.
+
+The xref:rg.adoc#_rg_services-api_manpage-JaxbService[`JaxbService`] is responsible for performing the XML conversion.
+The default implementation is located in the `org.apache.isis.core:isis-core-schema` module, specifically under the
+`org.apache.isis.core.schema.services` package.
+
+If your application is bootstrapped using an `AppManifest` (recommended; ee
+xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[here]) then the `JaxbService` will automatically be discovered and
+ registered.  However, if you are still using the older `isis.properties` configuration file to explicitly register
+ services then you will need to add in this service.

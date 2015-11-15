@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.jaxb.util;
+package org.apache.isis.schema.services.jaxb;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -28,17 +28,19 @@ import javax.xml.transform.stream.StreamResult;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.services.jaxb.JaxbService;
+
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has
  * {@link #createOutput(String, String) created} an output {@link StreamResult} containing the content of the schema.
  */
-public class CatalogingSchemaOutputResolver extends SchemaOutputResolver
+class CatalogingSchemaOutputResolver extends SchemaOutputResolver
 {
-    private final boolean includeIsisSchema;
+    private final JaxbService.IsisSchemas isisSchemas;
     private List<String> namespaceUris = Lists.newArrayList();
 
-    public CatalogingSchemaOutputResolver(final boolean includeIsisSchema) {
-        this.includeIsisSchema = includeIsisSchema;
+    public CatalogingSchemaOutputResolver(final JaxbService.IsisSchemas isisSchemas) {
+        this.isisSchemas = isisSchemas;
     }
 
     public List<String> getNamespaceUris() {
@@ -60,8 +62,8 @@ public class CatalogingSchemaOutputResolver extends SchemaOutputResolver
 
         result.setSystemId(namespaceUri);
 
-        if (namespaceUri.matches(".*isis\\.apache\\.org.*") && !includeIsisSchema) {
-            // ignore
+        if (isisSchemas.shouldIgnore(namespaceUri)) {
+            // skip
         } else {
             namespaceUris.add(namespaceUri);
             schemaResultByNamespaceUri.put(namespaceUri, result);

@@ -28,9 +28,10 @@ public interface SudoService {
 }
 ----
 
-which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to `DomainObjectContainer#getUser()` will return the specified user (and roles, if specified)
+which will run the provided block of code (a `Runnable` or a `Callable`) in a way such that calls to
+`DomainObjectContainer#getUser()` will return the specified user (and roles, if specified)
 
-The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.sudo.SudoServiceDefault`)
+The core framework provides a default implementation of this service (`o.a.i.core.runtime.services.sudo.SudoServiceDefault`).
 
 
 
@@ -59,11 +60,10 @@ protected void execute(final ExecutionContext ec) {
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `SudoService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
-
-then Apache Isis' core implementation of `SudoService` service is automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
+To use an alternative implementation, use
+xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).

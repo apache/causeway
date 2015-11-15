@@ -12,4 +12,5 @@ The interfaces listed in this chapter are role interfaces; they define a contrac
 include::_rg_classes_roles_manpage-HoldsUpdatedAt.adoc[leveloffset=+1]
 include::_rg_classes_roles_manpage-HoldsUpdatedBy.adoc[leveloffset=+1]
 include::_rg_classes_roles_manpage-Timestampable.adoc[leveloffset=+1]
+include::_rg_classes_roles_manpage-Dto.adoc[leveloffset=+1]
 

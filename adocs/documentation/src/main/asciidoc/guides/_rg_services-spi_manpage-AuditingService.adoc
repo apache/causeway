@@ -63,15 +63,15 @@ The typical way to indicate that an object should be audited is to annotate it w
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module provides an implementation of
+this service (`AuditingService`), and also provides a number of related domain services (`AuditingServiceMenu`,
+`AuditingServiceRepository` and `AuditingServiceContributions`).
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-then adding the (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module to the classpath will automatically register the `AuditingService`, `AuditingServiceMenu`, `AuditingServiceRepository` and `AuditingServiceContributions` services.  If menu items or contributions are not required in the UI, these can be suppressed either using security or by implementing a xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+If menu items or contributions are not required in the UI, these can be suppressed either using security or by
+implementing a xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

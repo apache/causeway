@@ -53,21 +53,22 @@ You could if you wish change the representation by registering your own implemen
 
 
 
-
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+There is no default implementation of this service provided by the core Apache Isis framework.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an
+implementation of this service (`RestfulObjectsSpecEventSerializer`) that serializes action invocations and published
+objects into a format based on the Restful Objects specification.  It also (as you might imagine) provides an
+implementation of the xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`].
 
-then adding the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module to the classpath will automatically register the `RestfulObjectsSpecEventSerializer` implementation (and also the module's `PublishingService` implementation).
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 
 
 == Related Services
 
-This service is intended (though not mandated) to be used by implementations of xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`].
+This service is intended (though not mandated) to be used by implementations of xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`].  The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module does use it (though the (non-ASF)
+http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module does not).
+

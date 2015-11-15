@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.runtime.services.jaxb;
+package org.apache.isis.schema.services.jaxb;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -23,7 +23,6 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,36 +39,12 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.runtime.services.jaxb.util.CatalogingSchemaOutputResolver;
 import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
 public class JaxbServiceDefault implements JaxbService {
-
-    /**
-     * This boolean flag controls whether, when generating {@link #toXsd(Object) XML schemas},
-     * any of the common Isis schemas (in the namespace <code>http://org.apache.isis.schema</code>) should be included or just ignored (and therefore don't appear in the ZIP file).
-     *
-     * <p>
-     *     The practical benefit of this is that for many DTOs there will only be one other
-     *     schema, that of the DTO itself.  Rather than generating a ZIP of two schemas (the Isis
-     *     schema and the one for the DTO), the {@link #toXsd(Object) toXsd} method will instead
-     *     return a single XSD file; far more convenient when debugging and so on.
-     *     The Isis schemas meanwhile can always be <a href="http://isis.apache.org/schema">downloaded from the website </a>.
-     * </p>
-     */
-    public static final String INCLUDE_ISIS_SCHEMA = "isis.services.jaxb.includeIsisSchema";
-
-    private boolean includeIsisSchema;
-
-    @PostConstruct
-    public void init(Map<String,String> props) {
-        final String prop = props.get(INCLUDE_ISIS_SCHEMA);
-        this.includeIsisSchema = prop != null && Boolean.parseBoolean(prop);
-
-    }
 
     @Override
     public <T> T fromXml(final Class<T> domainClass, final String xml) {
@@ -145,13 +120,13 @@ public class JaxbServiceDefault implements JaxbService {
         }
     }
 
-    public Map<String,String> toXsd(final Object domainObject) {
+    public Map<String,String> toXsd(final Object domainObject, final IsisSchemas isisSchemas) {
 
         try {
             final Class<?> domainClass = domainObject.getClass();
             final JAXBContext context = JAXBContext.newInstance(domainClass);
 
-            final CatalogingSchemaOutputResolver outputResolver = new CatalogingSchemaOutputResolver(includeIsisSchema);
+            final CatalogingSchemaOutputResolver outputResolver = new CatalogingSchemaOutputResolver(isisSchemas);
             context.generateSchema(outputResolver);
 
             return outputResolver.asMap();

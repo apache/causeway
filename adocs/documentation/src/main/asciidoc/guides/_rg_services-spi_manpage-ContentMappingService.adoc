@@ -41,7 +41,9 @@ This is an "internal" SPI, meaning that it uses types that are not part of the I
 
 == Implementations
 
-No default implementations are provided by Apache Isis framework itself.  However, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] includes a sample implementation to convert its `ToDoItem` entity into a `ToDoItemDto` (JAXB annotated and derived from an XSD).  This uses the link:http://orika-mapper.github.io/orika-docs/intro.html[Orika] mapping library.
+No default implementations are provided by Apache Isis framework itself.  However, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] includes a sample implementation to convert its `ToDoItem`
+entity into (two different versions of) a `ToDoItemDto`  (JAXB annotated).  This uses the
+link:http://orika-mapper.github.io/orika-docs/intro.html[Orika] mapping library.
 
 The source code is:
 
@@ -81,7 +83,6 @@ public class CustomContentMappingService implements ContentMappingService {
         }
         return null;
     }
-
     @javax.inject.Inject
     private BookmarkService bookmarkService;
 }

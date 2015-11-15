@@ -16,29 +16,14 @@
  */
 package org.apache.isis.applib.services.urlencoding;
 
-import java.nio.charset.Charset;
-
-import com.google.common.io.BaseEncoding;
-
-import org.apache.isis.applib.annotation.DomainService;
-import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 
-@DomainService(
-        nature = NatureOfService.DOMAIN
-)
-public class UrlEncodingService {
+public interface UrlEncodingService {
 
     @Programmatic
-    public String decode(String str) {
-        final byte[] bytes = BaseEncoding.base64Url().decode(str);
-        return new String(bytes, Charset.forName("UTF-8"));
-    }
+    public String encode(final String str);
 
     @Programmatic
-    public String encode(final String xmlStr) {
-        byte[] bytes = xmlStr.getBytes(Charset.forName("UTF-8"));
-        return BaseEncoding.base64Url().encode(bytes);
-    }
+    public String decode(String str);
 
 }

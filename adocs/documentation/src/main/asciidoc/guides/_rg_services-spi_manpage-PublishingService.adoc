@@ -45,10 +45,36 @@ The serialized form returned by `EventSerializer` must be in a form that the `Pu
 
 == Implementation
 
-The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an implementation (`org.isisaddons.module.publishing.dom.org.apache.isis.applib.services.publish`) that persists each event as a `PublishedEvent` entity.  This holds the serialized form of the event metadata and payload as translated into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`, namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional JSON nodes.
+The framework provides no default implementations of this service.  There are however two implementations available in
+the (non-ASF) link:http://isisaddons.org[Isis Addons].
 
-The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".  The intention here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.  When ``PublishedEvent``s are persisted initially they always take the value "QUEUED".
+=== isis-module-publishing
 
+The (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module provides an
+implementation (`org.isisaddons.module.publishing.dom.PublishingService`) that persists each
+event as a `PublishedEvent` entity.  This holds the serialized form of the event metadata and payload as translated
+into a string by the injected `EventSerializer`.  The module also provides its own implementation of `EventSerializer`,
+namely `RestfulObjectsSpecEventSerializer`, which represents the event payload using the representation defined by the link:http://restfulobjects.org[Restful Objects spec] of (transient) objects, grafting on the metadata as additional
+JSON nodes.
+
+The `PublishedEvent` entity also has a `state` field taking the values either "QUEUED" or "PROCESSED".  The intention
+here is that an event bus can poll this table to grab pending events and dispatch them to downstream systems.  When
+``PublishedEvent``s are persisted initially they always take the value "QUEUED".
+
+=== isis-module-publishmq
+
+The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides an
+implementation (`org.isisaddons.module.publismq.dom.servicespi.PublishingServiceUsingActiveMq`) that publishes each 
+action invocation as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.  These are converted into
+a canonical XML form (the xref:rg.adoc#_rg_schema-aim[ActionInvocationMemento] schema) using the
+xref:rg.adoc#_rg_schema-utilities-ActionInvocationMementoDtoUtils[`ActionInvocationMementoDtoUtils`] class; the idea
+being that subscribers on the ActiveMQ message queue can then query back for further information, for example using
+the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
+
+[NOTE]
+====
+At the time of writing this implementation does not publish changed object events.
+====
 
 
 
@@ -131,15 +157,17 @@ public class ToDoItemChangedPayloadFactory implements PublishingPayloadFactoryFo
 
 == Registering the Services
 
-Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]):
+There is no default implementation of this service provided by the core Apache Isis framework.
 
-[source,ini]
-----
-isis.services-installer=configuration-and-annotation
-----
+Both the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module and the
+http://github.com/isisaddons/isis-module-publishmq[publishmq] module provide implementations of this service.
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
-then adding the (non-ASF) http://github.com/isisaddons/isis-module-publishing[Isis addons' publishing] module to the classpath will automatically register the `PublishingService` implementation (and also the module's `RestfulObjectsSpecEventSerializer` implementation).
+The modules also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
+suppressed either using security or by implementing a
+xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+
 
 
 
