@@ -114,8 +114,8 @@ including:
 |*Example Apps (not ASF):*
 
 * http://github.com/estatio/estatio[Estatio]
-* http://github.com/isisaddons/isis-app-todoapp[TodoApp] (link:http://mmyco.co.uk:8180/todoapp/[online demo, v1.9.0])
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.9.0])
+* http://github.com/isisaddons/isis-app-todoapp[TodoApp]
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
 * http://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * http://github.com/isisaddons/isis-app-quickstart[Quickstart]
 * http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
