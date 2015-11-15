@@ -43,7 +43,7 @@ public class Dto_downloadXsd {
 
     private final Dto dto;
 
-    final MimeType mimeTypeApplicationZip;
+    private final MimeType mimeTypeApplicationZip;
 
     public Dto_downloadXsd(final Dto dto) {
         this.dto = dto;
@@ -62,7 +62,7 @@ public class Dto_downloadXsd {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+
     )
     @MemberOrder(sequence = "500.2")
     public Object $$(final String fileName) {

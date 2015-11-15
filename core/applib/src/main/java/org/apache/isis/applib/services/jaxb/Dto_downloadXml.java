@@ -37,15 +37,8 @@ public class Dto_downloadXml {
 
     private final Dto dto;
 
-    final MimeType mimeTypeApplicationZip;
-
     public Dto_downloadXml(final Dto dto) {
         this.dto = dto;
-        try {
-            mimeTypeApplicationZip = new MimeType("application", "zip");
-        } catch (final MimeTypeParseException ex) {
-            throw new FatalException(ex);
-        }
     }
 
     public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto> {}
