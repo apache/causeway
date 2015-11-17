@@ -36,9 +36,9 @@ import org.apache.isis.schema.utils.jaxbadapters.PersistentEntityAdapter;
 
 @Provider
 @Produces({"application/xml", "application/*+xml", "text/*+xml"})
-public class RestfulObjectsMessageBodyWriter extends JAXBXmlRootElementProvider {
+public class RestfulObjectsJaxbWriterForXml extends JAXBXmlRootElementProvider {
 
-    public RestfulObjectsMessageBodyWriter(){
+    public RestfulObjectsJaxbWriterForXml(){
         ;
     }
 
@@ -47,9 +47,8 @@ public class RestfulObjectsMessageBodyWriter extends JAXBXmlRootElementProvider 
         return super.isReadWritable(type, genericType, annotations, mediaType) && hasXRoDomainTypeParameter(mediaType);
     }
 
-    protected static boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
-        final boolean retval = mediaType.getParameters().containsKey("x-ro-domain-type");
-        return retval;
+    protected boolean hasXRoDomainTypeParameter(final MediaType mediaType) {
+        return Util.hasXRoDomainTypeParameter(mediaType);
     }
 
     @Override protected Marshaller getMarshaller(

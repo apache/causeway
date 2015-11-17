@@ -55,26 +55,28 @@ This example is taken from the (non-ASF) http://github.com/isisaddons/isis-app-t
 @XmlType(
         namespace = "http://viewmodels.app.todoapp/v1/todoitem",    // <2>
         propOrder = {                                               // <3>
-            "toDoItem",
             "description",
-            "cost",
-            "similarItems"
+            "category",
+            "subcategory",
+            "cost"
         }
 )
 @XmlRootElement(name = "toDoItemDto")                               // <4>
 public class ToDoItemDto implements Dto {
 
     @XmlElement(required = true)                                    // <5>
-    protected ToDoItem toDoItem;                                    // <6>
-
-    @XmlElement(required = true)
+    @Getter @Setter
     protected String description;
 
-    protected BigDecimal cost;
+    @XmlElement(required = true)
+    @Getter @Setter
+    protected String category;
 
-    @XmlElementWrapper                                              // <7>
-    @XmlElement(name = "todoItem")                                  // <8>
-    protected List<ToDoItem> similarItems = Lists.newArrayList();
+    @Getter @Setter
+    protected String subcategory;
+
+    @Getter @Setter
+    protected BigDecimal cost;
 
     // getters and setters omitted
 }
@@ -84,6 +86,3 @@ public class ToDoItemDto implements Dto {
 <3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
 <4> mandatory, identifies this class as a view model and defines the root element for JAXB serialization
 <5> optional; JAXB metadata can specify such attributes as required/optional
-<6> reference to a persistent entity (`ToDoItem`).  Further discussion below.
-<7> collections must be wrapped in `XmlElementWraper`.
-<8> collections should specify the name of the elements within the collection
