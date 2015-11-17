@@ -66,9 +66,9 @@ public class Dto_downloadXsd {
 
     )
     @MemberOrder(sequence = "500.2")
-    public Object $$(final String fileName) {
+    public Object $$(final String fileName, final JaxbService.IsisSchemas isisSchemas) {
 
-        final Map<String, String> map = jaxbService.toXsd(dto, JaxbService.IsisSchemas.IGNORE);
+        final Map<String, String> map = jaxbService.toXsd(dto, isisSchemas);
 
         if(map.isEmpty()) {
             container.warnUser("No schemas were generated for " + dto.getClass().getName() + "; programming error?");
@@ -103,6 +103,10 @@ public class Dto_downloadXsd {
 
     public String default0$$() {
         return Util.withSuffix(dto.getClass().getName(), "xsd");
+    }
+
+    public JaxbService.IsisSchemas default1$$() {
+        return JaxbService.IsisSchemas.IGNORE;
     }
 
     private static String zipEntryNameFor(final String namespaceUri) {
