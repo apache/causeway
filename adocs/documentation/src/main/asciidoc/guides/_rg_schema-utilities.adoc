@@ -12,3 +12,7 @@ In addition to defining the schemas themselves, Apache Isis also provides some s
 
 
 include::_rg_schema-utilities-ActionInvocationMementoDtoUtils.adoc[leveloffset=+1]
+
+
+
+PersistentEntityAdapter.class

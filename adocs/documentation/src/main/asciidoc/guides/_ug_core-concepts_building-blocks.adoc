@@ -7,7 +7,7 @@
 In this section we run through the main building blocks that make up an Apache Isis application.
 
 [[_ug_core-concepts_building-blocks_metamodel]]
-## A MetaModel
+== A MetaModel
 
 At its core, Apache Isis is a metamodel that is built at runtime from the domain classes (eg `Customer.java`), along
 with optional supporting metadata (eg `Customer.layout.json`).
@@ -41,7 +41,7 @@ sources.
 
 
 [[_ug_core-concepts_building-blocks_types-of-domain-objects]]
-## Type of Domain Objects
+== Type of Domain Objects
 
 Most domain objects that the end-user interacts with are *domain entities*, such as `Customer`, `Order`, `Product` and
 so on.  These are persistent objects and which are mapped to a database (usually relational), using JDO/DataNucleus
@@ -208,16 +208,34 @@ in Apache Isis, and do _not_ correspond to actions even though they have public 
 
 
 
-## Domain Entities vs View Models
+== Domain Entities vs View Models
 
-NOTE: TODO
+When developing an Apache Isis application you will most likely start off with the persistent domain entities:
+`Customer`, `Order`, `Product`, and so on.  For some applications this may well suffice.  However, if the application
+needs to integrate with other systems, or if the application needs to support reasonably complex business processes,
+then you may need to look beyond just domain entities.
 
-`@DomainObject(nature=...)`
+To support these use cases we support view models.  In the same way that an (RDBMS) database view can aggregate and
+abstract from multiple underlying database tables, so a view model sits on top of one or many underlying entities.
+
+View models are not persisted, but nevertheless they can have behaviour (and titles, and icons) just like domain
+entities.  Indeed, to a user of the system there is no particular distinction (again, in the same way that when using
+an RDBMS one can use database views and database tables pretty much interchangeably).
+
+View models generally tend to be associated with supporting a particular use case; logically they are part of the
+application layer, not part of the domain layer (where entities live).
+
+We introduce view models here because they do get mentioned quite often within the users and reference guide.  However,
+we do consider them a more advanced topic; we generally recommend that you build your applications from the domain
+layer up, rather than from the view model down.
+
+For further discussion on view models, see xref:ug.adoc#_ug_more-advanced_view-models[this topic].
+
 
 
 
 [[_ug_core-concepts_building-blocks_domain-services]]
-## Domain Services
+== Domain Services
 
 Domain services consist of a set of logically grouped actions, and as such follow the same conventions as for entities. However, a service cannot have (persisted) properties, nor can it have (persisted) collections.
 
@@ -226,7 +244,7 @@ Domain services are instantiated once and once only by the framework, and are us
 For convenience you can inherit from AbstractService or one of its subclasses, but this is not mandatory.
 
 
-### Domain Services vs View Services
+=== Domain Services vs View Services
 
 NOTE: TODO
 
@@ -241,26 +259,76 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 
 
 
-
-[[_ug_core-concepts_building-blocks_value-objects]]
-## Value Objects (Primitives)
-
-NOTE: TODO
-
-
-
 [[_ug_core-concepts_building-blocks_mixins-and-contributions]]
-## Mixins & Contributions
+== Mixins & Contributions
 
 NOTE: TODO
+
+
+For more information, see xref:ug.adoc#_ug_more-advanced_decoupling_contributions[this topic on contribution]s, and
+xref:ug.adoc#_ug_more-advanced_decoupling_mixins[this topic on mixin]s.
 
 
 
 [[_ug_core-concepts_building-blocks_domain-events]]
-## Domain Events
+== Domain Events
+
+NOTE: TODO; see xref:rg.adoc#_rg_classes_domainevent[domain event] classes.
+
+
+
+=== UI Events (`1.11.0-SNAPSHOT`)
+
+NOTE: TODO; see xref:rg.adoc#_rg_classes_uievent[UI event] classes.
+
+
+
+
+[[_ug_core-concepts_building-blocks_oid]]
+== OIDs
+
+As well as defining a xref:ug.adoc#_ug_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain
+classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
+
+When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an
+object identifier.  Fundamentally this is a combination of its type (domain class), along with an identifier.  You can think
+of it as its "primary key", except across all domain entity types.
+
+For portability and resilience, though, the object type is generally an alias for the actual domain class: thus
+"customers.CUS", say, rather than "com.mycompany.myapp.customers.Customer".  This is derived from an annotation.  The
+identifier meanwhile is always converted to a string.
+
+Although simple, the OID is an enormously powerful concept: it represents a URI to any domain object managed by
+a given Apache Isis application.  With it, we have the ability to lookup any arbitrary domain objects.
+
+Some examples:
+
+* an OID allows sharing of information between users, eg as a deep link to be pasted into an email.
+
+* the information within an OID could be converted into a barcode, and stamped onto a PDF form.  When the PDF is
+scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
+
+* as a handle to any object in an audit record (as used by the
+xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`], in fact).
+
+* and of course both the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] and
+xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]
+use the oid tuple to look up, render and allow the user to interact with domain objects.
+
+Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects
+to obtain OIDs.  These are represented as `Bookmark`s, obtained from the
+xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].  Deep links meanwhile can be obtained from
+the xref:rg.adoc#_rg_annotations_manpage-DeepLinkService[`@DeepLinkService`].
+
+OIDs can also be converted into XML format, useful for integration scenarios.  The
+xref:rg.adoc#_rg_schema-common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+
+
+
+[[_ug_core-concepts_building-blocks_value-objects]]
+== Value Objects (Primitives)
 
 NOTE: TODO
-
 
 
 
