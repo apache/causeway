@@ -51,7 +51,7 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
                 iconUiEventClass,
                 IconUiEvent.Noop.class,
                 IconUiEvent.Default.class,
-                "isis.services.eventbus.iconUiEvent.postForDefault",
+                "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault",
                 configuration)) {
             return null;
         }

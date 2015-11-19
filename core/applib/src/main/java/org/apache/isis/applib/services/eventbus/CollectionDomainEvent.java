@@ -29,7 +29,7 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.services.eventbus.collectionDomainEvent.postForDefault"
+     * raises an event or not depends upon the "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
     public static class Default extends CollectionInteractionEvent<Object, Object> {

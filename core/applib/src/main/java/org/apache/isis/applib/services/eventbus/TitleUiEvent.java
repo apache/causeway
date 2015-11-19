@@ -33,7 +33,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#titleUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.services.eventbus.titleUiEvent.postForDefault"
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.titleUiEvent.postForDefault"
      * configuration property.
      */
     public static class Default extends TitleUiEvent<Object> {
@@ -88,7 +88,7 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
      * The title as provided by a subscriber using {@link #setTitle(String)}.
      *
      * <p>
-     *     Note that a {@link #getTranslatedTitle()} will be used in preference, if available.
+     *     Note that a {@link #getTranslatableTitle()} will be used in preference, if available.
      * </p>
      */
     public String getTitle() {
@@ -103,26 +103,26 @@ public abstract class TitleUiEvent<S> extends AbstractUiEvent<S> {
     }
     //endregion
 
-    //region > translatedTitle
-    private TranslatableString translatedTitle;
+    //region > translatableTitle
+    private TranslatableString translatableTitle;
 
     /**
-     * The translatable (i18n) title as provided by a subscriber using {@link #setTranslatedTitle(TranslatableString)}.
+     * The translatable (i18n) title as provided by a subscriber using {@link #setTranslatableTitle(TranslatableString)}.
      *
      * <p>
      *     If a translatable title has been provided then this will be used in preference to any
      *     {@link #getTitle() non-translatable title}.
      * </p>
      */
-    public TranslatableString getTranslatedTitle() {
-        return translatedTitle;
+    public TranslatableString getTranslatableTitle() {
+        return translatableTitle;
     }
 
     /**
      * For subscribers to call to provide a translatable (i18n) title for this object.
      */
-    public void setTranslatedTitle(final TranslatableString translatedTitle) {
-        this.translatedTitle = translatedTitle;
+    public void setTranslatableTitle(final TranslatableString translatableTitle) {
+        this.translatableTitle = translatableTitle;
     }
     //endregion
 

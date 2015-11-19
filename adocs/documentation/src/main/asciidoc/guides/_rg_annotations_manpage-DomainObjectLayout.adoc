@@ -48,11 +48,19 @@ The table below summarizes the annotation's attributes.
 |Currently unused.
 
 
+|xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClassUiEvent[`cssClassUiEvent()`]
+|subtype of `CssClassUiEvent` +
+(`CssClassUiEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] to obtain a CSS class for the domain object.
+
 |xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[`describedAs()`]
 |String.
 |description of this class, eg to be rendered in a tooltip.
 
-
+|xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_iconUiEvent[`iconUiEvent()`]
+|subtype of `IconUiEvent` +
+(`IconUiEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] to obtain the icon (name) for the domain object.
 
 |xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_named[`named()`]
 |String.
@@ -69,6 +77,12 @@ A typical use case is if the desired name is a reserved Java keyword, such as `d
 |xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_plural[`plural()`]
 |String.
 |the plural name of the class
+
+
+|xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_titleUiEvent[`titleUiEvent()`]
+|subtype of `TitleUiEvent` +
+(`TitleUiEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] to obtain the title for the domain object.
 
 |===
 
@@ -107,9 +121,12 @@ Note that there is (currently) no support for specifying UI hints for domain obj
 include::_rg_annotations_manpage-DomainObjectLayout_bookmarking.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_cssClass.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_cssClassFa.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObjectLayout_cssClassUiEvent.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_describedAs.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObjectLayout_iconUiEvent.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_named.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_paged.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObjectLayout_plural.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObjectLayout_titleUiEvent.adoc[leveloffset=+1]
 
 

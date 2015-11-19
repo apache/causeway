@@ -204,7 +204,7 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                     actionDomainEventFacet.getEventType(),
                     ActionDomainEvent.Noop.class,
                     ActionDomainEvent.Default.class,
-                    "isis.services.eventbus.actionDomainEvent.postForDefault", this.configuration)) {
+                    "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", this.configuration)) {
                 FacetUtil.addFacet(actionDomainEventFacet);
             }
 

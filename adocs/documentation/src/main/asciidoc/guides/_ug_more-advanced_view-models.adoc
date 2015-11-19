@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-View models are a type of domain objects (with state, behaviour etc) but where the state is _not_ persisted into the
+View models are a type of domain object (with state, behaviour etc) but where the state is _not_ persisted into the
  JDO/DataNucleus-managed database, but is instead converted to/from a string memento, and held by the calling client.
 This opens up a number of more advanced use cases.
 
@@ -164,7 +164,7 @@ While the underlying technique is the same irrespective of use case, the program
 defining a view model so that the original intent is not lost.  They are:
 
 .View model programming model
-[cols="1a,4a,4a", options="header"]
+[cols="1a,4a,2a", options="header"]
 |===
 
 | Use case
@@ -211,8 +211,8 @@ public class Dashboard { ... }
 [source,java]
 ----
 public class ExcelUploadManager implements ViewModel {
-    public String viewModelMemento() { ... }
-    public void viewModelInit(String memento) { ... }
+  public String viewModelMemento() { ... }
+  public void viewModelInit(String memento) { ... }
 }
 |Implement xref:rg.adoc#_rg_classes_super_manpage-ViewModel[`ViewModel`] interface.  The memento is as defined by the
 interface's methods: the programmer has full control (but also full responsibility) for the string memento.
@@ -229,6 +229,7 @@ derived automatically by serializing the XML graph as implied by the JAXB annota
 et al) this state _can_ include collections.
 |===
 
+JAXB-annotated DTOs are discussed in more detail immediately xref:rg.adoc#_ug_more-advanced_view-models_jaxb[below].
 
 
 [[_ug_more-advanced_view-models_jaxb]]
@@ -262,10 +263,9 @@ representation of its underlying `ToDoItem` entity):
         }
 )
 @DomainObjectLayout(
-        titleUiEvent = TitleUiEvent.Default.class                   // <4>
+        titleUiEvent = TitleUiEvent.Doop.class                      // <4>
 )
 public class ToDoItemDto implements Dto {
-
     @XmlElement(required = true)
     @Getter @Setter                                                 // <5>
     protected String description;
@@ -284,111 +284,135 @@ public class ToDoItemDto implements Dto {
 <1> identifies this class as a view model and defines the root element for JAXB serialization
 <2> specify the XML schema namespace to which this element type belongs
 <3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<4> optional but recommended: using xref:rg.adoc#_rg_classes_uievent_manpage-TitleUiEvent[`TitleUiEvent`] to obtain
+<4> demonstrating use of UI events for a subscriber to provide the DTO's title; see xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`].
 <5> optional; JAXB metadata can specify such attributes as required/optional
 
 
+For the package in which the DTO class resides, we define a corresponding namespace.  This goes in `package-info.java`:
 
 [source,java]
 ----
 @javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://viewmodels.app.todoapp/v1/todoitem",                // <1>
         xmlns = {
-                @XmlNs(
-                        namespaceURI = "http://isis.apache.org/schema/common",
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://isis.apache.org/schema/common",  // <2>
                         prefix = "common"
                 )
         },
-        namespace = "http://viewmodels.app.todoapp/v1/todoitem",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
-package todoapp.app.viewmodels.todoitem.v1;
-
-import javax.xml.bind.annotation.XmlNs;
+package todoapp.app.viewmodels.todoitem.v1_0;                                     // <3>
 ----
+<1> the namespace URI.  There is no requirement for this to correspond to a physical URL, but it should be unique (this
+usually implies the usage of a company domain name)
+<2> define an alias for all of other Java types used within the DTO class.  It's recommended that the Apache Isis xref:rg.adoc#_rg_schema-common[common schema] is always be defined; any references to persistent entities will resultin usage
+of this schema.
+<3> the package in which the DTO resides.
+
+Note how both the XML namespace and package are broadly equivalent to each other; in particular note that they both
+also include a version "v1".
 
 
 
-This annotation therefore allows view models/DTOs to have references to persistent entities.  It is a common
+=== Versioning
 
+Versioning DTOs enables us to make changes without breaking existing consumers of the data.  We can distinguish two
+types of changes:
 
+* backwardly compatible changes
+* breaking changes.
+
+Following link:http://semver.org[semantic versioning] approach, we suggest using `v1_0`, `v1_1`, `v1_2` etc as the
+package version for a sequence of backwardly compatible changes, then bump up to `v2_0` for a breaking change.
+
+Backwardly compatible changes can generally (always?) be modelled using class inheritance.  Thus, `v1_1.ToDoItemDto`
+is a subclass of `v1_0.ToDoItemDto`.  This makes sense too: OO inheritance means "is-substitutable-for", so what is
+true in an OO context is true when processing XML documents.
+
+On the other hand, breaking changes probably (always?) imply that the next version of the DTO does not use inheritance.
+Thus `v2_0.ToDoItemDto` might share many of the same properties as the `v1_1.ToDoItemDto`, but any reuse would be
+copy-n-paste rather than through inheritance.
+
+To see this in practice, here's (the outline of) v1.1 of `ToDoItemDto`:
 
 [source,java]
 ----
-package todoapp.app.viewmodels.todoitem.v2;
-
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-import com.google.common.collect.Lists;
-
-import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.services.eventbus.TitleUiEvent;
-
-import lombok.Getter;
-import lombok.Setter;
-import todoapp.dom.todoitem.ToDoItem;
-
-@XmlAccessorType(XmlAccessType.FIELD)
+package todoapp.app.viewmodels.todoitem.v1_1;
+...
+@XmlRootElement(name = "toDoItemDto")
 @XmlType(
-        namespace = "http://viewmodels.app.todoapp/v2/todoitem",
+        namespace = "http://viewmodels.app.todoapp/v1_1/todoitem",
         propOrder = {
                 "toDoItem",
                 "similarItems"
         }
 )
-@XmlRootElement(name = "toDoItemDto")
-@DomainObjectLayout(
-        titleUiEvent = TitleUiEvent.Default.class
-)
-public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1.ToDoItemDto {
-
-    @XmlElement(required = true)
-    @Getter @Setter
-    protected ToDoItem toDoItem;
-
-    @XmlElementWrapper
-    @XmlElement(name = "todoItem")
-    @Getter @Setter
-    protected List<ToDoItem> similarItems = Lists.newArrayList();
-
+public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
+    ...
 }
 ----
 
 
+The corresponding `package-info.java` is similar to that for `v1_0`, though note how it also defines a namespace prefix
+for `v1_0`:
 
 [source,java]
 ----
 @javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://viewmodels.app.todoapp/v1_1/todoitem",
         xmlns = {
-                @XmlNs(
+                @javax.xml.bind.annotation.XmlNs(
                         namespaceURI = "http://isis.apache.org/schema/common",
                         prefix = "common"
                 ),
-                @XmlNs(
-                        namespaceURI = "http://viewmodels.app.todoapp/v1/todoitem",
-                        prefix = "todoitem-v1"
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://viewmodels.app.todoapp/v1_0/todoitem",
+                        prefix = "todoitem-v1_0"
                 ),
-                @XmlNs(
-                        namespaceURI = "http://viewmodels.app.todoapp/v2/todoitem",
-                        prefix = "todoitem-v2"
+                @javax.xml.bind.annotation.XmlNs(
+                        namespaceURI = "http://viewmodels.app.todoapp/v1_1/todoitem",
+                        prefix = "todoitem-v1_1"
                 )
         },
-        namespace = "http://viewmodels.app.todoapp/v2/todoitem",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
-package todoapp.app.viewmodels.todoitem.v2;
-
-import javax.xml.bind.annotation.XmlNs;
+package todoapp.app.viewmodels.todoitem.v1_1;
 ----
 
 
 
+=== Referencing Domain Entities
+
+It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.  The
+`ToDoItemDto` we've been using as the example in this section is an example: there is an underlying `ToDoItem` entity.
+
+It wouldn't make sense to serialize out the state of a persistent entity: the point of a DTO is to act as a facade
+on top of the entity so that the implementation details (of the entity's structure) don't leak out to the consumer.
+However, the identity of the underlying entity can be well defined; Apache Isis defines the
+xref:rg.adoc#_rg_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class):
+the object's type and its identifier.  This is basically a formal XML equivalent to the `Bookmark` object obtained
+from the xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].
+
+There is only one requirement to make this work: every referenced domain entity must be annotated with
+xref:rg.adoc#_rg_annotations_manpage-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], specifying the framework-provided
+`PersistentEntityAdapter.class`.  This class is similar to the `BookmarkService`: it knows how to create an `OidDto`
+from an object reference.
+
+Thus, in our view model we can legitimately write:
+
+[source,java]
+----
+package todoapp.app.viewmodels.todoitem.v1_1;
+...
+public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
+    ...
+    @Getter @Setter
+    protected ToDoItem toDoItem;
+}
+----
+
+All we need to do is remember to add that `@XmlJavaTypeAdapter` annotation to the referenced entity:
 
 [source,java]
 ----
@@ -400,9 +424,37 @@ public class ToDoItem ...  {
 
 
 
+=== Collections
+
+It's also possible for a DTO to hold collections of objects.  These can be of any type, either simple properties, or
+references to other objects.
+
+The only bit of boilerplate that is required is the `@XmlElementWrapper` annotation.  This instructs JAXB to create
+an XML element (based on the field name) to contain each of the elements.  (If this is omitted then the contents of
+the collection are at the same level as the properties; almost certainly not what is required).
+
+For example, the v1.1 of the `ToDoItemDto` could also contain:
+
+[source,java]
+----
+package todoapp.app.viewmodels.todoitem.v1_1;
+...
+public class ToDoItemDto extends todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto {
+    ...
+    @XmlElementWrapper
+    @XmlElement(name = "todoItem")
+    @Getter @Setter
+    protected List<ToDoItem> similarItems = Lists.newArrayList();
+}
+----
 
 
+There's nothing to prevent a JAXB DTO from containing rich graphs of data, parent containing children containing
+children.  Be aware though that all of this state will become the DTO's memento, ultimately converted into a URL-safe
+form, by way of the xref:rg.adoc#_rg_services-spi_manpage-UrlEncodingService[`UrlEncodingService`].
 
-== `UrlEncodingService`
+There are limits to the lengths of URLs, however.  Therefore the DTO should not include state that can easily be
+derived from other information.  If the URL does exceed limits, then provide a custom implementation of `UrlEncodingService`
+to handle the memento string in some other fashion (eg substituting it with a GUID, with the memento cached somehow
+on the server).
 
-NOTE: TODO

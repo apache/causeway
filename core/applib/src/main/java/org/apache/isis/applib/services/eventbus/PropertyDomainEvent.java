@@ -29,7 +29,7 @@ public abstract class PropertyDomainEvent<S,T> extends AbstractInteractionEvent<
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.Property#domainEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.services.eventbus.propertyDomainEvent.postForDefault"
+     * raises an event or not depends upon the "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault"
      * configuration property.
      */
     public static class Default extends PropertyInteractionEvent<Object, Object> {

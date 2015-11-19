@@ -6,3 +6,12 @@
 
 
 NOTE: TODO
+
+
+
+
+
+However, the identity of the underlying entity can be well defined; Apache Isis defines the
+xref:rg.adoc#_rg_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class):
+the object's type and its identifier.  This is basically a formal XML equivalent to the `Bookmark` object obtained
+from the xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].

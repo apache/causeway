@@ -54,7 +54,7 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
                 cssClassUiEventClass,
                 CssClassUiEvent.Noop.class,
                 CssClassUiEvent.Default.class,
-                "isis.services.eventbus.cssClassUiEvent.postForDefault",
+                "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault",
                 configuration)) {
             return null;
         }

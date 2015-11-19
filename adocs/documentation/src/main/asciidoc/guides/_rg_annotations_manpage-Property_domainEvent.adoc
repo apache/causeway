@@ -26,7 +26,10 @@ public class ToDoItem {
 }
 ----
 
-The purpose of the `domainEvent()` attribute is to allows a custom subclass to be emitted instead. This attribute is also supported for xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[actions] and xref:rg.adoc#_rg_annotations_manpage-Property_domainEvent[properties].
+The `domainEvent()` attribute allows a custom subclass to be emitted allowing more precise subscriptions (to those
+subclasses) to be defined instead.  This attribute is also supported for
+ xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[actions] and
+ xref:rg.adoc#_rg_annotations_manpage-Property_domainEvent[properties].
 
 
 For example:
@@ -59,16 +62,12 @@ Subscribers can be either coarse-grained (if they subscribe to the top-level eve
 
 [source,java]
 ----
-@DomainService
-public class SomeSubscriber {
-
-    @Programmatic
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
     @com.google.common.eventbus.Subscribe
-    public void on(PropertyInteractionEvent ev) {
-
+    public void on(PropertyDomainEvent ev) {
         ...
     }
-
 }
 ----
 
@@ -76,16 +75,12 @@ or can be fine-grained (by subscribing to specific event subtypes):
 
 [source,java]
 ----
-@DomainService
-public class SomeSubscriber {
-
-    @Programmatic
+@DomainService(nature=NatureOfService.DOMAIN)
+public class SomeSubscriber extends AbstractSubscriber {
     @com.google.common.eventbus.Subscribe
     public void on(ToDoItem.DueByChangedEvent ev) {
-
         ...
     }
-
 }
 ----
 
@@ -129,6 +124,25 @@ public void on(PropertyDomainEvent ev) {
 ----
 
 It is also possible to abort the transaction during the executing or executed phases by throwing an exception. If the exception is a subtype of `RecoverableException` then the exception will be rendered as a user-friendly warning (eg Growl/toast) rather than an error.
+
+
+
+
+== Default, Doop and Noop events (`1.11.0-SNAPSHOT`)
+
+If the `domainEvent` attribute is not explicitly specified (is left as its default value, `PropertyDomainEvent.Default`),
+then the framework will, by default, post an event.
+
+If this is not required, then the `isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault`
+configuration property can be set to "false"; this will disable posting.
+
+On the other hand, if the `domainEvent` has been explicitly specified to some subclass, then an event will be posted.
+The framework provides `PropertyDomainEvent.Doop` as such a subclass, so setting the `domainEvent` attribute to this class
+will ensure that the event to be posted, irrespective of the configuration property setting.
+
+And, conversely, the framework also provides `PropertyDomainEvent.Noop`; if `domainEvent` attribute is set to this class,
+then no event will be posted.
+
 
 
 

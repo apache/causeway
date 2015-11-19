@@ -1,4 +1,4 @@
-<templateSet group="AsciiDoc">
+<templateSet group="Isis-AsciiDoc">
   <template name="adtbl3" value=".$tableCaption$&#10;[cols=&quot;1a,1a,1a&quot;, options=&quot;header&quot;]&#10;|===&#10;&#10;| $cell1header$ &#10;| $cell2header$&#10;| $cell3header$&#10;&#10;&#10;| $cell1row1$&#10;| $cell2row1$&#10;| $cell3row1$&#10;&#10;&#10;|&#10;|&#10;|&#10;&#10;|===" description="Table with three columns" toReformat="false" toShortenFQNames="true">
     <variable name="tableCaption" expression="" defaultValue="&quot;Table caption&quot;" alwaysStopAt="true" />
     <variable name="cell1header" expression="" defaultValue="&quot;Header Cell 1&quot;" alwaysStopAt="true" />

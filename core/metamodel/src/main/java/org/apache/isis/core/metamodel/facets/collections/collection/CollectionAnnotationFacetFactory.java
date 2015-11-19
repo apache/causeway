@@ -176,7 +176,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
                 collectionDomainEventFacet.getEventType(),
                 CollectionDomainEvent.Noop.class,
                 CollectionDomainEvent.Default.class,
-                "isis.services.eventbus.collectionDomainEvent.postForDefault", this.configuration)) {
+                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", this.configuration)) {
             FacetUtil.addFacet(collectionDomainEventFacet);
         }
 

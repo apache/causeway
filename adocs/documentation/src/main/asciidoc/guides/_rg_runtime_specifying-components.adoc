@@ -60,11 +60,11 @@ This property is IGNORED if the `isis.appManifest` configuration property is spe
 This property is IGNORED if the `isis.appManifest` configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
 |`isis.persistor`
-|`datanucleus`, `inmemory`, `FQCN` +
+|`datanucleus`
 (`_datanucleus_`)
 |`o.a.i.core.runtime.installerregistry.installerapi.` `PersistenceMechanismInstaller`
 
-This property is IGNORED completely in 1.9.0.
+This property is IGNORED completely in 1.9.0+; the `datanucleus` implementation is always used.
 
 
 |`isis.services-installer`

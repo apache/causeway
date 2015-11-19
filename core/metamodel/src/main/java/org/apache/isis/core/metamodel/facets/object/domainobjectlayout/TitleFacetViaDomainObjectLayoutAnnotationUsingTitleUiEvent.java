@@ -55,7 +55,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
                 titleUiEventClass,
                 TitleUiEvent.Noop.class,
                 TitleUiEvent.Default.class,
-                "isis.services.eventbus.titleUiEvent.postForDefault",
+                "isis.reflector.facet.domainObjectLayoutAnnotation.titleEvent.postForDefault",
                 configuration)) {
             return null;
         }
@@ -94,7 +94,7 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
 
         eventBusService.post(titleUiEvent);
 
-        final TranslatableString translatedTitle = titleUiEvent.getTranslatedTitle();
+        final TranslatableString translatedTitle = titleUiEvent.getTranslatableTitle();
         if(translatedTitle != null) {
             return translatedTitle.translate(translationService, translationContext);
         }

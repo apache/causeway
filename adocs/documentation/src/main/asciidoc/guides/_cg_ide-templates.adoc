@@ -7,7 +7,7 @@
 
 
 
-We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis domain objects, and also for unit tests (JUnit and JMock).  We also provide them for IntelliJ for writing Asciidoc documentation (see also the xref:cg.adoc#_cg__cg_asciidoc-templates[appendix]).
+We provide IDE templates (for IntelliJ and Eclipse) for writing Apache Isis domain objects, and also for unit tests (JUnit and JMock).  We also provide them for IntelliJ for writing Asciidoc documentation (see also the xref:cg.adoc#_cg_asciidoc-templates[appendix]).
 
 
 == Download
@@ -42,7 +42,7 @@ The following table lists the templates available to download:
 
 |Asciidoc
 |ad
-|link:../resources/templates/asciidoc-templates-idea.xml[Download]
+|link:../resources/templates/isis-asciidoc-templates-idea.xml[Download]
 |(none )
 
 |===
@@ -56,13 +56,13 @@ The most commonly used Apache Isis domain objects templates are also listed on t
 
 === IntelliJ
 
-To install in IntelliJ (Community edition 14), copy to the relevant `config/templates` directory, eg:
+To install in IntelliJ (Community edition 15), copy to the relevant `config/templates` directory, eg:
 
 * Windows `<User home>\.IdeaIC14\config\templates`
 * Linux `~/.IdeaIC14/config/templates`
 * Mac OS `~/Library/Preferences/IdeaIC14/templates`
 
-If using the Ultimate edition, the directory is `.IntelliJIdea14` rather than `IdeaIC14`.
+If using the Ultimate edition, the directory is `.IntelliJIdea15` rather than `IdeaIC15`.
 
 
 === Eclipse

@@ -174,7 +174,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
                 propertyDomainEventFacet.getEventType(),
                 PropertyDomainEvent.Noop.class,
                 PropertyDomainEvent.Default.class,
-                "isis.services.eventbus.propertyDomainEvent.postForDefault",
+                "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault",
                 this.configuration)) {
             FacetUtil.addFacet(propertyDomainEventFacet);
         }

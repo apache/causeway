@@ -51,7 +51,7 @@ public abstract class CssClassUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#cssClassUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.services.eventbus.cssClassUiEvent.postForDefault"
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.cssClassUiEvent.postForDefault"
      * configuration property.
      */
     public static class Default extends CssClassUiEvent<Object> {

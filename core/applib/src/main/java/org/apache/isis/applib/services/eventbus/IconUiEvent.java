@@ -49,7 +49,7 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     /**
      * This class is the default for the
      * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.  Whether this
-     * raises an event or not depends upon the "isis.services.eventbus.iconUiEvent.postForDefault"
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectLayoutAnnotation.iconUiEvent.postForDefault"
      * configuration property.
      */
     public static class Default extends IconUiEvent<Object> {

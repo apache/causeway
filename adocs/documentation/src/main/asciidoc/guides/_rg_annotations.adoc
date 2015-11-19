@@ -57,8 +57,8 @@ include::_rg_annotations_manpage-RequestScoped.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-Title.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-ViewModel.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-ViewModelLayout.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-XmlJavaTypeAdapter.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-XmlRootElement.adoc[leveloffset=+1]
-include::_rg_annotations_manpage-XmlValueTypeAdapter.adoc[leveloffset=+1]
 
 
 
