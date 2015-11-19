@@ -208,7 +208,7 @@ in Apache Isis, and do _not_ correspond to actions even though they have public 
 
 
 
-== Domain Entities vs View Models
+== Entities vs View Models
 
 When developing an Apache Isis application you will most likely start off with the persistent domain entities:
 `Customer`, `Order`, `Product`, and so on.  For some applications this may well suffice.  However, if the application

@@ -6,8 +6,6 @@
 
 
 
-== `oidDto`
-
 The main purpose of the common schema is to define the `oidDto` complex type: the object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the
 xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].
@@ -17,22 +15,22 @@ a given Apache Isis application.  With it, we have the ability to lookup any arb
 examples can be found xref:ug.adoc#_ug_core-concepts_building-blocks_oid[here].
 
 
-
-
 [source,xml]
 ----
 <xs:schema targetNamespace="http://isis.apache.org/schema/common"                           <!--1-->
            elementFormDefault="qualified"
            xmlns="http://isis.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
     <xs:complexType name="oidDto">                                                          <!--2-->
         <xs:sequence>
-            <xs:element name="objectType" type="xs:string"/>
-            <xs:element name="objectIdentifier" type="xs:string"/>
+            <xs:element name="objectType" type="xs:string"/>                                <!--3-->
+            <xs:element name="objectIdentifier" type="xs:string"/>                          <!--4-->
         </xs:sequence>
         <xs:attribute name="objectState" type="bookmarkObjectState" default="persistent"/>
     </xs:complexType>
-    <xs:simpleType name="bookmarkObjectState">
+
+    <xs:simpleType name="bookmarkObjectState">                                              <!--5-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="persistent"/>
             <xs:enumeration value="transient"/>
@@ -42,12 +40,31 @@ examples can be found xref:ug.adoc#_ug_core-concepts_building-blocks_oid[here].
     ...
 </xs:schema>
 ----
+<1> the common schema has a namespace URI of "http://isis.apache.org/schema/common".  Although URIs are not the same as URLs, you will find that the schemas are also downloadable from this location.
+<2> the `oidDto` complex type defines the unique identifier for any domain object: its type, and an identifier.  The `objectState` attribute is of type `bookmarkObjectState` and will typically be "transient" or "viewModel"
+<3> the object type, corresponding to either the
+xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`@DomainObject#objectType()`] attribute, or to the (JDO)
+xref:rg.adoc#_rg_annotations_manpage-PersistenceCapable[`@PersistenceCapable`] annotation (`schema` and/or `table`
+attributes), or to the (JDO) xref:rg.adoc#_rg_annotations_manpage-Discriminator[`@Discriminator`] annotation.  If none
+is specified, then the fully
+qualified class name will be used.
+<4> the object identifier (aka primary key), converted to string form.
+<5> the `bookmarkObjectState` enumerates the possible persistence states of the referenced object.  Although "transient" is shown,
+in practice the only types of objects will be "persistent" (entities) or "viewModel".
 
-This
+The `oidDto` complex type is used in two specific places by the framework:
 
-== `valueDto` and `valueType`
+* first, as a means of serializing JAXB view model/DTOs (annotated with
+xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]), that reference domain entities. +
++
+These references are serialized instead into OIDs
 
-The common schema defines two further types: the `valueDto` complex type and the `valueType` simple type:
+* second, as references to the target of action invocations, as described by the
+xref:rg.adoc#_rg_schema-aim[action invocation memento] schema. +
++
+They are also used to represent references to any action arguments that take domain object entities.
+
+The common schema also defines two further types: the `valueDto` complex type and the `valueType` simple type:
 
 [source,xml]
 ----
@@ -56,48 +73,23 @@ The common schema defines two further types: the `valueDto` complex type and the
            xmlns="http://isis.apache.org/schema/common"
            xmlns:xs="http://www.w3.org/2001/XMLSchema">
     ...
-    <xs:complexType name="valueDto">                                    <!--1-->
+    <xs:complexType name="valueDto">                              <!--1-->
         <xs:choice minOccurs="0" maxOccurs="1">
             <xs:element name="string" type="xs:string"/>
             <xs:element name="byte" type="xs:byte"/>
             <xs:element name="short" type="xs:short"/>
-            <xs:element name="int" type="xs:int"/>
-            <xs:element name="long" type="xs:long"/>
-            <xs:element name="float" type="xs:float"/>
-            <xs:element name="double" type="xs:double"/>
-            <xs:element name="boolean" type="xs:boolean"/>
-            <xs:element name="char" type="xs:string"/>
-            <xs:element name="bigDecimal" type="xs:decimal"/>
-            <xs:element name="bigInteger" type="xs:integer"/>
-            <xs:element name="dateTime" type="xs:dateTime"/>
-            <xs:element name="localDate" type="xs:date"/>
-            <xs:element name="localDateTime" type="xs:dateTime"/>
+            ...
             <xs:element name="localTime" type="xs:time"/>
             <xs:element name="reference" type="oidDto"/>
         </xs:choice>
     </xs:complexType>
-    <xs:simpleType name="valueType">                                  <!--2-->
+
+    <xs:simpleType name="valueType">                              <!--2-->
         <xs:restriction base="xs:string">
             <xs:enumeration value="string"/>
             <xs:enumeration value="byte"/>
             <xs:enumeration value="short"/>
-            <xs:enumeration value="int"/>
-            <xs:enumeration value="long"/>
-            <xs:enumeration value="float"/>
-            <xs:enumeration value="double"/>
-            <xs:enumeration value="boolean"/>
-            <xs:enumeration value="char"/>
-            <xs:enumeration value="bigInteger"/>
-            <xs:enumeration value="bigDecimal"/>
-            <xs:enumeration value="javaUtilDate"/>
-            <xs:enumeration value="javaSqlDate"/>
-            <xs:enumeration value="javaSqlTime"/>
-            <xs:enumeration value="javaSqlTimestamp"/>
-            <xs:enumeration value="jodaDateTime"/>
-            <xs:enumeration value="jodaLocalDate"/>
-            <xs:enumeration value="jodaLocalTime"/>
-            <xs:enumeration value="jodaLocalDateTime"/>
-            <xs:enumeration value="isisApplibBlob"/>
+            ...
             <xs:enumeration value="isisApplibClob"/>
             <xs:enumeration value="reference"/>
         </xs:restriction>
@@ -105,6 +97,7 @@ The common schema defines two further types: the `valueDto` complex type and the
 </xs:schema>
 ----
 
-These two definitions are just building blocks, both used within the xref:rg.adoc#_rg_schema-aim[Action Invocation Memento]
-schema.  The first, `valueDto` is intended to hold any valid value, eg of an argument to an action.  The second,
-`valueType`, enumerates the different types of vales, eg of a formal parameter to an action.
+These two type definitions are just building blocks, also used within the
+xref:rg.adoc#_rg_schema-aim[action iInvocation memento] schema.  The first, `valueDto` is intended to hold any valid
+value, eg of an argument to an action.  The second, `valueType`, enumerates the different types of vales, eg of a
+formal parameter to an action.

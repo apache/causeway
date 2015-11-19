@@ -22,4 +22,3 @@ The sections below discuss these schemas in more detail.
 
 include::_rg_schema-common.adoc[leveloffset=+1]
 include::_rg_schema-aim.adoc[leveloffset=+1]
-include::_rg_schema-utilities.adoc[leveloffset=+1]

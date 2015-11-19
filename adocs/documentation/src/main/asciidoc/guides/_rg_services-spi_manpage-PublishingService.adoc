@@ -67,7 +67,7 @@ The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' pu
 implementation (`org.isisaddons.module.publismq.dom.servicespi.PublishingServiceUsingActiveMq`) that publishes each 
 action invocation as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.  These are converted into
 a canonical XML form (the xref:rg.adoc#_rg_schema-aim[ActionInvocationMemento] schema) using the
-xref:rg.adoc#_rg_schema-utilities-ActionInvocationMementoDtoUtils[`ActionInvocationMementoDtoUtils`] class; the idea
+`ActionInvocationMementoDtoUtils` class; the idea
 being that subscribers on the ActiveMQ message queue can then query back for further information, for example using
 the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
 

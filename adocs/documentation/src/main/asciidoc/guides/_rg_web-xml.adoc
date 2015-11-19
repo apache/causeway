@@ -153,7 +153,10 @@ Its mapping is:
 
 === `ResourceServlet`
 
-NOTE: WIP
+The `ResourceServlet` loads and services static content either from the filesystem or from the classpath, each with an appropriate mime type.
+
+Static content here means request paths ending in `.js`, `.css`, `.html`, `.png`, `.jpg`, `.jpeg` and `gif`.
+
 
 Its definition is:
 
@@ -205,11 +208,14 @@ Its mapping is:
 [[_rg_web-xml_filters]]
 == Filters
 
-The order in which filters appear in `web.xml` matters: first to last they define a pipeline.  This is shown in the above diagrams, and the subsections also list the in the same order that they should appear in your `web.xml`.
+The order in which filters appear in `web.xml` matters: first to last they define a pipeline.  This is shown in the
+above diagrams, and the subsections also list the in the same order that they should appear in your `web.xml`.
+
 
 === `ShiroFilter` (Shiro)
 
-NOTE: WIP
+Shiro filter that sets up a Shiro security manager for the request, obtained from the Shiro `WebEnvironment` set up
+by the Shiro `EnvironmentLoaderListener` (discussed above).
 
 Its definition is:
 
@@ -234,7 +240,9 @@ Its mapping is:
 
 === `IsisLogOnExceptionFilter`
 
-NOTE: WIP
+The `IsisLogOnExceptionFilter` filter simply logs the URL of any request that causes an exception to be thrown, then
+re-propagates the exception. The use case is simply to ensure that all exceptions are logged (against the
+`IsisLogOnExceptionFilter` slf4j appender).
 
 Its definition is:
 
@@ -265,7 +273,7 @@ Its mapping is:
 
 === `ResourceCachingFilter`
 
-NOTE: WIP
+The `ResourceCachingFilter` adds HTTP cache headers to specified resources, based on their pattern.
 
 Its definition is:
 
@@ -319,8 +327,7 @@ Its mapping is:
 
 === `WicketFilter`
 
-NOTE: WIP
-
+The `WicketFilter` is responsible for initiating the handling of Wicket requests.
 
 Its definition is:
 
@@ -410,7 +417,8 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 
 === `IsisTransactionFilterForRestfulObjects`
 
-NOTE: WIP
+The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all
+calls routed to the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
 
 Its definition is:
 
@@ -437,22 +445,29 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 [[_rg_web-xml_context-parameters]]
 == Configuration Files
 
-However Apache Isis is bootstrapped (using the `IsisWicketApplication` or using `IsisWebAppBootstrapper`), it will read a number of configuration files, such as `isis.properties`.
+However Apache Isis is bootstrapped (using the `IsisWicketApplication` or using `IsisWebAppBootstrapper`), it will
+read a number of configuration files, such as `isis.properties`.
 
-By default these are read from `WEB-INF` directory.
+By default these are read from `WEB-INF` directory.  This can be overriden using the `isis.config.dir` context parameter:
 
-    <context-param>
-      <param-name>isis.config.dir</param-name>
-      <param-value>location of your config directory if fixed</param-value>
-    </context-param>
-    -->
+[source,xml]
+----
+<context-param>
+  <param-name>isis.config.dir</param-name>
+  <param-value>location of your config directory if fixed</param-value>
+</context-param>
+----
 
+Another context parameter, `isis.viewres` specifies which additional configuration files to search for (over and above
+the default ones of `isis.properties` et al):
 
-    <!--
-    determines which additional configuration files to search for
-     -->
-    <context-param>
-        <param-name>isis.viewers</param-name>
-        <param-value>wicket,restfulobjects</param-value>
-    </context-param>
+[source,xml]
+----
+<context-param>
+    <param-name>isis.viewers</param-name>
+    <param-value>wicket,restfulobjects</param-value>
+</context-param>
+----
+
+For example, this will cause `viewer_wicket.properties` and `viewer_restfulobjects.properties` to also be loaded.
 

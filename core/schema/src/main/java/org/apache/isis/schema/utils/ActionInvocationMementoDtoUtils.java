@@ -62,7 +62,7 @@ import org.apache.isis.schema.utils.jaxbadapters.JodaLocalDateTimeXMLGregorianCa
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalDateXMLGregorianCalendarAdapter;
 import org.apache.isis.schema.utils.jaxbadapters.JodaLocalTimeXMLGregorianCalendarAdapter;
 
-public class ActionInvocationMementoDtoUtils {
+public final class ActionInvocationMementoDtoUtils {
 
     //region > static
     private static final Function<ParamDto, String> PARAM_DTO_TO_NAME = new Function<ParamDto, String>() {
