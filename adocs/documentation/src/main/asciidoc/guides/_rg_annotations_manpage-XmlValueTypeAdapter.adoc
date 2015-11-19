@@ -5,6 +5,21 @@
 :_imagesdir: images/
 
 
-The `@XmlValueTypeAdapter` annotation (`1.11.0-SNAPSHOT`) is not recognized directly by the framework, but should be used to annotate any persistent domain entities that are referenced from view models annotated with xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`].
+The JAXB `@XmlValueTypeAdapter` annotation (`1.11.0-SNAPSHOT`) influences the serialization of objects into XML.
+While not recognized directly by the framework, the framework _does_ provide the `PersistentEntityAdapter` class,
+which causes JAXB to serialize references to persistent entities into a canonical `<oid-dto>` element: equivalent to the `Bookmark` provided by the xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].
 
-NOTE: TODO
+For example:
+
+[source,java]
+----
+@XmlJavaTypeAdapter(PersistentEntityAdapter.class)
+public class ToDoItem ...  {
+    ...
+}
+----
+
+This annotation therefore allows view models/DTOs to have references to persistent entities; a common idiom.  For a
+more complete discussion of writing JAXB view models/DTOs, see xref:ug.adoc#_ug_more-advanced_view-models[this topic]
+in the user guide.
+

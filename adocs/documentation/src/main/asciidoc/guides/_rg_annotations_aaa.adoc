@@ -11,7 +11,6 @@ include::_rg_annotations_aaa_main.adoc[leveloffset=+1]
 include::_rg_annotations_aaa_other.adoc[leveloffset=+1]
 include::_rg_annotations_aaa_jdo.adoc[leveloffset=+1]
 include::_rg_annotations_aaa_jee.adoc[leveloffset=+1]
-include::_rg_annotations_aaa_jaxb.adoc[leveloffset=+1]
 include::_rg_annotations_aaa_deprecated.adoc[leveloffset=+1]
 include::_rg_annotations_aaa_partial.adoc[leveloffset=+1]
 

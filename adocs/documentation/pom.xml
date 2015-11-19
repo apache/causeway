@@ -116,7 +116,7 @@
                                     </requires>
                         -->
 
-                        <sourceHighlighter>coderay</sourceHighlighter>
+                        <sourceHighlighter>rouge</sourceHighlighter>
                         <backend>html5</backend>
                         <templateDir>../template</templateDir>
                         <eruby>erb</eruby>

@@ -27,12 +27,15 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
 
     //region > Default class
     /**
-     * The default for {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute, will be
-     * used as the event class to be posted if some other subclass wasn't specified (though setting to
-     * {@link org.apache.isis.applib.services.eventbus.CollectionDomainEvent.Noop} will disable).
+     * This class is the default for the
+     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.services.eventbus.collectionDomainEvent.postForDefault"
+     * configuration property.
      */
     public static class Default extends CollectionInteractionEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
+        public Default(){}
+        @Deprecated
         public Default(
                 final Object source,
                 final Identifier identifier,
@@ -46,13 +49,25 @@ public abstract class CollectionDomainEvent<S,T> extends AbstractInteractionEven
     //region > Noop class
 
     /**
-     * Disables event propogation if explicitly set as the value of
-     * {@link org.apache.isis.applib.annotation.Collection#domainEvent()} annotation attribute.
+     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event.
      */
-    public static class Noop extends CollectionDomainEvent<Object,Object> {
+    public static class Noop extends CollectionInteractionEvent<Object, Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
+
+    //region > Doop class
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event..
+     */
+    public static class Doop extends CollectionInteractionEvent<Object, Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
 
     //region > constructors
 

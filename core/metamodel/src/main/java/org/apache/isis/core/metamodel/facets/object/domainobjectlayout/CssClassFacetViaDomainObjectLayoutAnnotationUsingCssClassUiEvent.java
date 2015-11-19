@@ -26,6 +26,7 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.services.eventbus.CssClassUiEvent;
 import org.apache.isis.applib.services.eventbus.EventBusService;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
@@ -33,7 +34,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent extends FacetAbstract implements
         CssClassFacet {
@@ -43,12 +44,18 @@ public class CssClassFacetViaDomainObjectLayoutAnnotationUsingCssClassUiEvent ex
     public static Facet create(
             final DomainObjectLayout domainObjectLayout,
             final ServicesInjector servicesInjector,
-            final FacetHolder facetHolder) {
+            final IsisConfiguration configuration, final FacetHolder facetHolder) {
         if(domainObjectLayout == null) {
             return null;
         }
         final Class<? extends CssClassUiEvent<?>> cssClassUiEventClass = domainObjectLayout.cssClassUiEvent();
-        if(CssClassUiEvent.Noop.class.isAssignableFrom(cssClassUiEventClass)) {
+
+        if(!EventUtil.eventTypeIsPostable(
+                cssClassUiEventClass,
+                CssClassUiEvent.Noop.class,
+                CssClassUiEvent.Default.class,
+                "isis.services.eventbus.cssClassUiEvent.postForDefault",
+                configuration)) {
             return null;
         }
 

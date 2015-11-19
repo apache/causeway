@@ -35,3 +35,11 @@ public interface UrlEncodingService {
 
 == Implementation
 
+The framework provides a default implementation (`UrlEncodingServiceUsingBaseEncoding`) that uses converts the string
+using base-64 encoding and UTF-8 character set.  Note that although the maximum length of a URL should not exceed
+2083 characters.  For large DTOs (capturing a lot of state), you may therefore wish to register an alternative
+implementation.
+
+To use an alternative implementation, use
+xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).

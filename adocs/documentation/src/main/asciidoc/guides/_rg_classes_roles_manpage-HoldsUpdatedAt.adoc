@@ -39,7 +39,6 @@ public class Customer {
     public java.sql.Timestamp getVersionSequence() {
         return (java.sql.Timestamp) JDOHelper.getVersion(this);
     }
-    }
 }
 ----
 

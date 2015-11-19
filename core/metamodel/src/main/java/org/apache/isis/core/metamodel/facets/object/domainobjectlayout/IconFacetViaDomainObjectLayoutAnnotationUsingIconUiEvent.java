@@ -26,11 +26,13 @@ import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.IconUiEvent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends IconFacetAbstract {
 
@@ -39,12 +41,18 @@ public class IconFacetViaDomainObjectLayoutAnnotationUsingIconUiEvent extends Ic
     public static Facet create(
             final DomainObjectLayout domainObjectLayout,
             final ServicesInjector servicesInjector,
-            final FacetHolder facetHolder) {
+            final IsisConfiguration configuration, final FacetHolder facetHolder) {
         if(domainObjectLayout == null) {
             return null;
         }
         final Class<? extends IconUiEvent<?>> iconUiEventClass = domainObjectLayout.iconUiEvent();
-        if(IconUiEvent.Noop.class.isAssignableFrom(iconUiEventClass)) {
+
+        if(!EventUtil.eventTypeIsPostable(
+                iconUiEventClass,
+                IconUiEvent.Noop.class,
+                IconUiEvent.Default.class,
+                "isis.services.eventbus.iconUiEvent.postForDefault",
+                configuration)) {
             return null;
         }
 

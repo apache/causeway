@@ -45,7 +45,7 @@ public @interface DomainObjectLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Noop.class;
+    Class<? extends TitleUiEvent<?>> titleUiEvent() default TitleUiEvent.Default.class;
 
     // //////////////////////////////////////
 
@@ -56,7 +56,7 @@ public @interface DomainObjectLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Noop.class;
+    Class<? extends IconUiEvent<?>> iconUiEvent() default IconUiEvent.Default.class;
 
     // //////////////////////////////////////
 
@@ -67,7 +67,7 @@ public @interface DomainObjectLayout {
      * This subclass must provide a no-arg constructor; the fields are set reflectively.
      * </p>
      */
-    Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Noop.class;
+    Class<? extends CssClassUiEvent<?>> cssClassUiEvent() default CssClassUiEvent.Default.class;
 
     /**
      * Indicates the css class that a domain class (type) should have.

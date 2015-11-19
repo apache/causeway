@@ -16,6 +16,7 @@ There are two central ideas at the heart of domain-driven design.
 
 Let's look at each in turn.
 
+[[_ug_core-concepts_philosophy_domain-driven-design_ubiquitous-language]]
 == Ubiquitous Language
 
 It's no secret that the IT industry is plagued by project failures. Too often systems take longer than intended to implement, and when finally implemented, they don't address the real requirements anyway.

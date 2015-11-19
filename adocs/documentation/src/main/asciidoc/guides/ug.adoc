@@ -15,7 +15,7 @@ It goes on to discuss the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer], both fr
 
 Later chapters discuss essential topics such as xref:ug.adoc#_ug_testing[testing] and how to xref:ug.adoc#_ug_deployment[deploy] your app, and discuss other ways in which you can xref:ug.adoc#_ug_extending[extend] or adapt the framework itself to your particular needs.
 
-The users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  The users' guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
+This users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
 
 
 

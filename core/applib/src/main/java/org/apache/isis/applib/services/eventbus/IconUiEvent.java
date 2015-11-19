@@ -46,9 +46,11 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     //endregion
 
     //region > Default class
-
     /**
-     * Implementation provided as a convenience for domain objects that have no custom subclass.
+     * This class is the default for the
+     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.services.eventbus.iconUiEvent.postForDefault"
+     * configuration property.
      */
     public static class Default extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
@@ -58,14 +60,25 @@ public abstract class IconUiEvent<S> extends AbstractUiEvent<S> {
     //region > Noop class
 
     /**
-     * Marker class that is the default for
-     * {@link org.apache.isis.applib.annotation.DomainObjectLayout#iconUiEvent()} annotation attribute, meaning that
-     * an event should <i>not</i> be emitted by default.
+     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event.
      */
     public static class Noop extends IconUiEvent<Object> {
         private static final long serialVersionUID = 1L;
     }
     //endregion
+
+    //region > Doop class
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event..
+     */
+    public static class Doop extends IconUiEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
 
     //region > iconName
     private String iconName;

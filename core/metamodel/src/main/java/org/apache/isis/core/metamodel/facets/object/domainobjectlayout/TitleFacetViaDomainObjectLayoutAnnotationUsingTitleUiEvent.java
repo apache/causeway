@@ -29,12 +29,14 @@ import org.apache.isis.applib.services.eventbus.EventBusService;
 import org.apache.isis.applib.services.eventbus.TitleUiEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends TitleFacetAbstract {
 
@@ -43,15 +45,21 @@ public class TitleFacetViaDomainObjectLayoutAnnotationUsingTitleUiEvent extends 
     public static Facet create(
             final DomainObjectLayout domainObjectLayout,
             final ServicesInjector servicesInjector,
-            final FacetHolder facetHolder) {
+            final IsisConfiguration configuration, final FacetHolder facetHolder) {
         if(domainObjectLayout == null) {
             return null;
         }
         final Class<? extends TitleUiEvent<?>> titleUiEventClass = domainObjectLayout.titleUiEvent();
 
-        if(TitleUiEvent.Noop.class.isAssignableFrom(titleUiEventClass)) {
+        if(!EventUtil.eventTypeIsPostable(
+                titleUiEventClass,
+                TitleUiEvent.Noop.class,
+                TitleUiEvent.Default.class,
+                "isis.services.eventbus.titleUiEvent.postForDefault",
+                configuration)) {
             return null;
         }
+
         final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
         final ObjectSpecification facetHolderAsSpec = (ObjectSpecification) facetHolder; // bit naughty...
         final String translationContext = facetHolderAsSpec.getCorrespondingClass().getCanonicalName();

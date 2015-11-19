@@ -51,38 +51,22 @@ This example is taken from the (non-ASF) http://github.com/isisaddons/isis-app-t
 
 [source,java]
 ----
-@XmlAccessorType(XmlAccessType.FIELD)                               // <1>
-@XmlType(
-        namespace = "http://viewmodels.app.todoapp/v1/todoitem",    // <2>
-        propOrder = {                                               // <3>
-            "description",
-            "category",
-            "subcategory",
-            "cost"
-        }
-)
-@XmlRootElement(name = "toDoItemDto")                               // <4>
+@XmlRootElement(name = "toDoItemDto")                               // <1>
 public class ToDoItemDto implements Dto {
 
-    @XmlElement(required = true)                                    // <5>
-    @Getter @Setter
     protected String description;
 
-    @XmlElement(required = true)
-    @Getter @Setter
     protected String category;
 
-    @Getter @Setter
     protected String subcategory;
 
-    @Getter @Setter
     protected BigDecimal cost;
 
     // getters and setters omitted
 }
 ----
-<1> optional; whether JAXB-serialization reads fields directly (as here) else uses getters/setters
-<2> specify the XML schema namespace to which this element type belongs
-<3> all properties in the class must be listed; (they can be ignored using `@XmlTransient`)
-<4> mandatory, identifies this class as a view model and defines the root element for JAXB serialization
-<5> optional; JAXB metadata can specify such attributes as required/optional
+<1> identifies this class as a view model and defines the root element for JAXB serialization
+
+
+For a more complete discussion of writing JAXB view models/DTOs, see xref:ug.adoc#_ug_more-advanced_view-models[this topic]
+in the user guide.

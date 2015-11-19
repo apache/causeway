@@ -47,39 +47,6 @@
                 </excludes>
             </testResource>
         </testResources>
-        <plugins>
-            <!-- 
-            uncomment for enhanced cucumber-jvm reporting
-            http://www.masterthought.net/section/cucumber-reporting
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <testfailureignore>true</testfailureignore>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>net.masterthought</groupId>
-                <artifactId>maven-cucumber-reporting</artifactId>
-                <version>0.0.3</version>
-                <executions>
-                    <execution>
-                        <id>execution</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <projectname>cucumber-jvm-example</projectname>
-                            <outputdirectory>${project.build.directory}/cucumber-reports</outputdirectory>
-                            <cucumberoutput>${project.build.directory}/cucumber.json</cucumberoutput>
-                            <enableflashcharts>false</enableflashcharts>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>  
-            -->
-        </plugins>
     </build>
     <dependencies>
 
@@ -118,38 +85,75 @@
             <artifactId>hsqldb</artifactId>
         </dependency>
 
-        <!-- 
-        uncomment to enable enhanced cucumber-jvm reporting
-        http://www.masterthought.net/section/cucumber-reporting
-        <dependency>  
-            <groupId>com.googlecode.totallylazy</groupId>  
-            <artifactId>totallylazy</artifactId>  
-            <version>991</version>  
-        </dependency>
-
-        <dependency>
-            <groupId>net.masterthought</groupId>
-            <artifactId>cucumber-reporting</artifactId>
-            <version>0.0.21</version>
-        </dependency>
-        <dependency>
-            <groupId>net.masterthought</groupId>
-            <artifactId>maven-cucumber-reporting</artifactId>
-            <version>0.0.4</version>
-        </dependency>  
-        -->
     </dependencies>
 
-    <!-- 
-    uncomment for enhanced cucumber-jvm reporting
-    http://www.masterthought.net/section/cucumber-reporting
-    <repositories>  
-        <repository>  
-            <id>repo.bodar.com</id>  
-            <url>http://repo.bodar.com</url>  
-        </repository>  
-    </repositories>  
-     -->
+    <profiles>
+        <profile>
+            <!--
+            enhanced cucumber reporting per http://www.masterthought.net/section/cucumber-reporting
+            -->
+            <id>cucumber-reporting</id>
+            <activation>
+                <property>
+                    <name>cucumber-reporting</name>
+                </property>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>repo.bodar.com</id>
+                    <url>http://repo.bodar.com</url>
+                </repository>
+            </repositories>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <testFailureIgnore>true</testFailureIgnore>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.masterthought</groupId>
+                        <artifactId>maven-cucumber-reporting</artifactId>
+                        <version>0.0.4</version>
+                        <executions>
+                            <execution>
+                                <id>execution</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <projectName>cucumber-jvm-example</projectName>
+                                    <outputDirectory>${project.build.directory}/cucumber-reports</outputDirectory>
+                                    <cucumberOutput>${project.build.directory}/cucumber.json</cucumberOutput>
+                                    <enableFlashCharts>false</enableFlashCharts>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>com.googlecode.totallylazy</groupId>
+                    <artifactId>totallylazy</artifactId>
+                    <version>991</version>
+                </dependency>
 
+                <dependency>
+                    <groupId>net.masterthought</groupId>
+                    <artifactId>cucumber-reporting</artifactId>
+                    <version>0.0.21</version>
+                </dependency>
+                <dependency>
+                    <groupId>net.masterthought</groupId>
+                    <artifactId>maven-cucumber-reporting</artifactId>
+                    <version>0.0.4</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
 </project>

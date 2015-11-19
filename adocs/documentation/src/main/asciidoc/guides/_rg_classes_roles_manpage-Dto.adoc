@@ -23,13 +23,12 @@ The `Dto_downloadXml` mixin defines the following action:
 ----
 @Mixin
 public class Dto_downloadXml {
-    public Dto_downloadXml(final Dto dto) { ... }               // <1>
-    public Object downloadXml(final String fileName) { ... }    // <2>
+    public Dto_downloadXml(final Dto dto) { ... }     // <1>
+    public Object $$(final String fileName) { ... }
     ...
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
-<2> in fact, the method is called "$$".  This is converted to "download Xml", based on the mixin's name
 
 This will return the XML text wrapped up in a xref:rg.adoc#_rg_classes_value-types_manpage-Clob[`Clob`].
 
@@ -39,17 +38,18 @@ The `Dto_downloadXsd` mixin is similar:
 ----
 @Mixin
 public class Dto_downloadXsd {
-    public Dto_downloadXsd(final Dto dto) { ... }               // <1>
-    public Object downloadXsd(final String fileName) { ... }    // <2>
+    public Dto_downloadXsd(final Dto dto) { ... }                                       // <1>
+    public Object $$(final String fileName, final IsisSchemes isisSchemas) { ... }     // <2>
 }
 ----
 <1> provided as an action to any class that (trivially) implements the `Dto` interface
-<2> in fact, the method is called "$$".  This is converted to "download Xsd", based on the mixin's name
 
 If the domain object's JAXB annotations reference only a single XSD schema then this will return that XML text as
 a xref:rg.adoc#_rg_classes_value-types_manpage-Clob[`Clob`] of that XSD.  If there are multiple XSD schemas referenced
 then the action will return a zip of those schemas, wrapped up in a
-xref:rg.adoc#_rg_classes_value-types_manpage-Blob[`Blob`].
+xref:rg.adoc#_rg_classes_value-types_manpage-Blob[`Blob`].  The `IsisSchemas` parameter to the action can be used to
+optionally ignore the common Apache Isis schemas (useful if there is only one other XSD schema referenced by the DTO).
+
 
 
 == Related Services

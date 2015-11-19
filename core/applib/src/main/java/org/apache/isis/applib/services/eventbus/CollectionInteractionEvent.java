@@ -33,6 +33,8 @@ public abstract class CollectionInteractionEvent<S,T> extends CollectionDomainEv
     @Deprecated
     public static class Default extends CollectionDomainEvent.Default {
         private static final long serialVersionUID = 1L;
+        public Default(){}
+        @Deprecated
         public Default(
                 final Object source,
                 final Identifier identifier,
@@ -44,6 +46,10 @@ public abstract class CollectionInteractionEvent<S,T> extends CollectionDomainEv
     //endregion
 
     //region > constructors
+    public CollectionInteractionEvent() {
+    }
+
+    @Deprecated
     public CollectionInteractionEvent(
             final S source,
             final Identifier identifier,
@@ -51,6 +57,7 @@ public abstract class CollectionInteractionEvent<S,T> extends CollectionDomainEv
         super(source, identifier, of);
     }
 
+    @Deprecated
     public CollectionInteractionEvent(
             final S source,
             final Identifier identifier,

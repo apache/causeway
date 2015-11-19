@@ -18,6 +18,8 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * The different sorts of domain objects recognized by Isis.
  *
@@ -30,7 +32,8 @@ public enum Nature {
 
     /**
      * The default; allows the programmer to combine <tt>@DomainObject</tt> annotation with the
-     * <tt>@ViewModel</tt> annotation or implementing the <tt>ViewModel</tt> interface.
+     * {@link ViewModel} annotation, or the {@link XmlRootElement} annotation, or by implementing the
+     * {@link org.apache.isis.applib.ViewModel} interface.
      */
     NOT_SPECIFIED,
 
@@ -52,8 +55,13 @@ public enum Nature {
      * considered to be part of the domain model layer.
      *
      * <p>
-     *     The identity of an external entity is determined solely by the state of entity's properties (that have
-     *     not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     *     The identity of an external entity is determined solely by the state of object's properties (that have not
+     *     been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     * </p>
+     *
+     * <p>
+     *     Note that collections are ignored; if their state is required to fully identify the view model, use
+     *     {@link XmlRootElement} annotation instead.
      * </p>
      */
     EXTERNAL_ENTITY,
@@ -63,7 +71,13 @@ public enum Nature {
      *
      * <p>
      *     As for a {@link #EXTERNAL_ENTITY}, the identity of a synthetic entity is determined solely by the state of
-     *     entity's properties (that have not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     *     object's properties (that have not been set to be ignored using
+     *     {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     * </p>
+     *
+     * <p>
+     *     Note that collections are ignored; if their state is required to fully identify the view model, use
+     *     {@link XmlRootElement} annotation instead.
      * </p>
      */
     INMEMORY_ENTITY,
@@ -74,6 +88,14 @@ public enum Nature {
      * <p>
      *     The identity of a view model is determined solely by the state of object's properties (that have
      *     not been set to be ignored using {@link org.apache.isis.applib.annotation.Property#notPersisted()}).
+     *     Using this nature should be considered exactly equivalent to annotating with {@link ViewModel}.
+     * </p>
+     *
+     * <p>
+     *     Note that collections are ignored; if their state is required to fully identify the view model, define the
+     *     view model using the JAXB {@link XmlRootElement} annotation instead (where the object's state is serialized
+     *     to an arbitrarily deep graph of data, with references to persistent entities transparently resolved to
+     *     <code>&lt;oid-dto&gt;</code> elements).
      * </p>
      *
      * @see ViewModel
