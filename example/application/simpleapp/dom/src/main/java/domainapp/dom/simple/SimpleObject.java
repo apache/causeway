@@ -23,7 +23,6 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainObject;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
+import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 import org.apache.isis.applib.util.ObjectContracts;
 
@@ -63,19 +63,20 @@ import org.apache.isis.applib.util.ObjectContracts;
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})
 @DomainObject
 @DomainObjectLayout(
-        bookmarking = BookmarkPolicy.AS_ROOT,
-        cssClassFa = "fa-flag"
+        bookmarking = BookmarkPolicy.AS_ROOT
 )
 public class SimpleObject implements Comparable<SimpleObject> {
 
     public static final int NAME_LENGTH = 40;
+
 
     public TranslatableString title() {
         return TranslatableString.tr("Object: {name}", "name", getName());
     }
 
 
-    public static class NameDomainEvent extends IsisApplibModule.PropertyDomainEvent<SimpleObject,String> {}
+
+    public static class NameDomainEvent extends PropertyDomainEvent<SimpleObject,String> {}
     @javax.jdo.annotations.Column(
             allowsNull="false",
             length = NAME_LENGTH
