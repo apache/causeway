@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
 
 public final class Annotations  {
     
@@ -166,6 +167,7 @@ public final class Annotations  {
                     Collection.class,
                     CollectionLayout.class,
                     MemberOrder.class,
+                    Title.class,
                     javax.jdo.annotations.Column.class
             )
     );
