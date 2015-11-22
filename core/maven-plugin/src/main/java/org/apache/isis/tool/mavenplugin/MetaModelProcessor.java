@@ -44,6 +44,6 @@ interface MetaModelProcessor {
         void throwExecutionException(final String errorMessage, final Exception e) throws MojoExecutionException;
     }
 
-    void process(final ObjectReflectorDefault specificationLoader, final Context context) throws MojoFailureException;
+    void process(final Context context, final ObjectReflectorDefault specificationLoader) throws MojoFailureException;
 
 }
