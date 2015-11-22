@@ -28,15 +28,16 @@ Defaults to `generated-resources/isis-xsd`
 +
 Defaults to `false`.  Most DTO classes will reference one another or the xref:rg.adoc#_rg_schema-common[common schema].  Normally it's fine to merge all these XSDs together.  This property, if set, results in each a separate directory for each generation of its XSD or XSDs.
 
-The sections below explain in more detail how to configure the plugin.
-
-As a convenience to potential Java subscribers, the XSDs generated from the view models can then in turn be generated
-into DTOs.  The original view models and these DTOs are similar but not identical: the view models can only be used
+As a convenience to any (Java) consumers, the XSDs generated from the view models can then in turn be generated
+into DTOs.  The original view models and these DTOs are similar but not identical: while the view models can only be used
 within the Isis application (they may reference underlying domain entities) whereas the DTO classes generated from the
 XSDs can be used standalone, eg by a Java subscriber running on an ESB such as Apache Camel.
 
+The diagram below shows how these different plugins fit together:
 
+image::{_imagesdir}maven-plugin/xsd-goal.png[width="800px",link="{_imagesdir}maven-plugin/xsd-goal.png"]
 
+The sections below explain in more detail how to configure the `xsd` plugin (and other plugins).
 
 [[_cg_isis-maven-plugin_xsd]]
 == `xsd` submodule
@@ -308,14 +309,14 @@ If for any reason you want to disable the generation of the DTOs, use:
 
 [source,bash]
 ----
-mvn test -Dskip.xjc
+mvn package -Dskip.xjc
 ----
 
-If you want to disable the generation of both the XSDs and  the DTOs, use:
+If you want to disable the generation of both the XSDs and the DTOs, use:
 
 [source,bash]
 ----
-mvn test -Dskip.xjc -Dskip.isis-xsd
+mvn package -Dskip.xjc -Dskip.isis-xsd
 ----
 
 
