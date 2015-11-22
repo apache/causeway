@@ -66,7 +66,9 @@ public class Dto_downloadXsd {
 
     )
     @MemberOrder(sequence = "500.2")
-    public Object $$(final String fileName, final JaxbService.IsisSchemas isisSchemas) {
+    public Object $$(
+            final String fileName,
+            final JaxbService.IsisSchemas isisSchemas) {
 
         final Map<String, String> map = jaxbService.toXsd(dto, isisSchemas);
 
