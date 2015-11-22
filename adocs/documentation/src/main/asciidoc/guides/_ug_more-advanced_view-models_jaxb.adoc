@@ -126,9 +126,9 @@ for `v1_0`:
 [source,java]
 ----
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://viewmodels.app.todoapp/todoitem/v1_1/todoitem.xsd",         // <1>
+        namespace = "http://viewmodels.app.todoapp/todoitem/v1_1/todoitem.xsd",         <!--1-->
         xmlns = {
-                @javax.xml.bind.annotation.XmlNs(                                       // <2>
+                @javax.xml.bind.annotation.XmlNs(                                       <!--2-->
                         namespaceURI = "http://isis.apache.org/schema/common",
                         prefix = "common"
                 ),
