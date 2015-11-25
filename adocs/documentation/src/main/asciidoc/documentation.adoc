@@ -45,10 +45,10 @@ pass:[<br/>]
 * *link:./cheat-sheet.html[Cheat Sheet]*
 * link:./icons.html[Icons]
 
-*Isis Add-ons*
+*3rd-party add-ons (not ASF)*
 
-* http://isisaddons.org[Isis addons] (not ASF)
-* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL] (not ASF)
+* http://isisaddons.org[Isis addons]
+* http://catalog.incode.org[Incode Catalog]
 
 
 |===
@@ -118,6 +118,9 @@ including:
 * http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
 * http://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * http://github.com/isisaddons/isis-app-quickstart[Quickstart]
+
+tools (not ASF):
+
 * http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
@@ -131,6 +134,7 @@ including:
 * link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
 * link:./books.html[Books]
 * link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
+* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL]
 //* link:./downloadable-presentations.html[Downloadable Presentations]
 
 
