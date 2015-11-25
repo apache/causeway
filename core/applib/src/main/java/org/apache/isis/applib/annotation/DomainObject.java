@@ -24,6 +24,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectLoadedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
+
 /**
  * Domain semantics for domain objects (entities and view models; for services see {@link org.apache.isis.applib.annotation.DomainService}).
  */
@@ -146,5 +154,88 @@ public @interface DomainObject {
      * The nature of this domain object.
      */
     Nature nature() default Nature.NOT_SPECIFIED;
+
+
+    // //////////////////////////////////////
+
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectCreatedEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectCreatedEvent<?>> createdLifecycleEvent() default ObjectCreatedEvent.Default.class;
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectPersistingEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectPersistingEvent<?>> persistingLifecycleEvent() default ObjectPersistingEvent.Default.class;
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectPersistedEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectPersistedEvent<?>> persistedLifecycleEvent() default ObjectPersistedEvent.Default.class;
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectLoadedEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectLoadedEvent<?>> loadedLifecycleEvent() default ObjectLoadedEvent.Default.class;
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectUpdatingEvent<?>> updatingLifecycleEvent() default ObjectUpdatingEvent.Default.class;
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectUpdatedEvent<?>> updatedLifecycleEvent() default ObjectUpdatedEvent.Default.class;
+
+
+    /**
+     * Indicates that the loading of the domain object should be posted to the
+     * {@link org.apache.isis.applib.services.eventbus.EventBusService event bus} using a custom (subclass of)
+     * {@link org.apache.isis.applib.services.eventbus.ObjectRemovingEvent}.
+     *
+     * <p>
+     * This subclass must provide a no-arg constructor; the fields are set reflectively.
+     * </p>
+     */
+    Class<? extends ObjectRemovingEvent<?>> removingLifecycleEvent() default ObjectRemovingEvent.Default.class;
+
 
 }

@@ -148,9 +148,6 @@ public abstract class ActionDomainEventFacetAbstract
         return value();
     }
 
-    /**
-     * For testing only.
-     */
     public Class<? extends ActionDomainEvent<?>> getEventType() {
         //noinspection unchecked
         return eventType();

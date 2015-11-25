@@ -34,6 +34,13 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.ObjectType;
 import org.apache.isis.applib.annotation.PublishedObject;
 import org.apache.isis.applib.services.HasTransactionId;
+import org.apache.isis.applib.services.eventbus.ObjectCreatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectLoadedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectPersistingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectRemovingEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatedEvent;
+import org.apache.isis.applib.services.eventbus.ObjectUpdatingEvent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
 import org.apache.isis.core.commons.lang.Nullable;
@@ -49,6 +56,13 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
 import org.apache.isis.core.metamodel.facets.object.audit.AuditableFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedLifecycleEventFacetForDomainObjectAnnotation;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingLifecycleEventFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForAuditedAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.auditing.AuditableFacetForDomainObjectAnnotation;
 import org.apache.isis.core.metamodel.facets.object.domainobject.autocomplete.AutoCompleteFacetForAutoCompleteAnnotation;
@@ -79,6 +93,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorVisiting;
 import org.apache.isis.core.metamodel.specloader.validator.ValidationFailures;
+import org.apache.isis.core.metamodel.util.EventUtil;
 import org.apache.isis.objectstore.jdo.metamodel.facets.object.persistencecapable.JdoPersistenceCapableFacet;
 
 
@@ -114,7 +129,10 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         processEditing(processClassContext);
         processObjectType(processClassContext);
         processNature(processClassContext);
+        processLifecycleEvents(processClassContext);
+
     }
+
 
     void processAuditing(final ProcessClassContext processClassContext) {
         final Class<?> cls = processClassContext.getCls();
@@ -292,6 +310,144 @@ public class DomainObjectAnnotationFacetFactory extends FacetFactoryAbstract
         FacetUtil.addFacet(mixinFacet);
     }
 
+
+    private void processLifecycleEvents(final ProcessClassContext processClassContext) {
+
+        final Class<?> cls = processClassContext.getCls();
+        final DomainObject domainObject = Annotations.getAnnotation(cls, DomainObject.class);
+        if(domainObject == null) {
+            return;
+        }
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
+        processLifecycleEventCreated(domainObject, holder);
+        processLifecycleEventLoaded(domainObject, holder);
+        processLifecycleEventPersisted(domainObject, holder);
+        processLifecycleEventPersisting(domainObject, holder);
+        processLifecycleEventRemoving(domainObject, holder);
+        processLifecycleEventUpdated(domainObject, holder);
+        processLifecycleEventUpdating(domainObject, holder);
+
+    }
+
+    private void processLifecycleEventCreated(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectCreatedEvent<?>> lifecycleEvent = domainObject.createdLifecycleEvent();
+
+        final CreatedLifecycleEventFacetForDomainObjectAnnotation facet =
+                new CreatedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectCreatedEvent.Noop.class,
+                ObjectCreatedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.createdLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventLoaded(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectLoadedEvent<?>> lifecycleEvent = domainObject.loadedLifecycleEvent();
+
+        final LoadedLifecycleEventFacetForDomainObjectAnnotation facet =
+                new LoadedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectLoadedEvent.Noop.class,
+                ObjectLoadedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.loadedLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventPersisting(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectPersistingEvent<?>> lifecycleEvent = domainObject.persistingLifecycleEvent();
+
+        final PersistingLifecycleEventFacetForDomainObjectAnnotation facet =
+                new PersistingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectPersistingEvent.Noop.class,
+                ObjectPersistingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.persistingLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventPersisted(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectPersistedEvent<?>> lifecycleEvent = domainObject.persistedLifecycleEvent();
+
+        final PersistedLifecycleEventFacetForDomainObjectAnnotation facet =
+                new PersistedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectPersistedEvent.Noop.class,
+                ObjectPersistedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.persistedLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventRemoving(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectRemovingEvent<?>> lifecycleEvent = domainObject.removingLifecycleEvent();
+
+        final RemovingLifecycleEventFacetForDomainObjectAnnotation facet =
+                new RemovingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectRemovingEvent.Noop.class,
+                ObjectRemovingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.removingLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventUpdated(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectUpdatedEvent<?>> lifecycleEvent = domainObject.updatedLifecycleEvent();
+
+        final UpdatedLifecycleEventFacetForDomainObjectAnnotation facet =
+                new UpdatedLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectUpdatedEvent.Noop.class,
+                ObjectUpdatedEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
+
+    private void processLifecycleEventUpdating(final DomainObject domainObject, final FacetHolder holder) {
+        final Class<? extends ObjectUpdatingEvent<?>> lifecycleEvent = domainObject.updatingLifecycleEvent();
+
+        final UpdatingLifecycleEventFacetForDomainObjectAnnotation facet =
+                new UpdatingLifecycleEventFacetForDomainObjectAnnotation(
+                        holder, lifecycleEvent, getSpecificationLoader());
+
+        if(EventUtil.eventTypeIsPostable(
+                facet.getEventType(),
+                ObjectUpdatingEvent.Noop.class,
+                ObjectUpdatingEvent.Default.class,
+                "isis.reflector.facet.domainObjectAnnotation.updatingLifecycleEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(facet);
+        }
+    }
 
     // //////////////////////////////////////
 

@@ -27,10 +27,10 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCallbackViaSaveMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistedCallbackFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistingCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacetViaMethod;
 
 public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 

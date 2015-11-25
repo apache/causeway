@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.callbacks.remove.RemoveCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.remove.RemovedCallbackFacetViaMethod;
-import org.apache.isis.core.metamodel.facets.object.callbacks.remove.RemovingCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
 
 public class RemoveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 

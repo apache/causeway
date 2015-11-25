@@ -10,8 +10,10 @@ object (if possible). This is as an alternative to implementing
 xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`] reserved method.  (If `iconName()` is present, then
 it will take precedence).
 
-Subscribers subscribe through the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can
-optionally specify a title.
+Subscribers subscribe through the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] and can
+use obtain a reference to the domain object from the event.  From this they can, if they wish, specify an icon name for
+the domain object using the event's API.
+
 
 [NOTE]
 ====

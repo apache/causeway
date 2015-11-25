@@ -41,6 +41,12 @@ The table below summarizes the annotation's attributes.
 (`false`)
 |Whether the number of instances of this domain class is relatively small (a "bounded" set), such that instances could be selected from a drop-down list box or similar.
 
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_createdLifecycleEvent[`created-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectCreatedEvent` +
+(`ObjectCreatedEvent.Default`)
+|the event type to be posted to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance is created
 
 |xref:rg.adoc#_rg_annotations_manpage-DomainObject_editing[`editing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
@@ -58,6 +64,20 @@ The table below summarizes the annotation's attributes.
 |specify an alias for the domain class used to uniquely identify the object both within the Apache Isis runtime and externally
 
 
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistedLifecycleEvent[`persisted-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectPersistedEvent` +
+(`ObjectPersistedEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance has just been persisted
+
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistingLifecycleEvent[`persisting-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectPersistingEvent` +
+(`ObjectPersistingEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance is about to be persisted
+
 |xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`publishing()`]
 |`AS_CONFIGURED`, `ENABLED`, `DISABLED` +
 (`AS_CONFIGURED`)
@@ -68,6 +88,27 @@ The table below summarizes the annotation's attributes.
 `PayloadFactory()`
 |subtype of `PublishingPayloadFactory-` `ForObject` (none)
 |specifies that a custom implementation of `PublishingPayloadFactoryForObject` be used to create the (payload of the) published event representing the change to the object
+
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_removingLifecycleEvent[`removing-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectRemovingEvent` +
+(`ObjectRemovingEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance is about to be deleted
+
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatedLifecycleEvent[`updated-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectUpdatedEvent` +
+(`ObjectUpdatedEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance has just been updated
+
+|xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatingLifecycleEvent[`updating-` +
+`LifecycleEvent()`] +
+(`1.11.0-SNAPSHOT`)
+|subtype of `ObjectUpdatingEvent` +
+(`ObjectUpdatingEvent.Default`)
+|the event type to be posted (`1.11.0-SNAPSHOT`) to the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] whenever an instance is about to be updated
 
 |===
 
@@ -80,8 +121,9 @@ For example:
 @DomainObject(
     auditing=Auditing.ENABLED,
     autoCompleteRepository=CustomerRepository.class
-    editing=Editing.ENABLED,               // <1>
-    publishing=Publishing.ENABLED
+    editing=Editing.ENABLED,                            // <1>
+    updatedLifecycleEvent=Customer.UpdatedEvent.class
+
 )
 public class Customer {
     ...
@@ -94,10 +136,17 @@ public class Customer {
 include::_rg_annotations_manpage-DomainObject_auditing.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_autoCompleteRepository.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_bounded.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_createdLifecycleEvent.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_editing.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_loadedLifecycleEvent.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_nature.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_persistedLifecycleEvent.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_persistingLifecycleEvent.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_objectType.adoc[leveloffset=+1]
 include::_rg_annotations_manpage-DomainObject_publishing.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_removingLifecycleEvent.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_updatingLifecycleEvent.adoc[leveloffset=+1]
+include::_rg_annotations_manpage-DomainObject_updatedLifecycleEvent.adoc[leveloffset=+1]
 
 
 

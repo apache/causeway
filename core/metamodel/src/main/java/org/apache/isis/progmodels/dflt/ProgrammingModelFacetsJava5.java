@@ -66,12 +66,12 @@ import org.apache.isis.core.metamodel.facets.object.ViewModelSemanticCheckingFac
 import org.apache.isis.core.metamodel.facets.object.actionorder.annotation.ActionOrderFacetAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.audit.markerifc.AuditableFacetMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.bookmarkable.BookmarkPolicyFacetViaBookmarkableAnnotationFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.load.LoadCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.persist.PersistCallbackViaSaveMethodFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.remove.RemoveCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.update.UpdateCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LoadCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistCallbackViaSaveMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.boundedmarkerifc.ChoicesFacetFromBoundedMarkerInterfaceFactory;
 import org.apache.isis.core.metamodel.facets.object.choices.enums.EnumFacetUsingValueFacetUsingSemanticsProviderFactory;
 import org.apache.isis.core.metamodel.facets.object.cssclass.annotation.CssClassFacetOnTypeAnnotationFactory;
@@ -91,6 +91,7 @@ import org.apache.isis.core.metamodel.facets.object.hidden.method.HiddenObjectFa
 import org.apache.isis.core.metamodel.facets.object.icon.method.IconFacetMethodFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.ignore.annotation.RemoveSubscriberMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDatanucleusPersistableTypesFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.datanucleus.RemoveDnPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.ignore.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
@@ -236,6 +237,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         addFactory(RemoveGetClassMethodFacetFactory.class);
         addFactory(RemovePostConstructOrPreDestroyAnnotationMethodsFacetFactory.class);
         addFactory(RemoveProgrammaticOrIgnoreAnnotationMethodsFacetFactory.class);
+        addFactory(RemoveSubscriberMethodsFacetFactory.class);
 
         // come what may, we have to ignore the PersistenceCapable supertype.
         addFactory(RemoveJdoEnhancementTypesFacetFactory.class);

@@ -23,13 +23,15 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 
 |`isis.object.` +
 `editing`
-| `true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 |Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:rg.adoc#_rg_runtime_configuring-core_isis-objects-editing[below] for further discussion.
 
 
 |`isis.persistor.` +
 `disableConcurrencyChecking`
-| `true`,`false` (`false`)
+|`true`,`false` +
+(`false`)
 | Disables concurrency checking globally.  +
 
 Only intended for "emergency use" as a workaround while pending fix/patch to Apache Isis itself.  (Note that there is no "datanucleus" in the property).
@@ -37,18 +39,20 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 |`isis.reflector.facet.` +
 `actionAnnotation.` +
 `domainEvent.postForDefault`
-|`true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `collectionAnnotation.` +
 `domainEvent.postForDefault`
-|`true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `cssClass.patterns`
-|regex:css1,regex2:css2,...
+|regex:css1, regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
 
 See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
@@ -61,26 +65,96 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`createdLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`loadedLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`persistingLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`persistedLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`removingLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`updatingLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
+
+|`isis.reflector.facet.` +
+`domainObjectAnnotation.` +
+`updatedLifecycleEvent.` +
+`postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
+|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
+
+|`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`cssClassUiEvent.postForDefault`
-|`true`,`false` (`true`)
+`cssClassUiEvent.postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`iconUiEvent.postForDefault`
-|`true`,`false` (`true`)
+`iconUiEvent.postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
-`titleUiEvent.postForDefault`
-|`true`,`false` (`true`)
+`titleUiEvent.postForDefault` +
+(`1.11.0-SNAPSHOT`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `filterVisibility`
-| `true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 |Whether objects should be filtered for visibility. +
 
 See xref:rg.adoc#_rg_runtime_configuring-core_filterVisibility[section below] for further discussion.
@@ -88,7 +162,8 @@ See xref:rg.adoc#_rg_runtime_configuring-core_filterVisibility[section below] fo
 |`isis.reflector.facet.` +
 `propertyAnnotation.` +
 `domainEvent.postForDefault`
-|`true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 |Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
 |`isis.reflector.facets`
@@ -128,7 +203,8 @@ See xref:ug.adoc#_ug_extending_programming-model_custom-validator[Custom Validat
 
 |`isis.reflector.validator.` +
 `allowDeprecated`
-| `true`,`false` (`true`)
+|`true`,`false` +
+(`true`)
 | Whether deprecated annotations or naming conventions are tolerated or not.  If not, then a metamodel validation error will be triggered, meaning the app won't boot (fail-fast).
 
 
@@ -143,7 +219,8 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 
 |`isis.services.` +
 `audit.objects`
-| `all`, `none` (`all`)
+| `all`, `none` +
+(`all`)
 |Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 |`isis.services.` +
@@ -156,12 +233,14 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 
 |`isis.services.` +
 `container.disableAutoFlush`
-| `true`,`false` (`_false_`)
+|`true`,`false` +
+(`false`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 |`isis.services.` +
 `container.disableAutoFlush`
-| `true`,`false` (`_false_`)
+|`true`,`false` +
+(`false`)
 |Whether the `DomainObjectContainer` should automatically flush pending changes prior to querying (via `allMatches()`, `firstMatch()` and so on).
 
 
@@ -170,7 +249,8 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 `ContentNegotiation-` +
 `ServiceXRoDomainType` +
 .prettyPrint
-| `true`,`false` (depends)
+| `true`,`false` +
+(depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
 +
 If no configuration property is available, then the defaults is determined by the xref:rg.adoc#_rg_runtime_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
@@ -179,7 +259,8 @@ If no configuration property is available, then the defaults is determined by th
 
 | `isis.service.` +
 `email.tls.enabled`
-| `true`,`false` (`_true_`)
+|`true`,`false` +
+(`true`)
 |Whether to enable TLS for the email SMTP connection (used by xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
@@ -216,12 +297,14 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 
 | `isis.services.` +
 `eventbus.implementation` +
-| `guava`, `axon`, FQCN (`_guava_`)
+| `guava`, `axon`, +
+FQCN (`_guava_`)
 |which implementation to use by the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.allowLateRegistration` +
-| `true`, `false`, (`_false_`)
+|`true`,`false` +
+(`false`)
 |whether a domain service can register with the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
@@ -229,7 +312,8 @@ Since this almost certainly constitutes a bug in application code, by default th
 
 | `isis.services.` +
 `exceprecog.logRecognizedExceptions` +
-| `true`, `false`, (`_false_`)
+|`true`,`false` +
+(`false`)
 |whether recognized exceptions should also be logged. +
 
 Generally a recognized exception is one that is expected (for example a uniqueness constraint violated in the database) and which does not represent an error condition.  This property logs the exception anyway, useful for debugging.
@@ -238,7 +322,8 @@ Generally a recognized exception is one that is expected (for example a uniquene
 | `isis.services.` +
 `ExceptionRecognizerComposite-` +
 `ForJdoObjectStore.disable` +
-| `true`, `false`, (`_false_`)
+|`true`,`false` +
+(`false`)
 |whether to disable the default recognizers registered by `ExceptionRecognizerCompositeForJdoObjectStore`. +
 
 This implementation provides a default set of recognizers to convert RDBMS constraints into user-friendly messages.  In the (probably remote) chance that this functionality isn't required, they can be disabled through this flag.
@@ -246,7 +331,8 @@ This implementation provides a default set of recognizers to convert RDBMS const
 
 |`isis.services.` +
 `publish.objects`
-| `all`, `none` (`all`)
+| `all`, `none` +
+(`all`)
 |Whether changed objects should be automatically published (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 |`isis.services.` +
