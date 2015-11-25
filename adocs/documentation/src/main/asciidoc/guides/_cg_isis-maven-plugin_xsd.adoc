@@ -33,11 +33,10 @@ into DTOs.  The original view models and these DTOs are similar but not identica
 within the Isis application (they may reference underlying domain entities) whereas the DTO classes generated from the
 XSDs can be used standalone, eg by a Java subscriber running on an ESB such as Apache Camel.
 
-The diagram below shows how these different plugins fit together:
+The rest of this section explains how to configure a new `xsd` submodule that uses the `isis-maven-plugin` along with
+other standard plugins in order to generate both XSDs and DTOs.  The `pom.xml` described below uses Maven profiles
+to separate out these two responsibilities.
 
-image::{_imagesdir}maven-plugin/xsd-goal.png[width="800px",link="{_imagesdir}maven-plugin/xsd-goal.png"]
-
-The sections below explain in more detail how to configure the `xsd` plugin (and other plugins).
 
 [[_cg_isis-maven-plugin_xsd]]
 == `xsd` submodule
@@ -53,6 +52,11 @@ We recommend creating a new submodule that will perform the following build step
 +
 These are _not_ the same as the original view models; they are provided as a convenience for subscribers to marshall XML documents into Java classes, but running as a standalone process (not part of the Isis app)
 
+
+These two main responsibilities can then be placed into separate Maven profiles, for better modularity.  The diagram
+below shows the overall design:
+
+image::{_imagesdir}maven-plugin/xsd-goal.png[width="800px",link="{_imagesdir}maven-plugin/xsd-goal.png"]
 
 For example, here is the `pom.xml` file for the (non-ASF)
 http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app's `todoapp-xsd` submodule.
@@ -96,6 +100,9 @@ First, the usual boilerplate:
 <1> depends on the rest of the application's modules
 <2> XSD generation, to run the `xsd` goal and then assemble into a zip file; within a profile for modularity
 <3> XJC generation, to run the `xjc` to generate Java DTO classes from XSDs; within a profile for modularity
+
+
+
 
 
 
