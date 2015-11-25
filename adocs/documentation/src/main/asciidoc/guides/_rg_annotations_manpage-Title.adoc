@@ -13,16 +13,17 @@ For example:
 ----
 public void Customer {
     @Title(sequence="1.0")
-    public String lastName() { ... }
+    public String getLastName() { ... }     // <1>
     ...
     @Title(sequence="1.5", prepend=", ")
-    public String firstName() { ... }
+    public String getFirstName() { ... }
     ...
     @Title(sequence="1.7", append=".")
-    public String midInitial() { ... }
+    public String getMidInitial() { ... }
     ...
 }
 ----
+<1> backing field and setters omitted
 
 could be used to create names of the style "Bloggs, Joe K."
 
@@ -36,3 +37,26 @@ For viewers that support this annotation (for example, the Wicket
 viewer), this convention excludes any properties whose value is already
 present in the title column. This convention can be overridden using
 `@Hidden(where=Where.NOWHERE)`.
+
+== Lombok support
+
+If xref:cg.adoc#_cg_ide_project-lombok[Project Lombok] is being used, then `@Title` can be specified on the backing field.
+
+For example:
+
+[source,java]
+----
+public void Customer {
+    @Title(sequence="1.0")
+    @Getter @Setter
+    private String name;
+
+    @Title(sequence="1.5", prepend=", ")
+    @Getter @Setter
+    private String firstName;
+
+    @Title(sequence="1.7", append=".")
+    @Getter @Setter
+    private String midInitial;
+}
+----
