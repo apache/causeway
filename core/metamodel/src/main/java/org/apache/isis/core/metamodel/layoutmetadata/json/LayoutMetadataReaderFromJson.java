@@ -410,12 +410,16 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         if(blacklisted.contains(domainClass)) {
             return null;
         }
+
+        final String resourceName = domainClass.getSimpleName() + ".layout.json";
         try {
-            content = ClassExtensions.resourceContent(domainClass, ".layout.json");
+            content = ClassExtensions.resourceContentOf(domainClass, resourceName);
         } catch (IOException | IllegalArgumentException ex) {
 
             blacklisted.add(domainClass);
-            final String message = "Failed to locate " + domainClass.getName() + ".layout.json file (" + ex.getMessage() + ")";
+            final String message = String .format(
+                    "Failed to locate file %s (relative to %s.class); ex: %s)",
+                    resourceName, domainClass.getName(), ex.getMessage());
 
             LOG.debug(message);
             return null;
