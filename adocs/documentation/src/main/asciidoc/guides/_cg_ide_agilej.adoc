@@ -6,6 +6,11 @@
 :toc: right
 
 
+[NOTE]
+====
+This material does not constitute an endorsement; AgileJ Structure Views is not affiliated to Apache Software Foundation in any way.
+====
+
 link:http://www.agilej.com/[AgileJ Structure Views] is a commercial product to reverse engineer and visualize Java classes from source code.
 
 The key to using the tool is in developing a suitable filter script, a DSL.  You can use the following script as a starting point for visualizing Apache Isis domain models:
@@ -47,8 +52,4 @@ hide method lines
 
 For more information on AgileJ, see Paul Wells' 8-part tutorial series on Youtube; the first can be found link:https://www.youtube.com/watch?v=YrZQ7lMSsH0[here] (view the "show more" comments to click through to other parts).
 
-[NOTE]
-====
-This material does not constitute an endorsement; AgileJ is not affiliated to Apache Software Foundation in any way.
-====
 

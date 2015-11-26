@@ -5,4 +5,4 @@
 :_imagesdir: images/
 
 
-NOTE: TODO
+NOTE: TODO - the `org.apache.isis.applib.value.Clob` class.
