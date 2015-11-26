@@ -53,6 +53,9 @@ public abstract class ActionLinkFactoryAbstract implements ActionLinkFactory {
 
         final ActionModel actionModel = ActionModel.create(objectAdapter, action);
 
+        // this returns non-null if the action is no-arg and returns a URL or a Blob or a Clob.  Otherwise can use default handling
+        // TODO: the method looks at the actual compile-time return type; cannot see a way to check at runtime what is returned.
+        // TODO: see https://issues.apache.org/jira/browse/ISIS-1264 for further detail.
         final AjaxDeferredBehaviour ajaxDeferredBehaviour = determineDeferredBehaviour(action, actionModel);
 
         final AbstractLink link = new AjaxLink<Object>(linkId) {

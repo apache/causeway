@@ -18,9 +18,6 @@ package org.apache.isis.viewer.wicket.ui.actionresponse;
 
 import java.net.URL;
 
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.models.VoidModel;
-import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
@@ -30,6 +27,10 @@ import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
+
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.models.VoidModel;
+import org.apache.isis.viewer.wicket.ui.pages.voidreturn.VoidReturnPage;
 
 public enum ActionResultResponseHandlingStrategy {
     REDIRECT_TO_VOID {
@@ -55,10 +56,13 @@ public enum ActionResultResponseHandlingStrategy {
         public void handleResults(final Component component, final ActionResultResponse resultResponse) {
             RequestCycle requestCycle = component.getRequestCycle();
             AjaxRequestTarget target = requestCycle.find(AjaxRequestTarget.class);
+
             if (target == null) {
-                // normal (non-Ajax) request => just stream the Lob to the browser
+                // non-Ajax request => just stream the Lob to the browser
+                // or if this is a no-arg action, there also will be no parent for the component
                 requestCycle.scheduleRequestHandlerAfterCurrent(resultResponse.getHandler());
             } else {
+                // otherwise,
                 // Ajax request => respond with a redirect to be able to stream the Lob to the client
                 ResourceStreamRequestHandler scheduledHandler = (ResourceStreamRequestHandler) resultResponse.getHandler();
                 StreamAfterAjaxResponseBehavior streamingBehavior = new StreamAfterAjaxResponseBehavior(scheduledHandler);
@@ -66,6 +70,7 @@ public enum ActionResultResponseHandlingStrategy {
                 CharSequence callbackUrl = streamingBehavior.getCallbackUrl();
                 target.appendJavaScript("setTimeout(\"window.location.href='" + callbackUrl + "'\", 10);");
             }
+
         }
     },
     OPEN_URL_IN_BROWSER {

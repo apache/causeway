@@ -70,9 +70,8 @@ public final class BulkActionsLinkFactory implements ActionLinkFactory {
 
     @Override
     public LinkAndLabel newLink(
-            final ObjectAdapterMemento objectAdapterMemento,
-            final ObjectAction objectAction,
-            final String linkId) {
+            final String linkId, final ObjectAdapterMemento objectAdapterMemento,
+            final ObjectAction objectAction) {
 
         final ActionMemento actionMemento = new ActionMemento(objectAction);
         final AbstractLink link = new Link<Object>(linkId) {

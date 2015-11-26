@@ -48,9 +48,9 @@ public final class EntityActionLinkFactory extends ActionLinkFactoryAbstract {
 
     @Override
     public LinkAndLabel newLink(
+            final String linkId,
             final ObjectAdapterMemento adapterMemento,
-            final ObjectAction action,
-            final String linkId) {
+            final ObjectAction action) {
 
         final ObjectAdapter objectAdapter = adapterMemento.getObjectAdapter(ConcurrencyChecking.NO_CHECK);
         

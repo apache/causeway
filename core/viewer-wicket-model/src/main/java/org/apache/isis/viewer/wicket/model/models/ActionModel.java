@@ -51,7 +51,6 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.oid.OidMarshaller;
@@ -463,7 +462,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         final ObjectAdapter[] arguments = getArgumentsAsArray();
         final ObjectAction action = getActionMemento().getAction();
 
-        final AuthenticationSession session = getAuthenticationSession();
         final ObjectAdapter resultAdapter =
                 action.executeWithRuleChecking(
                         targetAdapter, arguments,

@@ -55,7 +55,7 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "800.1")
-    public Object $$(final String fileName) throws JAXBException, IOException {
+    public Clob $$(final String fileName) throws JAXBException, IOException {
 
         final Class<? extends Persistable> objClass = persistable.getClass();
         final String objClassName = objClass.getName();
@@ -65,7 +65,6 @@ public class Persistable_downloadJdoMetadata {
 
         return new Clob(Util.withSuffix(fileName, "jdo"), "text/xml", xml);
     }
-
 
     public String default0$$() {
         return Util.withSuffix(persistable.getClass().getName(), "jdo");

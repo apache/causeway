@@ -322,8 +322,8 @@ class CssMenuItem implements Serializable {
 
         // build the link
         final LinkAndLabel linkAndLabel = actionLinkFactory.newLink(
-                targetAdapterMemento, objectAction, PageAbstract.ID_MENU_LINK
-                );
+                PageAbstract.ID_MENU_LINK, targetAdapterMemento, objectAction
+        );
         if (linkAndLabel == null) {
             // can only get a null if invisible, so this should not happen given guard above
             return null;
