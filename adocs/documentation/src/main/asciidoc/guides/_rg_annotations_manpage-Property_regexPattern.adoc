@@ -6,7 +6,15 @@
 
 
 
-The `regexPattern()` attribute validates the contents of any string property with respect to a regular expression pattern. It is ignored if applied to properties of any other type. This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-Parameter_regexPattern[parameters].
+There are three attributes (as of `1.11.0-SNAPSHOT`, two in earlier releases) related to enforcing regular expressions:
+
+* The `regexPattern()` attribute validates the contents of any string property with respect to a regular expression pattern. It is ignored if applied to properties of any other type. This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-Parameter_regexPattern[parameters].
+
+* The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those
+that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
+
+* The related `regexPatternReplacement()` attribute (as of `1.11.0-SNAPSHOT`) specifies the error message to show if
+the provided argument does not match the regex pattern.
 
 For example:
 
@@ -15,14 +23,13 @@ For example:
 public class Customer {
     @Property(
         regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
-        regexPatternFlags=Pattern.CASE_INSENSITIVE
+        regexPatternFlags=Pattern.CASE_INSENSITIVE,
+        regexPatternReplacement = "Must be valid email address (containing a '@') symbol"   // <1>
     )
     public String getEmail() { ... }
 }
 ----
+<1> new in `1.11.0-SNAPSHOT`. Note that there is currently no i18n support for this phrase.
 
-
-
-The related `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
 
 
