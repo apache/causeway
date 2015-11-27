@@ -6,10 +6,15 @@
 
 
 
+There are three attributes related to enforcing regular expressions:
 
-The `regexPattern()` attribute validates the contents of any string parameter with respect to a regular expression pattern. It is ignored if applied to parameters of any other type. This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-Property_regexPattern[properties].
+* The `regexPattern()` attribute validates the contents of any string parameter with respect to a regular expression pattern. It is ignored if applied to parameters of any other type. This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-Property_regexPattern[properties].
 
-The related `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
+* The `regexPatternFlags()` attribute specifies flags that modify the handling of the pattern.  The values are those
+that would normally be passed to `java.util.regex.Pattern#compile(String,int)`.
+
+* The related `regexPatternReplacement()` attribute (as of `1.11.0-SNAPSHOT`) specifies the error message to show if
+the provided argument does not match the regex pattern.
 
 For example:
 
@@ -19,7 +24,8 @@ public class Customer {
     public void updateEmail(
             @Parameter(
                 regexPattern = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+",
-                regexPatternFlags=Pattern.CASE_INSENSITIVE
+                regexPatternFlags = Pattern.CASE_INSENSITIVE,
+                regexPatternReplacement = "Must be valid email address (containing a '@') symbol"   // <1>
             )
             @ParameterLayout(named = "Email")
             final String email) {
@@ -27,5 +33,5 @@ public class Customer {
     }
 )
 ----
+<1> unused prior to `1.11.0-SNAPSHOT`. Note that there is currently no i18n support for this phrase.
 
-The related `regexPatternReplacement()` attribute is currently unused.

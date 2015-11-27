@@ -159,5 +159,9 @@ public @interface Property {
      */
     int regexPatternFlags() default 0;
 
+    /**
+     * Replacement text for the pattern in generated error message.
+     */
+    String regexPatternReplacement() default "Doesn't match pattern";
 
 }

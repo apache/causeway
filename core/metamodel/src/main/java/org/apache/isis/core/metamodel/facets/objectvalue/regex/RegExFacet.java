@@ -45,4 +45,5 @@ public interface RegExFacet extends MultipleValueFacet, ValidatingInteractionAdv
 
     public String format(String text);
 
+    public String replacement();
 }
