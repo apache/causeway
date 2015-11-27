@@ -48,13 +48,14 @@ public class RegExFacetForParameterAnnotation extends RegExFacetAbstract {
             return null;
         }
 
+        final String replacement = parameter.regexPatternReplacement();
         final int patternFlags = parameter.regexPatternFlags();
 
-        return new RegExFacetForParameterAnnotation(pattern, patternFlags, holder);
+        return new RegExFacetForParameterAnnotation(pattern, patternFlags, holder, replacement);
     }
 
-    private RegExFacetForParameterAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
-        super(pattern, "", false, holder);
+    private RegExFacetForParameterAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
+        super(pattern, "", false, holder, replacement);
         this.pattern = Pattern.compile(pattern, patternFlags);
     }
 

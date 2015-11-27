@@ -47,12 +47,13 @@ public class RegExFacetForRegExAnnotationOnProperty extends RegExFacetAbstract {
         final String validationExpression = annotation.validation();
         final boolean caseSensitive = annotation.caseSensitive();
         final String formatExpression = annotation.format();
+        final String replacement = "Doesn't match pattern";
 
-        return new RegExFacetForRegExAnnotationOnProperty(validationExpression, formatExpression, caseSensitive, holder);
+        return new RegExFacetForRegExAnnotationOnProperty(validationExpression, formatExpression, caseSensitive, holder, replacement);
     }
 
-    private RegExFacetForRegExAnnotationOnProperty(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder) {
-        super(validation, format, caseSensitive, holder);
+    private RegExFacetForRegExAnnotationOnProperty(final String validation, final String format, final boolean caseSensitive, final FacetHolder holder, final String replacement) {
+        super(validation, format, caseSensitive, holder, replacement);
         pattern = Pattern.compile(validation(), patternFlags());
     }
 

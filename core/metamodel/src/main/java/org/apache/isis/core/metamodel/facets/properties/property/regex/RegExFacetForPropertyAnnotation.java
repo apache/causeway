@@ -48,13 +48,15 @@ public class RegExFacetForPropertyAnnotation extends RegExFacetAbstract {
         if(Strings.isNullOrEmpty(pattern)) {
             return null;
         }
+
+        final String replacement = annotation.regexPatternReplacement();
         final int patternFlags = annotation.regexPatternFlags();
 
-        return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder);
+        return new RegExFacetForPropertyAnnotation(pattern, patternFlags, holder, replacement);
     }
 
-    private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder) {
-        super(pattern, "", (patternFlags & Pattern.CASE_INSENSITIVE) == Pattern.CASE_INSENSITIVE, holder);
+    private RegExFacetForPropertyAnnotation(final String pattern, final int patternFlags, final FacetHolder holder, final String replacement) {
+        super(pattern, "", (patternFlags & Pattern.CASE_INSENSITIVE) == Pattern.CASE_INSENSITIVE, holder, replacement);
         this.pattern = Pattern.compile(pattern, patternFlags);
     }
 
