@@ -37,6 +37,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAc
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
+import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationServiceForRestfulObjectsV1_0;
 
 @DomainService(
         nature = NatureOfService.DOMAIN

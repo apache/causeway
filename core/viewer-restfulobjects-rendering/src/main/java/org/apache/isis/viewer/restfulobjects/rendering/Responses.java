@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
@@ -34,13 +35,44 @@ public final class Responses {
         return of(RestfulResponse.HttpStatusCode.NO_CONTENT);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching) {
-        return ofOk(renderer, caching, null);
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching) {
+        return ofOk(renderer, caching, null, null);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final JsonRepresentation rootRepresentation) {
+        return ofOk(renderer, caching, null, rootRepresentation);
+    }
+
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final Version version) {
+        return ofOk(renderer, caching, version, null);
+    }
+
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final Version version,
+            final JsonRepresentation rootRepresentation) {
+
+        final JsonRepresentation representation = renderer.render();
+        // if a rootRepresentation is provided, then the assumption is that the rendered
+        // will be rendering to some submap of the rootRepresentation
+        final JsonRepresentation entityRepresentation =
+                rootRepresentation != null? rootRepresentation : representation;
+
         final MediaType mediaType = renderer.getMediaType();
-        final Response.ResponseBuilder response = of(RestfulResponse.HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(JsonWriterUtil.jsonFor(renderer.render()));
+        final Response.ResponseBuilder response =
+                of(RestfulResponse.HttpStatusCode.OK)
+                    .type(mediaType)
+                    .cacheControl(caching.getCacheControl())
+                    .entity(JsonWriterUtil.jsonFor(entityRepresentation));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 

@@ -14,14 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering.service;
+package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
@@ -31,8 +33,11 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
+import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectActionReprRenderer;
@@ -44,7 +49,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndPr
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -65,16 +70,35 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     public void shutdown() {
     }
 
+
     @Override
     public ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
             final ObjectAdapter objectAdapter) {
 
+        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        ensureCompatibleAcceptHeader(RepresentationType.DOMAIN_OBJECT, list);
+
+        final ResponseBuilder responseBuilder = buildResponseTo(
+                renderContext2, objectAdapter, JsonRepresentation.newMap(), null);
+
+        return responseBuilder(responseBuilder);
+    }
+
+    /**
+     * Not API
+     */
+    ResponseBuilder buildResponseTo(
+            final RepresentationService.Context2 renderContext2,
+            final ObjectAdapter objectAdapter,
+            final JsonRepresentation representation,
+            final JsonRepresentation rootRepresentation) {
+
         final DomainObjectReprRenderer renderer =
-                new DomainObjectReprRenderer(renderContext2, null, JsonRepresentation.newMap());
+                new DomainObjectReprRenderer(renderContext2, null, representation);
         renderer.with(objectAdapter).includesSelf();
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
         if(renderContext2 instanceof RepresentationService.Context6) {
             final RepresentationService.Context6 context6 = (RepresentationService.Context6) renderContext2;
@@ -88,14 +112,16 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
         if (version != null && version.getTime() != null) {
             responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
         }
-
-        return responseBuilder(responseBuilder);
+        return responseBuilder;
     }
 
     @Override
     public ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
             final ObjectAndProperty objectAndProperty) {
+
+        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, list);
 
         final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(renderContext2);
         renderer.with(objectAndProperty)
@@ -117,6 +143,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
             final RepresentationService.Context2 renderContext2,
             final ObjectAndCollection objectAndCollection) {
 
+        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        ensureCompatibleAcceptHeader(RepresentationType.OBJECT_COLLECTION, list);
+
         final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(renderContext2);
         renderer.with(objectAndCollection)
                 .usingLinkTo(renderContext2.getAdapterLinkTo());
@@ -137,6 +166,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
             final RepresentationService.Context2 renderContext2,
             final ObjectAndAction objectAndAction) {
 
+        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, list);
+
         final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(renderContext2);
         renderer.with(objectAndAction)
                 .usingLinkTo(renderContext2.getAdapterLinkTo())
@@ -151,6 +183,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     public ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
             final ObjectAndActionInvocation objectAndActionInvocation) {
+
+        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        ensureCompatibleAcceptHeader(RepresentationType.ACTION_RESULT, list);
 
         final ActionResultReprRenderer renderer = new ActionResultReprRenderer(renderContext2, objectAndActionInvocation.getSelfLink());
         renderer.with(objectAndActionInvocation)
@@ -167,6 +202,31 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      */
     protected ResponseBuilder responseBuilder(final ResponseBuilder responseBuilder) {
         return responseBuilder;
+    }
+
+
+
+    private void ensureCompatibleAcceptHeader(
+            final RepresentationType representationType,
+            final List<MediaType> acceptableMediaTypes) {
+        if (representationType == null) {
+            return;
+        }
+
+        // RestEasy will check the basic media types...
+        // ... so we just need to check the profile paramter
+        final String producedProfile = representationType.getMediaTypeProfile();
+        if(producedProfile != null) {
+            for (MediaType mediaType : acceptableMediaTypes ) {
+                String acceptedProfileValue = mediaType.getParameters().get("profile");
+                if(acceptedProfileValue == null) {
+                    continue;
+                }
+                if(!producedProfile.equals(acceptedProfileValue)) {
+                    throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_ACCEPTABLE);
+                }
+            }
+        }
     }
 
 

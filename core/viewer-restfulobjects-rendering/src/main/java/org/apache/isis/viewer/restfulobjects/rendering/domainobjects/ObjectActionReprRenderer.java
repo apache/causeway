@@ -43,8 +43,13 @@ public class ObjectActionReprRenderer extends AbstractObjectMemberReprRenderer<O
         this(rendererContext, null, null, JsonRepresentation.newMap());
     }
 
-    public ObjectActionReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollowSpecs, String actionId, final JsonRepresentation representation) {
-        super(rendererContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation, Where.OBJECT_FORMS);
+    public ObjectActionReprRenderer(
+            final RendererContext rendererContext,
+            final LinkFollowSpecs linkFollowSpecs,
+            String actionId,
+            final JsonRepresentation representation) {
+        super(rendererContext, linkFollowSpecs, actionId, RepresentationType.OBJECT_ACTION, representation,
+                Where.OBJECT_FORMS);
     }
 
     @Override

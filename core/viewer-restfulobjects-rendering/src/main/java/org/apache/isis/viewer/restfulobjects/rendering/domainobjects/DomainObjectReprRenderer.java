@@ -96,7 +96,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     private ObjectAdapter objectAdapter;
     private Mode mode = Mode.REGULAR;
 
-    public DomainObjectReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public DomainObjectReprRenderer(
+            final RendererContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, RepresentationType.DOMAIN_OBJECT, representation);
         usingLinkToBuilder(new DomainObjectLinkTo());
     }
@@ -182,7 +185,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap()
+            );
             renderer.with(objectAdapter);
             link.mapPut("value", renderer.render());
         }
@@ -257,7 +261,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             final OneToOneAssociation property = (OneToOneAssociation) assoc;
             final LinkFollowSpecs linkFollowerForProp = getLinkFollowSpecs().follow("members[" + property.getId() + "]");
-            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(getRendererContext(), linkFollowerForProp, property.getId(), JsonRepresentation.newMap());
+            final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
+            final ObjectPropertyReprRenderer renderer =
+                    new ObjectPropertyReprRenderer(getRendererContext(), linkFollowerForProp, property.getId(), propertyRepresentation);
             renderer.with(new ObjectAndProperty(objectAdapter, property)).usingLinkTo(linkToBuilder);
 
             if (mode.isArgs()) {
@@ -293,7 +299,9 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
             final LinkFollowSpecs linkFollowerForColl = getLinkFollowSpecs().follow(
                     "members[" + collection.getId() + "]");
-            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), linkFollowerForColl, collection.getId(), JsonRepresentation.newMap());
+            final JsonRepresentation collectionRepresentation = JsonRepresentation.newMap();
+            final ObjectCollectionReprRenderer renderer =
+                    new ObjectCollectionReprRenderer(getRendererContext(), linkFollowerForColl, collection.getId(), collectionRepresentation);
 
             renderer.with(new ObjectAndCollection(objectAdapter, collection)).usingLinkTo(linkToBuilder);
             if(mode.isEventSerialization()) {
@@ -327,7 +335,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(objectAdapter.getSpecification().containsDoOpFacet(NotPersistableFacet.class)) {
             return;
         }
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap()
+        );
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
         final String domainType = objectAdapter.getSpecification().getSpecId().asString();
@@ -364,7 +373,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return;
         }
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
+        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap()
+        );
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
         if(!getRendererContext().suppressUpdateLink()) {

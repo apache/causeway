@@ -142,7 +142,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         {
             // object
             if(returnedAdapter != null) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result);
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result
+                );
                 
                 renderer.with(returnedAdapter).includesSelf();
                 

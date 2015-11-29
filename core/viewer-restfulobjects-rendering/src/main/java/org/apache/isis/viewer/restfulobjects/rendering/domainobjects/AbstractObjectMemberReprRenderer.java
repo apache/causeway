@@ -78,7 +78,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
      * <p>
      * Used to determine whether to follow links; only populated for {@link Mode#INLINE inline} Mode.
      */
-    private final String memberId;
+    private String memberId;
     private final Where where;
 
     public AbstractObjectMemberReprRenderer(
@@ -103,6 +103,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         this.objectAdapter = objectAndMember.getObjectAdapter();
         this.objectMember = objectAndMember.getMember();
         this.objectMemberType = MemberType.determineFrom(objectMember);
+        this.memberId = objectMember.getId();
         usingLinkTo(new DomainObjectLinkTo());
 
         return cast(this);
@@ -262,7 +263,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         
         // create a temporary map that looks the same as the member map we'll be following
         final JsonRepresentation memberMap = JsonRepresentation.newMap();
-        memberMap.mapPut(getMemberId(), this.representation);
+        memberMap.mapPut(getMemberId(), representation);
         if (membersLinkFollower.matches(memberMap) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }

@@ -18,8 +18,6 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,65 +25,109 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.DomainServiceLayout;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
-import org.apache.isis.viewer.restfulobjects.rendering.Caching;
-import org.apache.isis.viewer.restfulobjects.rendering.Responses;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+@DomainServiceLayout(
+        menuOrder = "1500"
+)
 public class ContentNegotiationServiceSimplified extends ContentNegotiationServiceAbstract {
 
-    private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
     private static final String ACCEPT_OBJECT = "urn:org.apache.isis:repr-types/object/v1";
+
+    private ContentNegotiationServiceForRestfulObjectsV1_0 restfulObjectsV1_0 = new ContentNegotiationServiceForRestfulObjectsV1_0();
 
     public Response.ResponseBuilder buildResponse(
             final RepresentationService.Context2 renderContext2,
             final ObjectAdapter objectAdapter) {
 
-        final RepresentationType representationType = RepresentationType.DOMAIN_OBJECT;
         final List<MediaType> acceptableMediaTypes = renderContext2.getAcceptableMediaTypes();
 
-        boolean canAccept = canAccept(representationType, acceptableMediaTypes, ACCEPT_OBJECT);
+        boolean canAccept = canAccept(acceptableMediaTypes, ACCEPT_OBJECT);
         if(!canAccept) {
             return null;
         }
 
-        JsonRepresentation representation = JsonRepresentation.newMap();
+        final InteractionInitiatedBy interactionInitiatedBy =
+                determineInteractionInitiatedByFrom(renderContext2);
+        final Where where = renderContext2.getWhere();
+
+        final JsonRepresentation rootRepresentation = JsonRepresentation.newMap();
 
         List<OneToOneAssociation> properties = objectAdapter.getSpecification().getProperties(Contributed.INCLUDED);
-        for (OneToOneAssociation property : properties) {
-            Consent visibility = property.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.ANYWHERE);
-            if(visibility.isAllowed()) {
+        for (final OneToOneAssociation property : properties) {
 
+            final Consent visibility = property.isVisible(objectAdapter, interactionInitiatedBy, where);
+            if (!visibility.isAllowed()) {
+                continue;
             }
+
+            final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
+            final ObjectPropertyReprRenderer renderer =
+                    new ObjectPropertyReprRenderer(renderContext2, null, property.getId(), propertyRepresentation);
+            renderer.with(new ObjectAndProperty(objectAdapter, property));
+
+            final JsonRepresentation propertyValueRepresentation = renderer.render();
+            rootRepresentation.mapPut(property.getId(), propertyValueRepresentation.getRepresentation("value"));
         }
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(renderContext2, null, representation);
+        List<OneToManyAssociation> collections = objectAdapter.getSpecification().getCollections(Contributed.INCLUDED);
+        for (final OneToManyAssociation collection : collections) {
 
-        renderer.with(objectAdapter).includesSelf();
+            final Consent visibility = collection.isVisible(objectAdapter, interactionInitiatedBy, where);
+            if (!visibility.isAllowed()) {
+                continue;
+            }
 
-        final Response.ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
+            final JsonRepresentation propertyRepresentation = JsonRepresentation.newMap();
+            final ObjectCollectionReprRenderer renderer =
+                    new ObjectCollectionReprRenderer(renderContext2, null, collection.getId(), propertyRepresentation);
+            renderer.with(new ObjectAndCollection(objectAdapter, collection));
 
-        final Version version = objectAdapter.getVersion();
-        if (version != null && version.getTime() != null) {
-            responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
+            final JsonRepresentation collectionValueRepresentation = renderer.render();
+            rootRepresentation.mapPut(collection.getId(), collectionValueRepresentation);
         }
 
-        return null;
+
+        final JsonRepresentation $$roRepresentation = JsonRepresentation.newMap();
+        rootRepresentation.mapPut("$$ro", $$roRepresentation);
+
+        final Response.ResponseBuilder responseBuilder =
+                restfulObjectsV1_0.buildResponseTo(
+                        renderContext2, objectAdapter, $$roRepresentation, rootRepresentation);
+
+        return responseBuilder(responseBuilder);
+    }
+
+    private static InteractionInitiatedBy determineInteractionInitiatedByFrom(
+            final RendererContext rendererContext) {
+        if (rendererContext instanceof RepresentationService.Context4) {
+            return ((RepresentationService.Context4) rendererContext).getInteractionInitiatedBy();
+        } else {
+            // fallback
+            return InteractionInitiatedBy.USER;
+        }
     }
 
     @Programmatic
@@ -114,6 +156,13 @@ public class ContentNegotiationServiceSimplified extends ContentNegotiationServi
             final RepresentationService.Context2 renderContext2,
             final ObjectAndActionInvocation objectAndActionInvocation) {
         return null;
+    }
+
+    /**
+     * For easy subclassing to further customize, eg additional headers
+     */
+    protected Response.ResponseBuilder responseBuilder(final Response.ResponseBuilder responseBuilder) {
+        return responseBuilder;
     }
 
     @Inject

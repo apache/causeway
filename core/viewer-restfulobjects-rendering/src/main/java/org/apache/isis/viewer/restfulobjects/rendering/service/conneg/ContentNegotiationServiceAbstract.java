@@ -33,7 +33,6 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
@@ -131,15 +130,12 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
     }
 
     protected boolean canAccept(
-            final RepresentationType representationType,
             final List<MediaType> acceptableMediaTypes,
             final String profileValue) {
         for (MediaType mediaType : acceptableMediaTypes) {
-            if(representationType.matchesJsonProfile(mediaType)) {
-                final String paramValue = mediaType.getParameters().get("profile");
-                if (Objects.equals(paramValue, profileValue)) {
-                    return true;
-                }
+            final String paramValue = mediaType.getParameters().get("profile");
+            if (Objects.equals(paramValue, profileValue)) {
+                return true;
             }
         }
         return false;
