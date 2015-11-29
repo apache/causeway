@@ -18,13 +18,16 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 /**
  * TODO: roll-up in the future (introduced only so that API does not break)
  */
-public interface RendererContext4 extends RendererContext3 {
+public interface RendererContext6 extends RendererContext5 {
 
-    InteractionInitiatedBy getInteractionInitiatedBy();
+    /**
+     * Applies only when rendering a domain object.
+     */
+    RepresentationService.Intent getIntent();
 
 }

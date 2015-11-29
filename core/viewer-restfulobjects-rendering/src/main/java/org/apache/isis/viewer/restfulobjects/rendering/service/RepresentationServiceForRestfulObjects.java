@@ -16,32 +16,26 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
+import com.google.common.base.Function;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
-import org.apache.isis.viewer.restfulobjects.rendering.Caching;
-import org.apache.isis.viewer.restfulobjects.rendering.Responses;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer.SelfLink;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprMode;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectActionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectCollectionReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectPropertyReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNegotiationService;
 
 @DomainService(
@@ -49,66 +43,43 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.conneg.ContentNeg
 )
 public class RepresentationServiceForRestfulObjects implements RepresentationService {
 
-    private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
-    // //////////////////////////////////////////////////////////////
-    // objectRepresentation
-    // //////////////////////////////////////////////////////////////
+    @PostConstruct
+    public void init(final Map<String, String> properties) {
+
+    }
+
 
     @Override
     @Programmatic
     public Response objectRepresentation(
             final Context rendererContext,
             final ObjectAdapter objectAdapter) {
-        return objectRepresentation(rendererContext, objectAdapter, Intent.ALREADY_PERSISTENT);
+
+        final Context2 renderContext2 = asContext2(rendererContext);
+        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
+            @Override
+            public ResponseBuilder apply(final ContentNegotiationService connegService) {
+                return connegService.buildResponse(renderContext2, objectAdapter);
+            }
+        });
+
+        assertContentNegotiationServiceHandled(responseBuilder);
+        return buildResponse(responseBuilder);
     }
 
+    /**
+     * @deprecated - use {@link #objectRepresentation(Context, ObjectAdapter, Intent)}
+     */
+    @Deprecated
     @Override
     @Programmatic
     public Response objectRepresentation(
             final Context rendererContext,
             final ObjectAdapter objectAdapter,
-            final Intent intent) {
-
-        ResponseBuilder responseBuilder = null;
-
-        if(rendererContext instanceof Context2) {
-            final Context2 renderContext2 = (Context2) rendererContext;
-
-            final List<ContentNegotiationService> contentNegotiationServices =
-                    lookupService(renderContext2, ContentNegotiationService.class);
-            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAdapter);
-                if(responseBuilder != null) {
-                    break;
-                }
-            }
-        }
-
-        if (responseBuilder == null) {
-            // fall through
-            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, JsonRepresentation.newMap());
-
-            renderer.with(objectAdapter).includesSelf();
-
-            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-
-            final Version version = objectAdapter.getVersion();
-            if (version != null && version.getTime() != null) {
-                responseBuilder.tag(ETAG_FORMAT.format(version.getTime()));
-            }
-        }
-
-        if(intent == Intent.JUST_CREATED) {
-            responseBuilder.status(Response.Status.CREATED);
-        }
-
-        return buildResponse(responseBuilder);
+            final Intent unused) {
+        return objectRepresentation(rendererContext, objectAdapter);
     }
-
-    // //////////////////////////////////////////////////////////////
-    // propertyDetails
-    // //////////////////////////////////////////////////////////////
 
 
     @Override
@@ -118,38 +89,18 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndProperty objectAndProperty,
             final MemberReprMode memberReprMode) {
 
-        ResponseBuilder responseBuilder = null;
-
-        if(rendererContext instanceof Context2) {
-            final Context2 renderContext2 = (Context2) rendererContext;
-
-            final List<ContentNegotiationService> contentNegotiationServices =
-                    lookupService(renderContext2, ContentNegotiationService.class);
-            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndProperty);
-                if(responseBuilder != null) {
-                    break;
-                }
+        final Context2 renderContext2 = asContext2(rendererContext);
+        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
+            @Override
+            public ResponseBuilder apply(final ContentNegotiationService connegService) {
+                return connegService.buildResponse(renderContext2, objectAndProperty);
             }
-        }
+        });
 
-        if(responseBuilder == null) {
-            // fall through
-
-            final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
-            renderer.with(objectAndProperty)
-                    .usingLinkTo(rendererContext.getAdapterLinkTo())
-                    .withMemberMode(memberReprMode);
-
-            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-        }
-
+        assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
     }
 
-    // //////////////////////////////////////////////////////////////
-    // collectionDetails
-    // //////////////////////////////////////////////////////////////
 
     @Override
     @Programmatic
@@ -158,38 +109,20 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndCollection objectAndCollection,
             final MemberReprMode memberReprMode) {
 
-        ResponseBuilder responseBuilder = null;
-
-        if(rendererContext instanceof Context2) {
-            final Context2 renderContext2 = (Context2) rendererContext;
-
-            final List<ContentNegotiationService> contentNegotiationServices =
-                    lookupService(renderContext2, ContentNegotiationService.class);
-            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndCollection);
-                if(responseBuilder != null) {
-                    break;
-                }
+        final Context2 renderContext2 = asContext2(rendererContext);
+        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
+            @Override
+            public ResponseBuilder apply(final ContentNegotiationService connegService) {
+                return connegService.buildResponse(renderContext2, objectAndCollection);
             }
-        }
+        });
 
-        if(responseBuilder == null) {
-            // fall through
-            final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(rendererContext);
-            renderer.with(objectAndCollection)
-                    .usingLinkTo(rendererContext.getAdapterLinkTo())
-                    .withMemberMode(memberReprMode);
-
-            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-        }
-
-
+        assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
     }
 
-    // //////////////////////////////////////////////////////////////
-    // action Prompt
-    // //////////////////////////////////////////////////////////////
+
+
 
     @Override
     @Programmatic
@@ -197,38 +130,18 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final Context rendererContext,
             final ObjectAndAction objectAndAction) {
 
-        ResponseBuilder responseBuilder = null;
-
-        if(rendererContext instanceof Context2) {
-            final Context2 renderContext2 = (Context2) rendererContext;
-
-            final List<ContentNegotiationService> contentNegotiationServices =
-                    lookupService(renderContext2, ContentNegotiationService.class);
-            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndAction);
-                if(responseBuilder != null) {
-                    break;
-                }
+        final Context2 renderContext2 = asContext2(rendererContext);
+        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
+            @Override
+            public ResponseBuilder apply(final ContentNegotiationService connegService) {
+                return connegService.buildResponse(renderContext2, objectAndAction);
             }
-        }
+        });
 
-        if(responseBuilder == null) {
-            // fall through
-            final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
-            renderer.with(objectAndAction)
-                    .usingLinkTo(rendererContext.getAdapterLinkTo())
-                    .asStandalone();
-
-            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-        }
-
-
+        assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
     }
 
-    // //////////////////////////////////////////////////////////////
-    // action Result
-    // //////////////////////////////////////////////////////////////
 
     @Override
     @Programmatic
@@ -237,43 +150,65 @@ public class RepresentationServiceForRestfulObjects implements RepresentationSer
             final ObjectAndActionInvocation objectAndActionInvocation,
             final SelfLink selfLink) {
 
-        ResponseBuilder responseBuilder = null;
-
-        if(rendererContext instanceof Context2) {
-            final Context2 renderContext2 = (Context2) rendererContext;
-
-            final List<ContentNegotiationService> contentNegotiationServices =
-                    lookupService(renderContext2, ContentNegotiationService.class);
-            for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-                responseBuilder = contentNegotiationService.buildResponse(renderContext2, objectAndActionInvocation);
-                if(responseBuilder != null) {
-                    break;
-                }
+        final Context2 renderContext2 = asContext2(rendererContext);
+        final ResponseBuilder responseBuilder = buildResponse(new Function<ContentNegotiationService, ResponseBuilder>() {
+            @Override
+            public ResponseBuilder apply(final ContentNegotiationService connegService) {
+                return connegService.buildResponse(renderContext2, objectAndActionInvocation);
             }
-        }
+        });
 
-        if (responseBuilder == null) {
-            // fall through
-            final ActionResultReprRenderer renderer = new ActionResultReprRenderer(rendererContext, selfLink);
-            renderer.with(objectAndActionInvocation)
-                    .using(rendererContext.getAdapterLinkTo());
-
-            responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-            Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
-        }
-
+        assertContentNegotiationServiceHandled(responseBuilder);
         return buildResponse(responseBuilder);
     }
 
-    protected <T> List<T> lookupService(final Context2 renderContext2, final Class<T> serviceClass) {
-        return renderContext2.getPersistenceSession().getServicesInjector().lookupServices(serviceClass);
+    private Context2 asContext2(final Context rendererContext) {
+        if (rendererContext instanceof Context2) {
+            final Context2 context = (Context2) rendererContext;
+            return context;
+        }
+        throw new IllegalArgumentException(String.format(
+                "The %s requires that the context to implement %s",
+                RepresentationServiceForRestfulObjects.class.getSimpleName(), Context2.class.getName()));
+    }
+
+    void assertContentNegotiationServiceHandled(final ResponseBuilder responseBuilder) {
+        if (responseBuilder == null) {
+            throw new IllegalStateException("Could not locate " + ContentNegotiationService.class.getSimpleName() + " to handle request");
+        }
     }
 
     /**
-     * Overridable to allow further customization.
+     * Iterates over all {@link #contentNegotiationServices injected} {@link ContentNegotiationService}s to find one
+     * that returns a {@link ResponseBuilder} using the provided function.
+     *
+     * <p>
+     *     There will always be at least one such service, namely the
+     *     {@link ContentNegotiationServiceForRestfulObjectsV1_0}.
+     * </p>
+     *
+     * @param connegServiceBuildResponse - the function to ask of the {@link ContentNegotiationService}.
+     */
+    ResponseBuilder buildResponse(
+            final Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
+        ResponseBuilder responseBuilder = null;
+        for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
+            responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
+            if(responseBuilder != null) {
+                return responseBuilder;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Overriddable to allow further customization.
      */
     protected Response buildResponse(final ResponseBuilder responseBuilder) {
         return responseBuilder.build();
     }
 
+
+    @Inject
+    List<ContentNegotiationService> contentNegotiationServices;
 }

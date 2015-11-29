@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoader;
  */
 public interface RendererContext5 extends RendererContext4 {
 
-    public SpecificationLoader getSpecificationLoader();
-    public ServicesInjector getServicesInjector();
+    SpecificationLoader getSpecificationLoader();
+    ServicesInjector getServicesInjector();
 
 }

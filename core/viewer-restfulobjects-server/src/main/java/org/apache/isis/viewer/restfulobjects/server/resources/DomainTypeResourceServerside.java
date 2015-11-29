@@ -48,6 +48,7 @@ import org.apache.isis.viewer.restfulobjects.applib.util.UrlEncodingUtils;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.LinkBuilder;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
+import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ActionParameterDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDescriptionReprRenderer;
@@ -59,7 +60,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.ParentSpecAnd
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.PropertyDescriptionReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.TypeListReprRenderer;
-import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.util.UrlParserUtils;
 
@@ -77,7 +78,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_TYPE_LIST })
     public Response domainTypes() {
         final RepresentationType representationType = RepresentationType.TYPE_LIST;
-        init(representationType, Where.ANYWHERE);
+        init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
 
@@ -93,7 +94,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_DOMAIN_TYPE })
     public Response domainType(@PathParam("domainType") final String domainType) {
 
-        init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE);
+        init(RepresentationType.DOMAIN_TYPE, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ObjectSpecification objectSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
 
@@ -109,7 +110,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_PROPERTY_DESCRIPTION })
     public Response typeProperty(@PathParam("domainType") final String domainType, @PathParam("propertyId") final String propertyId) {
         final RepresentationType representationType = RepresentationType.PROPERTY_DESCRIPTION;
-        init(representationType, Where.ANYWHERE);
+        init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -134,7 +135,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_COLLECTION_DESCRIPTION })
     public Response typeCollection(@PathParam("domainType") final String domainType, @PathParam("collectionId") final String collectionId) {
         final RepresentationType representationType = RepresentationType.COLLECTION_DESCRIPTION;
-        init(representationType, Where.ANYWHERE);
+        init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -159,7 +160,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_DESCRIPTION })
     public Response typeAction(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId) {
         final RepresentationType representationType = RepresentationType.ACTION_DESCRIPTION;
-        init(representationType, Where.ANYWHERE);
+        init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -184,7 +185,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_ACTION_PARAMETER_DESCRIPTION })
     public Response typeActionParam(@PathParam("domainType") final String domainType, @PathParam("actionId") final String actionId, @PathParam("paramName") final String paramName) {
         final RepresentationType representationType = RepresentationType.ACTION_PARAMETER_DESCRIPTION;
-        init(representationType, Where.ANYWHERE);
+        init(representationType, Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final ObjectSpecification parentSpec = getSpecificationLoader().lookupBySpecId(ObjectSpecId.of(domainType));
         if (parentSpec == null) {
@@ -218,7 +219,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("supertype") final String superTypeStr, // simple style
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
-        init(Where.ANYWHERE);
+        init(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final String supertype = domainTypeFor(superTypeStr, argsUrlEncoded, "supertype");
 
@@ -249,7 +250,7 @@ public class DomainTypeResourceServerside extends ResourceAbstract implements Do
             @QueryParam("args") final String argsUrlEncoded // formal style
             ) {
 
-        init(Where.ANYWHERE);
+        init(Where.ANYWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final String subtype = domainTypeFor(subTypeStr, argsUrlEncoded, "subtype");
 

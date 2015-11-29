@@ -52,11 +52,12 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext5;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext5 {
+public class ResourceContext implements RendererContext6 {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -77,6 +78,7 @@ public class ResourceContext implements RendererContext5 {
     private List<List<String>> followLinks;
 
     private final Where where;
+    private final RepresentationService.Intent intent;
     private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
 
@@ -91,6 +93,7 @@ public class ResourceContext implements RendererContext5 {
             final UriInfo uriInfo,
             final Request request,
             final Where where,
+            final RepresentationService.Intent intent,
             final String urlUnencodedQueryStringIfAny,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
@@ -108,6 +111,8 @@ public class ResourceContext implements RendererContext5 {
         this.providers = providers;
         this.uriInfo = uriInfo;
         this.request = request;
+        this.where = where;
+        this.intent = intent;
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
@@ -118,7 +123,6 @@ public class ResourceContext implements RendererContext5 {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
-        this.where = where;
         this.deploymentType = deploymentType;
         this.interactionInitiatedBy = interactionInitiatedBy;
 
@@ -330,6 +334,14 @@ public class ResourceContext implements RendererContext5 {
         return where;
     }
 
+    /**
+     * Only applies to rendering of objects
+     * @return
+     */
+    @Override
+    public RepresentationService.Intent getIntent() {
+        return intent;
+    }
 
     //region > canEagerlyRender
     private Set<Oid> rendered = Sets.newHashSet();
@@ -399,6 +411,5 @@ public class ResourceContext implements RendererContext5 {
     public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
-
 
 }

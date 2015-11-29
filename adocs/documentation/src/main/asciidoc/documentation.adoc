@@ -144,6 +144,9 @@ tools (not ASF):
 * link:release-notes.html[Release Notes]
 * link:migration-notes.html[Migration Notes]
 
+*Get involved!*
+
+* Our link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[*Kanban board*] maps out the JIRA issues we are looking to tackle in the next few releases
 
 |====
 

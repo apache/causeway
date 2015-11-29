@@ -38,7 +38,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext5;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ActionResultReprRenderer;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjectLinkTo;
@@ -47,22 +47,24 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapt
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 
 public class DomainResourceHelper {
 
-    static class RepresentationServiceContextAdapter implements RepresentationService.Context5 {
+    static class RepresentationServiceContextAdapter implements RepresentationService.Context6 {
 
-        private final RendererContext5 rendererContext;
+        private final RendererContext6 rendererContext;
         private final ObjectAdapterLinkTo adapterLinkTo;
+        private RepresentationService.Intent intent;
 
         RepresentationServiceContextAdapter(
-                final RendererContext5 rendererContext,
+                final RendererContext6 rendererContext,
                 final ObjectAdapterLinkTo adapterLinkTo) {
             this.rendererContext = rendererContext;
             this.adapterLinkTo = adapterLinkTo;
+            this.intent = rendererContext.getIntent();
         }
 
         @Override
@@ -179,28 +181,34 @@ public class DomainResourceHelper {
         public ServicesInjector getServicesInjector() {
             return rendererContext.getServicesInjector();
         }
+
+        @Override
+        public RepresentationService.Intent getIntent() {
+            return intent;
+        }
     }
 
+    private final RepresentationServiceContextAdapter representationServiceContext;
     private final RepresentationService representationService;
-    private RepresentationServiceContextAdapter representationServiceContext;
 
     public DomainResourceHelper(final ResourceContext resourceContext, final ObjectAdapter objectAdapter) {
+        this(resourceContext, objectAdapter, new DomainObjectLinkTo());
+    }
+
+    public DomainResourceHelper(
+            final ResourceContext resourceContext,
+            final ObjectAdapter objectAdapter,
+            final ObjectAdapterLinkTo adapterLinkTo) {
+
         this.resourceContext = resourceContext;
         this.objectAdapter = objectAdapter;
 
-        using(new DomainObjectLinkTo());
-
-        representationService = lookupService(RepresentationService.class);
-    }
-
-    public DomainResourceHelper using(final ObjectAdapterLinkTo adapterLinkTo) {
-
         representationServiceContext = new RepresentationServiceContextAdapter(resourceContext, adapterLinkTo);
 
-        adapterLinkTo.usingUrlBase(resourceContext)
-                     .with(objectAdapter);
+        adapterLinkTo.usingUrlBase(this.resourceContext)
+                     .with(this.objectAdapter);
 
-        return this;
+        representationService = lookupService(RepresentationService.class);
     }
 
     private final ResourceContext resourceContext;
@@ -245,7 +253,7 @@ public class DomainResourceHelper {
 
         final OneToOneAssociation property = accessHelper.getPropertyThatIsVisibleForIntent(propertyId, ObjectAdapterAccessHelper.Intent.ACCESS);
 
-        return representationService.propertyDetails(representationServiceContext, new ObjectAndProperty(objectAdapter, property), memberMode);
+        return representationService.propertyDetails(representationServiceContext, new ObjectAndProperty2(objectAdapter, property, memberMode), memberMode);
     }
 
 
@@ -359,7 +367,7 @@ public class DomainResourceHelper {
         final ObjectAdapter returnedAdapter = action.execute(objectAdapter, argArray2, InteractionInitiatedBy.USER);
 
         final ObjectAndActionInvocation objectAndActionInvocation =
-                new ObjectAndActionInvocation(this.objectAdapter, action, arguments, returnedAdapter);
+                new ObjectAndActionInvocation(objectAdapter, action, arguments, returnedAdapter, selfLink);
 
         // response
         return representationService.actionResult(representationServiceContext, objectAndActionInvocation, selfLink);

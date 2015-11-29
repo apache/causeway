@@ -16,15 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.restfulobjects.rendering;
+package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
-import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-/**
- * TODO: roll-up in the future (introduced only so that API does not break)
- */
-public interface RendererContext4 extends RendererContext3 {
+public class ObjectAndProperty2 extends ObjectAndProperty {
 
-    InteractionInitiatedBy getInteractionInitiatedBy();
+    private final MemberReprMode memberReprMode;
 
+    public ObjectAndProperty2(final ObjectAdapter objectAdapter, final OneToOneAssociation property, final MemberReprMode memberReprMode) {
+        super(objectAdapter, property);
+        this.memberReprMode = memberReprMode;
+    }
+
+    public MemberReprMode getMemberReprMode() {
+        return memberReprMode;
+    }
 }

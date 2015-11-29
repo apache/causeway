@@ -28,12 +28,19 @@ public class ObjectAndActionInvocation {
     private final ObjectAction action;
     private final JsonRepresentation arguments;
     private final ObjectAdapter returnedAdapter;
+    private final ActionResultReprRenderer.SelfLink selfLink;
 
-    public ObjectAndActionInvocation(final ObjectAdapter objectAdapter, final ObjectAction action, final JsonRepresentation arguments, final ObjectAdapter returnedAdapter) {
+    public ObjectAndActionInvocation(
+            final ObjectAdapter objectAdapter,
+            final ObjectAction action,
+            final JsonRepresentation arguments,
+            final ObjectAdapter returnedAdapter,
+            final ActionResultReprRenderer.SelfLink selfLink) {
         this.objectAdapter = objectAdapter;
         this.action = action;
         this.arguments = arguments;
         this.returnedAdapter = returnedAdapter;
+        this.selfLink = selfLink;
     }
 
     public ObjectAdapter getObjectAdapter() {
@@ -52,4 +59,7 @@ public class ObjectAndActionInvocation {
         return returnedAdapter;
     }
 
+    public ActionResultReprRenderer.SelfLink getSelfLink() {
+        return selfLink;
+    }
 }
