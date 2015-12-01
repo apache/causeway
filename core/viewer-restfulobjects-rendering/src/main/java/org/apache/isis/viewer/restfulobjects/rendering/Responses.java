@@ -41,11 +41,14 @@ public final class Responses {
         return ofOk(renderer, caching, null, null);
     }
 
+    /**
+     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
+     */
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching,
-            final JsonRepresentation rootRepresentation) {
-        return ofOk(renderer, caching, null, rootRepresentation);
+            final JsonRepresentation rootRepresentationIfAny) {
+        return ofOk(renderer, caching, null, rootRepresentationIfAny);
     }
 
     public static Response.ResponseBuilder ofOk(
@@ -55,17 +58,20 @@ public final class Responses {
         return ofOk(renderer, caching, version, null);
     }
 
+    /**
+     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
+     */
     public static Response.ResponseBuilder ofOk(
             final ReprRenderer<?, ?> renderer,
             final Caching caching,
             final Version version,
-            final JsonRepresentation rootRepresentation) {
+            final JsonRepresentation rootRepresentationIfAny) {
 
         final JsonRepresentation representation = renderer.render();
         // if a rootRepresentation is provided, then the assumption is that the rendered
         // will be rendering to some submap of the rootRepresentation
         final JsonRepresentation entityRepresentation =
-                rootRepresentation != null? rootRepresentation : representation;
+                rootRepresentationIfAny != null? rootRepresentationIfAny : representation;
 
         final MediaType mediaType = renderer.getMediaType();
         final Response.ResponseBuilder response =
@@ -80,7 +86,16 @@ public final class Responses {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(final Response.ResponseBuilder responseBuilder, final Version version) {
+    public static Response.ResponseBuilder mediaType(
+            final Response.ResponseBuilder responseBuilder,
+            final MediaType mediaType) {
+        responseBuilder.type(mediaType);
+        return responseBuilder;
+    }
+
+    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(
+            final Response.ResponseBuilder responseBuilder,
+            final Version version) {
         if (version != null && version.getTime() != null) {
             final Date time = version.getTime();
             responseBuilder.lastModified(time);

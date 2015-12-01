@@ -68,6 +68,11 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
     @Override
     public JsonRepresentation render() {
+
+        if(representation == null) {
+            return null;
+        }
+
         addValue();
 
         addLinkToReturnType();

@@ -124,6 +124,10 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
     @Override
     public JsonRepresentation render() {
 
+        if(representation == null) {
+            return null;
+        }
+
         final boolean isService = objectAdapter.getSpecification().isService();
 
         if (!(mode.isArgs())) {
@@ -185,8 +189,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
 
         final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("links");
         if (linkFollower.matches(link)) {
-            final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap()
-            );
+            final DomainObjectReprRenderer renderer =
+                    new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
             renderer.with(objectAdapter);
             link.mapPut("value", renderer.render());
         }
@@ -335,8 +339,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
         if(objectAdapter.getSpecification().containsDoOpFacet(NotPersistableFacet.class)) {
             return;
         }
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap()
-        );
+        final DomainObjectReprRenderer renderer =
+                new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asPersistLinkArguments().render();
 
         final String domainType = objectAdapter.getSpecification().getSpecId().asString();
@@ -373,8 +377,8 @@ public class DomainObjectReprRenderer extends ReprRendererAbstract<DomainObjectR
             return;
         }
 
-        final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap()
-        );
+        final DomainObjectReprRenderer renderer =
+                new DomainObjectReprRenderer(getRendererContext(), null, JsonRepresentation.newMap());
         final JsonRepresentation domainObjectRepr = renderer.with(objectAdapter).asUpdatePropertiesLinkArguments().render();
 
         if(!getRendererContext().suppressUpdateLink()) {

@@ -37,11 +37,6 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDes
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
-            final RendererContext rendererContext) {
-        this(rendererContext, null, null, JsonRepresentation.newMap());
-    }
-
-    public ObjectCollectionReprRenderer(
             final RendererContext rendererContext,
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
@@ -52,6 +47,10 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
     @Override
     public JsonRepresentation render() {
+
+        if(representation == null) {
+            return null;
+        }
 
         renderMemberContent();
 

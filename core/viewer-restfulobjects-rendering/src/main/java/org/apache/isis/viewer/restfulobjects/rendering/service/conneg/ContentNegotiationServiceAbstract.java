@@ -129,12 +129,12 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
         }
     }
 
-    protected boolean canAccept(
+    protected boolean mediaTypeParameterMatches(
             final List<MediaType> acceptableMediaTypes,
-            final String profileValue) {
+            final String parameter, final String parameterValue) {
         for (MediaType mediaType : acceptableMediaTypes) {
-            final String paramValue = mediaType.getParameters().get("profile");
-            if (Objects.equals(paramValue, profileValue)) {
+            final String paramValue = mediaType.getParameters().get(parameter);
+            if (Objects.equals(paramValue, parameterValue)) {
                 return true;
             }
         }

@@ -73,14 +73,14 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter) {
 
-        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.DOMAIN_OBJECT, list);
 
         final ResponseBuilder responseBuilder = buildResponseTo(
-                renderContext2, objectAdapter, JsonRepresentation.newMap(), null);
+                rendererContext, objectAdapter, JsonRepresentation.newMap(), null);
 
         return responseBuilder(responseBuilder);
     }
@@ -89,19 +89,19 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
      * Not API
      */
     ResponseBuilder buildResponseTo(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAdapter objectAdapter,
-            final JsonRepresentation representation,
+            final JsonRepresentation representationIfAnyRequired,
             final JsonRepresentation rootRepresentation) {
 
         final DomainObjectReprRenderer renderer =
-                new DomainObjectReprRenderer(renderContext2, null, representation);
+                new DomainObjectReprRenderer(rendererContext, null, representationIfAnyRequired);
         renderer.with(objectAdapter).includesSelf();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
 
-        if(renderContext2 instanceof RepresentationService.Context6) {
-            final RepresentationService.Context6 context6 = (RepresentationService.Context6) renderContext2;
+        if(rendererContext instanceof RepresentationService.Context6) {
+            final RepresentationService.Context6 context6 = (RepresentationService.Context6) rendererContext;
             final RepresentationService.Intent intent = context6.getIntent();
             if(intent == RepresentationService.Intent.JUST_CREATED) {
                 responseBuilder.status(Response.Status.CREATED);
@@ -117,15 +117,15 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAndProperty objectAndProperty) {
 
-        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_PROPERTY, list);
 
-        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(renderContext2);
+        final ObjectPropertyReprRenderer renderer = new ObjectPropertyReprRenderer(rendererContext);
         renderer.with(objectAndProperty)
-                .usingLinkTo(renderContext2.getAdapterLinkTo());
+                .usingLinkTo(rendererContext.getAdapterLinkTo());
 
         if(objectAndProperty instanceof ObjectAndProperty2) {
             final ObjectAndProperty2 objectAndProperty2 = (ObjectAndProperty2) objectAndProperty;
@@ -140,15 +140,30 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAndCollection objectAndCollection) {
 
-        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_COLLECTION, list);
 
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(renderContext2);
+        final ResponseBuilder responseBuilder =
+                buildResponseTo(rendererContext, objectAndCollection, JsonRepresentation.newMap(), null);
+
+        return responseBuilder(responseBuilder);
+    }
+
+    /**
+     * Not API
+     */
+    ResponseBuilder buildResponseTo(
+            final RepresentationService.Context2 rendererContext,
+            final ObjectAndCollection objectAndCollection,
+            final JsonRepresentation representation,
+            final JsonRepresentation rootRepresentation) {
+        final ObjectCollectionReprRenderer renderer =
+                new ObjectCollectionReprRenderer(rendererContext, null, null, representation);
         renderer.with(objectAndCollection)
-                .usingLinkTo(renderContext2.getAdapterLinkTo());
+                .usingLinkTo(rendererContext.getAdapterLinkTo());
 
         if(objectAndCollection instanceof ObjectAndCollection2) {
             final ObjectAndCollection2 objectAndCollection2 = (ObjectAndCollection2) objectAndCollection;
@@ -156,22 +171,20 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
             renderer.withMemberMode(objectAndCollection2.getMemberReprMode());
         }
 
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-
-        return responseBuilder(responseBuilder);
+        return Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
     }
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAndAction objectAndAction) {
 
-        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.OBJECT_ACTION, list);
 
-        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(renderContext2);
+        final ObjectActionReprRenderer renderer = new ObjectActionReprRenderer(rendererContext);
         renderer.with(objectAndAction)
-                .usingLinkTo(renderContext2.getAdapterLinkTo())
+                .usingLinkTo(rendererContext.getAdapterLinkTo())
                 .asStandalone();
 
         final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
@@ -181,20 +194,34 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     @Override
     public ResponseBuilder buildResponse(
-            final RepresentationService.Context2 renderContext2,
+            final RepresentationService.Context2 rendererContext,
             final ObjectAndActionInvocation objectAndActionInvocation) {
 
-        final List<MediaType> list = renderContext2.getAcceptableMediaTypes();
+        final List<MediaType> list = rendererContext.getAcceptableMediaTypes();
         ensureCompatibleAcceptHeader(RepresentationType.ACTION_RESULT, list);
 
-        final ActionResultReprRenderer renderer = new ActionResultReprRenderer(renderContext2, objectAndActionInvocation.getSelfLink());
-        renderer.with(objectAndActionInvocation)
-                .using(renderContext2.getAdapterLinkTo());
-
-        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE);
-        Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
+        final ResponseBuilder responseBuilder =
+                buildResponseTo(rendererContext, objectAndActionInvocation, JsonRepresentation.newMap(), null);
 
         return responseBuilder(responseBuilder);
+    }
+
+    /**
+     * Not API
+     */
+    ResponseBuilder buildResponseTo(
+            final RepresentationService.Context2 rendererContext,
+            final ObjectAndActionInvocation objectAndActionInvocation,
+            final JsonRepresentation representation,
+            final JsonRepresentation rootRepresentation) {
+        final ActionResultReprRenderer renderer =
+                new ActionResultReprRenderer(rendererContext, null, objectAndActionInvocation.getSelfLink(), representation);
+        renderer.with(objectAndActionInvocation)
+                .using(rendererContext.getAdapterLinkTo());
+
+        final ResponseBuilder responseBuilder = Responses.ofOk(renderer, Caching.NONE, rootRepresentation);
+        Responses.addLastModifiedAndETagIfAvailable(responseBuilder, objectAndActionInvocation.getObjectAdapter().getVersion());
+        return responseBuilder;
     }
 
     /**
