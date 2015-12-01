@@ -23,6 +23,7 @@ import javax.ws.rs.core.Response;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse;
 import org.apache.isis.viewer.restfulobjects.rendering.util.JsonWriterUtil;
 
@@ -34,13 +35,50 @@ public final class Responses {
         return of(RestfulResponse.HttpStatusCode.NO_CONTENT);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching) {
-        return ofOk(renderer, caching, null);
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching) {
+        return ofOk(renderer, caching, null, null);
     }
 
-    public static Response.ResponseBuilder ofOk(final ReprRenderer<?, ?> renderer, final Caching caching, final Version version) {
+    /**
+     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
+     */
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final JsonRepresentation rootRepresentationIfAny) {
+        return ofOk(renderer, caching, null, rootRepresentationIfAny);
+    }
+
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final Version version) {
+        return ofOk(renderer, caching, version, null);
+    }
+
+    /**
+     * @param rootRepresentationIfAny - if specified, is used for entity; otherwise the renderer is used.  The idea is that the renderer will be set up to render to some sub-node of root representation
+     */
+    public static Response.ResponseBuilder ofOk(
+            final ReprRenderer<?, ?> renderer,
+            final Caching caching,
+            final Version version,
+            final JsonRepresentation rootRepresentationIfAny) {
+
+        final JsonRepresentation representation = renderer.render();
+        // if a rootRepresentation is provided, then the assumption is that the rendered
+        // will be rendering to some submap of the rootRepresentation
+        final JsonRepresentation entityRepresentation =
+                rootRepresentationIfAny != null? rootRepresentationIfAny : representation;
+
         final MediaType mediaType = renderer.getMediaType();
-        final Response.ResponseBuilder response = of(RestfulResponse.HttpStatusCode.OK).type(mediaType).cacheControl(caching.getCacheControl()).entity(JsonWriterUtil.jsonFor(renderer.render()));
+        final Response.ResponseBuilder response =
+                of(RestfulResponse.HttpStatusCode.OK)
+                    .type(mediaType)
+                    .cacheControl(caching.getCacheControl())
+                    .entity(JsonWriterUtil.jsonFor(entityRepresentation));
         return addLastModifiedAndETagIfAvailable(response, version);
     }
 
@@ -48,7 +86,16 @@ public final class Responses {
         return Response.status(httpStatusCode.getJaxrsStatusType()).type(MediaType.APPLICATION_JSON_TYPE);
     }
 
-    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(final Response.ResponseBuilder responseBuilder, final Version version) {
+    public static Response.ResponseBuilder mediaType(
+            final Response.ResponseBuilder responseBuilder,
+            final MediaType mediaType) {
+        responseBuilder.type(mediaType);
+        return responseBuilder;
+    }
+
+    public static Response.ResponseBuilder addLastModifiedAndETagIfAvailable(
+            final Response.ResponseBuilder responseBuilder,
+            final Version version) {
         if (version != null && version.getTime() != null) {
             final Date time = version.getTime();
             responseBuilder.lastModified(time);

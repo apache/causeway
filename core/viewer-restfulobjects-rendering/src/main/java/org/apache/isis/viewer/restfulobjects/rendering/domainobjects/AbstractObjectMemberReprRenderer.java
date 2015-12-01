@@ -263,7 +263,7 @@ public abstract class AbstractObjectMemberReprRenderer<R extends ReprRendererAbs
         
         // create a temporary map that looks the same as the member map we'll be following
         final JsonRepresentation memberMap = JsonRepresentation.newMap();
-        memberMap.mapPut(getMemberId(), this.representation);
+        memberMap.mapPut(getMemberId(), representation);
         if (membersLinkFollower.matches(memberMap) && detailsLinkFollower.matches(link)) {
             followDetailsLink(link);
         }

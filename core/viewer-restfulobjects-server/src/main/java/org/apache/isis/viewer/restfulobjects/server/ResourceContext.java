@@ -132,8 +132,9 @@ public class ResourceContext implements RendererContext6 {
     
     void init(final RepresentationType representationType) {
         getQueryStringAsJsonRepr(); // force it to be cached
-        
-        ensureCompatibleAcceptHeader(representationType);
+
+        // previously we checked for compatible accept headers here.
+        // now, though, this is a responsibility of the various ContentNegotiationService implementations
         ensureDomainModelQueryParamSupported();
         
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
@@ -144,27 +145,6 @@ public class ResourceContext implements RendererContext6 {
         if(domainModel != DomainModel.FORMAL) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
                     "x-ro-domain-model of '%s' is not supported", domainModel);
-        }
-    }
-
-    private void ensureCompatibleAcceptHeader(final RepresentationType representationType) {
-        if (representationType == null) {
-            return;
-        }
-
-        // RestEasy will check the basic media types...
-        // ... so we just need to check the profile paramter
-        final String producedProfile = representationType.getMediaTypeProfile();
-        if(producedProfile != null) {
-            for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
-                String acceptedProfileValue = mediaType.getParameters().get("profile");
-                if(acceptedProfileValue == null) {
-                    continue;
-                }
-                if(!producedProfile.equals(acceptedProfileValue)) {
-                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE);
-                }
-            }
         }
     }
 

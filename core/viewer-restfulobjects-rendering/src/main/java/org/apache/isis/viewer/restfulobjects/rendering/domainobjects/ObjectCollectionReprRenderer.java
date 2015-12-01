@@ -37,20 +37,20 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDes
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
-            final RendererContext rendererContext) {
-        this(rendererContext, null, null, JsonRepresentation.newMap());
-    }
-
-    public ObjectCollectionReprRenderer(
             final RendererContext rendererContext,
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
+        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation,
+                Where.PARENTED_TABLES);
     }
 
     @Override
     public JsonRepresentation render() {
+
+        if(representation == null) {
+            return null;
+        }
 
         renderMemberContent();
 
@@ -95,7 +95,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap());
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
+                );
                 renderer.with(elementAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
@@ -124,7 +125,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
+        final JsonRepresentation representation = JsonRepresentation.newMap();
+        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null,
+                representation);
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

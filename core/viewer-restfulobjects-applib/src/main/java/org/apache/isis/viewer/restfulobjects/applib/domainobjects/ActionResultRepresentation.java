@@ -19,6 +19,7 @@
 package org.apache.isis.viewer.restfulobjects.applib.domainobjects;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
 
 public class ActionResultRepresentation extends AbstractObjectMemberRepresentation {
@@ -28,7 +29,7 @@ public class ActionResultRepresentation extends AbstractObjectMemberRepresentati
 
         private final String value;
 
-        private ResultType(final String value) {
+        ResultType(final String value) {
             this.value = value;
         }
 

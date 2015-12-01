@@ -19,8 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.rendering.domainobjects;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
+import org.apache.isis.viewer.restfulobjects.applib.domainobjects.ActionResultRepresentation;
 
 public class ObjectAndActionInvocation {
 
@@ -62,4 +66,31 @@ public class ObjectAndActionInvocation {
     public ActionResultReprRenderer.SelfLink getSelfLink() {
         return selfLink;
     }
+
+
+    /**
+     * not API
+     */
+    public ActionResultRepresentation.ResultType determineResultType() {
+
+        final ObjectSpecification returnType = this.action.getReturnType();
+
+        if (returnType.getCorrespondingClass() == void.class) {
+            return ActionResultRepresentation.ResultType.VOID;
+        }
+
+        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
+        if (collectionFacet != null) {
+            return ActionResultRepresentation.ResultType.LIST;
+        }
+
+        final EncodableFacet encodableFacet = returnType.getFacet(EncodableFacet.class);
+        if (encodableFacet != null) {
+            return ActionResultRepresentation.ResultType.SCALAR_VALUE;
+        }
+
+        // else
+        return ActionResultRepresentation.ResultType.DOMAIN_OBJECT;
+    }
+
 }
