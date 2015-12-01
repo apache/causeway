@@ -46,7 +46,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.MemberReprM
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAdapterLinkTo;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndAction;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndActionInvocation;
-import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection;
+import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndCollection2;
 import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.ObjectAndProperty2;
 import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
@@ -270,7 +270,7 @@ public class DomainResourceHelper {
 
         final OneToManyAssociation collection = accessHelper.getCollectionThatIsVisibleForIntent(collectionId, ObjectAdapterAccessHelper.Intent.ACCESS);
 
-        return representationService.collectionDetails(representationServiceContext, new ObjectAndCollection(objectAdapter, collection), memberMode);
+        return representationService.collectionDetails(representationServiceContext, new ObjectAndCollection2(objectAdapter, collection, memberMode), memberMode);
     }
 
 
