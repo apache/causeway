@@ -11,6 +11,6 @@ NOTE: TODO
 
 Sometimes you want to define a `public` method on a domain object that is not intended to be rendered in Apache Isis' UI.
 
-To exclude such methods, use the xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] annotation.
+To exclude such methods, use the xref:rgant.adoc#_rgant_manpage-Programmatic[`@Programmatic`] annotation.
 
 

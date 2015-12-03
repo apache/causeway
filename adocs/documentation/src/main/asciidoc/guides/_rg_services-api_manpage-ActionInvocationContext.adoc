@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `ActionInvocationContext` domain service is a xref:rg.adoc#_rg_annotations_manpage-RequestScoped[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_invokeOn[`@Action#invokeOn()`].  This allows the user to select multiple objects in a table and then invoke the same action against all of them.
+The `ActionInvocationContext` domain service is a xref:rgant.adoc#_rgant_manpage-RequestScoped[`@RequestScoped`] service intended to support the implementation of "bulk" actions annotated with xref:rgant.adoc#_rgant_manpage-Action_invokeOn[`@Action#invokeOn()`].  This allows the user to select multiple objects in a table and then invoke the same action against all of them.
 
 When an action is invoked in this way, this service allows each object instance to "know where it is" in the collection; it acts a little like an iterator.  In particular, an object can determine if it is the last object to be called, and so can perform special processing, eg to return a summary calculated result.
 
@@ -26,7 +26,7 @@ public static class ActionInvocationContext {
     public boolean isLast() { ... }
 }
 ----
-<1> is xref:rg.adoc#_rg_annotations_manpage-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
+<1> is xref:rgant.adoc#_rgant_manpage-RequestScoped[`@RequestScoped`], so this domain service instance is scoped to a particular request and is then destroyed
 <2> an enum set to either `OBJECT` (if action has been invoked on a single object) or `COLLECTION` (if has been invoked on a collection).
 <3> returns the list of domain objects which are being acted upon
 <4> is the 0-based index to the object being acted upon.
@@ -70,7 +70,7 @@ implementation of `ActionInvocationContext` class is automatically registered (i
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

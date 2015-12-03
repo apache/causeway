@@ -30,7 +30,7 @@ public interface LocaleProvider {
 }
 ----
 
-This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rg.adoc#_rg_annotations_manpage-RequestScoped[`@RequestScoped`], however).
+This is notionally request-scoped, returning the `Locale` of the current user; _not_ that of the server.  (Note that the implementation is not required to actually be xref:rgant.adoc#_rgant_manpage-RequestScoped[`@RequestScoped`], however).
 
 
 
@@ -55,7 +55,7 @@ xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `LocaleP
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

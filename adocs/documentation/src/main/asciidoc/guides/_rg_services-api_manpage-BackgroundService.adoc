@@ -50,13 +50,13 @@ public void submitCustomerInvoices() {
 
 This will create a bunch of background commands executing the `submitInvoice()` action for each of the customers returned from the customer repository.
 
-The action method invoked must be part of the Apache Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`] or `@Ignore`. However, it may be annotated with xref:rg.adoc#_rg_annotations_manpage-Action_hidden[`@Action#hidden()`] or xref:rg.adoc#_rg_annotations_manpage-ActionLayout_hidden[`@ActionLayout#hidden()`] and it will still be invoked.
+The action method invoked must be part of the Apache Isis metamodel, which is to say it must be public, accept only scalar arguments, and must not be annotated with xref:rgant.adoc#_rgant_manpage-Programmatic[`@Programmatic`] or `@Ignore`. However, it may be annotated with xref:rgant.adoc#_rgant_manpage-Action_hidden[`@Action#hidden()`] or xref:rgant.adoc#_rgant_manpage-ActionLayout_hidden[`@ActionLayout#hidden()`] and it will still be invoked.
 
 In fact, when invoked by the background service, no business rules (hidden, disabled, validation) are enforced; the action method must take responsibility for performing appropriate validation and error checking.
 
 [TIP]
 ====
-If you want to check business rules, you can use xref:rg.adoc#_rg_annotations_manpage-WrapperFactory[`@WrapperFactory#wrapNoExecute(...)`].
+If you want to check business rules, you can use xref:rgant.adoc#_rgant_manpage-WrapperFactory[`@WrapperFactory#wrapNoExecute(...)`].
 ====
 
 
@@ -99,7 +99,7 @@ implementation of `BackgroundService` is automatically registered (it is annotat
 further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

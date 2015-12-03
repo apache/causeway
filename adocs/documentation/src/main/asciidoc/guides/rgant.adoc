@@ -1,0 +1,72 @@
+[[_rgant]]
+= Annotations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+[[_rgant]]
+== Annotations
+
+Apache Isis uses annotations to provide additional metadata about the domain objects.
+
+To give just a few examples:
+
+* if a property is read-only, then this can be annotated with `@Property(editing=EditingDISABLED)`.
+* if a class has a small fixed set of instances (eg a picklist), then it can be annotated using `@DomainObject(bounded=true)`
+* if a class is a domain service and should be automatically instantiated as a singleton, then it can be annotated using `@DomainService`
+* if an action is idempotent, then it can be annotated using `@Action(semantics=SemanticsOf.IDEMPOTENT)`.
+* if an action parameter is optional, it can be annotated using `@Parameter(optionality=Optionality.OPTIONAL)`
+
+Some annotations act as UI hints, for example:
+
+* if a collection should be rendered "open" rather than collapsed, it can be annotated using `@CollectionLayout(render=RenderType.EAGERLY)`
+* if an action has a tooltip, it can be annotated using `@ActionLayout(describedAs=...)`
+* if a domain object is bookmarkable, it can be annotated using `@DomainObjectLayout(bookmarking=BookmarkPolicy.AS_ROOT`).
+
+This guide documents all the annotations currently supported by Apache Isis.  It also identifies a number of annotations that are now deprecated, and indicates their replacement.
+
+Other guides are:
+
+* xref:rg.adoc#[Reference Guide]
+
+
+include::_rgant_aaa.adoc[leveloffset=+1]
+
+include::_rgant_manpage-Action.adoc[leveloffset=+1]
+include::_rgant_manpage-ActionLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-Collection.adoc[leveloffset=+1]
+include::_rgant_manpage-Collectionlayout.adoc[leveloffset=+1]
+include::_rgant_manpage-Column.adoc[leveloffset=+1]
+include::_rgant_manpage-Digits.adoc[leveloffset=+1]
+include::_rgant_manpage-Discriminator.adoc[leveloffset=+1]
+include::_rgant_manpage-DomainObject.adoc[leveloffset=+1]
+include::_rgant_manpage-DomainObjectLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-DomainService.adoc[leveloffset=+1]
+include::_rgant_manpage-DomainServiceLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-Facets.adoc[leveloffset=+1]
+include::_rgant_manpage-HomePage.adoc[leveloffset=+1]
+include::_rgant_manpage-Inject.adoc[leveloffset=+1]
+include::_rgant_manpage-MemberGroupLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-MemberOrder.adoc[leveloffset=+1]
+include::_rgant_manpage-NotPersistent.adoc[leveloffset=+1]
+include::_rgant_manpage-MinLength.adoc[leveloffset=+1]
+include::_rgant_manpage-Parameter.adoc[leveloffset=+1]
+include::_rgant_manpage-ParameterLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-PersistenceCapable.adoc[leveloffset=+1]
+include::_rgant_manpage-PostConstruct.adoc[leveloffset=+1]
+include::_rgant_manpage-PreDestroy.adoc[leveloffset=+1]
+include::_rgant_manpage-PrimaryKey.adoc[leveloffset=+1]
+include::_rgant_manpage-Programmatic.adoc[leveloffset=+1]
+include::_rgant_manpage-Property.adoc[leveloffset=+1]
+include::_rgant_manpage-PropertyLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-RequestScoped.adoc[leveloffset=+1]
+include::_rgant_manpage-Title.adoc[leveloffset=+1]
+include::_rgant_manpage-ViewModel.adoc[leveloffset=+1]
+include::_rgant_manpage-ViewModelLayout.adoc[leveloffset=+1]
+include::_rgant_manpage-XmlJavaTypeAdapter.adoc[leveloffset=+1]
+include::_rgant_manpage-XmlRootElement.adoc[leveloffset=+1]
+
+
+
+

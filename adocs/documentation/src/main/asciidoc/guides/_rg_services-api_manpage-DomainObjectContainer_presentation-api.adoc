@@ -7,7 +7,7 @@
 
 
 
-A responsibility of every domain object is to return a title.  This can be done declaratively using the xref:rg.adoc#_rg_annotations_manpage-Title[`@Title`] annotation on property/ies, or it can be done imperatively by writing a xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] method.
+A responsibility of every domain object is to return a title.  This can be done declaratively using the xref:rgant.adoc#_rgant_manpage-Title[`@Title`] annotation on property/ies, or it can be done imperatively by writing a xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] method.
 
 It's quite common for titles to be built up of the titles of other objects.  If using building up the title using `@Title` then Apache Isis will automatically use the title of the objects referenced by the annotated properties.  We also need programmatic access to these titles if going the imperative route.
 

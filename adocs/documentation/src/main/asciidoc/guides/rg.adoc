@@ -9,7 +9,7 @@
 [[_rg]]
 == Reference Guide
 
-This reference guide describes in detail the various elements of the Apache Isis Programming Model.  Most notably these are the xref:rg.adoc#_rg_annotations[annotations] (such as `@DomainObject`), and the reserved and prefix xref:rg.adoc#_rg_methods[methods] (such as `title()` and `validate...()`); it also includes various utility and supporting xref:rg.adoc#_rg_classes[classes].
+This reference guide describes in detail the various elements of the Apache Isis Programming Model.  Most notably these are the xref:rgant.adoc#_rgant[annotations] (such as `@DomainObject`), and the reserved and prefix xref:rg.adoc#_rg_methods[methods] (such as `title()` and `validate...()`); it also includes various utility and supporting xref:rg.adoc#_rg_classes[classes].
 
 This guide also documents the domain services, both those that act as an xref:rg.adoc#_rg_services-api[API] (implemented by the framework for your domain objects to call), and those domain services that act as an xref:rg.adoc#_rg_services-spi[SPI] (implemented by your domain application and which are called by the framework).
 
@@ -20,7 +20,6 @@ This reference guide does _not_ describe how to actually build an Apache Isis ap
 
 
 
-include::_rg_annotations.adoc[leveloffset=+1]
 include::_rg_methods.adoc[leveloffset=+1]
 include::_rg_services-api.adoc[leveloffset=+1]
 include::_rg_services-spi.adoc[leveloffset=+1]

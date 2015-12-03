@@ -58,7 +58,7 @@ See also xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`]
 |Y
 |Return a list of matching elements for a property or an action parameter. +
 
-Alternatively, can specify for a class using xref:rg.adoc#_rg_annotations_manpage-DomainObject_autoCompleteRepository[`@DomainObject` +
+Alternatively, can specify for a class using xref:rgant.adoc#_rgant_manpage-DomainObject_autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository`] +
 
 See also xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]

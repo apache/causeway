@@ -18,7 +18,7 @@ At the time of writing `1.11.0` has not been released; these notes relate to `1.
 
 == JAXB view models
 
-This version recognizes classes annotated with xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]
+This version recognizes classes annotated with xref:rgant.adoc#_rgant_manpage-XmlRootElement[`@XmlRootElement`]
 as view models.  These are serialized out into XML and converted into URL.
 
 The xref:rg.adoc#_rg_services-api_manpage-JaxbService[`JaxbService`] is responsible for performing the XML conversion.

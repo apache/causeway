@@ -86,7 +86,7 @@ implementation of `EmailService` service is automatically registered and injecte
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

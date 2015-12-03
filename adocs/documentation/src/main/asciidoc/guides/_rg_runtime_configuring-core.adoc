@@ -25,7 +25,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:rg.adoc#_rg_runtime_configuring-core_isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant_manpage-DomainObject_editing[`@DomainObject#editing()`]); see xref:rg.adoc#_rg_runtime_configuring-core_isis-objects-editing[below] for further discussion.
 
 
 |`isis.persistor.` +
@@ -41,14 +41,14 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-Action_domainEvent[`@Action#domainEvent()`] is not specified (is set to `ActionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `collectionAnnotation.` +
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-Collection_domainEvent[`@Collection#domainEvent()`] is not specified (is set to `CollectionDomainEvent.Default`).
 
 |`isis.reflector.facet.` +
 `cssClass.patterns`
@@ -71,7 +71,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_createdLifecycleEvent[`@DomainObject#createdLifecycleEvent()`] is not specified (is set to `ObjectCreatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -80,7 +80,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_loadedLifecycleEvent[`@DomainObject#loadedLifecycleEvent()`] is not specified (is set to `ObjectLoadedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -89,7 +89,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_persistingLifecycleEvent[`@DomainObject#persistingLifecycleEvent()`] is not specified (is set to `ObjectPersistingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -98,7 +98,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_persistedLifecycleEvent[`@DomainObject#persistedLifecycleEvent()`] is not specified (is set to `ObjectPersistedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -107,7 +107,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_removingLifecycleEvent[`@DomainObject#removingLifecycleEvent()`] is not specified (is set to `ObjectRemovingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -116,7 +116,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_updatingLifecycleEvent[`@DomainObject#updatingLifecycleEvent()`] is not specified (is set to `ObjectUpdatingEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -125,7 +125,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObject_updatedLifecycleEvent[`@DomainObject#updatedLifecycleEvent()`] is not specified (is set to `ObjectUpdatedEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
@@ -133,7 +133,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_cssClassUiEvent[`@DomainObjectLayout#cssClassUiEvent()`] is not specified (is set to `CssClassUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
@@ -141,7 +141,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_iconUiEvent[`@DomainObjectLayout#iconUiEvent()`] is not specified (is set to `IconUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `domainObjectLayoutAnnotation.` +
@@ -149,7 +149,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`1.11.0-SNAPSHOT`)
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_titleUiEvent[`@DomainObjectLayout#titleUiEvent()`] is not specified (is set to `TitleUiEvent.Default`).
 
 |`isis.reflector.facet.` +
 `filterVisibility`
@@ -164,7 +164,7 @@ See xref:rg.adoc#_rg_runtime_configuring-core_filterVisibility[section below] fo
 `domainEvent.postForDefault`
 |`true`,`false` +
 (`true`)
-|Whether an event should be posted if xref:rg.adoc#_rg_annotations_manpage-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
+|Whether an event should be posted if xref:rgant.adoc#_rgant_manpage-Property_domainEvent[`@Property#domainEvent()`] is not specified (is set to `PropertyDomainEvent.Default`).
 
 |`isis.reflector.facets`
 |`FQCN`
@@ -212,7 +212,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated as domain services.  +
 
-Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
+Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
 This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
@@ -221,12 +221,12 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 `audit.objects`
 | `all`, `none` +
 (`all`)
-|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
+|Whether the changed properties of objects should be automatically audited (for objects annotated with xref:rgant.adoc#_rgant_manpage-DomainObject_auditing[`@DomainObject(auditing=Auditing.AS_CONFIGURED)`].
 
 |`isis.services.` +
 `command.actions`
 | `all`, `ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically reified into commands (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
+|Whether actions should be automatically reified into commands (for actions annotated with xref:rgant.adoc#_rgant_manpage-Action_command[`@Action(command=CommandReification.AS_CONFIGURED)`].  +
 
 `ignoreQueryOnly` is an alias for `ignoreSafe`.
 
@@ -333,12 +333,12 @@ This implementation provides a default set of recognizers to convert RDBMS const
 `publish.objects`
 | `all`, `none` +
 (`all`)
-|Whether changed objects should be automatically published (for objects annotated with xref:rg.adoc#_rg_annotations_manpage-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
+|Whether changed objects should be automatically published (for objects annotated with xref:rgant.adoc#_rgant_manpage-DomainObject_publishing[`@DomainObject(publishing=Publishing.AS_CONFIGURED)`].
 
 |`isis.services.` +
 `publish.actions`
 | `all`, `ignoreSafe`, `none` (`all`)
-|Whether actions should be automatically published (for actions annotated with xref:rg.adoc#_rg_annotations_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
+|Whether actions should be automatically published (for actions annotated with xref:rgant.adoc#_rgant_manpage-Action_publishing[`@Action(publishing=Publishing.AS_CONFIGURED)`]. +
 
 
 |`isis.services.` +
@@ -372,7 +372,7 @@ See xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] to learn more about 
 `propertyLayout.labelPosition`
 |`TOP`, `LEFT` +
 (`LEFT`)
-|Default for label position for all properties if not explicitly specified using xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
+|Default for label position for all properties if not explicitly specified using xref:rgant.adoc#_rgant_manpage-PropertyLayout_labelPosition[`@PropertyLayout#labelPosition()`]
 
 |===
 

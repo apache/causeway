@@ -39,7 +39,7 @@ The following sections describe each of these methods in a little more detail.
 
 === `getModules()`
 
-The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.  Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:rg.adoc#_rg_annotations_manpage-DomainService[`@DomainService`]) and entities (annotated with xref:rg.adoc#_rg_annotations_manpage-PersistenceCapable[`@PersistenceCapable`]).  Generally there is one such module class per Maven module.
+The most significant method (the only one which must return a non-`null` value) is the `getModules()` method.  Each module is identified by a class; the framework simply uses that class' package as the root to search for domain services (annotated with xref:rgant.adoc#_rgant_manpage-DomainService[`@DomainService`]) and entities (annotated with xref:rgant.adoc#_rgant_manpage-PersistenceCapable[`@PersistenceCapable`]).  Generally there is one such module class per Maven module.
 
 A module class for a domain module might for example be defined as:
 
@@ -82,7 +82,7 @@ As can be seen, the various (non-ASF) link:http://isisaddons.org[Isis Addons] mo
 
 === `getAdditionalServices()`
 
-We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.  However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:rg.adoc#_rg_annotations_manpage-DomainService[`@DomainService`] annotation.
+We normally we recommend that services are defined exclusively through `getModules()`, and that this method should therefore return an empty list.  However, there are certain use cases where the a service must be explicitly specified either because the service required does not (for whatever reason) have a xref:rgant.adoc#_rgant_manpage-DomainService[`@DomainService`] annotation.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-module-security[Isis addons' security] module (v1.9.0) allows the policy to evaluate conflicting permissions to be specified by explicitly registering either the `PermissionsEvaluationServiceAllowBeatsVeto` domain service or the `PermissionsEvaluationServiceVetoBeatsAllow` domain service:
 

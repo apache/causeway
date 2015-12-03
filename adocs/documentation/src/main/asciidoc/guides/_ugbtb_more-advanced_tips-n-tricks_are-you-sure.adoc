@@ -10,7 +10,7 @@ end-user explicitly confirms that they intended to invoke the action.
 
 == Using action semantics
 
-One way to meet this requirement is using the framework's built-in xref:rg.adoc#_rg_annotations_manpage-Action_semantics[`@Action#semantics()`] attribute:
+One way to meet this requirement is using the framework's built-in xref:rgant.adoc#_rgant_manpage-Action_semantics[`@Action#semantics()`] attribute:
 
 [source,java]
 ----

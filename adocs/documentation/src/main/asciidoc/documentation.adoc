@@ -67,19 +67,10 @@ pass:[<br/>]
 * pass:[<a href="./guides/ugbtb.html" target="_blank">Beyond the Basics</a>]
 
 
-|*Reference Guide:*
+|*Reference Guides:*
 
-Programming model (annotations, methods), domain services (API and SPI), utility classes, UI layout, runtime configuration properties
-
-pass:[<a class="button guide" href="./guides/rg.html" role="button" target="_blank">Reference Guide »</a>]
-
-including:
-
-* link:./guides/rg.html#_rg_annotations[Annotations]
-* *link:./guides/rg.html#_rg_methods[Methods]*
-* *link:./guides/rg.html#_rg_services-api[Domain Services API]*
-* link:./guides/rg.html#_rg_services-spi[Domain Services SPI]
-* link:./guides/rg.html#_rg_runtime[Configuration Properties]
+* pass:[<a href="./guides/rg.html" target="_blank">Reference Guide</a>]
+* pass:[<a href="./guides/rgant.html" target="_blank">Annotations</a>]
 
 
 |*Contributors' Guide*

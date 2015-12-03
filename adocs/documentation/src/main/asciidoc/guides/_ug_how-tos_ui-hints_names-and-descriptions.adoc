@@ -12,29 +12,29 @@ NOTE: see also xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[Internationalization]
 
 == Class (object)
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_named[`@DomainObjectLayout#named()`], xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_describedAs[`@DomainObjectLayout#describedAs()`]
 
 
 == Property
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_named[`@PropertyLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-PropertyLayout_named[`@PropertyLayout#named()`], xref:rgant.adoc#_rgant_manpage-PropertyLayout_describedAs[`@PropertyLayout#describedAs()`]
 
 
 
 == Collections
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_named[`@CollectionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-CollectionLayout_named[`@CollectionLayout#named()`], xref:rgant.adoc#_rgant_manpage-CollectionLayout_describedAs[`@CollectionLayout#describedAs()`]
 
 
 
 == Actions
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ActionLayout_named[`@ActionLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-ActionLayout_named[`@ActionLayout#named()`], xref:rgant.adoc#_rgant_manpage-ActionLayout_describedAs[`@ActionLayout#describedAs()`]
 
 
 == Action Parameters
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_named[`@ParameterLayout#named()`], xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-ParameterLayout_named[`@ParameterLayout#named()`], xref:rgant.adoc#_rgant_manpage-ParameterLayout_describedAs[`@ParameterLayout#describedAs()`]
 
 
 [TIP]

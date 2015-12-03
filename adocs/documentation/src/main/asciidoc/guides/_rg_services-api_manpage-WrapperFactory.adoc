@@ -56,8 +56,8 @@ public interface WrapperFactory {
 <3> whether the supplied object has been wrapped.
 <4> enumerates how the wrapper interacts with the underlying domain object.
 <5> validate all business rules and then execute.
-<6> skip all business rules and then execute (including creating xref:rg.adoc#_rg_annotations_manpage-Action_command[command]s and firing pre- and post-execute xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[domain event]s).
-<7> validate all business rules (including those from xref:rg.adoc#_rg_annotations_manpage-Action_domainEvent[domain event]s) but do not execute.
+<6> skip all business rules and then execute (including creating xref:rgant.adoc#_rgant_manpage-Action_command[command]s and firing pre- and post-execute xref:rgant.adoc#_rgant_manpage-Action_domainEvent[domain event]s).
+<7> validate all business rules (including those from xref:rgant.adoc#_rgant_manpage-Action_domainEvent[domain event]s) but do not execute.
 <8> convenience method to invoke `wrap(...)` with `ExecuteMode#NO_EXECUTE` (make this feature more discoverable)
 <9> convenience method to invoke `wrap(...)` with `ExecuteMode#SKIP_RULES` (make this feature more discoverable)
 
@@ -158,5 +158,5 @@ implementation of `WrapperFactory` service is automatically registered and injec
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).

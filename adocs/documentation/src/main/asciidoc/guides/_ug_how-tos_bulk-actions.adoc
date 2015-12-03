@@ -4,5 +4,5 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO - xref:rg.adoc#_rg_annotations_manpage-Action_invokeOn[`@Action#invokeOn()`]
+NOTE: TODO - xref:rgant.adoc#_rgant_manpage-Action_invokeOn[`@Action#invokeOn()`]
 

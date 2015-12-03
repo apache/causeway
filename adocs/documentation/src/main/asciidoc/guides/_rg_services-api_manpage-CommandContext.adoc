@@ -6,7 +6,7 @@
 
 
 
-The `CommandContext` service is a xref:rg.adoc#_rg_annotations_manpage-RequestScoped[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
+The `CommandContext` service is a xref:rgant.adoc#_rgant_manpage-RequestScoped[request-scoped] service that reifies the invocation of an action on a domain object into an object itself. This reified information is encapsulated within the `Command` object.
 
 By default, the `Command` is held in-memory only; once the action invocation has completed, the `Command` object is gone. The optional
  supporting xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] enables the implementation of `Command` to be pluggable. With an appropriate implementation (eg as provided by the (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module's xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`]) the `Command` may then be persisted.
@@ -18,7 +18,7 @@ Persistent ``Command``s support several use cases:
 * if xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) through the unique `transactionId` GUID
 * if xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique `transactionId` GUID
 
-Assuming that the `CommandService` supports persistent `Command`s, the associated xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action#command()`] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
+Assuming that the `CommandService` supports persistent `Command`s, the associated xref:rgant.adoc#_rgant_manpage-Action_command[`@Action#command()`] annotation also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
 
@@ -105,7 +105,7 @@ public interface Command extends HasTransactionId {
 
 == Usage
 
-The typical way to indicate that an action should be treated as a command is to annotate it with the xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action#command()`] annotation.
+The typical way to indicate that an action should be treated as a command is to annotate it with the xref:rgant.adoc#_rgant_manpage-Action_command[`@Action#command()`] annotation.
 
 For example:
 
@@ -122,11 +122,11 @@ public class ToDoItem ... {
 ====
 As an alternative to annotating every action with `@Action#command()`, alternatively this can be configured as the default using `isis.services.command.actions` configuration property.
 
-See xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action#command()`] and xref:rg.adoc#_rg_runtime_configuring-core[runtime configuration] for further details.
+See xref:rgant.adoc#_rgant_manpage-Action_command[`@Action#command()`] and xref:rg.adoc#_rg_runtime_configuring-core[runtime configuration] for further details.
 ====
 
 
-The xref:rg.adoc#_rg_annotations_manpage-Action_command[`@Action#command()`] annotation can also be used to specify whether the command should be performed in the background, for example:
+The xref:rgant.adoc#_rgant_manpage-Action_command[`@Action#command()`] annotation can also be used to specify whether the command should be performed in the background, for example:
 
 [source,java]
 ----
@@ -202,7 +202,7 @@ implementation of `CommandContext` service is automatically registered and injec
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

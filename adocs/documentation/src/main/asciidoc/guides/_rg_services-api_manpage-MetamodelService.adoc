@@ -8,7 +8,7 @@
 
 The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Apache Isis' internal metamodel.
 
-Currently this is limited to looking up the object type (as specified in xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
+Currently this is limited to looking up the object type (as specified in xref:rgant.adoc#_rgant_manpage-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
 
 
 == API & Implementation
@@ -38,5 +38,5 @@ implementation of `MetamodelService` service is automatically registered and inj
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).

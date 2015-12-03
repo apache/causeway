@@ -75,7 +75,7 @@ As noted in the introduction, a common use case for this service is in the imple
 
 [TIP]
 ====
-Rather than implementing `ViewModel`, it's usually easier to annotate your view models with xref:rg.adoc#_rg_annotations_manpage-ViewModel[`@ViewModel`] (or equivalently xref:rg.adoc#_rg_annotations_manpage-DomainObject_nature[`@DomainObject#nature=EXTERNAL_ENTITY`] or xref:rg.adoc#_rg_annotations_manpage-DomainObject_nature[`@DomainObject#nature=INMEMORY_ENTITY`].
+Rather than implementing `ViewModel`, it's usually easier to annotate your view models with xref:rgant.adoc#_rgant_manpage-ViewModel[`@ViewModel`] (or equivalently xref:rgant.adoc#_rgant_manpage-DomainObject_nature[`@DomainObject#nature=EXTERNAL_ENTITY`] or xref:rgant.adoc#_rgant_manpage-DomainObject_nature[`@DomainObject#nature=INMEMORY_ENTITY`].
 ====
 
 For example, suppose you were implementing a view model that represents an external entity in a SOAP web service.  To access this service the view model needs to store (say) the hostname, port number and an id to the object.
@@ -127,5 +127,5 @@ implementation of `MementoService` service is automatically registered and injec
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rg.adoc#_rg_annotations_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
