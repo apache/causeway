@@ -59,18 +59,20 @@ pass:[<br/>]
 
 |*User Guides:*
 
-* pass:[<a href="./guides/ug.html" target="_blank">Fundamentals</a>]
-* pass:[<a href="./guides/ugvw.html" target="_blank">Wicket viewer</a>]
-* pass:[<a href="./guides/ugvro.html" target="_blank">Restful Objects viewer</a>]
-* pass:[<a href="./guides/ugsec.html" target="_blank">Security</a>]
-* pass:[<a href="./guides/ugtst.html" target="_blank">Testing</a>]
-* pass:[<a href="./guides/ugbtb.html" target="_blank">Beyond the Basics</a>]
+* link:./guides/ug.html[Fundamentals^]
+* link:./guides/ugvw.html[Wicket Viewer^]
+* link:./guides/ugvro.html[Restful Objects Viewer^]
+* link:./guides/ugsec.html[Security^]
+* link:./guides/ugtst.html[Testing^]
+* link:./guides/ugbtb.html[Beyond the Basics^]
 
 
 |*Reference Guides:*
 
-* pass:[<a href="./guides/rg.html" target="_blank">Reference Guide</a>]
-* pass:[<a href="./guides/rgant.html" target="_blank">Annotations</a>]
+* link:./guides/rg.html[Reference Guide^]
+* link:./guides/rgant.html[Annotations^]
+* link:./guides/rgsvc.html[Domain Services^]
+
 
 
 |*Contributors' Guide*

@@ -135,7 +135,7 @@ dynamically.  If writing integration tests or fixtures, or (sometimes) just regu
 instantiate mixins directly.
 
 For this you can use the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-creation-api[`DomainObjectContainer#mixin(...)`
 method.  For example:
 
 [source,java]

@@ -6,7 +6,7 @@
 
 
 
-The `BackgroundCommandExecution` class (a subclass of xref:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] and the xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`].
+The `BackgroundCommandExecution` class (a subclass of xref:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[AbstractIsisSessionTemplate]) is intended to simplify the execution of background ``Command``s persisted by way of the xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] and the xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommandService`].
 
 Its signature is:
 
@@ -34,9 +34,9 @@ image::{_imagesdir}headless-access/BackgroundCommandExecution.png[width="400px"]
 
 == Background Execution
 
-The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:rg.adoc#_rg_services-api_manpage-BackgroundService[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
+The `BackgroundCommandExecutionFromBackgroundCommandServiceJdo` is a concrete subclass of `BackgroundCommandExecution` (see the xref:rgsvc.adoc#_rgsvc-api_manpage-BackgroundService[`BackgroundCommandService`]), the intended use being for the class to be instantiated regularly (eg every 10 seconds) by a scheduler such as http://quartz-scheduler.org[Quartz]) to poll for ``Command``s to be executed, and then execute them.
 
-This implementation queries for ``Command``s persisted by the link:http://www.isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] and xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
+This implementation queries for ``Command``s persisted by the link:http://www.isisaddons.org/isis-module-command[Isis addons Command Module]'s  implementations of xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] and xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] using the `BackgroundCommandServiceJdoRepository`.
 
 The diagram below (link:http://yuml.me/edit/25343da1[yuml.me/25343da1]) shows the inheritance hierarchy for this class:
 

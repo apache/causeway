@@ -13,7 +13,7 @@ Whenever a domain object (or list of domain objects) is to be rendered, the fram
 * pre-execute phase: before the invocation of the action
 * post-execute: after the invocation of the action
 
-Subscribers subscribe through the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
+Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] using either link:https://github.com/google/guava[Guava] or link:http://www.axonframework.org/[Axon Framework] annotations and can influence each of these phases.
 
 By default the event raised is `ActionDomainEvent.Default`. For example:
 
@@ -60,7 +60,7 @@ rather than through the constructor.  This substantially reduces the boilerplate
 
 == Subscribers
 
-Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
+Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API or (if the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] has been appropriately configured) using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
 
@@ -155,8 +155,8 @@ then no event will be posted.
 
 == Raising events programmatically
 
-Normally events are only raised for interactions through the UI. However, events can be raised programmatically either by calling the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] API directly, or by emulating the UI by
-wrapping the target object using the xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`] domain service.
+Normally events are only raised for interactions through the UI. However, events can be raised programmatically either by calling the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] API directly, or by emulating the UI by
+wrapping the target object using the xref:rgsvc.adoc#_rgsvc-api_manpage-WrapperFactory[`WrapperFactory`] domain service.
 
 
 

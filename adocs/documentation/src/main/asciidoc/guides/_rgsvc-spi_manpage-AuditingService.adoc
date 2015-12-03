@@ -1,0 +1,85 @@
+[[_rgsvc-spi_manpage-AuditingService]]
+= `AuditingService3`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+The `AuditingService3` auditing service provides a simple mechanism to capture changes to data. It is called for each property that has changed on any domain object, as a set of pre- and post-values.
+
+[NOTE]
+====
+In case you are wondering what happened to `AuditingService` and `AuditingService2`, these were earlier versions of the SPI that have since been deprecated and removed.
+====
+
+
+== SPI
+
+The SPI for the service is:
+
+[source,java]
+----
+public interface AuditingService3 {
+
+    @Programmatic
+    public void audit(
+            final UUID transactionId, String targetClassName, final Bookmark target,
+            String memberIdentifier, final String propertyName,
+            final String preValue, final String postValue,
+            final String user, final java.sql.Timestamp timestamp);
+  }
+----
+
+The framework will call this for each and every domain object property that is modified within a transaction.
+
+
+
+== Implementation
+
+The most full-featured available implementation is the (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' Audit module].  This creates an audit records for each changed property (ie every time that `AuditingService3#audit(...)` is called.  The implementation is `org.isisaddons.module.audit.dom.AuditingService`.
+
+The module also provides:
+
+* `AuditingServiceMenu` service which provides actions to search for ``AuditEntry``s, underneath an 'Activity' menu on the secondary menu bar.
+
+* `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.  None of its actions are visible in the user interface (they are all `@Programmatic`).
+
+* `AuditingServiceContributions` which contrbutes collections to the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[ `HasTransactionId`] interface. This will therefore display all audit entries that occurred in a given transaction, in other words whenever a command, a published event or another audit entry is displayed.
+
+
+
+If you just want to debug (writing to stderr), you can instead configure `o.a.i.applib.services.audit.AuditingService3$Stderr`
+
+
+
+== Usage
+
+The typical way to indicate that an object should be audited is to annotate it with the xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+
+
+
+
+== Registering the Services
+
+The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit] module provides an implementation of
+this service (`AuditingService`), and also provides a number of related domain services (`AuditingServiceMenu`,
+`AuditingServiceRepository` and `AuditingServiceContributions`).
+
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If menu items or contributions are not required in the UI, these can be suppressed either using security or by
+implementing a xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+
+
+
+== Related Services
+
+The auditing service works very well with the xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+
+You may also want to configure the xref:rgsvc.adoc#_rgsvc-spi_manpage-PublishingService[`PublishingService`].
+
+All three of these services collaborate implicitly by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+

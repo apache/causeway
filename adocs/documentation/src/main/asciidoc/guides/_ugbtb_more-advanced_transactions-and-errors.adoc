@@ -6,7 +6,7 @@
 
 In Apache Isis, every action invocation (in fact, every interaction) is automatically wrapped in a transaction, and any repository query automatically does a flush.
 
-What that means is that there's no need to explicitly start or commit transactions in Apache Isis; this will be done for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport[IsisJdoSupport] domain service, then you are likely to confuse Isis and get a stack trace for your trouble.
+What that means is that there's no need to explicitly start or commit transactions in Apache Isis; this will be done for you. Indeed, if you do try to manage transactions (eg by reaching into the JDO `PersistenceManager` exposed by the xref:rgsvc.adoc#_rgsvc-api_manpage-IsisJdoSupport[IsisJdoSupport] domain service, then you are likely to confuse Isis and get a stack trace for your trouble.
 
 
 
@@ -23,11 +23,11 @@ If you throw any other exception (ie not a subclass of `RecoverableException`), 
 
 == Raise message/errors to users
 
-NOTE: TODO - xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_messages-api[`DomainObjectContainer`]
+NOTE: TODO - xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_messages-api[`DomainObjectContainer`]
 
 
 
 == Exception Recognizers
 
-NOTE: TODO - xref:rg.adoc#_rg_services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`] service
+NOTE: TODO - xref:rgsvc.adoc#_rgsvc-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`] service
 

@@ -13,7 +13,7 @@ Still, on very rare occasion you may have a need, in which case you can either u
 
 == `DomainObjectContainer` API
 
-The xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`] service exposes the following API:
+The xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`] service exposes the following API:
 
 [source,java]
 ----

@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-NOTE: TODO - see xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`], xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`], xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`], xref:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`], xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`].
+NOTE: TODO - see xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`], xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`], xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`], xref:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`], xref:rgsvc.adoc#_rgsvc-api_manpage-WrapperFactory[`WrapperFactory`].
 
 
 

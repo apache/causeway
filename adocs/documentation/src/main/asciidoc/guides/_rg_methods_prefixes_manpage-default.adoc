@@ -8,7 +8,7 @@
 
 The `default...()` supporting method is called for action parameters to return the initial argument value.  This may be some sensible default (eg today's date, or 0 or 1), or -- for an action that is modifying the state of an object -- might default to the current value of a corresponding property.
 
-The method is _also_ called for properties in the case when an object is newly instantiated using xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer#newTransientInstance(...)`].  This is a much less common use case.  If a default is not specified then properties are initialized to a default based on their type (eg 0 or `false`).
+The method is _also_ called for properties in the case when an object is newly instantiated using xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer#newTransientInstance(...)`].  This is a much less common use case.  If a default is not specified then properties are initialized to a default based on their type (eg 0 or `false`).
 
 The signature of the supporting method depends on whether it is for an action parameter or a property.
 
@@ -123,7 +123,7 @@ public class ShoppingCartItem {
 
 There are, in fact, two other ways to set properties of a newly instantiated object to default values.
 
-The first is to use the xref:rg.adoc#_rg_methods_lifecycle_manpage-created[`created()`] callback, called by the framework when xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer#newTransientInstance(...)`] is called.  This method is called after any dependencies have been injected into the service.
+The first is to use the xref:rg.adoc#_rg_methods_lifecycle_manpage-created[`created()`] callback, called by the framework when xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer#newTransientInstance(...)`] is called.  This method is called after any dependencies have been injected into the service.
 
 The second is more straightforward: simply initialize properties in the constructor.  However, this cannot use any injected services as they will not have been initialized.
 

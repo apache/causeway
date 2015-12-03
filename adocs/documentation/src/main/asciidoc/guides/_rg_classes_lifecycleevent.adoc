@@ -39,7 +39,7 @@ Impl'n (g: a:)
 |(abstract class). +
 `ObjectCreatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first instantiated
-using the xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
+using the xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-creation-api[`DomainObjectContainer`]'s
 `#newTransientInstance(...)` method.
 
 
@@ -61,7 +61,7 @@ using the xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-cre
 |(abstract class). +
 `ObjectPersistedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is first saved (inserted) into the database using the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
@@ -73,7 +73,7 @@ xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-a
 |(abstract class). +
 `ObjectPersistingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be saved (inserted) into the database using the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#persist(...)` method.
 
 
@@ -85,7 +85,7 @@ xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-a
 |(abstract class). +
 `ObjectRemovingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be deleted from the database using the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#remove(...)` method.
 
 
@@ -98,7 +98,7 @@ xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-a
 `ObjectUpdatedEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object has just been updated in the database.  This is done either explicitly when the current
 transaction is flushed using the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
@@ -111,7 +111,7 @@ xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-a
 `ObjectUpdatingEvent.Default` is the concrete implementation that is used.
 |Broadcast when an object is about to be updated in the database.  This is done either explicitly when the current
 transaction is flushed using the
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 

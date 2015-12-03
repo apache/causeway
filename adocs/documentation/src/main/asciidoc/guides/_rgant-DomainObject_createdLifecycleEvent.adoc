@@ -5,11 +5,11 @@
 :_imagesdir: images/
 
 
-Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.  This is typically when the xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]'s xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_object-creation-api[`newTransientInstance()`] is called;
+Whenever a domain object is instantiated or otherwise becomes known to the framework, a "created" lifecycle event is fired.  This is typically when the xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`]'s xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-creation-api[`newTransientInstance()`] is called;
 it will also happen if the object is simply instantiated with `new(...)`, and then the container's
-xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer_services-api[`injectServicesInto(...)`] method is called.
+xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_services-api[`injectServicesInto(...)`] method is called.
 
-Subscribers subscribe through the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] and can
 use the event to obtain a reference to the object just created.  The subscriber could then, for example, update the
 object, eg looking up state from some external datastore.
 
@@ -49,7 +49,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`] has been appropriately configured)
+or (if the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):

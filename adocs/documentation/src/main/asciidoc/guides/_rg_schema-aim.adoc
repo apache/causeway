@@ -8,7 +8,7 @@
 The "aim" schema defines the serialized form (or memento) of an action invocation.
 
 Action invocations are captured (in memory rather than in serialized form) when the end-user invokes the action
-"through" the UI, by way of the xref:rg.adoc#_rg_services-api_manpage-CommandContext[CommandContext] service. Using the
+"through" the UI, by way of the xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[CommandContext] service. Using the
 `ActionInvocationMementoDtoUtils` utility class, a service can instantiate `ActionInvocationMementoDto` which can then
 be serialized to/from using the same `ActionInvocationMementoDtoUtils` class.
 

@@ -1,0 +1,100 @@
+[[_rgsvc-spi_manpage-CommandService]]
+= `CommandService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The `CommandService` service supports the xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[`CommandContext`] service such that `Command` objects (that reify the invocation of an action on a domain object into an object) can be persisted.
+
+Persistent `Command`s support several use cases:
+
+* they enable profiling of the running application (which actions are invoked then most often, what is their response time)
+* they act as a parent to any background commands that might be invoked through the xref:rgsvc.adoc#_rgsvc-api_manpage-BackgroundService[`BackgroundService`]
+* if xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`transactionId`]
+* if xref:rgsvc.adoc#_rgsvc-spi_manpage-PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`transactionId`]
+* the associated xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
+
+
+
+The screencast below provides a run-through of the command (profiling) service, auditing service, publishing service. It also shows how commands can be run in the background either explicitly by scheduling through the background service or implicitly by way of a framework annotation.
+
+
+
+video::tqXUZkPB3EI[youtube,width="560px",height="315px"]
+
+[NOTE]
+====
+Note that this screencast shows an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
+====
+
+
+== SPI
+
+The `CommandService` service defines the following very simple API:
+
+[source,java]
+----
+public interface CommandService {
+    @Programmatic
+    Command create();
+    @Programmatic
+    void startTransaction(Command command, final UUID transactionId);
+    @Programmatic
+    void complete(Command command);
+    @Programmatic
+    boolean persistIfPossible(Command command);
+}
+----
+
+where `Command` is defined as defined by the xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[`CommandContext`] service.
+
+
+== Implementation
+
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation (`org.isisaddons.module.command.dom.CommandServiceJdo`) that persists ``Command``s using the JDO/DataNucleus object store.  It further provides a number of supporting services:
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoRepository` is a repository to search for persisted ``Command``s
+
+* `org.isisaddons.module.command.dom.CommandServiceJdoContributions` contributes actions for searching for persisted child and sibling ``Command``s.
+
+
+
+== Usage
+
+The typical way to indicate that an action should be reified into a `Command` is by annotating the action using xref:rgant.adoc#_rgant-Action_command[`@Action#command()`].
+
+
+
+
+== Registering the Services
+
+The (non-ASF) http://github.com/isisaddons/isis-module-command[Isis addons' command] module provides an implementation
+of this service (`CommandService`), and also provides a number of related domain services
+(`CommandJdoRepository` and `CommandServiceJdoContributions`).  This
+module also provides service implementations of the
+xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`BackgroundCommandService`].
+
+Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
+
+If contributions are not required in the UI, these can be suppressed either using security or by implementing a
+xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+
+
+
+
+== Related Services
+
+As discussed above, this service supports the xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[`CommandContext`], providing the ability for `Command` objects to be
+persisted. This is closely related to the xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommandService`]that allows the xref:rgsvc.adoc#_rgsvc-api_manpage-BackgroundService[`BackgroundService`] to schedule commands for background/asynchronous execution.
+
+The implementations of `CommandService` and `BackgroundCommandService` are intended to go together, so that persistent parent `Command`s can be associated with their child background `Command`s.
+
+The services provided by this module combines very well with the xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[`AuditingService`].  The `CommandService` captures the _cause_ of an interaction (an action was invoked, a property was edited), while the `AuditingService3` captures the _effect_ of that interaction in terms of changed state.
+
+You may also want to configure the xref:rgsvc.adoc#_rgsvc-spi_manpage-PublishingService[`PublishingService`].
+
+All three of these services collaborate implicitly by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+

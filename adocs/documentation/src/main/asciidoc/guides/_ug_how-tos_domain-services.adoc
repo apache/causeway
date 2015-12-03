@@ -23,7 +23,7 @@ image::{_imagesdir}how-tos/domain-services/hexagonal-architecture-addons.png[wid
 
 The (non-ASF) link:http://isisaddons.org[Isis Addons] are a good source of domain services, providing SPI implementations of the common cross-cutting concerns, and also a number of APIs for domain objects to invoke (eg tags, excel, settings).  Of course, you can also write your own domain services as well, for example to interface with some external CMS system, say.
 
-The Apache Isis framework also provides numerous in-built domain services.  These are catalogued in the reference guide, see xref:rg.adoc#_rg_services-api[here] and xref:rg.adoc#_rg_services-spi[here].
+The Apache Isis framework also provides numerous in-built domain services.  These are catalogued in the reference guide, see xref:rgsvc.adoc#_rgsvc-api[here] and xref:rgsvc.adoc#_rgsvc-spi[here].
 
 
 
@@ -233,7 +233,7 @@ public class MyService extends AbstractService {
 }
 ----
 
-The framework provides a number of request-scoped services, include a scratchpad service, query results caching, and support for co-ordinating bulk actions.  See xref:rg.adoc#_rg_services-api[here] and xref:rg.adoc#_rg_services-spi[here] for further details.
+The framework provides a number of request-scoped services, include a scratchpad service, query results caching, and support for co-ordinating bulk actions.  See xref:rgsvc.adoc#_rgsvc-api[here] and xref:rgsvc.adoc#_rgsvc-spi[here] for further details.
 
 
 
@@ -284,7 +284,7 @@ isis.services = employee.Employees,\
 
 This is quite rare, however; you will often want to use default implementations of domain services that are provided by the framework and so will not reside under this prefix.
 
-Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rg.adoc#_rg_services-api[here] and _rg_services-spi[here] for further details.
+Examples of framework-provided services (as defined in the applib) include clock, auditing, publishing, exception handling, view model support, snapshots/mementos, and user/application settings management; see the xref:rgsvc.adoc#_rgsvc-api[here] and _rgsvc-spi[here] for further details.
 
 
 

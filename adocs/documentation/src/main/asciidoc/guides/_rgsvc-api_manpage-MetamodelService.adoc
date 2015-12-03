@@ -1,0 +1,42 @@
+[[_rgsvc-api_manpage-MetamodelService]]
+= `MetamodelService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The `MetaModelService` provides access (albeit currently extremely limited) to aspects of Apache Isis' internal metamodel.
+
+Currently this is limited to looking up the object type (as specified in xref:rgant.adoc#_rgant-DomainObject_objectType[`@DomainObject#objectType()`] and equivalent mechanisms, and as used in  xref:rgsvc.adoc#_rgsvc-api_manpage-BookmarkService[`Bookmark`]s and elsewhere) from an object's class, and vice versa.  In the future we expect other aspects of the metamodel to also be formally surfaced through this API.
+
+
+== API & Implementation
+
+The API defined by the service is:
+
+[source,java]
+----
+public interface MetaModelService {
+    @Programmatic
+    Class<?> fromObjectType(final String objectType);   // <1>
+    @Programmatic
+    String toObjectType(final Class<?> domainType);     // <2>
+}
+----
+<1> reverse lookup of a domain class' object type
+<2> lookup of a domain class' object type
+
+
+
+
+== Registering the Service
+
+Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
+`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+implementation of `MetamodelService` service is automatically registered and injected (it is annotated with
+`@DomainService`) so no further configuration is required.
+
+To use an alternative implementation, use
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).

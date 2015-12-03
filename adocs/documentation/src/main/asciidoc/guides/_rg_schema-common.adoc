@@ -8,7 +8,7 @@
 
 The main purpose of the common schema is to define the `oidDto` complex type: the object's type and its identifier.
 This is basically a formal XML equivalent to the `Bookmark` object obtained from the
-xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`].
+xref:rgsvc.adoc#_rgsvc-api_manpage-BookmarkService[`BookmarkService`].
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by
 a given Apache Isis application.  With it, we have the ability to lookup any arbitrary object.  Further discussion and

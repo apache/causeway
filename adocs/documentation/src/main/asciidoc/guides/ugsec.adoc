@@ -42,7 +42,7 @@ In addition to Apache Isis' Shiro-based implementation of its authentication and
 [NOTE]
 .What about auditing?
 ====
-A further aspect of security is auditing: recording what data was modified by which user.   Apache Isis does define two service APIs -- xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] and xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`] -- that provide hooks to track which actions (commands) are invoked, and what data was modified as a result (auditing).
+A further aspect of security is auditing: recording what data was modified by which user.   Apache Isis does define two service APIs -- xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] and xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[`AuditingService`] -- that provide hooks to track which actions (commands) are invoked, and what data was modified as a result (auditing).
 
 Isis does not itself provide any in-built implementations of these APIs, but there are implementations within (non-ASF) link:http://www.isisaddons.org[Isis Addons], namely the http://github.com/isisaddons/isis-module-command[Isis addons' command] module and the http://github.com/isisaddons/isis-module-audit[Isis addons' auditing] module.
 ====

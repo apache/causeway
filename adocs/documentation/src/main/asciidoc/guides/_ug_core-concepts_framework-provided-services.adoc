@@ -12,43 +12,43 @@ Some framework domain services are SPI: they exist primarily so that the applica
 
 General purpose:
 
-* xref:rg.adoc#_rg_services-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
-* xref:rg.adoc#_rg_services-api_manpage-ClockService[`ClockService`]
-* xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport[`IsisJdoSupport`]
-* xref:rg.adoc#_rg_services-api_manpage-WrapperFactory[`WrapperFactory`]
-* xref:rg.adoc#_rg_services-api_manpage-EventBusService[`EventBusService`]
-* xref:rg.adoc#_rg_services-api_manpage-EmailService[`EmailService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-ClockService[`ClockService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-IsisJdoSupport[`IsisJdoSupport`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-WrapperFactory[`WrapperFactory`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-EmailService[`EmailService`]
 
 Commands/Background/Auditing:
 
-* xref:rg.adoc#_rg_services-api_manpage-CommandContext[`CommandContext`] (SPI)
-* xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] (SPI)
-* xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`] (SPI)
-* xref:rg.adoc#_rg_services-api_manpage-BackgroundService[`BackgroundService`]
-* xref:rg.adoc#_rg_services-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] (SPI)
-* xref:rg.adoc#_rg_services-spi_manpage-PublishingService[`PublishingService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[`CommandContext`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[`AuditingService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-api_manpage-BackgroundService[`BackgroundService`]
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommandService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-PublishingService[`PublishingService`] (SPI)
 
 Information Sharing:
 
-* xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`]
-* xref:rg.adoc#_rg_services-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
-* xref:rg.adoc#_rg_services-api_manpage-QueryResultsCache[`QueryResultsCache`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-Scratchpad[`Scratchpad`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-QueryResultsCache[`QueryResultsCache`]
 
 
 UserManagement:
 
-* xref:rg.adoc#_rg_services-spi_manpage-UserProfileService[`UserProfileService`] (SPI)
-* xref:rg.adoc#_rg_services-spi_manpage-UserRegistrationService[`UserRegistrationService`] (SPI)
-* xref:rg.adoc#_rg_services-spi_manpage-EmailNotificationService[`EmailNotificationService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-UserProfileService[`UserProfileService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-UserRegistrationService[`UserRegistrationService`] (SPI)
+* xref:rgsvc.adoc#_rgsvc-spi_manpage-EmailNotificationService[`EmailNotificationService`] (SPI)
 
 
 Bookmarks and Mementos:
 
-* xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`]
-* xref:rg.adoc#_rg_services-api_manpage-MementoService[`MementoService`]
-* xref:rg.adoc#_rg_services-api_manpage-DeepLinkService[`DeepLinkService`]
-* xref:rg.adoc#_rg_services-api_manpage-XmlSnapshotService[`XmlSnapshotService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-BookmarkService[`BookmarkService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-MementoService[`MementoService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-DeepLinkService[`DeepLinkService`]
+* xref:rgsvc.adoc#_rgsvc-api_manpage-XmlSnapshotService[`XmlSnapshotService`]
 
 
-A full list of services can be found in the xref:rg.adoc#_rg_services-api[Domain Services (API)]  and xref:rg.adoc#_rg_services-spi[Domain Services (SPI)] chapters of the reference guide.
+A full list of services can be found in the xref:rgsvc.adoc#_rgsvc-api[Domain Services (API)]  and xref:rgsvc.adoc#_rgsvc-spi[Domain Services (SPI)] chapters of the reference guide.
 
