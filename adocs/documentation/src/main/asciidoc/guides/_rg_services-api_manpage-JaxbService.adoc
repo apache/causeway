@@ -48,7 +48,7 @@ Isis provides a default implementation of the service, `o.a.i.schema.services.ja
 == Usage within the framework
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
-xref:rgant.adoc#_rgant_manpage-XmlRootElement[`@XmlRootElement`]-annotated
+xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]-annotated
 xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view models].  The functionality to download XML and XSD schemas is also
 exposed in the UI through mixins to xref:rg.adoc#_rg_classes_roles_manpage-Dto[`Dto`] interface.
 
@@ -62,6 +62,6 @@ implementation of `JaxbService` service is automatically registered and injected
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 

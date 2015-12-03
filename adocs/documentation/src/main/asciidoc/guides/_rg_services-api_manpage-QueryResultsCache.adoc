@@ -116,11 +116,11 @@ implementation of `QueryResultsCache` service is automatically registered and in
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
 
 == Related Services
 
-The xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:rgant.adoc#_rgant_manpage-Action_invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.
+The xref:rg.adoc#_rg_services-api_manpage-Scratchpad[`Scratchpad`] service is also intended for actions that are called many times, allowing arbitrary information to be shared between them. Those methods could be called from some outer loop in domain code, or by the framework itself if the action invoked has the xref:rgant.adoc#_rgant-Action_invokeOn[`@Action#invokeOn()`] annotation attribute set to `OBJECT_AND_COLLECTION` or `COLLECTION_ONLY`.

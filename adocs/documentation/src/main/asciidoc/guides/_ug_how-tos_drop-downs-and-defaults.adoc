@@ -57,9 +57,9 @@ NOTE: TODO
 
 ### Drop-down for limited number of instances
 
-NOTE: TODO - xref:rgant.adoc#_rgant_manpage-DomainObject_bounded[`@DomainObject#bounded()`]
+NOTE: TODO - xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObject#bounded()`]
 
 
 ### Auto-complete (repository-based)
 
-xref:rgant.adoc#_rgant_manpage-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`]
+xref:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject#autoCompleteRepository()`]

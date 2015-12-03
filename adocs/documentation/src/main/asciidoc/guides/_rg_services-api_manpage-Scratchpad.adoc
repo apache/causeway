@@ -36,7 +36,7 @@ This class (`o.a.i.applib.services.scratchpad.Scratchpad`) is also the implement
 
 == Usage
 
-The most common use-case is for xref:rgant.adoc#_rgant_manpage-Action_invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
+The most common use-case is for xref:rgant.adoc#_rgant-Action_invokeOn[bulk] actions that act upon multiple objects in a list.  The (same) `Scratchpad` service is injected into each of these objects, and so they can use pass information.
 
 For example, the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) demonstrates how the `Scratchpad` service can be used to calculate the total cost of the selected `ToDoItem`s:
 
@@ -114,7 +114,7 @@ implementation of `Scratchpad` service is automatically registered and injected 
 so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
@@ -123,6 +123,6 @@ further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementatio
 
 == Related Services
 
-The xref:rg.adoc#_rg_services-api_manpage-ActionInteractionContext[`ActionInteractionContext`] service allows xref:rgant.adoc#_rgant_manpage-Action_invokeOn[bulk actions] to co-ordinate with each other.
+The xref:rg.adoc#_rg_services-api_manpage-ActionInteractionContext[`ActionInteractionContext`] service allows xref:rgant.adoc#_rgant-Action_invokeOn[bulk actions] to co-ordinate with each other.
 
 The xref:rg.adoc#_rg_services-api_manpage-QueryResultsCache[`QueryResultsCache`] is useful for caching the results of expensive method calls.

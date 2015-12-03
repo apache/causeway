@@ -9,7 +9,7 @@ This class extends xref:rg.adoc#_rg_classes_super_manpage-AbstractContainedObjec
 intent was to be a convenience subclass for services acting as either a repository or a factory, however note that
  all of the methods that it defines are now deprecated.
 
-Instead, indicate that a service is repository using the xref:rgant.adoc#_rgant_manpage-DomainService_repositoryFor[`@DomainService#repositoryFor()`] attribute.
+Instead, indicate that a service is repository using the xref:rgant.adoc#_rgant-DomainService_repositoryFor[`@DomainService#repositoryFor()`] attribute.
 
 
 

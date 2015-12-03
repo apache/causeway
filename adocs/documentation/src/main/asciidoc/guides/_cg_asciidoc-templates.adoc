@@ -293,7 +293,7 @@ pass:[<pre>xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`\]</pre>]
 
 
 |`adrgna`
-|pass:[<pre>xref:rgant.adoc#_rgant_manpage-xxx[`@xxx`]</pre>]
+|pass:[<pre>xref:rgant.adoc#_rgant-xxx[`@xxx`]</pre>]
 
 a hyperlink to the "man page" for an annotation, where:
 
@@ -301,14 +301,14 @@ a hyperlink to the "man page" for an annotation, where:
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant_manpage-Action[`@Action`\]</pre>]
+pass:[<pre>xref:rgant.adoc#_rgant-Action[`@Action`\]</pre>]
 
-|xref:rgant.adoc#_rgant_manpage-Action[`@Action`]
+|xref:rgant.adoc#_rgant-Action[`@Action`]
 
 
 
 |`adrgnt`
-|pass:[<pre>xref:rgant.adoc#_rgant_manpage-xxx_ttt[`@xxx#ttt()`]</pre>]
+|pass:[<pre>xref:rgant.adoc#_rgant-xxx_ttt[`@xxx#ttt()`]</pre>]
 
 a hyperlink to the "man page" for the specific attribute (field) of an annotation, where:
 
@@ -317,9 +317,9 @@ a hyperlink to the "man page" for the specific attribute (field) of an annotatio
 
 for example:
 
-pass:[<pre>xref:rgant.adoc#_rgant_manpage-Action_semantics[`@Action#semantics()`\]</pre>]
+pass:[<pre>xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`\]</pre>]
 
-|xref:rgant.adoc#_rgant_manpage-Action_semantics[`@Action#semantics()`]
+|xref:rgant.adoc#_rgant-Action_semantics[`@Action#semantics()`]
 
 
 

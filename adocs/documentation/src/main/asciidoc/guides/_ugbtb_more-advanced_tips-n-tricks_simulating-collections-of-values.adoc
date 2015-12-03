@@ -19,5 +19,5 @@ NOTE: TODO
 
 == Persistence Concerns
 
-NOTE: TODO -  easiest to simply store using DataNucleus' support for collections, marked as xref:rgant.adoc#_rgant_manpage-Programmatic[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
+NOTE: TODO -  easiest to simply store using DataNucleus' support for collections, marked as xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`] so that it is ignored by Apache Isis.  Alternatively can store as json/xml in a varchar(4000) or clob and manually unpack.
 

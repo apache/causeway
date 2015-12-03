@@ -15,40 +15,40 @@ These annotations are also commonly used, but relate _not_ to objects or object 
 |Layer
 |xref:rg.adoc#_rg_object-layout_dynamic[Dynamic layout]?
 
-|xref:rgant.adoc#_rgant_manpage-Facets[`@Facets`]
+|xref:rgant.adoc#_rgant-Facets[`@Facets`]
 |Install arbitrary facets within the Apache Isis metamodel.
 |(any)
 |
 
-|xref:rgant.adoc#_rgant_manpage-HomePage[`@HomePage`]
+|xref:rgant.adoc#_rgant-HomePage[`@HomePage`]
 |Query-only action (on domain service) to be invoked, result of which is rendered as the user's home page.
 |UI
 |
 
-|xref:rgant.adoc#_rgant_manpage-MemberGroupLayout[`@MemberGroupLayout`]
+|xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`]
 |Grouping of properties into groups, and organizing of properties, collections into columns.
 |UI
 |Yes
 
 
-|xref:rgant.adoc#_rgant_manpage-MemberOrder[`@MemberOrder`]
+|xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`]
 |Ordering of properties, collections and actions, and also associating actions with either a property or a collection.
 |UI
 |Yes
 
 
-|xref:rgant.adoc#_rgant_manpage-MinLength[`@MinLength`]
+|xref:rgant.adoc#_rgant-MinLength[`@MinLength`]
 |Minimum number of characters required for an auto-complete search argument.
 |UI
 |
 
 
-|xref:rgant.adoc#_rgant_manpage-Programmatic[`@Programmatic`]
+|xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`]
 |Ignore a public method, excluded from the Apache Isis metamodel.
 |Domain
 |
 
-|xref:rgant.adoc#_rgant_manpage-Title[`@Title`]
+|xref:rgant.adoc#_rgant-Title[`@Title`]
 |Indicates which of the object's properties should be used to build up a title for the object.
 |UI
 

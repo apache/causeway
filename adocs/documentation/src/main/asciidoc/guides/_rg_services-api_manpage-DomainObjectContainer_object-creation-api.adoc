@@ -21,9 +21,9 @@ public interface DomainObjectContainer {
 }
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service
-<2> create a new view model, with the specified memento (as per xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rgant.adoc#_rgant_manpage-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
+<2> create a new view model, with the specified memento (as per xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
 <3> programmatically instantiate a mixin, as annotated with
-xref:rgant.adoc#_rgant_manpage-Mixin[`@Mixin`] or xref:rgant.adoc#_rgant_manpage-DomainObject_nature[`@DomainObject#nature()`].
+xref:rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
 
 For example:
 

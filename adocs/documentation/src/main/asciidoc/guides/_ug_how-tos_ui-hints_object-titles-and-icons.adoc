@@ -21,7 +21,7 @@ The title is always shown with an icon, so there is generally no need for the ti
 
 === Declarative style
 
-The xref:rgant.adoc#_rgant_manpage-Title[`@Title`] annotation can be used build up the title of an object from its constituent parts.
+The xref:rgant.adoc#_rgant-Title[`@Title`] annotation can be used build up the title of an object from its constituent parts.
 
 For example:
 
@@ -84,7 +84,7 @@ NOTE: TODO - see xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`]
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
 
 
 
@@ -94,4 +94,4 @@ NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], x
 
 It is also possible for an object to return a xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`], xref:rgant.adoc#_rgant_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rgant.adoc#_rgant_manpage-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rgant.adoc#_rgant_manpage-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]
+NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

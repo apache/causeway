@@ -17,7 +17,7 @@ For more on contributed services:
 
 * the syntax of writing contributed actions/properties/collections is described in this xref:ug.adoc#_ug_how-tos_contributed-members[how-to]
 
-* there's also useful information in the reference guide, discussing the xref:rgant.adoc#_rgant_manpage-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
+* there's also useful information in the reference guide, discussing the xref:rgant.adoc#_rgant-DomainService_nature[@DomainService#nature()] attribute, for the `NatureOfService.VIEW_CONTRIBUTIONS_ONLY` nature.
 
 
 

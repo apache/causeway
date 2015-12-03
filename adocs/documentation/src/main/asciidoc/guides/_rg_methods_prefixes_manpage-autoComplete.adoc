@@ -58,7 +58,7 @@ public class ShoppingCartItem {
 }
 ----
 <1> `product` is the 0th argument of the action.
-<2> the xref:rgant.adoc#_rgant_manpage-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<2> the xref:rgant.adoc#_rgant-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 
 
@@ -91,6 +91,6 @@ public class ShoppingCartItem {
     ...
 }
 ----
-<1> the xref:rgant.adoc#_rgant_manpage-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
+<1> the xref:rgant.adoc#_rgant-MinLength[`@MinLength`] annotation specifies the minimum number of characters that must be entered before a search is performed for matching objects
 
 

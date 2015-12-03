@@ -66,7 +66,7 @@ NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`]
 
 ### Declarative validation
 
-NOTE: TODO - using xref:rgant.adoc#_rgant_manpage-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`], xref:rgant.adoc#_rgant_manpage-Property_mustSatisfy[`@Property#mustSatisfy()`]
+NOTE: TODO - using xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`@Parameter#mustSatisfy()`], xref:rgant.adoc#_rgant-Property_mustSatisfy[`@Property#mustSatisfy()`]
 
 
 

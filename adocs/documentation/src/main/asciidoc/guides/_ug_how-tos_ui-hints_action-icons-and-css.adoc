@@ -11,7 +11,7 @@ These UI hint can be applied either to individual actions, or can be applied en-
 
 == Per action
 
-NOTE: TODO - xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
+NOTE: TODO - xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] and xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`]
 
 
 Alternatively, you can specify these hints dynamically in the xref:rg.adoc#_rg_object-layout[`Xxx.layout.json`] for the entity.
@@ -19,7 +19,7 @@ Alternatively, you can specify these hints dynamically in the xref:rg.adoc#_rg_o
 
 == Per pattern matching
 
-Rather than annotating every action with xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] and xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
+Rather than annotating every action with xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] and xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`] you can instead specify the UI hint globally using regular expressions.
 
 The xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.reflector.facet.cssClassFa.patterns` is a comma separated list of key:value pairs, eg:
 
@@ -52,7 +52,7 @@ where (again)the key is a regex matching action names (eg `delete.*`) and the va
 
 [TIP]
 ====
-We strongly recommend that you use this technique rather than annotating each action with xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] or xref:rgant.adoc#_rgant_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`].  Not only is the code more maintainable, you'll also find that it forces you to be consistent in your action names.
+We strongly recommend that you use this technique rather than annotating each action with xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[`@ActionLayout#cssClassFa()`] or xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`].  Not only is the code more maintainable, you'll also find that it forces you to be consistent in your action names.
 ====
 
 

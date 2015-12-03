@@ -17,6 +17,6 @@ The class itself is instantiated automatically by the framework whenever interac
 [NOTE]
 ====
 If the domain object defines its own xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] supporting method, or
-has xref:rgant.adoc#_rgant_manpage-Title[`@Title`] annotation(s) on its properties, then these will take
+has xref:rgant.adoc#_rgant-Title[`@Title`] annotation(s) on its properties, then these will take
 precedence.
 ====

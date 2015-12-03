@@ -86,7 +86,7 @@ This is an "internal" SPI, meaning that it uses types that are not part of the I
 As discussed in the introduction, the framework provides a default implementation, `o.a.i.v.ro.rendering.service.RepresentationServiceForRestfulObjects`.   This delegates to xref:rg.adoc#_rg_services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] to generate an alternative representation; but if none is provided then it falls back on generating the representations as defined in the link:http://restfulobjects.org[Restful Objects spec] v1.0.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

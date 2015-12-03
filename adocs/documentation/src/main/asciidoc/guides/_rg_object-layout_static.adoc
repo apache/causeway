@@ -17,13 +17,13 @@ The annotation defines two attributes, `name()` and `sequence()`.  Their usage d
 
 * for properties, the `name()` is used to group properties together.  The `sequence()` then orders properties within these groups. If no `name()` is specified then the property is placed in a fallback "General" group, called "General". +
 +
-The name of these "member groups" are then referenced by xref:rgant.adoc#_rgant_manpage-MemberGroupLayout[`@MemberGroupLayout`].
+The name of these "member groups" are then referenced by xref:rgant.adoc#_rgant-MemberGroupLayout[`@MemberGroupLayout`].
 
 * for collections, the `name()` attribute is (currently) unused.  The `sequence()` orders collections relative to one another
 
 * for actions, the `name()` attribute associates an action with either a property or with a collection. +
 +
-If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rgant.adoc#_rgant_manpage-ActionLayout_position[`@ActionLayout#position()`] attribute. +
+If the `name()` attribute matches a property name, then the action's button is rendered close to the property, according to xref:rgant.adoc#_rgant-ActionLayout_position[`@ActionLayout#position()`] attribute. +
 +
 On the other hand if the `name() attribute matches a collection name, then the action's button is rendered on the collection's header. +
 +
@@ -156,4 +156,4 @@ image::{_imagesdir}reference-layout/4-0-8-0.png[width="720px",link="{_imagesdir}
 
 == Other Annotations
 
-As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations: xref:rgant.adoc#_rgant_manpage-ActionLayout, [`@ActionLayout`] xref:rgant.adoc#_rgant_manpage-CollectionLayout[`@CollectionLayout`],  xref:rgant.adoc#_rgant_manpage-DomainObjectLayout[`@DomainObjectLayout`],  xref:rgant.adoc#_rgant_manpage-DomainServiceLayout[`@DomainServiceLayout`],  xref:rgant.adoc#_rgant_manpage-ParameterLayout[`@ParameterLayout`], xref:rgant.adoc#_rgant_manpage-PropertyLayout[`@PropertyLayout`], and xref:rgant.adoc#_rgant_manpage-ViewModelLayout[`@ViewModelLayout`]
+As of 1.8.0, all the layout annotations have been consolidated into the various `XxxLayout` annotations: xref:rgant.adoc#_rgant-ActionLayout, [`@ActionLayout`] xref:rgant.adoc#_rgant-CollectionLayout[`@CollectionLayout`],  xref:rgant.adoc#_rgant-DomainObjectLayout[`@DomainObjectLayout`],  xref:rgant.adoc#_rgant-DomainServiceLayout[`@DomainServiceLayout`],  xref:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`], xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`], and xref:rgant.adoc#_rgant-ViewModelLayout[`@ViewModelLayout`]

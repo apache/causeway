@@ -18,6 +18,6 @@ The class itself is instantiated automatically by the framework whenever interac
 ====
 If the domain object defines its own xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`] supporting method,
 or if it has the
-xref:rgant.adoc#_rgant_manpage-DomainObjectLayout#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then
+xref:rgant.adoc#_rgant-DomainObjectLayout#cssClassFa[`@DomainObjectLayout#cssClassFa()`] attribute, then
 these will take precedence.
 ====

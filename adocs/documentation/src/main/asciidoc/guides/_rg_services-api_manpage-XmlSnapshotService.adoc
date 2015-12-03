@@ -199,7 +199,7 @@ implementation of `XmlSnapshotService` service is automatically registered and i
 `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
@@ -213,7 +213,7 @@ The xref:rg.adoc#_rg_services-api_manpage-MementoService[`MementoService`] also 
 The xref:rg.adoc#_rg_services-api_manpage-JaxbService[`JaxbService`] (`1.11.0-SNAPSHOT`) is a simple wrapper around
 standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that (as of
 `1.11.0-SNAPSHOT`) there is built-in support for JAXB classes (ie annotated with
-xref:rgant.adoc#_rgant_manpage-XmlRootElement[`@XmlRootElement`]) to be used as view models.
+xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
 
 
 

@@ -119,9 +119,9 @@ xref:rg.adoc#_rg_services-spi_manpage-CommandService[`CommandService`] for persi
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
 
-* xref:rgant.adoc#_rgant_manpage-Action_domainEvent[`Action#domainEvent()`]
-* xref:rgant.adoc#_rgant_manpage-Property_domainEvent[`Property#domainEvent()`]
-* xref:rgant.adoc#_rgant_manpage-Collection_domainEvent[`Collection#domainEvent()`]
+* xref:rgant.adoc#_rgant-Action_domainEvent[`Action#domainEvent()`]
+* xref:rgant.adoc#_rgant-Property_domainEvent[`Property#domainEvent()`]
+* xref:rgant.adoc#_rgant-Collection_domainEvent[`Collection#domainEvent()`]
 |`EventBusServiceJdo` +
 ``o.a.i.core`` +
 ``isis-core-objectstore-jdo-datanucleus``

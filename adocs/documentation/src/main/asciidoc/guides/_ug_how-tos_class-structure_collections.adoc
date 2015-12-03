@@ -14,7 +14,7 @@ While Apache Isis support collections of references, the framework (currently) d
 
 Or, actually, you can, because that is a valid mapping supported by JDO/DataNucleus .  However, Apache Isis has no default visualization.
 
-One workaround is to mark the collection as xref:rgant.adoc#_rgant_manpage-Programmatic[`@Programmatic`].  This ensures that the collection is ignored by Apache Isis.
+One workaround is to mark the collection as xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`].  This ensures that the collection is ignored by Apache Isis.
 
 Another workaround is to wrap each value in a view model, as explained in this xref:ugbtb.adoc#_ugbtb_more-advanced_tips-n-tricks_simulating-collections-of-values[tip].
 ====

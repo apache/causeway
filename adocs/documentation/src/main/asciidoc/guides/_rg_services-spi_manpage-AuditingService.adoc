@@ -56,7 +56,7 @@ If you just want to debug (writing to stderr), you can instead configure `o.a.i.
 
 == Usage
 
-The typical way to indicate that an object should be audited is to annotate it with the xref:rgant.adoc#_rgant_manpage-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
+The typical way to indicate that an object should be audited is to annotate it with the xref:rgant.adoc#_rgant-DomainObject_auditing[`@DomainObject#auditing()`] annotation.
 
 
 

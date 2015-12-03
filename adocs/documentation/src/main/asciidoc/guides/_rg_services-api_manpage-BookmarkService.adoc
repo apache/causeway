@@ -9,7 +9,7 @@ The `BookmarkService` provides the ability to obtain a serializable `o.a.i.appli
 
 For example, a `Customer` object with:
 
-* an object type of "custmgmt.Customer" (as per xref:rgant.adoc#_rgant_manpage-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
+* an object type of "custmgmt.Customer" (as per xref:rgant.adoc#_rgant-DomainObject_objectType[`DomainObject#objectType()`] or equivalent) , and
 * an id=123
 
 could correspond to a `Bookmark` with a string representation of `custmgmt.Customer|123`.
@@ -110,7 +110,7 @@ implementation of `BookmarkService` is automatically registered (it is annotated
 configuration is required.
 
 To use an alternative implementation, use
-xref:rgant.adoc#_rgant_manpage-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
+xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
 further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

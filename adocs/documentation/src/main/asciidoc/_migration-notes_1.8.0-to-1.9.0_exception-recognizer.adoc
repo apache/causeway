@@ -8,7 +8,7 @@
 
 The `ExceptionRecognizerCompositeForJdoObjectStore` service (an implementation of the xref:rg.adoc#_rg_services-spi_manpage-ExceptionRecognizer[`ExceptionRecognizer`] SPI) recognizes certain expected exceptions thrown by the JDO objectstore (for example, violations of uniqueness) and converts them into meaningful messages for the end-user.
 
-Prior to 1.9.0 this implementation was _not_ annotated with xref:rgant.adoc#_rgant_manpage-DomainService[`@DomainService`] and thus needed to be explicitly registered in `isis.properties`.
+Prior to 1.9.0 this implementation was _not_ annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`] and thus needed to be explicitly registered in `isis.properties`.
 
 In 1.9.0 the service has been annotated with `@DomainService` meaning that:
 
