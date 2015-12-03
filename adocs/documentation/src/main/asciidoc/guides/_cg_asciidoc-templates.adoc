@@ -185,9 +185,9 @@ a hyperlink to a level 2 (chapter and section) within the reference guide, where
 
 for example:
 
-pass:[<pre>xref:ug.adoc#_ug_object-layout_dynamic_[Dynamic object layout]</pre>]
+pass:[<pre>xref:ug.adoc#_ugfun_object-layout_dynamic_[Dynamic object layout]</pre>]
 
-|xref:ug.adoc#_ug_object-layout_dynamic[Dynamic object layout]
+|xref:ug.adoc#_ugfun_object-layout_dynamic[Dynamic object layout]
 
 
 
@@ -385,9 +385,9 @@ a hyperlink to a level 1 (chapter) within the users' guide, where:
 
 for example:
 
-pass:[<pre>xref:ug.adoc#_ug_core-concepts[Core concepts\]</pre>]
+pass:[<pre>xref:ug.adoc#_ugfun_core-concepts[Core concepts\]</pre>]
 
-|xref:ug.adoc#_ug_core-concepts[Core concepts]
+|xref:ug.adoc#_ugfun_core-concepts[Core concepts]
 
 
 
@@ -418,19 +418,19 @@ a hyperlink to a level 3 (chapter, section, subsection) within the users' guide,
 
 for example:
 
-pass:[<pre>xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern\]</pre>]
+pass:[<pre>xref:ug.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern\]</pre>]
 
-|xref:ug.adoc#_ug_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern]
+|xref:ug.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern]
 
 
 
 
 |`adugsimpleapp`
-|pass:[<pre>xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
+|pass:[<pre>xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
 
 A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
 
-|xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype]
+|xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
 
 
 |`adugvro`
@@ -769,11 +769,11 @@ defines an inline anchor to any heading, where:
 
 For example:
 
-pass:[<pre>= anchor:[_ug_i18n\] Internationalization</pre>]
+pass:[<pre>= anchor:[_ugfun_i18n\] Internationalization</pre>]
 
 An alternative (more commonly used in our documentation) is to use the `[[...]]` directly above the heading:
 
-pass:[<pre>[[_ug_i18n\]\]
+pass:[<pre>[[_ugfun_i18n\]\]
 = Internationalization</pre>]
 
 |

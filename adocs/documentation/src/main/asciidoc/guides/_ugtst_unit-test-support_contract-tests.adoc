@@ -64,11 +64,11 @@ public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
 == Bidirectional
 
-This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug.adoc#_ug_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[mutual registration pattern]
+This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[mutual registration pattern]
 
 [TIP]
 ====
-(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ug.adoc#_ug_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[here].  Also check out the xref:cg.adoc#_cg_ide-templates[IDE templates] for further guidance.
+(If using the JDO objectstore, then) there is generally no need to programmatically maintain 1:m relationships (indeed it may introduce subtle errors). For more details, see xref:ug.adoc#_ugfun_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[here].  Also check out the xref:cg.adoc#_cg_ide-templates[IDE templates] for further guidance.
 ====
 
 For example, suppose that `ParentDomainObject` and `ChildDomainObject` have a 1:m relationship (`ParentDomainObject#children` / `ChildDomainObject#parent`), and also `PeerDomainObject` has a 1:1 relationship with itself (`PeerDomainObject#next` / `PeerDomainObject#previous`).

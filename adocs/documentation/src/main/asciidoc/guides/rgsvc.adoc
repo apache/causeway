@@ -12,10 +12,27 @@ This guide documents Apache Isis' domain services, both those that act as an xre
 (implemented by the framework for your domain objects to call), and those domain services that act as an
 xref:rgsvc.adoc#_rgsvc-spi[SPI] (implemented by your domain application and which are called by the framework).
 
-Other guides are:
+=== Other Guides
 
-* xref:rg.adoc#[Reference Guide]
+Apache Isis documentation is broken out into a number of user and reference guides.
+
+The user guides available are:
+
+* xref:ugfun.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics]
+
+The reference guides are:
+
 * xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services] (this guide)
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rg.adoc#[Classes, Methods and Schema]
+
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
 
 
 include::_rgsvc-api.adoc[leveloffset=+1]

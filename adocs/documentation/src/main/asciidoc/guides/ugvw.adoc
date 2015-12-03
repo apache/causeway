@@ -18,13 +18,27 @@ This user guide discuss end-user features, configuration and customization of th
 
 It also discusses how to extend the viewer, and the (non-ASF) link:http://isisaddons.org[Isis Addons] wicket components.
 
-Other guides are:
+=== Other Guides
 
-* xref:ug.adoc#[Fundamentals]
+Apache Isis documentation is broken out into a number of user and reference guides.
+
+The user guides available are:
+
+* xref:ugfun.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer] (this guide)
 * xref:ugvro.adoc#[Restful Objects viewer]
 * xref:ugsec.adoc#[Security]
 * xref:ugtst.adoc#[Testing]
 * xref:ugbtb.adoc#[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services]
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rg.adoc#[Classes, Methods and Schema]
+
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
 
 
 

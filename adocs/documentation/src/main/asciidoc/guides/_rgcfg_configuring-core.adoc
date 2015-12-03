@@ -55,14 +55,14 @@ Only intended for "emergency use" as a workaround while pending fix/patch to Apa
 |regex:css1, regex2:css2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `delete.*`) and the value is a link:http://getbootstrap.com/css/[Bootstrap] CSS button class (eg `btn-warning) to be applied (as per `@CssClass()`) to all action members matching the regex. +
 
-See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `cssClassFa.patterns`
 |regex:fa-icon,regex2:fa-icon2,...
 |Comma separated list of key:value pairs, where the key is a regex matching action names (eg `create.*`) and the value is a link:http://fortawesome.github.io/Font-Awesome/icons/[font-awesome] icon name (eg `fa-plus`) to be applied (as per `@CssClassFa()`) to all action members matching the regex. +
 
-See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
+See xref:ug.adoc#_ugfun_how-tos_ui-hints_action-icons-and-css[UI hints] for more details.
 
 |`isis.reflector.facet.` +
 `domainObjectAnnotation.` +
@@ -189,7 +189,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programmi
 |`isis.reflector.` +
 `layoutMetadataReaders`
 |`FQCN`,`FQCN2`,...
-|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug.adoc#_ug_object-layout_dynamic[dynamic layout]s. +
+|Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:ug.adoc#_ugfun_object-layout_dynamic[dynamic layout]s. +
 
 See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 

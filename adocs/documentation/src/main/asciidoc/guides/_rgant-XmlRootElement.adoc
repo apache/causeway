@@ -42,7 +42,7 @@ The memento string for view models is converted into a form compatible with use 
 xref:rgsvc.adoc#_rgsvc-spi_UrlEncodingService[`UrlEncodingService`], the default implementation of which
 simply encodes to base 64.  If the view model XML graph is too large to be serialized to a string, then an alternative
 implementation (eg which maps XML strings to a GUID, say) can be configured using the technique described in
-xref:rg.adoc#_ug_how-tos_replacing-default-service-implementations[here] in the user guide.
+xref:rg.adoc#_ugfun_how-tos_replacing-default-service-implementations[here] in the user guide.
 ====
 
 

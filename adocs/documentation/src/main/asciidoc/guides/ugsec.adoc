@@ -10,13 +10,28 @@
 
 This guide describes the authentication and authorization features available to secure your Apache Isis application.
 
-Other guides are:
 
-* xref:ug.adoc#[Fundamentals]
+=== Other Guides
+
+Apache Isis documentation is broken out into a number of user and reference guides.
+
+The user guides available are:
+
+* xref:ugfun.adoc#[Fundamentals]
 * xref:ugvw.adoc#[Wicket viewer]
 * xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security] (this guide)
 * xref:ugtst.adoc#[Testing]
 * xref:ugbtb.adoc#[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services]
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rg.adoc#[Classes, Methods and Schema]
+
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
 
 
 === Terminology
@@ -31,7 +46,7 @@ Isis has two levels of permissions.  _Read_ permission means that the user can v
 
 Isis provides an API for both authentication and authorization, and provides an implementation that integrates with link:http://shiro.apache.org[Apache Shiro].  Shiro in turn uses the concept of a _realm_ as a source for both authentication and optionally authorization.
 
-Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.  The xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype] is configured to use this realm.
+Shiro ships with a simple text-based realm -- the `IniRealm` -- which reads users (and password), user roles and role permissions from the `WEB-INF/shiro.ini` file.  The xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] is configured to use this realm.
 
 Shiro also ships with an implementation of an LDAP-based realm; LDAP is often used to manage user/passwords and corresponding user groups.  Apache Isis in turn extends this with its `IsisLdapRealm`, which provides more flexibility for both group/role and role/permissions management.
 

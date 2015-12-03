@@ -19,7 +19,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 |Purpose
 |Use instead
 |Layer
-|xref:ug.adoc#_ug_object-layout_dynamic[Dynamic layout]?
+|xref:ug.adoc#_ugfun_object-layout_dynamic[Dynamic layout]?
 
 |`@ActionOrder`
 |Order of buttons and menu items representing actions.

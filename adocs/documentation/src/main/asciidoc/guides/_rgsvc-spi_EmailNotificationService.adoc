@@ -70,7 +70,7 @@ implementation of `EmailNotificationService` service is automatically registered
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
+further in this xref:ug.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
 
 
 == Related Services

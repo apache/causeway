@@ -7,7 +7,7 @@
 
 The `@javax.annotation.PostConstruct` annotation, as defined in link:https://jcp.org/en/jsr/detail?id=250[JSR-250],  is recognized by Apache Isis as a callback method on domain services to be called just after they have been constructed, in order that they initialize themselves.
 
-It is also recognized for xref:ug.adoc#http://localhost:4000/guides/ug.html#_ugbtb_more-advanced_view-models[view models] (eg annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`]).
+It is also recognized for xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view models] (eg annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`]).
 
 For the default application-scoped (singleton) domain services, this means that the method, if present, is called during the bootstrapping of the application.  For xref:rgant.adoc#_rgant-RequestScoped[`@RequestScoped`] domain services, the method is called at the beginning of the request.
 

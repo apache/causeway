@@ -29,7 +29,7 @@ it knows how to bootstrap an Isis runtime.  This is discussed below, followed by
 As noted in the introduction, both goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]
 to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 
-This can be extremely minimal.  For example, the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp]'s
+This can be extremely minimal.  For example, the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]'s
 manifest is:
 
 

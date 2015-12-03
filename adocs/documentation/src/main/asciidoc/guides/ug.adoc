@@ -1,46 +1,27 @@
 [[ug]]
-= Fundamentals
+= User Guides
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 :numbered:
 
 
-[[_ug]]
-== Fundamentals
+Apache Isis documentation is broken out into a number of user and reference guides.
 
-This guide introduces the xref:ug.adoc#_ug_core-concepts[core concepts] and ideas behind Apache Isis,
-and tells you how to xref:ug.adoc#_ug_getting-started[get started] with a Maven archetype.
+The user guides available are:
 
-It also describes a number of xref:ug.adoc#_ug_how-tos[how-to]s, describes how to influence the
-xref:ug.adoc#_ug_object-layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it
- catalogues various xref:ug.adoc#_ug_faqs.adoc[FAQ]s.
-
-Other user guides are:
-
+* xref:ugfun.adoc#[Fundamentals]
 * xref:ugvw.adoc#[Wicket viewer]
 * xref:ugvro.adoc#[Restful Objects viewer]
 * xref:ugsec.adoc#[Security]
 * xref:ugtst.adoc#[Testing]
-* xref:ugbtb.adoc#[Beyond the Basics]
+* xref:ugbtb.adoc#[Beyond the Basics] (this guide)
 
-Other reference guides are:
+The reference guides are:
 
 * xref:rgant.adoc#[Annotations]
 * xref:rgsvc.adoc#[Domain Services]
 * xref:rgcfg.adoc#[Configuration Properties]
 * xref:rg.adoc#[Classes, Methods and Schema]
 
-This users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This
-guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
-
-
-
-include::_ug_core-concepts.adoc[leveloffset=+1]
-include::_ug_getting-started.adoc[leveloffset=+1]
-
-include::_ug_how-tos.adoc[leveloffset=+1]
-include::_ug_object-layout.adoc[leveloffset=+1]
-
-include::_ug_faqs.adoc[leveloffset=+1]
-
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.

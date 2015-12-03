@@ -17,7 +17,7 @@ You can also impose your own application-specific rules by installing your own m
 
 [TIP]
 ====
-Isis' xref:ug.adoc#_ug_isis-maven-plugin[Maven plugin] will also validate the domain object model during build time.
+Isis' xref:ug.adoc#_ugfun_isis-maven-plugin[Maven plugin] will also validate the domain object model during build time.
 ====
 
 

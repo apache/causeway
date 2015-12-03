@@ -25,7 +25,7 @@ Here the `stepsToReproduce` will be displayed in a text area of 10 rows.
 
 
 
-As an alternative to using the annotation, the dynamic xref:ug.adoc#_ug_object-layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ug.adoc#_ugfun_object-layout_dynamic[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

@@ -9,7 +9,7 @@ Apache Isis' security mechanism is configurable, specifying an `Authenticator` a
 
 [TIP]
 ====
-The xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype] is pre-configured to use Apache Shiro, so much of what follows is set up already.
+The xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] is pre-configured to use Apache Shiro, so much of what follows is set up already.
 ====
 
 == Telling Apache Isis to use Shiro

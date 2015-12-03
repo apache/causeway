@@ -59,7 +59,7 @@ pass:[<br/>]
 
 |*User Guides:*
 
-* *link:./guides/ug.html[Fundamentals^]*
+* *link:./guides/ugfun.html[Fundamentals^]*
 * link:./guides/ugvw.html[Wicket Viewer^]
 * link:./guides/ugvro.html[Restful Objects Viewer^]
 * link:./guides/ugsec.html[Security^]

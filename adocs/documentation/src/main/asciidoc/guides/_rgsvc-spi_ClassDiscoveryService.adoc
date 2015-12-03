@@ -46,7 +46,7 @@ This implementation is also used to discover domain services annotated with xref
 The usage will vary depending upon the conventions of the design.  As of 1.9.0, the usage of the service has been
 centralized such that the packages to be scanned are located from the xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]'s `#getModules()` method.
 
-For example, the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
+For example, the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]'s app manifest includes:
 
 [source,java]
 ----
@@ -77,6 +77,6 @@ implementation of `ClassDiscoveryService2` service is automatically registered a
 
 To use an alternative implementation, use
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] (as explained
-further in this xref:ug.adoc#_ug_how-tos_replacing-default-service-implementations["how to"] tip).
+further in this xref:ug.adoc#_ugfun_how-tos_replacing-default-service-implementations["how to"] tip).
 
 

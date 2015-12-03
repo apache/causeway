@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The metadata for domain objects is obtained both xref:ug.adoc#_ug_object-layout_static[statically] and xref:ug.adoc#_ug_object-layout_dynamic[dynamically].
+The metadata for domain objects is obtained both xref:ug.adoc#_ugfun_object-layout_static[statically] and xref:ug.adoc#_ugfun_object-layout_dynamic[dynamically].
 
 The default implementation for reading dynamic layout metadata is `org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson`, which is responsible for reading from the `Xxx.layout.json` files on the classpath (for each domain entity `Xxx`).
 

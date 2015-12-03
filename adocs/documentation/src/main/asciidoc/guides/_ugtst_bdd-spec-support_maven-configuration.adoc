@@ -7,7 +7,7 @@
 
 
 
-Apache Isis' BDD spec support is automatically configured if you use the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
+Apache Isis' BDD spec support is automatically configured if you use the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  To set it up manually, update the `pom.xml` of your domain object model module:
 
 [source,xml]
 ----

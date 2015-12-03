@@ -87,7 +87,7 @@ what the use cases are that those domain entities are trying to support.  You ce
 domain layer that could support every conceivable use case before starting to think about view models.
 
 Instead, you should iterate.  Identify the use case/story/end-user objective that you will deliver value to the
-business.  Then build out the minimum domain entities to support that use case (refining the xref:ug.adoc#_ug_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you
+business.  Then build out the minimum domain entities to support that use case (refining the xref:ug.adoc#_ugfun_core-concepts_philosophy_domain-driven-design_ubiquitous-language[ubiquitous language] as you
 go).  Then, identify if there any view models that could be introduced which would simplify the end-user interactions
 with the system (perhaps automating several related use cases together).
 ****
