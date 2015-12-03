@@ -25,7 +25,7 @@ public interface PublishingService {
     void setEventSerializer(EventSerializer eventSerializer);   // <3>
 }
 ----
-<1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
+<1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
 <2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
 <3> injects in the xref:rgsvc.adoc#_rgsvc-spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
 
@@ -178,7 +178,7 @@ The `PublishingService` is intended for coarse-grained publish/subscribe for sys
 
 The xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
 
 
 

@@ -7,7 +7,7 @@
 
 Whenever a domain object is to be rendered, the framework fires off an CSS class UI event to obtain a CSS class to use
 in any wrapping ``<div>``s and ``<span>``s that render the domain object.  This is as an alternative to implementing
-xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[`cssClass()`] reserved method.  (If `cssClass()` is present, then
+xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`] reserved method.  (If `cssClass()` is present, then
 it will take precedence).
 
 Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] and can

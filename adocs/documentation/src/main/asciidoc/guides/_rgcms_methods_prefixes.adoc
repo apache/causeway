@@ -34,7 +34,7 @@ The table below lists the method prefixes that are recognized as part of Apache 
 Param
 |Description
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-addTo[`addTo...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]
 |
 |
 |Y
@@ -47,10 +47,10 @@ Param
 Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-removeFrom[`removeFrom...()`]`
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]`
 
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`]
 |
 |Y
 |
@@ -61,9 +61,9 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-removeFrom[`removeFrom.
 Alternatively, can specify for a class using xref:rgant.adoc#_rgant-DomainObject_autoCompleteRepository[`@DomainObject` +
 `#autoCompleteRepository`] +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`]
 |
 |Y
 |
@@ -71,9 +71,9 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
 |Y
 |Provide list of choices for a property or action parameter. +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`].
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`].
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-clear[`clear...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
 |
 |Y
 |
@@ -83,10 +83,10 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoCompl
 
 Allows business logic to be placed apart from the setter. +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`]
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
 
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`]
 |
 |Y
 |
@@ -94,7 +94,7 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`]
 |Y
 |Default value for a property or an action parameter.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
 |Y
 |Y
 |Y
@@ -102,7 +102,7 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`]
 |
 |Disables (makes read-only) a property, a collection or an action.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-get[`get...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_get[`get...()`]
 |
 |Y
 |Y
@@ -110,9 +110,9 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`]
 |
 |Access the value of a property or collection. +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-set[`set...()`].
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`].
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-hide[`hide...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
 |
 |Y
 |Y
@@ -120,7 +120,7 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-set[`set...()`].
 |
 |Hides a property, a collection or an action.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`]
 |
 |Y
 |
@@ -130,9 +130,9 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-set[`set...()`].
 
 Allows business logic to be placed apart from the setter. +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-clear[`clear...()`]`.
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]`.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-removeFrom[`removeFrom...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]
 |
 |
 |Y
@@ -145,10 +145,10 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-clear[`clear...()`]`.
 Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-addTo[`addTo...()`]`
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`]`
 
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-set[`set...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_set[`set...()`]
 |
 |Y
 |Y
@@ -156,7 +156,7 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-addTo[`addTo...()`]`
 |
 |Sets the value of a property or a collection.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validate[`validate...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`]
 |Y
 |
 |
@@ -164,9 +164,9 @@ See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-addTo[`addTo...()`]`
 |Y
 |Check that a proposed value of a property or a set of action parameters or a single action parameter is valid. +
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`] and xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] to validate modifications to collections.
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`] and xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`] to validate modifications to collections.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateAddTo[`validate +
+|xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validate +
 AddTo...()`]
 |
 |Y
@@ -180,9 +180,9 @@ AddTo...()`]
 Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`], and xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validate[`validate...()`] for properties and actions.
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`], and xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateRemoveFrom[`validate +
+|xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validate +
 RemoveFrom...()`]
 |
 |Y
@@ -196,24 +196,24 @@ RemoveFrom...()`]
 Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
-See also xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], and xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validate[`validate...()`] for properties and actions.
+See also xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], and xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`] for properties and actions.
 
 |===
 
 
 
-include::_rgcms_methods_prefixes_manpage-addTo.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-autoComplete.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-choices.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-clear.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-default.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-disable.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-get.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-hide.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-modify.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-removeFrom.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-set.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-validate.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-validateAddTo.adoc[leveloffset=+1]
-include::_rgcms_methods_prefixes_manpage-validateRemoveFrom.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_addTo.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_autoComplete.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_choices.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_clear.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_default.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_disable.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_get.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_hide.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_modify.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_removeFrom.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_set.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_validate.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_validateAddTo.adoc[leveloffset=+1]
+include::_rgcms_methods_prefixes_validateRemoveFrom.adoc[leveloffset=+1]
 

@@ -74,8 +74,8 @@ Calling any of the above methods may result in a (subclass of) `InteractionExcep
 
 In addition, the following methods may also be called:
 
-* the xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] and `toString()` methods
-* any xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`] methods
+* the xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and `toString()` methods
+* any xref:rgcms.adoc#_rgcms_methods_prefixes_default[`default...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_choices[`choices...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 

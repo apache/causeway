@@ -25,7 +25,7 @@ public interface EventSerializer {
 }
 ----
 <1> returns an object for maximum flexibility, which is then handed off to the `PublishingService`.
-<2> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
+<2> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`], date/time etc
 <3> for published actions, will generally be an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, will generally be an `EventPayloadForObjectChanged` (or subclass thereof)
 
 It's important to make sure that the publishing service implementation is able to handle the serialized form.  Strings are a good lowest common denominator, but in some cases a type-safe equivalent, such as a w3c DOM `Document` or JSON node might be passed instead.

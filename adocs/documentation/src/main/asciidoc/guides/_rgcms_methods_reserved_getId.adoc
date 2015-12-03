@@ -1,0 +1,19 @@
+[[_rgcms_methods_reserved_getId]]
+= `getId()`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `getId()` method applies only to domain services, and allows a unique identifer to be provided for that service.
+
+This identifier corresponds in many ways to the xref:rgant.adoc#_rgant-DomainObject_objectType[`objectType()`] attribute for domain objects; it is used as an internal identifier but also appears in URLs within the xref:ugvro.adoc#[RestfulObjects viewer]'s REST API.
+
+If the identifier is omitted, the services fully qualified class name is used.
+
+[TIP]
+====
+Unlike domain objects, where the use of an object type is strongly encouraged (eg using xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`]), it matters much less if an id is specified for domain services.  The principle benefit is shorter URLs in the REST API.
+====
+
+

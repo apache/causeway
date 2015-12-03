@@ -12,7 +12,7 @@ The `cssClassFa()` attribute is used to specify the name of a link:http://fortaw
 These attribute can also be applied to xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[domain objects] to specify the object's icon, and to xref:rgant.adoc#_rgant-ActionLayout_cssClassFa[actions] to specify an icon for the action's representation as a button or menu item.
 
 
-If necessary the icon specified can be overridden by a particular object instance using the xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`] method.
+If necessary the icon specified can be overridden by a particular object instance using the xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] method.
 
 
 

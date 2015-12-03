@@ -6,7 +6,7 @@
 
 
 Whenever a domain object is to be rendered, the framework fires off a title UI event to obtain a title for the object.
-This is as an alternative to implementing xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] reserved method, or
+This is as an alternative to implementing xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] reserved method, or
 using the xref:rgant.adoc#_rgant-Title[`@Title`] annotation, within the class itself.  (If either
 `title()` or `@Title` are present, then they will take precedence).
 

@@ -75,7 +75,7 @@ Titles can sometimes get be long and therefore rather cumbersome in "parented" t
 
 === Imperative style
 
-NOTE: TODO - see xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`]
+NOTE: TODO - see xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
 
 
 
@@ -84,7 +84,7 @@ NOTE: TODO - see xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
 
 
 
@@ -92,6 +92,6 @@ NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName(
 == Object CSS Styling
 
 
-It is also possible for an object to return a xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to return a xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[`cssClass()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

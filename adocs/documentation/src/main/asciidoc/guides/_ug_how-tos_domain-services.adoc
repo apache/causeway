@@ -309,5 +309,5 @@ Shutdown is similar; the framework will call any method annotated with xref:rgan
 
 == The getId() method
 
-Optionally, a service may provide a xref:rgcms.adoc#_rgcms_methods_reserved_manpage-getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
+Optionally, a service may provide a xref:rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
 

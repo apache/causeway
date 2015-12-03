@@ -132,7 +132,7 @@ xref:rgsvc.adoc#_rgsvc-spi_CommandService[`CommandService`] for persistent `Comm
 `services.` +
 `fixturespec` +
 `FixtureScriptsDefault`]
-|Fallback implementation of xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
+|Fallback implementation of xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], providing the ability to execute fixture scripts.
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
@@ -214,7 +214,7 @@ SpecificationProvider`].
 |xref:rgsvc.adoc#_rgsvc-api_SudoService[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
-|For use in testing while running xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
+|For use in testing while running xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
 |`SudoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``

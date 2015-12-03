@@ -53,7 +53,7 @@ indicates that the domain object is conceptually part of the application layer, 
 
 The identity of an inmemory entity is determined solely by the state of entity's properties.  The framework will automatically recreate the domain object each time it is interacted with.
 
-Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.  As such the domain object's class cannot be annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] or implement the xref:rgcms.adoc#_rgcms_classes_super_manpage-ViewModel[`ViewModel`] interface.
+Those natures that indicate the domain object is an entity (of some sort or another) mean then that the domain object is considered to be part of the domain model layer.  As such the domain object's class cannot be annotated with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] or implement the xref:rgcms.adoc#_rgcms_classes_super_ViewModel[`ViewModel`] interface.
 
 
 [NOTE]

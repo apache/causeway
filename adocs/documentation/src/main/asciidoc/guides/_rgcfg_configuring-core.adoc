@@ -214,7 +214,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 
 Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
-This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -347,7 +347,7 @@ This implementation provides a default set of recognizers to convert RDBMS const
 |fully qualified package names (CSV)
 |to search for domain services (including all subpackages).
 
-This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rgcms.adoc#_rgcms_classes_super_AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +

@@ -22,7 +22,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-AbstractLifecycleEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_AbstractLifecycleEvent[`o.a.i.applib.` +
 `AbstractLifecycleEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -31,7 +31,7 @@ Impl'n (g: a:)
 |Superclass of the other lifecycle events, listed below in this table.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectCreatedDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectCreatedDomainEvent[`o.a.i.applib.` +
 `ObjectCreatedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -43,7 +43,7 @@ using the xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-creation-api[`
 `#newTransientInstance(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectLoadedDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedDomainEvent[`o.a.i.applib.` +
 `ObjectLoadedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -53,7 +53,7 @@ using the xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-creation-api[`
 |Broadcast when an object is retrieved from the database.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectPersistedDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistedDomainEvent[`o.a.i.applib.` +
 `ObjectPersistedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -65,7 +65,7 @@ xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainO
 `#persist(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectPersistingDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingDomainEvent[`o.a.i.applib.` +
 `ObjectPersistingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -77,7 +77,7 @@ xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainO
 `#persist(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectRemovingDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectRemovingDomainEvent[`o.a.i.applib.` +
 `ObjectRemovingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -89,7 +89,7 @@ xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainO
 `#remove(...)` method.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectUpdatedDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatedDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatedEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -102,7 +102,7 @@ xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainO
 `#flush(...)` method, else is done implicitly when the transaction commits at the end of the user request.
 
 
-|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_manpage-ObjectUpdatingDomainEvent[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectUpdatingDomainEvent[`o.a.i.applib.` +
 `ObjectUpdatingEvent`]
 |``o.a.i.core`` +
 ``services.eventbus`` +
@@ -119,12 +119,12 @@ xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainO
 
 
 
-include::_rgcms_classes_lifecycleevent_manpage-AbstractLifecycleEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectCreatedEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectLoadedEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectPersistedEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectPersistingEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectRemovingEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectUpdatedEvent.adoc[leveloffset=+1]
-include::_rgcms_classes_lifecycleevent_manpage-ObjectUpdatingEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_AbstractLifecycleEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectCreatedEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectLoadedEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectPersistedEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectPersistingEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectRemovingEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectUpdatedEvent.adoc[leveloffset=+1]
+include::_rgcms_classes_lifecycleevent_ObjectUpdatingEvent.adoc[leveloffset=+1]
 

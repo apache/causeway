@@ -19,7 +19,7 @@ Impl'n (g: a:)
 |Notes
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractContainedObject[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractContainedObject[`o.a.i.applib.` +
 `AbstractContainedObject`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -27,7 +27,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractDomainObject[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractDomainObject[`o.a.i.applib.` +
 `AbstractDomainObject`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -35,7 +35,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractFactoryAndRepository[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractFactoryAndRepository[`o.a.i.applib.` +
 `AbstractFactoryAndRepository`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -43,7 +43,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractService[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`o.a.i.applib.` +
 `AbstractService`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -51,7 +51,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractSubscriber[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`o.a.i.applib.` +
 `AbstractSubscriber`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -59,7 +59,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractViewModel[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractViewModel[`o.a.i.applib.` +
 `AbstractViewModel`]
 |``o.a.i.core`` +
 ``isis-core-applib``
@@ -67,7 +67,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScript[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`o.a.i.applib.` +
 `fixturescript` +
 `FixtureScript`]
 |``o.a.i.core`` +
@@ -76,7 +76,7 @@ Impl'n (g: a:)
 |
 
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`o.a.i.applib.` +
+|xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`o.a.i.applib.` +
 `fixturescripts` +
 `FixtureScripts`]
 |``o.a.i.core`` +
@@ -93,13 +93,13 @@ Impl'n (g: a:)
 
 
 
-include::_rgcms_classes_super_manpage-AbstractContainedObject.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-AbstractDomainObject.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-AbstractFactoryAndRepository.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-AbstractService.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-AbstractSubscriber.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-AbstractViewModel.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-FixtureScript.adoc[leveloffset=+1]
-include::_rgcms_classes_super_manpage-FixtureScripts.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractContainedObject.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractDomainObject.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractFactoryAndRepository.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractService.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractSubscriber.adoc[leveloffset=+1]
+include::_rgcms_classes_super_AbstractViewModel.adoc[leveloffset=+1]
+include::_rgcms_classes_super_FixtureScript.adoc[leveloffset=+1]
+include::_rgcms_classes_super_FixtureScripts.adoc[leveloffset=+1]
 
 

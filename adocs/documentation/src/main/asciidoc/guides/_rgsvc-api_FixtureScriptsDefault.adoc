@@ -8,13 +8,13 @@
 
 The `FixtureScriptsDefault` service provides the ability to execute xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts] .
 
-The service extends from the xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`], and is only instantiated by the framework if there no custom implementation of `FixtureScripts` has been otherwise provided; in other words it is a fallback.
+The service extends from the xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`], and is only instantiated by the framework if there no custom implementation of `FixtureScripts` has been otherwise provided; in other words it is a fallback.
 
 If this service is instantiated (as a fallback) then it uses the xref:rgsvc.adoc#_rgsvc-spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] to obtain a `FixtureScriptsSpecification`.  This configures this service, telling it which package to search for `FixtureScript` classes, how to execute those classes, and hints that influence the UI.
 
 [TIP]
 ====
-We recommend using xref:rgsvc.adoc#_rgsvc-spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] rather than subclassing xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`].
+We recommend using xref:rgsvc.adoc#_rgsvc-spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] rather than subclassing xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`].
 ====
 
 
@@ -33,7 +33,7 @@ public class FixtureScriptsDefault ... {
 }
 ----
 
-... in other words the same as xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`] superclass that it inherits from.
+... in other words the same as xref:rgcms.adoc#_rgcms_classes_super_FixtureScripts[`FixtureScripts`] superclass that it inherits from.
 
 
 == Configuration

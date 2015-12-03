@@ -10,7 +10,7 @@ NOTE: TODO
 
 == Visibility ("see it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-hide[`hide...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_hide[`hide...()`]
 
 ### Hide a Property
 
@@ -27,7 +27,7 @@ NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-hide[`hide...()`]
 
 == Usability ("use it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
 
 ### Disable a Property
 
@@ -53,7 +53,7 @@ In the Wicket viewer this means disabling the edit button.
 
 == Validity ("do it")
 
-NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validate[`validate...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`] and xref:rgcms.adoc#_rgcms_methods_reserved_manpage-validate[`validate()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_validate[`validate...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateAddTo[`validateAddTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_validateRemoveFrom[`validateRemoveFrom...()`] and xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
 
 
 ### Validate (change to) a Property

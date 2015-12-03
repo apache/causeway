@@ -15,33 +15,33 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Method
 |Description
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[`cssClass()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 |Provides a CSS class for this object instance.  In conjunction with xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 
-See also xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] and xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`].
+See also xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`].
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-disable[`disable(...)`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_disable[`disable(...)`]
 |Disable all or some of an object's properties
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-getId[`getId()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_getId[`getId()`]
 |Provides an optional unique identifier of a service. +
 
 If not provided, the service's fully-qualified class name is used.
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-hide[`hide(...)`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_hide[`hide(...)`]
 |Hide all or some of an object's properties
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`]
 |Provides the name of the image to render, usually alongside the title, to represent the object. If not provided, then the class name is used to locate an image. +
 
-See also xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] and xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[`cssClass()`]
+See also xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
 |Provides a title for the object. +
 
-See also xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_manpage-cssClass[`cssClass()`]
+See also xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`] and xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`]
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-validate[`validate()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_validate[`validate()`]
 |Validate the object's state prior to persisting.
 
 |===
@@ -49,10 +49,10 @@ See also xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`] 
 
 
 
-include::_rgcms_methods_reserved_manpage-cssClass.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-disable.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-getId.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-hide.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-iconName.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-title.adoc[leveloffset=+1]
-include::_rgcms_methods_reserved_manpage-validate.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_cssClass.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_disable.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_getId.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_hide.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_iconName.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_title.adoc[leveloffset=+1]
+include::_rgcms_methods_reserved_validate.adoc[leveloffset=+1]

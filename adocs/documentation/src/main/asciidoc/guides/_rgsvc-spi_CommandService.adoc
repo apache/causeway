@@ -12,8 +12,8 @@ Persistent `Command`s support several use cases:
 
 * they enable profiling of the running application (which actions are invoked then most often, what is their response time)
 * they act as a parent to any background commands that might be invoked through the xref:rgsvc.adoc#_rgsvc-api_BackgroundService[`BackgroundService`]
-* if xref:rgsvc.adoc#_rgsvc-spi_AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`transactionId`]
-* if xref:rgsvc.adoc#_rgsvc-spi_PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`transactionId`]
+* if xref:rgsvc.adoc#_rgsvc-spi_AuditingService[auditing] is configured, they provide better audit information, since the `Command` (the 'cause' of an action) can be correlated to the audit records (the "effect" of the action) by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
+* if xref:rgsvc.adoc#_rgsvc-spi_PublishingService[publishing] is configured, they provide better traceability as the `Command` is also correlated with any published events, again through the unique  xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`transactionId`]
 * the associated xref:rgant.adoc#_rgant-Action_command[`@Action#command()`] annotation attribute also allows action invocations to be performed in the background. In this case the act of invoking the action on an object instead returns the `Command` to the user.
 
 
@@ -96,5 +96,5 @@ The services provided by this module combines very well with the xref:rgsvc.adoc
 
 You may also want to configure the xref:rgsvc.adoc#_rgsvc-spi_PublishingService[`PublishingService`].
 
-All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_HasTransactionId[`HasTransactionId`] interface.
 

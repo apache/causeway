@@ -59,18 +59,18 @@ pass:[<br/>]
 
 |*User Guides:*
 
-* link:./guides/ug.html[Fundamentals^]
+* *link:./guides/ug.html[Fundamentals^]*
 * link:./guides/ugvw.html[Wicket Viewer^]
 * link:./guides/ugvro.html[Restful Objects Viewer^]
 * link:./guides/ugsec.html[Security^]
-* link:./guides/ugtst.html[Testing^]
+* *link:./guides/ugtst.html[Testing^]*
 * link:./guides/ugbtb.html[Beyond the Basics^]
 
 
 |*Reference Guides:*
 
-* link:./guides/rgant.html[Annotations^]
-* link:./guides/rgsvc.html[Domain Services^]
+* *link:./guides/rgant.html[Annotations^]*
+* *link:./guides/rgsvc.html[Domain Services^]*
 * link:./guides/rgcfg.html[Configuration Properties^]
 * link:./guides/rgcms.html[Classes, Methods and Schema^]
 
@@ -79,16 +79,12 @@ pass:[<br/>]
 
 |*Contributors' Guide*
 
-IDE setup, build the framework, writing docs, how to contribute patches (pull requests); for committers: publishing docs, applying patches, release process.
-
-pass:[<a class="button guide" href="./guides/cg.html" role="button" target="_blank">Contributors' Guide »</a>]
+* *link:./guides/cg.html[Contributors Guide^]*
 
 including:
 
 * Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
-* link:./guides/cg.html#_cg_ide-templates[*IDE templates*] (IntelliJ and Eclipse)
 * link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
-* link:./guides/cg.html#_cg_isis-maven-plugin[Isis Maven plugin]
 * link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release] ; link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
 
 

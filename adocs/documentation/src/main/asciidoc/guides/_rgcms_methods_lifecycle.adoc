@@ -28,28 +28,28 @@ The lifecycle callback methods supported by Isis are:
 |Method
 |Description
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-created[`created()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_created[`created()`]
 |called when an object has just been created using xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`newTransientInstance()`]
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-loaded[`loaded()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_loaded[`loaded()`]
 |called when a (persistent) object has just been loaded from the object store.
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-persisted[`persisted()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_persisted[`persisted()`]
 |called when object has just been persisted from the object store.
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-persisting[`persisting()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_persisting[`persisting()`]
 |called when a (not-yet-persistent) object is just about to be persisted from the object store
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-removed[`removed()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_removed[`removed()`]
 |called when a (persistent) object has just been deleted from the object store
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-removing[`removing()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_removing[`removing()`]
 |called when a (persistent) object is just about to be deleted from the object store
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-updated[`updated()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_updated[`updated()`]
 |called when a (persistent) object has just been updated in the object store
 
-|xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-updating[`updating()`]
+|xref:rgcms.adoc#_rgcms_methods_lifecycle_updating[`updating()`]
 |called when a (persistent) object is just about to be updated in the object store
 
 |===
@@ -66,10 +66,10 @@ Some lifecycle methods have been deprecated:
 |Notes
 
 |`deleted()`
-|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-removed[`removed()`]
+|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_removed[`removed()`]
 
 |`deleting()`
-|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-removing[`removing()`]
+|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_removing[`removing()`]
 
 |`loading()`
 |callback for when the (persistent) object is just about to be loaded from the object store. +
@@ -80,23 +80,23 @@ This method is never called.
 ====
 
 |`saved()`
-|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-persisted[`persisted()`]
+|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_persisted[`persisted()`]
 
 |`saving()`
-|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_manpage-persisting[`persisting()`]
+|Replaced by xref:rgcms.adoc#_rgcms_methods_lifecycle_persisting[`persisting()`]
 
 |===
 
 
 
 
-include::_rgcms_methods_lifecycle_manpage-created.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-loaded.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-persisted.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-persisting.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-removed.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-removing.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-updated.adoc[leveloffset=+1]
-include::_rgcms_methods_lifecycle_manpage-updating.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_created.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_loaded.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_persisted.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_persisting.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_removed.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_removing.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_updated.adoc[leveloffset=+1]
+include::_rgcms_methods_lifecycle_updating.adoc[leveloffset=+1]
 
 include::_rgcms_methods_lifecycle_jdo-api.adoc[leveloffset=+1]

@@ -217,7 +217,7 @@ a hyperlink to the reference guide's catalogue of the Apache Isis configuration 
 
 
 |`adrgcs`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_manpage-xxx[`xxx`\]</pre>]
+|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_xxx[`xxx`\]</pre>]
 
 a hyperlink to the "man page" for a superclass, where:
 
@@ -225,14 +225,14 @@ a hyperlink to the "man page" for a superclass, where:
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractService[`AbstractService`\]</pre>]
+pass:[<pre>xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractService[`AbstractService`]
+|xref:rgcms.adoc#_rgcms_classes_super_AbstractService[`AbstractService`]
 
 
 
 |`adrgcu`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_manpage-xxx[`xxx`\]</pre>]
+|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_xxx[`xxx`\]</pre>]
 
 a hyperlink to the "man page" for a utility class, where:
 
@@ -240,14 +240,14 @@ a hyperlink to the "man page" for a utility class, where:
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_manpage-TitleBuffer[`TitleBuffer`\]</pre>]
+pass:[<pre>xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[`TitleBuffer`\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_classes_utility_manpage-TitleBuffer[`TitleBuffer`]
+|xref:rgcms.adoc#_rgcms_classes_utility_TitleBuffer[`TitleBuffer`]
 
 
 
 |`adrgcv`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_manpage-xxx[`xxx`\]</pre>]
+|pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_xxx[`xxx`\]</pre>]
 
 
 a hyperlink to the "man page" for an applib value class, where:
@@ -256,14 +256,14 @@ a hyperlink to the "man page" for an applib value class, where:
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Blob[`Blob`\]</pre>]
+pass:[<pre>xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Blob[`Blob`]
+|xref:rgcms.adoc#_rgcms_classes_value-types_Blob[`Blob`]
 
 
 
 |`adrgmp`
-|pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-xxx[`xxx...()`\]</pre>]
+|pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_xxx[`xxx...()`\]</pre>]
 
 a hyperlink to the "man page" for a prefixed method, where:
 
@@ -271,9 +271,9 @@ a hyperlink to the "man page" for a prefixed method, where:
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`\]</pre>]
+pass:[<pre>xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`]
+|xref:rgcms.adoc#_rgcms_methods_prefixes_disable[`disable...()`]
 
 
 
@@ -286,9 +286,9 @@ a hyperlink to the "man page" for a reserved method, where:
 
 for example:
 
-pass:[<pre>xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`\]</pre>]
+pass:[<pre>xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`\]</pre>]
 
-|xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`]
+|xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
 
 
 
