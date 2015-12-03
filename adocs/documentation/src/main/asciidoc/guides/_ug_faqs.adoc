@@ -12,4 +12,5 @@ Apache Isis mailing lists.
 include::_ug_faqs_enabling-logging.adoc[leveloffset=+1]
 include::_ug_faqs_subtype-entity-not-fully-populated.adoc[leveloffset=+1]
 include::_ug_faqs_restful-image-property.adoc[leveloffset=+1]
-
+include::_ug_faqs_enhance-only.adoc[leveloffset=+1]
+include::_ug_faqs_per-user-themes.adoc[leveloffset=+1]
