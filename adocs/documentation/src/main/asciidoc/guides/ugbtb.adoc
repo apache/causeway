@@ -29,5 +29,5 @@ This users' guide is _not_ intended as a reference manual; for that see the *xre
 include::_ugbtb_more-advanced.adoc[leveloffset=+1]
 include::_ugbtb_programming-model.adoc[leveloffset=+1]
 include::_ugbtb_deployment.adoc[leveloffset=+1]
-include::_ugbtb_headless-access.adoc[leveloffset=+1]
+include::_ugbtb_web-xml.adoc[leveloffset=+1]
 

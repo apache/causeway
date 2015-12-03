@@ -96,7 +96,7 @@ If the `AppManifest` is _not_ being used then there are number of other configur
 
 == Viewer Configuration
 
-Viewers are specified by way of the filters and servlets in the xref:rg.adoc#_rg_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.  However, we can also hint to the framework as to which viewers are in use by way of a context parameter:
+Viewers are specified by way of the filters and servlets in the xref:ugbtb.adoc#_ugbtb_web-xml[`web.xml`] file; these are not bootstrapped by the framework, rather it is the other way around.  However, we can also hint to the framework as to which viewers are in use by way of a context parameter:
 
 [source,xml]
 ----

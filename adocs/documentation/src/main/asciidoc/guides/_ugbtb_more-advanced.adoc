@@ -18,6 +18,7 @@ include::_ugbtb_more-advanced_i18n.adoc[leveloffset=+1]
 include::_ugbtb_more-advanced_multi-tenancy.adoc[leveloffset=+1]
 include::_ugbtb_more-advanced_persisted-title.adoc[leveloffset=+1]
 include::_ugbtb_more-advanced_replacing-default-service-implementations.adoc[leveloffset=+1]include::_ugbtb_more-advanced_tips-n-tricks.adoc[leveloffset=+1]
+include::_ugbtb_more-advanced_headless-access.adoc[leveloffset=+1]
 
 
 
