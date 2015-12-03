@@ -57,7 +57,7 @@ pass:[<br/>]
 [cols="1a,1a,1a"]
 |===
 
-|*Users' Guide:*
+|*User Guides:*
 
 Core concepts, how tos and more advanced techniques, using and customizing the Wicket viewer & the Restful Objects viewer, security, testing
 

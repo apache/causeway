@@ -15,6 +15,6 @@ video::ludOLyi6VyY[youtube,width="840px",height="630px"]
 
 [NOTE]
 ====
-Note that this screencast shows an earlier version of the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screencast shows an earlier version of the xref:ugvw.adoc#_ugvw[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 

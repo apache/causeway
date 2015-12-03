@@ -50,7 +50,7 @@ and modify its state, and navigate to related objects.
 
 The next type of domain object to discuss is *domain services*.  These are (usually) singleton stateless services
 that provide additional functionality.  The behaviour of these services is rendered in various ways, though the most
-obvious is as the menu actions on the top-level menu bars in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]'s UI.
+obvious is as the menu actions on the top-level menu bars in the xref:ugvw.adoc#_ugvw[Wicket viewer]'s UI.
 
 Domain objects can also delegate to domain services; domain services are automatically injected into every other domain
 object; this includes domain entities as well as other services.  This injection of domain services into entities is
@@ -62,7 +62,7 @@ As well as domain entities - mapped to a datastore - Apache Isis also supports *
 view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.  However
 view models are _not_ mapped to the underlying database, rather they represent some aggregation of state from one or
 more underlying entities.  Their state is serialized and recreated from their internal identifier; this identifier is
-visible as the object's URL in the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] or
+visible as the object's URL in the xref:ugvw.adoc#_ugvw[Wicket viewer] or
 xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
 
 There's no need though for the view model to aggregate the state of regular domain entities.  A view model could also
@@ -312,7 +312,7 @@ scanned by the mail room, the barcode could be read to attach the correspondence
 xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`], in fact).
 
 * and of course both the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] and
-xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]
+xref:ugvw.adoc#_ugvw[Wicket viewer]
 use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects

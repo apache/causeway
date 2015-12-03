@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the (non-ASF) (non-ASF) link:http://isisaddons.org[Isis Addons]' (non-ASF) http://github.com/isisaddons/isis-wicket-excel[excel] view, the http://github.com/isisaddons/isis-wicket-fullcalendar2[fullcalendar2] view, and the http://github.com/isisaddons/isis-wicket-gmap3[gmap3] view.  If the objects to be rendered have the correct "shape", then the appropriate view will be made available.  For example, objects with a date can be rendered using `calendar`; objects with locations can be rendered using `map`.
+The xref:ugvw.adoc#_ugvw[Wicket viewer] allows additional views to be configured to render collections of objects; at the time of writing thesee include the (non-ASF) (non-ASF) link:http://isisaddons.org[Isis Addons]' (non-ASF) http://github.com/isisaddons/isis-wicket-excel[excel] view, the http://github.com/isisaddons/isis-wicket-fullcalendar2[fullcalendar2] view, and the http://github.com/isisaddons/isis-wicket-gmap3[gmap3] view.  If the objects to be rendered have the correct "shape", then the appropriate view will be made available.  For example, objects with a date can be rendered using `calendar`; objects with locations can be rendered using `map`.
 
 The `defaultView()` attribute is used to select which of these views should be used by default for a given collection.
 

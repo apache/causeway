@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[collections],  xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[properties], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_describedAs[actions], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[domain objects] and xref:rg.adoc#_rg_annotations_manpage-ViewModelLayout_describedAs[view models].
+The `describedAs()` attribute is used to provide a short description of the action parameter to the user.  In the xref:ugvw.adoc#_ugvw[Wicket viewer] it is displayed as a 'tool tip'.  The `describedAs()` attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[collections],  xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[properties], xref:rg.adoc#_rg_annotations_manpage-ActionLayout_describedAs[actions], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[domain objects] and xref:rg.adoc#_rg_annotations_manpage-ViewModelLayout_describedAs[view models].
 
 Descriptions may be provided for objects, members (properties,
 collections and actions), and for individual parameters within an action

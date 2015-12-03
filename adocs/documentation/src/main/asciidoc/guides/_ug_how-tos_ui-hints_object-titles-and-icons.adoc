@@ -9,7 +9,7 @@ In Apache Isis every object is identified to the user by a title (label) and an 
 
 The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
 
-It is also possible for an object to provide a CSS class hint.  In conjunction with xref:ug.adoc#_ug_wicket-viewer_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to provide a CSS class hint.  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 
 == Object Title
@@ -92,6 +92,6 @@ NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`], x
 == Object CSS Styling
 
 
-It is also possible for an object to return a xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:ug.adoc#_ug_wicket-viewer_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+It is also possible for an object to return a xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
 
 NOTE: TODO - xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rg.adoc#_rg_annotations_manpage-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

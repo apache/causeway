@@ -208,7 +208,7 @@ public class DomainAppSystemInitializer {
 
 === Webapps
 
-To bootstrap an Apache Isis webapp (using the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]), there are two choices:
+To bootstrap an Apache Isis webapp (using the xref:ugvw.adoc#_ugvw[Wicket viewer]), there are two choices:
 
 * either specify the `AppManifest` by overriding the `IsisWicketApplication#newWicketModule()`, eg: +
 +

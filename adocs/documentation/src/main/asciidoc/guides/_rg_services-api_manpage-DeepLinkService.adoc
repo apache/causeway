@@ -25,13 +25,13 @@ public interface DeepLinkService {
 ----
 <1> Creates a URI that can be used to obtain a representation of the provided domain object in one of the Apache Isis viewers.
 
-The xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] this provides an implementation for accessing the representation through this viewer.  (For the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`]).
+The xref:ugvw.adoc#_ugvw[Wicket viewer] this provides an implementation for accessing the representation through this viewer.  (For the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer], a URL can be constructed according to the link:http://www.restfulobjects.org[Restful Objects spec] in conjunction with a `Bookmark` obtained via the xref:rg.adoc#_rg_services-api_manpage-BookmarkService[`BookmarkService`]).
 
 
 
 == Usage within the framework
 
-The xref:rg.adoc#_rg_services-spi_manpage-EmailNotificationService[`EmailNotificationService`] uses this service in order to generate emails as part of xref:ug.adoc#_ug_wicket-viewer_features_user-registration[user registration].
+The xref:rg.adoc#_rg_services-spi_manpage-EmailNotificationService[`EmailNotificationService`] uses this service in order to generate emails as part of xref:ugvw.adoc#_ugvw_features_user-registration[user registration].
 
 
 
@@ -48,7 +48,7 @@ The Wicket viewer core framework provides a default implementation of this API:
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
 `AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the
-xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] is being used, then an implementation of `DeepLinkService` is
+xref:ugvw.adoc#_ugvw[Wicket viewer] is being used, then an implementation of `DeepLinkService` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use

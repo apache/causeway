@@ -6,7 +6,7 @@
 
 
 
-Apache Isis provides two different viewers, the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].  You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.  The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
+Apache Isis provides two different viewers, the xref:ugvw.adoc#_ugvw[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].  You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.  The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
 If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.  See the xref:ug.adoc#_ug_security_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
 

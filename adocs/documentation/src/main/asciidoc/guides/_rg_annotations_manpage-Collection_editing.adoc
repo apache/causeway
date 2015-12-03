@@ -12,7 +12,7 @@ The related `editingDisabledReason()` attribute specifies the a hard-coded reaso
 
 [WARNING]
 ====
-The xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
+The xref:ugvw.adoc#_ugvw[Wicket viewer] does *not* currently support the modification of collections; they are rendered read-only.
 
 The workaround is to create add/remove actions and use xref:rg.adoc#_rg_annotations_manpage-MemberOrder[UI hints] to render them close to the collection.
 ====

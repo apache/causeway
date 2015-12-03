@@ -82,7 +82,7 @@ various Wavemaker services.
 
 Even so, while GRC does (as the figures above show) include custom views, the majority of the views exposed by GRC are
 automatically generated from the underlying domain entities; the GRC viewer is a proprietary version of Isis' own
-xref:ug.adoc#_ug_wicket-viewer[Wicket viewer].  At the last count more than 400 domain entities, across 6 different
+xref:ugvw.adoc#_ugvw[Wicket viewer].  At the last count more than 400 domain entities, across 6 different
 Bounded Contexts, are surfaced in the UI in this this way.
 
 At the Domain level, we also extensively use the xref:ug.adoc#_ug_more-advanced_decoupling_event-bus[domain events]

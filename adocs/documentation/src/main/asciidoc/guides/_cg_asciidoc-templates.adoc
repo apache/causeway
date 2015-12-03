@@ -443,11 +443,11 @@ A hyperlink to the Restful Objects viewer chapter.
 
 
 |`adugvw`
-|pass:[<pre>xref:ug.adoc#_ug_wicket-viewer[Wicket viewer\]</pre>]
+|pass:[<pre>xref:ugvw.adoc#_ugvw[Wicket viewer\]</pre>]
 
 A hyperlink to the Wicket viewer chapter.
 
-|xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]
+|xref:ugvw.adoc#_ugvw[Wicket viewer]
 
 
 

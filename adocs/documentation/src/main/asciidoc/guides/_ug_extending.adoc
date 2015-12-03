@@ -8,7 +8,5 @@ This chapter explains the main APIs for extending Apache Isis: the programming m
 
 include::_ug_extending_programming-model.adoc[leveloffset=+1]
 
-include::_ug_extending_wicket-viewer.adoc[leveloffset=+1]
-
 include::_ug_extending_restfulobjects-viewer.adoc[leveloffset=+1]
 

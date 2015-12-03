@@ -87,7 +87,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
+The `simpleapp` archetype generates a single WAR file, configured to run both the xref:ugvw.adoc#_ugvw[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer].  The archetype also configures the DataNucleus/JDO Objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways.
 
@@ -175,7 +175,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp-with-fixtures.png[width="600
 
 == Using the App
 
-When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] or the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer]:
+When you start the app, you'll be presented with a welcome page from which you can access the webapp using either the xref:ugvw.adoc#_ugvw[Wicket viewer] or the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer]:
 
 image::{_imagesdir}getting-started/using-simple-app/010-root-page.png[width="600px",link="{_imagesdir}getting-started/using-simple-app/010-root-page.png"]
 
@@ -295,7 +295,7 @@ As noted above, the generated app is a very simple application consisting of a s
 |End-to-end xref:ug.adoc#_ug_testing_integ-test-support[integration tests] that exercise from the UI through to the database
 
 |`myapp-webapp`
-|Run as a webapp (from `web.xml`) hosting the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] and/or the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]
+|Run as a webapp (from `web.xml`) hosting the xref:ugvw.adoc#_ugvw[Wicket viewer] and/or the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]
 
 |===
 

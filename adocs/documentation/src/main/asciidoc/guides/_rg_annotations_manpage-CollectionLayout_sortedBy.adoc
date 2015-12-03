@@ -37,7 +37,7 @@ image::{_imagesdir}reference-annotations/CollectionLayout/sortedby-dependencies.
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ugvw.adoc#_ugvw[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 

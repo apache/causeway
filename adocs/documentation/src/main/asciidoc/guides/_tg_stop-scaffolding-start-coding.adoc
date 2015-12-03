@@ -554,7 +554,7 @@ This can be helpful for "naive" code which would normally make the same query wi
 
 == Extending the Wicket UI
 
-Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:ug.adoc#_ug_extending_wicket-viewer[here]). For collections there can be multiple views, and the Wicket viewer provides a view selector drop down (top right of each collection panel).
+Each element in the Wicket viewer (entity form, properties, collections, action button etc) is a component, each created by a internal API (`ComponentFactory`, described xref:ugvw.adoc#_ugvw_extending[here]). For collections there can be multiple views, and the Wicket viewer provides a view selector drop down (top right of each collection panel).
 
 Moreover, we can add additional views. In this section we'll explore some of these, already provided through http://www.isisaddons.org/[Isis addons] (not ASF).
 
