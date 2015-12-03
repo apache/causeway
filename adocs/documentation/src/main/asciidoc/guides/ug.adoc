@@ -9,13 +9,22 @@
 [[_ug]]
 == Users' Guide
 
-This users' guide introduces the xref:ug.adoc#_ug_core-concepts[core concepts] and ideas behind Apache Isis, tells you how to xref:ug.adoc#_ug_getting-started[get started] with a Maven archetype, and provides xref:ug.adoc#_ug_how-tos[how-to]s and xref:ug.adoc#_ug_more-advanced[more advanced] guidance on writing maintainable larger applications.
+This users' guide introduces the xref:ug.adoc#_ug_core-concepts[core concepts] and ideas behind Apache Isis,
+and tells you how to xref:ug.adoc#_ug_getting-started[get started] with a Maven archetype.
 
-Other users guides cover:
+It also provides xref:ug.adoc#_ug_how-tos[how-to]s and a catalog of xref:ug.adoc#_ug_faqs.adoc[FAQ]s.
 
-* the xref:ugvw.adoc#_ugvw[Wicket viewer], both from an end-user perspective and also how as a programmer you can customize the UI.
 
-There is a similar chapter discussing the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] which provides Apache Isis' REST API.  The guide also explains how to configure xref:ug.adoc#_ug_security[security], principally involving Apache Isis' integration with Apache Shiro.
+Other user guides are:
+
+* the xref:ugvw.adoc[User Guide for Wicket viewer]
+* the xref:ugvro.adoc[User Guide for Restful Objects viewer]
+
+
+The guide also explains how to configure xref:ug.adoc#_ug_security[security], principally involving Apache Isis' integration with Apache Shiro.
+
+xref:ug.adoc#_ug_more-advanced[more advanced] guidance on writing maintainable larger applications.
+
 
 Later chapters discuss essential topics such as xref:ug.adoc#_ug_testing[testing] and how to xref:ug.adoc#_ug_deployment[deploy] your app, and discuss other ways in which you can xref:ug.adoc#_ug_extending[extend] or adapt the framework itself to your particular needs.
 
@@ -30,7 +39,6 @@ include::_ug_getting-started.adoc[leveloffset=+1]
 include::_ug_how-tos.adoc[leveloffset=+1]
 include::_ug_more-advanced.adoc[leveloffset=+1]
 
-include::_ug_restfulobjects-viewer.adoc[leveloffset=+1]
 include::_ug_security.adoc[leveloffset=+1]
 
 include::_ug_testing.adoc[leveloffset=+1]

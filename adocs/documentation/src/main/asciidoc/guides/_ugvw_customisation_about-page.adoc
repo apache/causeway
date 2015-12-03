@@ -17,7 +17,7 @@ image::{_imagesdir}wicket-viewer/about-page/about-page.png[width="800px",link="{
 
 [NOTE]
 ====
-Note that this screenshot shows an earlier version of the xref:ugvw.adoc#_ugvw[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screenshot shows an earlier version of the xref:ugvw.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note that the `Build-Time` attribute has been used as the version number. The Wicket viewer is hard-coded to search for specific attributes and use as the application version. In order, it searches for:

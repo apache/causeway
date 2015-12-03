@@ -98,7 +98,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@Debug`
 |Action only invokable in debug mode.
-|Not supported by either the xref:ugvw.adoc#_ugvw[Wicket viewer] or the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]; use prototype mode instead (xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
+|Not supported by either the xref:ugvw.adoc[Wicket viewer] or the xref:ugvro.adoc[RestfulObjects viewer]; use prototype mode instead (xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 
@@ -116,7 +116,7 @@ The annotations listed in the table below are still supported by Apache Isis, bu
 
 |`@Exploration`
 |Action available in special 'exploration' mode.
-|Not supported by either the xref:ugvw.adoc#_ugvw[Wicket viewer] or the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]; use prototype mode instead (xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
+|Not supported by either the xref:ugvw.adoc[Wicket viewer] or the xref:ugvro.adoc[RestfulObjects viewer]; use prototype mode instead (xref:rg.adoc#_rg_annotations_manpage-Action_restrictTo[`@Action#restrictTo()`])
 |UI
 |
 

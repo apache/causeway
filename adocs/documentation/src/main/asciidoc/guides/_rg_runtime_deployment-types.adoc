@@ -15,7 +15,7 @@ When running in development/prototyping mode, certain capabilities are enabled; 
 
 == Using the Wicket Viewer
 
-Most of the you're likely to run Apache Isis using the xref:ugvw.adoc#_ugvw[Wicket viewer].  In this case Apache Isis' "deployment type" concept maps to Wicket's "configuration" concept:
+Most of the you're likely to run Apache Isis using the xref:ugvw.adoc[Wicket viewer].  In this case Apache Isis' "deployment type" concept maps to Wicket's "configuration" concept:
 
 .Apache Isis' deployment type corresponds to Apache Wicket's configuration
 [cols="1,1,2", options="header"]
@@ -64,7 +64,7 @@ Wicket's mechanism for specifying the "configuration" is to use a context parame
 
 == Restful Objects viewer only
 
-Most Apache Isis applications will consist of at least the xref:ugvw.adoc#_ugvw[Wicket viewer] and optionally the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
+Most Apache Isis applications will consist of at least the xref:ugvw.adoc[Wicket viewer] and optionally the xref:ugvro.adoc[RestfulObjects viewer].  When both viewers are deployed in the same app, then the bootstrapping is performed by Wicket, and so the deployment type is configured as described in the previous section.
 
 In some cases though you may be using Apache Isis to provide a REST API only, that is, you won't have deployed the Wicket viewer.  In these cases your app will be bootstrapped using  Apache Isis' xref:rg.adoc#_rg_web-xml_servlet-context-listeners[ `IsisWebAppBootstrapper`].
 
@@ -107,5 +107,5 @@ java -jar ... org.apache.isis.WebServer -t SERVER
 
 where "..." is the (usually rather long) list of JAR files and class directories that will make up your application.
 
-This works for both the xref:ugvw.adoc#_ugvw[Wicket viewer] and the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer].
+This works for both the xref:ugvw.adoc[Wicket viewer] and the xref:ugvro.adoc[RestfulObjects viewer].
 

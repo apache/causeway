@@ -6,7 +6,7 @@
 
 
 
-The `RepresentationService` is the main plug-in point for the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] to generate representations.
+The `RepresentationService` is the main plug-in point for the xref:ugvro.adoc[RestfulObjects viewer] to generate representations.
 
 The default implementation generates representations according to the link:http://restfulobjects.org[Restful Objects spec] v1.0.  However, it also delegates to the xref:rg.adoc#_rg_services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] which provides a mechanism for altering representations according to the HTTP `Accept` header.
 

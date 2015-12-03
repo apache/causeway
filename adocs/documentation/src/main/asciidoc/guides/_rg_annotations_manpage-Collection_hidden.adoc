@@ -48,7 +48,7 @@ The other values of the `Where` enum have no meaning for a collection.
 
 [NOTE]
 ====
-The xref:ugvw.adoc#_ugvw[Wicket viewer] suppresses collections when displaying lists of objects.
+The xref:ugvw.adoc[Wicket viewer] suppresses collections when displaying lists of objects.
 
-The xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] by default suppress collections when rendering a domain object.
+The xref:ugvro.adoc[RestfulObjects viewer] by default suppress collections when rendering a domain object.
 ====

@@ -6,7 +6,7 @@
 
 
 
-The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:ugvw.adoc#_ugvw[Wicket viewer] it is displayed as a 'tool tip'.
+The `describedAs()` attribute is used to provide a short description of the action to the user.  In the xref:ugvw.adoc[Wicket viewer] it is displayed as a 'tool tip'.
 
 This attribute can also be specified for xref:rg.adoc#_rg_annotations_manpage-CollectionLayout_describedAs[collections],  xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_describedAs[properties], xref:rg.adoc#_rg_annotations_manpage-ParameterLayout_describedAs[parameters], xref:rg.adoc#_rg_annotations_manpage-DomainObjectLayout_describedAs[domain objects] and xref:rg.adoc#_rg_annotations_manpage-ViewModelLayout_describedAs[view models].
 

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Apache Isis is primarily aimed at custom-built "enterprise" applications.  The UI exposed by the xref:ugvw.adoc#_ugvw[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.  The REST API exposed by the xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer] allows custom apps to be developed - eg using AngularJS or similar - for use by those requiring more guidance; typically end-users outside of the organization.
+Apache Isis is primarily aimed at custom-built "enterprise" applications.  The UI exposed by the xref:ugvw.adoc[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.  The REST API exposed by the xref:ugvro.adoc[RestfulObjects viewer] allows custom apps to be developed - eg using AngularJS or similar - for use by those requiring more guidance; typically end-users outside of the organization.
 
 But should your organization buy, or build?  Buying packaged software makes sense for statutory requirements, such as payroll or general ledger, or document management/retrieval.  But it makes much less sense to buy packaged software for the systems that support the core business: the software should fit the business, not the other way around.
 

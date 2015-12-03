@@ -6,12 +6,23 @@
 :numbered:
 
 
+
+
 [[_ugvw]]
 == User Guide for Wicket Viewer
+
+The Wicket Viewer automatically exposes an Apache Isis domain object model for use by end-users.  The viewer is
+implemented using link:http://wicket.apache.org[Apache Wicket].
 
 This user guide discuss end-user features, configuration and customization of the Wicket viewer.
 
 It also discusses how to extend the viewer, and the (non-ASF) link:http://isisaddons.org[Isis Addons] wicket components.
+
+Other user guides are:
+
+* the xref:ugb.adoc[User Guide Basics]
+* the xref:ugvro.adoc[User Guide for Restful Objects viewer]
+
 
 
 

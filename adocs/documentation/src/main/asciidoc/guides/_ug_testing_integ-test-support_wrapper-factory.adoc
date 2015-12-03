@@ -86,7 +86,7 @@ If there is a supporting `addTo...()` or `removeFrom...()` method, then these ca
 +
 [NOTE]
 ====
-In this respect the wrapper is more functional than the xref:ugvw.adoc#_ugvw[Wicket viewer] (which does not expose the ability to mutate collections directly).
+In this respect the wrapper is more functional than the xref:ugvw.adoc[Wicket viewer] (which does not expose the ability to mutate collections directly).
 ====
 
 * for *_object actions_* the test can call the action method itself.

@@ -434,20 +434,20 @@ A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
 
 
 |`adugvro`
-|pass:[<pre>xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer\]</pre>]
+|pass:[<pre>xref:ugvro.adoc[RestfulObjects viewer\]</pre>]
 
 A hyperlink to the Restful Objects viewer chapter.
 
-|xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]
+|xref:ugvro.adoc[RestfulObjects viewer]
 
 
 
 |`adugvw`
-|pass:[<pre>xref:ugvw.adoc#_ugvw[Wicket viewer\]</pre>]
+|pass:[<pre>xref:ugvw.adoc[Wicket viewer\]</pre>]
 
 A hyperlink to the Wicket viewer chapter.
 
-|xref:ugvw.adoc#_ugvw[Wicket viewer]
+|xref:ugvw.adoc[Wicket viewer]
 
 
 

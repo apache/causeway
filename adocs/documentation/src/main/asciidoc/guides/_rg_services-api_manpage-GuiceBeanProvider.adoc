@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:ugvw.adoc#_ugvw[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
+The `GuiceBeanProvider` domain service acts as a bridge between Apache Isis' xref:ugvw.adoc[Wicket viewer] internal bootstrapping using link:https://github.com/google/guice[Google Guice].
 
 This service operates at a very low-level, and you are unlikely to have a need for it.  It is used internally by the framework, in the default implementation of the xref:rg.adoc#_rg_services-api_manpage-DeepLinkService[`DeepLinkService`].
 
@@ -29,13 +29,13 @@ public interface GuiceBeanProvider {
 }
 ----
 
-The xref:ugvw.adoc#_ugvw[Wicket viewer] this provides an implementation of this service.
+The xref:ugvw.adoc[Wicket viewer] this provides an implementation of this service.
 
 
 
 == Usage
 
-Using the xref:ugvw.adoc#_ugvw[Wicket viewer] requires subclassing of `IsisWicketApplication`.  In the subclass it is commonplace to override `newIsisWicketModule()`, for example:
+Using the xref:ugvw.adoc[Wicket viewer] requires subclassing of `IsisWicketApplication`.  In the subclass it is commonplace to override `newIsisWicketModule()`, for example:
 
 [source,java]
 ----
@@ -81,7 +81,7 @@ should return "ToDo App".
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
 `AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the
-xref:ugvw.adoc#_ugvw[Wicket viewer] is being used, then an implementation of `GuiceBeanProvider` is
+xref:ugvw.adoc[Wicket viewer] is being used, then an implementation of `GuiceBeanProvider` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use
