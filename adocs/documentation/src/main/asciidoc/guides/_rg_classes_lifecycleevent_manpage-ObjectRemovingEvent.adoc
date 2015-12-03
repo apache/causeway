@@ -7,7 +7,7 @@
 
 Subclass of xref:rg.adoc#_rg_classes_lifecycleevent_manpage-AbstractLifecycleEvent[`AbstractLifecycleEvent`], broadcast
 when an object is about to be deleted from the database using the
-xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
+xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer_object-persistence-api[`DomainObjectContainer`]'s
 `#remove(...)` method.
 
 

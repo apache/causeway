@@ -9,7 +9,7 @@ Apache Isis includes an extensive number of domain services for your domain obje
 
 [NOTE]
 ====
-In addition there are a number of domain services that constitute an SPI; if present they are used by Apache Isis itself rather than by your domain objects.  A good example of this is the xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[`AuditingService3`] service.  The SPI services are covered in the xref:rgsvc.adoc#_rgsvc-spi[Domain Services (SPI) chapter].
+In addition there are a number of domain services that constitute an SPI; if present they are used by Apache Isis itself rather than by your domain objects.  A good example of this is the xref:rgsvc.adoc#_rgsvc-spi_AuditingService[`AuditingService3`] service.  The SPI services are covered in the xref:rgsvc.adoc#_rgsvc-spi[Domain Services (SPI) chapter].
 ====
 
 
@@ -26,7 +26,7 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 |Notes
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-ActionInvocationContext[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_ActionInvocationContext[`o.a.i.applib.` +
 `services.actinv` +
 `ActionInvocation-` +
 `Context`]
@@ -37,7 +37,7 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 |API is also concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-BackgroundService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_BackgroundService[`o.a.i.applib.` +
 `services.background` +
 `BackgroundService`]
 |Programmatic persistence of commands to be persisted (so can be executed by a background mechanism, eg scheduler)
@@ -45,10 +45,10 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |depends on: +
-xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommand-Service`]
+xref:rgsvc.adoc#_rgsvc-spi_BackgroundCommandService[`BackgroundCommand-Service`]
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-BookmarkService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`o.a.i.applib.` +
 `services.bookmark` +
 `BookmarkService`]
 |Convert object reference to a serializable "bookmark", and vice versa
@@ -63,7 +63,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommand-S
 `Contributions`
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-ClockService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_ClockService[`o.a.i.applib.` +
 `services.clock` +
 `ClockService`]
 |Access the current time (and for testing, allow the time to be changed)
@@ -73,7 +73,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommand-S
 |API is also a concrete class.
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-CommandContext[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_CommandContext[`o.a.i.applib.` +
 `services.command` +
 `CommandContext`]
 |Request-scoped access the current action that is being invoked, represented as a command object
@@ -82,9 +82,9 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-BackgroundCommandService[`BackgroundCommand-S
 ``isis-core-applib``
 |API is also a concrete class. +
 depends on: +
-xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used
+xref:rgsvc.adoc#_rgsvc-spi_CommandService[`CommandService`] for persistent `Command`, else in-memory impl. used
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-DeepLinkService[`o.a.i.applib` +
+|xref:rgsvc.adoc#_rgsvc-api_DeepLinkService[`o.a.i.applib` +
 `services.deeplink` +
 `DeepLinkService`]
 |Obtain a URL to a domain object (eg for use within an email or report)
@@ -94,7 +94,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persiste
 |Implementation only usable within Wicket viewer
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`o.a.i.applib` +
+|xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`o.a.i.applib` +
 `DomainObjectContainer`]
 |Generic repository to search, create and delete objects.  Also miscellaneous other functions, eg obtain title of object.
 |`DomainObjectContainer-` +
@@ -104,7 +104,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persiste
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-EmailService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_EmailService[`o.a.i.applib.` +
 `services.email` +
 `EmailService`]
 |Send a HTML email, optionally with attachments.
@@ -114,7 +114,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persiste
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_EventBusService[`o.a.i.applib.` +
 `services.eventbus` +
 `EventBusService`]
 |Programmatically post events to the internal event bus.  Also used by Apache Isis itself to broadcast domain events:
@@ -128,7 +128,7 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persiste
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-FixtureScriptsDefault[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_FixtureScriptsDefault[`o.a.i.applib.` +
 `services.` +
 `fixturespec` +
 `FixtureScriptsDefault`]
@@ -136,11 +136,11 @@ xref:rgsvc.adoc#_rgsvc-spi_manpage-CommandService[`CommandService`] for persiste
 |`FixtureScriptsDefault` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Interacts with xref:rgsvc.adoc#_rgsvc-spi_manpage-FixtureScriptsSpecificationProvider[`FixtureScripts-
+|Interacts with xref:rgsvc.adoc#_rgsvc-spi_FixtureScriptsSpecificationProvider[`FixtureScripts-
 SpecificationProvider`].
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-GuiceBeanProvider[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_GuiceBeanProvider[`o.a.i.applib.` +
 `services.guice` +
 `GuiceBeanProvider`]
 |Access to internal framework services initialized using Guice DI.
@@ -150,7 +150,7 @@ SpecificationProvider`].
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-IsisJdoSupport[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_IsisJdoSupport[`o.a.i.applib.` +
 `services.jdosupport` +
 `IsisJdoSupport`]
 |Lower level access to the JDO Persistence API.
@@ -160,7 +160,7 @@ SpecificationProvider`].
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-JaxbService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_JaxbService[`o.a.i.applib.` +
 `services.jaxb` +
 `JaxbService`]
 |Marshal and unmarshal JAXB-annotated view models to/from XML.
@@ -170,17 +170,17 @@ SpecificationProvider`].
 |`1.11.0-SNAPSHOT`.
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-MementoService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_MementoService[`o.a.i.applib.` +
 `services.memento` +
 `MementoService`]
-|Capture a serializable memento of a set of primitives or xref:rgsvc.adoc#_rgsvc-api_manpage-BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
+|Capture a serializable memento of a set of primitives or xref:rgsvc.adoc#_rgsvc-api_BookmarkService[bookmarks].  Primarily used internally, eg in support of commands/auditing.
 |`MementoServiceDefault` +
 ``o.a.i.core`` +
 ``isis-core-runtime``
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-MetaModelService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_MetaModelService[`o.a.i.applib.` +
 `services.metamodel` +
 `MetaModelService`]
 |Access to certain information from the Apache Isis metamodel.
@@ -190,7 +190,7 @@ SpecificationProvider`].
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-QueryResultsCache[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_QueryResultsCache[`o.a.i.applib.` +
 `services.` +
 `queryresultscache` +
 `QueryResultsCache`]
@@ -201,7 +201,7 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-Scratchpad[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_Scratchpad[`o.a.i.applib.` +
 `services.scratchpad` +
 `Scratchpad`]
 |Request-scoped service for interchanging information between and aggregating over multiple method calls; in particular for use by "bulk" actions (invoking of an action for all elements of a collection)
@@ -211,7 +211,7 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-SudoService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_SudoService[`o.a.i.applib.` +
 `services.sudo` +
 `SudoService`]
 |For use in testing while running xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[fixture scripts], allows a block of code to run as a specified user account.
@@ -221,7 +221,7 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-WrapperFactory[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`o.a.i.applib.` +
 `services.wrapper` +
 `WrapperFactory`]
 |Interact with another domain object "as if" through the UI (enforcing business rules, firing domain events)
@@ -231,7 +231,7 @@ SpecificationProvider`].
 |
 
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-XmlSnapshotService[`o.a.i.applib.` +
+|xref:rgsvc.adoc#_rgsvc-api_XmlSnapshotService[`o.a.i.applib.` +
 `services.xmlsnapshot` +
 `XmlSnapshotService`]
 |Generate an XML representation of an object and optionally a graph of related objects.
@@ -269,7 +269,7 @@ There is also a number of deprecated domain services.
 |`Bulk.InteractionContext` +
 ``o.a.i.core`` +
 ``isis-core-applib``
-|Replaced by xref:rgsvc.adoc#_rgsvc-api_manpage-ActionInvocationContext[`ActionInvocationContext`]
+|Replaced by xref:rgsvc.adoc#_rgsvc-api_ActionInvocationContext[`ActionInvocationContext`]
 
 
 
@@ -282,25 +282,25 @@ Key:
 
 
 
-include::_rgsvc-api_manpage-ActionInvocationContext.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-BackgroundService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-BookmarkService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-ClockService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-CommandContext.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-DeepLinkService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-DomainObjectContainer.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-EmailService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-EventBusService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-FixtureScriptsDefault.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-GuiceBeanProvider.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-IsisJdoSupport.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-JaxbService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-MementoService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-MetamodelService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-QueryResultsCache.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-Scratchpad.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-SudoService.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-WrapperFactory.adoc[leveloffset=+1]
-include::_rgsvc-api_manpage-XmlSnapshotService.adoc[leveloffset=+1]
+include::_rgsvc-api_ActionInvocationContext.adoc[leveloffset=+1]
+include::_rgsvc-api_BackgroundService.adoc[leveloffset=+1]
+include::_rgsvc-api_BookmarkService.adoc[leveloffset=+1]
+include::_rgsvc-api_ClockService.adoc[leveloffset=+1]
+include::_rgsvc-api_CommandContext.adoc[leveloffset=+1]
+include::_rgsvc-api_DeepLinkService.adoc[leveloffset=+1]
+include::_rgsvc-api_DomainObjectContainer.adoc[leveloffset=+1]
+include::_rgsvc-api_EmailService.adoc[leveloffset=+1]
+include::_rgsvc-api_EventBusService.adoc[leveloffset=+1]
+include::_rgsvc-api_FixtureScriptsDefault.adoc[leveloffset=+1]
+include::_rgsvc-api_GuiceBeanProvider.adoc[leveloffset=+1]
+include::_rgsvc-api_IsisJdoSupport.adoc[leveloffset=+1]
+include::_rgsvc-api_JaxbService.adoc[leveloffset=+1]
+include::_rgsvc-api_MementoService.adoc[leveloffset=+1]
+include::_rgsvc-api_MetamodelService.adoc[leveloffset=+1]
+include::_rgsvc-api_QueryResultsCache.adoc[leveloffset=+1]
+include::_rgsvc-api_Scratchpad.adoc[leveloffset=+1]
+include::_rgsvc-api_SudoService.adoc[leveloffset=+1]
+include::_rgsvc-api_WrapperFactory.adoc[leveloffset=+1]
+include::_rgsvc-api_XmlSnapshotService.adoc[leveloffset=+1]
 
 

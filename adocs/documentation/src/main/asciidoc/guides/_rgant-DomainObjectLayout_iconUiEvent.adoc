@@ -10,7 +10,7 @@ object (if possible). This is as an alternative to implementing
 xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`] reserved method.  (If `iconName()` is present, then
 it will take precedence).
 
-Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] and can
+Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] and can
 use obtain a reference to the domain object from the event.  From this they can, if they wish, specify an icon name for
 the domain object using the event's API.
 
@@ -57,7 +57,7 @@ The benefit is that subscribers can be more targeted as to the events that they 
 == Subscribers
 
 Subscribers (which must be domain services) subscribe using either the link:https://github.com/google/guava[Guava] API
-or (if the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] has been appropriately configured)
+or (if the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] has been appropriately configured)
 using the link:http://www.axonframework.org/[Axon Framework] API.  The examples below use the Guava API.
 
 Subscribers can be either coarse-grained (if they subscribe to the top-level event type):
@@ -115,8 +115,8 @@ then no event will be posted.
 == Raising events programmatically
 
 Normally events are only raised for interactions through the UI. However, events can be raised programmatically either
-by calling the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] API directly, or as a result
-of calling the xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`]'s
+by calling the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] API directly, or as a result
+of calling the xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`]'s
 `iconNameOf(...)` method.
 
 

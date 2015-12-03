@@ -110,8 +110,8 @@ Instead, a view model can be defined to act as a DTO.  To put this formal contra
 model can (as of `1.11.0-SNAPSHOT`) simply be defined as a JAXB-annotated entity; this allows the consumer to obtain
 the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.  These XML
 representations can be surfaced by the xref:ugvro.adoc#[RestfulObjects viewer] (by implementing
-the xref:rgsvc.adoc#_rgsvc-spi_manpage-ContentMappingService[`ContentMappingService`]); the XSD can be obtained
-using the xref:rgsvc.adoc#_rgsvc-api_manpage-JaxbService[`JaxbService`].  Using the formalism of XML also allows
+the xref:rgsvc.adoc#_rgsvc-spi_ContentMappingService[`ContentMappingService`]); the XSD can be obtained
+using the xref:rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`].  Using the formalism of XML also allows
 DTOs to be carefully and properly versioned using XML namespaces.
 
 [TIP]
@@ -129,7 +129,7 @@ JAXB-annotated view models are in many regards the most powerful of all the view
 One important variation of the DTO use case concerns subscribers on an enterprise event bus such as
 link:http://camel.apache.org[Apache Camel(TM)] and similar.
 
-A xref:rgsvc.adoc#_rgsvc-spi_manpage-PublishingService[`PublishingService`] implementation (eg that provided by
+A xref:rgsvc.adoc#_rgsvc-spi_PublishingService[`PublishingService`] implementation (eg that provided by
 (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module) can publish XML events
 onto a message queue, typically representing action invocations within the originating Isis application.  The ESB
 (Apache Camel) then dispatches this event to all interested subscribers.  These subscribers represent external systems

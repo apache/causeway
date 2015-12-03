@@ -7,4 +7,4 @@
 This class extends xref:rg.adoc#_rg_classes_super_manpage-AbstractContainedObject[`AbstractContainedObject`], adding
 in an implementation of `getId()` based upon the classes name.
 
-In practice there is little to gain from subclassing; simply inject xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`] for broadly equivalent functionality.
+In practice there is little to gain from subclassing; simply inject xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`] for broadly equivalent functionality.

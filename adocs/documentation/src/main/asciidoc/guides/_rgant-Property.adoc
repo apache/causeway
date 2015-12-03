@@ -23,7 +23,7 @@ It is also possible to apply the annotation to actions of domain services that a
 |xref:rgant.adoc#_rgant-Property_domainEvent[`domainEvent()`]
 |subtype of `PropertyDomainEvent` +
 (`PropertyDomainEvent.Default`)
-|the event type to be posted to the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
+|the event type to be posted to the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] to broadcast the property's business rule checking (hide, disable, validate) and its modification (before and after).
 
 
 |xref:rgant.adoc#_rgant-Property_editing[`editing()`]

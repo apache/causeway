@@ -7,7 +7,7 @@
 
 This section catalogues the various domain event classes defined by Apache Isis.
 
-These events are broadcast on the xref:rgsvc.adoc#_rgsvc-api_manpage-EventBusService[`EventBusService`].  The domain
+These events are broadcast on the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`].  The domain
 events are broadcast as a result of being specified in the xref:rgant.adoc#_rgant-Action_domainEvent[`@Action#domainEvent()`],  xref:rgant.adoc#_rgant-Property_domainEvent[`@Property#domainEvent()`] or xref:rgant.adoc#_rgant-Collection_domainEvent[`@Collection#domainEvent()`] attributes.
 
 They are listed in the table below.

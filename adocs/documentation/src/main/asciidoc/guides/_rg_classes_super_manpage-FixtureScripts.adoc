@@ -6,7 +6,7 @@
 
 This abstract class is intended to allow a domain service that can execute xref:rg.adoc#_rg_classes_super_manpage-FixtureScript[`FixtureScript`]s to be easily written.
 
-However, it has now been deprecated; instead we recommend that the xref:rgsvc.adoc#_rgsvc-spi_manpage-FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] service is
-implemented instead.  The framework will then automatically use xref:rgsvc.adoc#_rgsvc-api_manpage-FixtureScriptsDefault[`FixtureScriptsDefault`] as a fallback implementation of this class.
+However, it has now been deprecated; instead we recommend that the xref:rgsvc.adoc#_rgsvc-spi_FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] service is
+implemented instead.  The framework will then automatically use xref:rgsvc.adoc#_rgsvc-api_FixtureScriptsDefault[`FixtureScriptsDefault`] as a fallback implementation of this class.
 
 See the see the xref:ugtst.adoc#_ugtst_fixture-scripts[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts' API and usage].

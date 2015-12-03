@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the xref:rgsvc.adoc#_rgsvc-spi_manpage-AuditingService[`AuditingService`], if one has been configured.
+The `auditing()` attribute indicates that if the object is modified, then each of its changed properties should be submitted to the xref:rgsvc.adoc#_rgsvc-spi_AuditingService[`AuditingService`], if one has been configured.
 
 The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.services.audit.objects` is used to determine the whether the action is published:
 

@@ -8,7 +8,7 @@
 
 So much for the theory; how should view models be implemented?  Fundamentally all view models' state is serialized into
 a string memento; this memento is then held by the client (browser) in the form of a URL.  As you might imagine, this
-URL can become quite long, but Apache Isis offers a mechanism (the xref:rgsvc.adoc#_rgsvc-spi_manpage-UrlEncodingService[`UrlEncodingService`]) if it exceeds the maximum length for a URL
+URL can become quite long, but Apache Isis offers a mechanism (the xref:rgsvc.adoc#_rgsvc-spi_UrlEncodingService[`UrlEncodingService`]) if it exceeds the maximum length for a URL
 (2083 characters).  Also, of course, this string memento must only contain characters that it is valid for use within
 a URL.
 

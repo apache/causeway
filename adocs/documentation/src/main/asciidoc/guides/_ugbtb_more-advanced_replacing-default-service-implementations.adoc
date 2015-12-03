@@ -10,7 +10,7 @@ The framework provides default implementations for many of the xref:rgsvc.adoc#_
 
 The trick is to use the xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
 
-For example, suppose you wanted to provide your own implementation of xref:rgsvc.adoc#_rgsvc-api_manpage-LocaleProvider[`LocaleProvider`].  Here's how:
+For example, suppose you wanted to provide your own implementation of xref:rgsvc.adoc#_rgsvc-api_LocaleProvider[`LocaleProvider`].  Here's how:
 
 [source,java]
 ----

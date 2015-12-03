@@ -332,9 +332,9 @@ a hyperlink to the "man page" for an (API) domain service, where:
 
 for example:
 
-pass:[<pre>xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`\]</pre>]
+pass:[<pre>xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`\]</pre>]
 
-|xref:rgsvc.adoc#_rgsvc-api_manpage-DomainObjectContainer[`DomainObjectContainer`]
+|xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`]
 
 
 
@@ -347,8 +347,8 @@ a hyperlink to the "man page" for an (SPI) domain service, where:
 
 for example:
 
-pass:[<pre>xref:rgsvc.adoc#_rgsvc-spi_manpage-ContentMappingService[`ContentMappingService`\]</pre>]
-|xref:rgsvc.adoc#_rgsvc-spi_manpage-ContentMappingService[`ContentMappingService`]
+pass:[<pre>xref:rgsvc.adoc#_rgsvc-spi_ContentMappingService[`ContentMappingService`\]</pre>]
+|xref:rgsvc.adoc#_rgsvc-spi_ContentMappingService[`ContentMappingService`]
 
 
 
