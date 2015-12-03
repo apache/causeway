@@ -170,20 +170,20 @@ See xref:rg.adoc#_rg_runtime_configuring-core_filterVisibility[section below] fo
 |`FQCN`
 |Fully qualified class names of a custom implementation of `ProgrammingModel` interface. +
 
-See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `exclude`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (existing, built-in) facet factory classes to be included to the programming model. +
 
-See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 |`isis.reflector.facets.` +
 `include`
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of (new, custom) facet factory classes to be included to the programming model. +
-See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the programming model] for more details.
+See xref:ugbtb.adoc#_ugbtb_programming-model_finetuning[finetuning the programming model] for more details.
 
 
 |`isis.reflector.` +
@@ -191,7 +191,7 @@ See xref:ug.adoc#_ug_extending_programming-model_finetuning[finetuning the progr
 |`FQCN`,`FQCN2`,...
 |Fully qualified class names of classes to be instantiated to read layout metadata, as used in for xref:rg.adoc#_rg_object-layout_dynamic[dynamic layout]s. +
 
-See xref:ug.adoc#_ug_extending_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
+See xref:ugbtb.adoc#_ugbtb_programming-model_layout-metadata-reader[Layout Metadata Reader] for more information.
 
 
 
@@ -199,7 +199,7 @@ See xref:ug.adoc#_ug_extending_programming-model_layout-metadata-reader[Layout M
 |`FQCN`
 |Custom implementation of `MetaModelValidator` (in the `org.apache.isis.core.metamodel.specloader.validator` package) +
 
-See xref:ug.adoc#_ug_extending_programming-model_custom-validator[Custom Validator] to learn more.
+See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] to learn more.
 
 |`isis.reflector.validator.` +
 `allowDeprecated`
@@ -355,7 +355,7 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
 
-See xref:ug.adoc#_ug_more-advanced_i18n[i18n support] to learn more about the translation service.
+See xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] to learn more about the translation service.
 
 |`isis.viewers.` +
 `paged.parented`

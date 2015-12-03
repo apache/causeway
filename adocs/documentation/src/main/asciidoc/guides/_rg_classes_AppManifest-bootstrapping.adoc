@@ -240,7 +240,7 @@ The first (programmatic) approach takes precedence over the second approach (con
 
 [TIP]
 ====
-If you use the `org.apache.isis.WebServer` class to launch your application from the xref:ug.adoc#_ug_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
+If you use the `org.apache.isis.WebServer` class to launch your application from the xref:ugbtb.adoc#_ugbtb_deployment_cmd-line[command line], then note that you can specify the `AppManifest` using the `-m` (or `--manifest`) flag:
 
 [source,ini]
 ----

@@ -16,7 +16,7 @@ Or, actually, you can, because that is a valid mapping supported by JDO/DataNucl
 
 One workaround is to mark the collection as xref:rg.adoc#_rg_annotations_manpage-Programmatic[`@Programmatic`].  This ensures that the collection is ignored by Apache Isis.
 
-Another workaround is to wrap each value in a view model, as explained in this xref:ug.adoc#_ug_more-advanced_tips-n-tricks_simulating-collections-of-values[tip].
+Another workaround is to wrap each value in a view model, as explained in this xref:ugbtb.adoc#_ugbtb_more-advanced_tips-n-tricks_simulating-collections-of-values[tip].
 ====
 
 

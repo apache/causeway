@@ -51,7 +51,7 @@ and these properties may optionally be configured (each has a default to use gma
 * `isis.service.email.port`
 * `isis.service.email.tls.enabled`
 
-These configuration properties can be specified either in `isis.properties` or in an xref:ug.adoc#_ug_deployment_externalized-configuration[external configuration file].
+These configuration properties can be specified either in `isis.properties` or in an xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[external configuration file].
 
 If prototyping (that is, running the app using `org.apache.isis.WebServer`), the configuration properties can also be specified as system properties. For example, if you create a test email account on gmail, you can configure the service using:
 

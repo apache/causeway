@@ -31,7 +31,7 @@ It's also possible to specify a xref:rg.adoc#_rg_annotations_manpage-DomainObjec
 
 [TIP]
 ====
-The framework also provides a separate, powerful mechanism for xref:ug.adoc#_ug_more-advanced_i18n[internationalization].
+The framework also provides a separate, powerful mechanism for xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[internationalization].
 ====
 
 

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-IMPORTANT: TODO - see xref:ug.adoc#_ug_more-advanced_i18n[user guide, i18n].
+IMPORTANT: TODO - see xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[user guide, i18n].
 
 The `TranslatableString` utility class ...
 

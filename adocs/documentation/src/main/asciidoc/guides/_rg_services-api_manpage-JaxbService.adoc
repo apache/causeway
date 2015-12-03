@@ -49,7 +49,7 @@ Isis provides a default implementation of the service, `o.a.i.schema.services.ja
 
 This service is provided as a convenience for applications, but is also used internally by the framework to
 xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]-annotated
-xref:ug.adoc#_ug_more-advanced_view-models[view models].  The functionality to download XML and XSD schemas is also
+xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view models].  The functionality to download XML and XSD schemas is also
 exposed in the UI through mixins to xref:rg.adoc#_rg_classes_roles_manpage-Dto[`Dto`] interface.
 
 

@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-Apache Isis works by building a metamodel of the domain objects: entities, xref:ug.adoc#_ug_more-advanced_view-models[view model]s and services.  The class members of both entities and view models represent both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.  The class members of domain services is simpler: just behaviour, ie actions.
+Apache Isis works by building a metamodel of the domain objects: entities, xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view model]s and services.  The class members of both entities and view models represent both state -- (single-valued) properties and (multi-valued) collections -- and behaviour -- actions.  The class members of domain services is simpler: just behaviour, ie actions.
 
 In the automatically generated UI a property is rendered as a field.  This can be either of a value type (a string, number, date, boolean etc) or can be a reference to another entity.  A collection is generally rendered as a table.
 
@@ -19,7 +19,7 @@ In this section we discuss the mechanics of writing domain objects that comply w
 ====
 In fact, the Apache Isis programming model is extensible; you can teach Apache Isis new programming conventions and you can remove existing ones; ultimately they amount to syntax.   The only real fundamental that can't be changed is the notion that objects consist of properties, collections and actions.
 
-You can learn more about extending Apache Isis programming model xref:ug.adoc#_ug_extending_programming-model[here].
+You can learn more about extending Apache Isis programming model xref:ugbtb.adoc#_ugbtb_programming-model[here].
 ====
 
 

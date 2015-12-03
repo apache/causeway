@@ -17,8 +17,8 @@ the domain object using the event's API.
 [NOTE]
 ====
 The feature was originally introduced so that xref:rg.adoc#_rg_annotations_manpage-XmlRootElement[`@XmlRootElement`]-annotated
-xref:ug.adoc#_ug_more-advanced_view-models[view model]s could be kept as minimal as possible, just defining the data.
-UI events allow subscribers to provide UI hints, while xref:ug.adoc#_ug_more-advanced_decoupling_mixins[mixin]s can be used to provide the behaviour.
+xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view model]s could be kept as minimal as possible, just defining the data.
+UI events allow subscribers to provide UI hints, while xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[mixin]s can be used to provide the behaviour.
 ====
 
 By default the event raised is `TitleUiEvent.Default`. For example:

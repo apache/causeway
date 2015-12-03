@@ -17,7 +17,7 @@ An object's title can be constructed in various ways, but the most flexible is t
 public String title() { ... }
 ----
 
-Note that Apache Isis' xref:ug.adoc#_ug_more-advanced_i18n[i18n support] extends this so that titles can also be internationalized.
+Note that Apache Isis' xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] extends this so that titles can also be internationalized.
 
 For example, the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] uses this technique to add an overlay for todo items that have been completed:
 

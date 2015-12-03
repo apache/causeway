@@ -64,6 +64,7 @@ pass:[<br/>]
 * pass:[<a href="./guides/ugvro.html" target="_blank">Restful Objects viewer</a>]
 * pass:[<a href="./guides/ugsec.html" target="_blank">Security</a>]
 * pass:[<a href="./guides/ugtst.html" target="_blank">Testing</a>]
+* pass:[<a href="./guides/ugbtb.html" target="_blank">Beyond the Basics</a>]
 
 
 |*Reference Guide:*

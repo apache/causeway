@@ -12,10 +12,11 @@ This guide describes the authentication and authorization features available to 
 
 Other guides are:
 
-* the xref:ug.adoc[Fundamentals]
-* the xref:ugvw.adoc[Wicket viewer]
-* the xref:ugro.adoc[Restful Objects viewer]
-* the xref:ugtst.adoc[Testing]
+* xref:ug.adoc[Fundamentals]
+* xref:ugvw.adoc[Wicket viewer]
+* xref:ugro.adoc[Restful Objects viewer]
+* xref:ugtst.adoc[Testing]
+* xref:ugbtb.adoc[Beyond the Basics]
 
 
 === Terminology

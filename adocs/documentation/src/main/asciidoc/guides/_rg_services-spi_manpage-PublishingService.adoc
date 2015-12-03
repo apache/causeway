@@ -166,7 +166,7 @@ then this can be activated by updating the `pom.xml` and updating the `AppManife
 
 The modules also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
 suppressed either using security or by implementing a
-xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

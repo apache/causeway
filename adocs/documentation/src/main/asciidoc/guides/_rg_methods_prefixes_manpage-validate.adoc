@@ -9,7 +9,7 @@
 The `validate...()` supporting method is called for properties, actions and action parameters.  It allows the proposed new value for a property to be rejected, or the proposed argument of an action parameter to be rejected, or to reject a whole set of action arguments for an actio invocation.
 
 
-The reason for vetoing a modification/invocation is normally returned as a string.  However, Apache Isis' xref:ug.adoc#_ug_more-advanced_i18n[i18n support] extends this so that reasons can be internationalized if required.
+The reason for vetoing a modification/invocation is normally returned as a string.  However, Apache Isis' xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] extends this so that reasons can be internationalized if required.
 
 
 

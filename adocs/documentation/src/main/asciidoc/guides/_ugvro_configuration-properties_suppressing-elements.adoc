@@ -33,7 +33,7 @@ The defaults for all of these is false, meaning that the hypermedia/metadata is 
 In the future we might extend this per-request.  Raise/vote on a JIRA ticket if you require this feature.
 ====
 
-If an even simpler representations (of objects) are required, see xref:ugvro.adoc#_ugvro_configuration-properties_simplified-object-representation[simplified object representation], immediately below.  And if the above isn't flexible and you need complete control over all representations see the section on xref:ugvro.adoc#_ugvro_extending[Extending the Restful Objects viewer] in the xref:ug.adoc#_ug_extending[Extending] chapter.
+If an even simpler representations (of objects) are required, see xref:ugvro.adoc#_ugvro_configuration-properties_simplified-object-representation[simplified object representation], immediately below.  And if the above isn't flexible and you need complete control over all representations see the section on xref:ugvro.adoc#_ugvro_extending[Extending the Restful Objects viewer] in the xref:ugbtb.adoc[Extending] chapter.
 
 
 

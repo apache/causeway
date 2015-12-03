@@ -45,7 +45,7 @@ Note that the discriminator overrides the object type that may otherwise be infe
 
 |xref:rg.adoc#_rg_annotations_manpage-NotPersistent[`@javax.jdo.annotations.` +
 `NotPersistent`]
-|Used to determine whether to enforce or skip some xref:ug.adoc#_ug_extending_programming-model_custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
+|Used to determine whether to enforce or skip some xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[metamodel validation] for `@Column` versus equivalent Isis annotations.
 
 |Domain / persistence
 |Property

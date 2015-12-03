@@ -96,7 +96,7 @@ In this case the deployment type is specified through an Apache Isis-specific co
 
 == Overriding the deployment type
 
-If bootstrapping the application using Apache Isis' xref:ug.adoc#_ug_deployment_cmd-line[`org.apache.isis.WebServer`] then it is possible to override the deployment type using the `-t` (or `--type`) flag.
+If bootstrapping the application using Apache Isis' xref:ugbtb.adoc#_ugbtb_deployment_cmd-line[`org.apache.isis.WebServer`] then it is possible to override the deployment type using the `-t` (or `--type`) flag.
 
 For example:
 

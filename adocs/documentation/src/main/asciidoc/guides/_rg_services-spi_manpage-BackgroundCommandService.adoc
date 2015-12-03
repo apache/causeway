@@ -55,7 +55,7 @@ public class ActionInvocationMemento {
 
 == "Internal" SPI
 
-The `BackgroundCommandExecution` (in isis-core) is an abstract template class for  xref:ug.adoc#_ug_headless-access_AbstractIsisSessionTemplate[headless access], that defines an abstract hook method to obtain background `Command`s to be executed:
+The `BackgroundCommandExecution` (in isis-core) is an abstract template class for  xref:ugbtb.adoc#_ugbtb_headless-access_AbstractIsisSessionTemplate[headless access], that defines an abstract hook method to obtain background `Command`s to be executed:
 
 [source,java]
 ----
@@ -113,7 +113,7 @@ Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppMani
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a
-xref:ug.adoc#_ug_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
+xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].
 
 
 

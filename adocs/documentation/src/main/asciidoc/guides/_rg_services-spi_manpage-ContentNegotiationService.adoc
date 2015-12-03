@@ -14,11 +14,11 @@ Another use case is to support "third party" REST clients over which you have no
 
 Instead you need to create some sort of stable facade over your domain entities, one which you will preserve even if the domain entities change.  There are three ways in which you can do this:
 
-* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:ug.adoc#_ug_more-advanced_view-models[view model].  This is then surfaced over the RO viewer.  +
+* first is to solve the problem at the domain layer by defining a regular Apache Isis xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view model].  This is then surfaced over the RO viewer.  +
 +
 If the underlying entities change, then care must be taken to ensure that structure of the view model nevertheless is unchanged.
 
-* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:ug.adoc#_ug_more-advanced_mapping-rdbms-views[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
+* a second option is to solve the problem at the persistence layer, but defining a (SQL) view in the database and then xref:ugbtb.adoc#_ugbtb_more-advanced_mapping-rdbms-views[mapping this] to a (read-only) entity.  Again this is surfaced by the RO viewer.  +
 +
 If the underlying tables change (as the result of a change in their corresponding domain entities) then once more the view must be refactored so that it still presents the same structure.
 
