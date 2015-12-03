@@ -18,11 +18,11 @@ This guide describes those features available to you for testing your Apache Isi
 
 Other guides are:
 
-* xref:ug.adoc[Fundamentals]
-* xref:ugvw.adoc[Wicket viewer]
-* xref:ugro.adoc[Restful Objects viewer]
-* xref:ugsec.adoc[Security]
-* xref:ugbtb.adoc[Beyond the Basics]
+* xref:ug.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugbtb.adoc#[Beyond the Basics]
 
 
 

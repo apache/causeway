@@ -23,7 +23,7 @@ image::{_imagesdir}wicket-viewer/bookmarked-pages/panel.png[width="800px",link="
 
 [NOTE]
 ====
-Note that these screenshots show an earlier version of the xref:ugvw.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that these screenshots show an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 Note how the list contains both domain objects and an action ("not yet complete").

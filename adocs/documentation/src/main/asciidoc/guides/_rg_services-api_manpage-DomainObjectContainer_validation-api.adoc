@@ -21,6 +21,6 @@ public interface DomainObjectContainer {
 }
 ----
 
-If an object is changed by editing its properties, then (using the xref:ugvw.adoc[Wicket viewer] at least) Apache Isis will check that the state of the object is valid.  There is currently however no equivalent guarantee for actions.
+If an object is changed by editing its properties, then (using the xref:ugvw.adoc#[Wicket viewer] at least) Apache Isis will check that the state of the object is valid.  There is currently however no equivalent guarantee for actions.
 
 The intent of this API was (originally at least) to provide a fallback whereby actions could at least be able to perform this validation programmatically (eg in their own xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`] or xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] methods.  However, this feature should be considered experimental; your mileage may vary.

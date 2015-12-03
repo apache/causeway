@@ -6,7 +6,7 @@
 
 
 
-Apache Isis provides two different viewers, the xref:ugvw.adoc[Wicket viewer] and the xref:ugvro.adoc[RestfulObjects viewer].  You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.  The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
+Apache Isis provides two different viewers, the xref:ugvw.adoc#[Wicket viewer] and the xref:ugvro.adoc#[RestfulObjects viewer].  You can deploy both of these concurrently, or deploy just the Wicket viewer, or deploy just the Restful Objects viewer.  The configuration in `web.xml` varies accordingly, both in terms of the servlet context listeners, filters and servlets.
 
 If you are using Apache Isis' integration with Apache Shiro (for security) then this also needs configuring in `web.xml`.  See the xref:ugsec.adoc#_ugsec_configuring-isis-to-use-shiro[security chapter] for full details on this topic.
 
@@ -418,7 +418,7 @@ This filter should be mapped to the `servlet-name` for the RestEasy `HttpServlet
 === `IsisTransactionFilterForRestfulObjects`
 
 The `IsisTransactionFilterForRestfulObjects` filter simply ensures that a transaction is in progress for all
-calls routed to the xref:ugvro.adoc[RestfulObjects viewer].
+calls routed to the xref:ugvro.adoc#[RestfulObjects viewer].
 
 Its definition is:
 

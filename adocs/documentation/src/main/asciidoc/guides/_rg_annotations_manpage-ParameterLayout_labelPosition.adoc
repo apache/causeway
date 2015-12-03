@@ -36,6 +36,6 @@ public class Order {
 ----
 
 
-To get an idea of how these are rendered (in the xref:ugvw.adoc[Wicket viewer]), see xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_labelPosition[PropertyLayout#labelPosition()].
+To get an idea of how these are rendered (in the xref:ugvw.adoc#[Wicket viewer]), see xref:rg.adoc#_rg_annotations_manpage-PropertyLayout_labelPosition[PropertyLayout#labelPosition()].
 
 

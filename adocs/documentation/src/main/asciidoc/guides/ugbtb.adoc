@@ -12,15 +12,15 @@
 This guide provides xref:ugbtb.adoc#_ugbtb_more-advanced[more advanced] guidance on writing maintainable larger
 applications.
 
-Later chapters discuss how to xref:ugbtb.adoc#_ugbtb_deployment[deploy] your app, and discuss other ways in which you can xref:ugbtb.adoc[extend] or adapt the framework itself to your particular needs.
+Later chapters discuss how to xref:ugbtb.adoc#_ugbtb_deployment[deploy] your app, and discuss other ways in which you can xref:ugbtb.adoc#[extend] or adapt the framework itself to your particular needs.
 
 Other guides are:
 
-* xref:u.adoc[Fundamentals]
-* xref:ugvw.adoc[Wicket viewer]
-* xref:ugvro.adoc[Restful Objects viewer]
-* xref:ugvro.adoc[Security]
-* xref:ugtst.adoc[Testing]
+* xref:ug.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugvro.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
 
 
 This users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.

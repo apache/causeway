@@ -44,7 +44,7 @@ Param
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ugvw.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
 See also xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`]`
@@ -142,7 +142,7 @@ See also xref:rg.adoc#_rg_methods_prefixes_manpage-clear[`clear...()`]`.
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ugvw.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
 See also xref:rg.adoc#_rg_methods_prefixes_manpage-addTo[`addTo...()`]`
@@ -177,7 +177,7 @@ AddTo...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ugvw.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
 See also xref:rg.adoc#_rg_methods_prefixes_manpage-validateRemoveFrom[`validateRemoveFrom...()`], and xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`] for properties and actions.
@@ -193,7 +193,7 @@ RemoveFrom...()`]
 
 [NOTE]
 ====
-Directly mutable collections are not currently supported by the xref:ugvw.adoc[Wicket viewer].
+Directly mutable collections are not currently supported by the xref:ugvw.adoc#[Wicket viewer].
 ====
 
 See also xref:rg.adoc#_rg_methods_prefixes_manpage-validateAddTo[`validateAddTo...()`], and xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`] for properties and actions.

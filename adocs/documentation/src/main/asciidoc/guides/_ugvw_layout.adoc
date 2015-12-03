@@ -60,7 +60,7 @@ video::zmrg49WeEPc[youtube,width="530px",height="354px"]
 
 [NOTE]
 ====
-Note that this screencast shows an earlier version of the xref:ugvw.adoc[Wicket viewer] UI (specifically, pre 1.8.0).
+Note that this screencast shows an earlier version of the xref:ugvw.adoc#[Wicket viewer] UI (specifically, pre 1.8.0).
 ====
 
 

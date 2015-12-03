@@ -16,11 +16,11 @@ This user guide discuss features, configuration and how to extend the Restful Ob
 
 Other guides are:
 
-* xref:ug.adoc[Fundamentals]
-* xref:ugvw.adoc[Wicket viewer]
-* xref:ugsec.adoc[Security]
-* xref:ugtst.adoc[Testing]
-* xref:ugbtb.adoc[Beyond the Basics]
+* xref:ug.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics]
 
 
 

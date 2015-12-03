@@ -15,11 +15,11 @@ number of xref:ug.adoc#_ug_how-tos[how-to]s, and catalog various xref:ug.adoc#_u
 
 Other guides are:
 
-* xref:ugvw.adoc[Wicket viewer]
-* xref:ugvro.adoc[Restful Objects viewer]
-* xref:ugvro.adoc[Security]
-* xref:ugtst.adoc[Testing]
-* xref:ugbtb.adoc[Beyond the Basics]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics]
 
 
 This users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This

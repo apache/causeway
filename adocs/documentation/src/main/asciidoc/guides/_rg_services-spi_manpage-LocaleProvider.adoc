@@ -37,11 +37,11 @@ This is notionally request-scoped, returning the `Locale` of the current user; _
 
 == Implementation
 
-Isis' xref:ugvw.adoc[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
+Isis' xref:ugvw.adoc#[Wicket viewer] provides an implementation of this service (`LocaleProviderWicket`) which leverages Apache Wicket APIs.
 
 [NOTE]
 ====
-Currently there is no equivalent implementation for the xref:ugvro.adoc[RestfulObjects viewer].
+Currently there is no equivalent implementation for the xref:ugvro.adoc#[RestfulObjects viewer].
 ====
 
 
@@ -51,7 +51,7 @@ Currently there is no equivalent implementation for the xref:ugvro.adoc[RestfulO
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
 `AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]), _and_ that the
-xref:ugvw.adoc[Wicket viewer] is being used, then an implementation of `LocaleProvider` is
+xref:ugvw.adoc#[Wicket viewer] is being used, then an implementation of `LocaleProvider` is
 automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 To use an alternative implementation, use

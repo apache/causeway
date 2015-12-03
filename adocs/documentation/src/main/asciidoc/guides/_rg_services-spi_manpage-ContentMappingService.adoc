@@ -6,7 +6,7 @@
 
 
 
-The `ContentMappingService` supports the (default implementation of the) xref:rg.adoc#_rg_services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] allowing the xref:ugvro.adoc[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified by the HTTP `Accept` header.
+The `ContentMappingService` supports the (default implementation of the) xref:rg.adoc#_rg_services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] allowing the xref:ugvro.adoc#[RestfulObjects viewer] to allow domain objects to be transformed into some other format as specified by the HTTP `Accept` header.
 
 See xref:rg.adoc#_rg_services-spi_manpage-ContentNegotiationService[`ContentNegotiationService`] for further discussion.
 

@@ -50,7 +50,7 @@ and modify its state, and navigate to related objects.
 
 The next type of domain object to discuss is *domain services*.  These are (usually) singleton stateless services
 that provide additional functionality.  The behaviour of these services is rendered in various ways, though the most
-obvious is as the menu actions on the top-level menu bars in the xref:ugvw.adoc[Wicket viewer]'s UI.
+obvious is as the menu actions on the top-level menu bars in the xref:ugvw.adoc#[Wicket viewer]'s UI.
 
 Domain objects can also delegate to domain services; domain services are automatically injected into every other domain
 object; this includes domain entities as well as other services.  This injection of domain services into entities is
@@ -62,8 +62,8 @@ As well as domain entities - mapped to a datastore - Apache Isis also supports *
 view models in the same way as a domain entity, indeed they are unlikely to distinguish one from the other.  However
 view models are _not_ mapped to the underlying database, rather they represent some aggregation of state from one or
 more underlying entities.  Their state is serialized and recreated from their internal identifier; this identifier is
-visible as the object's URL in the xref:ugvw.adoc[Wicket viewer] or
-xref:ugvro.adoc[RestfulObjects viewer].
+visible as the object's URL in the xref:ugvw.adoc#[Wicket viewer] or
+xref:ugvro.adoc#[RestfulObjects viewer].
 
 There's no need though for the view model to aggregate the state of regular domain entities.  A view model could also
 be used as a proxy for some externally managed entity, accessed over a web service or REST API; it could even be a
@@ -112,7 +112,7 @@ functionality is simply for other domain objects to invoke programmatically).
 +
 It is also possible to specify a nature of simply `VIEW`, this combining `VIEW_MENU_ONLY` and `VIEW_CONTRIBUTIONS_ONLY`.
 This is in fact the default, useful for initial prototyping.  A final nature is `VIEW_REST_ONLY` which is for domain
-services whose functionality is surfaced only by the xref:ugvro.adoc[RestfulObjects viewer].
+services whose functionality is surfaced only by the xref:ugvro.adoc#[RestfulObjects viewer].
 
 Worth emphasising is that domain entities and view models hold state, whereas domain services are generally
 stateless.  If a domain service does hold state (eg the `Scratchpad` service noted above) then it should be
@@ -311,8 +311,8 @@ scanned by the mail room, the barcode could be read to attach the correspondence
 * as a handle to any object in an audit record (as used by the
 xref:rg.adoc#_rg_services-spi_manpage-AuditingService[`AuditingService`], in fact).
 
-* and of course both the xref:ugvro.adoc[RestfulObjects viewer] and
-xref:ugvw.adoc[Wicket viewer]
+* and of course both the xref:ugvro.adoc#[RestfulObjects viewer] and
+xref:ugvw.adoc#[Wicket viewer]
 use the oid tuple to look up, render and allow the user to interact with domain objects.
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects

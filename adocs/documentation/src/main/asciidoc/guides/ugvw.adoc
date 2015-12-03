@@ -20,11 +20,11 @@ It also discusses how to extend the viewer, and the (non-ASF) link:http://isisad
 
 Other guides are:
 
-* xref:ug.adoc[Fundamentals]
-* xref:ugvro.adoc[Restful Objects viewer]
-* xref:ugsec.adoc[Security]
-* xref:ugtst.adoc[Testing]
-* xref:ugbtb.adoc[Beyond the Basics]
+* xref:ug.adoc#[Fundamentals]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics]
 
 
 

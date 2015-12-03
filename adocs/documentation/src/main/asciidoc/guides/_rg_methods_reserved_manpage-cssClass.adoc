@@ -8,7 +8,7 @@
 
 The `cssClass()` returns a CSS class for a particular object instance.
 
-The xref:ugvw.adoc[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.  This is done both for rendering the object either in a table or when rendering the object on its own page.
+The xref:ugvw.adoc#[Wicket viewer] wraps the object's representation in a containing `<div>` with the class added.  This is done both for rendering the object either in a table or when rendering the object on its own page.
 
 In conjunction with xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 

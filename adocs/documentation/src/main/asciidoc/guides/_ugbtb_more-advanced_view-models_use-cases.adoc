@@ -98,18 +98,18 @@ DTOs (data transfer objects) are simple classes that (according to link:https://
 
 If those two processes are parts of the same overall application (the same team builds and deploys both server and
 client) then there's generally no need to define a DTO; just access the entities using Apache Isis'
-xref:ugvro.adoc[RestfulObjects viewer].
+xref:ugvro.adoc#[RestfulObjects viewer].
 
 On the other hand, if the client consuming the DTO is a different application -- by which we mean developed/deployed by
 a different (possible third-party) team -- then the DTOs act as a formal contract between the provider and the consumer.
-In such cases, exposing domain entities over xref:ugvro.adoc[RestfulObjects] would be
+In such cases, exposing domain entities over xref:ugvro.adoc#[RestfulObjects] would be
 "A Bad Thing"(TM) because the consumer would in effect have access to implementation details that could then not be
 easily changed by the producer.
 
 Instead, a view model can be defined to act as a DTO.  To put this formal contract onto a solid footing, this view
 model can (as of `1.11.0-SNAPSHOT`) simply be defined as a JAXB-annotated entity; this allows the consumer to obtain
 the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.  These XML
-representations can be surfaced by the xref:ugvro.adoc[RestfulObjects viewer] (by implementing
+representations can be surfaced by the xref:ugvro.adoc#[RestfulObjects viewer] (by implementing
 the xref:rg.adoc#_rg_services-spi_manpage-ContentMappingService[`ContentMappingService`]); the XSD can be obtained
 using the xref:rg.adoc#_rg_services-api_manpage-JaxbService[`JaxbService`].  Using the formalism of XML also allows
 DTOs to be carefully and properly versioned using XML namespaces.
@@ -120,7 +120,7 @@ If the view model DTO implements the xref:rg.adoc#_rg_classes_mixins_Dto[`Dto`] 
 will also provide the ability to download the XML or its XSD directly from the UI.
 ====
 
-In case it's not clear, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc[Wicket viewer] just like any other.  Indeed (as the xref:ugbtb.adoc#_ugbtb_more-advanced_view-models_programming-model[programming model] section below makes clear), these
+In case it's not clear, these DTOs are still usable as "regular" view models; they will render in the xref:ugvw.adoc#[Wicket viewer] just like any other.  Indeed (as the xref:ugbtb.adoc#_ugbtb_more-advanced_view-models_programming-model[programming model] section below makes clear), these
 JAXB-annotated view models are in many regards the most powerful of all the view model alternatives.
 
 

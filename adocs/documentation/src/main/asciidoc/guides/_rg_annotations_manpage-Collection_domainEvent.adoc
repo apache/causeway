@@ -18,7 +18,7 @@ Subscribers subscribe through the xref:rg.adoc#_rg_services-api_manpage-EventBus
 
 [WARNING]
 ====
-The xref:ugvw.adoc[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  However, domain events are still relevant to determine if such collections should be hidden.
+The xref:ugvw.adoc#[Wicket viewer] does _not_ currently support the modification of collections; they are rendered read-only.  However, domain events are still relevant to determine if such collections should be hidden.
 
 The workaround is to create add/remove actions and use xref:rg.adoc#_rg_annotations_manpage-MemberOrder[UI hints] to render them close to the collection.
 ====

@@ -7,7 +7,7 @@
 
 The `getId()` method applies only to domain services, and allows a unique identifer to be provided for that service.
 
-This identifier corresponds in many ways to the xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`objectType()`] attribute for domain objects; it is used as an internal identifier but also appears in URLs within the xref:ugvro.adoc[RestfulObjects viewer]'s REST API.
+This identifier corresponds in many ways to the xref:rg.adoc#_rg_annotations_manpage-DomainObject_objectType[`objectType()`] attribute for domain objects; it is used as an internal identifier but also appears in URLs within the xref:ugvro.adoc#[RestfulObjects viewer]'s REST API.
 
 If the identifier is omitted, the services fully qualified class name is used.
 

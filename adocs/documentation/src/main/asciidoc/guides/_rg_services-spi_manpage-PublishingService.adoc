@@ -69,7 +69,7 @@ action invocation as an event on an link:http://activemq.apache.org[ActiveMQ] me
 a canonical XML form (the xref:rg.adoc#_rg_schema-aim[ActionInvocationMemento] schema) using the
 `ActionInvocationMementoDtoUtils` class; the idea
 being that subscribers on the ActiveMQ message queue can then query back for further information, for example using
-the xref:ugvro.adoc[RestfulObjects viewer].
+the xref:ugvro.adoc#[RestfulObjects viewer].
 
 [NOTE]
 ====
