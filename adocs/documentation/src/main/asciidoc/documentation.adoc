@@ -59,17 +59,10 @@ pass:[<br/>]
 
 |*User Guides:*
 
-Core concepts, how tos and more advanced techniques, using and customizing the Wicket viewer & the Restful Objects viewer, security, testing
-
-pass:[<a class="button guide" href="./guides/ug.html" role="button" target="_blank">Users' Guide »</a>]
-
-including:
-
-* *link:./guides/ug.html#_ug_getting-started_simpleapp-archetype[Getting Started]* (SimpleApp Archetype)
-* link:./guides/ug.html#_ug_how-tos[How-tos]
-* link:./guides/ug.html#_ug_wicket-viewer[Customizing the Wicket Viewer]
-* link:./guides/ug.html#_ug_testing[Testing]
-* link:./guides/ug.html#_ug_extending[Extending]
+* pass:[<a href="./guides/ug.html" target="_blank">Fundamentals</a>]
+* pass:[<a href="./guides/ugvw.html" target="_blank">Wicket viewer</a>]
+* pass:[<a href="./guides/ugvro.html" target="_blank">Restful Objects viewer</a>]
+* pass:[<a href="./guides/ugsec.html" target="_blank">Security</a>]
 
 
 |*Reference Guide:*
