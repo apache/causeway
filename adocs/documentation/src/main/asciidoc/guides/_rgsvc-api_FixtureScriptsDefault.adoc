@@ -40,7 +40,7 @@ public class FixtureScriptsDefault ... {
 
 As noted in the introduction, this service is only instantiated if there is no other implementation of `FixtureScripts` available on the classpath.
 
-If an instance of `FixtureScriptsSpecificationProvider` is available on the classpath, then the service will be visible in the UI (assuming xref:rg.adoc#_rg_runtime_deployment-types[prototype mode]).  Otherwise the service will be available only to be injected and invoked programmatically.
+If an instance of `FixtureScriptsSpecificationProvider` is available on the classpath, then the service will be visible in the UI (assuming xref:rgcfg.adoc#_rgcfg_deployment-types[prototype mode]).  Otherwise the service will be available only to be injected and invoked programmatically.
 
 
 

@@ -22,7 +22,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:rgant.adoc#_rgant-ViewModelLayout_cssclass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a domain class (type) should have, to allow more targetted styling in xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`]
+|the css class that a domain class (type) should have, to allow more targetted styling in xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
 
 
 |xref:rgant.adoc#_rgant-ViewModelLayout_cssClassFa[`cssClassFa()`]

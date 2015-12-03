@@ -49,8 +49,8 @@ The default `ClockService` implementation in fact simply delegates to another cl
 
 * there are two subclasses implementations `Clock`, namely `SystemClock` and `FixtureClock`.
 * the first implementation that is instantiated registers itself as the singleton.
-* if running in xref:rg.adoc#_rg_runtime_deployment-types[production] (server) mode, then (unless another implementation has beaten it to the punch) the framework will instantiate the ``SystemClock`.  Once instantiated this cannot be replaced.
-* if running in xref:rg.adoc#_rg_runtime_deployment-types[prototype] mode, then the framework will instead instantiate `FixtureClock`.  This _can_ be replaced if required.
+* if running in xref:rgcfg.adoc#_rgcfg_deployment-types[production] (server) mode, then (unless another implementation has beaten it to the punch) the framework will instantiate the ``SystemClock`.  Once instantiated this cannot be replaced.
+* if running in xref:rgcfg.adoc#_rgcfg_deployment-types[prototype] mode, then the framework will instead instantiate `FixtureClock`.  This _can_ be replaced if required.
 
 The `FixtureClock` will behave as the system clock, unless its is explicitly set using `FixtureClock#setDate(...)` or `FixtureClock#setTime(...)` and so forth.
 

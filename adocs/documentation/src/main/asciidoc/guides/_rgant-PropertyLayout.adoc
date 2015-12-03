@@ -21,7 +21,7 @@ The table below summarizes the annotation's attributes.
 
 |xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`cssClass()`]
 |Any string valid as a CSS class
-|the css class that a property should have, to allow more targetted styling in xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`]
+|the css class that a property should have, to allow more targetted styling in xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]
 
 
 |xref:rgant.adoc#_rgant-PropertyLayout_describedAs[`describedAs()`]
@@ -42,7 +42,7 @@ The table below summarizes the annotation's attributes.
 
 Defaults is `LEFT`, unless xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine`] in which case `TOP`.  The value `RIGHT` is only supported for boolean properties. +
 
-It is also possible to change the default through a xref:rg.adoc#_rg_runtime_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
+It is also possible to change the default through a xref:rgcfg.adoc#_rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition[configuration property]
 
 
 |xref:rgant.adoc#_rgant-PropertyLayout_multiLine[`multiLine()`]

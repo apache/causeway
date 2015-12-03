@@ -16,7 +16,7 @@ The table below lists the reserved methods that are recognized as part of Apache
 |Description
 
 |xref:rg.adoc#_rg_methods_reserved_manpage-cssClass[`cssClass()`]
-|Provides a CSS class for this object instance.  In conjunction with xref:rg.adoc#_rg_runtime_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
+|Provides a CSS class for this object instance.  In conjunction with xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`], can therefore provide custom styling of an object instance wherever it is rendered. +
 
 See also xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] and xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`].
 

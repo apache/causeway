@@ -30,7 +30,7 @@ If background ``Command``s are used, then an external scheduler, using xref:ugbt
 
 The `command()` attribute determines whether the action invocation should be reified into a `Command` object (by the xref:rgsvc.adoc#_rgsvc-api_CommandContext[`CommandContext`] service).
 
-The default is `AS_CONFIGURED`, meaning that the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.services.command.actions` is used to determine the whether the action is reified:
+The default is `AS_CONFIGURED`, meaning that the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.command.actions` is used to determine the whether the action is reified:
 
 * `all` +
 +

@@ -7,7 +7,7 @@
 
 
 
-By default actions are available irrespective of the xref:rg.adoc#_rg_runtime_deployment-types[deployment mode].  The `restrictTo()` attribute specifies whether the action should instead be restricted to only available in prototyping mode.
+By default actions are available irrespective of the xref:rgcfg.adoc#_rgcfg_deployment-types[deployment mode].  The `restrictTo()` attribute specifies whether the action should instead be restricted to only available in prototyping mode.
 
 For example:
 

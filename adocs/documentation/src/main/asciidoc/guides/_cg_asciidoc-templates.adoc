@@ -201,18 +201,18 @@ a hyperlink to a level 3 (chapter, section, subsection) within the reference gui
 
 for example:
 
-pass:[<pre>xref:rg.adoc#_rg_runtime_application-specific_application-css[Application-specific CSS\]</pre>]
+pass:[<pre>xref:rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS\]</pre>]
 
-|xref:rg.adoc#_rg_runtime_application-specific_application-css[Application-specific CSS]
+|xref:rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS]
 
 
 
 |`adrgcfg`
-|pass:[<pre>xref:rg.adoc#_rg_runtime_configuring-core[configuration properties]</pre>]
+|pass:[<pre>xref:rgcfg.adoc#_rgcfg_configuring-core[configuration properties]</pre>]
 
 a hyperlink to the reference guide's catalogue of the Apache Isis configuration properties.
 
-|xref:rg.adoc#_rg_runtime_configuring-core[configuration properties]
+|xref:rgcfg.adoc#_rgcfg_configuring-core[configuration properties]
 
 
 

@@ -69,9 +69,11 @@ pass:[<br/>]
 
 |*Reference Guides:*
 
-* link:./guides/rg.html[Reference Guide^]
 * link:./guides/rgant.html[Annotations^]
 * link:./guides/rgsvc.html[Domain Services^]
+* link:./guides/rgcfg.html[Configuration Properties^]
+* link:./guides/rg.html[Classes, Methods and Schema^]
+
 
 
 

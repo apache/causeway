@@ -1,4 +1,4 @@
-[[_rg_runtime_configuring-datanucleus_properties]]
+[[_rgcfg_configuring-datanucleus_properties]]
 = Configuration Properties
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -28,9 +28,9 @@ These configuration properties are typically stored in `WEB-INF/persistor_datanu
 |`isis.persistor.datanucleus.` +
 `RegisterEntities.packagePrefix`
 |fully qualified package names (CSV)
-|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:rg.adoc#_rg_runtime_configuring-datanucleus_eagerly-registering-entities[discussion below].
+|that specifies the entities early rather than allow DataNucleus to find the entities lazily.  Further xref:rgcfg.adoc#_rgcfg_configuring-datanucleus_eagerly-registering-entities[discussion below].
 
-This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.persistor.datanucleus.` +
@@ -60,7 +60,7 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 `datanucleus.persistenceByReachabilityAtCommit`
 |`false`
 |We recommend this setting is disabled.  +
-Further xref:rg.adoc#_rg_runtime_configuring-datanucleus_disabling-persistence-by-reachability[discussion below].
+Further xref:rgcfg.adoc#_rgcfg_configuring-datanucleus_disabling-persistence-by-reachability[discussion below].
 
 |===
 

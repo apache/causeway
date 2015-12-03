@@ -348,7 +348,7 @@ If you do provide your own implementation of this SPI, be aware that your subscr
 
 The implementation of `EventBusService` provided by Apache Isis will by default use link:https://code.google.com/p/guava-libraries/[Guava]'s https://code.google.com/p/guava-libraries/wiki/EventBusExplained[`EventBus`] as the underlying in-memory event bus.  Alternatively the link:http://www.axonframework.org/[AxonFramework]'s link:http://www.axonframework.org/docs/2.4/single.html#d5e1489[SimpleEventBus] can be used.
 
-To specify which, add the xref:rg.adoc#_rg_runtime_configuring-core[configuration property] `isis.services.eventbus.implementation`:
+To specify which, add the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.eventbus.implementation`:
 
 [source,ini]
 ----

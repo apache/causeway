@@ -1,4 +1,4 @@
-[[_rg_runtime_configuring-core]]
+[[_rgcfg_configuring-core]]
 = Configuring Core
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -8,7 +8,7 @@ This section lists the core/runtime configuration properties recognized by Apach
 
 [NOTE]
 ====
-Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:rg.adoc#_rg_runtime_configuring-datanucleus[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
+Configuration properties for the JDO/DataNucleus objectstore can be found in the xref:rgcfg.adoc#_rgcfg_configuring-datanucleus[Configuring DataNucleus] section later in this chapter, while configuration properties for the viewers can be found in the their respective chapters, xref:ugvw.adoc#_ugvw_configuration-properties[here for Wicket viewer], and xref:ugvro.adoc#_ugvro_configuration-properties[here for the Restful Objects viewer].
 ====
 
 
@@ -25,7 +25,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 `editing`
 |`true`,`false` +
 (`true`)
-|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rg.adoc#_rg_runtime_configuring-core_isis-objects-editing[below] for further discussion.
+|Whether objects' properties and collections can be edited directly (for objects annotated with xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject#editing()`]); see xref:rgcfg.adoc#_rgcfg_configuring-core_isis-objects-editing[below] for further discussion.
 
 
 |`isis.persistor.` +
@@ -157,7 +157,7 @@ See xref:ug.adoc#_ug_how-tos_ui-hints_action-icons-and-css[UI hints] for more de
 (`true`)
 |Whether objects should be filtered for visibility. +
 
-See xref:rg.adoc#_rg_runtime_configuring-core_filterVisibility[section below] for further discussion.
+See xref:rgcfg.adoc#_rgcfg_configuring-core_filterVisibility[section below] for further discussion.
 
 |`isis.reflector.facet.` +
 `propertyAnnotation.` +
@@ -214,7 +214,7 @@ See xref:ugbtb.adoc#_ugbtb_programming-model_custom-validator[Custom Validator] 
 
 Each entry can be optionally prefixed by "n:" specifying the relative order on the menu (corresponds to xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`]).
 
-This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -253,7 +253,7 @@ This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[
 (depends)
 |If a domain object has been mapped to the specified JAXB `x-ro-domain-type`, then determines whether the result is pretty-printed or not. +
 +
-If no configuration property is available, then the defaults is determined by the xref:rg.adoc#_rg_runtime_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
+If no configuration property is available, then the defaults is determined by the xref:rgcfg.adoc#_rgcfg_deployment-types[deployment type]: production mode disables pretty printing, while prototype mode enables it.
 
 
 
@@ -347,7 +347,7 @@ This implementation provides a default set of recognizers to convert RDBMS const
 |fully qualified package names (CSV)
 |to search for domain services (including all subpackages).
 
-This property is IGNORED if the xref:rg.adoc#_rg_runtime_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
+This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`isis.appManifest`] configuration property is specified, or if an xref:rg.adoc#_rg_classes_super_manpage-AppManifest[`AppManifest`] is provided programmatically.
 
 
 |`isis.services.` +
@@ -378,7 +378,7 @@ See xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] to learn more about 
 
 
 
-[[_rg_runtime_configuring-core_filterVisibility]]
+[[_rgcfg_configuring-core_filterVisibility]]
 == Filtering visibility
 
 The framework provides the `isis.reflector.facet.filterVisibility` configuration property that influences whether a returned object is visible to the end-user:
@@ -418,7 +418,7 @@ There are no major side-effects from this algorithm, other than the fact that th
 ====
 
 
-[[_rg_runtime_configuring-core_isis-objects-editing]]
+[[_rgcfg_configuring-core_isis-objects-editing]]
 == `objects.editing`
 
 This configuration property in effect allows editing to be disabled globally for an application:
@@ -432,7 +432,7 @@ We recommend enabling this feature; it will help drive out the underlying busine
 
 
 
-[[_rg_runtime_configuring-core_isis-viewers-propertyLayout-labelPosition]]
+[[_rgcfg_configuring-core_isis-viewers-propertyLayout-labelPosition]]
 == `propertyLayout.labelPosition`
 
 If you want a consistent look-n-feel throughout the app, eg all property labels to the top, then it'd be rather
