@@ -28,7 +28,7 @@ which can map domain objects either to an RDBMS or to various NoSQL objectstores
 recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowNulls=...)`.
 
 In addition, the framework builds up the metamodel for each domain object using
-xref:rg.adoc#_rg_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as
+xref:ug.adoc#_ug_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as
 grouping elements of the UI together, using multi-column layouts, and so on.  The layout file can be modified while the
 application is still running, and are picked up automatically; a useful way to speed up feedback.
 

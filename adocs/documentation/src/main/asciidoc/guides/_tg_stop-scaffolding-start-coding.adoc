@@ -309,7 +309,7 @@ Domain entities have state: either values (primitives, strings) or references to
 * revisit the title, consider whether to use the xref:rgant.adoc#_rgant-Title[`@Title`] annotation
 ** rather than the xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] `title()` method
 * order the properties using the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
-** see also the docs on xref:rg.adoc#_rg_object-layout_static[static layouts]
+** see also the docs on xref:ug.adoc#_ug_object-layout_static[static layouts]
 * use the xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
 ** do the same for parameters using xref:rgant.adoc#_rgant-ParameterLayout[`@ParameterLayout`]
 
@@ -392,7 +392,7 @@ So:
 
 Up to this point we've been using annotations (`@MemberOrder`, `@MemberGroupLayout`, `@Named`, `@PropertyLayout`, `@ParameterLayout`, `@ActionLayout` and so on) for UI hints. However, the feedback loop is not good: it requires us stopping the app, editing the code, recompiling and running again. So instead, all these UI hints (and more) can be specified dynamically, using a corresponding `.layout.json` file. If edited while the app is running, it will be reloaded automatically (in IntelliJ, use Run&gt;Reload Changed Classes):
 
-* Delete the various hint annotations and instead specify layout hints using a xref:rg.adoc#_rg_object-layout_dynamic[.layout.json] file.
+* Delete the various hint annotations and instead specify layout hints using a xref:ug.adoc#_ug_object-layout_dynamic[.layout.json] file.
 
 
 

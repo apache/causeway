@@ -102,7 +102,7 @@ It is also possible to apply the annotation to actions of domain services that a
 
 
 
-As an alternative to using the `@PropertyLayout` annotation, a dynamic layout using  xref:rg.adoc#_rg_object-layout_dynamic[`.layout.json`] file can be specified; for example:
+As an alternative to using the `@PropertyLayout` annotation, a dynamic layout using  xref:ug.adoc#_ug_object-layout_dynamic[`.layout.json`] file can be specified; for example:
 
 [source,javascript]
 ----

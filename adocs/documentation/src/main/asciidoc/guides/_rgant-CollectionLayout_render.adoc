@@ -20,7 +20,7 @@ public class Order {
 ----
 
 
-As an alternative to using the annotation, the dynamic xref:rg.adoc#_rg_object-layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ug.adoc#_ug_object-layout_dynamic[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

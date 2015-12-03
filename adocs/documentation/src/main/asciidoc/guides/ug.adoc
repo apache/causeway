@@ -30,5 +30,7 @@ include::_ug_core-concepts.adoc[leveloffset=+1]
 include::_ug_getting-started.adoc[leveloffset=+1]
 
 include::_ug_how-tos.adoc[leveloffset=+1]
+include::_ug_object-layout.adoc[leveloffset=+1]
+
 include::_ug_faqs.adoc[leveloffset=+1]
 

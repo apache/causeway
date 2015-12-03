@@ -92,7 +92,7 @@ div.x-myapp-highlight span.scalarName {
 }
 ----
 
-Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:rg.adoc#_rg_object-layout_dynamic[dynamic layout] JSON file:
+Note also that instead of using `@PropertyLayout(cssClass=...)` annotation, you can also specify the CSS style using a xref:ug.adoc#_ug_object-layout_dynamic[dynamic layout] JSON file:
 
 [source,javascript]
 ----

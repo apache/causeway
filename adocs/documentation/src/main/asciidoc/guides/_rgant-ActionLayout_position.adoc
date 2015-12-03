@@ -67,7 +67,7 @@ image::{_imagesdir}reference-annotations/ActionLayout/position-PANEL_DROPDOWN.pn
 If there are multiple actions associated with a single property then the positioning can be mix'ed-and-match'ed as required.  If the `PANEL` or `PANEL_DROPDOWN` are used, then (as the screenshots above show) the actions from potentially multiple properties grouped by that panel will be shown together.
 
 
-As an alternative to using the annotation, the dynamic xref:rg.adoc#_rg_object-layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ug.adoc#_ug_object-layout_dynamic[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

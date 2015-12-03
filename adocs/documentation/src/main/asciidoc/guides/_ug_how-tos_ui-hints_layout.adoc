@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-See the xref:rg.adoc#_rg_object-layout[object layout] chapter.
+See the xref:ug.adoc#_ug_object-layout[object layout] chapter.
 
