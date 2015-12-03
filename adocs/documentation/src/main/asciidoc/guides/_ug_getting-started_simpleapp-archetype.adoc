@@ -153,7 +153,7 @@ image::{_imagesdir}getting-started/simpleapp-webapp.png[width="600px",link="{_im
 
 == Running with Fixtures
 
-It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:ug.adoc#_ug_testing_fixture-scripts[fixture script] on the command line.
+It is also possible to start the application with a pre-defined set of data; useful for demos or manual exploratory testing.  This is done by specifying a xref:ugtst.adoc#_ugtst_fixture-scripts[fixture script] on the command line.
 
 If running the self-hosted console, you can specify the fixtures using the `--initParam` flag:
 
@@ -292,7 +292,7 @@ As noted above, the generated app is a very simple application consisting of a s
 |Domain object fixtures used for initializing the system when being demo'ed or for unit testing.
 
 |`myapp-integtests`
-|End-to-end xref:ug.adoc#_ug_testing_integ-test-support[integration tests] that exercise from the UI through to the database
+|End-to-end xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] that exercise from the UI through to the database
 
 |`myapp-webapp`
 |Run as a webapp (from `web.xml`) hosting the xref:ugvw.adoc[Wicket viewer] and/or the xref:ugvro.adoc[RestfulObjects viewer]

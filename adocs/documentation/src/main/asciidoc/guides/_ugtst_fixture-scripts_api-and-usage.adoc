@@ -1,4 +1,4 @@
-[[_ug_testing_fixture-scripts_api-and-usage]]
+[[_ugtst_fixture-scripts_api-and-usage]]
 = API and Usage
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -42,7 +42,7 @@ public class DomainAppFixturesProvider implements FixtureScriptsSpecificationPro
 }
 ----
 <1> search for all fixture scripts under the package containing this class
-<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
+<2> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
 <3> specify the fixture script class to provide as the default for the service's "run fixture script" action
 <4> whether the service's "run fixture script" action should display other fixture scripts using a choices drop down or (if there are very many of them) using an auto-complete
 <5> if present, enables a "recreate objects and return first" action to be displayed in the UI
@@ -80,7 +80,7 @@ public class DomainAppFixturesService extends FixtureScripts {     // <3>
 <2> ... under the "Prototyping" menu
 <3> inherit from `org.apache.isis.applib.fixturescripts.FixtureScripts`
 <4> search for all fixture scripts under the "domainapp" package; in your code this would probably be "com.mycompany.myapp" or similar
-<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
+<5> if the same fixture script (class) is encountered more than once, then run anyway; more on this in xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage_organizing[Organizing Fixture scripts]], below.
 <6> (optional) specify a default fixture script to run, in this case `RecreateSimpleObjects` fixture script (see below)
 <7> make all fixture scripts found available as a drop-down (by increasing the visibility of this method to `public`)
 
@@ -291,7 +291,7 @@ public class SimpleObjectIntegTest extends SimpleAppIntegTest {
 
 
 
-[[_ug_testing_fixture-scripts_api-and-usage_organizing]]
+[[_ugtst_fixture-scripts_api-and-usage_organizing]]
 == Organizing Fixture scripts
 
 There are lots of ways to organize fixture scripts, but we've used them as either:

@@ -143,7 +143,7 @@ method.  For example:
 DocumentHolder_documents mixin = container.mixin(DocumentHolder_documents.class, customer);
 ----
 
-The xref:ug.adoc#_ug_testing_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
+The xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping_IntegrationTestAbstract[`IntegrationTestAbstract`] and
 xref:rg.adoc#_rg_classes_super_manpage-FixtureScript[`FixtureScript`] classes both provide a `mixin(...)` convenience
 method.
 

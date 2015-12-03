@@ -1,4 +1,4 @@
-[[_ug_testing_unit-test-support_contract-tests]]
+[[_ugtst_unit-test-support_contract-tests]]
 = Contract Tests
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -11,7 +11,7 @@ Contract tests ensure that all instances of a particular idiom/pattern that occu
 
 
 
-== ``SortedSet``s Contract Test
+== ``SortedSet``s
 
 This contract test automatically checks that all fields of type `java.util.Collection` are declared as `java.util.SortedSet`. In other words, it precludes either `java.util.List` or `java.util.Set` from being used as a collection.
 
@@ -62,7 +62,7 @@ public class SortedSetsContractTestAll extends SortedSetsContractTestAbstract {
 
 
 
-== Bidirectional Contract Test
+== Bidirectional
 
 This contract test automatically checks that bidirectional 1:m or 1:1 associations are being maintained correctly (assuming that they follow the xref:ug.adoc#_ug_how-tos_entity-relationships_managed-1-to-m-bidirectional-relationships[mutual registration pattern]
 
@@ -103,7 +103,7 @@ The example tests can be found https://github.com/apache/isis/tree/master/core/u
 
 
 
-== Injected Services Method Contract Test
+== Injected Services Method
 
 It is quite common for some basic services to be injected in a project-specific domain object superclass; for example a `ClockService` might generally be injected everywhere:
 
@@ -143,7 +143,7 @@ public class InjectServiceMethodMustBeFinalContractTestAll extends InjectService
 
 
 
-== Value Objects Contract Test
+== Value Objects
 
 The `ValueTypeContractTestAbstract` automatically tests that a custom value type implements `equals()` and `hashCode()` correctly.
 

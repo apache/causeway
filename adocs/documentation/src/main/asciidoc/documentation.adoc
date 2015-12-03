@@ -63,6 +63,7 @@ pass:[<br/>]
 * pass:[<a href="./guides/ugvw.html" target="_blank">Wicket viewer</a>]
 * pass:[<a href="./guides/ugvro.html" target="_blank">Restful Objects viewer</a>]
 * pass:[<a href="./guides/ugsec.html" target="_blank">Security</a>]
+* pass:[<a href="./guides/ugtst.html" target="_blank">Testing</a>]
 
 
 |*Reference Guide:*

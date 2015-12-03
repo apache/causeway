@@ -10,4 +10,4 @@ The `FixtureScriptsSpecificationProvider` SPI service is an alternative to subcl
 
 This new design is optional; if you continue to provide your own subclass then everything will continue as before.  However the new design is more flexible and involves less code.
 
-See xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage[user guide] for further discussion.
+See xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[user guide] for further discussion.

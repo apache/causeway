@@ -132,7 +132,7 @@ private static <T> List<T> executeListAndClose(final TypesafeQuery<T> query) {
 [[_rg_services-api_manpage-IsisJdoSupport_fixture-support]]
 == Fixture support
 
-When writing xref:ug.adoc#_ug_testing_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport_executing-sql[above].
+When writing xref:ugtst.adoc#_ugtst_integ-test-support[integration tests] you'll usually need to tear down some/all mutable transactional data before each test.  One way to do that is to use the `executeUpdate(...)` method described xref:rg.adoc#_rg_services-api_manpage-IsisJdoSupport_executing-sql[above].
 
 Alternatively, the `deleteAll(...)` method will let your test delete all instances of a class without resorting to SQL:
 

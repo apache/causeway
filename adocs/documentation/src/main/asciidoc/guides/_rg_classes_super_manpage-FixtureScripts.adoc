@@ -9,4 +9,4 @@ This abstract class is intended to allow a domain service that can execute xref:
 However, it has now been deprecated; instead we recommend that the xref:rg.adoc#_rg_services-spi_manpage-FixtureScriptsSpecificationProvider[`FixtureScriptsSpecificationProvider`] service is
 implemented instead.  The framework will then automatically use xref:rg.adoc#_rg_services-api_manpage-FixtureScriptsDefault[`FixtureScriptsDefault`] as a fallback implementation of this class.
 
-See the see the xref:ug.adoc#_ug_testing_fixture-scripts[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ug.adoc#_ug_testing_fixture-scripts_api-and-usage[fixture scripts' API and usage].
+See the see the xref:ugtst.adoc#_ugtst_fixture-scripts[user guide's testing chapter] for further discussion on the use of fixture scripts, in particular xref:ugtst.adoc#_ugtst_fixture-scripts_api-and-usage[fixture scripts' API and usage].

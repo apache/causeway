@@ -19,6 +19,7 @@ Other guides are:
 * the xref:ug.adoc[Fundamentals]
 * the xref:ugvw.adoc[Wicket viewer]
 * the xref:ugsec.adoc[Security]
+* the xref:ugtst.adoc[Testing]
 
 
 

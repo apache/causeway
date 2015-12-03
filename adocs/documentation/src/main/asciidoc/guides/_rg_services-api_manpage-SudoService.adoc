@@ -7,7 +7,7 @@
 
 
 The `SudoService` allows the current user reported by the `DomainObjectContainer` to be temporarily changed to some
-other user. This is useful both for xref:ug.adoc#_ug_testing_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ug.adoc#_ug_testing_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
+other user. This is useful both for xref:ugtst.adoc#_ugtst_integ-test-support[integration testing] (eg if testing a workflow system whereby objects are moved from one user to another) and while running xref:ugtst.adoc#_ugtst_fixture-scripts[fixture scripts] (eg setting up objects that would normally require several users to have acted upon the objects).
 
 
 == API & Implementation

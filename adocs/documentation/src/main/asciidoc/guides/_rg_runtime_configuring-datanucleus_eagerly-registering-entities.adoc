@@ -18,6 +18,6 @@ The framework thus provide mechanisms to search for all `@PersistenceCapable` en
 
 * for earlier versions the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` configuration property can be specified.  To bootstrap as a webapp this is usually specified in `persistor_datanucleus.properties`.  (This is also supported in 1.9.0 if no `AppManifest` is specified.  For integration testing this can be specified programatically.
 
-Further discussion on specifying the package(s) in integration testing (for either approach) can be found in the xref:ug.adoc#_ug_testing_integ-test-support_bootstrapping[user guide].
+Further discussion on specifying the package(s) in integration testing (for either approach) can be found in the xref:ugtst.adoc#_ugtst_integ-test-support_bootstrapping[user guide].
 
 
