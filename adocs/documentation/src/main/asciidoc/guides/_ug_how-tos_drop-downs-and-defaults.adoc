@@ -13,15 +13,15 @@ NOTE: TODO
 
 ### Choices for Property
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Auto-complete for property
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
 
 ### Default for property
 
-NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+NOTE: TODO -  xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`]
 
 
 
@@ -32,19 +32,19 @@ NOTE: TODO
 
 ### Choices for action parameter
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Dependent choices for action params
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`]
 
 ### Auto-complete for action param
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`]
 
 ### Default for action param
 
-NOTE: TODO -  xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`]
+NOTE: TODO -  xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`]
 
 
 

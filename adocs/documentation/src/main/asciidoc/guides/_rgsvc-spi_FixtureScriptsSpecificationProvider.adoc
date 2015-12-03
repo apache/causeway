@@ -11,7 +11,7 @@ xref:rgsvc.adoc#_rgsvc-api_FixtureScriptsDefault[`FixtureScriptsDefault`] domain
 location to search for fixture scripts and other settings.
 
 The service is only used if the `FixtureScriptsDefault` service is instantiated as a fallback by the framework.  If
-the application provides its own subclass of xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[`FixtureScripts`]
+the application provides its own subclass of xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`]
 superclass, then this provider service is not used.
 
 [TIP]

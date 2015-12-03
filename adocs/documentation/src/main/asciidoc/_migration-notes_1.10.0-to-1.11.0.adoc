@@ -26,6 +26,6 @@ The default implementation is located in the `org.apache.isis.core:isis-core-sch
 `org.apache.isis.core.schema.services` package.
 
 If your application is bootstrapped using an `AppManifest` (recommended; ee
-xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[here]) then the `JaxbService` will automatically be discovered and
+xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[here]) then the `JaxbService` will automatically be discovered and
  registered.  However, if you are still using the older `isis.properties` configuration file to explicitly register
  services then you will need to add in this service.

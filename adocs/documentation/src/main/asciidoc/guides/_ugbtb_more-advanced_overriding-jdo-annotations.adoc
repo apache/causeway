@@ -43,7 +43,7 @@ This file should be placed can be placed in `src/main/java/META-INF` within your
 
 [TIP]
 ====
-(As of `1.11.0-SNAPSHOT`) you can use a mixin action on xref:rg.adoc#_rg_classes_mixins_Persistable[`Persistable`] mixin
+(As of `1.11.0-SNAPSHOT`) you can use a mixin action on xref:rgcms.adoc#_rgcms_classes_mixins_Persistable[`Persistable`] mixin
 to download the JDO class metadata in XML form.
 ====
 

@@ -6,7 +6,7 @@
 
 
 
-The Isis application library provides the xref:rg.adoc#_rg_classes_value-types_manpage-Blob[Blob] value type (binary large objects) and also the xref:rg.adoc#_rg_classes_value-types_manpage-Clob[Clob]
+The Isis application library provides the xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Blob[Blob] value type (binary large objects) and also the xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Clob[Clob]
 value type (character large object), each of which also includes metadata about the data (specifically the filename and mime type).
 
 A class can define a property using either of these types, for example:

@@ -25,7 +25,7 @@ public interface PublishingService {
     void setEventSerializer(EventSerializer eventSerializer);   // <3>
 }
 ----
-<1> standard metadata about the event, such as the user, the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
+<1> standard metadata about the event, such as the user, the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`transactionId`], date/time etc
 <2> for published actions, an `EventPayloadForActionInvocation` (or subclass thereof); for published objects, an `EventPayloadForObjectChanged` (or subclass thereof)
 <3> injects in the xref:rgsvc.adoc#_rgsvc-spi_EventSerializer[`EventSerializer`] service.  This is deprecated because not every implementation is required to use an `EventSerializer` so its inclusion within the SPI of `PublishingService` was in retrospect a mistake.
 
@@ -66,7 +66,7 @@ here is that an event bus can poll this table to grab pending events and dispatc
 The (non-ASF) http://github.com/isisaddons/isis-module-publishmq[Isis addons' publishmq] module provides an
 implementation (`org.isisaddons.module.publismq.dom.servicespi.PublishingServiceUsingActiveMq`) that publishes each 
 action invocation as an event on an link:http://activemq.apache.org[ActiveMQ] message queue.  These are converted into
-a canonical XML form (the xref:rg.adoc#_rg_schema-aim[ActionInvocationMemento] schema) using the
+a canonical XML form (the xref:rgcms.adoc#_rgcms_schema-aim[ActionInvocationMemento] schema) using the
 `ActionInvocationMementoDtoUtils` class; the idea
 being that subscribers on the ActiveMQ message queue can then query back for further information, for example using
 the xref:ugvro.adoc#[RestfulObjects viewer].
@@ -161,7 +161,7 @@ There is no default implementation of this service provided by the core Apache I
 
 Both the (non-ASF) Isis addons' http://github.com/isisaddons/isis-module-publishing[publishing] module and the
 http://github.com/isisaddons/isis-module-publishmq[publishmq] module provide implementations of this service.
-Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 The modules also provide services that contribute to the UI.  If contributions are not required in the UI, these can be
@@ -178,7 +178,7 @@ The `PublishingService` is intended for coarse-grained publish/subscribe for sys
 
 The xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] meanwhile is intended for fine-grained publish/subscribe for object-to-object interactions within an Apache Isis domain object model. The event propagation is strictly in-memory, and there are no restrictions on the object acting as the event (it need not be serializable, for example).
 
-All three of these services collaborate implicitly by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
 
 
 

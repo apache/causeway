@@ -71,7 +71,7 @@ If using another implementation, the `canSet(...)` method can be used to check i
 
 == Usage
 
-As noted in the introduction, a common use case for this service is in the implementation of the xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[`ViewModel`] interface.
+As noted in the introduction, a common use case for this service is in the implementation of the xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractViewModel[`ViewModel`] interface.
 
 [TIP]
 ====
@@ -122,7 +122,7 @@ The memento service is used by the xref:rgsvc.adoc#_rgsvc-api_CommandContext[`Co
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `MementoService` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 

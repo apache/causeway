@@ -13,7 +13,7 @@ For example, this might search for a customer by their name or number.  Or it co
 
 [TIP]
 ====
-If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method instead.
+If you require additional control - for example restricting the returned results based on the object being interacted with - then use the xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method instead.
 ====
 
 

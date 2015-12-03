@@ -116,7 +116,7 @@ public class PartyRelationship {
 
 == Mapping ``Blob``s and ``Clob``s
 
-Isis provides custom value types for xref:rg.adoc#_rg_classes_value-types_manpage-Blob[`Blob`]s and xref:rg.adoc#_rg_classes_value-types_manpage-Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
+Isis provides custom value types for xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Blob[`Blob`]s and xref:rgcms.adoc#_rgcms_classes_value-types_manpage-Clob[`Clob`]s.  These value types have multiple internal fields, meaning that they corresponding to multiple columns in the database.  Mapping this correctly requires using  `@Column` within JDO's `@Persistent` annotation.
 
 For example, here's how to map a `Blob` (taken from (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp]):
 

@@ -240,7 +240,7 @@ The framework provides a number of request-scoped services, include a scratchpad
 
 == Registering domain services
 
-The easiest way to register domain services is using xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[`AppManifest`] to specify the modules
+The easiest way to register domain services is using xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to specify the modules
 which contain xref:rgant.adoc#_rgant-DomainService[`@DomainService`]-annotated classes.
 
 For example:
@@ -309,5 +309,5 @@ Shutdown is similar; the framework will call any method annotated with xref:rgan
 
 == The getId() method
 
-Optionally, a service may provide a xref:rg.adoc#_rg_methods_reserved_manpage-getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
+Optionally, a service may provide a xref:rgcms.adoc#_rgcms_methods_reserved_manpage-getId[`getId()`] method.  This method returns a logical identifier for a service, independent of its implementation.
 

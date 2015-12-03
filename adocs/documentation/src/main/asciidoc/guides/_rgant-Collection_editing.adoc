@@ -25,7 +25,7 @@ Whether a collection is enabled or disabled depends upon these factors:
 
 * else, then the value of the `@Collection(editing=...)` attribute itself.
 
-* else, the result of invoking any supporting xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] supporting methods
+* else, the result of invoking any supporting xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`] supporting methods
 
 
 Thus, to make a collection read-only even if the object would otherwise be editable, use:

@@ -109,7 +109,7 @@ of this service (`BackgroundCommandService`), and also provides a number of rela
 module also provides service implementations of the
 xref:rgsvc.adoc#_rgsvc-spi_CommandService[`CommandService`].
 
-Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If contributions are not required in the UI, these can be suppressed either using security or by implementing a

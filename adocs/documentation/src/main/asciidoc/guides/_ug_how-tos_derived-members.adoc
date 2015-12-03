@@ -39,10 +39,10 @@ public class Customer {
 
 == Trigger on property change
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-modify[`modify...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-clear[`clear...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-clear[`clear...()`]
 
 
 
 == Trigger on collection change
 
-NOTE: TODO - xref:rg.adoc#_rg_methods_prefixes_manpage-addTo[`addTo...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-removeFrom[`removeFrom...()`]
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-addTo[`addTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-removeFrom[`removeFrom...()`]

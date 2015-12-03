@@ -74,8 +74,8 @@ Calling any of the above methods may result in a (subclass of) `InteractionExcep
 
 In addition, the following methods may also be called:
 
-* the xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] and `toString()` methods
-* any xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`], xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`] or xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`] methods
+* the xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] and `toString()` methods
+* any xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`] or xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`] methods
 
 An exception will be thrown if any other methods are thrown.
 
@@ -153,7 +153,7 @@ The original intent of this API was to enable test transcripts to be captured (i
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `WrapperFactory` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 

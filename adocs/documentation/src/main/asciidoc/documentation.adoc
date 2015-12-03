@@ -72,7 +72,7 @@ pass:[<br/>]
 * link:./guides/rgant.html[Annotations^]
 * link:./guides/rgsvc.html[Domain Services^]
 * link:./guides/rgcfg.html[Configuration Properties^]
-* link:./guides/rg.html[Classes, Methods and Schema^]
+* link:./guides/rgcms.html[Classes, Methods and Schema^]
 
 
 

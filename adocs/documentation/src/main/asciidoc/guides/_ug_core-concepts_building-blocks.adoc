@@ -273,13 +273,13 @@ xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[this topic on mixin]s.
 [[_ug_core-concepts_building-blocks_domain-events]]
 == Domain Events
 
-NOTE: TODO; see xref:rg.adoc#_rg_classes_domainevent[domain event] classes.
+NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes.
 
 
 
 === UI Events (`1.11.0-SNAPSHOT`)
 
-NOTE: TODO; see xref:rg.adoc#_rg_classes_uievent[UI event] classes.
+NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 
 
 
@@ -321,7 +321,7 @@ xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`].  Deep links meanw
 the xref:rgant.adoc#_rgant-DeepLinkService[`@DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.  The
-xref:rg.adoc#_rg_schema-common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
+xref:rgcms.adoc#_rgcms_schema-common[common schema] XSD defines the `oidDto` complex type for precisely this purpose.
 
 
 

@@ -307,7 +307,7 @@ Domain entities have state: either values (primitives, strings) or references to
 * for all non-optional properties will either need to prompt for a value, or calculate some suitable default
 * change the implementation of title, if need be
 * revisit the title, consider whether to use the xref:rgant.adoc#_rgant-Title[`@Title`] annotation
-** rather than the xref:rg.adoc#_rg_methods_reserved_manpage-title[`title()`] `title()` method
+** rather than the xref:rgcms.adoc#_rgcms_methods_reserved_manpage-title[`title()`] `title()` method
 * order the properties using the xref:rgant.adoc#_rgant-MemberOrder[`@MemberOrder`], also `@MemberGroupLayout`
 ** see also the docs on xref:ug.adoc#_ug_object-layout_static[static layouts]
 * use the xref:rgant.adoc#_rgant-PropertyLayout[`@PropertyLayout`] annotation to position property/action parameter labels either to the LEFT, TOP or NONE
@@ -324,10 +324,10 @@ Domain entities can also reference other domain entities. These references may b
 * update the corresponding domain service (for creation actoin)
 * use different techniques to obtain references (shown in drop-down list box)
 ** use the xref:rgant.adoc#_rgant-DomainObject_bounded[`@DomainObjectLayout(bounded=...)`] annotation on the referenced type if there are only a small number (bounded) of instances
-** use a xref:rg.adoc#_rg_methods_prefixes_manpage-choices[`choices...()`] supporting method
+** use a xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-choices[`choices...()`] supporting method
 *** on a property
 *** on an action parameter
-** use a xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method
+** use a xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method
 *** on a property
 *** on an action parameter
 
@@ -348,7 +348,7 @@ Quick detour: often we want to set up defaults to go with choices. Sensible defa
 Returning back to references, Isis also supports vector (multi-valued) references to another object instances� in other words collections. We sometimes called these "parented" collections (to distinguish from a "standalone" collection as returned from an action)
 
 * Ensure that all domain classes implement `java.lang.Comparable`
-** use the xref:rg.adoc#_rg_classes_utility_manpage-ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
+** use the xref:rgcms.adoc#_rgcms_classes_utility_manpage-ObjectContracts[`ObjectContracts`] utility class to help implement `Comparable`
 *** you can also `equals()`, `hashCode()`, `toString()`
 * Add a xref:ug.adoc#_ug_how-tos_class-structure_collections[collection] to one of the entities
 ** Use `SortedSet` as the class
@@ -413,7 +413,7 @@ Or, more pithily: "see it, use it, do it"
 * Use the xref:rgant.adoc#_rgant-Property_hidden[`Property(hidden=...)`] annotation to make properties invisible
 ** likewise xref:rgant.adoc#_rgant-Collection_hidden[`@Collection(hidden=...)`] for collections
 ** the xref:rgant.adoc#_rgant-Programmatic[`@Programmatic`]  annotation can also be used and in many cases is to be preferred; the difference is that the latter means the member is not part of the Apache Isis metamodel.
-* Use the xref:rg.adoc#_rg_methods_prefixes_manpage-hide[`hide...()`] supporting method on properties, collections and actions to make a property/collection/action invisible according to some imperative rule
+* Use the xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-hide[`hide...()`] supporting method on properties, collections and actions to make a property/collection/action invisible according to some imperative rule
 
 
 === Use it!
@@ -421,14 +421,14 @@ Or, more pithily: "see it, use it, do it"
 * Use the xref:rgant.adoc#_rgant-Property_editing[`Property(editing=...)`] annotation to make property read-only
 ** likewise xref:rgant.adoc#_rgant-Collection_editing[`@Collection(editing=...)`] for collections
 ** alternatively, use xref:rgant.adoc#_rgant-DomainObject_editing[`@DomainObject(editing=...)`] to disable editing for all properties/collections
-* Use the xref:rg.adoc#_rg_methods_prefixes_manpage-disable[`disable...()`] supporting method on properties and actions to make a property/action disabled according to some imperative rule
+* Use the xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-disable[`disable...()`] supporting method on properties and actions to make a property/action disabled according to some imperative rule
 
 
 === Do it!
 
 * use the xref:rgant.adoc#_rgant-Property_regexPattern[`@Property(regexPattern=...)`] annotation to specify a regex pattern for properties, and use xref:rgant.adoc#_rgant-Parameter_regexPattern[`@Parameter(regexPattern=...)`] for parameters
 * use the xref:rgant.adoc#_rgant-Property_maxLength[`@Property(maxLength=...)`] annotation to indicate a maxmum number of characters, and xref:rgant.adoc#_rgant-Parameter_maxLength[`@Parameter(maxLength=...)`] for parameters
-* Use the xref:rg.adoc#_rg_methods_prefixes_manpage-validate[`validate...()`] supporting method on properties or action parameter
+* Use the xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-validate[`validate...()`] supporting method on properties or action parameter
 * optional: for any data type:
 ** use the xref:rgant.adoc#_rgant-Property_mustSatisfy[`Property(mustSatisfy=...)`] and xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`Parameter(mustSatisfy=...)`] annotations to specify arbitrary constraints on properties and parameters
 
@@ -602,7 +602,7 @@ In most cases users can accomplish the business operations they need by invoking
 
 Also, if using Apache Isis' REST API then the REST client may be a native application (on a smartphone or tablet, say) that is deployed by a third party. In these cases exposing the entities directly would be inadvisable because a refactoring of the domain entity would change the REST API and probably break that REST client.
 
-To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] or (for more control) by implementing the xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[`ViewModel`] interface.
+To support these use cases, Apache Isis therefore allows you to write a view model, either by annotating the class with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] or (for more control) by implementing the xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractViewModel[`ViewModel`] interface.
 
 * build a view model summarizing the state of the app (a "dashboard")
 * write a new `@HomePage` domain service action returning this dashboard viewmodel (and remove the `@HomePage` annotation from any other domain service if present)

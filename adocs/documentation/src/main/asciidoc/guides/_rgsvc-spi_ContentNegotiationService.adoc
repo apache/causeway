@@ -187,7 +187,7 @@ If the property is not set, then the default depends on the xref:rgcfg.adoc#_rgc
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' default
 implementation of `ContentNegotiationService` service is automatically registered and injected (it is annotated with
 `@DomainService`) so no further configuration is required.
 

@@ -27,7 +27,7 @@ The table below summarizes the annotation's attributes.
 |Positive integer
 |Deprecated; use xref:rgant.adoc#_rgant-MinLength[`@MinLength`] instead. +
 
-Can be used to specify the minimum length for xref:rg.adoc#_rg_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method; but because this _is a_ supporting method rather than the action method itself, we now feel it is misleading to use the `@Parameter` annotation in this situation.
+Can be used to specify the minimum length for xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-autoComplete[`autoComplete...()`] supporting method; but because this _is a_ supporting method rather than the action method itself, we now feel it is misleading to use the `@Parameter` annotation in this situation.
 
 
 |xref:rgant.adoc#_rgant-Parameter_mustSatisfy[`mustSatisfy()`]

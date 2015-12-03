@@ -21,7 +21,7 @@ public interface DomainObjectContainer {
 }
 ----
 <1> create a new non-persisted domain entity.  Any services will be automatically injected into the service
-<2> create a new view model, with the specified memento (as per xref:rg.adoc#_rg_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
+<2> create a new view model, with the specified memento (as per xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractViewModel[ViewModel#viewModelMemento()].  In general it is easier to just annotate with xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] and let Apache Isis manage the memento automatically.
 <3> programmatically instantiate a mixin, as annotated with
 xref:rgant.adoc#_rgant-Mixin[`@Mixin`] or xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`].
 
@@ -40,9 +40,9 @@ Doing this will not inject any domain services, but they can be injected manuall
 
 [NOTE]
 ====
-Calling `new(...)` also this circumvents Apache Isis' xref:rg.adoc#_rg_methods_reserved_manpage-created[`created()`]
+Calling `new(...)` also this circumvents Apache Isis' xref:rgcms.adoc#_rgcms_methods_reserved_manpage-created[`created()`]
 callback, and in addition any default values for properties (either explicitly set by
-xref:rg.adoc#_rg_methods_prefixes_manpage-default[`default...()`] or defaulted implicitly according to Apache Isis'
+xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-default[`default...()`] or defaulted implicitly according to Apache Isis'
 own conventions) will not be called either.  If you don't intend to use these features, though, the net effect is code
 that has less coupling to Isis and is arguably easier to understand (has "less magic" happening).
 ====

@@ -124,7 +124,7 @@ public class MyAppAppManifest implements AppManifest {
 
 [TIP]
 ====
-For details of the usages of the other methods in this interface, see the xref:guides/rg.adoc#_rg_classes_AppManifest-bootstrapping[reference guide] documentation.
+For details of the usages of the other methods in this interface, see the xref:guides/rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[reference guide] documentation.
 ====
 
 

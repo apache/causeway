@@ -46,7 +46,7 @@ The module also provides:
 
 * `AuditingServiceRepository` service to to search for persisted `AuditEntry``s.  None of its actions are visible in the user interface (they are all `@Programmatic`).
 
-* `AuditingServiceContributions` which contrbutes collections to the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[ `HasTransactionId`] interface. This will therefore display all audit entries that occurred in a given transaction, in other words whenever a command, a published event or another audit entry is displayed.
+* `AuditingServiceContributions` which contrbutes collections to the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[ `HasTransactionId`] interface. This will therefore display all audit entries that occurred in a given transaction, in other words whenever a command, a published event or another audit entry is displayed.
 
 
 
@@ -67,7 +67,7 @@ The (non-ASF) http://github.com/isisaddons/isis-module-audit[Isis addons' audit]
 this service (`AuditingService`), and also provides a number of related domain services (`AuditingServiceMenu`,
 `AuditingServiceRepository` and `AuditingServiceContributions`).
 
-Assuming that an `AppManifest` is being used to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app])
+Assuming that an `AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app])
 then this can be activated by updating the `pom.xml` and updating the `AppManifest#getModules()` method.
 
 If menu items or contributions are not required in the UI, these can be suppressed either using security or by
@@ -81,5 +81,5 @@ The auditing service works very well with the xref:rgsvc.adoc#_rgsvc-spi_Command
 
 You may also want to configure the xref:rgsvc.adoc#_rgsvc-spi_PublishingService[`PublishingService`].
 
-All three of these services collaborate implicitly by way of the xref:rg.adoc#_rg_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
+All three of these services collaborate implicitly by way of the xref:rgcms.adoc#_rgcms_classes_mixins_manpage-HasTransactionId[`HasTransactionId`] interface.
 

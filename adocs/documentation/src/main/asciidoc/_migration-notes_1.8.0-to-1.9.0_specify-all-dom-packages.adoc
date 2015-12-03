@@ -10,7 +10,7 @@ Apache Isis automatically scans for certain classes on the classpath in order to
 
 * searching for classes annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`].
 
-* searching for classes extending xref:rg.adoc#_rg_classes_super_manpage-FixtureScript[`FixtureScript`]
+* searching for classes extending xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScript[`FixtureScript`]
 
 * searching for classes annotated with xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`].
 

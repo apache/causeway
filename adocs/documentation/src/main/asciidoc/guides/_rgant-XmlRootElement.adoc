@@ -13,7 +13,7 @@ A view model is a non-persisted domain object whose state is converted to/from a
 JAXB-annotated object this memento is its XML representation.  JAXB generally requires that the root element of the
 XML representation is annotated with `@XmlRootElement`.  Apache Isis makes this a mandatory requirement.
 
-In comparison to using either the xref:rg.adoc#_rg_classes_super_manpage-ViewModel[`ViewModel`] interface or the
+In comparison to using either the xref:rgcms.adoc#_rgcms_classes_super_manpage-ViewModel[`ViewModel`] interface or the
 xref:rgant.adoc#_rgant-ViewModel[`@ViewModel`] annotation, using `@XmlRootElement` has a couple of
 significant advantages:
 
@@ -33,7 +33,7 @@ all the code by hand
 The main disadvantages of using JAXB-annotated view models is that any referenced persistent entity must be annotated
 with the xref:rgant.adoc#_rgant-XmlJavaTypeAdapter[`@XmlJavaTypeAdapter`], using the
 framework-provided `PersistentEntityAdapter`.  This adapter converts any references to such domain entities using the
-`oidDto` complex type (as defined by the Apache Isis xref:rg.adoc#_rg_schema-common[common schema]):
+`oidDto` complex type (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]):
 the object's type and its identifier.
 
 [TIP]
@@ -75,7 +75,7 @@ Although (like any other viewmodel) a JAXB-annotated can have behaviour (actions
 the DTO "clean", just focused on specifying the data contract.
 
 Behaviour can therefore be provided using xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[mixins] (annotated with
-xref:rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:rg.adoc#_rg_classes_uievent[UI events] can be used
+xref:rgant.adoc#_rgant-Mixin[`@Mixin`]), while xref:rgcms.adoc#_rgcms_classes_uievent[UI events] can be used
 to obtain title, icons and so on.
 
 For a more complete discussion of writing JAXB view models/DTOs, see xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[this topic]

@@ -7,7 +7,7 @@
 
 Whenever a domain object is to be rendered, the framework fires off an icon UI event to obtain an icon (name) for the
 object (if possible). This is as an alternative to implementing
-xref:rg.adoc#_rg_methods_reserved_manpage-iconName[`iconName()`] reserved method.  (If `iconName()` is present, then
+xref:rgcms.adoc#_rgcms_methods_reserved_manpage-iconName[`iconName()`] reserved method.  (If `iconName()` is present, then
 it will take precedence).
 
 Subscribers subscribe through the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] and can

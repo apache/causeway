@@ -8,7 +8,7 @@
 
 When an object is added to a 1:m bidirectional relationship, the child object must refer to the parent and the child must be added to the parent's children collection.
 
-If there were no database involved then we would have recommended that you use the link:http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf[mutual registration] pattern to ensure that both the parent and child are updated correctly.  (The  xref:rg.adoc#_rg_methods_prefixes_manpage-modify[`modify...()`] and xref:rg.adoc#_rg_methods_prefixes_manpage-clear[`clear...()`] supporting methods were introduced in the framework primarily to help support implement the mutual registration pattern.
+If there were no database involved then we would have recommended that you use the link:http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf[mutual registration] pattern to ensure that both the parent and child are updated correctly.  (The  xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-modify[`modify...()`] and xref:rgcms.adoc#_rgcms_methods_prefixes_manpage-clear[`clear...()`] supporting methods were introduced in the framework primarily to help support implement the mutual registration pattern.
 
 However, in a relational database, these two operations in the domain object model correspond simply to updating the foreign key of the child table to reference the parent's primary key.
 

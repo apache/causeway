@@ -43,7 +43,7 @@ public class MySubscribingService {
 
 [TIP]
 ====
-In this particular use case, it is generally simpler to just subclass from xref:rg.adoc#_rg_classes_super_manpage-AbstractSubscriber[`AbstractSubscriber`].
+In this particular use case, it is generally simpler to just subclass from xref:rgcms.adoc#_rgcms_classes_super_manpage-AbstractSubscriber[`AbstractSubscriber`].
 ====
 
 Other use cases include obtaining connections to external datasources, eg subscribing to an ActiveMQ router, say, or initializing/cleaning up a background scheduler such as Quartz.

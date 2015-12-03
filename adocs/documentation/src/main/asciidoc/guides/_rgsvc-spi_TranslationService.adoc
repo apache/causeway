@@ -61,7 +61,7 @@ For more details on the implementation, see xref:ugbtb.adoc#_ugbtb_more-advanced
 == Registering the Services
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `TranslationService` service (along with the supporting menu service) are automatically registered and injected (it is annotated with `@DomainService`) so no further configuration is required.
 
 If the menu items are not required then these can be suppressed either using security or by implementing a xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_vetoing-visibility[vetoing subscriber].

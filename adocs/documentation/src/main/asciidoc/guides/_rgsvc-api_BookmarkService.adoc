@@ -105,7 +105,7 @@ Bookmarks are also used by the (non-ASF) http://github.com/isisaddons/isis-modul
 == Registering the Service
 
 Assuming that the `configuration-and-annotation` services installer is configured (implicit if using the
-`AppManifest` to xref:rg.adoc#_rg_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
+`AppManifest` to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]) then Apache Isis' core
 implementation of `BookmarkService` is automatically registered (it is annotated with `@DomainService`) so no further
 configuration is required.
 

@@ -17,7 +17,7 @@ using link:https://lucene.apache.org/[Apache Lucene] or similar.
 ====
 Another use case is to maintain "last updated by"/"last updated at" properties.  While you can roll your own, note that
 the framework provides built-in support for this use case through the
-xref:rg.adoc#_rg_classes_roles_manpage-Timestampable[`Timestampable`] role interface.
+xref:rgcms.adoc#_rgcms_classes_roles_manpage-Timestampable[`Timestampable`] role interface.
 ====
 
 By default the event raised is `ObjectRemovingEvent.Default`. For example:

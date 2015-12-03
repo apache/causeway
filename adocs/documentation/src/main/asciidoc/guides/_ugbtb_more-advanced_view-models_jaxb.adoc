@@ -155,7 +155,7 @@ It's quite common for view models to be "backed by" (be projections of) some und
 It wouldn't make sense to serialize out the state of a persistent entity: the point of a DTO is to act as a facade
 on top of the entity so that the implementation details (of the entity's structure) don't leak out to the consumer.
 However, the identity of the underlying entity can be well defined; Apache Isis defines the
-xref:rg.adoc#_rg_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class):
+xref:rgcms.adoc#_rgcms_schema-common[Common schema] which defines the `<oid-dto>` element (and corresponding `OidDto` class):
 the object's type and its identifier.  This is basically a formal XML equivalent to the `Bookmark` object obtained
 from the xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`].
 

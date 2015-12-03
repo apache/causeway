@@ -116,7 +116,7 @@ DTOs to be carefully and properly versioned using XML namespaces.
 
 [TIP]
 ====
-If the view model DTO implements the xref:rg.adoc#_rg_classes_mixins_Dto[`Dto`] marker interface, then the framework
+If the view model DTO implements the xref:rgcms.adoc#_rgcms_classes_mixins_Dto[`Dto`] marker interface, then the framework
 will also provide the ability to download the XML or its XSD directly from the UI.
 ====
 

@@ -6,7 +6,7 @@
 
 
 
-The `FixtureScriptsSpecificationProvider` SPI service is an alternative to subclassing the xref:rg.adoc#_rg_classes_super_manpage-FixtureScripts[`FixtureScripts`] domain service.  The logic that would normally be in the subclass moves to the provider service instead, and the framework instantiates a fallback default instance, xref:rgsvc.adoc#_rgsvc-api_FixtureScriptsDefault[`FixtureScriptsDefault`].
+The `FixtureScriptsSpecificationProvider` SPI service is an alternative to subclassing the xref:rgcms.adoc#_rgcms_classes_super_manpage-FixtureScripts[`FixtureScripts`] domain service.  The logic that would normally be in the subclass moves to the provider service instead, and the framework instantiates a fallback default instance, xref:rgsvc.adoc#_rgsvc-api_FixtureScriptsDefault[`FixtureScriptsDefault`].
 
 This new design is optional; if you continue to provide your own subclass then everything will continue as before.  However the new design is more flexible and involves less code.
 
