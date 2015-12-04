@@ -49,23 +49,83 @@ The screencast below demonstrates the feature.
 video::HMSqapQDY_4[youtube,width="853px",height="480px"]
 
 
-And the table below explains in a little more detail what is returned when this profile is activated.
-
-[cols="1a,4a", options="header"]
-|===
-
-| Resource
-| Description
+The sections below explain in a little more detail what is returned when this profile is activated.
 
 
-|Domain object +
-(section 14)
-|The representation of a domain object is simple key/value pairs for each property.  The contents of any collections are
-also eagerly returned, consisting of an array of elements of each referenced object.  Each such element contains
-key/value pairs of each property (in other words, a grid of data is returned), along with special `$$href` and
-`$$title` properties. +
+[[_ugvro_simplified-representations_domain-object]]
+== Domain Object
 
-In addition, the representation defined by the RO spec is also included, under a special `$$ro` property. +
+If a domain object resource (section 14) is accessed with the Apache Isis profile, the resultant representation is a
+JSON object with simple key/value pairs for each property.
+
+The contents of any collections are also eagerly returned, consisting of an array of elements of each referenced
+object.  Each such element contains key/value pairs of each property (in other words, a grid of data is returned).
+Each element also has a special `$$href` property (so that the client can easily navigate to a resource for that
+object) and a `$$title` property (to use as a label, eg the hyperlink text).
+
+In addition, the representation defined by the RO spec is also included, under a special `$$ro` property.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
+
+[source]
+----
+http://localhost:8080/restful/objects/TODO/45
+----
+
+with an `Accept` request header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+returns the following representation:
+
+[source]
+----
+{
+  "$$href" : "http://localhost:8080/restful/objects/TODO/45",       // <1>
+  "$$title" : "Buy bread due by 2015-12-04",                        // <2>
+  "description" : "Buy bread",                                      // <3>
+  "category" : "Domestic",
+  "subcategory" : "Shopping",
+  "complete" : false,
+  "atPath" : "/users/sven",
+  ...
+  "similarTo" : [ {                                                 // <4>
+    "$$href" : "http://localhost:8080/restful/objects/TODO/46",
+    "$$title" : "Buy milk due by 2015-12-04",
+    "description" : "Buy milk",
+    "category" : "Domestic",
+    ...
+  }, {
+    "$$href" : "http://localhost:8080/restful/objects/TODO/47",
+    "$$title" : "Buy stamps due by 2015-12-04",
+    "description" : "Buy stamps",
+    "category" : "Domestic",
+    ...
+  },
+     ...
+  } ],
+  "dependencies" : [ ],
+  "$$ro" : {                                                        // <5>
+    "links" : [ ... ],
+    "extensions" : { ... },
+    "title" : "Buy bread due by 2015-12-04",
+    "domainType" : "TODO",
+    "instanceId" : "45",
+    "members" : { ... }
+  }
+}
+----
+<1> hyperlink to the representation
+<2> title of the domain object
+<3> all the properties of the domain object (to which the caller has access), as key/value pairs
+<4> contents of each collection
+<5> special `$$ro` json-prop, being the normal RO Spec representation for this object
+
+with a `Content-Type` header:
 
 [source]
 ----
@@ -73,45 +133,200 @@ Content-Type: application/json;
               profile="urn:org.apache.isis/v1";repr-type="object"
 ----
 
-|Object Collection +
-(section 17)
-|Collections are represented as an array of elements of key/value for each referenced object, and again each element
-the containing the key/value pairs of the properties of that object (a grid, again). +
+
+[[_ugvro_simplified-representations_object-collection]]
+== Domain Object Collection
+
+If a domain object collection (section 17) is accessed with this profile, then the resultant representation is as
+an array of elements of key/value for each referenced object, and again each element the containing the key/value
+pairs of the properties of that object (a grid, again). +
 
 In addition, the representation defined by the RO spec is also included, as a special object with a single `$$ro`
-property. +
+property.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
 
 [source]
 ----
-Content-Type: application/json;
-              profile="urn:org.apache.isis/v1";repr-type="object-collection"
+http://localhost:8080/restful/objects/TODO/45/collections/similarTo
 ----
 
-|Action invocation +
-(section 19)
-|If the action returned an object, then the domain object representation described above is returned. +
+with an `Accept` request header of:
 
 [source]
 ----
-Content-Type: application/json;
-              profile="urn:org.apache.isis/v1";repr-type="object"
+Accept: application/json;profile="urn:org.apache.isis/v1"
 ----
 
-If the action returned a list, then the same array representation as (parented) object collections is returned, though
-with a slightly different `Content-Type` to distinguish:
+returns the following representation:
 
 [source]
 ----
-Content-Type: application/json;
-              profile="urn:org.apache.isis/v1";repr-type="list"
+[                                                                   // <1>
+{
+  "$$href" : "http://localhost:8080/restful/objects/TODO/46",       // <2>
+  "$$title" : "Buy milk due by 2015-12-04",                         // <3>
+  "description" : "Buy milk",                                       // <4>
+  "category" : "Domestic",
+  ...
+}, {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/47",
+  "$$title" : "Buy stamps due by 2015-12-04",
+  "description" : "Buy stamps",
+  "category" : "Domestic",
+  ...
+}, {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/48",
+  "$$title" : "Mow lawn due by 2015-12-10",
+  "description" : "Mow lawn",
+  "category" : "Domestic",
+  ...
+},
+...
+, {
+  "$$ro" : {                                                        // <5>
+    "id" : "similarTo",
+    "memberType" : "collection",
+    "links" : [ ... ],
+    "extensions" : { ... },
+    "value" : [ ... ]
+  }
+}
+]
+----
+<1> returns a JSON array, not a JSON object
+<2> hyperlink to the representation
+<3> title of the domain object
+<4> all the properties of the domain object (to which the caller has access), as key/value pairs
+<5> last element is a special object with a single `$$ro` json-prop, being the normal RO Spec representation for this object
+
+with a `Content-Type` header:
+
+[source]
+----
+Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="object-collection"
 ----
 
-Note that actions returning scalar values or void are not supported; for these the regular RO spec representation will
-be returned.
 
-|===
+[[_ugvro_simplified-representations_action-invocation]]
+== Action Invocation
+
+When an action is invoked, it can return a domain object, a list, a scalar, or return nothing.
+
+=== Returning an Object
+
+If the action returned an object, then the domain object representation described
+xref:ugvro.adoc#_ugvro_simplified-representations_domain-object[above] is returned.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
+
+[source]
+----
+http://localhost:8080/restful/objects/TODO/45/actions/updateCost/invoke
+----
+
+with an `Accept` request header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+returns the following representation:
+
+[source]
+----
+
+{
+  "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$title" : "Buy bread due by 2015-12-04",
+  "description" : "Buy bread",
+  "category" : "Domestic",
+  "subcategory" : "Shopping",
+  "complete" : false,
+  ...
+  "similarTo" : [ ... ]
+  ...
+  "$$ro" : { ... }
+}
+----
+
+with a `Content-Type` of:
+
+[source]
+----
+Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="object"
+----
+
+\... in other words no different to a representation obtained of the returned domain object directly.
 
 
+=== Returning a List
+
+On the other hand if the action returned a list (a "standalone" collection, then an array representation is returned.
+This is very similar to that returned by a
+xref:ugvro.adoc#_ugvro_simplified-representations_object-collection[(parented) object collection], though with a
+slightly different `Content-Type` to distinguish.
+
+For example, using the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp], accessing
+this resource:
+
+[source]
+----
+http://localhost:8080/restful/services/ToDoItems/actions/notYetComplete/invoke
+----
+
+with an `Accept` request header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+returns the following representation:
+
+[source]
+----
+[ {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$title" : "Buy bread due by 2015-12-04",
+  "description" : "Buy bread",
+  "category" : "Domestic",
+  ...
+}, {
+  "$$href" : "http://localhost:8080/restful/objects/TODO/46",
+  "$$title" : "Buy milk due by 2015-12-04",
+  "description" : "Buy milk",
+  "category" : "Domestic",
+  ...
+},
+...
+, {
+  "$$ro" : {
+    "links" : [ ... ]
+    "resulttype" : "list",
+    "result" : { ... }
+      "value" : [ ... ],
+      "links" : [ ... ],
+      "extensions" : { }
+    }
+  }
+} ]
+----
+
+with a `Content-Type` header:
+
+[source]
+----
+Content-Type: application/json;profile="urn:org.apache.isis/v1";repr-type="list"
+----
+
+=== Returning Scalar/Nothing
+
+Note that actions returning scalar values or nothing (which includes `void` actions) are not supported; for these the
+regular RO spec representation will be returned.
 
 
 [[_ugvro_simplified-representations_other-representations]]
