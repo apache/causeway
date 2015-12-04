@@ -7,9 +7,9 @@
 
 
 
-Using xref:ug.adoc#_ugfun_object-layout_dynamic[dynamic object layout]s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
+Using xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic object layout]s using JSON has the huge benefit that the layout can be updated without requiring a recompile of the code and redeploy of the app.  Many developers also find it easier to rationalize about layout when all the hints are collated together in a single place (rather than scattered across the class members as annotations).
 
-Another benefit of dynamic layout is that UI hints can be provided for xref:ug.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
+Another benefit of dynamic layout is that UI hints can be provided for xref:ugfun.adoc#_ugfun_how-tos_contributed-members[contributed associations and actions] that are synthesised at runtime.
 
 The main downsides of using dynamic layouts are a lack of typesafety (a typo will result in the metadata not being picked up for the element) and syntactic fragility (an invalid JSON document will result in no metadata for the entire class).
 

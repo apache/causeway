@@ -13,6 +13,6 @@ This is the way that the link:http://metawidget.org/[MetaWidget] team, in partic
 
 [NOTE]
 ====
-We compare Apache Isis' with MetaWidget xref:ug.adoc#_ugfun_core-concepts_principles_apache-isis-vs_metawidget[here].
+We compare Apache Isis' with MetaWidget xref:ugfun.adoc#_ugfun_core-concepts_principles_apache-isis-vs_metawidget[here].
 ====
 

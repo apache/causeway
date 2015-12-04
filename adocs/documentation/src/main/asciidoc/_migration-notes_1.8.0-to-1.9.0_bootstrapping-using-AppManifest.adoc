@@ -8,7 +8,7 @@
 
 Apache Isis 1.9.0 provides a simplified programmatic way of bootstrapping the application, that also unifies bootstrapping for integration tests.
 
-For now this new bootstrapping mechanism is optional (you don't have to change your code), but it may become mandatory in future releases.  The xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
+For now this new bootstrapping mechanism is optional (you don't have to change your code), but it may become mandatory in future releases.  The xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated to use this new mechanism.
 
 The instructions below assume that your application is structured as per the simpleapp archetype.  Adjust accordingly.
 

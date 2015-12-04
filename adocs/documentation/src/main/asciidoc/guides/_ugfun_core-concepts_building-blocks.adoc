@@ -28,7 +28,7 @@ which can map domain objects either to an RDBMS or to various NoSQL objectstores
 recognizes a number of the JDO annotations such as `@javax.jdo.annotations.Column(allowNulls=...)`.
 
 In addition, the framework builds up the metamodel for each domain object using
-xref:ug.adoc#_ugfun_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as
+xref:ugfun.adoc#_ugfun_object-layout[layout hints], such as `Customer.layout.json`.  These provide metadata such as
 grouping elements of the UI together, using multi-column layouts, and so on.  The layout file can be modified while the
 application is still running, and are picked up automatically; a useful way to speed up feedback.
 
@@ -287,7 +287,7 @@ NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 [[_ugfun_core-concepts_building-blocks_oid]]
 == OIDs
 
-As well as defining a xref:ug.adoc#_ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain
+As well as defining a xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_metamodel[metamodel] of the structure (domain
 classes) of its domain objects, Apache Isis also manages the runtime instances of said domain objects.
 
 When a domain entity is recreated from the database, the framework keeps track of its identity through an "OID": an

@@ -5,5 +5,5 @@
 :_imagesdir: images/
 
 
-See the xref:ug.adoc#_ugfun_object-layout[object layout] chapter.
+See the xref:ugfun.adoc#_ugfun_object-layout[object layout] chapter.
 

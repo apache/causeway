@@ -79,7 +79,7 @@ pass:[<br/>]
 
 |*Contributors' Guide*
 
-* *link:./guides/cg.html[Contributors Guide^]*
+* *link:./guides/cg.html[Contributors' Guide^]*
 
 including:
 

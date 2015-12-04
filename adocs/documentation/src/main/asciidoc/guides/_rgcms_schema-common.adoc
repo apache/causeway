@@ -12,7 +12,7 @@ xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`].
 
 Although simple, this is an enormously powerful concept, in that it represents a URI to any domain object managed by
 a given Apache Isis application.  With it, we have the ability to lookup any arbitrary object.  Further discussion and
-examples can be found xref:ug.adoc#_ugfun_core-concepts_building-blocks_oid[here].
+examples can be found xref:ugfun.adoc#_ugfun_core-concepts_building-blocks_oid[here].
 
 
 [source,xml]

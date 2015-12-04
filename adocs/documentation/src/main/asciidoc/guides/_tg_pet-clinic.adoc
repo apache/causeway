@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  It was originally written by Jeroen van der Wal.
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  It was originally written by Jeroen van der Wal.
 
 It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 

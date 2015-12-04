@@ -31,7 +31,7 @@ It is also possible to specify a global default for the page size of standalone 
 
 
 
-As an alternative to using the annotation, the dynamic xref:ug.adoc#_ugfun_object-layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]

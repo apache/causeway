@@ -102,7 +102,7 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adlinkaddonsapp" value="(non-ASF) http://github.com/isisaddons/isis-app-$APP$[Isis addons' $APP$]" description="Link to specific Isis Addons app" toReformat="false" toShortenFQNames="true" deactivated="true">
+  <template name="adlinkaddonsapp" value="(non-ASF) http://github.com/isisaddons/isis-app-$APP$[Isis addons' $APP$]" description="Link to specific Isis Addons app" toReformat="false" toShortenFQNames="true">
     <variable name="APP" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
@@ -167,50 +167,43 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgmp" value="xref:rg.adoc#_rg_methods_prefixes_manpage-$methodName$[`$methodName$...()`]" description="x-ref to ref guide manpage for method prefix" toReformat="false" toShortenFQNames="true">
+  <template name="adrgmp" value="xref:rgcsm.adoc#_rgcsm_methods_prefixes_$methodName$[`$methodName$...()`]" description="x-ref to ref guide manpage for method prefix" toReformat="false" toShortenFQNames="true">
     <variable name="methodName" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adug1" value="xref:ug.adoc#$chapter$[$DisplayText$]" description="x-ref to user guide level 1 (chapter)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_ug_" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adrgsa" value="xref:rg.adoc#_rg_services-api_manpage-$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service api" toReformat="false" toShortenFQNames="true">
+  <template name="adrgsa" value="xref:rgsvc.adoc#_rgsvc_api_$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service api" toReformat="false" toShortenFQNames="true">
     <variable name="ServiceType" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgmr" value="xref:rg.adoc#_rg_methods_reserved_manpage-$methodName$[`$methodName$()`]" description="x-ref to ref guide manpage for reserved method" toReformat="false" toShortenFQNames="true">
+  <template name="adrgmr" value="xref:rgcsm.adoc#_rgcsm_methods_reserved_$methodName$[`$methodName$()`]" description="x-ref to ref guide manpage for reserved method" toReformat="false" toShortenFQNames="true">
     <variable name="methodName" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgss" value="xref:rg.adoc#_rg_services-spi_manpage-$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service spi" toReformat="false" toShortenFQNames="true">
+  <template name="adrgss" value="xref:rgsvc.adoc#_rgsvc-spi_$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service spi" toReformat="false" toShortenFQNames="true">
     <variable name="ServiceType" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgcv" value="xref:rg.adoc#_rg_classes_value-types_manpage-$Type$[`$Type$`]" description="x-ref to ref guide manpage for class value type" toReformat="false" toShortenFQNames="true">
+  <template name="adrgcv" value="xref:rgcsm.adoc#_rgcsm_classes_value-types_$Type$[`$Type$`]" description="x-ref to ref guide manpage for class value type" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgcs" value="xref:rg.adoc#_rg_classes_super_manpage-$Type$[`$Type$`]" description="x-ref to ref guide manpage for class superclass" toReformat="false" toShortenFQNames="true">
+  <template name="adrgcs" value="xref:rgcsm.adoc#_rgcsm_classes_super_$Type$[`$Type$`]" description="x-ref to ref guide manpage for class superclass" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgcu" value="xref:rg.adoc#_rg_classes_utility_manpage-$Type$[`$Type$`]" description="x-ref to ref guide manpage for class utility" toReformat="false" toShortenFQNames="true">
+  <template name="adrgcu" value="xref:rgcsm.adoc#_rgcsm_classes_utility_$Type$[`$Type$`]" description="x-ref to ref guide manpage for class utility" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
@@ -222,25 +215,8 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgna" value="xref:rg.adoc#_rg_annotations_manpage-$Type$[`@$Type$`]" description="x-ref to ref guide manpage for annotation" toReformat="false" toShortenFQNames="true">
+  <template name="adrgna" value="xref:rgant.adoc#_rgant_$Type$[`@$Type$`]" description="x-ref to ref guide manpage for annotation" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adug2" value="xref:ug.adoc#$chapter$_$section$[$DisplayText$]" description="x-ref to user guide level 2 (chapter section)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_ug_" alwaysStopAt="true" />
-    <variable name="section" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adug3" value="xref:ug.adoc#$chapter$_$section$_$subsection$[$DisplayText$]" description="x-ref to user guide level 3 (chapter section subsection)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_ug_" alwaysStopAt="true" />
-    <variable name="section" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="subsection" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
@@ -252,24 +228,21 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgnt" value="xref:rg.adoc#_rg_annotations_manpage-$Type$_$attribute$[`@$Type$#$attribute$()`]" description="x-ref to ref guide manpage for annotation's attribute" toReformat="false" toShortenFQNames="true">
+  <template name="adrgnt" value="xref:rgant.adoc#_rgant_$Type$_$attribute$[`@$Type$#$attribute$()`]" description="x-ref to ref guide manpage for annotation's attribute" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="attribute" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adugvw" value="xref:ug.adoc#_ug_wicket-viewer[Wicket viewer]" description="x-ref to user guide wicket viewer" toReformat="false" toShortenFQNames="true">
+  <template name="adugvw" value="xref:ugvw.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide wicket viewer" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Wicket viewer" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adugvro" value="xref:ug.adoc#_ug_restfulobjects-viewer[RestfulObjects viewer]" description="x-ref to user guide restfulobjects viewer" toReformat="false" toShortenFQNames="true">
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adrgntx" value="xref:rg.adoc#_rg_annotations_manpage-$Type$_$attribute$[$linkText$]" description="x-ref to ref guide manpage for annotation's attribute, overriding the link text" toReformat="false" toShortenFQNames="true">
+  <template name="adrgntx" value="xref:rgant.adoc#_rgant_$Type$_$attribute$[$linkText$]" description="x-ref to ref guide manpage for annotation's attribute, overriding the link text" toReformat="false" toShortenFQNames="true">
     <variable name="Type" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="attribute" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="linkText" expression="" defaultValue="" alwaysStopAt="true" />
@@ -291,46 +264,23 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrg1" value="xref:rg.adoc#$chapter$[$DisplayText$]" description="x-ref to ref guide level 1 (chapter)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_rg_" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="adrgcfg" value="xref:rgcfg.adoc#$bookmark$[$DisplayText$]" description="x-ref to ref guide configuration properties guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Configuration Properties guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrg2" value="xref:rg.adoc#$chapter$_$section$[$DisplayText$]" description="x-ref to ref guide level 2 (chapter section)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_rg_" alwaysStopAt="true" />
-    <variable name="section" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="adrgsvc" value="xref:rgsvc.adoc#$bookmark$[$DisplayText$]" description="xref to domain services guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Domain Services guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrg3" value="xref:rg.adoc#$chapter$_$section$_$subsection$[$DisplayText$]" description="x-ref to ref guide level 3 (chapter section subsection)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_rg_" alwaysStopAt="true" />
-    <variable name="section" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="subsection" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adrgcfg" value="xref:rg.adoc#_rg_runtime_configuring-core[configuration property]" description="x-ref to ref guide configuration properties section" toReformat="false" toShortenFQNames="true">
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adcg" value="xref:cg.adoc#_cg[Contributors' Guide]" description="xref to contributors guide" toReformat="false" toShortenFQNames="true">
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adrg" value="xref:rg.adoc#_rg[Reference Guide]" description="xref to reference guide" toReformat="false" toShortenFQNames="true">
-    <context>
-      <option name="AsciiDoc" value="true" />
-    </context>
-  </template>
-  <template name="adug" value="xref:ug.adoc#_ug[Users' Guide]" description="xref to user' guide" toReformat="false" toShortenFQNames="true">
+  <template name="adugfun" value="xref:ugfun.adoc#$bookmark$[$DisplayText$]" description="xref to fundamentals guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Fundamentals Guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
@@ -340,24 +290,37 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adcg1" value="xref:cg.adoc#_cg_$chapter$[$DisplayText$]" description="x-ref to contributors guide level 1 (chapter)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="adcg" value="xref:cg.adoc#$bookmark$[$DisplayText$]" description="x-ref to contributors guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Contributors guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adcg2" value="xref:cg.adoc#_cg_$chapter$_$section$[$DisplayText$]" description="x-ref to contributors guide level 2 (chapter section)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="section" expression="" defaultValue="" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="adtg" value="xref:tg.adoc#$bookmark$[$DisplayText$]" description="x-ref to tutorials guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Tutorials" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adtg1" value="xref:tg.adoc#$chapter$[$DisplayText$]" description="x-ref to tutorials level 1 (chapter)" toReformat="false" toShortenFQNames="true">
-    <variable name="chapter" expression="" defaultValue="_tg_" alwaysStopAt="true" />
-    <variable name="DisplayText" expression="" defaultValue="" alwaysStopAt="true" />
+  <template name="adugtst" value="xref:ugtst.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide testing guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Testing guide" alwaysStopAt="true" />
+    <context>
+      <option name="AsciiDoc" value="true" />
+    </context>
+  </template>
+  <template name="adugbtb" value="xref:ugbtb.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide beyond the basics" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Beyond the Basics guide" alwaysStopAt="true" />
+    <context>
+      <option name="AsciiDoc" value="true" />
+    </context>
+  </template>
+  <template name="adugsec" value="xref:ugsec.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide security guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Security guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>

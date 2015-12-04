@@ -21,7 +21,7 @@ Collections are always rendered in the "last" column.  This can appear either be
 
 [IMPORTANT]
 ====
-As this is an important topic, there is a xref:ug.adoc#_ugfun_object-layout[separate chapter] that discussed object layout in full.
+As this is an important topic, there is a xref:ugfun.adoc#_ugfun_object-layout[separate chapter] that discussed object layout in full.
 ====
 
 

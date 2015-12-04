@@ -92,9 +92,9 @@ where:
 
 
 
-== Xref to Contributors' Guide
+== Xref to Guides
 
-Cross-references (links) to the xref:cg.adoc#_cg[Contributors' Guide] (this document).
+Cross-references (links) to the various guides
 
 [cols="1,4a,2a", options="header"]
 |===
@@ -104,115 +104,34 @@ Cross-references (links) to the xref:cg.adoc#_cg[Contributors' Guide] (this docu
 
 
 |`adcg`
-|pass:[<pre>xref:cg.adoc#_cg[Contributors' Guide\]</pre>] +
+|pass:[<pre>xref:cg.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to the contributors guide.
-|xref:cg.adoc#_cg[Contributors' Guide]
+a hyperlink to a bookmark within the contributors guide, where:
 
-|`adcg1`
-|pass:[<pre>xref:cg.adoc#_cg_xxx[ttt\]</pre>]
-
-a hyperlink to a level 1 (chapter) within the contributors guide, where:
-
-* `xxx` is the chapter's anchor
+* `xxx` is the bookmark's anchor
 * `ttt` is the text to display as the hyperlink
 
 for example:
 
-pass:[<pre>xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates/]</pre>]
+pass:[<pre>xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates\]</pre>]
 
 |xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates]
 
 
-|`adcg2`
-|pass:[<pre>xref:cg.adoc#_cg_xxx_yyy[ttt\]</pre>]
-
-a hyperlink to a level 2 (chapter and section) within the contributors guide, where:
-
-* `xxx` and `yyy` make up the anchor to the section within the chapter
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:cg.adoc#_cg_committers_release-process[Release process/]</pre>]
-
-|xref:cg.adoc#_cg_committers_release-process[Release process]
-
-|===
-
-
-
-== Xref to Reference Guide
-
-Cross-references (links) to the xref:rg.adoc#_rg[Reference Guide].
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adrg`
-|pass:[<pre>xref:rg.adoc#_rg[Reference Guide\]</pre>]
-
-a hyperlink to the Reference Guide.
-
-|xref:rg.adoc#_rg[Reference Guide]
-
-|`adrg1`
-|pass:[<pre>xref:rg.adoc#_rg_xxx[ttt\]</pre>]
-
-a hyperlink to a level 1 (chapter) within the reference guide, where:
-
-* `xxx` is the chapter's anchor
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:rgant.adoc#_rgant[Annotations\]</pre>]
-
-|xref:rgant.adoc#_rgant[Annotations]
-
-
-
-|`adrg2`
-|pass:[<pre>xref:rg.adoc#_rg_xxx_yyy[ttt\]</pre>]
-
-a hyperlink to a level 2 (chapter and section) within the reference guide, where:
-
-* `xxx` and `yyy` make up the anchor to the section within the chapter
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:ug.adoc#_ugfun_object-layout_dynamic_[Dynamic object layout]</pre>]
-
-|xref:ug.adoc#_ugfun_object-layout_dynamic[Dynamic object layout]
-
-
-
-|`adrg3`
-|pass:[<pre>xref:rg.adoc#_rg_xxx_yyy_zzz[ttt\]</pre>]
-
-a hyperlink to a level 3 (chapter, section, subsection) within the reference guide, where:
-
-* `xxx`, `yyy`, `zzz` make up the anchor to the subsection within the chapter
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS\]</pre>]
-
-|xref:rgcfg.adoc#_rgcfg_application-specific_application-css[Application-specific CSS]
-
-
 
 |`adrgcfg`
-|pass:[<pre>xref:rgcfg.adoc#_rgcfg_configuring-core[configuration properties]</pre>]
+|pass:[<pre>xref:rgcfg.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to the reference guide's catalogue of the Apache Isis configuration properties.
+a hyperlink to a bookmark within configuration properties guide, where:
 
-|xref:rgcfg.adoc#_rgcfg_configuring-core[configuration properties]
+* `xxx` is the bookmark
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core\]</pre>]
+
+|xref:rgcfg.adoc#_rgcfg_configuring-core[Configuring Core]
 
 
 
@@ -352,102 +271,108 @@ pass:[<pre>xref:rgsvc.adoc#_rgsvc-spi_ContentMappingService[`ContentMappingServi
 
 
 
-|===
 
+|`adugfun`
+|pass:[<pre>xref:ugfun.adoc#xxx[ttt\]</pre>]
 
+a hyperlink to a bookmark within the fundamentals users' guide, where:
 
-== Xref to the Users' Guide
-
-Cross-references (links) to the xref:ug.adoc#_ug[Users' Guide].
-
-[cols="1,4a,2a", options="header"]
-|===
-| Abbrev.
-| Produces
-| Example
-
-|`adug`
-|pass:[<pre>xref:ug.adoc#_ug[Users' Guide\]</pre>]
-
-a hyperlink to the Users' Guide.
-
-|xref:ug.adoc#_ug[Users' Guide]
-
-
-
-|`adug1`
-|pass:[<pre>xref:ug.adoc#xxx[ttt\]</pre>]
-
-a hyperlink to a level 1 (chapter) within the users' guide, where:
-
-* `xxx` is the chapter's anchor
+* `xxx` is the bookmark's anchor
 * `ttt` is the text to display as the hyperlink
 
 for example:
 
-pass:[<pre>xref:ug.adoc#_ugfun_core-concepts[Core concepts\]</pre>]
+pass:[<pre>xref:ugfun.adoc#_ugfun_core-concepts[Core concepts\]</pre>]
 
-|xref:ug.adoc#_ugfun_core-concepts[Core concepts]
+|xref:ugfun.adoc#_ugfun_core-concepts[Core concepts]
 
-
-
-|`adug2`
-|pass:[<pre>xref:ug.adoc#xxx_yyy[ttt\]</pre>]
-
-a hyperlink to a level 2 (chapter and section) within the users' guide, where:
-
-* `xxx` and `yyy` make up the anchor to the section within the chapter
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:ug.adoc#core-concepts_philosophy[Philosophy\]</pre>]
-
-
-|xref:ug.adoc#core-concepts_philosophy[Philosophy]
-
-
-
-|`adug3`
-|pass:[<pre>xref:ug.adoc#xxx_yyy_zzz[ttt\]</pre>]
-
-a hyperlink to a level 3 (chapter, section, subsection) within the users' guide, where:
-
-* `xxx`, `yyy`, `zzz` make up the anchor to the subsection within the chapter
-* `ttt` is the text to display as the hyperlink
-
-for example:
-
-pass:[<pre>xref:ug.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern\]</pre>]
-
-|xref:ug.adoc#_ugfun_core-concepts_philosophy_naked-objects-pattern[Naked objects pattern]
-
-
-
-
-|`adugsimpleapp`
-|pass:[<pre>xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
-
-A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
-
-|xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
-
-
-|`adugvro`
-|pass:[<pre>xref:ugvro.adoc#[RestfulObjects viewer\]</pre>]
-
-A hyperlink to the Restful Objects viewer chapter.
-
-|xref:ugvro.adoc#[RestfulObjects viewer]
 
 
 
 |`adugvw`
-|pass:[<pre>xref:ugvw.adoc#[Wicket viewer\]</pre>]
+|pass:[<pre>xref:ugvw.adoc#xxx[ttt\]</pre>]
 
-A hyperlink to the Wicket viewer chapter.
+A hyperlink to a bookmark within the Wicket viewer guide, where:
 
-|xref:ugvw.adoc#[Wicket viewer]
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink.
+
+for example:
+
+pass:[<pre>xref:ugvw.adoc#_ugvw_customisation[Customisation\]</pre>]
+
+|xref:ugvw.adoc#_ugvw_customisation[Customisation]
+
+
+|`adugvro`
+|pass:[<pre>xref:ugvro.adoc#xxx[ttt\]</pre>]
+
+A hyperlink to a bookmark within the Restful Objects viewer guide, where:
+
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink.
+
+for example:
+
+pass:[<pre>xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification\]</pre>]
+
+|xref:ugvro.adoc#_ugvro_ro-spec[RestfulObjects specification]
+
+
+
+
+|`adugsec`
+|pass:[<pre>xref:ugsec.adoc#xxx[ttt\]</pre>]
+
+A hyperlink to a bookmark within the Secrurity guide, where:
+
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink.
+
+for example:
+
+pass:[<pre>xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features\]</pre>]
+
+|xref:ugsec.adoc#_ugsec_shiro-caching[Caching and other Shiro Features]
+
+
+|`adugtst`
+|pass:[<pre>xref:ugtst.adoc#xxx[ttt\]</pre>]
+
+A hyperlink to a bookmark within the Testing guide, where:
+
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink.
+
+for example:
+
+pass:[<pre>xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support\]</pre>]
+
+|xref:ugtst.adoc#_ugtst_bdd-spec-support[BDD Spec Support]
+
+
+|`adugbtb`
+|pass:[<pre>xref:ugbtb.adoc#xxx[ttt\]</pre>]
+
+A hyperlink to a bookmark within the 'Beyond the Basics' user guide, where:
+
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink.
+
+for example:
+
+pass:[<pre>xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration\]</pre>]
+
+|xref:ugbtb.adoc#_ugbtb_deployment_externalized-configuration[Externalized Configuration]
+
+
+
+|`adugsimpleapp`
+|pass:[<pre>xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype\]</pre>]
+
+A hyperlink to the `simpleapp` archetype in the "getting started" chapter.
+
+|xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
 
 
 

@@ -23,7 +23,7 @@ We therefore recommend that you disable persistence-by-reachability by adding th
 isis.persistor.datanucleus.impl.datanucleus.persistenceByReachabilityAtCommit=false
 ----
 
-This change has been made to the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
+This change has been made to the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]
 
 If you do disable this feature, then you will (of course) need to ensure that you explicitly persist all entities using the `DomainObjectContainer#persist(.)` or `DomainObjectContainer#persistIfNotAlready(.)` methods.
 

@@ -31,7 +31,7 @@ If none of these are found, then no version is displayed.
 
 [TIP]
 ====
-This configuration is included within the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+This configuration is included within the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
 ====
 
 === Adding attributes to the WAR's manifest

@@ -36,7 +36,7 @@ The reference guides are:
 * xref:rgant.adoc#[Annotations]
 * xref:rgsvc.adoc#[Domain Services]
 * xref:rgcfg.adoc#[Configuration Properties]
-* xref:rg.adoc#[Classes, Methods and Schema]
+* xref:rgcms.adoc#[Classes, Methods and Schema]
 
 In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
 

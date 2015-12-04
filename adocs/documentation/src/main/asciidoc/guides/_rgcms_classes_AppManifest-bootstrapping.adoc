@@ -183,7 +183,7 @@ What then remains is to update the bootstrapping code itself.
 
 Bootstrapping integration tests is still performed using the `IsisSystemForTest.Builder`, but very often the bootstrapping code can be substantially simplified (compared to not using an `AppManifest`, that is).
 
-For example, this is the bootstrapping code for the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] looks something like:
+For example, this is the bootstrapping code for the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] looks something like:
 
 [source,java]
 ----

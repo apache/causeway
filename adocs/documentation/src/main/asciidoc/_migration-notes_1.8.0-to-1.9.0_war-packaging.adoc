@@ -6,7 +6,7 @@
 
 
 
-As discussed in xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and elsewhere, the `org.apache.isis.WebServer` provides the ability to run your app from an embedded jetty.  This is great for prototyping.  The class resides in the `isis-core-webserver` module, which also has the dependency on jetty.
+As discussed in xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] and elsewhere, the `org.apache.isis.WebServer` provides the ability to run your app from an embedded jetty.  This is great for prototyping.  The class resides in the `isis-core-webserver` module, which also has the dependency on jetty.
 
 In 1.9.0 we have upgraded the jetty dependency to use Jetty 9.2.0 (`org.eclipse.jetty.aggregate:jetty-all:9.2.11.v20150529`, to be precise).  One consequence of this is that the packaged WAR file will not boot on Tomcat.
 
@@ -31,4 +31,4 @@ Alternatively you can change your webapp's `pom.xml` so that when the war is pac
 ----
 
 
-For future projects the xref:ug.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated with this change.
+For future projects the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype] has been updated with this change.

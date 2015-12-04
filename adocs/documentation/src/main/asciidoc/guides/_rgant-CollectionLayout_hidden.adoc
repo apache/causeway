@@ -47,7 +47,7 @@ The collection should not be hidden.
 The other values of the `Where` enum have no meaning for a collection.
 
 
-As an alternative to using the annotation, the dynamic xref:ug.adoc#_ugfun_object-layout_dynamic[`.layout.json`]
+As an alternative to using the annotation, the dynamic xref:ugfun.adoc#_ugfun_object-layout_dynamic[`.layout.json`]
 can be used instead, eg:
 
 [source,javascript]
