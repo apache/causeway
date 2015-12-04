@@ -5,15 +5,20 @@
 :_imagesdir: images/
 
 
-The Restful Objects viewer provides a number of configuration option that extend/simplify/alter the representations generated from the Restful Objects specification.
+The Restful Objects viewer provides a couple of configuration option that extend/simplify/alter the representations
+generated from the Restful Objects specification.
 
-These configuration properties are typically stored in `WEB-INF/viewer_restfulobjects.properties`.  However, you can place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all config files are merged together).
+These configuration properties are typically stored in `WEB-INF/viewer_restfulobjects.properties`.  However, you can
+place all configuration properties into `WEB-INF/isis.properties` if you wish (the configuration properties from all
+config files are merged together).
 
-[WARNING]
+[NOTE]
 ====
-These configuration settings should be considered beta, and may change in the future in response to emerging requirements.
+As of `1.11.0-SNAPSHOT` these configuration settings should be considered deprecated, because the
+xref:ugvro.adoc#_ugvro_simplified-representations[simplified representation] support provided by the Apache Isis profile is a more flexible solution.
 
-Also, be aware enabling these settings makes the representations with respect to the http://restfulobjects.org[Restful Object spec].  (Based on experience in Apache Isis, in the future the spec may be updated to allow such extensions).
+Also, be aware enabling these settings makes the representations non-standard with respect to
+http://restfulobjects.org[Restful Object spec].
 ====
 
 
@@ -28,45 +33,11 @@ Also, be aware enabling these settings makes the representations with respect to
 |`isis.viewer.restfulobjects.` +
 `honorUiHints`
 | `true`,`false` (`_false_`)
-| See xref:ugvro.adoc#_ugvro_configuration-properties_honor-ui-hints[discussion], below.
-
-|`isis.viewer.restfulobjects.` +
-`suppressDescribedByLinks`
-| `true`,`false` (`_false_`)
-.6+| See xref:ugvro.adoc#_ugvro_configuration-properties_suppressing-elements[discussion], below.
-
-|`isis.viewer.restfulobjects.` +
-`suppressUpdateLink`
-| `true`,`false` (`_false_`)
-
-|`isis.viewer.restfulobjects.` +
-`suppressMemberId`
-| `true`,`false` (`_false_`)
-
-|`isis.viewer.restfulobjects.` +
-`suppressMemberLinks`
-| `true`,`false` (`_false_`)
-
-|`isis.viewer.restfulobjects.` +
-`suppressMemberExtensions`
-| `true`,`false` (`_false_`)
-
-|`isis.viewer.restfulobjects.` +
-`suppressMemberDisabledReason`
-| `true`,`false` (`_false_`)
-
-|`isis.viewer.restfulobjects.` +
-`objectPropertyValuesOnly`
-| `true`,`false` (`_false_`)
-| See xref:ugvro.adoc#_ugvro_configuration-properties_simplified-object-representation[discussion], below.
+|A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ugvro.adoc#_ugvro_ro-spec_extensions_minimizing-round-trips_honor-ui-hints[here].
 
 |===
 
 
-
-
-include::_ugvro_configuration-properties_honor-ui-hints.adoc[leveloffset=+1]
-include::_ugvro_configuration-properties_suppressing-elements.adoc[leveloffset=+1]
-include::_ugvro_configuration-properties_simplified-object-representation.adoc[leveloffset=+1]
-
-
+There are also a number of configuration properties that can be used to suppress or simplify the default RO-spec
+representations.  These pre-date the Apache Isis profile `1.11.0-SNAPSHOT` support, so are considered deprecated.
+Discussion of them can nevertheless be found xref:ugvro.adoc#_ugvro_simplified-representations_configuration-properties[here].

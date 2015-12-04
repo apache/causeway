@@ -1,0 +1,146 @@
+[[_ugvro_simplified-representations]]
+= Simplified Representations
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+The representations defined by the RO spec are very rich and enable complex client-side applications to be built.
+However, their sophistication can be an impediment to their use if one wishes to write a simple app using third-party
+components that expect to consume much simpler representations.  Examples of such tools are
+link:http://angular-ui.github.io/bootstrap/[Angular Bootstrap],
+link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
+link:https://github.com/mgcrea/angular-strap[Angular Strap].
+
+
+As of `1.11.0-SNAPSHOT`, Apache Isis provides support for its own simplified representation for the most commonly-used
+representations.  This is implemented using the `ContentNegotiationService` described in the
+xref:ugvro.adoc#_ugvro_architecture[architecture] chapter.
+
+
+
+[[_ugvro_simplified-representations_apache-isis-profile]]
+== The Apache Isis "Profile"
+
+The RO spec uses the standard `Accept` header for content negotiation, and defines its own "profile" for the standard
+representations; these take the form:
+
+[source]
+----
+Accept: application/json;profile="urn:org.restfulobjects:repr-types/xxx"
+----
+
+where "xxx" varies by resource.  The detail can be found in section 2.4.1 of the RO spec.
+
+The Apache Isis viewer also defines its own "Isis" profile which enables the client to request simplified
+representations for the most frequently accessed resources.  This is done by specifying an `Accept` header of:
+
+[source]
+----
+Accept: application/json;profile="urn:org.apache.isis/v1"
+----
+
+Not every resource supports this header, but the most commonly accessed ones do.  In each case the server will set the
+`Content-Type` header so that the client knows how to process the representation.
+
+[cols="1a,4a", options="header"]
+|===
+
+| Resource
+| Description
+
+
+|Domain object +
+(section 14)
+|The representation of a domain object is simple key/value pairs for each property.  The contents of any collections are
+also eagerly returned, consisting of an array of elements of each referenced object.  Each such element contains
+key/value pairs of each property (in other words, a grid of data is returned), along with special `$$href` and
+`$$title` properties. +
+
+In addition, the representation defined by the RO spec is also included, under a special `$$ro` property. +
+
+[source]
+----
+Content-Type: application/json;
+              profile="urn:org.apache.isis/v1";repr-type="object"
+----
+
+|Object Collection +
+(section 17)
+|Collections are represented as an array of elements of key/value for each referenced object, and again each element
+the containing the key/value pairs of the properties of that object (a grid, again). +
+
+In addition, the representation defined by the RO spec is also included, as a special object with a single `$$ro`
+property. +
+
+[source]
+----
+Content-Type: application/json;
+              profile="urn:org.apache.isis/v1";repr-type="object-collection"
+----
+
+|Action invocation +
+(section 19)
+|If the action returned an object, then the domain object representation described above is returned. +
+
+[source]
+----
+Content-Type: application/json;
+              profile="urn:org.apache.isis/v1";repr-type="object"
+----
+
+If the action returned a list, then the same array representation as (parented) object collections is returned, though
+with a slightly different `Content-Type` to distinguish:
+
+[source]
+----
+Content-Type: application/json;
+              profile="urn:org.apache.isis/v1";repr-type="list"
+----
+
+Note that actions returning scalar values or void are not supported; for these the regular RO spec representation will
+be returned.
+
+|===
+
+
+
+
+[[_ugvro_simplified-representations_other-representations]]
+== Supporting other Representations
+
+Sometimes though you may want to extend or change the representations generated.  This might be because you want to
+write a RESTful client that uses a particular library (say a Javascript library or web components) that can only handle representations in a certain form.
+
+Or, you might want to have Apache Isis generate representations according to some other "standard", of which there are
+many:
+
+* Mike Kelly's http://stateless.co/hal_specification.html[HAL] specification
+* Mike Amundsen's http://amundsen.com/media-types/collection/[Collection+JSON] specification
+* Kevin Swiber's https://github.com/kevinswiber/siren[Siren] specification
+* Steve Klabnik's http://jsonapi.org/[JSON API] specification
+* Gregg Cainus' https://github.com/cainus/hyper-json-spec[Hyper+JSON] specification
+* the W3C's https://www.w3.org/TR/json-ld/[JSON-LD] specification
+* Markus Lanthaler's http://www.markus-lanthaler.com/hydra/[Hydra] specification.
+
+A good discussion about the relative merits of several of these different hypermedia formats can be found https://groups.google.com/forum/#!msg/api-craft/NgjzQYVOE4s/EAB2jxtU_TMJ[here].
+
+Or, of course, you may have your own internal specification that you wish to use.
+
+Supporting any of these alternative representations can be achieved by providing a suitable implementation of
+`ContentNegotiationService`.  The existing implementations (eg `ContentNegotiationServiceSimplified`) can be used as a
+starting point.
+
+[NOTE]
+====
+These will, admittedly, need to access the internal APIs for the Apache Isis metamodel, and you should be aware that
+these are not formal API; they may change over time.  That said, they are very stable and have not changed
+significantly over the last few years.
+====
+
+
+
+include::_ugvro_simplified-representations_configuration-properties.adoc[leveloffset=+1]
+
+
