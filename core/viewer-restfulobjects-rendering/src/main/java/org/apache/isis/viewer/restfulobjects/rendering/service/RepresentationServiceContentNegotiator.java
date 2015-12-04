@@ -47,7 +47,6 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
 
     @PostConstruct
     public void init(final Map<String, String> properties) {
-
     }
 
 

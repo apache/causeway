@@ -35,6 +35,17 @@ http://restfulobjects.org[Restful Object spec].
 | `true`,`false` (`_false_`)
 |A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ugvro.adoc#_ugvro_ro-spec_extensions_minimizing-round-trips_honor-ui-hints[here].
 
+|`isis.viewer.restfulobjects.` +
+`strictAcceptChecking` +
+(`1.11.0-SNAPSHOT`)
+| `true`,`false` (`_false_`)
+|Whether to strictly enforce the `Accept` header checking for the default RO-spec representations (by the
+`ContentNegotiationServiceForRestfulObjectsV1_0` service). Will otherwise accept anything.  +
++
+This is convenient because it allows the `Accept` header to be set to that of the
+xref:ugvro.adoc#_ugvro_simplified-representations[Apache Isis profile] for all resources, rather than simply the
+handful of resources that supported that profile.
+
 |===
 
 

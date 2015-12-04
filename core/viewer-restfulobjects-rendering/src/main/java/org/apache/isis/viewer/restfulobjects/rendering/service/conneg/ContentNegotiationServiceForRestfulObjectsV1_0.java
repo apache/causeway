@@ -61,9 +61,12 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
 
     private static final DateFormat ETAG_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 
+    private boolean strictAcceptChecking;
+
     @PostConstruct
     public void init(final Map<String, String> properties) {
-
+        final String strictAcceptCheckingStr = properties.get("isis.viewer.restfulobjects.strictAcceptChecking");
+        this.strictAcceptChecking = "true".equalsIgnoreCase(strictAcceptCheckingStr);
     }
 
     @PreDestroy
@@ -236,6 +239,9 @@ public class ContentNegotiationServiceForRestfulObjectsV1_0 implements ContentNe
     private void ensureCompatibleAcceptHeader(
             final RepresentationType representationType,
             final List<MediaType> acceptableMediaTypes) {
+        if(!strictAcceptChecking) {
+            return;
+        }
         if (representationType == null) {
             return;
         }
