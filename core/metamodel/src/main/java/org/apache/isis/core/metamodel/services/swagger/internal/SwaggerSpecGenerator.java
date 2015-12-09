@@ -70,32 +70,91 @@ public class SwaggerSpecGenerator {
         swagger.basePath("/restful");
         swagger.info(new Info()
                         .version("1.0.0")
-                        .title("Restful Objects"))
-                .path("/",
-                        new Path()
-                            .get(new Operation()
-                                    .description(roSpec("5.1"))
-                                    .produces("application/json")
-                                    .produces("application/json;profile=urn:org.restfulobjects:repr-types/home-page")
-                                    .response(200,
-                                            newResponse(Caching.NON_EXPIRING)
-                                            .description("OK")
-                                            .schema(new RefProperty("#/definitions/home-page"))
-                                    )))
+                        .title("Restful Objects"));
+
+        appendBoilerplate(swagger);
+        appendLinkDefinitions(swagger);
+
+        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
+        for (ObjectSpecification serviceSpec : allSpecs) {
+            final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
+            if (domainServiceFacet == null) {
+                continue;
+            }
+            if (!isVisible(visibility, domainServiceFacet)) {
+                continue;
+            }
+
+            List<ActionType> actionTypes = actionTypesFor(visibility);
+            List<ObjectAction> serviceActions = serviceSpec.getObjectActions(
+                    actionTypes, Contributed.EXCLUDED, Filters.<ObjectAction>any());
+            if(serviceActions.isEmpty()) {
+                continue;
+            }
+
+            final String serviceId = serviceIdFor(serviceSpec);
+
+            final ObjectProperty serviceMembers = appendServicePath(swagger, serviceId);
+
+            for (final ObjectAction serviceAction : serviceActions) {
+                appendActionTo(serviceMembers, serviceAction);
+
+                if(false) {
+                    appendPromptPaths(swagger, serviceAction);
+                }
+
+                appendInvokePath(swagger, serviceAction);
+            }
+        }
+
+        switch (format) {
+            case JSON:
+                return Json.pretty(swagger);
+            case YAML:
+                try {
+                    return Yaml.pretty().writeValueAsString(swagger);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+            default:
+                throw new IllegalArgumentException("Unrecognized format: " + format);
+        }
+    }
+
+    void appendBoilerplate(final Swagger swagger) {
+        appendBoilerplatePaths(swagger);
+        appendBoilerplateDefinitions(swagger);
+    }
+
+    void appendBoilerplatePaths(final Swagger swagger) {
+        swagger.path("/",
+                new Path()
+                        .get(new Operation()
+                                .tag("boilerplate")
+                                .description(roSpec("5.1"))
+                                .produces("application/json")
+                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/home-page")
+                                .response(200,
+                                        newResponse(Caching.NON_EXPIRING)
+                                                .description("OK")
+                                                .schema(new RefProperty("#/definitions/home-page"))
+                                )))
                 .path("/user",
                         new Path()
-                            .get(new Operation()
-                                    .description(roSpec("6.1"))
-                                    .produces("application/json")
-                                    .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
-                                    .response(200,
-                                            newResponse(Caching.USER_INFO)
-                                            .description("OK")
-                                            .schema(new RefProperty("#/definitions/user"))
-                                    )))
+                                .get(new Operation()
+                                        .tag("boilerplate")
+                                        .description(roSpec("6.1"))
+                                        .produces("application/json")
+                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
+                                        .response(200,
+                                                newResponse(Caching.USER_INFO)
+                                                        .description("OK")
+                                                        .schema(new RefProperty("#/definitions/user"))
+                                        )))
                 .path("/services",
                         new Path()
                                 .get(new Operation()
+                                        .tag("boilerplate")
                                         .description(roSpec("7.1"))
                                         .produces("application/json")
                                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
@@ -107,50 +166,56 @@ public class SwaggerSpecGenerator {
 
                 .path("/version",
                         new Path()
-                            .get(new Operation()
-                                    .description(roSpec("8.1"))
-                                    .produces("application/json")
-                                    .produces("application/json;profile=urn:org.restfulobjects:repr-types/version")
-                                    .response(200,
-                                            newResponse(Caching.NON_EXPIRING)
-                                            .description("OK")
-                                            .schema(new RefProperty("#/definitions/version"))
-                                    )));
+                                .get(new Operation()
+                                        .tag("boilerplate")
+                                        .description(roSpec("8.1"))
+                                        .produces("application/json")
+                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/version")
+                                        .response(200,
+                                                newResponse(Caching.NON_EXPIRING)
+                                                        .description("OK")
+                                                        .schema(new RefProperty("#/definitions/version"))
+                                        )));
+    }
 
+    void appendBoilerplateDefinitions(final Swagger swagger) {
         swagger.addDefinition("home-page",
                 newModel(roSpec("5.2")));
 
         swagger.addDefinition("user",
                 newModel(roSpec("6.2"))
-                    .property("userName", stringProperty())
-                    .property("roles", arrayOfStrings())
-                    .property("links", arrayOfLinksGetOnly())
-                    .required("userName")
-                    .required("roles")
-                );
+                        .property("userName", stringProperty())
+                        .property("roles", arrayOfStrings())
+                        .property("links", arrayOfLinksGetOnly())
+                        .required("userName")
+                        .required("roles")
+        );
 
         swagger.addDefinition("services",
                 newModel(roSpec("7.2"))
-                    .property("value", arrayOfLinksGetOnly())
-                    .required("userName")
-                    .required("roles")
-                );
+                        .property("value", arrayOfLinksGetOnly())
+                        .required("userName")
+                        .required("roles")
+        );
 
         swagger.addDefinition("version",
                 newModel(roSpec("8.2"))
-                    .property("specVersion", stringProperty())
-                    .property("implVersion", stringProperty())
-                    .property("optionalCapabilities",
-                            new ObjectProperty()
-                                .property("blobsClobs", stringProperty())
-                                .property("deleteObjects", stringProperty())
-                                .property("domainModel", stringProperty())
-                                .property("validateOnly", stringProperty())
-                                .property("protoPersistentObjects", stringProperty())
-                            )
-                    .required("userName")
-                    .required("roles")
-                );
+                        .property("specVersion", stringProperty())
+                        .property("implVersion", stringProperty())
+                        .property("optionalCapabilities",
+                                new ObjectProperty()
+                                        .property("blobsClobs", stringProperty())
+                                        .property("deleteObjects", stringProperty())
+                                        .property("domainModel", stringProperty())
+                                        .property("validateOnly", stringProperty())
+                                        .property("protoPersistentObjects", stringProperty())
+                        )
+                        .required("userName")
+                        .required("roles")
+        );
+    }
+
+    void appendLinkDefinitions(final Swagger swagger) {
 
         swagger.addDefinition("link",
                 new ModelImpl()
@@ -178,194 +243,191 @@ public class SwaggerSpecGenerator {
                     .required("href")
                     .required("method")
         );
+    }
 
+    void appendActionTo(final ObjectProperty serviceMembers, final ObjectAction serviceAction) {
+        String serviceActionId = serviceAction.getId();
 
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
-        for (ObjectSpecification serviceSpec : allSpecs) {
-            final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
-            if (domainServiceFacet == null) {
-                continue;
-            }
-            if (!isVisible(visibility, domainServiceFacet)) {
-                continue;
-            }
+        // within the services representation itself
+        serviceMembers.property(serviceActionId,
+                new ObjectProperty()
+                        .property("id", stringPropertyEnum(serviceActionId))
+                        .property("memberType", stringPropertyEnum("action"))
+                        .property("links",
+                                new ObjectProperty()
+                                        .property("rel", stringPropertyEnum( String.format(
+                                                "urn:org.restfulobjects:rels/details;action=%s", serviceActionId)))
+                                        .property("href", stringPropertyEnum(String.format(
+                                                "actions/%s", serviceActionId))))
+                        .property("method", stringPropertyEnum("GET"))
+                        .property("type", stringPropertyEnum(
+                                "application/json;profile=urn:org.restfulobjects:repr-types/object-action"))
+        );
+    }
 
-            List<ObjectAction> serviceActions = serviceSpec
-                    .getObjectActions(actionTypesFor(visibility), Contributed.EXCLUDED, Filters.<ObjectAction>any());
-            if(serviceActions.isEmpty()) {
-                continue;
-            }
+    ObjectProperty appendServicePath(
+            final Swagger swagger,
+            final String serviceId) {
 
-            String serviceId = serviceIdFor(serviceSpec);
-            final String serviceDefinitionId = "service-" + serviceId;
+        final String serviceDefinitionId = "service-" + serviceId;
+        final String servicePathStr = "/services/" + serviceId;
 
-            final Path servicePath = new Path();
-            final String servicePathStr = "/services/" + serviceId;
-            swagger.path(servicePathStr, servicePath);
+        final Path servicePath = new Path();
+        swagger.path(servicePathStr, servicePath);
 
-            servicePath.get(
-                    new Operation()
+        servicePath.get(
+                new Operation()
+                        .tag(serviceId)
                         .description(roSpec("15.1"))
                         .produces("application/json")
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
                         .response(200,
                                 newResponse(Caching.TRANSACTIONAL)
-                                    .description("OK")
-                                    .schema(new RefProperty("#/definitions/"
-                                            + serviceDefinitionId)))
+                                        .description("OK")
+                                        .schema(new RefProperty("#/definitions/"
+                                                + serviceDefinitionId)))
+        );
+
+        final ObjectProperty serviceMembers = new ObjectProperty();
+        ModelImpl serviceRepr =
+                newModel(roSpec("15.1.2") + ": representation of " + serviceId)
+                        .property("title", stringProperty())
+                        .property("serviceId", stringProperty()._default(serviceId))
+                        .property("members", serviceMembers);
+
+        swagger.addDefinition(serviceDefinitionId, serviceRepr);
+        return serviceMembers;
+    }
+
+    void appendPromptPaths(
+            final Swagger swagger,
+            final ObjectAction serviceAction) {
+
+        final ObjectSpecification serviceSpec = serviceAction.getOnType();
+        final String serviceId = serviceIdFor(serviceSpec);
+        final String servicePathStr = "/services/" + serviceId;
+        final String serviceActionId = serviceAction.getId();
+        final String serviceActionPromptPathRelStr = "actions/" + serviceActionId;
+
+        final ObjectProperty actionParametersRepr = new ObjectProperty();
+        swagger.path(servicePathStr + "/" + serviceActionPromptPathRelStr,
+                new Path()
+                        .get(
+                                new Operation()
+                                        .tag(serviceId)
+                                        .description(roSpec("18.1") + ": (prompt) resource for " + serviceId + "#" + serviceActionId)
+                                        .produces("application/json")
+                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-action")
+                                        .response(200,
+                                                new Response()
+                                                        .description(roSpec("18.2") + ": (prompt) representation of " + serviceId + "#" + serviceActionId)
+                                                        .schema(new ObjectProperty()
+                                                                .property("id",
+                                                                        stringPropertyEnum(serviceActionId))
+                                                                .property("memberType",
+                                                                        stringPropertyEnum("action"))
+                                                                .property("links", arrayOfLinksGetOnly())
+                                                                .property("parameters", actionParametersRepr)
+                                                        ))));
+        final List<ObjectActionParameter> parameters = serviceAction.getParameters();
+
+        int i = 0;
+        for (final ObjectActionParameter parameter : parameters) {
+            final String parameterId = parameter.getId();
+            actionParametersRepr.property(parameterId,
+                    new ObjectProperty()
+                        .property("num", new IntegerProperty()._default(i++))
+                        .property("id", stringPropertyEnum(parameterId))
+                        .property("name", stringPropertyEnum(parameter.getName()))
+                        .property("description", stringPropertyEnum(parameter.getDescription()))
             );
+        }
+    }
 
-            final ObjectProperty serviceMembers = new ObjectProperty();
-            ModelImpl serviceRepr =
-                    newModel(roSpec("15.1.2") + ": representation of " + serviceId)
-                    .property("title", stringProperty())
-                    .property("serviceId", stringProperty()._default(serviceId))
-                    .property("members", serviceMembers);
+    void appendInvokePath(
+            final Swagger swagger,
+            final ObjectAction serviceAction) {
 
-            swagger.addDefinition(serviceDefinitionId, serviceRepr);
+        final ObjectSpecification serviceSpec = serviceAction.getOnType();
+        final String serviceId = serviceIdFor(serviceSpec);
+        final String serviceActionId = serviceAction.getId();
 
-            for (final ObjectAction serviceAction : serviceActions) {
-                String serviceActionId = serviceAction.getId();
+        final List<ObjectActionParameter> parameters = serviceAction.getParameters();
+        final Path serviceActionInvokePath = new Path();
+        swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, serviceActionId), serviceActionInvokePath);
 
-                // within the services representation itself
-                final String serviceActionPromptPathRelStr = "actions/" + serviceActionId;
-                serviceMembers.property(serviceActionId,
-                        new ObjectProperty()
-                            .property("id", stringPropertyEnum(serviceActionId))
-                            .property("memberType", stringPropertyEnum("action"))
-                            .property("links",
-                                    new ObjectProperty()
-                                        .property("rel", stringPropertyEnum("urn:org.restfulobjects:rels/details;action=" + serviceActionId + ""))
-                                        .property("href", stringPropertyEnum(serviceActionPromptPathRelStr)))
-                            .property("method", stringPropertyEnum("GET"))
-                            .property("type", stringPropertyEnum("application/json;profile=urn:org.restfulobjects:repr-types/object-action"))
-                );
+        final Operation invokeOperation =
+                new Operation()
+                        .tag(serviceId)
+                        .description(roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + serviceActionId)
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
+                        .produces("application/json;profile=urn:org.apache.isis/v1")
+                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true");
 
-                // and for the service action's own resources (prompt and invoke)
-                final ObjectProperty actionParametersRepr = new ObjectProperty();
-                swagger.path(servicePathStr + "/" + serviceActionPromptPathRelStr,
-                        new Path()
-                                .get(
-                                        new Operation()
-                                                .description(roSpec("18.1") + ": (prompt) resource for " + serviceId + "#" + serviceActionId)
-                                                .produces("application/json")
-                                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-action")
-                                                .response(200,
-                                                        new Response()
-                                                                .description(roSpec("18.2") + ": (prompt) representation of " + serviceId + "#" + serviceActionId)
-                                                                .schema(new ObjectProperty()
-                                                                        .property("id",
-                                                                                stringPropertyEnum(serviceActionId))
-                                                                        .property("memberType",
-                                                                                stringPropertyEnum("action"))
-                                                                        .property("links", arrayOfLinksGetOnly())
-                                                                        .property("parameters", actionParametersRepr)
-                                                                ))));
-                final List<ObjectActionParameter> parameters = serviceAction.getParameters();
+        final ActionSemantics.Of semantics = serviceAction.getSemantics();
+        if(semantics.isSafeInNature()) {
+            serviceActionInvokePath.get(invokeOperation);
 
-                int i = 0;
-                for (final ObjectActionParameter parameter : parameters) {
-                    final String parameterId = parameter.getId();
-                    actionParametersRepr.property(parameterId,
-                            new ObjectProperty()
-                                .property("num", new IntegerProperty()._default(i++))
-                                .property("id", stringPropertyEnum(parameterId))
-                                .property("name", stringPropertyEnum(parameter.getName()))
-                                .property("description", stringPropertyEnum(parameter.getDescription()))
-                    );
-                }
-
-                // invoke path
-                final Path serviceActionInvokePath = new Path();
-                swagger.path( servicePathStr + "/" + serviceActionPromptPathRelStr + "/invoke", serviceActionInvokePath);
-
-                final Operation invokeOperation =
-                        new Operation()
-                            .description(roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + serviceActionId)
-                            .produces("application/json")
-                            .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
-                            .produces("application/json;profile=urn:org.apache.isis/v1")
-                            .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true");
-
-                final ActionSemantics.Of semantics = serviceAction.getSemantics();
-                if(semantics.isSafeInNature()) {
-                    serviceActionInvokePath.get(invokeOperation);
-
-                    for (final ObjectActionParameter parameter : parameters) {
-                        invokeOperation
-                                .parameter(
-                                        new QueryParameter()
-                                                .name(parameter.getId())
-                                                .description(roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
-                                                .required(false)
-                                                .type("string")
-                                );
-                    }
-                    if(!parameters.isEmpty()) {
-                        invokeOperation.parameter(new QueryParameter()
-                                .name("x-isis-querystring")
-                                .description(roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
-                                .required(false)
-                                .type("string"));
-                    }
-
-                } else {
-                    if (semantics.isIdempotentInNature()) {
-                        serviceActionInvokePath.put(invokeOperation);
-                    } else {
-                        serviceActionInvokePath.post(invokeOperation);
-                    }
-
-                    final ModelImpl bodyParam =
-                            new ModelImpl()
-                                .type("object");
-                    for (final ObjectActionParameter parameter : parameters) {
-
-                        final Property valueProperty;
-                        // TODO: need to switch on parameter's type and create appopriate impl of valueProperty
-                        // if(parameter.getSpecification().isValue()) ...
-                        valueProperty = stringProperty();
-
-                        bodyParam
-                                .property(parameter.getId(),
-                                        new ObjectProperty()
-                                                .property("value", valueProperty)
-                                );
-                    }
-
-                    invokeOperation
-                            .consumes("application/json")
-                            .parameter(
-                                    new BodyParameter()
-                                            .name("body")
-                                            .schema(bodyParam));
-
-                }
-
-
+            for (final ObjectActionParameter parameter : parameters) {
                 invokeOperation
-                        .response(
-                                200, new Response()
-                                        .description(roSpecForResponseOf(serviceAction) + ": (invoke) representation of " + serviceId + "#" + serviceActionId)
-                                    .schema(new ObjectProperty())
+                        .parameter(
+                                new QueryParameter()
+                                        .name(parameter.getId())
+                                        .description(roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                                        .required(false)
+                                        .type("string")
+                        );
+            }
+            if(!parameters.isEmpty()) {
+                invokeOperation.parameter(new QueryParameter()
+                        .name("x-isis-querystring")
+                        .description(roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .required(false)
+                        .type("string"));
+            }
+
+        } else {
+            if (semantics.isIdempotentInNature()) {
+                serviceActionInvokePath.put(invokeOperation);
+            } else {
+                serviceActionInvokePath.post(invokeOperation);
+            }
+
+            final ModelImpl bodyParam =
+                    new ModelImpl()
+                            .type("object");
+            for (final ObjectActionParameter parameter : parameters) {
+
+                final Property valueProperty;
+                // TODO: need to switch on parameter's type and create appopriate impl of valueProperty
+                // if(parameter.getSpecification().isValue()) ...
+                valueProperty = stringProperty();
+
+                bodyParam
+                        .property(parameter.getId(),
+                                new ObjectProperty()
+                                        .property("value", valueProperty)
                         );
             }
 
+            invokeOperation
+                    .consumes("application/json")
+                    .parameter(
+                            new BodyParameter()
+                                    .name("body")
+                                    .schema(bodyParam));
+
         }
 
-        switch (format) {
-            case JSON:
-                return Json.pretty(swagger);
-            case YAML:
-                try {
-                    return Yaml.pretty().writeValueAsString(swagger);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
-            default:
-                throw new IllegalArgumentException("Unrecognized format: " + format);
-        }
+        invokeOperation
+                .response(
+                        200, new Response()
+                                .description(roSpecForResponseOf(serviceAction) + ": (invoke) representation of " + serviceId + "#" + serviceActionId)
+                                .schema(new ObjectProperty())
+                );
     }
+
 
     private String roSpecForResponseOf(final ObjectAction action) {
         final ActionSemantics.Of semantics = action.getSemantics();

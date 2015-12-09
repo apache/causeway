@@ -30,14 +30,6 @@
 
     <script type="text/javascript">
     $(function () {
-      /*
-      var url = window.location.search.match(/url=([^&]+)/);
-      if (url && url.length > 1) {
-        url = decodeURIComponent(url[1]);
-      } else {
-        url = "/restful/swagger/private"
-      }
-      */
       var url = document.getElementById("input_baseUrl").selectedOptions[0].value;
 
       // Pre load translate...
@@ -113,13 +105,10 @@
         <form id='api_selector'>
             <div class='input'>
                 <select id="input_baseUrl" name="baseUrl">
-                    <option id="public" label="public" value="/restful/swagger/public"/>
                     <option id="private" label="private" value="/restful/swagger/private"/>
+                    <option id="public" label="public" value="/restful/swagger/public"/>
                     <option id="prototyping" label="prototyping" value="/restful/swagger/prototyping"/>
                 </select>
-<!--
-                <input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text" value="/restful/swagger/public">
--->
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
             <div class='input'><a id="explore" href="#" data-sw-translate>Explore</a></div>
