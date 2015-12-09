@@ -99,10 +99,6 @@ public class SwaggerSpecGenerator {
             for (final ObjectAction serviceAction : serviceActions) {
                 appendActionTo(serviceMembers, serviceAction);
 
-                if(false) {
-                    appendPromptPaths(swagger, serviceAction);
-                }
-
                 appendInvokePath(swagger, serviceAction);
             }
         }
@@ -299,51 +295,6 @@ public class SwaggerSpecGenerator {
         return serviceMembers;
     }
 
-    void appendPromptPaths(
-            final Swagger swagger,
-            final ObjectAction serviceAction) {
-
-        final ObjectSpecification serviceSpec = serviceAction.getOnType();
-        final String serviceId = serviceIdFor(serviceSpec);
-        final String servicePathStr = "/services/" + serviceId;
-        final String serviceActionId = serviceAction.getId();
-        final String serviceActionPromptPathRelStr = "actions/" + serviceActionId;
-
-        final ObjectProperty actionParametersRepr = new ObjectProperty();
-        swagger.path(servicePathStr + "/" + serviceActionPromptPathRelStr,
-                new Path()
-                        .get(
-                                new Operation()
-                                        .tag(serviceId)
-                                        .description(roSpec("18.1") + ": (prompt) resource for " + serviceId + "#" + serviceActionId)
-                                        .produces("application/json")
-                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-action")
-                                        .response(200,
-                                                new Response()
-                                                        .description(roSpec("18.2") + ": (prompt) representation of " + serviceId + "#" + serviceActionId)
-                                                        .schema(new ObjectProperty()
-                                                                .property("id",
-                                                                        stringPropertyEnum(serviceActionId))
-                                                                .property("memberType",
-                                                                        stringPropertyEnum("action"))
-                                                                .property("links", arrayOfLinksGetOnly())
-                                                                .property("parameters", actionParametersRepr)
-                                                        ))));
-        final List<ObjectActionParameter> parameters = serviceAction.getParameters();
-
-        int i = 0;
-        for (final ObjectActionParameter parameter : parameters) {
-            final String parameterId = parameter.getId();
-            actionParametersRepr.property(parameterId,
-                    new ObjectProperty()
-                        .property("num", new IntegerProperty()._default(i++))
-                        .property("id", stringPropertyEnum(parameterId))
-                        .property("name", stringPropertyEnum(parameter.getName()))
-                        .property("description", stringPropertyEnum(parameter.getDescription()))
-            );
-        }
-    }
-
     void appendInvokePath(
             final Swagger swagger,
             final ObjectAction serviceAction) {
@@ -400,7 +351,7 @@ public class SwaggerSpecGenerator {
             for (final ObjectActionParameter parameter : parameters) {
 
                 final Property valueProperty;
-                // TODO: need to switch on parameter's type and create appopriate impl of valueProperty
+                // TODO: need to switch on parameter's type and create appropriate impl of valueProperty
                 // if(parameter.getSpecification().isValue()) ...
                 valueProperty = stringProperty();
 
