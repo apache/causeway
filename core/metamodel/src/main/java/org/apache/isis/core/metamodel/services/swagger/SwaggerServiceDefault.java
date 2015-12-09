@@ -24,8 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.swagger.SwaggerService;
-import org.apache.isis.applib.value.Clob;
-import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpec;
+import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
@@ -38,12 +37,13 @@ public class SwaggerServiceDefault implements SwaggerService, SpecificationLoade
     private final static Logger LOG = LoggerFactory.getLogger(SwaggerServiceDefault.class);
 
     @Override
-    public Clob downloadSwaggerSpec(final String fileName, final Type type) {
+    public String generateSwaggerSpec(
+            final Visibility visibility,
+            final Format format) {
 
-        SwaggerSpec swaggerSpec = new SwaggerSpec(specificationLoader);
-
-        String yaml = swaggerSpec.generate(type);
-        return new Clob(fileName, "text/json", yaml);
+        final SwaggerSpecGenerator swaggerSpecGenerator = new SwaggerSpecGenerator(specificationLoader);
+        final String swaggerSpec = swaggerSpecGenerator.generate(visibility, format);
+        return swaggerSpec;
     }
 
     //region > injected dependencies

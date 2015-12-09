@@ -20,7 +20,19 @@ class Util {
 
     private Util(){}
 
-    static String withSuffix(String fileName, String suffix) {
+    static String buildFileName(
+            String fileNamePrefix,
+            final SwaggerService.Visibility visibility,
+            final SwaggerService.Format format) {
+        final String formatLower = format.name().toLowerCase();
+        int i = fileNamePrefix.lastIndexOf("." + formatLower);
+        if(i > 0) {
+            fileNamePrefix = fileNamePrefix.substring(0, i);
+        }
+        return withSuffix(fileNamePrefix + "-" + visibility.name().toLowerCase(), formatLower);
+    }
+
+    private static String withSuffix(String fileName, String suffix) {
         if(!suffix.startsWith(".")) {
             suffix = "." + suffix;
         }
@@ -29,5 +41,6 @@ class Util {
         }
         return fileName;
     }
+
 
 }

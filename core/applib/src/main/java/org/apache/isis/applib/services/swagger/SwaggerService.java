@@ -21,11 +21,10 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.ViewModel;
-import org.apache.isis.applib.value.Clob;
 
 public interface SwaggerService {
 
-    public enum Type {
+    enum Visibility {
         /**
          * Specification for use by third-party clients, ie public use.
          *
@@ -52,11 +51,22 @@ public interface SwaggerService {
         public boolean isPublic() {
             return this == PUBLIC;
         }
-        public boolean isPrivateWithPrototyping() {
-            return this == PRIVATE_WITH_PROTOTYPING;
-        }
     }
 
-    public Clob downloadSwaggerSpec(final String fileName, final Type type);
+    enum Format {
+        JSON {
+            @Override public String mediaType() {
+                return "text/json";
+            }
+        },
+        YAML {
+            @Override public String mediaType() {
+                return "application/yaml";
+            }
+        };
+
+        public abstract String mediaType();
+    }
+    String generateSwaggerSpec(final Visibility visibility, final Format format);
 
 }    

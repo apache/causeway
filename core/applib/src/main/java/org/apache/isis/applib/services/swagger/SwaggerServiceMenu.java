@@ -57,11 +57,23 @@ public class SwaggerServiceMenu {
     @MemberOrder(sequence="500.800.1")
     public Clob downloadSwaggerSpec(
             @ParameterLayout(named = "Filename")
-            final String fileName,
-            final SwaggerService.Type type) {
-        return swaggerService.downloadSwaggerSpec(Util.withSuffix(fileName, "json"), type);
+            final String fileNamePrefix,
+            final SwaggerService.Visibility visibility,
+            final SwaggerService.Format format) {
+        final String fileName = Util.buildFileName(fileNamePrefix, visibility, format);
+        final String spec = swaggerService.generateSwaggerSpec(visibility, format);
+        return new Clob(fileName, format.mediaType(), spec);
     }
 
+    public String default0DownloadSwaggerSpec() {
+        return "swagger";
+    }
+    public SwaggerService.Visibility default1DownloadSwaggerSpec() {
+        return SwaggerService.Visibility.PRIVATE;
+    }
+    public SwaggerService.Format default2DownloadSwaggerSpec() {
+        return SwaggerService.Format.YAML;
+    }
 
     @Inject
     SwaggerService swaggerService;
