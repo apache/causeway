@@ -30,7 +30,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
+import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
 import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -46,6 +48,7 @@ import io.swagger.models.Path;
 import io.swagger.models.Response;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.IntegerProperty;
@@ -76,30 +79,65 @@ public class SwaggerSpecGenerator {
         appendLinkDefinitions(swagger);
 
         final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
-        for (ObjectSpecification serviceSpec : allSpecs) {
+        for (final ObjectSpecification serviceSpec :  allSpecs) {
+
             final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
             if (domainServiceFacet == null) {
                 continue;
             }
-            if (!isVisible(visibility, domainServiceFacet)) {
+            if (visibility.isPublic() &&
+                domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_REST_ONLY) {
+                continue;
+            }
+            if (domainServiceFacet.getNatureOfService() != NatureOfService.VIEW_MENU_ONLY &&
+                domainServiceFacet.getNatureOfService() != NatureOfService.VIEW) {
                 continue;
             }
 
-            List<ActionType> actionTypes = actionTypesFor(visibility);
-            List<ObjectAction> serviceActions = serviceSpec.getObjectActions(
+            final List<ActionType> actionTypes = actionTypesFor(visibility);
+            final List<ObjectAction> serviceActions = serviceSpec.getObjectActions(
                     actionTypes, Contributed.EXCLUDED, Filters.<ObjectAction>any());
-            if(serviceActions.isEmpty()) {
+            if (serviceActions.isEmpty()) {
                 continue;
             }
 
-            final String serviceId = serviceIdFor(serviceSpec);
-
-            final ObjectProperty serviceMembers = appendServicePath(swagger, serviceId);
+            final ObjectProperty serviceMembers = appendServicePath(swagger, serviceSpec);
 
             for (final ObjectAction serviceAction : serviceActions) {
+                if (visibility.isPublic() && !isVisibleForPublic(serviceAction)) {
+                    continue;
+                }
                 appendActionTo(serviceMembers, serviceAction);
+                appendServiceActionInvokePath(swagger, serviceAction);
+            }
+        }
 
-                appendInvokePath(swagger, serviceAction);
+        for (final ObjectSpecification objectSpec : allSpecs) {
+
+            final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
+            if (domainServiceFacet != null) {
+                continue;
+            }
+
+            if(objectSpec.isAbstract()) {
+                continue;
+            }
+
+            final List<ActionType> actionTypes = actionTypesFor(visibility);
+            final List<ObjectAction> objectActions = objectSpec.getObjectActions(
+                    actionTypes, Contributed.INCLUDED, Filters.<ObjectAction>any());
+            if (objectActions.isEmpty()) {
+                continue;
+            }
+
+            final ObjectProperty objectMembers = appendObjectPath(swagger, objectSpec);
+
+            for (final ObjectAction objectAction : objectActions) {
+                if (visibility.isPublic() && !isVisibleForPublic(objectAction)) {
+                    continue;
+                }
+                appendActionTo(objectMembers, objectAction);
+                appendObjectActionInvokePath(swagger, objectAction);
             }
         }
 
@@ -241,6 +279,77 @@ public class SwaggerSpecGenerator {
         );
     }
 
+    ObjectProperty appendServicePath(final Swagger swagger, final ObjectSpecification objectSpec) {
+
+        final String serviceId = serviceIdFor(objectSpec);
+
+        final Path path = new Path();
+        swagger.path(String.format("/services/%s", serviceId), path);
+
+        path.get(
+                new Operation()
+                        .tag(serviceId)
+                        .description(roSpec("15.1"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
+                        .response(200,
+                                newResponse(Caching.TRANSACTIONAL)
+                                        .description("OK")
+                                        .schema(new RefProperty("#/definitions/service-" + serviceId)))
+        );
+
+        final ObjectProperty serviceMembers = new ObjectProperty();
+        final ModelImpl serviceRepr =
+                newModel(roSpec("15.1.2") + ": representation of " + serviceId)
+                        .property("title", stringProperty())
+                        .property("serviceId", stringProperty()._default(serviceId))
+                        .property("members", serviceMembers);
+
+        swagger.addDefinition("service-" + serviceId, serviceRepr);
+        return serviceMembers;
+    }
+
+    ObjectProperty appendObjectPath(final Swagger swagger, final ObjectSpecification objectSpec) {
+
+        final String objectType = objectTypeFor(objectSpec);
+
+        final Path path = new Path();
+        swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
+
+        path.get(
+                new Operation()
+                        .tag(objectType)
+                        .description(roSpec("14.1"))
+                        .parameter(
+                                new PathParameter()
+                                        .name("objectId")
+                                        .type("string"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
+                        .produces("application/json;profile=urn:org.apache.isis/v1")
+                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                        .response(200,
+                                newResponse(Caching.TRANSACTIONAL)
+                                        .description("OK")
+                                        .schema(new RefProperty("#/definitions/object-" + objectType)))
+        );
+
+        final ObjectProperty serviceMembers = new ObjectProperty();
+        final ModelImpl serviceRepr =
+                newModel(roSpec("14.4") + ": representation of " + objectType)
+                        .property("title", stringProperty())
+                        .property("domainType", stringProperty()._default(objectType))
+                        .property("instanceId", stringProperty())
+                        .property("members", serviceMembers);
+
+        swagger.addDefinition("object-" + objectType, serviceRepr);
+        return serviceMembers;
+    }
+
+    private String objectTypeFor(final ObjectSpecification objectSpec) {
+        return objectSpec.getFacet(ObjectSpecIdFacet.class).value().asString();
+    }
+
     void appendActionTo(final ObjectProperty serviceMembers, final ObjectAction serviceAction) {
         String serviceActionId = serviceAction.getId();
 
@@ -261,56 +370,22 @@ public class SwaggerSpecGenerator {
         );
     }
 
-    ObjectProperty appendServicePath(
-            final Swagger swagger,
-            final String serviceId) {
-
-        final String serviceDefinitionId = "service-" + serviceId;
-        final String servicePathStr = "/services/" + serviceId;
-
-        final Path servicePath = new Path();
-        swagger.path(servicePathStr, servicePath);
-
-        servicePath.get(
-                new Operation()
-                        .tag(serviceId)
-                        .description(roSpec("15.1"))
-                        .produces("application/json")
-                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
-                        .response(200,
-                                newResponse(Caching.TRANSACTIONAL)
-                                        .description("OK")
-                                        .schema(new RefProperty("#/definitions/"
-                                                + serviceDefinitionId)))
-        );
-
-        final ObjectProperty serviceMembers = new ObjectProperty();
-        ModelImpl serviceRepr =
-                newModel(roSpec("15.1.2") + ": representation of " + serviceId)
-                        .property("title", stringProperty())
-                        .property("serviceId", stringProperty()._default(serviceId))
-                        .property("members", serviceMembers);
-
-        swagger.addDefinition(serviceDefinitionId, serviceRepr);
-        return serviceMembers;
-    }
-
-    void appendInvokePath(
+    void appendServiceActionInvokePath(
             final Swagger swagger,
             final ObjectAction serviceAction) {
 
         final ObjectSpecification serviceSpec = serviceAction.getOnType();
         final String serviceId = serviceIdFor(serviceSpec);
-        final String serviceActionId = serviceAction.getId();
+        final String actionId = serviceAction.getId();
 
         final List<ObjectActionParameter> parameters = serviceAction.getParameters();
-        final Path serviceActionInvokePath = new Path();
-        swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, serviceActionId), serviceActionInvokePath);
+        final Path path = new Path();
+        swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
         final Operation invokeOperation =
                 new Operation()
                         .tag(serviceId)
-                        .description(roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + serviceActionId)
+                        .description(roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
                         .produces("application/json")
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
                         .produces("application/json;profile=urn:org.apache.isis/v1")
@@ -318,7 +393,7 @@ public class SwaggerSpecGenerator {
 
         final ActionSemantics.Of semantics = serviceAction.getSemantics();
         if(semantics.isSafeInNature()) {
-            serviceActionInvokePath.get(invokeOperation);
+            path.get(invokeOperation);
 
             for (final ObjectActionParameter parameter : parameters) {
                 invokeOperation
@@ -340,9 +415,9 @@ public class SwaggerSpecGenerator {
 
         } else {
             if (semantics.isIdempotentInNature()) {
-                serviceActionInvokePath.put(invokeOperation);
+                path.put(invokeOperation);
             } else {
-                serviceActionInvokePath.post(invokeOperation);
+                path.post(invokeOperation);
             }
 
             final ModelImpl bodyParam =
@@ -374,7 +449,95 @@ public class SwaggerSpecGenerator {
         invokeOperation
                 .response(
                         200, new Response()
-                                .description(roSpecForResponseOf(serviceAction) + ": (invoke) representation of " + serviceId + "#" + serviceActionId)
+                                .description(roSpecForResponseOf(serviceAction) + ": (invoke) representation of " + serviceId + "#" + actionId)
+                                .schema(new ObjectProperty())
+                );
+    }
+
+    void appendObjectActionInvokePath(
+            final Swagger swagger,
+            final ObjectAction objectAction) {
+
+        final ObjectSpecification objectSpec = objectAction.getOnType();
+        final String objectType = objectTypeFor(objectSpec);
+        final String actionId = objectAction.getId();
+
+        final List<ObjectActionParameter> parameters = objectAction.getParameters();
+        final Path path = new Path();
+        swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", objectType, actionId), path);
+
+        final Operation invokeOperation =
+                new Operation()
+                        .tag(objectType)
+                        .description(roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
+                        .parameter(
+                                new PathParameter()
+                                        .name("objectId")
+                                        .type("string"))
+                        .produces("application/json")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/action-result")
+                        .produces("application/json;profile=urn:org.apache.isis/v1")
+                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true");
+
+        final ActionSemantics.Of semantics = objectAction.getSemantics();
+        if(semantics.isSafeInNature()) {
+            path.get(invokeOperation);
+
+            for (final ObjectActionParameter parameter : parameters) {
+                invokeOperation
+                        .parameter(
+                                new QueryParameter()
+                                        .name(parameter.getId())
+                                        .description(roSpec("2.9.1") + (!Strings.isNullOrEmpty(parameter.getDescription())? (": " + parameter.getDescription()) : ""))
+                                        .required(false)
+                                        .type("string")
+                        );
+            }
+            if(!parameters.isEmpty()) {
+                invokeOperation.parameter(new QueryParameter()
+                        .name("x-isis-querystring")
+                        .description(roSpec("2.10") + ": all (formal) arguments as base64 encoded string")
+                        .required(false)
+                        .type("string"));
+            }
+
+        } else {
+            if (semantics.isIdempotentInNature()) {
+                path.put(invokeOperation);
+            } else {
+                path.post(invokeOperation);
+            }
+
+            final ModelImpl bodyParam =
+                    new ModelImpl()
+                            .type("object");
+            for (final ObjectActionParameter parameter : parameters) {
+
+                final Property valueProperty;
+                // TODO: need to switch on parameter's type and create appropriate impl of valueProperty
+                // if(parameter.getSpecification().isValue()) ...
+                valueProperty = stringProperty();
+
+                bodyParam
+                        .property(parameter.getId(),
+                                new ObjectProperty()
+                                        .property("value", valueProperty)
+                        );
+            }
+
+            invokeOperation
+                    .consumes("application/json")
+                    .parameter(
+                            new BodyParameter()
+                                    .name("body")
+                                    .schema(bodyParam));
+
+        }
+
+        invokeOperation
+                .response(
+                        200, new Response()
+                                .description(roSpecForResponseOf(objectAction) + ": (invoke) representation of " + objectType + "#" + actionId)
                                 .schema(new ObjectProperty())
                 );
     }
@@ -394,15 +557,39 @@ public class SwaggerSpecGenerator {
         }
     }
 
-    boolean isVisible(final SwaggerService.Visibility visibility, final DomainServiceFacet domainServiceFacet) {
-        if (domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_REST_ONLY) {
-            return true;
-        }
-        if (visibility.isPublic()) {
+    private boolean isVisibleForPublic(final ObjectAction objectAction) {
+        final ObjectSpecification specification = objectAction.getReturnType();
+        boolean visible = isVisibleForPublic(specification);
+        if(!visible) {
             return false;
         }
-        return domainServiceFacet.getNatureOfService() == NatureOfService.VIEW_MENU_ONLY ||
-               domainServiceFacet.getNatureOfService() == NatureOfService.VIEW;
+        List<ObjectSpecification> parameterTypes = objectAction.getParameterTypes();
+        for (ObjectSpecification parameterType : parameterTypes) {
+            boolean paramVisible = isVisibleForPublic(parameterType);
+            if(!paramVisible) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isVisibleForPublic(final ObjectSpecification specification) {
+        if (specification == null) {
+            return true;
+        }
+        if(specification.isViewModel()) {
+            return true;
+        }
+        if(specification.isValue()) {
+            return true;
+        }
+        if(specification.isParentedOrFreeCollection()) {
+            TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
+            ObjectSpecification elementSpec = typeOfFacet.valueSpec();
+            return isVisibleForPublic(elementSpec);
+        }
+        final Class<?> correspondingClass = specification.getCorrespondingClass();
+        return correspondingClass == void.class || correspondingClass == Void.class;
     }
 
     private ModelImpl newModel(final String description) {
