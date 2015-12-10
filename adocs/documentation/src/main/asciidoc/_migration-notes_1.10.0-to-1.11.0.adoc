@@ -29,3 +29,30 @@ If your application is bootstrapped using an `AppManifest` (recommended; ee
 xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[here]) then the `JaxbService` will automatically be discovered and
  registered.  However, if you are still using the older `isis.properties` configuration file to explicitly register
  services then you will need to add in this service.
+
+
+== Swagger
+
+Update the `web.xml`:
+
+[source,xml]
+----
+<servlet>
+    <servlet-name>WebjarsServlet</servlet-name>
+    <servlet-class>org.webjars.servlet.WebjarsServlet</servlet-class>
+    <init-param>
+        <param-name>disableCache</param-name>
+        <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>2</load-on-startup>
+</servlet>
+<servlet-mapping>
+    <servlet-name>WebjarsServlet</servlet-name>
+    <url-pattern>/webjars/*</url-pattern>
+</servlet-mapping>
+----
+
+
+The text of the simple archetype's `about/index.html` has also changed; the `<li`> for the `/restful` URL has been
+replaced with a `/swagger-ui` URL.
+

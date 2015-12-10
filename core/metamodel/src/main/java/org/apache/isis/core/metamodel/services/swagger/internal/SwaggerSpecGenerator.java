@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.commons.factory.InstanceUtil;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
@@ -61,6 +62,7 @@ import io.swagger.util.Yaml;
 public class SwaggerSpecGenerator {
 
     private final SpecificationLoader specificationLoader;
+    private final ValuePropertyFactory valuePropertyFactory = new ValuePropertyFactory();
 
     public SwaggerSpecGenerator(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
@@ -122,7 +124,7 @@ public class SwaggerSpecGenerator {
             appendServicePath(swagger, serviceSpec);
 
             for (final ObjectAction serviceAction : serviceActions) {
-                appendServiceActionInvokePath(swagger, serviceAction);
+                appendServiceActionInvokePath(swagger, serviceSpec, serviceAction);
             }
         }
     }
@@ -157,14 +159,14 @@ public class SwaggerSpecGenerator {
                 continue;
             }
             final ModelImpl isisModel = appendObjectPathAndModelDefinitions(swagger, objectSpec);
-            appendObjectModel(isisModel, objectProperties, objectCollections);
+            updateObjectModel(isisModel, objectSpec, objectProperties, objectCollections);
 
             for (final OneToManyAssociation objectCollection : objectCollections) {
-                appendCollectionTo(swagger, objectCollection);
+                appendCollectionTo(swagger, objectSpec, objectCollection);
             }
 
             for (final ObjectAction objectAction : objectActions) {
-                appendObjectActionInvokePath(swagger, objectAction);
+                appendObjectActionInvokePath(swagger, objectSpec, objectAction);
             }
         }
     }
@@ -258,15 +260,24 @@ public class SwaggerSpecGenerator {
         swagger.addDefinition("LinkModel",
                 new ModelImpl()
                     .type("object")
-                    .property("rel", stringProperty())
-                    .property("href", stringProperty())
-                    .property("title", stringProperty())
-                    .property("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE"))
-                    .property("type", stringProperty())
-                    .property("arguments", new ObjectProperty())
+                    .property("rel", stringProperty().description("the relationship of the resource to this referencing resource"))
+                    .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                    .property("title", stringProperty().description("title to render"))
+                    .property("method", stringPropertyEnum("GET", "POST", "PUT", "DELETE").description("HTTP verb to access"))
+                    .property("type", stringProperty().description("Content-Type recognized by the resource (for HTTP Accept header)"))
+                    .property("arguments", new ObjectProperty().description("Any arguments, to send as query strings or in body"))
+                    .property("value", stringProperty().description("the representation of the link if followed"))
                     .required("rel")
                     .required("href")
                     .required("method")
+        );
+
+        swagger.addDefinition("HrefModel",
+                new ModelImpl()
+                    .type("object")
+                    .description("Abbreviated version of the Link resource, used primarily to reference non-value objects")
+                    .property("href", stringProperty().description("the hyperlink reference (URL) of the resource"))
+                    .required("href")
         );
 
     }
@@ -307,8 +318,6 @@ public class SwaggerSpecGenerator {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
 
-        final String isisModelDefinition = objectType + "Model";
-        final String restfulObjectsModelDefinition = objectType + "RestfulObjectsModel";
         final String tag = objectType.startsWith("org.apache.isis")? "> apache isis internals": objectType;
         final Operation operation = new Operation();
         path.get(
@@ -328,6 +337,7 @@ public class SwaggerSpecGenerator {
         // per https://github.com/swagger-api/swagger-spec/issues/146, swagger 2.0 doesn't support multiple
         // modelled representations per path and response code;
         // in particular cannot associate representation/model with Accept header ('produces(...) method)
+        final String restfulObjectsModelDefinition = objectType + "RestfulObjectsModel";
         if (false) {
             operation.response(200,
                     newResponse(Caching.TRANSACTIONAL)
@@ -343,13 +353,12 @@ public class SwaggerSpecGenerator {
             swagger.addDefinition(restfulObjectsModelDefinition, roSpecModel);
         }
 
+        final String isisModelDefinition = objectType + "Model";
         operation
                 .response(200,
                         newResponse(Caching.TRANSACTIONAL)
-                                .description("if Accept: application/json;profile=urn:org.apache.isis/v1")
-                                .schema(new RefProperty("#/definitions/"
-                                        + isisModelDefinition)));
-
+                                .description(objectType + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                                .schema(new RefProperty("#/definitions/" + isisModelDefinition)));
 
         final ModelImpl isisModel = new ModelImpl();
         swagger.addDefinition(isisModelDefinition, isisModel);
@@ -380,9 +389,9 @@ public class SwaggerSpecGenerator {
 
     void appendServiceActionInvokePath(
             final Swagger swagger,
+            final ObjectSpecification serviceSpec,
             final ObjectAction serviceAction) {
 
-        final ObjectSpecification serviceSpec = serviceAction.getOnType();
         final String serviceId = serviceIdFor(serviceSpec);
         final String actionId = serviceAction.getId();
 
@@ -457,16 +466,55 @@ public class SwaggerSpecGenerator {
         invokeOperation
                 .response(
                         200, new Response()
-                                .description(roSpecForResponseOf(serviceAction) + ": (invoke) representation of " + serviceId + "#" + actionId)
-                                .schema(new ObjectProperty())
+                                .description(serviceId + "#" + actionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                                .schema(actionReturnTypeFor(serviceAction))
                 );
+    }
+
+    void appendCollectionTo(
+            final Swagger swagger,
+            final ObjectSpecification objectSpec,
+            final OneToManyAssociation collection) {
+
+        final String objectType = objectTypeFor(objectSpec);
+        final String collectionId = collection.getId();
+
+        final Path path = new Path();
+        swagger.path(String.format("/objects/%s/{objectId}/collections/%s", objectType, collectionId), path);
+
+        final Operation collectionOperation =
+                new Operation()
+                        .tag(objectType)
+                        .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
+                        .parameter(
+                                new PathParameter()
+                                        .name("objectId")
+                                        .type("string"))
+                        .produces("application/json;profile=urn:org.apache.isis/v1")
+                        .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
+                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/object-collection");
+
+        path.get(collectionOperation);
+        collectionOperation
+                .response(
+                        200, new Response()
+                                .description(objectType + "#" + collectionId + " , if Accept: application/json;profile=urn:org.apache.isis/v1")
+                                .schema(modelFor(collection))
+                );
+    }
+
+    private Property modelFor(final OneToManyAssociation collection) {
+        ObjectSpecification collectionSpecification = collection.getSpecification();
+        return new ArrayProperty()
+                .description("List of " + objectTypeFor(collectionSpecification))
+                    .items(modelFor(collectionSpecification));
     }
 
     void appendObjectActionInvokePath(
             final Swagger swagger,
+            final ObjectSpecification objectSpec,
             final ObjectAction objectAction) {
 
-        final ObjectSpecification objectSpec = objectAction.getOnType();
         final String objectType = objectTypeFor(objectSpec);
         final String actionId = objectAction.getId();
 
@@ -544,19 +592,97 @@ public class SwaggerSpecGenerator {
         invokeOperation
                 .response(
                         200, new Response()
-                                .description(roSpecForResponseOf(objectAction) + ": (invoke) representation of " + objectType + "#" + actionId)
-                                .schema(new ObjectProperty())
+                                .description(objectType + "#" + actionId)
+                                .schema(actionReturnTypeFor(objectAction))
                 );
     }
 
-    void appendCollectionTo(final Swagger members, final OneToManyAssociation serviceAction) {
+    Property actionReturnTypeFor(final ObjectAction objectAction) {
 
+        final ObjectSpecification specification = objectAction.getReturnType();
+        TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+        if(typeOfFacet != null) {
+            ObjectSpecification elementSpec = typeOfFacet.valueSpec();
+            if(elementSpec != null) {
+                return new ArrayProperty()
+                        .items(modelFor(elementSpec));
+            }
+        }
+        return modelFor(specification);
     }
 
-    void appendObjectModel(
-            final ModelImpl swagger,
-            final List<OneToOneAssociation> objectProperties, final List<OneToManyAssociation> objectCollections) {
+    private Property modelFor(final ObjectSpecification specification) {
+        if(specification == null) {
+            return new ObjectProperty();
+        }
 
+        // no "simple" representation for void or values
+        final Class<?> correspondingClass = specification.getCorrespondingClass();
+        if(correspondingClass == void.class || correspondingClass == Void.class) {
+            return new ObjectProperty();
+        }
+        // no "simple" representation for values
+        final Property property = valuePropertyFactory.newProperty(correspondingClass);
+        if(property != null) {
+            // was recognized as a value
+            return new ObjectProperty();
+        }
+
+        if(specification.isParentedOrFreeCollection()) {
+            TypeOfFacet typeOfFacet = specification.getFacet(TypeOfFacet.class);
+            if(typeOfFacet != null) {
+                ObjectSpecification elementSpec = typeOfFacet.valueSpec();
+                if(elementSpec != null) {
+                    return new ArrayProperty()
+                            .items(modelFor(elementSpec));
+                }
+            }
+        }
+
+        return new RefProperty("#/definitions/" + objectTypeFor(specification) + "Model");
+    }
+
+    void updateObjectModel(
+            final ModelImpl model,
+            final ObjectSpecification objectSpecification,
+            final List<OneToOneAssociation> objectProperties,
+            final List<OneToManyAssociation> objectCollections) {
+
+        final String objectType = objectTypeFor(objectSpecification);
+        final String className = objectSpecification.getFullIdentifier();
+
+        model
+                .type("object")
+                .description(String.format("%s (%s)", objectType, className));
+
+        for (OneToOneAssociation objectProperty : objectProperties) {
+            model.property(
+                    objectProperty.getId(),
+                    propertyFor(objectProperty.getSpecification()));
+        }
+
+        for (OneToManyAssociation objectCollection : objectCollections) {
+            final ObjectSpecification elementSpec = objectCollection.getSpecification();
+            final String elementModelDefinition = objectTypeFor(elementSpec) + "Model";
+
+            model.property(
+                    objectCollection.getId(),
+                    new ArrayProperty()
+                    .items(new RefProperty("#/definitions/" + elementModelDefinition))
+            );
+        }
+    }
+
+    Property propertyFor(final ObjectSpecification objectSpecification) {
+        final Property property =
+                valuePropertyFactory.newProperty(objectSpecification.getCorrespondingClass());
+        if (property != null) {
+            return property;
+        }
+        else {
+            // assume this is a reference to an entity/view model, meaning we use an href
+            return refToHrefModel();
+        }
     }
 
     static String roSpecForResponseOf(final ObjectAction action) {
@@ -608,7 +734,15 @@ public class SwaggerSpecGenerator {
 
     static ArrayProperty arrayOfLinks() {
         return new ArrayProperty()
-                .items(new RefProperty("#/definitions/LinkModel"));
+                .items(refToLinkModel());
+    }
+
+    static RefProperty refToLinkModel() {
+        return new RefProperty("#/definitions/LinkModel");
+    }
+
+    static RefProperty refToHrefModel() {
+        return new RefProperty("#/definitions/HrefModel");
     }
 
     static ArrayProperty arrayOfStrings() {
