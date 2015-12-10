@@ -18,6 +18,10 @@
  */
 package org.apache.isis.core.metamodel.services.swagger;
 
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +40,31 @@ public class SwaggerServiceDefault implements SwaggerService, SpecificationLoade
     @SuppressWarnings("unused")
     private final static Logger LOG = LoggerFactory.getLogger(SwaggerServiceDefault.class);
 
+    public static final String KEY_RESTFUL_BASE_PATH = "isis.services.swagger.restfulBasePath";
+    public static final String KEY_RESTFUL_BASE_PATH_DEFAULT = "/restful";
+
+    private String basePath;
+
+    @PostConstruct
+    public void init(final Map<String,String> properties) {
+        this.basePath = getPropertyElse(properties, KEY_RESTFUL_BASE_PATH, KEY_RESTFUL_BASE_PATH_DEFAULT);
+    }
+
+    static String getPropertyElse(final Map<String, String> properties, final String key, final String dflt) {
+        String basePath = properties.get(key);
+        if(basePath == null) {
+            basePath = dflt;
+        }
+        return basePath;
+    }
+
     @Override
     public String generateSwaggerSpec(
             final Visibility visibility,
             final Format format) {
 
         final SwaggerSpecGenerator swaggerSpecGenerator = new SwaggerSpecGenerator(specificationLoader);
-        final String swaggerSpec = swaggerSpecGenerator.generate(visibility, format);
+        final String swaggerSpec = swaggerSpecGenerator.generate(basePath, visibility, format);
         return swaggerSpec;
     }
 

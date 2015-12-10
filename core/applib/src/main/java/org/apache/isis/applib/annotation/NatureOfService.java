@@ -56,6 +56,26 @@ public enum NatureOfService {
      * Equivalent to annotating all actions with both (the now deprecated) {@link org.apache.isis.applib.annotation.NotInServiceMenu} and {@link org.apache.isis.applib.annotation.NotContributed} annotations).
      * </p>
      */
-    DOMAIN
+    DOMAIN;
+
+    boolean isViewRestOnly() {
+        return this == VIEW_REST_ONLY;
+    }
+    boolean isView() {
+        return this == VIEW;
+    }
+    boolean isViewMenuOnly() {
+        return this == VIEW_MENU_ONLY;
+    }
+    boolean isViewContributionsOnly() {
+        return this == VIEW_CONTRIBUTIONS_ONLY;
+    }
+    boolean isDomain() {
+        return this == DOMAIN;
+    }
+
+    boolean isViewOrViewMenuOnly() {
+        return isView() || isViewMenuOnly();
+    }
 
 }
