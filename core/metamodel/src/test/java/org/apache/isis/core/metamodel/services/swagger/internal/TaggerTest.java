@@ -24,43 +24,43 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class SwaggerSpecGeneratorTest {
+public class TaggerTest {
 
-    public static class TagFor extends SwaggerSpecGeneratorTest {
+    public static class TagFor extends TaggerTest {
 
         @Test
         public void fullyQualifiedClass() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("foo.bar.Abc");
+            String tag = new Tagger().tagFor("foo.bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void jaxb() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto");
+            String tag = new Tagger().tagFor("todoapp.app.viewmodels.todoitem.v1_0.ToDoItemDto", null);
             assertThat(tag, is(equalTo("todoitem")));
         }
 
         @Test
         public void schemaClass() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("bar.Abc");
+            String tag = new Tagger().tagFor("bar.Abc", null);
             assertThat(tag, is(equalTo("bar")));
         }
 
         @Test
         public void noPackage() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("Abc");
+            String tag = new Tagger().tagFor("Abc", null);
             assertThat(tag, is(equalTo("Abc")));
         }
 
         @Test
         public void isisAddons() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("org.isisaddons.module.security.app.feature.ApplicationClass");
+            String tag = new Tagger().tagFor("org.isisaddons.module.security.app.feature.ApplicationClass", null);
             assertThat(tag, is(equalTo("isisaddons security")));
         }
 
         @Test
         public void applib() throws Exception {
-            String tag = SwaggerSpecGenerator.tagFor("org.apache.isis.applib.fixturescripts.FixtureResult");
+            String tag = new Tagger().tagFor("org.apache.isis.applib.fixturescripts.FixtureResult", null);
             assertThat(tag, is(equalTo("> apache isis internals")));
         }
 

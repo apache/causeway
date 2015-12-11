@@ -116,6 +116,8 @@ public class ValuePropertyFactory {
                 return new StringProperty();
             }
         };
+        propertyFactoryByClass.put(char.class, stringFactory);
+        propertyFactoryByClass.put(Character.class, stringFactory);
         propertyFactoryByClass.put(char[].class, stringFactory);
         propertyFactoryByClass.put(String.class, stringFactory);
 

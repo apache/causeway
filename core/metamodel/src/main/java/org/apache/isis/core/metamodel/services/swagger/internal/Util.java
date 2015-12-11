@@ -129,13 +129,15 @@ public final class Util {
 
     static List<ObjectAction> actionsOf(
             final ObjectSpecification objectSpec,
-            final SwaggerService.Visibility visibility) {
+            final SwaggerService.Visibility visibility,
+            final ClassExcluder classExcluder) {
         final List<ActionType> actionTypes = actionTypesFor(visibility);
 
         return objectSpec.getObjectActions(actionTypes, Contributed.INCLUDED, new Filter<ObjectAction>() {
             @Override
             public boolean accept(final ObjectAction objectAction) {
-                return !visibility.isPublic() || isVisibleForPublic(objectAction);
+                return !classExcluder.exclude(objectAction) &&
+                        !visibility.isPublic() || isVisibleForPublic(objectAction);
             }
         });
     }
