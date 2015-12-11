@@ -200,6 +200,7 @@ public final class TranslatableString {
      *     {@link Exception#getMessage() message} when only a translatable message has been provided.
      * </p>
      */
+    @Programmatic
     public String getPattern() {
         return !isPluralForm() || number == 1 ? getSingularText() : getPluralText();
     }

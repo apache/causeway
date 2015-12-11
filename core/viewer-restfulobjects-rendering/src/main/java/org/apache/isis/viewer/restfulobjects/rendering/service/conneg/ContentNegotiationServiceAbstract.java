@@ -133,12 +133,29 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
             final List<MediaType> acceptableMediaTypes,
             final String parameter, final String parameterValue) {
         for (MediaType mediaType : acceptableMediaTypes) {
-            final String paramValue = mediaType.getParameters().get(parameter);
+            final String paramValue = sanitize(mediaType.getParameters().get(parameter));
             if (Objects.equals(paramValue, parameterValue)) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Remove any single quotes.
+     */
+    private String sanitize(String mediaParam) {
+        if (mediaParam == null) {
+            return null;
+        }
+        mediaParam = mediaParam.trim();
+        if(mediaParam.startsWith("'")) {
+            mediaParam = mediaParam.substring(1);
+        }
+        if(mediaParam.endsWith("'")) {
+            mediaParam = mediaParam.substring(0, mediaParam.length()-1);
+        }
+        return mediaParam;
     }
 
     //endregion

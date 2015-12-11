@@ -112,6 +112,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
     }
 
 
+
     /**
      * version (derived property)
      */

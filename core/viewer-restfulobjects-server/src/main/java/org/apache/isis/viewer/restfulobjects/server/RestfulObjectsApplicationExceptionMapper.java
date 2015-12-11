@@ -51,11 +51,17 @@ public class RestfulObjectsApplicationExceptionMapper implements ExceptionMapper
             builder.header(RestfulResponse.Header.WARNING.getName(), RestfulResponse.Header.WARNING.render(message));
         }
 
-        // xml handling
-        boolean xml = false;
+        // xml handling (only if also not text/html, ie what browsers would send).
+        boolean html = false;
         final List<MediaType> acceptableMediaTypes = httpHeaders.getAcceptableMediaTypes();
         for (MediaType acceptableMediaType : acceptableMediaTypes) {
-            xml = xml || acceptableMediaType.getSubtype().equals("xml");
+            html = html || (acceptableMediaType.getType().equals("text") && acceptableMediaType.getSubtype().equals("html"));
+        }
+        boolean xml = false;
+        if(!html) {
+            for (MediaType acceptableMediaType : acceptableMediaTypes) {
+                xml = xml || acceptableMediaType.getSubtype().equals("xml");
+            }
         }
 
         // body and content-type

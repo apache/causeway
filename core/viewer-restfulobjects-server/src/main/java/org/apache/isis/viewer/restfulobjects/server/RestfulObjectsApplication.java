@@ -23,6 +23,7 @@ import org.apache.isis.viewer.restfulobjects.server.resources.DomainObjectResour
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainServiceResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainTypeResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.HomePageResourceServerside;
+import org.apache.isis.viewer.restfulobjects.server.resources.SwaggerSpecResource;
 import org.apache.isis.viewer.restfulobjects.server.resources.UserResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.VersionResourceServerside;
 
@@ -37,6 +38,8 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         addClass(DomainObjectResourceServerside.class);
         addClass(DomainServiceResourceServerside.class);
         addClass(VersionResourceServerside.class);
+
+        addClass(SwaggerSpecResource.class);
 
         final RestfulObjectsJaxbWriterForXml roWriter = new RestfulObjectsJaxbWriterForXml();
         addSingleton(roWriter);
