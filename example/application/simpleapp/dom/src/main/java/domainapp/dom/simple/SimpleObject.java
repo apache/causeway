@@ -18,13 +18,9 @@
  */
 package domainapp.dom.simple;
 
-import java.util.List;
-
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
@@ -115,10 +111,6 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
 
-
-    public List<SimpleObject> getOthers() {
-        return Lists.newArrayList();
-    }
 
 
     /**

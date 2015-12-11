@@ -18,22 +18,28 @@
  */
 package org.apache.isis.core.metamodel.services.swagger.internal;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.ActionSemantics;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.fixturescripts.FixtureResult;
 import org.apache.isis.applib.services.swagger.SwaggerService;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.mixin.MixinFacet;
 import org.apache.isis.core.metamodel.facets.object.objectspecid.ObjectSpecIdFacet;
-import org.apache.isis.core.metamodel.services.ServiceUtil;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -101,7 +107,8 @@ public class SwaggerSpecGenerator {
     }
 
     void appendServicePathsAndDefinitions(final Swagger swagger, final SwaggerService.Visibility visibility) {
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
+        // take copy to avoid concurrent modification exception
+        final Collection<ObjectSpecification> allSpecs = Lists.newArrayList(specificationLoader.allSpecifications());
         for (final ObjectSpecification serviceSpec :  allSpecs) {
 
             final DomainServiceFacet domainServiceFacet = serviceSpec.getFacet(DomainServiceFacet.class);
@@ -130,7 +137,8 @@ public class SwaggerSpecGenerator {
     }
 
     void appendObjectPathsAndDefinitions(final Swagger swagger, final SwaggerService.Visibility visibility) {
-        final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
+        // take copy to avoid concurrent modification exception
+        final Collection<ObjectSpecification> allSpecs = Lists.newArrayList(specificationLoader.allSpecifications());
         for (final ObjectSpecification objectSpec : allSpecs) {
 
             final DomainServiceFacet domainServiceFacet = objectSpec.getFacet(DomainServiceFacet.class);
@@ -148,6 +156,10 @@ public class SwaggerSpecGenerator {
                 continue;
             }
             if(objectSpec.isValue()) {
+                continue;
+            }
+            // special cases
+            if(objectSpec.getCorrespondingClass() == FixtureResult.class) {
                 continue;
             }
 
@@ -191,17 +203,17 @@ public class SwaggerSpecGenerator {
                 newModel(Util.roSpec("5.2")));
 
         swagger.path("/user",
-                    new Path()
-                            .get(new Operation()
-                                    .tag(tag)
-                                    .description(Util.roSpec("6.1"))
-                                    .produces("application/json")
-                                    .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
-                                    .response(200,
-                                            newResponse(Caching.USER_INFO)
-                                                    .description("OK")
-                                                    .schema(new RefProperty("#/definitions/RestfulObjectsSupportingUserModel"))
-                                    )));
+                new Path()
+                        .get(new Operation()
+                                .tag(tag)
+                                .description(Util.roSpec("6.1"))
+                                .produces("application/json")
+                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/user")
+                                .response(200,
+                                        newResponse(Caching.USER_INFO)
+                                                .description("OK")
+                                                .schema(new RefProperty("#/definitions/RestfulObjectsSupportingUserModel"))
+                                )));
         swagger.addDefinition("RestfulObjectsSupportingUserModel",
                 newModel(Util.roSpec("6.2"))
                         .property("userName", stringProperty())
@@ -211,17 +223,17 @@ public class SwaggerSpecGenerator {
                         .required("roles"));
 
         swagger.path("/services",
-                        new Path()
-                                .get(new Operation()
-                                        .tag(tag)
-                                        .description(Util.roSpec("7.1"))
-                                        .produces("application/json")
-                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
-                                        .response(200,
-                                                newResponse(Caching.USER_INFO)
-                                                        .description("OK")
-                                                        .schema(new RefProperty("#/definitions/RestfulObjectsSupportingServicesModel"))
-                                        )));
+                new Path()
+                        .get(new Operation()
+                                .tag(tag)
+                                .description(Util.roSpec("7.1"))
+                                .produces("application/json")
+                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/services")
+                                .response(200,
+                                        newResponse(Caching.USER_INFO)
+                                                .description("OK")
+                                                .schema(new RefProperty("#/definitions/RestfulObjectsSupportingServicesModel"))
+                                )));
         swagger.addDefinition("RestfulObjectsSupportingServicesModel",
                 newModel(Util.roSpec("7.2"))
                         .property("value", arrayOfLinks())
@@ -229,17 +241,17 @@ public class SwaggerSpecGenerator {
                         .required("roles"));
 
         swagger.path("/version",
-                        new Path()
-                                .get(new Operation()
-                                        .tag(tag)
-                                        .description(Util.roSpec("8.1"))
-                                        .produces("application/json")
-                                        .produces("application/json;profile=urn:org.restfulobjects:repr-types/RestfulObjectsSupportingServicesModel")
-                                        .response(200,
-                                                newResponse(Caching.NON_EXPIRING)
-                                                        .description("OK")
-                                                        .schema(new ObjectProperty())
-                                        )));
+                new Path()
+                        .get(new Operation()
+                                .tag(tag)
+                                .description(Util.roSpec("8.1"))
+                                .produces("application/json")
+                                .produces("application/json;profile=urn:org.restfulobjects:repr-types/RestfulObjectsSupportingServicesModel")
+                                .response(200,
+                                        newResponse(Caching.NON_EXPIRING)
+                                                .description("OK")
+                                                .schema(new ObjectProperty())
+                                )));
         swagger.addDefinition("RestfulObjectsSupportingServicesModel",
                 newModel(Util.roSpec("8.2"))
                         .property("specVersion", stringProperty())
@@ -290,9 +302,11 @@ public class SwaggerSpecGenerator {
         swagger.path(String.format("/services/%s", serviceId), path);
 
         final String serviceModelDefinition = serviceId + "Model";
+
+        final String tag = tagFor(serviceId);
         path.get(
                 new Operation()
-                        .tag(serviceId)
+                        .tag(tag)
                         .description(Util.roSpec("15.1"))
                         .produces("application/json")
                         .produces("application/json;profile=urn:org.restfulobjects:repr-types/object")
@@ -318,10 +332,9 @@ public class SwaggerSpecGenerator {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}", objectType), path);
 
-        final String tag = objectType.startsWith("org.apache.isis")? "> apache isis internals": objectType;
+        final String tag = tagFor(objectType);
         final Operation operation = new Operation();
-        path.get(
-                operation);
+        path.get(operation);
         operation
                 .tag(tag)
                 .description(Util.roSpec("14.1"))
@@ -399,9 +412,10 @@ public class SwaggerSpecGenerator {
         final Path path = new Path();
         swagger.path(String.format("/services/%s/actions/%s/invoke", serviceId, actionId), path);
 
+        final String tag = tagFor(serviceId);
         final Operation invokeOperation =
                 new Operation()
-                        .tag(serviceId)
+                        .tag(tag)
                         .description(Util.roSpec("19.1") + ": (invoke) resource of " + serviceId + "#" + actionId)
                         .produces("application/json;profile=urn:org.apache.isis/v1")
                         .produces("application/json;profile=urn:org.apache.isis/v1;suppress=true")
@@ -482,9 +496,10 @@ public class SwaggerSpecGenerator {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}/collections/%s", objectType, collectionId), path);
 
+        final String tag = tagFor(objectType);
         final Operation collectionOperation =
                 new Operation()
-                        .tag(objectType)
+                        .tag(tag)
                         .description(Util.roSpec("17.1") + ": resource of " + objectType + "#" + collectionId)
                         .parameter(
                                 new PathParameter()
@@ -522,9 +537,10 @@ public class SwaggerSpecGenerator {
         final Path path = new Path();
         swagger.path(String.format("/objects/%s/{objectId}/actions/%s/invoke", objectType, actionId), path);
 
+        final String tag = tagFor(objectType);
         final Operation invokeOperation =
                 new Operation()
-                        .tag(objectType)
+                        .tag(tag)
                         .description(Util.roSpec("19.1") + ": (invoke) resource of " + objectType + "#" + actionId)
                         .parameter(
                                 new PathParameter()
@@ -712,7 +728,25 @@ public class SwaggerSpecGenerator {
     // TODO: this is horrid, there ought to be a facet we can call instead...
     static String serviceIdFor(final ObjectSpecification serviceSpec) {
         Object tempServiceInstance = InstanceUtil.createInstance(serviceSpec.getCorrespondingClass());
-        return ServiceUtil.id(tempServiceInstance);
+        return serviceId(tempServiceInstance);
+    }
+
+    static String serviceId(final Object object) {
+        final Class<?> cls = object.getClass();
+        try {
+            final Method m = cls.getMethod("getId", new Class[0]);
+            return (String) m.invoke(object, new Object[0]);
+        } catch (final SecurityException e) {
+            throw new IsisException(e);
+        } catch (final NoSuchMethodException e) {
+            return object.getClass().getName();
+        } catch (final IllegalArgumentException e) {
+            throw new IsisException(e);
+        } catch (final IllegalAccessException e) {
+            throw new IsisException(e);
+        } catch (final InvocationTargetException e) {
+            throw new IsisException(e);
+        }
     }
 
     static String objectTypeFor(final ObjectSpecification objectSpec) {
@@ -752,5 +786,41 @@ public class SwaggerSpecGenerator {
     static Response newResponse(final Caching caching) {
         return Util.withCachingHeaders(new Response(), caching);
     }
+
+    static Pattern tagPatternIsisAddons = Pattern.compile("^org\\.isisaddons\\.module\\.([^\\.]+)\\.(.+)$");
+    static Pattern tagPatternForFqcn = Pattern.compile("^.*\\.([^\\.]+)\\.([^\\.]+)$");
+    static Pattern tagPatternForSchemaTable = Pattern.compile("^([^\\.]+)\\.([^\\.]+)$");
+    static Pattern tagPatternForJaxbDto = Pattern.compile("^([^\\.]+)\\.(v[0-9][^\\.]*)([^\\.]+)$");
+    static String tagFor(final String str) {
+        if (str.startsWith("org.apache.isis")) {
+            return "> apache isis internals";
+        }
+
+        Matcher matcher;
+        matcher = tagPatternIsisAddons.matcher(str);
+        if (matcher.matches()) {
+            return "isisaddons " + matcher.group(1);
+        }
+        matcher = Pattern.compile("^.*\\.([^\\.]+)\\.(v[0-9][^\\.]*)\\.([^\\.]+)$").matcher(str);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        matcher = tagPatternForFqcn.matcher(str);
+        if (matcher.matches()) {
+            return matcher.group(1);
+        }
+        matcher = tagPatternForSchemaTable.matcher(str);
+        if (matcher.matches()) {
+            // special cases for other Isis addons
+            if(str.startsWith("isis")) {
+                return "isisaddons " + str.substring(4, str.indexOf("."));
+            }
+            return matcher.group(1);
+        }
+
+
+        return str;
+    }
+
 
 }
