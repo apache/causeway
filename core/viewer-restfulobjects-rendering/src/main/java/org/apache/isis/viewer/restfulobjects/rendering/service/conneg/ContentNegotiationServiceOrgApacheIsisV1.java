@@ -56,7 +56,7 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 @DomainServiceLayout(
         menuOrder = "1500"
 )
-public class ContentNegotiationServiceSimplified extends ContentNegotiationServiceAbstract {
+public class ContentNegotiationServiceOrgApacheIsisV1 extends ContentNegotiationServiceAbstract {
 
     /**
      * Unlike RO v1.0, use a single content-type of <code>application/json;profile="urn:org.apache.isis/v1"</code>.
@@ -350,6 +350,8 @@ public class ContentNegotiationServiceSimplified extends ContentNegotiationServi
             rootRepresentation.mapPut("$$href", upHref);
             final String upTitle = propertyValueRepresentation.getString("links[rel=up].title");
             rootRepresentation.mapPut("$$title", upTitle);
+            final String upInstanceId = upHref.substring(upHref.lastIndexOf("/")+1);
+            rootRepresentation.mapPut("$$instanceId", upInstanceId);
 
             final JsonRepresentation value = propertyValueRepresentation.getRepresentation("value");
             rootRepresentation.mapPut(property.getId(), value);
