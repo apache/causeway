@@ -89,6 +89,11 @@ public class IsisSessionFilter implements Filter {
     public static final String WHEN_NO_SESSION_KEY = "whenNoSession";
 
     /**
+     * Which URLs to ignore (eg <code>/restful/swagger</code> so that swagger specs can be accessed from the swagger-ui)
+     */
+    public static final String PASS_THRU_KEY = "passThru";
+
+    /**
      * Init parameter key to read the restricted list of paths (if
      * {@link #WHEN_NO_SESSION_KEY} is for {@link WhenNoSession#RESTRICTED}).
      * 
@@ -130,6 +135,8 @@ public class IsisSessionFilter implements Filter {
      */
     public static final String QUERY_STRING_FORCE_LOGOUT = "__isis_force_logout";
 
+    private String passThru;
+
     static void redirect(final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final String redirectTo) throws IOException {
         httpResponse.sendRedirect(StringExtensions.combinePath(httpRequest.getContextPath(), redirectTo));
     }
@@ -149,8 +156,7 @@ public class IsisSessionFilter implements Filter {
             }
         },
         /**
-         * the destination servlet is expected to know that there will be no
-         * open context
+         * the destination servlet is expected to know that there will be no open session, and handle the case appropriately
          */
         CONTINUE("continue") {
             @Override
@@ -159,8 +165,7 @@ public class IsisSessionFilter implements Filter {
             }
         },
         /**
-         * Allow access to a restricted list of URLs (else redirect to the first
-         * of that list of URLs)
+         * Allow access to a restricted list of URLs (else redirect to the first of that list of URLs)
          */
         RESTRICTED("restricted") {
             @Override
@@ -207,6 +212,7 @@ public class IsisSessionFilter implements Filter {
     public void init(final FilterConfig config) throws ServletException {
         authSessionStrategy = lookup(config.getInitParameter(AUTHENTICATION_SESSION_STRATEGY_KEY));
         lookupWhenNoSession(config);
+        lookupPassThru(config);
         lookupRedirectToOnException(config);
         lookupIgnoreExtensions(config);
     }
@@ -248,6 +254,12 @@ public class IsisSessionFilter implements Filter {
             }
             this.restrictedPaths = Lists.newArrayList(Splitter.on(",").split(restrictedPathsStr));
         }
+
+    }
+
+    private void lookupPassThru(final FilterConfig config) {
+
+        this.passThru = config.getInitParameter(PASS_THRU_KEY);
 
     }
 
@@ -297,6 +309,11 @@ public class IsisSessionFilter implements Filter {
                 return;
             }
 
+            if(requestIsPassThru(httpServletRequest)) {
+                chain.doFilter(request, response);
+                return;
+            }
+
             // authenticate
             final AuthenticationSession authSession =
                     authSessionStrategy.lookupValid(httpServletRequest, httpServletResponse);
@@ -324,6 +341,10 @@ public class IsisSessionFilter implements Filter {
             closeSession();
         }
 
+    }
+
+    protected boolean requestIsPassThru(final HttpServletRequest httpServletRequest) {
+        return passThru != null && httpServletRequest.getRequestURI().startsWith(passThru);
     }
 
     private boolean requestIsIgnoreExtension(final IsisSessionFilter filter, final HttpServletRequest httpRequest) {

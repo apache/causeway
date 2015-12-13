@@ -384,23 +384,37 @@ The `IsisSessionFilter` is responsible for the (persistence) session management;
         <param-name>whenNoSession</param-name>                  <!--2-->
         <param-value>basicAuthChallenge</param-value>
     </init-param>
+    <init-param>
+        <param-name>passThru</param-name>                       <!--3-->
+        <param-value>/restful/swagger</param-value>
+    </init-param>
     <!--
     <init-param>
-        <param-name>restricted</param-name>                     <!--3-->
+        <param-name>restricted</param-name>                     <!--4-->
         <param-value>...</param-value>
     </init-param>
     <init-param>
-        <param-name>redirectToOnException</param-name>          <!--4-->
+        <param-name>redirectToOnException</param-name>          <!--5-->
         <param-value>...</param-value>
     </init-param>
     -->
 </filter>
 ----
 <1> pluggable strategy for determining what the authentication session (credentials) are of the request
-<2> what the servlet should do if no existing session was found; typically a 401, or can issue a Basic Auth challenge
-<3> List of paths that are allowed through even if not authenticated.  The servlets mapped to these paths are expected to be able to deal with there being no session. Typically they will be logon pages.
-<4> where to redirect to if an exception occurs.
+<2> what the servlet should do if no existing session was found.  Usual values are either `unauthorized` or `basicAuthChallenge`.  Discussed in more detail below.
+<3> (`1.11.0-SNAPSHOT`), specify which URIs to ignore and simply passthru.  Originally introduced to allow the SwaggerSpec resource (which does not require a session) to be invoked.
+<4> List of paths that are allowed through even if not authenticated.  The servlets mapped to these paths are expected to be able to deal with there being no session. Typically they will be logon pages.  See below for further details.
+<5> where to redirect to if an exception occurs.
 
+
+The `whenNoSession` parameter determines what the behaviour should be if no existing session can be found.  There are a number of predetermined values available:
+
+* `unauthorized` will generates a 401 response
+* `basicAuthChallenge` will also generate a 401 response, and also issues a Basic Auth challenge using `WWW-Authenticate` response header
+* `continue`, in which case the request is allowed to continue but the destination expected to know that there will be no open session
+* `restricted`, which allows access to a restricted list of URLs, otherwise will redirect to the first of that list of URLs
+
+If accessing the REST API through a web browser, then normally `basicAuthChallenge` is appropriate; the browser will automatically display a simple prompt.  If accessing the REST API through a custom Javascript app, then `unauthorized` is usually the one to use.
 
 This filter should be mapped to the `servlet-name` for the RestEasy `HttpServletDispatcher`; for example:
 
