@@ -19,13 +19,12 @@
 package org.apache.isis.viewer.restfulobjects.rendering;
 
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.runtime.system.DeploymentType;
 
 /**
  * TODO: roll-up in the future (introduced only so that API does not break)
  */
 public interface RendererContext4 extends RendererContext3 {
 
-    public InteractionInitiatedBy getInteractionInitiatedBy();
+    InteractionInitiatedBy getInteractionInitiatedBy();
 
 }

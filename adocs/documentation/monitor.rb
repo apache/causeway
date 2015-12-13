@@ -21,6 +21,7 @@ $CELLULOID_TEST=false
 #
 opts = Slop.parse do |o|
   o.int '-p', '--port', 'port (default: 4000)', default: 4000
+  o.bool '-x', '--suppress', 'suppress monitoring'
   o.bool '-b', '--browser', 'launch browser'
   o.bool '-h', '--help', 'help'
 end
@@ -120,45 +121,48 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
 end
 
 
-i=0
-lastTimeGenerated = Time.now - 10
+if not opts.suppress? then
+
+    i=0
+    lastTimeGenerated = Time.now - 10
 
 
 
-puts ""
-puts ""
-puts ""
-puts "monitoring..."
-puts ""
-
-
-#
-# then continue monitoring all directories
-#
-adocFiles = Dir.glob("src/main/asciidoc/**/*.adoc")
-directories = adocFiles.each{ |f| File.new(f) }.uniq{ |f| File.dirname(f) }.map{ |f| File.dirname(f) }
-
-puts "listening to: #{directories}"
-
-fileListener = Listen.to(directories) do |modified, added, removed|
-    unless modified.length==0
-        modified.each { |file|
-            i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
-        }
+    puts ""
+    puts ""
+    puts ""
+    puts "monitoring..."
+    puts ""
+    
+    
+    #
+    # then continue monitoring all directories
+    #
+    adocFiles = Dir.glob("src/main/asciidoc/**/*.adoc")
+    directories = adocFiles.each{ |f| File.new(f) }.uniq{ |f| File.dirname(f) }.map{ |f| File.dirname(f) }
+    
+    puts "listening to: #{directories}"
+    
+    fileListener = Listen.to(directories) do |modified, added, removed|
+        unless modified.length==0
+            modified.each { |file|
+                i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
+            }
+        end
+        unless added.length==0
+            added.each { |file|
+                i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
+            }
+        end
+        unless removed.length==0
+            removed.each { |file|
+                #puts "removed #{file}"
+            }
+        end
     end
-    unless added.length==0
-        added.each { |file|
-            i,lastTimeGenerated = process file, srcBasePath, targetBasePath, templateDir, i, lastTimeGenerated, false
-        }
-    end
-    unless removed.length==0
-        removed.each { |file|
-            #puts "removed #{file}"
-        }
-    end
+    fileListener.start
 end
-fileListener.start
-
+    
 httpServer = HTTPServer.new(
     :Port => port,
     :DocumentRoot => 'target/site',

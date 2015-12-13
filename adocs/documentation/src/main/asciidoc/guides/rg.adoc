@@ -1,30 +1,27 @@
 [[rg]]
-= Reference Guide
+= Reference Guides
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 :numbered:
 
 
-[[_rg]]
-== Reference Guide
+Apache Isis documentation is broken out into a number of user and reference guides.
 
-This reference guide describes in detail the various elements of the Apache Isis Programming Model.  Most notably these are the xref:rg.adoc#_rg_annotations[annotations] (such as `@DomainObject`), and the reserved and prefix xref:rg.adoc#_rg_methods[methods] (such as `title()` and `validate...()`); it also includes various utility and supporting xref:rg.adoc#_rg_classes[classes].
+The user guides available are:
 
-This guide also documents the domain services, both those that act as an xref:rg.adoc#_rg_services-api[API] (implemented by the framework for your domain objects to call), and those domain services that act as an xref:rg.adoc#_rg_services-spi[SPI] (implemented by your domain application and which are called by the framework).
+* xref:ugfun.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics] (this guide)
 
-Also part of the reference manual are the details of how to influence the xref:rg.adoc#_rg_object-layout[UI layout] of your domain objects (this is ultimately just a type of metadata), and it catalogues all the various xref:rg.adoc#_rg_runtime[configuration properties] available that influence the behaviour of the framework and the API domain services.
+The reference guides are:
 
-This reference guide does _not_ describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.  The reference guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
+* xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services]
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rgcms.adoc#[Classes, Methods and Schema]
 
-
-
-
-include::_rg_annotations.adoc[leveloffset=+1]
-include::_rg_methods.adoc[leveloffset=+1]
-include::_rg_services-api.adoc[leveloffset=+1]
-include::_rg_services-spi.adoc[leveloffset=+1]
-include::_rg_classes.adoc[leveloffset=+1]
-include::_rg_object-layout.adoc[leveloffset=+1]
-include::_rg_runtime.adoc[leveloffset=+1]
-include::_rg_web-xml.adoc[leveloffset=+1]
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.

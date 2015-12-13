@@ -1,0 +1,39 @@
+[[_ugfun_core-concepts_principles_your-apps]]
+= Your Applications
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+Apache Isis is primarily aimed at custom-built "enterprise" applications.  The UI exposed by the xref:ugvw.adoc#[Wicket viewer] is intended to be usable by domain experts, typically end-users within the organization.  The REST API exposed by the xref:ugvro.adoc#[RestfulObjects viewer] allows custom apps to be developed - eg using AngularJS or similar - for use by those requiring more guidance; typically end-users outside of the organization.
+
+But should your organization buy, or build?  Buying packaged software makes sense for statutory requirements, such as payroll or general ledger, or document management/retrieval.  But it makes much less sense to buy packaged software for the systems that support the core business: the software should fit the business, not the other way around.
+
+
+NOTE: TODO - flesh out the following:
+
+*  Flexible, "just enough"
+
+*  Decoupled
+
+* Long-term Cost of ownership
+
+** dependency injection of services
+** OO design techniques, eg dependency inversion principle
+** an in-memory event bus
+** applib
+
+** (no "Big Ball of Mud")
+
+* Honouring the Single Responsibility Principle
+**  behaviourally Complete vs Contributions/Mixins
+
+* Testable +
++
+While Apache Isis can be used (very effectively) for simple CRUD-style applications, it is also intended to be used for complex business domains.  Ensuring that the business logic in
+such applications is correct means that the framework must (and does) provide robust testing support, both for developer-level unit testing and business-level (end-to-end) integration testing.
+
+* Reusable building blocks +
++
+Isis addons, catalog.incode.org
+

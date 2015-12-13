@@ -45,15 +45,21 @@ public final class StringExtensions {
      * between the words, where each word starts with a capital letter. E.g.,
      * "NextAvailableDate" is returned as "Next Available Date".
      */
-    public static String asNaturalName2(final String name) {
-    
+    public static String asNaturalName2(String name) {
+
+        // handle any nested class names, eg 'Foo$Bar'
+        final int idx = name.lastIndexOf("$");
+        if(idx != -1) {
+            name = name.substring(idx+1);
+        }
+
         final int length = name.length();
     
         if (length <= 1) {
             return name.toUpperCase();// ensure first character is upper case
         }
     
-        final StringBuffer naturalName = new StringBuffer(length);
+        final StringBuilder naturalName = new StringBuilder(length);
     
         char previousCharacter;
         char character = Character.toUpperCase(name.charAt(0));// ensure first

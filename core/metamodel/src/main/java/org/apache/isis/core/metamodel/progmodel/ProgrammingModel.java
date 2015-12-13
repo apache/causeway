@@ -50,7 +50,7 @@ public interface ProgrammingModel extends MetaModelValidatorRefiner {
      *
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
-    public static final String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
+    String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
 
     /**
      * Key used to lookup comma-separated list of {@link FacetFactory}s to
@@ -58,13 +58,13 @@ public interface ProgrammingModel extends MetaModelValidatorRefiner {
      *
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      */
-    public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
+    String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
 
     /**
      * This is a bit nasty, but currently the bootstrapping of the metamodel for integration tests vs the webapp differs;
      * the intent of this class is to centralize some logic that should be applied in both cases.
      */
-    public static class Util {
+    class Util {
         private Util(){}
 
         public static void includeFacetFactories(final IsisConfiguration configuration, final ProgrammingModel programmingModel) {

@@ -19,11 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.ident.title.annotation;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -35,16 +30,19 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import org.apache.isis.applib.annotation.Title;
-import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.methodutils.MethodScope;
-import org.apache.isis.core.metamodel.facets.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.Annotations;
+import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleFacetViaTitleAnnotation.TitleComponent;
+import org.apache.isis.core.metamodel.runtimecontext.LocalizationProvider;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2.Mode;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class TitleFacetViaTitleAnnotationTest {
 
@@ -93,9 +91,12 @@ public class TitleFacetViaTitleAnnotationTest {
 
     @Test
     public void testTitle() throws Exception {
-        final List<Method> methods = Arrays.asList(NormalDomainObject.class.getMethod("titleElement1"), NormalDomainObject.class.getMethod("titleElement2"), NormalDomainObject.class.getMethod("titleElement3"));
+        final List<Annotations.Evaluator<Title>> evaluatorList = Annotations
+                .getEvaluators(NormalDomainObject.class, Title.class);
 
-        final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
+        TitleAnnotationFacetFactory.sort(evaluatorList);
+
+        final List<TitleComponent> components = Lists.transform(evaluatorList, TitleComponent.FROM_EVALUATORS);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final NormalDomainObject normalPojo = new NormalDomainObject();
         final Sequence sequence = context.sequence("in-title-element-order");
@@ -121,9 +122,11 @@ public class TitleFacetViaTitleAnnotationTest {
 
     @Test
     public void titleThrowsException() {
-        final List<Method> methods = MethodFinderUtils.findMethodsWithAnnotation(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, MethodScope.OBJECT, Title.class);
 
-        final List<TitleComponent> components = Lists.transform(methods, TitleComponent.FROM_METHOD);
+        final List<Annotations.Evaluator<Title>> evaluators = Annotations
+                .getEvaluators(DomainObjectWithProblemInItsAnnotatedTitleMethod.class, Title.class);
+
+        final List<TitleComponent> components = Lists.transform(evaluators, TitleComponent.FROM_EVALUATORS);
         final TitleFacetViaTitleAnnotation facet = new TitleFacetViaTitleAnnotation(components, mockFacetHolder, mockAdapterManager);
         final DomainObjectWithProblemInItsAnnotatedTitleMethod screwedPojo = new DomainObjectWithProblemInItsAnnotatedTitleMethod();
         context.checking(new Expectations() {

@@ -52,11 +52,12 @@ import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.DomainModel;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulRequest.RequestParameter;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
-import org.apache.isis.viewer.restfulobjects.rendering.RendererContext5;
+import org.apache.isis.viewer.restfulobjects.rendering.RendererContext6;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 
-public class ResourceContext implements RendererContext5 {
+public class ResourceContext implements RendererContext6 {
 
     private final HttpHeaders httpHeaders;
     private final UriInfo uriInfo;
@@ -77,6 +78,7 @@ public class ResourceContext implements RendererContext5 {
     private List<List<String>> followLinks;
 
     private final Where where;
+    private final RepresentationService.Intent intent;
     private final InteractionInitiatedBy interactionInitiatedBy;
     private final String urlUnencodedQueryString;
 
@@ -91,6 +93,7 @@ public class ResourceContext implements RendererContext5 {
             final UriInfo uriInfo,
             final Request request,
             final Where where,
+            final RepresentationService.Intent intent,
             final String urlUnencodedQueryStringIfAny,
             final HttpServletRequest httpServletRequest,
             final HttpServletResponse httpServletResponse,
@@ -108,6 +111,8 @@ public class ResourceContext implements RendererContext5 {
         this.providers = providers;
         this.uriInfo = uriInfo;
         this.request = request;
+        this.where = where;
+        this.intent = intent;
         this.urlUnencodedQueryString = urlUnencodedQueryStringIfAny;
         this.httpServletRequest = httpServletRequest;
         this.httpServletResponse = httpServletResponse;
@@ -118,7 +123,6 @@ public class ResourceContext implements RendererContext5 {
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.specificationLoader = specificationLoader;
-        this.where = where;
         this.deploymentType = deploymentType;
         this.interactionInitiatedBy = interactionInitiatedBy;
 
@@ -128,8 +132,9 @@ public class ResourceContext implements RendererContext5 {
     
     void init(final RepresentationType representationType) {
         getQueryStringAsJsonRepr(); // force it to be cached
-        
-        ensureCompatibleAcceptHeader(representationType);
+
+        // previously we checked for compatible accept headers here.
+        // now, though, this is a responsibility of the various ContentNegotiationService implementations
         ensureDomainModelQueryParamSupported();
         
         this.followLinks = Collections.unmodifiableList(getArg(RequestParameter.FOLLOW_LINKS));
@@ -140,27 +145,6 @@ public class ResourceContext implements RendererContext5 {
         if(domainModel != DomainModel.FORMAL) {
             throw RestfulObjectsApplicationException.createWithMessage(HttpStatusCode.BAD_REQUEST,
                     "x-ro-domain-model of '%s' is not supported", domainModel);
-        }
-    }
-
-    private void ensureCompatibleAcceptHeader(final RepresentationType representationType) {
-        if (representationType == null) {
-            return;
-        }
-
-        // RestEasy will check the basic media types...
-        // ... so we just need to check the profile paramter
-        final String producedProfile = representationType.getMediaTypeProfile();
-        if(producedProfile != null) {
-            for (MediaType mediaType : httpHeaders.getAcceptableMediaTypes()) {
-                String acceptedProfileValue = mediaType.getParameters().get("profile");
-                if(acceptedProfileValue == null) {
-                    continue;
-                }
-                if(!producedProfile.equals(acceptedProfileValue)) {
-                    throw RestfulObjectsApplicationException.create(HttpStatusCode.NOT_ACCEPTABLE);
-                }
-            }
         }
     }
 
@@ -330,6 +314,14 @@ public class ResourceContext implements RendererContext5 {
         return where;
     }
 
+    /**
+     * Only applies to rendering of objects
+     * @return
+     */
+    @Override
+    public RepresentationService.Intent getIntent() {
+        return intent;
+    }
 
     //region > canEagerlyRender
     private Set<Oid> rendered = Sets.newHashSet();
@@ -399,6 +391,5 @@ public class ResourceContext implements RendererContext5 {
     public String urlFor(final String url) {
         return getUriInfo().getBaseUri().toString() + url;
     }
-
 
 }

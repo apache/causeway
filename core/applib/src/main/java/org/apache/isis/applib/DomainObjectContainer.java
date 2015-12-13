@@ -48,6 +48,17 @@ public interface DomainObjectContainer {
 
     //endregion
 
+    //region > iconNameOf
+
+    /**
+     * Return the icon name of the object, as rendered in the UI by the
+     * Isis viewers.
+     */
+    @Programmatic
+    String iconNameOf(Object domainObject);
+
+    //endregion
+
     //region > resolve, objectChanged
 
     /**

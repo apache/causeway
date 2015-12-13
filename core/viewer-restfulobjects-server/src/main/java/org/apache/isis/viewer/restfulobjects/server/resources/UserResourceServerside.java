@@ -35,13 +35,14 @@ import org.apache.isis.viewer.restfulobjects.applib.user.UserResource;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 public class UserResourceServerside extends ResourceAbstract implements UserResource {
 
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_USER })
     public Response user() {
-        init(RepresentationType.USER, Where.NOWHERE);
+        init(RepresentationType.USER, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final UserReprRenderer renderer = new UserReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf().with(getAuthenticationSession());
@@ -72,7 +73,7 @@ public class UserResourceServerside extends ResourceAbstract implements UserReso
     @Override
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_HOME_PAGE })
     public Response logout() {
-        init(RepresentationType.HOME_PAGE, Where.NOWHERE);
+        init(RepresentationType.HOME_PAGE, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
 
         final HomePageReprRenderer renderer = new HomePageReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());
         renderer.includesSelf();

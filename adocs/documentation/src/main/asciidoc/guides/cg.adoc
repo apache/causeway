@@ -11,13 +11,39 @@
 
 This contributors' guide has three related audiences:
 
-* programmers who want to just use Apache Isis to build applications, and want help setting up their development environment or to build their code from the command line (eg to execute within a continuous integration server such as Jenkins)
+* programmers who want to just use Apache Isis to build applications, and want help setting up their development
+environment or to build their code from the command line (eg to execute within a continuous integration server such
+as Jenkins)
 
 * programmers who want to contribute back patches (bug fixes, new features) either to the codebase or the framework's documentation
 
 * committers of Apache Isis itself who want guidance on release process, publishing documents and other related procedures.
 
-The developer' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  This guide also doesn't describe how to actually build an Apache Isis application; for that see the *xref:ug.adoc#_ug[Users' Guide]*.
+
+
+=== Other Guides
+
+Apache Isis documentation is broken out into a number of user and reference guides.
+
+The user guides available are:
+
+* xref:ugfun.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics]
+
+The reference guides are:
+
+* xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services]
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rgcms.adoc#[Classes, Methods and Schema]
+
+In addition, there is (this) xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
+
+
 
 
 include::_cg_ide.adoc[leveloffset=+1]

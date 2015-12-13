@@ -31,7 +31,10 @@ public class ScalarValueReprRenderer extends ReprRendererAbstract<ScalarValueRep
 
     private ObjectSpecification returnType;
 
-    ScalarValueReprRenderer(final RendererContext resourceContext, final LinkFollowSpecs linkFollower, final JsonRepresentation representation) {
+    public ScalarValueReprRenderer(
+            final RendererContext resourceContext,
+            final LinkFollowSpecs linkFollower,
+            final JsonRepresentation representation) {
         super(resourceContext, linkFollower, null, representation); // null for representationType (there is none)
     }
 

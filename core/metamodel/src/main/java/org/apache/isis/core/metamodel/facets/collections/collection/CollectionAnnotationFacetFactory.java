@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionInteraction;
 import org.apache.isis.applib.annotation.Disabled;
@@ -77,6 +78,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
 
@@ -91,6 +93,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
     private final CollectionTypeRegistry collectionTypeRegistry = new CollectionTypeRegistry();
 
     private ServicesInjector servicesInjector;
+    private IsisConfiguration configuration;
 
     public CollectionAnnotationFacetFactory() {
         super(FeatureType.COLLECTIONS_AND_ACTIONS);
@@ -166,7 +169,16 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
             collectionDomainEventFacet = new CollectionDomainEventFacetDefault(
                     collectionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
         }
-        FacetUtil.addFacet(collectionDomainEventFacet);
+        if(!CollectionDomainEvent.Noop.class.isAssignableFrom(collectionDomainEventFacet.getEventType())) {
+            FacetUtil.addFacet(collectionDomainEventFacet);
+        }
+        if(EventUtil.eventTypeIsPostable(
+                collectionDomainEventFacet.getEventType(),
+                CollectionDomainEvent.Noop.class,
+                CollectionDomainEvent.Default.class,
+                "isis.reflector.facet.collectionAnnotation.domainEvent.postForDefault", this.configuration)) {
+            FacetUtil.addFacet(collectionDomainEventFacet);
+        }
 
 
         //
@@ -375,6 +387,7 @@ public class CollectionAnnotationFacetFactory extends FacetFactoryAbstract imple
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
         postsCollectionAddedToEventValidator.setConfiguration(configuration);
         postsCollectionRemovedFromEventValidator.setConfiguration(configuration);
         collectionInteractionValidator.setConfiguration(configuration);

@@ -1,0 +1,299 @@
+[[_ugfun_how-tos_class-structure_properties]]
+= Property
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+NOTE: TODO
+
+
+
+
+
+== Value vs Reference Types
+
+NOTE: TODO
+
+The annotations for mapping value types tend to be different for properties vs action parameters, because JDO annotations are only valid on properties.  The table in the xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties-vs-parameters[Properties vs Parameters] section provides a handy reference of each.
+
+
+
+== Optional Properties
+
+JDO/DataNucleus' default is that a property is assumed to be mandatory if it is a primitive type (eg `int`, `boolean`), but optional if a reference type (eg `String`, `BigDecimal` etc).  To override optionality in JDO/DataNucleus the `@Column(allowsNull="...")` annotations is used.
+
+Apache Isis on the other hand assumes that all properties (and action parameters, for that matter) are mandatory, not optional.  These defaults can also be overridden using Apache Isis' own annotations, specifically `@Property(optionality=...)`.
+
+These different defaults can lead to incompatibilities between the two frameworks.  To counteract that, Apache Isis also recognizes and honours JDO's `@Column(allowsNull=...)`.
+
+For example, rather than:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(allowNulls="true")
+private LocalDate date;
+@Property(optionality=Optionality.OPTIONAL)
+public LocalDate getDate() { ... }
+public void setDate(LocalDate d) { ... }
+----
+
+you should instead simply write:
+
+[source,java]
+----
+private LocalDate date;
+@javax.jdo.annotations.Column(allowNulls="true")
+public LocalDate getDate() { ... }
+public void setDate(LocalDate d) { ... }
+----
+
+[WARNING]
+====
+With JDO/DataNucleus it's valid for the `@Column` annotation to be placed on either the field or the getter.  Apache Isis (currently) only looks for annotations on the getter.  We therefore recommend that you always place `@Column` on the gettter.
+====
+
+In all cases the framework will search for any incompatibilities in optionality (whether specified explicitly or defaulted implicitly) between Isis' defaults and DataNucleus, and refuse to boot if any are found (fail fast).
+
+
+
+=== Handling Mandatory Properties in Subtypes
+
+If you have a hierarchy of classes then you need to decide which inheritance strategy to use.
+
+* "table per hierarchy", or "rollup" (`InheritanceStrategy.SUPERCLASS_TABLE`) +
++
+whereby a single table corresponds to the superclass, and also holds the properties of the subtype (or subtypes) being rolled up
+
+* "table per class" (`InheritanceStrategy.NEW_TABLE`) +
++
+whereby is a table for both superclass and subclass, in 1:1 correspondence
+
+* "rolldown" (`InheritanceStrategy.SUBCLASS_TABLE`) +
++
+whereby a single table holds the properties of the subtype, and also holds the properties of its supertype
+
+In the first "rollup" case, we can have a situation where - logically speaking - the property is mandatory in the subtype - but it must be mapped as nullable in the database because it is n/a for any other subtypes that are rolled up.
+
+In this situation we must tell JDO that the column is optional, but to Apache Isis we want to enforce it being mandatory. This can be done using the `@Property(optionality=Optionality.MANDATORY)` annotation.
+
+For example:
+
+[source,java]
+----
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
+public class SomeSubtype extends SomeSuperType {
+    private LocalDate date;
+    @javax.jdo.annotations.Column(allowNulls="true")
+    @Property(optionality=Optionality.MANDATORY)
+    public LocalDate getDate() { ... }
+    public void setDate(LocalDate d) { ... }
+}
+----
+
+[TIP]
+====
+The `@Property(optionality=...)` annotation is equivalent to the older but still supported `@Optional` annotation and `@Mandatory` annotations. Its benefit is that it lumps together all Apache Isis' property metadata in a single annotation.  Its downside is that it is rather verbose if the only semantic that needs to be specified -- as is often the case -- is optionality.
+====
+
+An alternative way to achieve this is to leave the JDO annotation on the field (where it is invisible to Apache Isis), and rely on Isis' default, eg:
+
+[source,java]
+----
+@javax.jdo.annotations.Inheritance(strategy = InheritanceStrategy.SUPER_TABLE)
+public class SomeSubtype extends SomeSuperType {
+    @javax.jdo.annotations.Column(allowNulls="true")
+    private LocalDate date;
+    // mandatory in Apache Isis by default
+    public LocalDate getDate() { }
+    public void setDate(LocalDate d) { }
+}
+----
+
+We recommend the former mapping, though, using `@Property(optionality=Optionality.MANDATORY)`.
+
+
+
+
+
+== ``String``s (Length)
+
+NOTE: TODO
+
+
+
+
+
+[[_ugfun_how-tos_class-structure_properties_mapping-joda-dates]]
+== Mapping JODA Dates
+
+Isis' JDO objectstore bundles DataNucleus' http://www.datanucleus.org/documentation/products/plugins.html[built-in support] for Joda `LocalDate` and `LocalDateTime` datatypes, meaning that entity properties of these types will be persisted as appropriate data types in the database tables.
+
+It is, however, necessary to annotate your properties with `@javax.jdo.annotations.Persistent`, otherwise the data won't actually be persisted. See the http://db.apache.org/jdo/field_types.html[JDO docs] for more details on this.
+
+Moreover, these datatypes are _not_ in the default fetch group, meaning that JDO/DataNucleus will perform an additional `SELECT` query for each attribute. To avoid this extra query, the annotation should indicate that the property is in the default fetch group.
+
+For example, the `ToDoItem` (in the https://github.com/isisaddons/isis-app-todoapp[todoapp example app] (not ASF)) defines the `dueBy` property as follows:
+
+
+
+== ``BigDecimal``s (Precision)
+
+Working with `java.math.BigDecimal` properties takes a little care due to scale/precision issues.
+
+For example, suppose we have:
+
+[source,java]
+----
+private BigDecimal impact;
+public BigDecimal getImpact() {
+    return impact;
+}
+public void setImpact(final BigDecimal impact) {
+    this.impact = impact;
+}
+----
+
+JDO/DataNucleus creates, at least with HSQL, the table with the field type as NUMERIC(19). No decimal digits are admitted. (Further details http://hsqldb.org/doc/2.0/guide/sqlgeneral-chapt.html#sgc_numeric_types[here]).
+
+What this implies is that, when a record is inserted, a log entry similar to this one appears:
+
+[source,java]
+----
+INSERT INTO ENTITY(..., IMPACT, ....) VALUES (...., 0.5, ....)
+----
+
+But when that same record is retrieved, the log will show that a value of "0" is returned, instead of 0.5.
+
+The solution is to explicitly add the scale to the field like this:
+
+[source,java]
+----
+@javax.jdo.annotations.Column(scale=2)
+private BigDecimal impact;
+public BigDecimal getImpact() {
+    return impact;
+}
+public void setImpact(final BigDecimal impact) {
+    this.impact = impact;
+}
+----
+
+In addition, you should also set the scale of the `BigDecimal`, using `setScale(scale, roundingMode)`.
+
+More information can be found http://www.opentaps.org/docs/index.php/How_to_Use_Java_BigDecimal:_A_Tutorial[here] and http://www.tutorialspoint.com/java/math/bigdecimal_setscale_rm_roundingmode.htm[here].
+
+
+
+
+== Mapping Blobs and Clobs
+
+Apache Isis configures JDO/DataNucleus so that the properties of type `org.apache.isis.applib.value.Blob` and `org.apache.isis.applib.value.Clob` can also be persisted.
+
+As for xref:ugfun.adoc#_ugfun_how-tos_class-structure_properties_mapping-joda-dates[Joda dates], this requires the `@javax.jdo.annotations.Persistent` annotation. However, whereas for dates one would always expect this value to be retrieved eagerly, for blobs and clobs it is not so clear cut.
+
+=== Mapping Blobs
+
+For example, in the `ToDoItem` class (of the https://github.com/isisaddons/isis-app-todoapp/blob/61b8114a8e01dbb3c380b31cf09eaed456407570/dom/src/main/java/todoapp/dom/module/todoitem/ToDoItem.java#L475[todoapp example app] (non-ASF) the `attachment` property is as follows:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes", jdbcType="BLOB", sqlType = "LONGVARBINARY")
+})
+private Blob attachment;
+@Property(
+        optionality = Optionality.OPTIONAL
+)
+public Blob getAttachment() {
+    return attachment;
+}
+public void setAttachment(final Blob attachment) {
+    this.attachment = attachment;
+}
+----
+
+The three `@javax.jdo.annotations.Column` annotations are required because the mapping classes that Apache Isis provides (https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisBlobMapping.java#L59[IsisBlobMapping] and https://github.com/apache/isis/blob/isis-1.4.0/component/objectstore/jdo/jdo-datanucleus/src/main/java/org/apache/isis/objectstore/jdo/datanucleus/valuetypes/IsisClobMapping.java#L59[IsisClobMapping]) map to 3 columns. (It is not an error to omit these `@Column` annotations, but without them the names of the table columns are simply suffixed `_0`, `_1`, `_2` etc.
+
+If the `Blob` is mandatory, then use:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype", allowsNull="false"),
+    @javax.jdo.annotations.Column(name = "attachment_bytes",
+                                  jdbcType="BLOB", sqlType = "LONGVARBINARY",
+                                  allowsNull="false")
+})
+private Blob attachment;
+@Property(
+    optionality = Optionality.MANDATORY
+)
+public Blob getAttachment() {
+return attachment;
+}
+public void setAttachment(final Blob attachment) {
+this.attachment = attachment;
+}
+----
+
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARBINARY" does not work, try instead "BLOB".  There can be differences in behaviour between JDBC drivers.
+====
+
+
+=== Mapping Clobs
+
+Mapping `Clob`s works in a very similar way, but the `jdbcType` and `sqlType` attributes will, respectively, be `CLOB` and `LONGVARCHAR`:
+
+[source,java]
+----
+@javax.jdo.annotations.Persistent(defaultFetchGroup="false", columns = {
+    @javax.jdo.annotations.Column(name = "attachment_name"),
+    @javax.jdo.annotations.Column(name = "attachment_mimetype"),
+    @javax.jdo.annotations.Column(name = "attachment_chars",
+                                  jdbcType="CLOB", sqlType = "LONGVARCHAR")
+})
+private Clob doc;
+@Property(
+    optionality = Optionality.OPTIONAL
+)
+public Clob getDoc() {
+    return doc;
+}
+public void setDoc(final Clob doc) {
+    this.doc = doc;
+}
+----
+
+[NOTE]
+====
+If specifying a `sqlType` of "LONGVARCHAR" does not work, try instead "CLOB".  There can be differences in behaviour between JDBC drivers.
+====
+
+=== Mapping to VARBINARY or VARCHAR
+
+Instead of mapping to a sqlType of `LONGVARBINARY` (or perhaps `BLOB`), you might instead decide to map to a `VARBINARY`.  The difference is whether the binary data is held "on-row" or as a pointer "off-row"; with a `VARBINARY` the data is held on-row and so you will need to specify a length.
+
+For example:
+
+
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_bytes", jdbcTypr="BLOB", sqlType = "VARBINARY", length=2048)
+----
+
+
+The same argument applies to `LONGVARCHAR` (or `CLOB`); you could instead map to a regular `VARCHAR`:
+
+
+[source,java]
+----
+@javax.jdo.annotations.Column(name = "attachment_chars", sqlType = "VARCHAR", length=2048)
+----
+
+Support and maximum allowed length will vary by database vendor.

@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryJUnit4TestCase;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.title.annotation.TitleAnnotationFacetFactory;
@@ -114,7 +115,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         final List<Method> titleMethods = Arrays.asList(Customer.class.getMethod("someTitle"));
         for (int i = 0; i < titleMethods.size(); i++) {
-            Assert.assertEquals(titleMethods.get(i), titleFacetViaTitleAnnotation.getComponents().get(i).getMethod());
+            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+                    .getTitleEvaluator();
+
+            Assert.assertEquals(titleMethods.get(i),
+                    titleEvaluator.getMethod());
         }
     }
 
@@ -152,7 +157,11 @@ public class TitleAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4T
 
         final List<TitleComponent> components = titleFacetViaTitleAnnotation.getComponents();
         for (int i = 0; i < titleMethods.size(); i++) {
-            Assert.assertEquals(titleMethods.get(i), components.get(i).getMethod());
+            final Annotations.MethodEvaluator<Title> titleEvaluator = (Annotations.MethodEvaluator<Title>) titleFacetViaTitleAnnotation.getComponents().get(i)
+                    .getTitleEvaluator();
+
+            Assert.assertEquals(titleMethods.get(i),
+                    titleEvaluator.getMethod());
         }
 
         final Customer2 customer = new Customer2();

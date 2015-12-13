@@ -45,10 +45,10 @@ pass:[<br/>]
 * *link:./cheat-sheet.html[Cheat Sheet]*
 * link:./icons.html[Icons]
 
-*Isis Add-ons*
+*3rd-party add-ons (not ASF)*
 
-* http://isisaddons.org[Isis addons] (not ASF)
-* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL] (not ASF)
+* http://isisaddons.org[Isis addons]
+* http://catalog.incode.org[Incode Catalog]
 
 
 |===
@@ -57,48 +57,34 @@ pass:[<br/>]
 [cols="1a,1a,1a"]
 |===
 
-|*Users' Guide:*
+|*User Guides:*
 
-Core concepts, how tos and more advanced techniques, using and customizing the Wicket viewer & the Restful Objects viewer, security, testing
-
-pass:[<a class="button guide" href="./guides/ug.html" role="button" target="_blank">Users' Guide »</a>]
-
-including:
-
-* *link:./guides/ug.html#_ug_getting-started_simpleapp-archetype[Getting Started]* (SimpleApp Archetype)
-* link:./guides/ug.html#_ug_how-tos[How-tos]
-* link:./guides/ug.html#_ug_wicket-viewer[Customizing the Wicket Viewer]
-* link:./guides/ug.html#_ug_testing[Testing]
-* link:./guides/ug.html#_ug_extending[Extending]
+* *link:./guides/ugfun.html[Fundamentals^]*
+* link:./guides/ugvw.html[Wicket Viewer^]
+* link:./guides/ugvro.html[Restful Objects Viewer^]
+* link:./guides/ugsec.html[Security^]
+* *link:./guides/ugtst.html[Testing^]*
+* link:./guides/ugbtb.html[Beyond the Basics^]
 
 
-|*Reference Guide:*
+|*Reference Guides:*
 
-Programming model (annotations, methods), domain services (API and SPI), utility classes, UI layout, runtime configuration properties
+* *link:./guides/rgant.html[Annotations^]*
+* *link:./guides/rgsvc.html[Domain Services^]*
+* link:./guides/rgcfg.html[Configuration Properties^]
+* link:./guides/rgcms.html[Classes, Methods and Schema^]
 
-pass:[<a class="button guide" href="./guides/rg.html" role="button" target="_blank">Reference Guide »</a>]
 
-including:
-
-* link:./guides/rg.html#_rg_annotations[Annotations]
-* *link:./guides/rg.html#_rg_methods[Methods]*
-* *link:./guides/rg.html#_rg_services-api[Domain Services API]*
-* link:./guides/rg.html#_rg_services-spi[Domain Services SPI]
-* link:./guides/rg.html#_rg_runtime[Configuration Properties]
 
 
 |*Contributors' Guide*
 
-IDE setup, build the framework, writing docs, how to contribute patches (pull requests); for committers: publishing docs, applying patches, release process.
-
-pass:[<a class="button guide" href="./guides/cg.html" role="button" target="_blank">Contributors' Guide »</a>]
+* *link:./guides/cg.html[Contributors' Guide^]*
 
 including:
 
 * Setting up link:./guides/cg.html#_cg_ide_intellij[IntelliJ] or link:./guides/cg.html#_cg_ide_eclipse[Eclipse]
-* link:./guides/cg.html#_cg_ide-templates[*IDE templates*] (IntelliJ and Eclipse)
 * link:./guides/cg.html#_cg_contributing[Contributing patches] (pull requests)
-* link:./guides/cg.html#_cg_isis-maven-plugin[Isis Maven plugin]
 * link:./guides/cg.html#_cg_committers_cutting-a-release[Cutting a release] ; link:./guides/cg.html#_cg_committers_verifying-releases[Verifying a release]
 
 
@@ -114,10 +100,13 @@ including:
 |*Example Apps (not ASF):*
 
 * http://github.com/estatio/estatio[Estatio]
-* http://github.com/isisaddons/isis-app-todoapp[TodoApp] (link:http://mmyco.co.uk:8180/todoapp/[online demo, v1.9.0])
-* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.9.0])
+* http://github.com/isisaddons/isis-app-todoapp[TodoApp]
+* http://github.com/isisaddons/isis-app-kitchensink[Kitchensink] (link:http://mmyco.co.uk:8180/kitchensink/[online demo, v1.10.0])
 * http://github.com/isisaddons/isis-app-neoapp[Neo4J Example]
 * http://github.com/isisaddons/isis-app-quickstart[Quickstart]
+
+tools (not ASF):
+
 * http://github.com/isisaddons/isis-app-simpledsl[Isis DSL Example]
 
 
@@ -131,6 +120,7 @@ including:
 * link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
 * link:./books.html[Books]
 * link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
+* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL]
 //* link:./downloadable-presentations.html[Downloadable Presentations]
 
 
@@ -140,6 +130,9 @@ including:
 * link:release-notes.html[Release Notes]
 * link:migration-notes.html[Migration Notes]
 
+*Get involved!*
+
+* Our link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[*Kanban board*] maps out the JIRA issues we are looking to tackle in the next few releases
 
 |====
 

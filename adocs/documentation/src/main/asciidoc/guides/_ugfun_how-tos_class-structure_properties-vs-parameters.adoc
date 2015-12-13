@@ -1,0 +1,45 @@
+[[_ugfun_how-tos_class-structure_properties-vs-parameters]]
+= Properties vs Parameters
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+NOTE: TODO
+
+
+In many cases the value types of properties and of action parameters align. For example, a `Customer` entity might have a `surname` property, and there might also be corresponding `changeSurname`.  Ideally we want the surname property and surname action parameter to use the same value type.
+
+Having first-class support for this is a goal of Apache Isis, and it is already possible (by writing some plumbing and glue code using Isis and DataNucleus APIs) to get some way towards this ideal.  However, in the vast majority of cases it is much easier and more practical to simply use standard value types such as `java.lang.String`.
+
+However, the JDO/DataNucleus annotations for specifying semantics such as optionality or maximum length are restricted to only apply to fields and to methods; they cannot be applied to action parameters.  It is therefore necessary to use Apache Isis' equivalent annotations for action parameters.
+
+The table below summarises the equivalence of some of the most common cases.
+
+
+.Comparing annotations of Properties vs Action Parameters
+[cols="2,3,3", options="header"]
+|===
+|value type/semantic
+|property
+|action parameter
+
+|string (length)
+|
+|
+
+|big decimal (precision)
+|
+|
+
+|Isis blob
+|
+|
+
+|optional
+|`@Column(allowsNull="true")`
+|`ParameterLayout(optionality=Optionality.OPTIONAL`) or `@Optional`
+|===
+
+

@@ -15,6 +15,9 @@ gem 'asciidoctor-diagram', '~> 1.2.1'
 gem 'tilt'
 gem 'thread_safe'
 gem 'coderay'
+
+#gem 'pygments'
+gem 'rouge'
 gem 'webrick'
 
 gem 'launchy', '~> 2.4.3'

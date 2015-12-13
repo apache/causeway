@@ -18,11 +18,14 @@
  */
 package org.apache.isis.viewer.restfulobjects.rendering.service.conneg;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -125,6 +128,36 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
                     xRoDomainType, domainObject.getClass().getName());
         }
     }
+
+    protected boolean mediaTypeParameterMatches(
+            final List<MediaType> acceptableMediaTypes,
+            final String parameter, final String parameterValue) {
+        for (MediaType mediaType : acceptableMediaTypes) {
+            final String paramValue = sanitize(mediaType.getParameters().get(parameter));
+            if (Objects.equals(paramValue, parameterValue)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Remove any single quotes.
+     */
+    private String sanitize(String mediaParam) {
+        if (mediaParam == null) {
+            return null;
+        }
+        mediaParam = mediaParam.trim();
+        if(mediaParam.startsWith("'")) {
+            mediaParam = mediaParam.substring(1);
+        }
+        if(mediaParam.endsWith("'")) {
+            mediaParam = mediaParam.substring(0, mediaParam.length()-1);
+        }
+        return mediaParam;
+    }
+
     //endregion
 
     @Inject

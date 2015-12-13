@@ -25,7 +25,7 @@ Let's start with the basics...
 Apache Isis integrates with http://shiro.apache.org[Apache Shiro]. The core framework supports file-based realms, while the Isis Addons http://github.com/isisaddons/isis-module-security[security module] (non ASF) provides a well-features subdomain of users, roles and permissions against features derived from the Apache Isis metamodel. The example todoapp integrates with the security module.
 
 
-image::{_imagesdir}/isis-in-pictures/010-login.png[width="600px",link="{_imagesdir}/isis-in-pictures/010-login.png"]
+image::{_imagesdir}/isis-in-pictures/010-login.png[width="800px",link="{_imagesdir}/isis-in-pictures/010-login.png"]
 
 
 
@@ -34,7 +34,7 @@ image::{_imagesdir}/isis-in-pictures/010-login.png[width="600px",link="{_imagesd
 Apache Isis has lots of features to help you prototype and then fully test your application. One such are fixture scripts, which allow pre-canned data to be installed in the running application. This is great to act as the starting point for identifying new stories; later on when the feature is being implemented, the same fixture script can be re-used within that feature's integration tests. (More on tests later).
 
 
-image::{_imagesdir}/isis-in-pictures/020-install-fixtures.png[width="600px",link="{_imagesdir}/isis-in-pictures/020-install-fixtures.png"]
+image::{_imagesdir}/isis-in-pictures/020-install-fixtures.png[width="800px",link="{_imagesdir}/isis-in-pictures/020-install-fixtures.png"]
 
 
 
@@ -42,7 +42,7 @@ image::{_imagesdir}/isis-in-pictures/020-install-fixtures.png[width="600px",link
 
 Most of the time the end-user interacts with representations of persistent domain entities, but Apache Isis also supports view models which can aggregate data from multiple sources. The todoapp example uses a "dashboard" view model to list todo items not yet done vs those completed.
 
-image::{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png[width="600px",link="{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png"]
+image::{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png[width="800px",link="{_imagesdir}/isis-in-pictures/030-dashboard-view-model.png"]
 
 In general we recommend to initially focus only on domain entities; this will help drive out a good domain model. Later on view models can be introduced in support of specific use cases.
 
@@ -54,7 +54,7 @@ In general we recommend to initially focus only on domain entities; this will he
 The screenshot below is of the todoapp's `ToDoItem` domain entity. Like all web pages, this UI is generated at runtime, directly from the domain object itself. There are no controllers or HTML to write.
 
 
-image::{_imagesdir}/isis-in-pictures/040-domain-entity.png[width="600px",link="{_imagesdir}/isis-in-pictures/040-domain-entity.png"]
+image::{_imagesdir}/isis-in-pictures/040-domain-entity.png[width="800px",link="{_imagesdir}/isis-in-pictures/040-domain-entity.png"]
 
 In addition to the domain entity, Apache Isis allows layout metadata hints to be provided, for example to specify the grouping of properties, the positioning of those groups into columns, the association of actions (the buttons) with properties or collections, the icons on the buttons, and so on. This metadata can be specified either as annotations or in JSON form; the benefit of the latter is that it can be updated (and the UI redrawn) without restarting the app.
 
@@ -67,7 +67,7 @@ Any production-ready app will require this metadata but (like the view models di
 
 By default properties on domain entities are editable, meaning they can be changed directly. In the todoapp example, the `ToDoItem`'s description is one such editable property:
 
-image::{_imagesdir}/isis-in-pictures/050-edit-property.png[width="600px",link="{_imagesdir}/isis-in-pictures/050-edit-property.png"]
+image::{_imagesdir}/isis-in-pictures/050-edit-property.png[width="800px",link="{_imagesdir}/isis-in-pictures/050-edit-property.png"]
 
 
 Note that some of the properties are read-only even in edit mode; individual properties can be made non-editable. It is also possible to make all properties disabled and thus enforce changes only through actions (below).
@@ -79,7 +79,7 @@ Note that some of the properties are read-only even in edit mode; individual pro
 
 The other way to modify an entity is to an invoke an action. In the screenshot below the `ToDoItem`'s category and subcategory can be updated together using an action:
 
-image::{_imagesdir}/isis-in-pictures/060-invoke-action.png[width="600px",link="{_imagesdir}/isis-in-pictures/060-invoke-action.png"]
+image::{_imagesdir}/isis-in-pictures/060-invoke-action.png[width="800px",link="{_imagesdir}/isis-in-pictures/060-invoke-action.png"]
 
 
 There are no limitations on what an action can do; it might just update a single object, it could update multiple objects. Or, it might not update any objects at all, but could instead perform some other activity, such as sending out email or printing a document.
@@ -95,12 +95,12 @@ As an alternative to placing actions (business logic) on a domain object, it can
 
 In the screenshot below the highlighted "export as xml" action, the "relative priority" property (and "previous" and "next" actions) and also the "similar to" collection are all contributed:
 
-image::{_imagesdir}/isis-in-pictures/065-contributions.png[width="600px",link="{_imagesdir}/isis-in-pictures/065-contributions.png"]
+image::{_imagesdir}/isis-in-pictures/065-contributions.png[width="800px",link="{_imagesdir}/isis-in-pictures/065-contributions.png"]
 
 
 Contributions are defined by the signature of the actions on the contributing service. The code snippet below shows how this works for the "export as xml" action:
 
-image::{_imagesdir}/isis-in-pictures/067-contributed-action.png[width="600px",link="{_imagesdir}/isis-in-pictures/067-contributed-action.png"]
+image::{_imagesdir}/isis-in-pictures/067-contributed-action.png[width="800px",link="{_imagesdir}/isis-in-pictures/067-contributed-action.png"]
 
 
 
@@ -110,19 +110,19 @@ image::{_imagesdir}/isis-in-pictures/067-contributed-action.png[width="600px",li
 
 The Apache Isis viewer is implemented using http://wicket.apache.org[Apache Wicket], and has been designed to be extensible. For example, when a collection of objects is rendered, this is just one of several views, as shown in the selector drop-down:
 
-image::{_imagesdir}/isis-in-pictures/070-pluggable-views.png[width="600px",link="{_imagesdir}/isis-in-pictures/070-pluggable-views.png"]
+image::{_imagesdir}/isis-in-pictures/070-pluggable-views.png[width="800px",link="{_imagesdir}/isis-in-pictures/070-pluggable-views.png"]
 
 
 The (non-ASF) link:http://isisaddons.org[Isis Addons] library provides a number of such extensions.  For example, the https://github.com/isisaddons/isis-wicket-gmap3[gmap3 component] will render any domain entity (such as `ToDoItem`) that implements its `Locatable` interface:
 
-image::{_imagesdir}/isis-in-pictures/080-gmap3-view.png[width="600px",link="{_imagesdir}/isis-in-pictures/080-gmap3-view.png"]
+image::{_imagesdir}/isis-in-pictures/080-gmap3-view.png[width="800px",link="{_imagesdir}/isis-in-pictures/080-gmap3-view.png"]
 
 
 
 
 Similarly the Isis Addons' https://github.com/isisaddons/isis-wicket-fullcalendar2[fullcalendar2 component] (non ASF) will render any domain entity (such as `ToDoItem`) that implements its `Calendarable` interface:
 
-image::{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png[width="600px",link="{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png"]
+image::{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png[width="800px",link="{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png"]
 
 
 
@@ -130,14 +130,14 @@ image::{_imagesdir}/isis-in-pictures/090-fullcalendar2-view.png[width="600px",li
 
 Yet another "view" (though this one is rather simpler) is that provided by the Isis Addons https://github.com/isisaddons/isis-wicket-excel[excel component] (non ASF). This provides a download button to the table as a spreadsheet:
 
-image::{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png[width="600px",link="{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png"]
+image::{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png[width="800px",link="{_imagesdir}/isis-in-pictures/100-excel-view-and-docx.png"]
 
 
 
 
 The screenshot above also shows an "export to Word" action. This is _not_ a view but instead is a (contributed) action that uses the Isis Addons https://github.com/isisaddons/isis-module-docx[docx module] (non ASF) to perform a "mail-merge":
 
-image::{_imagesdir}/isis-in-pictures/110-docx.png[width="600px",link="{_imagesdir}/isis-in-pictures/110-docx.png"]
+image::{_imagesdir}/isis-in-pictures/110-docx.png[width="800px",link="{_imagesdir}/isis-in-pictures/110-docx.png"]
 
 
 
@@ -156,28 +156,28 @@ As well as providing extensions to the UI, the Isis Addons provide a rich set of
 
 Under the activity menu are four sets of services which provide support for https://github.com/isisaddons/isis-module-sessionlogger[user session logging/auditing] (non ASF), https://github.com/isisaddons/isis-module-command[command profiling] (non ASF), https://github.com/isisaddons/isis-module-audit[(object change) auditing] (shown, non-ASF) and (inter-system) https://github.com/isisaddons/isis-module-publishing[event publishing] (non ASF):
 
-image::{_imagesdir}/isis-in-pictures/120-auditing.png[width="600px",link="{_imagesdir}/isis-in-pictures/120-auditing.png"]
+image::{_imagesdir}/isis-in-pictures/120-auditing.png[width="800px",link="{_imagesdir}/isis-in-pictures/120-auditing.png"]
 
 
 
 
 In the security menu is access to the rich set of functionality provided by the Isis Addons https://github.com/isisaddons/isis-module-security[security module] (non ASF):
 
-image::{_imagesdir}/isis-in-pictures/130-security.png[width="600px",link="{_imagesdir}/isis-in-pictures/130-security.png"]
+image::{_imagesdir}/isis-in-pictures/130-security.png[width="800px",link="{_imagesdir}/isis-in-pictures/130-security.png"]
 
 
 
 
 In the prototyping menu is the ability to download a GNU gettext `.po` file for translation. This file can then be translated into multiple languages so that your app can support different locales. Note that this feature is part of Apache Isis core (it is not in Isis Addons):
 
-image::{_imagesdir}/isis-in-pictures/140-i18n.png[width="600px",link="{_imagesdir}/isis-in-pictures/140-i18n.png"]
+image::{_imagesdir}/isis-in-pictures/140-i18n.png[width="800px",link="{_imagesdir}/isis-in-pictures/140-i18n.png"]
 
 
 
 
 The Isis Addons also provides a module for managing application and user https://github.com/isisaddons/isis-module-settings[settings] (non ASF). Most apps (the todoapp example included) won't expose these services directly, but will usually wrap them in their own app-specific settings service that trivially delegates to the settings module's services:
 
-image::{_imagesdir}/isis-in-pictures/150-appsettings.png[width="600px",link="{_imagesdir}/isis-in-pictures/150-appsettings.png"]
+image::{_imagesdir}/isis-in-pictures/150-appsettings.png[width="800px",link="{_imagesdir}/isis-in-pictures/150-appsettings.png"]
 
 
 
@@ -186,7 +186,7 @@ image::{_imagesdir}/isis-in-pictures/150-appsettings.png[width="600px",link="{_i
 
 Of the various Isis Addons, the https://github.com/isisaddons/isis-module-security[security module] has the most features. One significant feature is the ability to associate users and objects with a "tenancy". The todoapp uses this feature so that different users' list of todo items are kept separate from one another. A user with administrator is able to switch their own "tenancy" to the tenancy of some other user, in order to access the objects in that tenancy:
 
-image::{_imagesdir}/isis-in-pictures/160-switch-tenancy.png[width="600px",link="{_imagesdir}/isis-in-pictures/160-switch-tenancy.png"]
+image::{_imagesdir}/isis-in-pictures/160-switch-tenancy.png[width="800px",link="{_imagesdir}/isis-in-pictures/160-switch-tenancy.png"]
 
 
 
@@ -197,13 +197,13 @@ For more details, see the https://github.com/isisaddons/isis-module-security[sec
 
 Most of the https://github.com/isisaddons/isis-module-security[security module]'s services are on the security module, which would normally be provided only to administrators. Kept separate is the "me" action:
 
-image::{_imagesdir}/isis-in-pictures/170-me.png[width="600px",link="{_imagesdir}/isis-in-pictures/170-me.png"]
+image::{_imagesdir}/isis-in-pictures/170-me.png[width="800px",link="{_imagesdir}/isis-in-pictures/170-me.png"]
 
 
 
 Assuming they have been granted permissions, this allows a user to access an entity representing their own user account:
 
-image::{_imagesdir}/isis-in-pictures/180-app-user-entity.png[width="600px",link="{_imagesdir}/isis-in-pictures/180-app-user-entity.png"]
+image::{_imagesdir}/isis-in-pictures/180-app-user-entity.png[width="800px",link="{_imagesdir}/isis-in-pictures/180-app-user-entity.png"]
 
 
 
@@ -214,7 +214,7 @@ If not all of these properties are required, then they can be hidden either usin
 
 Apache Isis' Wicket viewer uses http://getbootstrap.com[Twitter Bootstrap], which means that it can be themed. If more than one theme has been configured for the app, then the viewer allows the end-user to switch their theme:
 
-image::{_imagesdir}/isis-in-pictures/190-switch-theme.png[width="600px",link="{_imagesdir}/isis-in-pictures/190-switch-theme.png"]
+image::{_imagesdir}/isis-in-pictures/190-switch-theme.png[width="800px",link="{_imagesdir}/isis-in-pictures/190-switch-theme.png"]
 
 
 
@@ -223,7 +223,7 @@ image::{_imagesdir}/isis-in-pictures/190-switch-theme.png[width="600px",link="{_
 
 In addition to Apache Isis' Wicket viewer, it also provides a fully fledged REST API, as an implementation of the http://restfulobjects.org[Restful Objects] specification. The screenshot below shows accessing this REST API using a Chrome plugin:
 
-image::{_imagesdir}/isis-in-pictures/200-rest-api.png[width="600px",link="{_imagesdir}/isis-in-pictures/200-rest-api.png"]
+image::{_imagesdir}/isis-in-pictures/200-rest-api.png[width="800px",link="{_imagesdir}/isis-in-pictures/200-rest-api.png"]
 
 
 

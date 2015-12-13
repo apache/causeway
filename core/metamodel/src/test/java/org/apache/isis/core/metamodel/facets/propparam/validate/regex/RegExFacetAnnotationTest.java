@@ -53,12 +53,12 @@ public class RegExFacetAnnotationTest {
 
     @Test
     public void shouldBeAbleToInstantiate() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation(".*", "", true, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation(".*", "", true, facetHolder, null);
     }
 
     @Test
     public void shouldAllowDotStar() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation(".*", "", true, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation(".*", "", true, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("abc"), equalTo(false)); // ie
                                                                                      // does
                                                                                      // match
@@ -66,7 +66,7 @@ public class RegExFacetAnnotationTest {
 
     @Test
     public void shouldAllowWhenCaseSensitive() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", true, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", true, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("abc"), equalTo(false)); // ie
                                                                                      // does
                                                                                      // match
@@ -74,7 +74,7 @@ public class RegExFacetAnnotationTest {
 
     @Test
     public void shouldAllowWhenCaseInsensitive() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", false, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", false, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("ABC"), equalTo(false)); // ie
                                                                                      // does
                                                                                      // match
@@ -82,19 +82,19 @@ public class RegExFacetAnnotationTest {
 
     @Test
     public void shouldDisallowWhenCaseSensitive() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", true, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", true, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("abC"), equalTo(true));
     }
 
     @Test
     public void shouldDisallowWhenCaseInsensitive() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", false, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^abc$", "", false, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("aBd"), equalTo(true));
     }
 
     @Test
     public void shouldReformat() {
-        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^([0-9]{2})([0-9]{2})([0-9]{2})$", "$1-$2-$3", false, facetHolder);
+        regExFacetOnTypeAnnotation = new RegExFacetOnTypeAnnotation("^([0-9]{2})([0-9]{2})([0-9]{2})$", "$1-$2-$3", false, facetHolder, null);
         assertThat(regExFacetOnTypeAnnotation.doesNotMatch("123456"), equalTo(false));
         assertThat(regExFacetOnTypeAnnotation.format("123456"), equalTo("12-34-56"));
     }

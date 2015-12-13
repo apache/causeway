@@ -1,0 +1,97 @@
+[[_ugfun_how-tos_ui-hints_object-titles-and-icons]]
+= Object Titles and Icons
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+In Apache Isis every object is identified to the user by a title (label) and an icon.  This is shown in several places: as the main heading for an object; as a link text for an object referencing another object, and also in tables representing collections of objects.
+
+The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
+
+It is also possible for an object to provide a CSS class hint.  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+
+
+== Object Title
+
+The object title is a label to identify an object to the end-user.  Generally the object title is a label to identify an object to the end-user.  There is no requirement for it to be absolutely unique, but it should be "unique enough" to distinguish the object from other object's likely to be rendered on the same page.
+
+The title is always shown with an icon, so there is generally no need for the title to include information about the object's type.  For example the title of a customer object shouldn't include the literal string "Customer"; it can just have the customer's name, reference or some other meaningful business identifier.
+
+
+=== Declarative style
+
+The xref:rgant.adoc#_rgant-Title[`@Title`] annotation can be used build up the title of an object from its constituent parts.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    @Title(sequence="1", append=" ")
+    public String getFirstName() { ... }
+    @Title(sequence="2")
+    public Product getLastName() { ... }
+    ...
+}
+----
+
+might return "Arthur Clarke", while:
+
+[source,java]
+----
+public class CustomerAlt {
+    @Title(sequence="2", prepend=", ")
+    public String getFirstName() { ... }
+
+    @Title(sequence="1")
+    public Product getLastName() { ... }
+    ...
+}
+----
+
+could return "Clarke, Arthur".
+
+Note that the sequence is in Dewey Decimal Format.  This allows a subclass to intersperse information within the title.  For example (please forgive this horrible domain modelling (!)):
+
+
+[source,java]
+----
+public class Author extends Customer {
+    @Title(sequence="1.5", append=". ")
+    public String getMiddleInitial() { ... }
+    ...
+}
+----
+
+could return "Arthur C. Clarke".
+
+
+[TIP]
+====
+Titles can sometimes get be long and therefore rather cumbersome in "parented" tables.  If `@Title` has been used then the Wicket viewer will automatically exclude portions of the title belonging to the owning object.
+====
+
+
+=== Imperative style
+
+NOTE: TODO - see xref:rgcms.adoc#_rgcms_methods_reserved_title[`title()`]
+
+
+
+
+== Object Icon
+
+The icon is often the same for all instances of a particular class, but it's also possible for an individual instance to return a custom icon.  This could represent the state of that object (eg a shipped order, say, or overdue library book).
+
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_iconName[`iconName()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClassFa[`@DomainObjectLayout#cssClassFa()`]
+
+
+
+
+== Object CSS Styling
+
+
+It is also possible for an object to return a xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[CSS class].  In conjunction with xref:ugvw.adoc#_ugvw_customisation_tweaking-css-classes[customized CSS] this can be used to apply arbitrary styling; for example each object could be rendered in a page with a different background colour.
+
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_reserved_cssClass[`cssClass()`], xref:rgant.adoc#_rgant-DomainObjectLayout_cssClass[`@DomainObjectLayout#cssClass()`] xref:rgant.adoc#_rgant-ActionLayout_cssClass[`@ActionLayout#cssClass()`], xref:rgant.adoc#_rgant-PropertyLayout_cssClass[`@PropertyLayout#cssClass()`], xref:rgant.adoc#_rgant-CollectionLayout_cssClass[`@CollectionLayout#cssClass()`]

@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.metamodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
-import org.apache.isis.core.metamodel.facets.object.callbacks.create.CreatedCallbackFacetViaMethod;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;
 
 public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 

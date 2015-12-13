@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 public interface ContributeeMember extends ObjectMember {
 
 
-    public static class Predicates {
+    class Predicates {
         
         private Predicates(){}
 

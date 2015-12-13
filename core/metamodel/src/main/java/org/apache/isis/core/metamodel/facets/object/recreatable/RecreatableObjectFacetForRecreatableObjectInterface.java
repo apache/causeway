@@ -22,13 +22,15 @@ package org.apache.isis.core.metamodel.facets.object.recreatable;
 import org.apache.isis.applib.ViewModel;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.PostConstructMethodCache;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 
 public class RecreatableObjectFacetForRecreatableObjectInterface extends RecreatableObjectFacetAbstract {
 
     public RecreatableObjectFacetForRecreatableObjectInterface(
             final FacetHolder holder,
-            final PostConstructMethodCache postConstructMethodCache) {
-        super(holder, ArchitecturalLayer.APPLICATION, postConstructMethodCache);
+            final PostConstructMethodCache postConstructMethodCache,
+            final ServicesInjector servicesInjector) {
+        super(holder, ArchitecturalLayer.APPLICATION, RecreationMechanism.INITIALIZES, postConstructMethodCache, servicesInjector);
     }
 
     @Override

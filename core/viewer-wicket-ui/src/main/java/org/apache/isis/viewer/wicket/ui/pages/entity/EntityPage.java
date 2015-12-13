@@ -19,7 +19,6 @@
 
 package org.apache.isis.viewer.wicket.ui.pages.entity;
 
-import java.util.List;
 import org.apache.wicket.Application;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
@@ -31,9 +30,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.NonRecoverableException;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -43,9 +40,6 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -137,21 +131,6 @@ public class EntityPage extends PageAbstract {
 
         // check that the entity overall can be viewed.
         if(!isVisible(objectAdapter)) {
-            throw new ObjectMember.AuthorizationException();
-        }
-
-        // belt-n-braces: check that at least one property of the entity can be viewed.
-        final AuthenticationSession session = getAuthenticationSession();
-        final ObjectSpecification specification = objectAdapter.getSpecification();
-        final List<ObjectAssociation> visibleAssociation = specification.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.dynamicallyVisible(
-                objectAdapter, InteractionInitiatedBy.USER, Where.NOWHERE));
-
-        if(visibleAssociation.isEmpty()) {
-            final List<ObjectAssociation> anyAssociations = specification.getAssociations(Contributed.INCLUDED);
-            if(anyAssociations.isEmpty()) {
-                throw new NonRecoverableException(String.format(
-                        "No properties are defined for this entity type (%s); this is probably a programming error", specification.getFullIdentifier()));
-            }
             throw new ObjectMember.AuthorizationException();
         }
 

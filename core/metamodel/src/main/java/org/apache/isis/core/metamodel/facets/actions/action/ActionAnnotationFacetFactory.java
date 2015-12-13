@@ -97,6 +97,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorCom
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProvider;
 import org.apache.isis.core.metamodel.transactions.TransactionStateProviderAware;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, IsisConfigurationAware, AdapterManagerAware, MetaModelValidatorRefiner,
         TransactionStateProviderAware {
@@ -199,8 +200,13 @@ public class ActionAnnotationFacetFactory extends FacetFactoryAbstract implement
                 actionDomainEventFacet = new ActionDomainEventFacetDefault(
                         actionDomainEventType, servicesInjector, getSpecificationLoader(), holder);
             }
-            FacetUtil.addFacet(actionDomainEventFacet);
-
+            if(EventUtil.eventTypeIsPostable(
+                    actionDomainEventFacet.getEventType(),
+                    ActionDomainEvent.Noop.class,
+                    ActionDomainEvent.Default.class,
+                    "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault", this.configuration)) {
+                FacetUtil.addFacet(actionDomainEventFacet);
+            }
 
             // replace the current actionInvocationFacet with one that will
             // emit the appropriate domain event and then delegate onto the underlying

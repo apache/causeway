@@ -164,7 +164,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
         List<LinkAndLabel> links = Lists.transform(bulkActions, new Function<ObjectAction, LinkAndLabel>(){
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(null, objectAction, ID_ADDITIONAL_LINK);
+                return linkFactory.newLink(ID_ADDITIONAL_LINK, null, objectAction);
             }
         });
 

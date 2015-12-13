@@ -18,6 +18,7 @@
  */
 package org.apache.isis.tool.mavenplugin;
 
+import java.io.IOException;
 import java.util.Set;
 
 import org.apache.maven.model.Plugin;
@@ -31,7 +32,6 @@ import org.apache.maven.project.MavenProject;
 
 import org.apache.isis.applib.AppManifest;
 import org.apache.isis.core.commons.factory.InstanceUtil;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.systemusinginstallers.IsisComponentProviderDefault2;
@@ -47,15 +47,12 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
     @Parameter(required = true, readonly = false, property = "appManifest")
     private String appManifest;
 
-    private final MetaModelProcessor metaModelProcessor;
-    private final ContextForMojo context;
-
-    protected IsisMojoAbstract(final MetaModelProcessor metaModelProcessor) {
-        this.metaModelProcessor = metaModelProcessor;
-        this.context = new ContextForMojo(mavenProject, getLog());
+    protected IsisMojoAbstract() {
     }
 
     public void execute() throws MojoExecutionException, MojoFailureException {
+
+        ContextForMojo context = new ContextForMojo(mavenProject, getLog());
 
         final Plugin plugin = MavenProjects.lookupPlugin(mavenProject, CURRENT_PLUGIN_KEY);
 
@@ -74,12 +71,17 @@ public abstract class IsisMojoAbstract extends AbstractMojo {
             isisSystem.shutdown();
         }
 
-        final ObjectReflectorDefault specificationLoader =
-                (ObjectReflectorDefault) isisSystem.getSessionFactory().getSpecificationLoader();
-        metaModelProcessor.process(specificationLoader, context);
-
+        try {
+            doExecute(context, isisSystem);
+        } catch (IOException e) {
+            ;
+            // ignore
+        }
 
     }
+
+    protected abstract void doExecute(final ContextForMojo context, final IsisSystem system)
+            throws MojoFailureException, IOException;
 
     //region > Context
     static class ContextForMojo implements MetaModelProcessor.Context {

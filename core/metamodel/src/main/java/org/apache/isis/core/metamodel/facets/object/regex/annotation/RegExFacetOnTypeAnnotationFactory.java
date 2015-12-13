@@ -59,8 +59,9 @@ public class RegExFacetOnTypeAnnotationFactory extends FacetFactoryAbstract impl
         final String validationExpression = annotation.validation();
         final boolean caseSensitive = annotation.caseSensitive();
         final String formatExpression = annotation.format();
+        final String replacement = "Doesn't match pattern";
 
-        return new RegExFacetOnTypeAnnotation(validationExpression, formatExpression, caseSensitive, holder);
+        return new RegExFacetOnTypeAnnotation(validationExpression, formatExpression, caseSensitive, holder, replacement);
     }
 
     @Override

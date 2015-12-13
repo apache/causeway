@@ -37,6 +37,8 @@ public abstract class ActionInteractionEvent<S> extends ActionDomainEvent<S> {
     @Deprecated
     public static class Default extends ActionDomainEvent.Default {
         private static final long serialVersionUID = 1L;
+        public Default() {}
+        @Deprecated
         public Default(Object source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
         }
@@ -44,12 +46,17 @@ public abstract class ActionInteractionEvent<S> extends ActionDomainEvent<S> {
     //endregion
 
     //region > constructors
+
+    public ActionInteractionEvent(){}
+
+    @Deprecated
     public ActionInteractionEvent(
             final S source,
             final Identifier identifier) {
         super(source, identifier);
     }
 
+    @Deprecated
     public ActionInteractionEvent(
             final S source,
             final Identifier identifier,
@@ -57,6 +64,7 @@ public abstract class ActionInteractionEvent<S> extends ActionDomainEvent<S> {
         super(source, identifier, arguments);
     }
 
+    @Deprecated
     public ActionInteractionEvent(
             final S source,
             final Identifier identifier,

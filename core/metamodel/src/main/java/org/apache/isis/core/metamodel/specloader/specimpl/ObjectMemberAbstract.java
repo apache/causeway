@@ -348,7 +348,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
             }
             return singularName;
         }
-        final int indexOfUnderscore = singularName.lastIndexOf('_');
+        final int indexOfUnderscore = singularName.indexOf('_');
         if (indexOfUnderscore == -1) {
             return singularName;
         }

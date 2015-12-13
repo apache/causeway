@@ -1,0 +1,119 @@
+[[_rgcms_classes_value-types]]
+= Value Types
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+NOTE: TODO
+
+
+
+.JDK Classes
+[cols="1,1", options="header"]
+|===
+
+|Type
+|Description
+
+|`java.lang.Boolean`
+|
+
+|`java.lang.Character`
+|
+
+|`java.lang.Double`
+|
+
+|`java.lang.Float`
+|
+
+|`java.lang.Integer`
+|
+
+|`java.lang.Long`
+|
+
+|`java.lang.Short`
+|
+
+|`java.lang.String`
+|
+
+|`java.math.BigDecimal`
+|
+
+|`java.math.BigInteger`
+|
+
+|`java.sql.Date`
+|
+
+|`java.sql.Time`
+|
+
+|`java.sql.Timestamp`
+|
+
+|`java.util.Date`
+|
+
+|===
+
+
+.JodaTime classes
+[cols="1,1", options="header"]
+|===
+
+|Type
+|Description
+
+|`org.joda.time.DateTime`
+|
+
+|`org.joda.time.LocalDateTime`
+|
+
+|`org.joda.time.LocalDate`
+|
+
+|===
+
+
+
+
+.Isis Applib classes
+[cols="1,1", options="header"]
+|===
+
+|Type
+|Description
+
+|`o.a.i.applib.value.` +
+`Blob`
+|
+
+|`o.a.i.applib.value.` +
+`Clob`
+|
+
+|`o.a.i.applib.value.` +
+`Color`
+|
+
+|`o.a.i.applib.value.` +
+`Money`
+|
+
+|`o.a.i.applib.value.` +
+`Password`
+|
+
+|===
+
+
+
+include::_rgcms_classes_value-types_Blob.adoc[leveloffset=+1]
+include::_rgcms_classes_value-types_Clob.adoc[leveloffset=+1]
+include::_rgcms_classes_value-types_Color.adoc[leveloffset=+1]
+include::_rgcms_classes_value-types_Money.adoc[leveloffset=+1]
+include::_rgcms_classes_value-types_Password.adoc[leveloffset=+1]

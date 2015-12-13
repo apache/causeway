@@ -48,6 +48,7 @@ import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.restfulobjects.applib.RepresentationType;
 import org.apache.isis.viewer.restfulobjects.applib.client.RestfulResponse.HttpStatusCode;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 import org.apache.isis.viewer.restfulobjects.rendering.util.Util;
 import org.apache.isis.viewer.restfulobjects.server.ResourceContext;
 import org.apache.isis.viewer.restfulobjects.server.util.OidUtils;
@@ -78,13 +79,18 @@ public abstract class ResourceAbstract {
 
     private ResourceContext resourceContext;
 
-    protected void init(final Where where) {
-        init(RepresentationType.GENERIC, where);
+    protected void init(
+            final Where where,
+            final RepresentationService.Intent intent) {
+        init(RepresentationType.GENERIC, where, intent);
     }
 
-    protected void init(final RepresentationType representationType, Where where) {
+    protected void init(
+            final RepresentationType representationType,
+            Where where,
+            final RepresentationService.Intent intent) {
         String queryStringIfAny = getUrlDecodedQueryStringIfAny();
-        init(representationType, where, queryStringIfAny);
+        init(representationType, where, intent, queryStringIfAny);
     }
 
     private String getUrlDecodedQueryStringIfAny() {
@@ -95,14 +101,16 @@ public abstract class ResourceAbstract {
     protected void init(
             final RepresentationType representationType,
             final Where where,
+            final RepresentationService.Intent intent,
             final InputStream arguments) {
         final String urlDecodedQueryString = Util.asStringUtf8(arguments);
-        init(representationType, where, urlDecodedQueryString);
+        init(representationType, where, intent, urlDecodedQueryString);
     }
 
     protected void init(
             final RepresentationType representationType,
             final Where where,
+            final RepresentationService.Intent intent,
             final String urlUnencodedQueryString) {
         if (!IsisContext.inSession()) {
             throw RestfulObjectsApplicationException.create(HttpStatusCode.UNAUTHORIZED);
@@ -112,7 +120,7 @@ public abstract class ResourceAbstract {
         }
 
         this.resourceContext = new ResourceContext(
-                representationType, httpHeaders, providers, uriInfo, request, where, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
+                representationType, httpHeaders, providers, uriInfo, request, where, intent, urlUnencodedQueryString, httpServletRequest, httpServletResponse,
                 securityContext,
                 getDeploymentType(), getConfiguration(),
                 getServicesInjector(), getSpecificationLoader(),

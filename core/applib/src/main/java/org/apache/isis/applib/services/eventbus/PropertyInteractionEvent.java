@@ -33,6 +33,7 @@ public abstract class PropertyInteractionEvent<S,T> extends PropertyDomainEvent<
     @Deprecated
     public static class Default extends PropertyDomainEvent.Default {
         private static final long serialVersionUID = 1L;
+        public Default(){}
         public Default(Object source, Identifier identifier, Object oldValue, Object newValue) {
             super(source, identifier, oldValue, newValue);
         }
@@ -40,12 +41,16 @@ public abstract class PropertyInteractionEvent<S,T> extends PropertyDomainEvent<
     //endregion
 
     //region > constructors
+    public PropertyInteractionEvent() {}
+
+    @Deprecated
     public PropertyInteractionEvent(
             final S source,
             final Identifier identifier) {
         super(source, identifier);
     }
 
+    @Deprecated
     public PropertyInteractionEvent(
             final S source,
             final Identifier identifier,

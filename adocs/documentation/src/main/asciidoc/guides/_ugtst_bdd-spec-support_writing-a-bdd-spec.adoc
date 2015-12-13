@@ -1,0 +1,141 @@
+[[_ugtst_bdd-spec-support_writing-a-bdd-spec]]
+= Writing a BDD spec
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+BDD specifications contain:
+
+* a `XxxSpec.feature` file, describing the feature and the scenarios (given/when/then)s that constitute its acceptance criteria
+
+* a `RunSpecs.java` class file to run the specification (all boilerplate). This will run all `.feature` files in the same package or subpackages.
+
+* one or several `XxxGlue` constituting the step definitions to be matched against. +
++
+The "glue" (step definitions) are intended to be reused across features. We therefore recommend that they reside in a separate package, and are organized by the entity type upon which they act. +
++
+For example, given a feature that involves `Customer` and `Order`, have the step definitions pertaining to `Customer` reside in `CustomerGlue`, and the step definitions pertaining to `Order` reside in `OrderGlue`. +
++
+The `glue` attribute of the Cucumber-JVM JUnit runner eallows you to indicate which package(s) should be recursively searched to find any glue.
+
+* a system initializer class.  You can reuse the  system initializer from any integration tests (as described in xref:ugtst.adoc#_ugtst_integ-test-support[Integration Test Support], bootstrapping section).
+
+
+Here's an example of a feature from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype]:
+
+[source,java]
+----
+@SimpleObjectsFixture
+Feature: List and Create New Simple Objects
+
+  @integration
+  Scenario: Existing simple objects can be listed and new ones created
+    Given there are initially 3 simple objects
+    When  I create a new simple object
+    Then  there are 4 simple objects
+----
+
+The `@SimpleObjectsFixture` is a custom tag we've specified to indicate the prerequisite fixtures to be loaded; more on this in a moment. The `@integration` tag, meanwhile, says that this feature should be run with integration-level scope.
+
+
+[NOTE]
+====
+Although BDD specs are most commonly used for end-to-end tests (ie at the same scope as an integration test), the two concerns (expressability of a test to a business person vs granularity of the test) should not be conflated. There are a couple of http://silkandspinach.net/2013/01/18/a-testing-strategy/[good] blog http://claysnow.co.uk/the-testing-iceberg/[posts] discussing http://claysnow.co.uk/living-documentation-can-be-readable-and-fast/[this]. The basic idea is to avoid the overhead of a heavy-duty integration test if possible.
+
+Apache Isis does also support running BDD specs in unit test mode; by annotating the scenario with the `@unit` (rather than `@integration` tag).  When running under unit-level scope, the Apache Isis system is _not_ instantiated.  Instead, the `ScenarioExecution` class returns JMock mocks (except for the `WrapperFactory`, if configured).
+
+To support unit testing scope Apache Isis provides the `InMemoryDB` class; a glorified hashmap of "persisted" objects.  Use of this utility class is optional.
+
+Writing a BDD spec that supports both modes of operation therefore takes more effort and we expect most users interested in BDD will use integration-testing scope; for these reasons we have chosen _not_ to include unit-testing support in the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  For those who do require faster-executing test suite, it's worthwhile knowing that Apache Isis can support this.
+
+====
+
+
+The `RunSpecs` class to run this feature (and any other features in this package or subpackages) is just boilerplate
+
+[source,java]
+----
+@RunWith(Cucumber.class)
+@CucumberOptions(
+        format = {
+                "html:target/cucumber-html-report"
+                ,"json:target/cucumber.json"
+        },
+        glue={"classpath:domainapp.integtests.specglue"},
+        strict = true,
+        tags = { "~@backlog", "~@ignore" })
+public class RunSpecs {
+    // intentionally empty
+}
+----
+
+The JSON formatter allows integration with enhanced reports, for example as provided by http://www.masterthought.net/section/cucumber-reporting[Masterthought.net] (screenshots at end of page). (Commented out) configuration for this is provided in the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].
+
+The bootstrapping of Apache Isis can be moved into a `BootstrappingGlue` step definition:
+
+[source,java]
+----
+public class BootstrappingGlue extends CukeGlueAbstract {
+    @Before(value={"@integration"}, order=100)
+    public void beforeScenarioIntegrationScope() {
+        org.apache.log4j.PropertyConfigurator.configure("logging.properties");
+        SimpleAppSystemInitializer.initIsft();
+
+        before(ScenarioExecutionScope.INTEGRATION);
+    }
+    @After
+    public void afterScenario(cucumber.api.Scenario sc) {
+        assertMocksSatisfied();
+        after(sc);
+    }
+}
+----
+
+The fixture to run also lives in its own step definition, https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/CatalogOfFixturesGlue.java#L24[`CatalogOfFixturesGlue`]:
+
+[source,java]
+----
+public class CatalogOfFixturesGlue extends CukeGlueAbstract {
+    @Before(value={"@integration", "@SimpleObjectsFixture"}, order=20000)
+    public void integrationFixtures() throws Throwable {
+        scenarioExecution().install(new RecreateSimpleObjects());
+    }
+}
+----
+
+Note that this is annotated with a tag (`@SimpleObjectsFixture`) so that the correct fixture runs. (We might have a whole variety of these).
+
+The step definitions pertaining to `SimpleObject` domain entity then reside in the https://github.com/apache/isis/blob/07fe61ef3fb029ae36427f60da2afeeb931e4f88/example/application/simpleapp/integtests/src/test/java/domainapp/integtests/specglue/modules/simple/SimpleObjectGlue.java#L31[`SimpleObjectGlue`] class. This is where the heavy lifting gets done:
+
+[source,java]
+----
+public class SimpleObjectGlue extends CukeGlueAbstract {
+    @Given("^there are.* (\\d+) simple objects$")
+    public void there_are_N_simple_objects(int n) throws Throwable {
+        try {
+            final List<SimpleObject> findAll = service(SimpleObjects.class).listAll();
+            assertThat(findAll.size(), is(n));
+            putVar("list", "all", findAll);
+
+        } finally {
+            assertMocksSatisfied();
+        }
+    }
+    @When("^I create a new simple object$")
+    public void I_create_a_new_simple_object() throws Throwable {
+        service(SimpleObjects.class).create(UUID.randomUUID().toString());
+    }
+}
+----
+
+[TIP]
+====
+If using Java 8, note that Cucumber JVM supports a link:https://cucumber.io/docs/reference/jvm#java-8-lambdas[simplified syntax using lambdas].
+====
+
+
+
+

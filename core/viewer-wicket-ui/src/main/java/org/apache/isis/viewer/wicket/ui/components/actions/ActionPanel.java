@@ -81,7 +81,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
         actionModel.setExecutor(this);
-        buildGui(actionModel);
+        buildGui(getActionModel());
     }
 
     /**
@@ -100,24 +100,9 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private void buildGui(final ActionModel actionModel) {
         if (actionModel.hasParameters()) {
-            buildGuiForParameters();
+            buildGuiForParameters(getActionModel());
         } else {
-
-            boolean succeeded = executeActionAndProcessResults(null, null);
-            if(succeeded) {
-                // nothing to do
-            } else {
-
-                // render the target entity again
-                //
-                // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
-                // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
-                // an error page, but is probably 'good enough').
-                final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
-
-                ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
-                resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
-            }
+            buildGuiForNoParameters(actionModel);
         }
     }
 
@@ -130,28 +115,20 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
         return this;
     }
 
-    private void buildGuiForParameters() {
+    private void buildGuiForParameters(final ActionModel actionModel) {
 
-        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-
-                setVisible(showHeader);
-            }
-        };
-        addOrReplace(header);
+        WebMarkupContainer header = addHeader();
 
         ObjectAdapter targetAdapter = null;
         try {
-            targetAdapter = getActionModel().getTargetAdapter();
-            
+            targetAdapter = actionModel.getTargetAdapter();
+
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PARAMETERS, getActionModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
             final String actionName = getActionModel().getActionMemento().getAction().getName();
             header.add(new Label(ID_ACTION_NAME, Model.of(actionName)));
-            
+
         } catch (final ConcurrencyException ex) {
 
             // second attempt should succeed, because the Oid would have
@@ -167,6 +144,39 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             getMessageBroker().addWarning(ex.getMessage());
         }
     }
+
+    private WebMarkupContainer addHeader() {
+        WebMarkupContainer header = new WebMarkupContainer(ID_HEADER) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+
+                setVisible(showHeader);
+            }
+        };
+        addOrReplace(header);
+        return header;
+    }
+
+    private void buildGuiForNoParameters(final ActionModel actionModel) {
+
+        boolean succeeded = executeActionAndProcessResults(null, null);
+        if(succeeded) {
+            // nothing to do
+        } else {
+
+            // render the target entity again
+            //
+            // (One way this can occur is if an event subscriber has a defect and throws an exception; in which case
+            // the EventBus' exception handler will automatically veto.  This results in a growl message rather than
+            // an error page, but is probably 'good enough').
+            final ObjectAdapter targetAdapter = actionModel.getTargetAdapter();
+
+            ActionResultResponse resultResponse = ActionResultResponseType.OBJECT.interpretResult(this.getActionModel(), targetAdapter, null);
+            resultResponse.getHandlingStrategy().handleResults(this, resultResponse);
+        }
+    }
+
 
     protected void bookmarkPage(BookmarkableModel<?> model) {
         getBookmarkedPagesModel().bookmarkPage(model);

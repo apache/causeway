@@ -36,6 +36,7 @@ import org.apache.isis.viewer.restfulobjects.applib.version.VersionResource;
 import org.apache.isis.viewer.restfulobjects.rendering.Caching;
 import org.apache.isis.viewer.restfulobjects.rendering.Responses;
 import org.apache.isis.viewer.restfulobjects.rendering.RestfulObjectsApplicationException;
+import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationService;
 
 /**
  * Implementation note: it seems to be necessary to annotate the implementation
@@ -49,7 +50,7 @@ public class VersionResourceServerside extends ResourceAbstract implements Versi
     @GET
     @Produces({ MediaType.APPLICATION_JSON, RestfulMediaType.APPLICATION_JSON_VERSION })
     public Response version() {
-        init(RepresentationType.VERSION, Where.NOWHERE);
+        init(RepresentationType.VERSION, Where.NOWHERE, RepresentationService.Intent.NOT_APPLICABLE);
         fakeRuntimeExceptionIfXFail();
 
         final VersionReprRenderer renderer = new VersionReprRenderer(getResourceContext(), null, JsonRepresentation.newMap());

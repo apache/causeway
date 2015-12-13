@@ -6,19 +6,21 @@
 :toc: right
 
 
-This section describes how to install and setup IntelliJ, then how to import an application into IntelliJ and run it.
-
 
 [NOTE]
 ====
-This document relates to IntelliJ Community Edition 14.1.x, with screenshots taken for Windows.
+This material does not constitute an endorsement; JetBrains is not affiliated to Apache Software Foundation in any way.
 ====
+
+This section describes how to install and setup JetBrains' IntelliJ IDEA, then how to import an application into IntelliJ and run it.
 
 
 
 == Installing and Setting up
 
-This section covers installation and setup.
+This section covers installation and setup. These notes relates to IntelliJ Community Edition 14.1.x, with
+screenshots taken for Windows.
+
 
 === Download and Install
 

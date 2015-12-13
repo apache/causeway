@@ -125,7 +125,7 @@ public final class JdoObjectIdSerializer {
 
         // the JDO spec (5.4.3) requires that OIDs are serializable toString and 
         // recreatable through the constructor
-        return jdoOid.getClass().getName().toString() + SEPARATOR + jdoOid.toString();
+        return jdoOid.getClass().getName() + SEPARATOR + jdoOid.toString();
     }
 
     private static List<String> dnPrefixes = Arrays.asList("S", "I", "L", "M", "B");

@@ -73,7 +73,7 @@ th, td {
                         <b><a href="wicket/">wicket/</a></b>
                     </p>
                     <p>
-                        provides accesses to a generic UI for end-users,
+                        provides access to a generic UI for end-users,
                         Isis' <a href="http://isis.apache.org/components/viewers/wicket/about.html" target="_blank">Wicket Viewer</a>.
                         As its name suggests, this viewer is built on top of <a href="http://wicket.apache.org" target="_blank">Apache Wicket</a>&trade;.
                     </p>
@@ -81,13 +81,21 @@ th, td {
                 <li>
                     <p>
                         <b>
-                            <a href="restful/">restful/</a>
+                            <a href="swagger-ui/index.html">swagger-ui/</a>
                         </b>
                     </p>
                     <p>
-                        provides access to a RESTful API conformant with the
-                        <a href="http://restfulobjects.org">Restful Objects</a> spec</td>.  This is part of Apache Isis Core.  The
-                        implementation technology is JBoss RestEasy.
+                        provides access to a Swagger UI which uses a subset of the framework's automatically
+                        generated <a href="restful/">RESTful API</a>.  There are three versions of the Swagger
+                        spec files (that drive the UI): <a href="restful/swagger/public">public</a> (for use by
+                        "third-party" apps), <a href="restful/swagger/private">private</a> (for use by internal apps),
+                        and <a href="restful/swagger/prototyping">prototyping</a> (an extended version of the private
+                        API).  The Swagger spec files are themselves dynamically generated and can be used to generate
+                        client-side stubs.
+                    </p>
+                    <p>The RESTful API can return both simple representations and also richer hypermedia representations
+                        that are conformant with the <a href="http://restfulobjects.org">Restful Objects</a> spec.
+                        The HTTP <code>Accept</code> header is used to select which representation should be generated.
                     </p>
                 </li>
             </ul>

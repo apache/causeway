@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
  * domain object instance. It is used as a marker.
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.FIELD })
 public @interface Title {
 
     /**
