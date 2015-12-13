@@ -34,11 +34,9 @@ import org.apache.isis.viewer.restfulobjects.rendering.service.RepresentationSer
 
 public interface ContentNegotiationService {
 
-    @Programmatic
     @PostConstruct
     public void init(Map<String, String> properties);
 
-    @Programmatic
     @PreDestroy
     public void shutdown();
 

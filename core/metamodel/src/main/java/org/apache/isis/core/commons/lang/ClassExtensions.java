@@ -166,7 +166,12 @@ public final class ClassExtensions {
     }
 
     public static String resourceContent(final Class<?> cls, final String suffix) throws IOException {
-        final URL url = Resources.getResource(cls, cls.getSimpleName()+suffix);
+        final String resourceName = cls.getSimpleName() + suffix;
+        return resourceContentOf(cls, resourceName);
+    }
+
+    public static String resourceContentOf(final Class<?> cls, final String resourceName) throws IOException {
+        final URL url = Resources.getResource(cls, resourceName);
         return Resources.toString(url, Charset.defaultCharset());
     }
 

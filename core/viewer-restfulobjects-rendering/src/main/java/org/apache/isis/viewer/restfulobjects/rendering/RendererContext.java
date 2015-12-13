@@ -32,25 +32,25 @@ import org.apache.isis.viewer.restfulobjects.rendering.domainobjects.DomainObjec
 
 public interface RendererContext {
 
-    public String urlFor(final String url);
+    String urlFor(final String url);
 
-    public AuthenticationSession getAuthenticationSession();
+    AuthenticationSession getAuthenticationSession();
 
-    public IsisConfiguration getConfiguration();
+    IsisConfiguration getConfiguration();
     
-    public PersistenceSession getPersistenceSession();
+    PersistenceSession getPersistenceSession();
 
     /**
      * @deprecated - replaced by {@link #getPersistenceSession()}.
      */
     @Deprecated
-    public AdapterManager getAdapterManager();
+    AdapterManager getAdapterManager();
 
-    public Where getWhere();
+    Where getWhere();
 
-    public List<List<String>> getFollowLinks();
+    List<List<String>> getFollowLinks();
 
-    public Localization getLocalization();
+    Localization getLocalization();
 
     boolean honorUiHints();
 
@@ -71,6 +71,6 @@ public interface RendererContext {
      * @param objectAdapter - the object proposed to be rendered eagerly 
      * @return whether this adapter has already been rendered (implying the caller should not render the value).
      */
-    public boolean canEagerlyRender(ObjectAdapter objectAdapter);
+    boolean canEagerlyRender(ObjectAdapter objectAdapter);
 
 }

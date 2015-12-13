@@ -1,0 +1,35 @@
+[[_ugfun_core-concepts_add-ons]]
+= Isis Add-ons
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The link:http://www.isisaddons.org[Isis Addons] website provides a number of reusable modules and other extensions for Apache Isis.  This chapter focuses just on the modules, all of which have a name of the form `isis-module-xxx`.
+
+[WARNING]
+====
+Note that Isis addons, while maintained by Apache Isis committers, are not part of the ASF.
+====
+
+
+
+The modules themselves fall into four broad groups:
+
+* modules that provide an implementations of API defined by Apache Isis +
++
+where Apache Isis has hooks to use the service if defined by provides no implementations of its own.  The http://github.com/isisaddons/isis-module-command[command], http://github.com/isisaddons/isis-module-audit[auditing], http://github.com/isisaddons/isis-module-publishing[publishing], http://github.com/isisaddons/isis-module-security[security]  and http://github.com/isisaddons/isis-module-sessionlogger[sessionlogger] modules fall into this category.  Typically the domain objects themselves wouldn't interact with these services
+
+* modules that provide standalone domain services with their own API and implementation +
++
+These are simply intended to be used by domain objects.  The http://github.com/isisaddons/isis-module-docx[docx], http://github.com/isisaddons/isis-module-excel[excel], http://github.com/isisaddons/isis-module-settings[settings] and http://github.com/isisaddons/isis-module-stringinterpolator[stringinterpolator] fall into this category.
+
+* modules that provide standalone domain entities (and supporting services) for a particular subdomain +
++
+The http://github.com/isisaddons/isis-module-tags[tags] module falls into this category
+
+* modules that provide developer utilities +
++
+Not intended for use by either the framework or domain objects, but provide utilities that the developer themselves might use.  The http://github.com/isisaddons/isis-module-devutils[devutils] module (not suprisingly) falls into this category
+
+Each of the modules has a full README and example application demonstrating their usage.  The sections below briefly outline the capabilities of these modules.

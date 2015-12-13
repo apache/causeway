@@ -86,6 +86,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorComposite;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorForDeprecatedAnnotation;
+import org.apache.isis.core.metamodel.util.EventUtil;
 
 public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware, MetaModelValidatorRefiner, IsisConfigurationAware {
 
@@ -101,6 +102,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
     private final MetaModelValidatorForDeprecatedAnnotation notPersistedValidator = new MetaModelValidatorForDeprecatedAnnotation(NotPersisted.class);
 
     private ServicesInjector servicesInjector;
+    private IsisConfiguration configuration;
 
     public PropertyAnnotationFacetFactory() {
         super(FeatureType.PROPERTIES_AND_ACTIONS);
@@ -167,7 +169,15 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             propertyDomainEventFacet = new PropertyDomainEventFacetDefault(
                     propertyDomainEventType, getterFacet, servicesInjector, getSpecificationLoader(), holder);
         }
-        FacetUtil.addFacet(propertyDomainEventFacet);
+
+        if(EventUtil.eventTypeIsPostable(
+                propertyDomainEventFacet.getEventType(),
+                PropertyDomainEvent.Noop.class,
+                PropertyDomainEvent.Default.class,
+                "isis.reflector.facet.propertyAnnotation.domainEvent.postForDefault",
+                this.configuration)) {
+            FacetUtil.addFacet(propertyDomainEventFacet);
+        }
 
 
         //
@@ -231,6 +241,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
             FacetUtil.addFacet(replacementFacet);
         }
     }
+
 
     void processHidden(final ProcessMethodContext processMethodContext) {
         final Method method = processMethodContext.getMethod();
@@ -389,6 +400,7 @@ public class PropertyAnnotationFacetFactory extends FacetFactoryAbstract impleme
 
     @Override
     public void setConfiguration(final IsisConfiguration configuration) {
+        this.configuration = configuration;
         postsPropertyChangedEventValidator.setConfiguration(configuration);
         propertyInteractionValidator.setConfiguration(configuration);
         regexValidator.setConfiguration(configuration);

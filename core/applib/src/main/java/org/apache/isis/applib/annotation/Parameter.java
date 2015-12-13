@@ -102,6 +102,6 @@ public @interface Parameter {
     /**
      * Replacement text for the pattern in generated error message.
      */
-    String regexPatternReplacement() default "";
+    String regexPatternReplacement() default "Doesn't match pattern";
 
 }

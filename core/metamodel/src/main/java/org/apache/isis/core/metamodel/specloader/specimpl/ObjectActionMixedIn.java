@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.common.base.Objects;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
@@ -94,7 +95,7 @@ public class ObjectActionMixedIn extends ObjectActionDefault implements MixedInM
         // adjust name if necessary
         final String name = getName();
 
-        if(Objects.equal(name, DEFAULT_MEMBER_NAME)) {
+        if(Strings.isNullOrEmpty(name) || Objects.equal(name, DEFAULT_MEMBER_NAME)) {
             String memberName = determineNameFrom(mixinAction);
             FacetUtil.addFacet(new NamedFacetInferred(memberName, facetHolder));
         }

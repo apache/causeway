@@ -1,0 +1,48 @@
+[[_ugfun_how-tos_derived-members]]
+= Derived Members
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+NOTE: TODO
+
+
+
+
+== Derived Property
+
+NOTE: TODO
+
+
+
+
+== Derived Collection
+
+NOTE: TODO
+
+While derived properties and derived collections typically "walk the graph" to associated objects, there is nothing to prevent the returned value being the result of invoking a repository (domain service) action.
+
+For example:
+
+[source,java]
+----
+public class Customer {
+    ...
+    public List<Order> getMostRecentOrders() {
+        return orderRepo.findMostRecentOrders(this, 5);
+    }
+}
+----
+
+
+
+
+== Trigger on property change
+
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_modify[`modify...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_clear[`clear...()`]
+
+
+
+== Trigger on collection change
+
+NOTE: TODO - xref:rgcms.adoc#_rgcms_methods_prefixes_addTo[`addTo...()`], xref:rgcms.adoc#_rgcms_methods_prefixes_removeFrom[`removeFrom...()`]

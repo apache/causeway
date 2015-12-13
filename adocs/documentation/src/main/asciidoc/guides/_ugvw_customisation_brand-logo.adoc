@@ -1,0 +1,71 @@
+[[_ugvw_customisation_brand-logo]]
+= Brand logo
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+By default the Wicket viewer will display the application name top-left in the header menu. This can be changed to
+display a png logo instead.
+
+== Screenshots
+
+The screenshot below shows the Isis addons example https://github.com/isisaddons/isis-app-todoapp/[todoapp] (not ASF) with a 'brand logo' image in its header:
+
+image::{_imagesdir}wicket-viewer/brand-logo/brand-logo.png[width="750px",link="{_imagesdir}wicket-viewer/brand-logo/brand-logo.png"]
+
+A custom brand logo (typically larger) can also be specified for the signin page:
+
+image::{_imagesdir}wicket-viewer/brand-logo/brand-logo-signin.png[width="750px",link="{_imagesdir}wicket-viewer/brand-logo/brand-logo-signin.png"]
+
+
+
+
+== Configuration
+
+In the application-specific subclass of `IsisWicketApplication`, bind:
+
+* a string with name "brandLogoHeader" to the URL of a header image. A size of 160x40 works well.
+* a string with name "brandLogoSignin" to the URL of a image for the sign-in page. A size of 400x100 works well.
+
+For example:
+
+[source,java]
+----
+@Override
+protected Module newIsisWicketModule() {
+    final Module isisDefaults = super.newIsisWicketModule();
+
+    final Module overrides = new AbstractModule() {
+        @Override
+        protected void configure() {
+            ...
+            bind(String.class).annotatedWith(Names.named("brandLogoHeader"))
+                              .toInstance("/images/todoapp-logo-header.png");
+            bind(String.class).annotatedWith(Names.named("brandLogoSignin"))
+                              .toInstance("/images/todoapp-logo-signin.png");
+            ...
+        }
+    };
+
+    return Modules.override(isisDefaults).with(overrides);
+}
+----
+
+If the logo is hosted locally, add to the relevant directory (eg `src/main/webapp/images`). It is also valid for the
+URL to be absolute.
+
+You may also wish to tweak the xref:rgcfg.adoc#_rgcfg_application-specific_application-css[`application.css`]. For example, a logo with height 40px works well with the following:
+
+[source,css]
+----
+.navbar-brand img {
+    margin-top: -5px;
+    margin-left: 5px;
+}
+----
+
+
+
+

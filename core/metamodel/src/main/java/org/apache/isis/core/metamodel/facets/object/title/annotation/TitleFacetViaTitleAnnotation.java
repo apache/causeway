@@ -19,7 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.title.annotation;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.base.Function;
@@ -34,6 +33,7 @@ import org.apache.isis.applib.profiles.Localization;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Annotations;
 import org.apache.isis.core.metamodel.facets.object.title.TitleFacetAbstract;
 
 public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
@@ -43,24 +43,24 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
     private final AdapterManager adapterManager;
 
     public static class TitleComponent {
-        public static final Function<? super Method, ? extends TitleComponent> FROM_METHOD = new Function<Method, TitleComponent>() {
-
+        public static final Function<? super Annotations.Evaluator<Title>, ? extends TitleComponent> FROM_EVALUATORS = new Function<Annotations.Evaluator<Title>, TitleComponent>() {
             @Override
-            public TitleComponent apply(final Method input) {
-                return TitleComponent.of(input);
+            public TitleComponent apply(final Annotations.Evaluator<Title> titleEvaluator) {
+                return TitleComponent.of(titleEvaluator);
             }
         };
 
+
         private final String prepend;
         private final String append;
-        private final Method method;
+        private final Annotations.Evaluator<Title> titleEvaluator;
         private final int abbreviateTo;
 
-        private TitleComponent(final String prepend, final String append, final Method method, final int abbreviateTo) {
+        private TitleComponent(final String prepend, final String append, final Annotations.Evaluator<Title> titleEvaluator, final int abbreviateTo) {
             super();
             this.prepend = prepend;
             this.append = append;
-            this.method = method;
+            this.titleEvaluator = titleEvaluator;
             this.abbreviateTo = abbreviateTo;
         }
 
@@ -72,17 +72,18 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
             return append;
         }
 
-        public Method getMethod() {
-            return method;
+        public Annotations.Evaluator<Title> getTitleEvaluator() {
+            return titleEvaluator;
         }
 
-        public static TitleComponent of(final Method method) {
-            final Title annotation = method.getAnnotation(Title.class);
+        private static TitleComponent of(final Annotations.Evaluator<Title> titleEvaluator) {
+            final Title annotation = titleEvaluator.getAnnotation();
             final String prepend = annotation != null ? annotation.prepend() : " ";
             final String append = annotation != null ? annotation.append() : "";
             final int abbreviateTo = annotation != null ? annotation.abbreviatedTo() : Integer.MAX_VALUE;
-            return new TitleComponent(prepend, append, method, abbreviateTo);
+            return new TitleComponent(prepend, append, titleEvaluator, abbreviateTo);
         }
+
     }
 
     public TitleFacetViaTitleAnnotation(final List<TitleComponent> components, final FacetHolder holder, final AdapterManager adapterManager) {
@@ -117,7 +118,7 @@ public class TitleFacetViaTitleAnnotation extends TitleFacetAbstract {
 
         try {
             for (final TitleComponent component : this.components) {
-                final Object titlePart = ObjectAdapter.InvokeUtils.invoke(component.getMethod(), targetAdapter);
+                final Object titlePart = component.getTitleEvaluator().value(targetAdapter.getObject());
                 if (titlePart == null) {
                     continue;
                 } 

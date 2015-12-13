@@ -22,6 +22,13 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
 
     private static final long serialVersionUID = 1L;
 
+    //region > Default class
+    /**
+     * This class is the default for the
+     * {@link org.apache.isis.applib.annotation.DomainObject#updatedLifecycleEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.domainObjectAnnotation.updatedLifecycleEvent.postForDefault"
+     * configuration property.
+     */
     public static class Default extends ObjectUpdatedEvent<Object> {
         private static final long serialVersionUID = 1L;
         public Default() {}
@@ -31,6 +38,29 @@ public abstract class ObjectUpdatedEvent<S> extends AbstractLifecycleEvent<S> {
             return "ObjectUpdatedEvent$Default{source=" + getSource() + "}";
         }
     }
+    //endregion
+
+    //region > Noop class
+
+    /**
+     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event.
+     */
+    public static class Noop extends ObjectUpdatedEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
+    //region > Doop class
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event..
+     */
+    public static class Doop extends ObjectUpdatedEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
 
     public ObjectUpdatedEvent() {
     }

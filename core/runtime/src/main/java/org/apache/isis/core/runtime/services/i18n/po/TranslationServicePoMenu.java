@@ -18,21 +18,23 @@
  */
 package org.apache.isis.core.runtime.services.i18n.po;
 
-import java.util.List;
 import javax.inject.Inject;
-import org.apache.isis.applib.Identifier;
+
 import org.apache.isis.applib.IsisApplibModule;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.value.Clob;
 
-@DomainService()
+@DomainService(
+        nature = NatureOfService.VIEW_MENU_ONLY
+)
 @DomainServiceLayout(
         named = "Prototyping",
         menuBar = DomainServiceLayout.MenuBar.SECONDARY,
@@ -41,25 +43,11 @@ import org.apache.isis.applib.value.Clob;
 public class TranslationServicePoMenu {
 
     public static abstract class ActionDomainEvent extends IsisApplibModule.ActionDomainEvent<TranslationServicePoMenu> {
-        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier) {
-            super(source, identifier);
-        }
-
-        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
-
-        public ActionDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final List<Object> arguments) {
-            super(source, identifier, arguments);
-        }
     }
 
     // //////////////////////////////////////
 
     public static class DownloadPotFileDomainEvent extends ActionDomainEvent {
-        public DownloadPotFileDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
 
     @Action(
@@ -87,11 +75,7 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent {
-        public ResetTranslationCacheDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
-    }
+    public static class ResetTranslationCacheDomainEvent extends ActionDomainEvent { }
 
     @Action(
             domainEvent = ResetTranslationCacheDomainEvent.class,
@@ -112,11 +96,7 @@ public class TranslationServicePoMenu {
 
     // //////////////////////////////////////
 
-    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent {
-        public SwitchToReadingTranslationsDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
-    }
+    public static class SwitchToReadingTranslationsDomainEvent extends ActionDomainEvent { }
 
     @Action(
             domainEvent = SwitchToReadingTranslationsDomainEvent.class,
@@ -137,9 +117,6 @@ public class TranslationServicePoMenu {
     // //////////////////////////////////////
 
     public static class SwitchToWritingTranslationsDomainEvent extends ActionDomainEvent {
-        public SwitchToWritingTranslationsDomainEvent(final TranslationServicePoMenu source, final Identifier identifier, final Object... arguments) {
-            super(source, identifier, arguments);
-        }
     }
 
     @Action(

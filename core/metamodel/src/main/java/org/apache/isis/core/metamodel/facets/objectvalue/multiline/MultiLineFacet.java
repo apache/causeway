@@ -34,7 +34,7 @@ public interface MultiLineFacet extends MultipleValueFacet {
     /**
      * How many lines to use.
      */
-    public int numberOfLines();
+    int numberOfLines();
 
     /**
      * Whether carriage returns should be used to split over multiple lines or
@@ -46,6 +46,6 @@ public interface MultiLineFacet extends MultipleValueFacet {
      * spills over the length of one line.
      */
     @Deprecated
-    public boolean preventWrapping();
+    boolean preventWrapping();
 
 }

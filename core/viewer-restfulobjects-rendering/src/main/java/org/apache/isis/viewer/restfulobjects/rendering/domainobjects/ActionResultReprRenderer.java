@@ -20,9 +20,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.node.NullNode;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.restfulobjects.applib.JsonRepresentation;
@@ -43,23 +43,25 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     private JsonRepresentation arguments;
     private ObjectAdapter returnedAdapter;
     private final SelfLink selfLink;
-
+    private ObjectAndActionInvocation objectAndActionInvocation;
 
     public enum SelfLink {
         INCLUDED, EXCLUDED
     }
 
-    public ActionResultReprRenderer(final RendererContext rendererContext, final SelfLink selfLink) {
-        this(rendererContext, null, selfLink, JsonRepresentation.newMap());
-    }
-
-    public ActionResultReprRenderer(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final SelfLink selfLink, final JsonRepresentation representation) {
+    public ActionResultReprRenderer(
+            final RendererContext rendererContext,
+            final LinkFollowSpecs linkFollower,
+            final SelfLink selfLink,
+            final JsonRepresentation representation) {
         super(rendererContext, linkFollower, RepresentationType.ACTION_RESULT, representation);
         this.selfLink = selfLink;
     }
 
     @Override
     public ActionResultReprRenderer with(final ObjectAndActionInvocation objectAndActionInvocation) {
+
+        this.objectAndActionInvocation = objectAndActionInvocation;
 
         objectAdapter = objectAndActionInvocation.getObjectAdapter();
         action = objectAndActionInvocation.getAction();
@@ -78,6 +80,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     @Override
     public JsonRepresentation render() {
 
+        if(representation == null) {
+            return null;
+        }
+
         representationWithSelfFor(action, arguments);
 
         addResult(representation);
@@ -88,8 +94,10 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
     }
 
     private void addResult(final JsonRepresentation representation) {
+
+        final ResultType resultType = objectAndActionInvocation.determineResultType();
         final JsonRepresentation result = JsonRepresentation.newMap();
-        final ResultType resultType = addResultTo(result);
+        addResultTo(resultType, result);
 
         if (!resultType.isVoid()) {
             putResultType(representation, resultType);
@@ -101,54 +109,61 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         }
     }
 
-    private ResultType addResultTo(final JsonRepresentation result) {
+    private void addResultTo(
+            final ResultType resultType, final JsonRepresentation representation) {
+
+        if(returnedAdapter == null) {
+            return;
+        }
+
+        final ReprRendererAbstract<?, ?> renderer = buildResultRenderer(resultType, representation);
+        if(renderer != null) {
+            renderer.render();
+        }
+    }
+
+    private ReprRendererAbstract<?, ?> buildResultRenderer(
+            final ResultType resultType,
+            final JsonRepresentation representation) {
 
         final ObjectSpecification returnType = this.action.getReturnType();
 
-        if (returnType.getCorrespondingClass() == void.class) {
-            // void
-            return ResultType.VOID;
-        }
+        switch (resultType) {
+            case VOID:
+                return null;
 
-        final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
-        if (collectionFacet != null) {
-            // collection
+            case LIST:
 
-            if(returnedAdapter != null) {
+                final CollectionFacet collectionFacet = returnType.getFacet(CollectionFacet.class);
                 final Collection<ObjectAdapter> collectionAdapters = collectionFacet.collection(returnedAdapter);
-    
-                final ListReprRenderer renderer = new ListReprRenderer(rendererContext, null, result).withElementRel(Rel.ELEMENT);
-                renderer.with(collectionAdapters).withReturnType(action.getReturnType()).withElementType(returnedAdapter.getElementSpecification());
-    
-                renderer.render();
-            }
-            return ResultType.LIST;
-        }
 
-        final EncodableFacet encodableFacet = returnType.getFacet(EncodableFacet.class);
-        if (encodableFacet != null) {
-            // scalar
+                final ListReprRenderer listReprRenderer =
+                        new ListReprRenderer(rendererContext, null, representation).withElementRel(Rel.ELEMENT);
+                listReprRenderer.with(collectionAdapters)
+                        .withReturnType(action.getReturnType())
+                        .withElementType(returnedAdapter.getElementSpecification());
 
-            if(returnedAdapter != null) {
-                final ScalarValueReprRenderer renderer = new ScalarValueReprRenderer(rendererContext, null, result);
-                renderer.with(returnedAdapter).withReturnType(action.getReturnType());
-    
-                renderer.render();
-            }
-            return ResultType.SCALAR_VALUE;
+                return listReprRenderer;
 
-        }
+            case SCALAR_VALUE:
 
-        {
-            // object
-            if(returnedAdapter != null) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(rendererContext, null, result);
-                
-                renderer.with(returnedAdapter).includesSelf();
-                
-                renderer.render();
-            }
-            return ResultType.DOMAIN_OBJECT;
+                final ScalarValueReprRenderer scalarValueReprRenderer =
+                        new ScalarValueReprRenderer(rendererContext, null, representation);
+                scalarValueReprRenderer.with(returnedAdapter)
+                        .withReturnType(action.getReturnType());
+
+                return scalarValueReprRenderer;
+
+            case DOMAIN_OBJECT:
+
+                final DomainObjectReprRenderer objectReprRenderer =
+                        new DomainObjectReprRenderer(rendererContext, null, representation);
+
+                objectReprRenderer.with(returnedAdapter).includesSelf();
+
+                return objectReprRenderer;
+            default:
+                throw new IllegalStateException("All possible states of ResultType enumerated; resultType = " + resultType);
         }
     }
 

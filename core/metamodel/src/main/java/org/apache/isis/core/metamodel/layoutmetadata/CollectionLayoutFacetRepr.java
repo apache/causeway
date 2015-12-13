@@ -24,6 +24,7 @@ public class CollectionLayoutFacetRepr {
 
     public String cssClass;
     public String describedAs;
+    public String defaultView;
     public Where hidden;
     public String named;
     public boolean namedEscaped = true;

@@ -21,12 +21,16 @@ package org.apache.isis.viewer.wicket.ui.components.collection.selector;
 
 import java.io.Serializable;
 import java.util.List;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+
 import org.apache.isis.applib.annotation.Render;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.render.RenderFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
@@ -73,15 +77,15 @@ public class CollectionSelectorHelper implements Serializable {
     public int honourViewHintElseDefault(final Component component) {
         // honour hints ...
         final UiHintContainer hintContainer = getUiHintContainer(component);
-        if(hintContainer != null) {
+        if (hintContainer != null) {
             String viewStr = hintContainer.getHint(component, UIHINT_EVENT_VIEW_KEY);
-            if(viewStr != null) {
+            if (viewStr != null) {
                 try {
                     int view = Integer.parseInt(viewStr);
-                    if(view >= 0 && view < componentFactories.size()) {
+                    if (view >= 0 && view < componentFactories.size()) {
                         return view;
                     }
-                } catch(NumberFormatException ex) {
+                } catch (NumberFormatException ex) {
                     // ignore
                 }
             }
@@ -89,8 +93,8 @@ public class CollectionSelectorHelper implements Serializable {
 
         // ... else default
         int initialFactory = determineInitialFactory();
-        if(hintContainer != null) {
-            hintContainer.setHint(component, UIHINT_EVENT_VIEW_KEY, ""+initialFactory);
+        if (hintContainer != null) {
+            hintContainer.setHint(component, UIHINT_EVENT_VIEW_KEY, "" + initialFactory);
             // don't broadcast (no AjaxRequestTarget, still configuring initial setup)
         }
         return initialFactory;
@@ -104,15 +108,26 @@ public class CollectionSelectorHelper implements Serializable {
      * otherwise first factory.
      */
     private int determineInitialFactory() {
-        if(!hasRenderEagerlyFacet(model)) {
-            for(int i=0; i<componentFactories.size(); i++) {
-                if(componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
+        if (hasDefaultViewFacet(model)) {
+            DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
+            for (int i = 0; i < componentFactories.size(); i++) {
+                final String componentName = componentFactories.get(i).getName();
+                final String viewName = defaultViewFacet.value();
+                if (componentName.equalsIgnoreCase(viewName)) {
                     return i;
                 }
             }
         }
+        if (!hasRenderEagerlyFacet(model)) {
+            for (int i = 0; i < componentFactories.size(); i++) {
+                if (componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {
+                    return i;
+                }
+            }
+        }
+
         int ajaxTableIdx = findAjaxTable(componentFactories);
-        if(ajaxTableIdx>=0) {
+        if (ajaxTableIdx >= 0) {
             return ajaxTableIdx;
         }
         return 0;
@@ -124,7 +139,7 @@ public class CollectionSelectorHelper implements Serializable {
 
     static List<ComponentFactory> orderAjaxTableToEnd(List<ComponentFactory> componentFactories) {
         int ajaxTableIdx = findAjaxTable(componentFactories);
-        if(ajaxTableIdx>=0) {
+        if (ajaxTableIdx >= 0) {
             List<ComponentFactory> orderedFactories = Lists.newArrayList(componentFactories);
             ComponentFactory ajaxTableFactory = orderedFactories.remove(ajaxTableIdx);
             orderedFactories.add(ajaxTableFactory);
@@ -135,26 +150,21 @@ public class CollectionSelectorHelper implements Serializable {
     }
 
     private static int findAjaxTable(List<ComponentFactory> componentFactories) {
-        for(int i=0; i<componentFactories.size(); i++) {
-            if(componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
+        for (int i = 0; i < componentFactories.size(); i++) {
+            if (componentFactories.get(i) instanceof CollectionContentsAsAjaxTablePanelFactory) {
                 return i;
             }
         }
         return -1;
     }
 
-
     private static UiHintContainer getUiHintContainer(final Component component) {
         return UiHintContainer.Util.hintContainerOf(component, EntityModel.class);
     }
 
-
     private static boolean hasRenderEagerlyFacet(IModel<?> model) {
-        if(!(model instanceof EntityCollectionModel)) {
-            return false;
-        }
-        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
-        if(!entityCollectionModel.isParented()) {
+        final EntityCollectionModel entityCollectionModel = toEntityCollectionModel(model);
+        if (entityCollectionModel == null) {
             return false;
         }
 
@@ -162,6 +172,31 @@ public class CollectionSelectorHelper implements Serializable {
                 entityCollectionModel.getCollectionMemento().getCollection();
         RenderFacet renderFacet = collection.getFacet(RenderFacet.class);
         return renderFacet != null && renderFacet.value() == Render.Type.EAGERLY;
+    }
+
+    private static boolean hasDefaultViewFacet(IModel<?> model) {
+        final EntityCollectionModel entityCollectionModel = toEntityCollectionModel(model);
+        if (entityCollectionModel == null) {
+            return false;
+        }
+
+        final OneToManyAssociation collection =
+                entityCollectionModel.getCollectionMemento().getCollection();
+        DefaultViewFacet defaultViewFacet = collection.getFacet(DefaultViewFacet.class);
+        return defaultViewFacet != null;
+    }
+
+    private static EntityCollectionModel toEntityCollectionModel(IModel<?> model) {
+        if (!(model instanceof EntityCollectionModel)) {
+            return null;
+        }
+
+        final EntityCollectionModel entityCollectionModel = (EntityCollectionModel) model;
+        if (!entityCollectionModel.isParented()) {
+            return null;
+        }
+
+        return entityCollectionModel;
     }
 
     //endregion

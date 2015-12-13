@@ -21,16 +21,23 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Collection;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Property;
 import org.apache.isis.applib.annotation.PropertyLayout;
+import org.apache.isis.applib.annotation.Title;
+import org.apache.isis.core.commons.lang.ThrowableExtensions;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public final class Annotations  {
     
@@ -159,6 +166,113 @@ public final class Annotations  {
         return null;
     }
 
+    /**
+     * Searches for all no-arg methods or fields with a specified title, returning an
+     * {@link Evaluator} object that wraps either.  Will search up hierarchy also.
+     */
+    public static <T extends Annotation> List<Evaluator<T>> getEvaluators(
+            final Class<?> cls,
+            final Class<T> annotationClass) {
+        List<Evaluator<T>> evaluators = Lists.newArrayList();
+        appendEvaluators(cls, annotationClass, evaluators);
+        return evaluators;
+    }
+
+    private static <T extends Annotation> void appendEvaluators(
+            final Class<?> cls,
+            final Class<T> annotationClass,
+            final List<Evaluator<T>> evaluators) {
+
+        for (Method method : cls.getDeclaredMethods()) {
+            if(MethodScope.OBJECT.matchesScopeOf(method) &&
+                    method.getParameterCount() == 0) {
+                final Annotation annotation = method.getAnnotation(annotationClass);
+                if(annotation != null) {
+                    evaluators.add(new MethodEvaluator(method, annotation));
+                }
+            }
+        }
+        for (final Field field: cls.getDeclaredFields()) {
+            final Annotation annotation = field.getAnnotation(annotationClass);
+            if(annotation != null) {
+                evaluators.add(new FieldEvaluator(field, annotation));
+            }
+        }
+
+        // search superclasses
+        final Class<?> superclass = cls.getSuperclass();
+        if (superclass != null) {
+            appendEvaluators(superclass, annotationClass, evaluators);
+        }
+
+        // search implemented interfaces
+        final Class<?>[] interfaces = cls.getInterfaces();
+        for (final Class<?> iface : interfaces) {
+            appendEvaluators(iface, annotationClass, evaluators);
+        }
+    }
+
+    public static abstract class Evaluator<T extends Annotation> {
+
+        private final T annotation;
+
+        protected Evaluator(final T annotation) {
+            this.annotation = annotation;
+        }
+
+        public T getAnnotation() {
+            return annotation;
+        }
+
+        public abstract Object value(final Object obj) ;
+    }
+
+    public static class MethodEvaluator<T extends Annotation> extends Evaluator<T> {
+        private final Method method;
+
+        MethodEvaluator(final Method method, final T annotation) {
+            super(annotation);
+            this.method = method;
+        }
+
+        public Object value(final Object obj)  {
+            try {
+                return method.invoke(obj);
+            } catch (final InvocationTargetException e) {
+                ThrowableExtensions.throwWithinIsisException(e, "Exception executing " + method);
+                return null;
+            } catch (final IllegalAccessException e) {
+                throw new MetaModelException("illegal access of " + method, e);
+            }
+        }
+
+        public Method getMethod() {
+            return method;
+        }
+    }
+
+    static class FieldEvaluator<T extends Annotation> extends Evaluator<T> {
+        private final Field field;
+
+        FieldEvaluator(final Field field, final T annotation) {
+            super(annotation);
+            this.field = field;
+        }
+
+        public Object value(final Object obj)  {
+            try {
+                field.setAccessible(true);
+                return field.get(obj);
+            } catch (final IllegalAccessException e) {
+                throw new MetaModelException("illegal access of " + field, e);
+            }
+        }
+
+        public Field getField() {
+            return field;
+        }
+    }
+
     private static List<Class<?>> fieldAnnotationClasses = Collections.unmodifiableList(
             Arrays.<Class<?>>asList(
                     Property.class,
@@ -166,6 +280,7 @@ public final class Annotations  {
                     Collection.class,
                     CollectionLayout.class,
                     MemberOrder.class,
+                    Title.class,
                     javax.jdo.annotations.Column.class
             )
     );

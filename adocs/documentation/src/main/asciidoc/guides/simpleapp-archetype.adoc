@@ -25,7 +25,7 @@ Then run the following command:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.9.0 \
+    -D archetypeVersion=1.10.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -54,7 +54,7 @@ The process is almost identical to that for stable releases, however the `archet
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.10.0-SNAPSHOT \
+    -D archetypeVersion=1.11.0-SNAPSHOT \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -95,7 +95,7 @@ where `myapp` is the `artifactId` entered above.
 
 == Running the App
 
-The `simpleapp` archetype generates a single WAR file, configured to run both the link:./guides/ug.html#_ug_wicket-viewer[Wicket viewer] and the link:./guides/ug.html#_ug_restfulobjects-viewer[Restful Objects viewer].   The archetype also configures the JDO/DataNucleus objectstore to use an in-memory HSQLDB connection.  
+The `simpleapp` archetype generates a single WAR file, configured to run both the link:./guides/ugvw.html#[Wicket viewer] and the link:./guides/ugvro.html#[Restful Objects viewer].   The archetype also configures the JDO/DataNucleus objectstore to use an in-memory HSQLDB connection.
 
 Once you've built the app, you can run the WAR in a variety of ways. 
 

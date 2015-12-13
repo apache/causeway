@@ -37,27 +37,28 @@ import org.apache.isis.viewer.restfulobjects.rendering.domaintypes.CollectionDes
 public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRenderer<ObjectCollectionReprRenderer, OneToManyAssociation> {
 
     public ObjectCollectionReprRenderer(
-            final RendererContext rendererContext) {
-        this(rendererContext, null, null, JsonRepresentation.newMap());
-    }
-
-    public ObjectCollectionReprRenderer(
             final RendererContext rendererContext,
             final LinkFollowSpecs linkFollowSpecs,
             final String collectionId,
             final JsonRepresentation representation) {
-        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation, Where.PARENTED_TABLES);
+        super(rendererContext, linkFollowSpecs, collectionId, RepresentationType.OBJECT_COLLECTION, representation,
+                Where.PARENTED_TABLES);
     }
 
     @Override
     public JsonRepresentation render() {
 
+        if(representation == null) {
+            return null;
+        }
+
         renderMemberContent();
 
-        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly();
+        final LinkFollowSpecs followValue = getLinkFollowSpecs().follow("value");
+        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly() || !followValue.isTerminated();
 
         if ((mode.isInline() && eagerlyRender) || mode.isStandalone() || mode.isMutated() || mode.isEventSerialization() || !objectAdapter.representsPersistent()) {
-            addValue();
+            addValue(followValue);
         }
         if(!mode.isEventSerialization()) {
             putDisabledReasonIfDisabled();
@@ -79,13 +80,14 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
     // value
     // ///////////////////////////////////////////////////
 
-    private void addValue() {
+    private void addValue(final LinkFollowSpecs linkFollower) {
         final ObjectAdapter valueAdapter = objectMember.get(objectAdapter, getInteractionInitiatedBy());
         if (valueAdapter == null) {
             return;
         }
 
-        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter);
+        final LinkFollowSpecs followHref = linkFollower.follow("href");
+        boolean eagerlyRender = rendererContext.honorUiHints() && renderEagerly(valueAdapter) || !followHref.isTerminated();
 
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(valueAdapter);
         final List<JsonRepresentation> list = Lists.newArrayList();
@@ -93,7 +95,8 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
 
             final LinkBuilder valueLinkBuilder = DomainObjectReprRenderer.newLinkToBuilder(rendererContext, Rel.VALUE, elementAdapter);
             if(eagerlyRender) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), getLinkFollowSpecs(), JsonRepresentation.newMap());
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), followHref, JsonRepresentation.newMap()
+                );
                 renderer.with(elementAdapter);
                 if(mode.isEventSerialization()) {
                     renderer.asEventSerialization();
@@ -122,7 +125,9 @@ public class ObjectCollectionReprRenderer extends AbstractObjectMemberReprRender
      */
     @Override
     protected void followDetailsLink(final JsonRepresentation detailsLink) {
-        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null, JsonRepresentation.newMap());
+        final JsonRepresentation representation = JsonRepresentation.newMap();
+        final ObjectCollectionReprRenderer renderer = new ObjectCollectionReprRenderer(getRendererContext(), getLinkFollowSpecs(), null,
+                representation);
         renderer.with(new ObjectAndCollection(objectAdapter, objectMember)).asFollowed();
         detailsLink.mapPut("value", renderer.render());
     }

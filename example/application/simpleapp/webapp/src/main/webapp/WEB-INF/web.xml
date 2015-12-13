@@ -165,7 +165,22 @@
         <servlet-name>Resource</servlet-name>
         <url-pattern>*.swf</url-pattern>
     </servlet-mapping>
-    
+
+
+    <servlet>
+        <servlet-name>WebjarsServlet</servlet-name>
+        <servlet-class>org.webjars.servlet.WebjarsServlet</servlet-class>
+        <init-param>
+            <param-name>disableCache</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WebjarsServlet</servlet-name>
+        <url-pattern>/webjars/*</url-pattern>
+    </servlet-mapping>
+
 
 
     <!--

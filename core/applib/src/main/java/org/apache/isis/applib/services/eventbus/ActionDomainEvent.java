@@ -32,18 +32,44 @@ public abstract class ActionDomainEvent<S> extends AbstractInteractionEvent<S> {
     private static final long serialVersionUID = 1L;
 
     //region > Default class
-
     /**
-     * Propagated if no custom subclass was specified using
-     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.
+     * This class is the default for the
+     * {@link org.apache.isis.applib.annotation.Action#domainEvent()} annotation attribute.  Whether this
+     * raises an event or not depends upon the "isis.reflector.facet.actionAnnotation.domainEvent.postForDefault"
+     * configuration property.
      */
     public static class Default extends ActionInteractionEvent<Object> {
         private static final long serialVersionUID = 1L;
+        public Default(){}
+        @Deprecated
         public Default(Object source, Identifier identifier, Object... arguments) {
             super(source, identifier, arguments);
         }
     }
     //endregion
+
+    //region > Noop class
+
+    /**
+     * Convenience class to use indicating that an event should <i>not</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event.
+     */
+    public static class Noop extends ActionInteractionEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
+    //region > Doop class
+
+    /**
+     * Convenience class meaning that an event <i>should</i> be posted (irrespective of the configuration
+     * property setting for the {@link Default} event..
+     */
+    public static class Doop extends ActionInteractionEvent<Object> {
+        private static final long serialVersionUID = 1L;
+    }
+    //endregion
+
 
     //region > constructors
 

@@ -48,7 +48,11 @@ public abstract class ReprRendererAbstract<R extends ReprRendererAbstract<R, T>,
 
     protected boolean includesSelf;
 
-    public ReprRendererAbstract(final RendererContext rendererContext, final LinkFollowSpecs linkFollower, final RepresentationType representationType, final JsonRepresentation representation) {
+    public ReprRendererAbstract(
+            final RendererContext rendererContext,
+            final LinkFollowSpecs linkFollower,
+            final RepresentationType representationType,
+            final JsonRepresentation representation) {
         this.rendererContext = rendererContext;
         this.linkFollower = asProvidedElseCreate(linkFollower);
         this.representationType = representationType;

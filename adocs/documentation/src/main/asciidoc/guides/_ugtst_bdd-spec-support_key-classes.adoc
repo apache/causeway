@@ -1,0 +1,59 @@
+[[_ugtst_bdd-spec-support_key-classes]]
+= Key classes
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+
+
+There are some key framework classes that make up the spec support; these are discussed below.
+
+NOTE: some of these are also used by Apache Isis' xref:ugtst.adoc#_ugtst_integ-test-support[Integration Test support].
+
+
+
+
+== `IsisSystemForTest`
+
+The `IsisSystemForTest` class allows a complete running instance of Apache Isis to be bootstrapped (with the JDO objectstore); this is then held on a a `ThreadLocal` from one test to another.
+
+Typically bootstrapping code is used to lazily instantiate the `IsisSystemForTest` once and once only. The mechanism for doing this is line-for-line identical in both BDD step defs and integration tests.
+
+
+
+
+== `ScenarioExecution`
+
+The `ScenarioExecution` provides a context for a scenario that is being executed.  It is Cucumber that determines which step definitions are run, and in which order, and so state cannot be passed between step definitions using local variables or instance variables.  Instead the `ScenarioExecution` acts like a hashmap, allowing each step to put data (eg "given an uncompleted todoitem") into the map or get data ("when I complete the todoitem") from the map.  This is done using the `putVar(...)` and `getVar(...)` methods.
+
+[TIP]
+====
+This corresponds broadly to the "World" object in Ruby-flavoured Cucumber.
+====
+
+The `ScenarioExecution` also provids access to the configured domain services (using the `service(...)` method) and the `DomainObjectContainer` (through the `container()` method).
+
+[NOTE]
+====
+This could probably be refactored; Cucumber JVM provides automatic dependency injection into setp definitions, but Apache Isis does not currently leverage or exploit this capability.
+====
+
+Like the `IsisSystemForTest` class, the `ScenarioExecution` class binds an instance of itself onto a `ThreadLocal`. It can then be accessed in BDD step definitions using `ScenarioExecution.current()` static method.
+
+
+
+== `WrapperFactory`
+
+As with integration tests, the UI can be simulated by "wrapping" each domain object in a proxy using the `WrapperFactory`.
+
+
+
+
+== `CukeGlueAbstract`
+
+The `CukeGlueAbstract` acts as a convenience superclass for writing BDD step definitions (analogous to the `IntegrationTestAbstract` for integation tests).  Underneath the covers it delegates to an underlying `ScenarioExecution`.
+
+
+
+

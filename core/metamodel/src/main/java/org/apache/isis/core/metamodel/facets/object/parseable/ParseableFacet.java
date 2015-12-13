@@ -58,5 +58,5 @@ public interface ParseableFacet extends MultipleValueFacet {
      * field. So, a date might be rendered via a {@link TitleFacet} as
      * <tt>May 2, 2007</tt>, but its parseable form might be <tt>20070502</tt>.
      */
-    public String parseableTitle(ObjectAdapter obj);
+    String parseableTitle(ObjectAdapter obj);
 }

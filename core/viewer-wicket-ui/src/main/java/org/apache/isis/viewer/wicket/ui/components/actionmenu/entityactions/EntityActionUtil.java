@@ -113,7 +113,7 @@ public final class EntityActionUtil {
 
             @Override
             public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(adapterMemento, objectAction, linkId);
+                return linkFactory.newLink(linkId, adapterMemento, objectAction);
             }
         });
     }

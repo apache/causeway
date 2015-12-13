@@ -8,11 +8,11 @@
 
 Apache Isis automatically scans for certain classes on the classpath in order to configure itself.  Specifically these are:
 
-* searching for classes annotated with xref:rg.adoc#_rg_annotations_manpage-DomainService[`@DomainService`].
+* searching for classes annotated with xref:rgant.adoc#_rgant-DomainService[`@DomainService`].
 
-* searching for classes extending xref:rg.adoc#_rg_classes_super_manpage-FixtureScript[`FixtureScript`]
+* searching for classes extending xref:rgcms.adoc#_rgcms_classes_super_FixtureScript[`FixtureScript`]
 
-* searching for classes annotated with xref:rg.adoc#_rg_annotations_manpage-PersistenceCapable[`@PersistenceCapable`].
+* searching for classes annotated with xref:rgant.adoc#_rgant-PersistenceCapable[`@PersistenceCapable`].
 
 For the last of these we have tightened up the validation, to ensure that each package specified in the `isis.persistor.datanucleus.RegisterEntities.packagePrefix` key does indeed include at least one annotated entity.  This should include any domain classes for addon modules.
 

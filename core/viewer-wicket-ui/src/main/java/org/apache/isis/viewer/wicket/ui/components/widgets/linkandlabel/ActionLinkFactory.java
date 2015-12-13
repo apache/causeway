@@ -27,7 +27,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 public interface ActionLinkFactory extends Serializable {
 
     LinkAndLabel newLink(
-            final ObjectAdapterMemento adapter,
-            final ObjectAction noAction,
-            final String linkId);
+            final String linkId, final ObjectAdapterMemento adapter,
+            final ObjectAction noAction);
 }

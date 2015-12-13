@@ -27,6 +27,6 @@ import javax.ws.rs.core.MediaType;
  */
 public interface RendererContext2 extends RendererContext {
 
-    public List<MediaType> getAcceptableMediaTypes();
+    List<MediaType> getAcceptableMediaTypes();
 
 }

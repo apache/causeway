@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ug.adoc#_ug_getting-started_simpleapp-archetype[SimpleApp archetype].  It was originally written by Jeroen van der Wal.
+This is a step-by-step tutorial to build up a simple "petclinic" application, starting from the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp archetype].  It was originally written by Jeroen van der Wal.
 
 It consists of just three domain classes (http://yuml.me/edit/3db2078c[http://yuml.me/3db2078c]):
 
@@ -62,7 +62,7 @@ Run the simpleapp archetype to build an empty Isis application:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.9.0 \
+    -D archetypeVersion=1.10.0 \
     -D groupId=com.mycompany \
     -D artifactId=petclinic \
     -D version=1.0-SNAPSHOT \

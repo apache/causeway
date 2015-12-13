@@ -105,6 +105,17 @@ public class DomainObjectContainerDefault
 
     //endregion
 
+    //region > iconNameOf
+
+    @Programmatic
+    @Override
+    public String iconNameOf(final Object domainObject) {
+        final ObjectAdapter objectAdapter = adapterManager.adapterFor(unwrapped(domainObject));
+        return objectAdapter.getSpecification().getIconName(objectAdapter);
+    }
+
+    //endregion
+
     //region > newXxxInstance, remove
 
     @Programmatic

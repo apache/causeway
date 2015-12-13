@@ -68,6 +68,11 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
     @Override
     public JsonRepresentation render() {
+
+        if(representation == null) {
+            return null;
+        }
+
         addValue();
 
         addLinkToReturnType();
@@ -95,7 +100,8 @@ public class ListReprRenderer extends ReprRendererAbstract<ListReprRenderer, Col
 
             final LinkFollowSpecs linkFollower = getLinkFollowSpecs().follow("value");
             if (linkFollower.matches(linkToObject)) {
-                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap());
+                final DomainObjectReprRenderer renderer = new DomainObjectReprRenderer(getRendererContext(), linkFollower, JsonRepresentation.newMap()
+                );
                 final JsonRepresentation domainObject = renderer.with(adapter).render();
                 linkToObject.mapPut("value", domainObject);
             }

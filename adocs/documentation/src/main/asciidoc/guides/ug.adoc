@@ -1,39 +1,27 @@
 [[ug]]
-= User Guide
+= User Guides
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
 :_imagesdir: images/
 :numbered:
 
 
-[[_ug]]
-== Users' Guide
+Apache Isis documentation is broken out into a number of user and reference guides.
 
-This users' guide introduces the xref:ug.adoc#_ug_core-concepts[core concepts] and ideas behind Apache Isis, tells you how to xref:ug.adoc#_ug_getting-started[get started] with a Maven archetype, and provides xref:ug.adoc#_ug_how-tos[how-to]s and xref:ug.adoc#_ug_more-advanced[more advanced] guidance on writing maintainable larger applications.
+The user guides available are:
 
-It goes on to discuss the xref:ug.adoc#_ug_wicket-viewer[Wicket viewer], both from an end-user perspective and also how as a programmer you can customize the UI.  There is a similar chapter discussing the xref:ug.adoc#_ug_restfulobjects-viewer[Restful Objects viewer] which provides Apache Isis' REST API.  The guide also explains how to configure xref:ug.adoc#_ug_security[security], principally involving Apache Isis' integration with Apache Shiro.
+* xref:ugfun.adoc#[Fundamentals]
+* xref:ugvw.adoc#[Wicket viewer]
+* xref:ugvro.adoc#[Restful Objects viewer]
+* xref:ugsec.adoc#[Security]
+* xref:ugtst.adoc#[Testing]
+* xref:ugbtb.adoc#[Beyond the Basics] (this guide)
 
-Later chapters discuss essential topics such as xref:ug.adoc#_ug_testing[testing] and how to xref:ug.adoc#_ug_deployment[deploy] your app, and discuss other ways in which you can xref:ug.adoc#_ug_extending[extend] or adapt the framework itself to your particular needs.
+The reference guides are:
 
-The users' guide is _not_ intended as a reference manual; for that see the *xref:rg.adoc#_rg[Reference Guide]*.  The users' guide also doesn't explain how to setup your development environment; for that see the *xref:cg.adoc#_cg[Contributors' Guide]*.
+* xref:rgant.adoc#[Annotations]
+* xref:rgsvc.adoc#[Domain Services]
+* xref:rgcfg.adoc#[Configuration Properties]
+* xref:rgcms.adoc#[Classes, Methods and Schema]
 
-
-
-
-include::_ug_core-concepts.adoc[leveloffset=+1]
-//include::_ug_getting-started.adoc[leveloffset=+1]
-
-include::_ug_how-tos.adoc[leveloffset=+1]
-include::_ug_more-advanced.adoc[leveloffset=+1]
-
-//include::_ug_wicket-viewer.adoc[leveloffset=+1]
-//include::_ug_restfulobjects-viewer.adoc[leveloffset=+1]
-//include::_ug_security.adoc[leveloffset=+1]
-
-//include::_ug_testing.adoc[leveloffset=+1]
-//include::_ug_deployment.adoc[leveloffset=+1]
-//include::_ug_headless-access.adoc[leveloffset=+1]
-//include::_ug_extending.adoc[leveloffset=+1]
-//include::_ug_troubleshooting.adoc[leveloffset=+1]
-
-
+In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.

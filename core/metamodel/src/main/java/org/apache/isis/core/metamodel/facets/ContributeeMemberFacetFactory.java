@@ -26,7 +26,6 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.lang.PropertiesExtensions;
-import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -38,7 +37,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
  */
 public interface ContributeeMemberFacetFactory extends FacetFactory {
 
-    public static class ProcessContributeeMemberContext extends AbstractProcessContext<ObjectMember> 
+    class ProcessContributeeMemberContext extends AbstractProcessContext<ObjectMember>
             implements ProcessContextWithMetadataProperties<ObjectMember> {
         
         private final Properties metadataProperties;

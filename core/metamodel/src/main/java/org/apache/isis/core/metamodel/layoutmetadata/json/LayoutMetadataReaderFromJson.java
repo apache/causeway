@@ -47,6 +47,7 @@ import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacetAbstractImpl;
@@ -63,6 +64,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.CollectionLayoutFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.ColumnRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.CssClassFaFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.CssClassFacetRepr;
+import org.apache.isis.core.metamodel.layoutmetadata.DefaultViewFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.DescribedAsFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.DisabledFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.HiddenFacetRepr;
@@ -227,6 +229,9 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
                 }
                 if(collectionLayout.describedAs != null) {
                     props.setProperty("member." + memberName + ".collectionLayout.describedAs", collectionLayout.describedAs);
+                }
+                if(collectionLayout.defaultView != null) {
+                    props.setProperty("member." + memberName + ".collectionLayout.defaultView", collectionLayout.defaultView);
                 }
                 if(collectionLayout.hidden != null) {
                     props.setProperty("member." + memberName + ".collectionLayout.hidden", ""+collectionLayout.hidden);
@@ -405,12 +410,16 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         if(blacklisted.contains(domainClass)) {
             return null;
         }
+
+        final String resourceName = domainClass.getSimpleName() + ".layout.json";
         try {
-            content = ClassExtensions.resourceContent(domainClass, ".layout.json");
+            content = ClassExtensions.resourceContentOf(domainClass, resourceName);
         } catch (IOException | IllegalArgumentException ex) {
 
             blacklisted.add(domainClass);
-            final String message = "Failed to locate " + domainClass.getName() + ".layout.json file (" + ex.getMessage() + ")";
+            final String message = String .format(
+                    "Failed to locate file %s (relative to %s.class); ex: %s)",
+                    resourceName, domainClass.getName(), ex.getMessage());
 
             LOG.debug(message);
             return null;
@@ -549,6 +558,11 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
             final DescribedAsFacetRepr describedAsFacetRepr = new DescribedAsFacetRepr();
             describedAsFacetRepr.value = describedAsFacet.value();
             memberRepr.describedAs = describedAsFacetRepr;
+        }
+        final DefaultViewFacet defaultViewFacet = assoc.getFacet(DefaultViewFacet.class);
+        if(defaultViewFacet != null && !defaultViewFacet.isNoop() && !Strings.isNullOrEmpty(defaultViewFacet.value())) {
+            final DefaultViewFacetRepr defaultViewFacetRepr = new DefaultViewFacetRepr();
+            defaultViewFacetRepr.value = describedAsFacet.value();
         }
         final NamedFacet namedFacet = assoc.getFacet(NamedFacet.class);
         if(namedFacet != null && !namedFacet.isNoop()) {

@@ -27,7 +27,9 @@ package org.apache.isis.core.metamodel.facets.object.callbacks;
  * <tt>deleted</tt> method.
  * 
  * @see RemovingCallbackFacet
+ * @deprecated - cannot touch a pojo once deleted
  */
+@Deprecated
 public interface RemovedCallbackFacet extends CallbackFacet {
 
 }

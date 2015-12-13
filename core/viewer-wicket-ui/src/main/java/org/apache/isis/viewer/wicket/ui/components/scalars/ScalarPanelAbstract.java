@@ -395,7 +395,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     @Override
     public AdapterManager getAdapterManager() {
-    return getPersistenceSession();
-}
+        return getPersistenceSession();
+    }
 
 }
