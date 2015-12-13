@@ -318,14 +318,6 @@ public class ReferencePanel extends ScalarPanelAbstract {
         
     }
 
-    // called by syncWithInput
-    private void permanentlyHideEntityIconAndTitleIfInRegularMode() {
-        if(getComponentForRegular() != null) {
-            Components.permanentlyHide((MarkupContainer)getComponentForRegular(), ID_ENTITY_ICON_TITLE);
-        }
-    }
-
-
     // //////////////////////////////////////
     // setProviderAndCurrAndPending
     // //////////////////////////////////////
