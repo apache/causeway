@@ -26,6 +26,7 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 
@@ -244,6 +245,16 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
     public boolean updateChoices(ObjectAdapter[] argsIfAvailable) {
         setChoices(argsIfAvailable);
         return true;
+    }
+
+    /**
+     * Repaints just the Select2 component
+     *
+     * @param target The Ajax request handler
+     */
+    @Override
+    public void repaint(AjaxRequestTarget target) {
+        target.add(select2Field);
     }
 
     /**

@@ -24,6 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.google.common.collect.Lists;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.wicketstuff.select2.ChoiceProvider;
 import org.wicketstuff.select2.Select2Choice;
 import org.wicketstuff.select2.Settings;
@@ -534,5 +535,13 @@ public class ReferencePanel extends ScalarPanelAbstract {
         return IsisContext.getConfiguration();
     }
 
-
+    /**
+     * Repaints just the Select2 component
+     *
+     * @param target The Ajax request handler
+     */
+    @Override
+    public void repaint(AjaxRequestTarget target) {
+        target.add(select2Field);
+    }
 }

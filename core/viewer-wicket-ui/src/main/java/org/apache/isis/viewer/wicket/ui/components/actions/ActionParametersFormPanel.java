@@ -242,8 +242,8 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
                         // this could throw a ConcurrencyException as we may have to reload the 
                         // object adapter of the action in order to compute the choices
                         // (and that object adapter might have changed)
-                        if(paramPanel.updateChoices(pendingArguments)) {
-                            target.add(paramPanel);
+                        if (paramPanel.updateChoices(pendingArguments)) {
+                            paramPanel.repaint(target);
                         }
                     }
                 }
