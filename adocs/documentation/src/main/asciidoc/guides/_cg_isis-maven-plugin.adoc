@@ -5,28 +5,31 @@
 :_imagesdir: images/
 :toc: right
 
-The Apache Isis Maven plugin defines two goals:
+The Apache Isis Maven plugin defines three goals:
 
 * `validate` +
 +
 Use to verify at build time that the metamodel of an application is valid.  This runs the `MetaModelValidator` that is also run when the application is started up.
 
+* `swagger` +
++
+(`1.11.0-SNAPSHOT`) Uses the xref:rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ugvro.adoc#[RestfulObjects viewer].
+
 * `xsd` +
 +
-Uses the xref:rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
+(`1.11.0-SNAPSHOT`) Uses the xref:rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rgant.adoc#_rgant-XmlJavaValueType[`@XmlJavaValueType`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]).
 
-The `validate` goal is by default bound to the `test` phase of your application's `dom` sub-module, whereas the `xsd` goal defaults to the `generate-resources` phase of a completely separate sub-module; the suggested name of tihis module is (also) `xsd`.  An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app.
+The `validate` goal is by default bound to the `test` phase, and the `swagger` goal is by default bound to the `package` phase; both are typically of your application's `dom` sub-module.  The `xsd` goal meanwhile defaults to the `generate-resources` phase, and this is generally used in a completely separate sub-module.  An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app; the separate submodule that uses the `xsd` goal is (also) called `todoapp-xsd`.
 
-
-Both goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that
+All of these goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that
 it knows how to bootstrap an Isis runtime.  This is discussed below, followed by sections on configuring the two goals.
 
 
 == `AppManifest`
 
-As noted in the introduction, both goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]
+As noted in the introduction, all the goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`]
 to point the plugin at, so that it knows how to bootstrap an Isis runtime.
 
 This can be extremely minimal.  For example, the xref:ugfun.adoc#_ugfun_getting-started_simpleapp-archetype[SimpleApp]'s
@@ -66,10 +69,11 @@ public final class DomainAppDomainModule { }
 ----
 
 
-As you'll see below, the configuration for the two goals both refer to this app manifest.
+As you'll see below, the configuration for each of the goals both refer to this app manifest.
 
 
 
 include::_cg_isis-maven-plugin_validate.adoc[leveloffset=+1]
+include::_cg_isis-maven-plugin_swagger.adoc[leveloffset=+1]
 include::_cg_isis-maven-plugin_xsd.adoc[leveloffset=+1]
 

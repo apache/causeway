@@ -221,6 +221,16 @@ SpecificationProvider`].
 |API is also a concrete class
 
 
+|xref:rgsvc.adoc#_rgsvc-api_SwaggerService[`o.a.i.applib.` +
+`services.sudo` +
+`SwaggerService`]
+|(`1.11.0-SNAPSHOT`) Generates link:http://swagger.io/[Swagger] spec files to describe the public and/or private RESTful APIs exposed by the xref:ugvro.adoc#[RestfulObjects viewer].  These can then be used with the link:http://swagger.io/swagger-ui/[Swagger UI] page to explore the REST API, or used to generate client-side stubs using the link:http://swagger.io/swagger-codegen/[Swagger codegen] tool, eg for use in a custom REST client app.
+|`SwaggerServiceDefault` +
+``o.a.i.core`` +
+``isis-core-metamodel``
+|A `SwaggerServiceMenu` domain service is also provided which enables the swagger spec to be downloaded.  Apache Isis' xref:cg.adoc#_cg_isis-maven-plugin[Maven plugin] also provides a xref:cg.adoc#_cg_isis-maven-plugin_swagger[swagger goal] which allows the spec file(s) to be generated at build time (eg so that client-side stubs can then be generated in turn).
+
+
 |xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`o.a.i.applib.` +
 `services.wrapper` +
 `WrapperFactory`]
@@ -300,6 +310,7 @@ include::_rgsvc-api_MetamodelService.adoc[leveloffset=+1]
 include::_rgsvc-api_QueryResultsCache.adoc[leveloffset=+1]
 include::_rgsvc-api_Scratchpad.adoc[leveloffset=+1]
 include::_rgsvc-api_SudoService.adoc[leveloffset=+1]
+include::_rgsvc-api_SwaggerService.adoc[leveloffset=+1]
 include::_rgsvc-api_WrapperFactory.adoc[leveloffset=+1]
 include::_rgsvc-api_XmlSnapshotService.adoc[leveloffset=+1]
 

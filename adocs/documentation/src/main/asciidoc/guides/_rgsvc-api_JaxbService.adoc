@@ -30,6 +30,7 @@ public interface JaxbService {
     }
     @Programmatic
     public Map<String, String> toXsd(final Object domainObject, final IsisSchemas isSchemas);} // <4>
+}
 ----
 <1> unmarshalls the XML into an instance of the class.
 <2> marshalls the domain object into XML
