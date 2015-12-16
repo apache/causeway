@@ -17,7 +17,7 @@ Uses the xref:rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`] to generate XSD s
 +
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rgant.adoc#_rgant-XmlJavaValueType[`@XmlJavaValueType`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]).
 
-The `validate` goal is by default bound to the `test` phase of your application's `dom` sub-module, whereas the `xsd` goal defaults to the `generate-resources` phase of a completely separate `canonical` submodule.  An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app.
+The `validate` goal is by default bound to the `test` phase of your application's `dom` sub-module, whereas the `xsd` goal defaults to the `generate-resources` phase of a completely separate sub-module; the suggested name of tihis module is (also) `xsd`.  An example can be found in the (non-ASF) http://github.com/isisaddons/isis-app-todoapp[Isis addons' todoapp] example app.
 
 
 Both goals require an xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[`AppManifest`] to point the plugin at, so that

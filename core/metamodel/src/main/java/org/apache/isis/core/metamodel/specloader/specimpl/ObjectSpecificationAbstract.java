@@ -64,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.domainservice.DomainServiceFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -741,8 +742,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         if(contributed.isIncluded() && !contributeeAndMixedInActionsAdded) {
             synchronized (this.objectActions) {
                 final List<ObjectAction> actions = Lists.newArrayList(this.objectActions);
-                if (containsDoOpFacet(MixinFacet.class)) {
+                if (containsDoOpFacet(MixinFacet.class) || containsDoOpFacet(DomainServiceFacet.class)) {
                     // don't contribute to mixins themselves!
+                    // don't contribute to services either (nb: can't use isService(), not necessarily setup)
                 } else {
                     actions.addAll(createContributeeActions());
                     actions.addAll(createMixedInActions());
