@@ -61,7 +61,7 @@ public class OptionHandlerSystemProperties extends OptionHandlerAbstract {
 
     @Override
     public void primeConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
-        LOG.info("priming configuration builder: " + additionalProperties.size() + " properties to prime");
+        LOG.debug("priming configuration builder: " + additionalProperties.size() + " properties to prime");
         addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
     }
 

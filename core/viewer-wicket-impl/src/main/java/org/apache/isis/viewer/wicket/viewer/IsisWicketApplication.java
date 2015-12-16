@@ -463,7 +463,9 @@ public class IsisWicketApplication
         // also support loading from init parameters (specifically, to support simplericity's jetty-console)
         isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            LOG.info("priming configurations for " + isisConfigurationBuilderPrimer);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
+            }
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }
