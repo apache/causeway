@@ -113,14 +113,18 @@ The strategy is configured in `web.xml`; for example:
     </init-param>
     <init-param>
         <param-name>whenNoSession</param-name>
-        <param-value>basicAuthChallenge</param-value>           <!--2-->
+        <param-value>auto</param-value>                         <!--2-->
+    </init-param>
+    <init-param>
+        <param-name>passThru</param-name>
+        <param-value>/restful/swagger</param-value>             <!--3-->
     </init-param>
 </filter>
 ----
 <1> configure basic auth strategy
-<2> what to do if no session was found; we indicate to issue a 401 basic authentication challenge
+<2> what to do if no session was found; we use `auto` (`1.11.0-SNAPSHOT`) so as to issue a 401 status code with basic authentication challenge if the request originated from a web browser.  (Prior to `1.11.0-SNAPSHOT` this parameter was set either to `basicAuthChallenge` (which works when requested from web browser) or to `unauthorized` (which works when requested from a suitably coded custom Javascript app).
+<3> (`1.11.0-SNAPSHOT`) which paths are allowed to be accessed directly, without a session.  The `/restful/swagger` path provides access to the SwaggerResource that dynamically generates swagger spec files from the Apache Isis metamodel.
 
-The `IsisSessionFilter` has a further plugin point if no session was found (that is, if `AuthenticationSessionStrategy#lookupValid()` returns null), which is how to respond.  The value "basicAuthChallenge" means to return a 401, which is what triggers the web browser to pop-up the basic HTTP challenge dialog box.
 
 The above filter must then be chained before the servlet that actually handles the REST requests:
 

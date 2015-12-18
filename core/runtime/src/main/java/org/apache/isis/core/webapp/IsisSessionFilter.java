@@ -155,6 +155,20 @@ public class IsisSessionFilter implements Filter {
                 httpResponse.sendError(401);
             }
         },
+        AUTO("auto") {
+            @Override
+            public void handle(final IsisSessionFilter filter, final HttpServletRequest httpRequest, final HttpServletResponse httpResponse, final FilterChain chain) throws IOException, ServletException {
+                if(fromWebBrowser(httpRequest)) {
+                    httpResponse.setHeader("WWW-Authenticate", "Basic realm=\"Apache Isis\"");
+                }
+                httpResponse.sendError(401);
+            }
+
+            private boolean fromWebBrowser(final HttpServletRequest httpRequest) {
+                String accept = httpRequest.getHeader("Accept");
+                return accept.contains("text/html");
+            }
+        },
         /**
          * the destination servlet is expected to know that there will be no open session, and handle the case appropriately
          */

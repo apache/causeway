@@ -20,9 +20,16 @@ package org.apache.isis.core.metamodel.services.swagger.internal;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.joda.time.DateTime;
@@ -168,6 +175,21 @@ public class ValuePropertyFactory {
         final Factory factory = propertyFactoryByClass.get(cls);
         if(factory != null) {
             return factory.newProperty();
+        }
+
+        // special case, want to treat as a value
+        if(cls.isEnum()) {
+            final StringProperty property = new StringProperty();
+            final Object[] enumConstants = cls.getEnumConstants();
+
+            final List<String> enumNames = Lists.newArrayList(
+                    Iterables.transform(Arrays.asList(enumConstants), new Function<Object, String>() {
+                        @Nullable @Override public String apply(@Nullable final Object input) {
+                            return ((Enum<?>)input).name();
+                        }
+                    }));
+            property.setEnum(enumNames);
+            return property;
         }
 
         return null;
