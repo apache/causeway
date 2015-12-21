@@ -112,7 +112,7 @@ returns the following representation:
      ...
   } ],
   "dependencies" : [ ],
-  "$$ro" : {                                                        // <5>
+  "$$ro" : {                                                        // <6>
     "links" : [ ... ],
     "extensions" : { ... },
     "title" : "Buy bread due by 2015-12-04",
