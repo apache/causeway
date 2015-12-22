@@ -26,6 +26,16 @@ The table below summarizes all the APIs defined by Apache Isis.  It also lists t
 |Notes
 
 
+|xref:rgsvc.adoc#_rgsvc_api_AcceptHeaderService[`o.a.i.applib.` +
+`services.acceptheader` +
+`AcceptHeaderService`]
+|Request-scoped access to HTTP Accept headers.
+|`AcceptHeaderServiceDefault` +
+``o.a.i.core`` +
+``isis-viewer-restfulobjects-rendering``
+|Populated only when the domain objects are accessed using the xref:ugvro.adoc#[Restful Objects viewer].
+
+
 |xref:rgsvc.adoc#_rgsvc_api_ActionInvocationContext[`o.a.i.applib.` +
 `services.actinv` +
 `ActionInvocation-` +
@@ -292,6 +302,7 @@ Key:
 
 
 
+include::_rgsvc_api_AcceptHeaderService.adoc[leveloffset=+1]
 include::_rgsvc_api_ActionInvocationContext.adoc[leveloffset=+1]
 include::_rgsvc_api_BackgroundService.adoc[leveloffset=+1]
 include::_rgsvc_api_BookmarkService.adoc[leveloffset=+1]
