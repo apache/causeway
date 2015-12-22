@@ -159,8 +159,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            List<String> groupLayoutNames = memberGroupLayoutFacet.getLeft();
-            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans, groupLayoutNames);
+            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -176,20 +175,18 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         // middle column
         if(columnSpans.getMiddle() > 0) {
-            List<String> groupLayoutNames = memberGroupLayoutFacet.getMiddle();
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans, groupLayoutNames);
+            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
 
         // right column
         if(columnSpans.getRight() > 0) {
-            List<String> groupLayoutNames = memberGroupLayoutFacet.getRight();
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans, groupLayoutNames);
+            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
@@ -223,8 +220,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private boolean addPropertiesInColumn(
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
-            final ColumnSpans columnSpans,
-            final List<String> groupLayoutNames) {
+            final ColumnSpans columnSpans) {
         final int span = hint.from(columnSpans);
         
         final EntityModel entityModel = (EntityModel) getModel();
@@ -236,7 +232,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations, groupLayoutNames);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
 

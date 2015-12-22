@@ -399,27 +399,22 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
         private Util(){}
         
         public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
-                final List<ObjectAssociation> associations,
-                final List<String> groupLayoutNames) {
+                final List<ObjectAssociation> associations) {
             Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
             for(ObjectAssociation association: associations) {
-                addAssociationIntoGroup(associationsByGroup, association, groupLayoutNames);
+                addAssociationIntoGroup(associationsByGroup, association);
             }
             return associationsByGroup;
         }
 
         private static void addAssociationIntoGroup(
                 final Map<String, List<ObjectAssociation>> associationsByGroup,
-                final ObjectAssociation association,
-                final List<String> groupLayoutNames) {
+                final ObjectAssociation association) {
             final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
-                final String name = memberOrderFacet.name();
                 final String untranslatedName = memberOrderFacet.untranslatedName();
-                // correlate with the untranslated name, if possible
-                final String groupName = groupLayoutNames.contains(untranslatedName)? untranslatedName: name;
-                if(!Strings.isNullOrEmpty(groupName)) {
-                    getFrom(associationsByGroup, groupName).add(association);
+                if(!Strings.isNullOrEmpty(untranslatedName)) {
+                    getFrom(associationsByGroup, untranslatedName).add(association);
                     return;
                 }
             }

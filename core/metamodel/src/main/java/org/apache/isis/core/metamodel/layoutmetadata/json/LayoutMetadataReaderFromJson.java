@@ -481,8 +481,8 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
 
     private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
         final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
-        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations,
-                Lists.<String>newArrayList());
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations
+        );
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objectSpec, associationsByGroup.keySet(), hint);
         
