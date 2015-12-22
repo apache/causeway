@@ -398,7 +398,8 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public static class Util {
         private Util(){}
         
-        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(List<ObjectAssociation> associations) {
+        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
+                final List<ObjectAssociation> associations) {
             Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
             for(ObjectAssociation association: associations) {
                 addAssociationIntoGroup(associationsByGroup, association);
@@ -406,12 +407,14 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return associationsByGroup;
         }
 
-        private static void addAssociationIntoGroup(Map<String, List<ObjectAssociation>> associationsByGroup, ObjectAssociation association) {
+        private static void addAssociationIntoGroup(
+                final Map<String, List<ObjectAssociation>> associationsByGroup,
+                final ObjectAssociation association) {
             final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
-                final String name = memberOrderFacet.name();
-                if(!Strings.isNullOrEmpty(name)) {
-                    getFrom(associationsByGroup, name).add(association);
+                final String untranslatedName = memberOrderFacet.untranslatedName();
+                if(!Strings.isNullOrEmpty(untranslatedName)) {
+                    getFrom(associationsByGroup, untranslatedName).add(association);
                     return;
                 }
             }
