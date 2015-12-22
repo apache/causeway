@@ -99,6 +99,9 @@ public class ObjectActionArgHelper {
         // ensure that we have no arguments that are not parameters
         for (final Map.Entry<String, JsonRepresentation> arg : arguments.mapIterable()) {
             final String argName = arg.getKey();
+            if(argName.startsWith("x-ro")) {
+                continue;
+            }
             if (action.getParameterById(argName) == null) {
                 String reason = String.format("Argument '%s' found but no such parameter", argName);
                 arguments.mapPut("x-ro-invalidReason", reason);
