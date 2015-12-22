@@ -13,7 +13,7 @@ The role of the service itself is simply to return the `Locale` of the current u
 
 [NOTE]
 ====
-For the "big picture" and further details on Apache Isis' i18n support, see xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[here].
+For the "big picture" and further details on Apache Isis' i18n support, see xref:ugbtb.adoc#_ugbtb_i18n[here].
 ====
 
 

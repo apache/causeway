@@ -355,7 +355,7 @@ This property is IGNORED if the xref:rgcfg.adoc#_rgcfg_configuring-components[`i
 | `read`,`write`
 |Whether to force the `TranslationService` into either read or write mode. +
 
-See xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18n support] to learn more about the translation service.
+See xref:ugbtb.adoc#_ugbtb_i18n[i18n support] to learn more about the translation service.
 
 |`isis.viewers.` +
 `paged.parented`

@@ -250,7 +250,7 @@ Although not mandatory, this provides a number of helper/convenience methods and
 <1> ensures an Apache Isis session/transaction running for each test
 <2> sets up a JMock context (using Apache Isis' extension to JMock as described in xref:ugtst.adoc#_ugtst_unit-test-support_jmock-extensions[JMock Extensions].
 <3> standard JUnit rule for writing tests that throw exceptions
-<4> to capture messages that require translation, as described in xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[i18 support].
+<4> to capture messages that require translation, as described in xref:ugbtb.adoc#_ugbtb_i18n[i18 support].
 
 All of these rules could be inlined in your own base class; as we say, they are a convenience.
 

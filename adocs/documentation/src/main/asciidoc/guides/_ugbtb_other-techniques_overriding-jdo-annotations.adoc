@@ -1,4 +1,4 @@
-[[_ugbtb_more-advanced_overriding-jdo-annotations]]
+[[_ugbtb_other-techniques_overriding-jdo-annotations]]
 = Overriding JDO Annotations
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -56,7 +56,7 @@ For example, in writing up the above example we found that writing `schema=&quot
 
 * Forcing the schema to "PUBLIC" (as in the above example) works, but it isn't ideal because the name "PUBLIC" is not vendor-neutral (it works for HSQLDB, but MS SQL Server uses "dbo" as its default).
 
-* As of 1.9.0 Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ugbtb_more-advanced_decoupling_db-schemas[using modules].
+* As of 1.9.0 Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ugbtb_decoupling_db-schemas[using modules].
 
 * You may need to override the entire class metadata rather than individual elements; the mixin (`1.11.0-SNAPSHOT`) mentioned above can help here.
 ====

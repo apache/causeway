@@ -229,7 +229,7 @@ We introduce view models here because they do get mentioned quite often within t
 we do consider them a more advanced topic; we generally recommend that you build your applications from the domain
 layer up, rather than from the view model down.
 
-For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[this topic].
+For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_view-models[this topic].
 
 
 
@@ -265,8 +265,8 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 NOTE: TODO
 
 
-For more information, see xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_contributions[this topic on contribution]s, and
-xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[this topic on mixin]s.
+For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this topic on contribution]s, and
+xref:ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
 
 
 

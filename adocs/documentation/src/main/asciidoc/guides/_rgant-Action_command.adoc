@@ -23,7 +23,7 @@ By default, actions are invoked in directly in the thread of the invocation.   I
 
 [NOTE]
 ====
-If background ``Command``s are used, then an external scheduler, using xref:ugbtb.adoc#_ugbtb_more-advanced_headless-access_BackgroundCommandExecution[headless access], must also be configured.
+If background ``Command``s are used, then an external scheduler, using xref:ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[headless access], must also be configured.
 ====
 
 
@@ -112,7 +112,7 @@ will prevent the parent `Command` object from being persisted, _even if_ a child
 
 For persisted commands, the `commandExecuteIn()` attribute determines whether the `Command` should be executed in the foreground (the default) or executed in the background.
 
-Background execution means that the command is not executed immediately, but is available for a configured xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:ugbtb.adoc#_ugbtb_more-advanced_headless-access_BackgroundCommandExecution[here] for further information on this topic.
+Background execution means that the command is not executed immediately, but is available for a configured xref:rgsvc.adoc#_rgsvc_spi_BackgroundCommandService[`BackgroundCommandService`] to execute, eg by way of an in-memory scheduler such as Quartz.  See xref:ugbtb.adoc#_ugbtb_headless-access_BackgroundCommandExecution[here] for further information on this topic.
 
 For example:
 

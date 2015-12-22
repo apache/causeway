@@ -1,4 +1,4 @@
-[[_ugbtb_more-advanced_view-models_jaxb]]
+[[_ugbtb_view-models_jaxb]]
 = JAXB-annotated DTOs (`1.11.0-SNAPSHOT`)
 :Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 :_basedir: ../
@@ -12,7 +12,7 @@ examples are taken from the (non-ASF) http://github.com/isisaddons/isis-app-todo
 
 
 
-[[_ugbtb_more-advanced_view-models_jaxb_using-packages-to-version]]
+[[_ugbtb_view-models_jaxb_using-packages-to-version]]
 == Use packages to version DTOs
 
 The whole point of using DTOs (in Apache Isis, at least) is to define a formal contact between two interoperating but
@@ -81,7 +81,7 @@ also include a version "v1_0".
 
 
 
-[[_ugbtb_more-advanced_view-models_jaxb_semantic-versioning]]
+[[_ugbtb_view-models_jaxb_semantic-versioning]]
 == Semantic Versioning
 
 Versioning DTOs enables us to make changes without breaking existing consumers of the data.  We can distinguish two
@@ -146,7 +146,7 @@ package todoapp.app.viewmodels.todoitem.v1_1;
 
 
 
-[[_ugbtb_more-advanced_view-models_jaxb_referencing-domain-entities]]
+[[_ugbtb_view-models_jaxb_referencing-domain-entities]]
 == Referencing Domain Entities
 
 It's quite common for view models to be "backed by" (be projections of) some underlying domain entity.  The
@@ -189,7 +189,7 @@ public class ToDoItem ...  {
 
 
 
-[[_ugbtb_more-advanced_view-models_jaxb_collections]]
+[[_ugbtb_view-models_jaxb_collections]]
 == Collections
 
 It's also possible for a DTO to hold collections of objects.  These can be of any type, either simple properties, or
