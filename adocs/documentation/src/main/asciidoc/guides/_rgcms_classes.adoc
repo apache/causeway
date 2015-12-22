@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:rgsvc.adoc#_rgsvc-api[domain] xref:rgsvc.adoc#_rgsvc-spi[services], xref:ugfun.adoc#_ugfun_object-layout[object layout] or xref:rgcfg.adoc#_rgcfg[configuration].
+This chapter describes the usage of various classes and interfaces that are not otherwise associated with xref:rgsvc.adoc#_rgsvc_api[domain] xref:rgsvc.adoc#_rgsvc_spi[services], xref:ugfun.adoc#_ugfun_object-layout[object layout] or xref:rgcfg.adoc#_rgcfg[configuration].
 
 
 include::_rgcms_classes_AppManifest-bootstrapping.adoc[leveloffset=+1]

@@ -11,5 +11,5 @@ The `loaded()` lifecycle callback method is called when a (persistent) object ha
 
 [TIP]
 ====
-Alternatively, consider using a xref:rgsvc.adoc#_rgsvc-api_EventBusService[event bus] xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedEvent[`ObjectLoadedEvent`].
+Alternatively, consider using a xref:rgsvc.adoc#_rgsvc_api_EventBusService[event bus] xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectLoadedEvent[`ObjectLoadedEvent`].
 ====

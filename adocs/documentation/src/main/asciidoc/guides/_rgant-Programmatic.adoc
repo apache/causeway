@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any xref:rgsvc.adoc#_rgsvc-api_MementoService[memento]s or xref:rgsvc.adoc#_rgsvc-api_XmlSnapshotService[snapshot]s.
+The `@Programmatic` annotation causes the method to be excluded completely from the Apache Isis metamodel. This means it won't appear in any UI, and it won't appear in any xref:rgsvc.adoc#_rgsvc_api_MementoService[memento]s or xref:rgsvc.adoc#_rgsvc_api_XmlSnapshotService[snapshot]s.
 
 A common use-case is to ignore implementation-level artifacts. For example:
 

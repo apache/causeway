@@ -261,21 +261,21 @@ If no configuration property is available, then the defaults is determined by th
 `email.tls.enabled`
 |`true`,`false` +
 (`true`)
-|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|Whether to enable TLS for the email SMTP connection (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.hostname` +
 | host (`_smtp.gmail.com_`)
-|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|The hostname of the external SMTP provider (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.port` +
 | port number (`_587_`)
-|The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  +
+|The port number for the SMTP service on the the external SMTP host (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -283,14 +283,14 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 | `isis.service.` +
 `email.sender.address` +
 | email address
-|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
 | `isis.service.` +
 `email.sender.password` +
 | email password
-|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc-api_EmailService[`EmailService`]).  *Mandatory*.  +
+|The corresponding password for the email address to use for sending out email (used by xref:rgsvc.adoc#_rgsvc_api_EmailService[`EmailService`]).  *Mandatory*.  +
 
 NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.services.email`)
 
@@ -299,13 +299,13 @@ NB: note that the key is mis-spelt, (`isis.service.email` rather than `isis.serv
 `eventbus.implementation` +
 | `guava`, `axon`, +
 FQCN (`_guava_`)
-|which implementation to use by the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] as the underlying event bus.
+|which implementation to use by the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] as the underlying event bus.
 
 | `isis.services.` +
 `eventbus.allowLateRegistration` +
 |`true`,`false` +
 (`false`)
-|whether a domain service can register with the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] after any events have posted. +
+|whether a domain service can register with the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] after any events have posted. +
 
 Since this almost certainly constitutes a bug in application code, by default this is disallowed.
 
@@ -408,7 +408,7 @@ By default this configuration property is enabled.  To disable the visibility fi
 isis.reflector.facet.filterVisibility=false
 ----
 
-Filtering is supported by the Wicket viewer, and by the xref:rgsvc.adoc#_rgsvc-api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is _not_ "skip rules").  However the Restful Objects viewer does _not_ currently support filtering.
+Filtering is supported by the Wicket viewer, and by the xref:rgsvc.adoc#_rgsvc_api_WrapperFactory[`WrapperFactory`] domain service (provided the wrapper's execution mode is _not_ "skip rules").  However the Restful Objects viewer does _not_ currently support filtering.
 
 [NOTE]
 ====

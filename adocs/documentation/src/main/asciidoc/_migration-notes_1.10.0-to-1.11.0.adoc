@@ -21,7 +21,7 @@ At the time of writing `1.11.0` has not been released; these notes relate to `1.
 Classes annotated with xref:guides/rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`] are now recognized
 as view models.  These are serialized out into XML and converted into URL.
 
-The xref:guides/rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`] is responsible for performing the XML conversion.
+The xref:guides/rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] is responsible for performing the XML conversion.
 The default implementation is located in the `org.apache.isis.core:isis-core-schema` module, specifically under the
 `org.apache.isis.core.schema.services` package.
 

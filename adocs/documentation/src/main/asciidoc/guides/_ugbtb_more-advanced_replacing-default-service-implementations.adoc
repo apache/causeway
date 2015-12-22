@@ -6,11 +6,11 @@
 
 
 
-The framework provides default implementations for many of the xref:rgsvc.adoc#_rgsvc-api[API Services].  This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
+The framework provides default implementations for many of the xref:rgsvc.adoc#_rgsvc_api[API Services].  This is convenient, but sometimes you will want to replace the default implementation with your own service implementation.
 
 The trick is to use the xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute, specifying a low number (typically `"1"`).
 
-For example, suppose you wanted to provide your own implementation of xref:rgsvc.adoc#_rgsvc-api_LocaleProvider[`LocaleProvider`].  Here's how:
+For example, suppose you wanted to provide your own implementation of xref:rgsvc.adoc#_rgsvc_api_LocaleProvider[`LocaleProvider`].  Here's how:
 
 [source,java]
 ----

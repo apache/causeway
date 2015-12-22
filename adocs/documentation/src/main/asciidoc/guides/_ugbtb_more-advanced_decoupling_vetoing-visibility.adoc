@@ -5,7 +5,7 @@
 :_imagesdir: images/
 
 
-NOTE: TODO - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`]
+NOTE: TODO - a write-up of the "vetoing subscriber" design pattern, eg as described in the  xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`]
 
 
 eg if included an addon such as auditing or security.

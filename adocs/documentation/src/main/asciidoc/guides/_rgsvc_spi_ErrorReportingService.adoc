@@ -1,0 +1,106 @@
+[[_rgsvc_spi_ErrorReportingService]]
+= `ErrorReportingService`
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+The `ErrorReportingService` service is an optional SPI that providies the ability to record any errors/exceptions that
+ might occur in the application into an external incident recording system (such as JIRA).  The service also allows
+ a user-friendly (jargon-free) error message to be returned and rendered to the end-user, along with an optional
+ incident reference (eg a JIRA issue `XXX-1234`).
+
+
+
+== SPI
+
+The SPI defined by this service is:
+
+[source,java]
+----
+public interface ErrorReportingService {
+    Ticket reportError(ErrorDetails errorDetails);
+}
+----
+
+where `ErrorDetails` provided to the service is:
+
+[source,java]
+----
+public class ErrorDetails {
+    public String getMainMessage() { ... }          // <1>
+    public boolean isRecognized() { ... }           // <2>
+    public boolean isAuthorizationCause() { ... }   // <3>
+    public List<String> getStackTraceDetailList() { // <4>
+}
+----
+<1> the main message to be displayed to the end-user.  The service is responsible for translating this into the language of the end-user (it can use xref:rgsvc.adoc#_rgsvc_spi_LocaleProvider[`LocaleProvider`] if required).
+<2> whether this message has already been recognized by an xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`] service.  Generally this converts potentially non-recoverable (fatal) exceptions into recoverable exceptions (warnings) as well providing an alternative mechanism for generating user-friendly error messages.
+<3> whether the cause of the exception was due to a lack of privileges.  In such cases the UI restricts the information shown to the end-user, to avoid leaking potentially sensitive information
+<4> the stack trace of the exception, including the trace of any exceptions in the causal chain.  These technical details are hidden from the user and only shown for non-recoverable exceptions.
+
+
+and `Ticket` (returned by the service) has the constructor:
+
+[source,java]
+----
+public class Ticket implements Serializable {
+    public Ticket(
+        final String reference,             // <1>
+        final String userMessage,           // <2>
+        final String details) { ... }       // <3>
+}
+----
+<1> is a unique identifier that the end-user can use to track any follow-up from this error.  For example, an
+implementation might automatically log an issue in a bug tracking system such as JIRA, in which case the reference would
+probably be the JIRA issue number <tt>XXX-1234</tt>.
+<2> a short, jargon-free message to display to the end-user.
+<3> is optional additional details to show.  For example, these might include text on how to recover from the error, or
+ workarounds, or just further details on contacting the help desk if the issue is severe and requires immediate
+ attention.
+
+
+
+
+== Implementation
+
+The (non-ASF) http://github.com/isisaddons/isis-app-kitchensink[Isis addons' kitchensink] app provides an example
+implementation:
+
+[source,java]
+----
+@DomainService( nature = NatureOfService.DOMAIN )
+public class KitchensinkErrorReportingService implements ErrorReportingService {
+    private int ticketNumber = 1;
+    @Override
+    public Ticket reportError(final ErrorDetails errorDetails) {
+        return new Ticket(
+                nextTicketReference(),
+                "The Kitchen sink app is sorry to report that: " + errorDetails.getMainMessage(),
+                  "These are additional details for the end-user to read.\n"
+                + "This content should be able to span many lines.\n"
+                + "More detail.\n"
+                + "Some suggested work-arounds.\n"
+                + "Details of how to contact help desk.\n"
+                + "And so on");
+    }
+    String nextTicketReference() {
+        return "" + ticketNumber++;
+    }
+}
+----
+
+which is rendered as:
+
+image::{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png[width="860px",link="{_imagesdir}reference-services-spi/ErrorReportingService/kitchensink-example.png"]
+
+
+
+
+== Registering the Services
+
+There is no default implementation of this service.  To register your own implementation (and assuming that an
+`AppManifest` is being used to xref:rgcms.adoc#_rgcms_classes_AppManifest-bootstrapping[bootstrap the app]), then just
+ensure that the implementation is on the classpath and the module containing the implementation is returned in
+`AppManifest#getModules()`.
+

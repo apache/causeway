@@ -94,7 +94,7 @@ public class Customer {
 
 [NOTE]
 ====
-An alternative and almost equivalent design would be to publish an event using the xref:rgsvc.adoc#_rgsvc-api_EventBusService[`EventBusService`] and implement the domain services as subscribers to
+An alternative and almost equivalent design would be to publish an event using the xref:rgsvc.adoc#_rgsvc_api_EventBusService[`EventBusService`] and implement the domain services as subscribers to
 the event.  This alternative design is used in the (non-ASF) http://github.com/isisaddons/isis-module-poly[Isis addons' poly] module, for example.
 ====
 
@@ -114,7 +114,7 @@ Customer cust = container.newTransientInstance(Customer.class);  <1>
 // initialize state of "cust"
 container.persist(cust);
 ----
-<1> where `container` is an instance of xref:rgsvc.adoc#_rgsvc-api_DomainObjectContainer[`DomainObjectContainer`].
+<1> where `container` is an instance of xref:rgsvc.adoc#_rgsvc_api_DomainObjectContainer[`DomainObjectContainer`].
 
 View models are created similarly:
 

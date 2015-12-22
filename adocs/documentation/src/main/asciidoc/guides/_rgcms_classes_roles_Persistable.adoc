@@ -30,5 +30,5 @@ This will return the XML text wrapped up in a xref:rgcms.adoc#_rgcms_classes_val
 
 == Related Services
 
-The mixin delegates to the xref:rgsvc.adoc#_rgsvc-api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
+The mixin delegates to the xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`IsisJdoSupport`] service to obtain
 a reference to the JDO `PersistenceManagerFactory`.

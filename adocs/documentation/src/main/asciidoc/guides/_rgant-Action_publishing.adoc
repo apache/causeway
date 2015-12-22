@@ -7,7 +7,7 @@
 
 
 
-The `publishing()` attribute determines whether and how an action invocation is published via the registered implementation of a xref:rgsvc.adoc#_rgsvc-spi_PublishingService[`PublishingService`]).  This attribute is also supported for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects are published as events.
+The `publishing()` attribute determines whether and how an action invocation is published via the registered implementation of a xref:rgsvc.adoc#_rgsvc_spi_PublishingService[`PublishingService`]).  This attribute is also supported for xref:rgant.adoc#_rgant-DomainObject_publishing[domain objects], where it controls whether changed objects are published as events.
 
 A common use case is to notify external "downstream" systems of changes in the state of the Isis application.
 The default value for the attribute is `AS_CONFIGURED`, meaning that the xref:rgcfg.adoc#_rgcfg_configuring-core[configuration property] `isis.services.publish.actions` is used to determine the whether the action is published:

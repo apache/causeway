@@ -12,5 +12,5 @@ See also xref:rgcms.adoc#_rgcms_methods_lifecycle_persisted[`persisted()`].
 
 [TIP]
 ====
-Alternatively, consider using a xref:rgsvc.adoc#_rgsvc-api_EventBusService[event bus] xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingEvent[`ObjectPersistingEvent`].
+Alternatively, consider using a xref:rgsvc.adoc#_rgsvc_api_EventBusService[event bus] xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[subscriber] on the xref:rgcms.adoc#_rgcms_classes_lifecycleevent_ObjectPersistingEvent[`ObjectPersistingEvent`].
 ====
