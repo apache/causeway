@@ -33,6 +33,7 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
         return MemberOrderFacet.class;
     }
 
+    private final String originalName;
     private final String name;
     private final String sequence;
     private final TranslationService translationService;
@@ -45,6 +46,7 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
         super(type(), holder);
         this.translationService = translationService;
         this.name = translatedValueElse(name, "");
+        this.originalName = valueElse(name, "");
         this.sequence = valueElse(sequence, "1");
     }
 
@@ -71,6 +73,10 @@ public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstrac
     @Override
     public String name() {
         return name;
+    }
+
+    public String untranslatedName() {
+        return originalName;
     }
 
     @Override

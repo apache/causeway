@@ -147,7 +147,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        final ColumnSpans columnSpans = entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class).getColumnSpans();
+        MemberGroupLayoutFacet memberGroupLayoutFacet =
+                entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
+        final ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
 
         renderedFirstField = false;
         
@@ -157,7 +159,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
+            List<String> groupLayoutNames = memberGroupLayoutFacet.getLeft();
+            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans, groupLayoutNames);
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -173,18 +176,20 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         // middle column
         if(columnSpans.getMiddle() > 0) {
+            List<String> groupLayoutNames = memberGroupLayoutFacet.getMiddle();
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans);
+            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans, groupLayoutNames);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
 
         // right column
         if(columnSpans.getRight() > 0) {
+            List<String> groupLayoutNames = memberGroupLayoutFacet.getRight();
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans);
+            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans, groupLayoutNames);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
@@ -215,7 +220,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     }
 
-    private boolean addPropertiesInColumn(MarkupContainer markupContainer, MemberGroupLayoutHint hint, ColumnSpans columnSpans) {
+    private boolean addPropertiesInColumn(
+            final MarkupContainer markupContainer,
+            final MemberGroupLayoutHint hint,
+            final ColumnSpans columnSpans,
+            final List<String> groupLayoutNames) {
         final int span = hint.from(columnSpans);
         
         final EntityModel entityModel = (EntityModel) getModel();
@@ -227,7 +236,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations, groupLayoutNames);
         
         final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
 
@@ -275,16 +284,16 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     private void addPropertyToForm(
             final EntityModel entityModel,
-            final OneToOneAssociation association,
+            final OneToOneAssociation otoa,
             final WebMarkupContainer container,
             final List<LinkAndLabel> entityActions) {
-        final OneToOneAssociation otoa = association;
         final PropertyMemento pm = new PropertyMemento(otoa);
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
         final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
-        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel, otoa, getDeploymentType());
+        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel,
+                otoa, getDeploymentType());
 
         entityActions.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
 

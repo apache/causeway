@@ -398,20 +398,28 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
     public static class Util {
         private Util(){}
         
-        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(List<ObjectAssociation> associations) {
+        public static Map<String, List<ObjectAssociation>> groupByMemberOrderName(
+                final List<ObjectAssociation> associations,
+                final List<String> groupLayoutNames) {
             Map<String, List<ObjectAssociation>> associationsByGroup = Maps.newHashMap();
             for(ObjectAssociation association: associations) {
-                addAssociationIntoGroup(associationsByGroup, association);
+                addAssociationIntoGroup(associationsByGroup, association, groupLayoutNames);
             }
             return associationsByGroup;
         }
 
-        private static void addAssociationIntoGroup(Map<String, List<ObjectAssociation>> associationsByGroup, ObjectAssociation association) {
+        private static void addAssociationIntoGroup(
+                final Map<String, List<ObjectAssociation>> associationsByGroup,
+                final ObjectAssociation association,
+                final List<String> groupLayoutNames) {
             final MemberOrderFacet memberOrderFacet = association.getFacet(MemberOrderFacet.class);
             if(memberOrderFacet != null) {
                 final String name = memberOrderFacet.name();
-                if(!Strings.isNullOrEmpty(name)) {
-                    getFrom(associationsByGroup, name).add(association);
+                final String untranslatedName = memberOrderFacet.untranslatedName();
+                // correlate with the untranslated name, if possible
+                final String groupName = groupLayoutNames.contains(untranslatedName)? untranslatedName: name;
+                if(!Strings.isNullOrEmpty(groupName)) {
+                    getFrom(associationsByGroup, groupName).add(association);
                     return;
                 }
             }
