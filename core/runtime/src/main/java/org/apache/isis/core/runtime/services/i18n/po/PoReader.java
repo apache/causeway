@@ -133,7 +133,7 @@ class PoReader extends PoAbstract {
                 return msgId;
             }
         } catch(final RuntimeException ex){
-            logWarningIfNotPreviously("Failed to obtain locale, returning the original msgId");
+            logInfoIfNotPreviously("Failed to obtain locale, returning the original msgId");
             return msgId;
         }
 
@@ -162,7 +162,7 @@ class PoReader extends PoAbstract {
         // so this message is only ever displayed if the locale isn't using fallback (ie a translation is genuinely missing)
         final Boolean usesFallback = usesFallbackByLocale.get(targetLocale);
         if(usesFallback == null || !usesFallback) {
-            logWarningIfNotPreviously("No translation found for: " + key);
+            logInfoIfNotPreviously("No translation found for: " + key);
         }
 
         return msgId;
@@ -209,7 +209,7 @@ class PoReader extends PoAbstract {
         }
 
         // this is only ever logged the first time that a user using this particular locale is encountered
-        logWarningIfNotPreviously("Could not locate translations for locale: " + locale + ", using fallback");
+        logInfoIfNotPreviously("Could not locate translations for locale: " + locale + ", using fallback");
 
         usesFallbackByLocale.put(locale, true);
         return fallback;
@@ -246,14 +246,14 @@ class PoReader extends PoAbstract {
 
 
     // to avoid flooding the logs
-    private void logWarningIfNotPreviously(final String warning) {
-        if(!warnings.contains(warning)) {
-            LOG.warn(warning);
-            warnings.add(warning);
+    private void logInfoIfNotPreviously(final String infoMessage) {
+        if(!loggedInfoMessages.contains(infoMessage)) {
+            LOG.info(infoMessage);
+            loggedInfoMessages.add(infoMessage);
         }
     }
 
-    private final Set<String> warnings = Sets.newConcurrentHashSet();
+    private final Set<String> loggedInfoMessages = Sets.newConcurrentHashSet();
 
 
 }
