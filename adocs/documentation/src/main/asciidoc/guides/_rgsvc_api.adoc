@@ -160,6 +160,17 @@ SpecificationProvider`].
 |
 
 
+|xref:rgsvc.adoc#_rgsvc_api_HomePageProviderService[`o.a.i.applib.` +
+`services.homepage` +
+`HomePageProviderService`]
+|Returns the home page object, if any is defined.
+|`HomePageProvider` +
+`ServiceDefault` +
+``o.a.i.core`` +
+``isis-core-runtime``
+|Used by the default implementation of xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`RoutingService`].
+
+
 |xref:rgsvc.adoc#_rgsvc_api_IsisJdoSupport[`o.a.i.applib.` +
 `services.jdosupport` +
 `IsisJdoSupport`]
@@ -314,6 +325,7 @@ include::_rgsvc_api_EmailService.adoc[leveloffset=+1]
 include::_rgsvc_api_EventBusService.adoc[leveloffset=+1]
 include::_rgsvc_api_FixtureScriptsDefault.adoc[leveloffset=+1]
 include::_rgsvc_api_GuiceBeanProvider.adoc[leveloffset=+1]
+include::_rgsvc_api_HomePageProviderService.adoc[leveloffset=+1]
 include::_rgsvc_api_IsisJdoSupport.adoc[leveloffset=+1]
 include::_rgsvc_api_JaxbService.adoc[leveloffset=+1]
 include::_rgsvc_api_MementoService.adoc[leveloffset=+1]

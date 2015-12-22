@@ -21,7 +21,16 @@ package org.apache.isis.applib.services.homepage;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.HomePage;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.routing.RoutingService;
+import org.apache.isis.applib.services.routing.RoutingServiceDefault;
 
+/**
+ * Provides access to the home page object (if any).
+ *
+ * <p>
+ *     Used by the {@link RoutingServiceDefault default implementation} of the {@link RoutingService}.
+ * </p>
+ */
 public interface HomePageProviderService {
 
     /**

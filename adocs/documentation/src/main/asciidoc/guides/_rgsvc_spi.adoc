@@ -156,6 +156,18 @@ depends on: +
 `EventSerializer`
 
 
+|xref:rgsvc.adoc#_rgsvc_spi_RoutingService[`o.a.i.applib.` +
+`services.routing` +
+`RoutingService`]
+|Return an alternative object than that returned by an action.
+|`RoutingServiceDefault` +
+``o.a.i.core`` +
+``isis-core-applib``
+|The default implementation will return the home page (per xref:rgsvc.adoc#_rgsvc_api_HomePageProviderService[`HomePageProviderService`]) if a void or null is returned. +
+Used by the xref:ugvw.adoc#[Wicket viewer] only.
+
+
+
 |xref:rgsvc.adoc#_rgsvc_spi_TranslationService[`o.a.i.applib.` +
 `services.i18n` +
 `TranslationService`]
@@ -183,7 +195,8 @@ depends on: +
 `UrlEncodingService`]
 |Converts strings into a form safe for use within a URL.  Used to convert view models mementos into usable URL form.
 
-|`UrlEncodingServiceUsingBaseEncoding` +
+|`UrlEncodingService` +
+`UsingBaseEncoding` +
 ``o.a.i.applib`` +
 ``isis-core-applib``
 |
@@ -292,6 +305,7 @@ include::_rgsvc_spi_FixtureScriptsSpecificationProvider.adoc[leveloffset=+1]
 include::_rgsvc_spi_LocaleProvider.adoc[leveloffset=+1]
 include::_rgsvc_spi_PublishingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_RepresentationService.adoc[leveloffset=+1]
+include::_rgsvc_spi_RoutingService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationService.adoc[leveloffset=+1]
 include::_rgsvc_spi_TranslationsResolver.adoc[leveloffset=+1]
 include::_rgsvc_spi_UrlEncodingService.adoc[leveloffset=+1]
