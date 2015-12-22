@@ -113,6 +113,16 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
 
 
+    public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    @Action(
+            domainEvent = DeleteDomainEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
+    )
+    public void delete() {
+        container.removeIfNotAlready(this);
+    }
+
+
     /**
      * version (derived property)
      */

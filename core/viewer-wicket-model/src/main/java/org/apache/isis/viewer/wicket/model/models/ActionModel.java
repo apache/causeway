@@ -48,6 +48,7 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.RecoverableException;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.services.routing.RoutingService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.applib.value.Clob;
 import org.apache.isis.applib.value.NamedWithMimeType;
@@ -59,6 +60,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -467,6 +469,17 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
                         targetAdapter, arguments,
                         InteractionInitiatedBy.USER,
                         WHERE_FOR_ACTION_INVOCATION);
+
+        final List<RoutingService> routingServices = getServicesInjector().lookupServices(RoutingService.class);
+        final Object result = resultAdapter != null ? resultAdapter.getObject() : null;
+        for (RoutingService routingService : routingServices) {
+            final boolean canRoute = routingService.canRoute(result);
+            if(canRoute) {
+                final Object routeTo = routingService.route(result);
+                return routeTo != null? getPersistenceSession().adapterFor(routeTo): null;
+            }
+        }
+
         return resultAdapter;
     }
 
@@ -662,6 +675,10 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
 
     public ActionModel copy() {
         return new ActionModel(this);
+    }
+
+    protected ServicesInjectorSpi getServicesInjector() {
+        return getPersistenceSession().getServicesInjector();
     }
 
 
