@@ -192,6 +192,7 @@ public interface DomainObjectContainer {
 <1> are concatenated together to form the context for the `.pot` file.
 
 
+
 === `TranslatableException`
 
 Another mechanism by which messages can be rendered to the user are as the result of exception messages thrown and recognized by an xref:rgsvc.adoc#_rgsvc_spi_ExceptionRecognizer[`ExceptionRecognizer`].
@@ -262,6 +263,36 @@ Behind the scenes Apache Isis uses a JUnit rule (`ExceptionRecognizerTranslate`)
 ====
 
 
+
+
+
+
+== Escaped strings
+
+Translated messages can be escaped if required, eg to include embedded markup.
+
+[source,ini]
+----
+#: com.mycompany.myapp.OrderItem#quantity
+msgid "<i>Quantity</i>"
+msgstr "<i>Quantité</i>"
+----
+
+For this to work, the `namedEscaped()` attribute must be specified using either the
+xref:ugfun.adoc#_ugfun_object-layout_dynamic[dynamic layout] json file, or using an annotation such as
+xref:rgant.adoc#_rgant_PropertyLayout[`@PropertyLayout`] or xref:rgant.adoc#_rgant_ParameterLayout[`@ParameterLayout`].
+
+For example:
+
+[source,java]
+----
+@ParameterLayout(
+    named="<i>Quantity</i>",      // <1>
+    namedEscaped=false
+)
+public Integer getQuantity() { ... }
+----
+<1> required (even though it won't be used when a translation is read; otherwise the escaped flag is ignored)
 
 
 

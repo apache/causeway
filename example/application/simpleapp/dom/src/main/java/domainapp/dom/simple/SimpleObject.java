@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -81,6 +82,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     )
     @Property(
             editing = Editing.DISABLED
+    )
+    @PropertyLayout(
+            namedEscaped = false
     )
     private String name;
     public String getName() {
