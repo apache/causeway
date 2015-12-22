@@ -26,7 +26,7 @@ pass:[<br/>]
 
 | *What is Apache Isis?*
 
-* *link:./isis-in-pictures[What is Apache Isis?] ... in pictures*
+* *link:./isis-in-pictures.html[What is Apache Isis?] ... in pictures*
 * link:./powered-by.html[Powered by Apache Isis]
 * link:./how-isis-works.html[How Apache Isis Works] image:{_imagesdir}tv_show-25.png[width="25px" link="how-isis-works.html"]
 * link:./common-use-cases.html[Common Use Cases]
