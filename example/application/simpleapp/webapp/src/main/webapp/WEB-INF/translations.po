@@ -34,7 +34,7 @@ msgstr ""
 
 #: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
 msgid "AutoLabel.CSS.required"
-msgstr ""
+msgstr "Required"
 
 
 #: org.apache.isis.core.runtime.system.IsisSystem
@@ -312,7 +312,7 @@ msgstr "YAML"
 
 #: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
 msgid "aboutLabel"
-msgstr ""
+msgstr "About"
 
 
 #: org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage
@@ -502,11 +502,6 @@ msgstr "You can only select 1 item"
 #: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
 msgid "signInButtonLabel"
 msgstr "Sign in"
-
-
-#: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage
-msgid "signInFailed"
-msgstr ""
 
 
 #: org.apache.isis.viewer.wicket.ui.pages.login.WicketSignInPage

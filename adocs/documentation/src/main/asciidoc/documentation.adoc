@@ -120,7 +120,6 @@ tools (not ASF):
 * link:./articles-and-presentations.html[Articles, Conferences, Podcasts]
 * link:./books.html[Books]
 * link:./resources/thesis/Pawson-Naked-Objects-thesis.pdf[Naked Objects PhD thesis] (Pawson)
-* link:https://github.com/isisaddons/isis-app-simpledsl/[isis-script DSL]
 //* link:./downloadable-presentations.html[Downloadable Presentations]
 
 
