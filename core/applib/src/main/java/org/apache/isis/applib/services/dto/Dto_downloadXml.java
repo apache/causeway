@@ -39,7 +39,7 @@ public class Dto_downloadXml {
         this.dto = dto;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,
