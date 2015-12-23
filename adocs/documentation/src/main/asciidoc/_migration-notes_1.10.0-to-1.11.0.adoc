@@ -81,3 +81,14 @@ There is also an HTML page to load the Swagger UI itself; this resides in `src/m
 
 The text of the simple app's `about/index.html` has also changed (the `<li`> for the `/restful` URL has been replaced with a `/swagger-ui` URL).  If you use link:https://github.com/apache/isis/blob/master/example/application/simpleapp/webapp/src/main/webapp/about/index.html[this file], then update it.
 
+
+== Wicket Viewer i18n
+
+The xref:guides/ugvw.adoc#[Wicket viewer] (its labels, buttons, messages etc) can now be internationalized using the
+xref:guides/rgsvc.adoc#_rgsvc_spi_TranslationService[`TranslationService`].
+
+To enable this, new ``msgId``s and corresponding translations must be added to the `translations.po` file.  Full
+details of these ``msgId``s can be found in xref:guides/ugbtb.adoc#_ugbtb_i18n_wicket-viewer[i18n] section of the "beyond the basics" guide.
+
+If no translations are available, then the fallback is to use the previous mechanism, ie Wicket's original resource bundles.
+This feature can therefore be considered as optional.
