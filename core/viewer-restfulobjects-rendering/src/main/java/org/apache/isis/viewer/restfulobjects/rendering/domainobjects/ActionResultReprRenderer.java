@@ -99,8 +99,8 @@ public class ActionResultReprRenderer extends ReprRendererAbstract<ActionResultR
         final JsonRepresentation result = JsonRepresentation.newMap();
         addResultTo(resultType, result);
 
+        putResultType(representation, resultType);
         if (!resultType.isVoid()) {
-            putResultType(representation, resultType);
             if(returnedAdapter != null) {
                 representation.mapPut("result", result);
             } else {

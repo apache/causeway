@@ -191,9 +191,8 @@ public class RepresentationServiceContentNegotiator implements RepresentationSer
      */
     ResponseBuilder buildResponse(
             final Function<ContentNegotiationService, ResponseBuilder> connegServiceBuildResponse) {
-        ResponseBuilder responseBuilder = null;
         for (final ContentNegotiationService contentNegotiationService : contentNegotiationServices) {
-            responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
+            final ResponseBuilder responseBuilder = connegServiceBuildResponse.apply(contentNegotiationService);
             if(responseBuilder != null) {
                 return responseBuilder;
             }
