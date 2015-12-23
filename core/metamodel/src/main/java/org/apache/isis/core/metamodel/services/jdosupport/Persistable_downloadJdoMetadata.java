@@ -29,6 +29,7 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.dto.Dto;
@@ -55,7 +56,9 @@ public class Persistable_downloadJdoMetadata {
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "800.1")
-    public Clob $$(final String fileName) throws JAXBException, IOException {
+    public Clob $$(
+            @ParameterLayout(named = ".jdo file name")
+            final String fileName) throws JAXBException, IOException {
 
         final Class<? extends Persistable> objClass = persistable.getClass();
         final String objClassName = objClass.getName();

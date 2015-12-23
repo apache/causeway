@@ -21,9 +21,12 @@ package org.apache.isis.viewer.wicket.viewer.settings;
 
 import java.util.List;
 import org.apache.wicket.Application;
+import org.apache.wicket.Localizer;
 import org.apache.wicket.resource.loader.*;
 import org.apache.wicket.settings.def.ResourceSettings;
 import org.apache.wicket.util.lang.Generics;
+
+import org.apache.isis.viewer.wicket.viewer.integration.wicket.LocalizerForIsis;
 
 public class IsisResourceSettings extends ResourceSettings {
 
@@ -97,5 +100,10 @@ public class IsisResourceSettings extends ResourceSettings {
     public List<IStringResourceLoader> getStringResourceLoaders()
     {
         return stringResourceLoaders;
+    }
+
+    @Override
+    public Localizer getLocalizer() {
+        return new LocalizerForIsis();
     }
 }

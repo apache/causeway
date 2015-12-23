@@ -26,8 +26,7 @@ public interface JaxbService {
     @Programmatic
     <T> T fromXml(Class<T> domainClass, String xml);
 
-    @Programmatic
-    public String toXml(final Object domainObject);
+    @Programmatic String toXml(final Object domainObject);
 
 
     /**
@@ -43,22 +42,22 @@ public interface JaxbService {
      *     <a href="http://isis.apache.org/schema">downloaded</a> from the Isis website.
      * </p>
      */
-    public enum IsisSchemas {
-        INCLUDE {
-            public boolean shouldIgnore(final String namespaceUri) {
-                return false;
-            }
+    enum IsisSchemas {
+        INCLUDE,
+        IGNORE;
 
-        },
-        IGNORE {
-            public boolean shouldIgnore(final String namespaceUri) {
+        /**
+         * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
+         */
+        public boolean shouldIgnore(final String namespaceUri) {
+            if(this == INCLUDE) {
+                return false;
+            } else {
                 return namespaceUri.matches(".*isis\\.apache\\.org.*");
             }
-        };
-
-        public abstract boolean shouldIgnore(final String namespaceUri);
+        }
     }
 
     @Programmatic
-    public Map<String, String> toXsd(final Object domainObject, final IsisSchemas isisSchemas);
+    Map<String, String> toXsd(final Object domainObject, final IsisSchemas isisSchemas);
 }

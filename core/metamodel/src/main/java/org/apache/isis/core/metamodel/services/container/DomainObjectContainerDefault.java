@@ -182,6 +182,7 @@ public class DomainObjectContainerDefault
         }
     }
 
+    @Programmatic
     @Override
     public <T> T mixin(final Class<T> mixinClass, final Object mixedIn) {
         final ObjectSpecification objectSpec = getSpecificationLoader().loadSpecification(mixinClass);
