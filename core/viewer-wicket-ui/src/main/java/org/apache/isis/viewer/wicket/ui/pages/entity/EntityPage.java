@@ -29,17 +29,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.interactions.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions.ObjectVisibilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -130,9 +124,11 @@ public class EntityPage extends PageAbstract {
         }
 
         // check that the entity overall can be viewed.
-        if(!isVisible(objectAdapter)) {
+        if(!ObjectAdapter.Util.isVisible(objectAdapter, InteractionInitiatedBy.USER)) {
             throw new ObjectMember.AuthorizationException();
         }
+
+
 
 
         // the next bit is a work-around for JRebel integration...
@@ -173,23 +169,6 @@ public class EntityPage extends PageAbstract {
         // ensure the copy link holds this page.
         send(this, Broadcast.BREADTH, new IsisUiHintEvent(entityModel, null));
     }
-
-    private boolean isVisible(final ObjectAdapter input) {
-        final InteractionResult visibleResult =
-                InteractionUtils.isVisibleResult(input.getSpecification(), createVisibleInteractionContext(input
-        ));
-        return visibleResult.isNotVetoing();
-    }
-
-    private VisibilityContext<?> createVisibleInteractionContext(
-            final ObjectAdapter objectAdapter) {
-        final Identifier identifier = objectAdapter.getSpecification().getIdentifier();
-        return new ObjectVisibilityContext(
-                objectAdapter, identifier, InteractionInitiatedBy.USER,
-                Where.OBJECT_FORMS);
-    }
-
-
 
     private void addBreadcrumb(final EntityModel entityModel) {
         final BreadcrumbModelProvider session = (BreadcrumbModelProvider) getSession();
