@@ -1,0 +1,28 @@
+[[_ugbtb_decoupling]]
+= Decoupling
+:Notice: Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements. See the NOTICE file distributed with this work for additional information regarding copyright ownership. The ASF licenses this file to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at. http://www.apache.org/licenses/LICENSE-2.0 . Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR  CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+:_basedir: ../
+:_imagesdir: images/
+
+
+We use Java packages as a way to group related domain objects together; the package name forms a namespace. We can then
+reason about all the classes in that package/namespace as a single unit, or module.
+
+This section describes how to use Apache Isis' features to ensure that your domain application remains decoupled.  The techniques described here are also the ones that have been adopted by the various http://github.com/isisaddons[Isis Addons] modules (not ASF) for security, commands, auditing etc.
+
+The following sections describe how to re-assemble an application, in particular where some modules are in-house but others are potentially third-party (eg the Isis Addons modules).
+
+[NOTE]
+====
+There is some overlap with OSGi and Java 9's Jigsaw concepts of "module"; in the future we expect to refactor Apache Isis to leverage these module systems.
+====
+
+include::_ugbtb_decoupling_db-schemas.adoc[leveloffset=+1]
+include::_ugbtb_decoupling_mixins.adoc[leveloffset=+1]
+include::_ugbtb_decoupling_contributions.adoc[leveloffset=+1]
+include::_ugbtb_decoupling_vetoing-visibility.adoc[leveloffset=+1]
+include::_ugbtb_decoupling_event-bus.adoc[leveloffset=+1]
+include::_ugbtb_decoupling_pushing-changes.adoc[leveloffset=+1]
+
+
+

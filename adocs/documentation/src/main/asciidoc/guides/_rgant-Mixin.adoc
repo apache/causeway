@@ -34,7 +34,7 @@ An alternative and equivalent approach is to use the
 xref:rgant.adoc#_rgant-DomainObject_nature[`@DomainObject#nature()`] annotation with a nature of `MIXIN`.
 
 
-For further discussion on using mixins, see xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[mixins] in the user guide.
+For further discussion on using mixins, see xref:ugbtb.adoc#_ugbtb_decoupling_mixins[mixins] in the user guide.
 
 
 

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.swagger.SwaggerService;
 import org.apache.isis.core.metamodel.services.swagger.internal.SwaggerSpecGenerator;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -58,6 +59,7 @@ public class SwaggerServiceDefault implements SwaggerService, SpecificationLoade
         return basePath;
     }
 
+    @Programmatic
     @Override
     public String generateSwaggerSpec(
             final Visibility visibility,

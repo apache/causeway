@@ -49,5 +49,5 @@ can be used instead, eg:
 
 [TIP]
 ====
-The framework also provides a separate, powerful mechanism for xref:ugbtb.adoc#_ugbtb_more-advanced_i18n[internationalization].
+The framework also provides a separate, powerful mechanism for xref:ugbtb.adoc#_ugbtb_i18n[internationalization].
 ====

@@ -185,7 +185,7 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adrgss" value="xref:rgsvc.adoc#_rgsvc-spi_$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service spi" toReformat="false" toShortenFQNames="true">
+  <template name="adrgss" value="xref:rgsvc.adoc#_rgsvc_spi_$ServiceType$[`$ServiceType$`]" description="x-ref to ref guide manpage for service spi" toReformat="false" toShortenFQNames="true">
     <variable name="ServiceType" expression="" defaultValue="" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />

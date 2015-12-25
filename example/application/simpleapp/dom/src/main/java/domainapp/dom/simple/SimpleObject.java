@@ -31,6 +31,7 @@ import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.Property;
+import org.apache.isis.applib.annotation.PropertyLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.eventbus.PropertyDomainEvent;
@@ -82,6 +83,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
     @Property(
             editing = Editing.DISABLED
     )
+    @PropertyLayout(
+            namedEscaped = false
+    )
     private String name;
     public String getName() {
         return name;
@@ -111,6 +115,16 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
     }
 
+
+
+    public static class DeleteDomainEvent extends ActionDomainEvent<SimpleObject> {}
+    @Action(
+            domainEvent = DeleteDomainEvent.class,
+            semantics = SemanticsOf.NON_IDEMPOTENT_ARE_YOU_SURE
+    )
+    public void delete() {
+        container.removeIfNotAlready(this);
+    }
 
 
     /**

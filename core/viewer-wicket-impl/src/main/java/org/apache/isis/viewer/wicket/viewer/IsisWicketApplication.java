@@ -35,6 +35,7 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import org.apache.wicket.guice.GuiceComponentInjector;
 import org.wicketstuff.select2.ApplicationSettings;
 
 import org.apache.wicket.Application;
@@ -99,7 +100,6 @@ import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistryAccessor;
 import org.apache.isis.viewer.wicket.ui.pages.accmngt.AccountConfirmationMap;
 import org.apache.isis.viewer.wicket.ui.panels.PanelUtil;
-import org.apache.isis.viewer.wicket.viewer.guice.GuiceComponentInjector;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.DeploymentTypeWicketAbstract;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServer;
 import org.apache.isis.viewer.wicket.viewer.integration.isis.WicketServerPrototype;
@@ -462,7 +462,9 @@ public class IsisWicketApplication
         // also support loading from init parameters (specifically, to support simplericity's jetty-console)
         isisConfigurationBuilderPrimers.add(new OptionHandlerInitParameters(servletContext));
         for (final IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
-            LOG.info("priming configurations for " + isisConfigurationBuilderPrimer);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug("priming configurations for " + isisConfigurationBuilderPrimer);
+            }
             isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }

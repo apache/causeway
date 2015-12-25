@@ -6,8 +6,8 @@
 :toc: right
 
 
-The `xsd` goal of the `isis-maven-plugin` uses the xref:rgsvc.adoc#_rgsvc-api_JaxbService[`JaxbService`] to
-generate XSD schemas from any JAXB-annotated xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[view model/DTOs].
+The `xsd` goal of the `isis-maven-plugin` uses the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to
+generate XSD schemas from any JAXB-annotated xref:ugbtb.adoc#_ugbtb_view-models[view model/DTOs].
 
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen]
 tool, because it uses the framework's support (via
@@ -18,7 +18,7 @@ The `xsd` goal defines the following properties:
 
 * `appManifest` - fully qualified class name for the app manifest used to bootstrap the application (see discussion above)
 
-* `jaxbClasses` - a list of xref:rg.adoc#_ugbtb_more-advanced_view-models_jaxb[JAXB-annotated view model] classes;
+* `jaxbClasses` - a list of xref:rg.adoc#_ugbtb_view-models_jaxb[JAXB-annotated view model] classes;
 
 * `output` - (optional) subdirectory under the `target` directory to generate the XSDs +
 +

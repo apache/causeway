@@ -20,10 +20,10 @@ $CELLULOID_TEST=false
 # parse cmd line args
 #
 opts = Slop.parse do |o|
-  o.int '-p', '--port', 'port (default: 4000)', default: 4000
-  o.bool '-x', '--suppress', 'suppress monitoring'
-  o.bool '-b', '--browser', 'launch browser'
-  o.bool '-h', '--help', 'help'
+    o.int '-p', '--port', 'port (default: 4000)', default: 4000
+    o.bool '-x', '--suppress', 'suppress monitoring'
+    o.bool '-b', '--browser', 'launch browser'
+    o.bool '-h', '--help', 'help'
 end
 
 if opts.help? then
@@ -69,7 +69,8 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
             if priming then
                 regenerate = ""
             else
-                regenerate = srcSplit[1] + ".adoc"
+                regenerate = srcSplit[1]
+                regenerate += ".adoc" unless regenerate.end_with? ".adoc"
             end
         else
             regenerate = srcBase
@@ -85,39 +86,35 @@ def process(file,srcBasePath,targetBasePath,templateDir,i,lastTimeGenerated,prim
                timeUntilNext > 0 then
                 puts "skipping before regenerating (3 seconds not yet elapsed)"
             else
-                    cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
 
-                    unless priming then
-                        puts ""
-                        puts "#{i}: #{cmd}"
-                        # wait 1 further second for any additional edits
-                        sleep 1
-                    end
-                    system cmd
-                    lastTimeGenerated=Time.now
+                cmd = "asciidoctor #{regenerate} --require asciidoctor-diagram --backend html --eruby erb --template-dir '#{templateDir}' --destination-dir='#{targetRelDir}' -a imagesdir='' -a toc=right -a icons=font -a source-highlighter=coderay"
+
+                unless priming then
+                    puts ""
+                    puts "#{i}: #{cmd}"
+                    # wait 1 further second for any additional edits
+                    sleep 1
                 end
+                system cmd
+                lastTimeGenerated=Time.now
             end
+        end
         else
-
-        unless File.directory?(srcBase) then
+            unless File.directory?(srcBase) then
 
             cmd = "cp #{srcBase} #{targetRelDir}"
-
             unless priming then
                 puts ""
                 puts "#{i}: #{cmd}"
             end
 
             system cmd
-
         end
-
     end
 
     Dir.chdir workingDir
 
     return i+1, lastTimeGenerated
-
 end
 
 
@@ -125,8 +122,6 @@ if not opts.suppress? then
 
     i=0
     lastTimeGenerated = Time.now - 10
-
-
 
     puts ""
     puts ""
@@ -189,7 +184,6 @@ else
     puts
 
 end
-
 
 
 httpServer.start

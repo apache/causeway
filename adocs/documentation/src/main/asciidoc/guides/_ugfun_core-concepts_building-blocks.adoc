@@ -77,7 +77,7 @@ google-maps API.
 
 Also worth mentioning: domain services can also be either singletons (discussed above) or request-scoped; the latter
 being annotated with `@javax.enterprise.context.RequestScoped`.  An example of the request-scoped service is the
-xref:rgsvc.adoc#_rgsvc-api_Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
+xref:rgsvc.adoc#_rgsvc_api_Scratchpad[`Scratchpad`] service, for sharing arbitrary data between multiple objects.
 
 The final type of domain object is the *mixin*.  These are similar to contributed services in that they also contribute (or rather,
 mixin) both behaviour or (derived) state to entities/view models.  However, they provide a more control over contributed services,
@@ -229,7 +229,7 @@ We introduce view models here because they do get mentioned quite often within t
 we do consider them a more advanced topic; we generally recommend that you build your applications from the domain
 layer up, rather than from the view model down.
 
-For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_more-advanced_view-models[this topic].
+For further discussion on view models, see xref:ugbtb.adoc#_ugbtb_view-models[this topic].
 
 
 
@@ -265,8 +265,8 @@ In Apache Isis these are all implemented as domain services.  Indeed, it is quit
 NOTE: TODO
 
 
-For more information, see xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_contributions[this topic on contribution]s, and
-xref:ugbtb.adoc#_ugbtb_more-advanced_decoupling_mixins[this topic on mixin]s.
+For more information, see xref:ugbtb.adoc#_ugbtb_decoupling_contributions[this topic on contribution]s, and
+xref:ugbtb.adoc#_ugbtb_decoupling_mixins[this topic on mixin]s.
 
 
 
@@ -309,7 +309,7 @@ Some examples:
 scanned by the mail room, the barcode could be read to attach the correspondence to the relevant domain object.
 
 * as a handle to any object in an audit record (as used by the
-xref:rgsvc.adoc#_rgsvc-spi_AuditingService[`AuditingService`], in fact).
+xref:rgsvc.adoc#_rgsvc_spi_AuditingService[`AuditingService`], in fact).
 
 * and of course both the xref:ugvro.adoc#[RestfulObjects viewer] and
 xref:ugvw.adoc#[Wicket viewer]
@@ -317,7 +317,7 @@ use the oid tuple to look up, render and allow the user to interact with domain 
 
 Although the exact content of an OID should be considered opaque by domain objects, it is possible for domain objects
 to obtain OIDs.  These are represented as `Bookmark`s, obtained from the
-xref:rgsvc.adoc#_rgsvc-api_BookmarkService[`BookmarkService`].  Deep links meanwhile can be obtained from
+xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`].  Deep links meanwhile can be obtained from
 the xref:rgant.adoc#_rgant-DeepLinkService[`@DeepLinkService`].
 
 OIDs can also be converted into XML format, useful for integration scenarios.  The

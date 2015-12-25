@@ -97,9 +97,6 @@ public abstract class ContentNegotiationServiceAbstract implements ContentNegoti
 
     protected Object returnedObjectOf(final ObjectAndActionInvocation objectAndActionInvocation) {
         final ObjectAdapter returnedAdapter = objectAndActionInvocation.getReturnedAdapter();
-        if(returnedAdapter == null) {
-            throw RestfulObjectsApplicationException.create(RestfulResponse.HttpStatusCode.NOT_FOUND);
-        }
         return objectOf(returnedAdapter);
     }
 

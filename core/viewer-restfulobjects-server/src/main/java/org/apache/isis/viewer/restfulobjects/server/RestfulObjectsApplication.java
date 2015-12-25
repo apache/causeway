@@ -18,6 +18,7 @@
  */
 package org.apache.isis.viewer.restfulobjects.server;
 
+import org.apache.isis.viewer.restfulobjects.rendering.service.acceptheader.AcceptHeaderServiceForRest;
 import org.apache.isis.viewer.restfulobjects.server.conneg.RestfulObjectsJaxbWriterForXml;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainObjectResourceServerside;
 import org.apache.isis.viewer.restfulobjects.server.resources.DomainServiceResourceServerside;
@@ -45,7 +46,10 @@ public class RestfulObjectsApplication extends AbstractJaxRsApplication {
         addSingleton(roWriter);
         addSingleton(new RestfulObjectsApplicationExceptionMapper());
         addSingleton(new RuntimeExceptionMapper());
-        
+
+        addSingleton(new AcceptHeaderServiceForRest.RequestFilter());
+        addSingleton(new AcceptHeaderServiceForRest.ResponseFilter());
+
         // TODO: doesn't get injected
         // addSingleton(new TypedReprBuilderFactoryRegistry());
 

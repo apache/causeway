@@ -19,6 +19,7 @@ package org.apache.isis.applib.services.swagger;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.ViewModel;
 
@@ -54,19 +55,22 @@ public interface SwaggerService {
     }
 
     enum Format {
-        JSON {
-            @Override public String mediaType() {
+        JSON,
+        YAML;
+
+        /**
+         * Implementation note: not using subclasses, otherwise the key in translations.po becomes more complex.
+         */
+        public String mediaType() {
+            if(this == JSON) {
                 return "text/json";
-            }
-        },
-        YAML {
-            @Override public String mediaType() {
+            } else {
                 return "application/yaml";
             }
-        };
-
-        public abstract String mediaType();
+        }
     }
+
+    @Programmatic
     String generateSwaggerSpec(final Visibility visibility, final Format format);
 
 }    

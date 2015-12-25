@@ -63,14 +63,11 @@ public class TranslationServicePoMenu {
             @ParameterLayout(named = ".pot file name")
             final String potFileName) {
         final String chars = translationService.toPot();
-        return new Clob(potFileName, "text/plain", chars);
+        return new Clob(Util.withSuffix(potFileName, "pot"), "text/plain", chars);
     }
 
     public String default0DownloadTranslations() {
         return "translations.pot";
-    }
-    public boolean hideDownloadTranslations() {
-        return translationService.getMode().isRead();
     }
 
     // //////////////////////////////////////

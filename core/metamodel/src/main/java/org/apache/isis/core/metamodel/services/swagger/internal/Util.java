@@ -44,7 +44,13 @@ public final class Util {
         final ObjectSpecification specification = objectAction.getReturnType();
         boolean visible = isVisibleForPublic(specification);
         if(!visible) {
-            return false;
+            final TypeOfFacet typeOfFacet = objectAction.getFacet(TypeOfFacet.class);
+            if(typeOfFacet != null) {
+                ObjectSpecification elementSpec = typeOfFacet.valueSpec();
+                if(!isVisibleForPublic(elementSpec)) {
+                    return false;
+                }
+            }
         }
         List<ObjectSpecification> parameterTypes = objectAction.getParameterTypes();
         for (ObjectSpecification parameterType : parameterTypes) {

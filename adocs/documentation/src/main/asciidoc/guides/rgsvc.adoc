@@ -9,9 +9,9 @@
 [[_rgsvc]]
 == Domain Services
 
-This guide documents Apache Isis' domain services, both those that act as an xref:rgsvc.adoc#_rgsvc-api[API]
+This guide documents Apache Isis' domain services, both those that act as an xref:rgsvc.adoc#_rgsvc_api[API]
 (implemented by the framework for your domain objects to call), and those domain services that act as an
-xref:rgsvc.adoc#_rgsvc-spi[SPI] (implemented by your domain application and which are called by the framework).
+xref:rgsvc.adoc#_rgsvc_spi[SPI] (implemented by your domain application and which are called by the framework).
 
 === Other Guides
 
@@ -36,5 +36,5 @@ The reference guides are:
 In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
 
 
-include::_rgsvc-api.adoc[leveloffset=+1]
-include::_rgsvc-spi.adoc[leveloffset=+1]
+include::_rgsvc_api.adoc[leveloffset=+1]
+include::_rgsvc_spi.adoc[leveloffset=+1]

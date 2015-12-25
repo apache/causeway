@@ -36,6 +36,11 @@ public class IsisTransactionFilterForRestfulObjects implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        // no-op if no session available.
+        if(!IsisContext.inSession()) {
+            chain.doFilter(request, response);
+            return;
+        }
         getTransactionManager().startTransaction();
         try {
             chain.doFilter(request, response);

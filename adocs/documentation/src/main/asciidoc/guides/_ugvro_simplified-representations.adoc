@@ -86,21 +86,24 @@ returns the following representation:
 ----
 {
   "$$href" : "http://localhost:8080/restful/objects/TODO/45",       // <1>
-  "$$title" : "Buy bread due by 2015-12-04",                        // <2>
-  "description" : "Buy bread",                                      // <3>
+  "$$instanceId" : "45",                                            // <2>
+  "$$title" : "Buy bread due by 2015-12-04",                        // <3>
+  "description" : "Buy bread",                                      // <4>
   "category" : "Domestic",
   "subcategory" : "Shopping",
   "complete" : false,
   "atPath" : "/users/sven",
   ...
-  "similarTo" : [ {                                                 // <4>
+  "similarTo" : [ {                                                 // <5>
     "$$href" : "http://localhost:8080/restful/objects/TODO/46",
+    "$$instanceId" : "46",
     "$$title" : "Buy milk due by 2015-12-04",
     "description" : "Buy milk",
     "category" : "Domestic",
     ...
   }, {
     "$$href" : "http://localhost:8080/restful/objects/TODO/47",
+    "$$instanceId" : "47",
     "$$title" : "Buy stamps due by 2015-12-04",
     "description" : "Buy stamps",
     "category" : "Domestic",
@@ -109,7 +112,7 @@ returns the following representation:
      ...
   } ],
   "dependencies" : [ ],
-  "$$ro" : {                                                        // <5>
+  "$$ro" : {                                                        // <6>
     "links" : [ ... ],
     "extensions" : { ... },
     "title" : "Buy bread due by 2015-12-04",
@@ -120,10 +123,11 @@ returns the following representation:
 }
 ----
 <1> hyperlink to the representation
-<2> title of the domain object
-<3> all the properties of the domain object (to which the caller has access), as key/value pairs
-<4> contents of each collection
-<5> special `$$ro` json-prop, being the normal RO Spec representation for this object
+<2> instance id of the domain object (unique within its type)
+<3> title of the domain object
+<4> all the properties of the domain object (to which the caller has access), as key/value pairs
+<5> contents of each collection
+<6> special `$$ro` json-prop, being the normal RO Spec representation for this object
 
 with a `Content-Type` header:
 
@@ -166,8 +170,9 @@ returns the following representation:
 [                                                                   // <1>
 {
   "$$href" : "http://localhost:8080/restful/objects/TODO/46",       // <2>
-  "$$title" : "Buy milk due by 2015-12-04",                         // <3>
-  "description" : "Buy milk",                                       // <4>
+  "$$instanceId" : "46",                                            // <3>
+  "$$title" : "Buy milk due by 2015-12-04",                         // <4>
+  "description" : "Buy milk",                                       // <5>
   "category" : "Domestic",
   ...
 }, {
@@ -185,7 +190,7 @@ returns the following representation:
 },
 ...
 , {
-  "$$ro" : {                                                        // <5>
+  "$$ro" : {                                                        // <6>
     "id" : "similarTo",
     "memberType" : "collection",
     "links" : [ ... ],
@@ -197,9 +202,10 @@ returns the following representation:
 ----
 <1> returns a JSON array, not a JSON object
 <2> hyperlink to the representation
-<3> title of the domain object
-<4> all the properties of the domain object (to which the caller has access), as key/value pairs
-<5> last element is a special object with a single `$$ro` json-prop, being the normal RO Spec representation for this object
+<3> instance id of the domain object (unique within its type)
+<4> title of the domain object
+<5> all the properties of the domain object (to which the caller has access), as key/value pairs
+<6> last element is a special object with a single `$$ro` json-prop, being the normal RO Spec representation for this object
 
 with a `Content-Type` header:
 
@@ -241,6 +247,7 @@ returns the following representation:
 
 {
   "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$instanceId" : "45",
   "$$title" : "Buy bread due by 2015-12-04",
   "description" : "Buy bread",
   "category" : "Domestic",
@@ -291,12 +298,14 @@ returns the following representation:
 ----
 [ {
   "$$href" : "http://localhost:8080/restful/objects/TODO/45",
+  "$$instanceId" : "45",
   "$$title" : "Buy bread due by 2015-12-04",
   "description" : "Buy bread",
   "category" : "Domestic",
   ...
 }, {
   "$$href" : "http://localhost:8080/restful/objects/TODO/46",
+  "$$instanceId" : "46",
   "$$title" : "Buy milk due by 2015-12-04",
   "description" : "Buy milk",
   "category" : "Domestic",

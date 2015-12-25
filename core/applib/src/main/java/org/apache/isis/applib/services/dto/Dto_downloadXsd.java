@@ -55,7 +55,7 @@ public class Dto_downloadXsd {
         }
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXsd> {}
 
     @Action(
             domainEvent = ActionDomainEvent.class,

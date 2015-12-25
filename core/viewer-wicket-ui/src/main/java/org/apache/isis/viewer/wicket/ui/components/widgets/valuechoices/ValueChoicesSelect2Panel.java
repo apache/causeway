@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.wicketstuff.select2.ChoiceProvider;
@@ -88,6 +89,12 @@ public class ValueChoicesSelect2Panel extends ScalarPanelAbstract implements Sca
         addOrReplace(labelIfRegular);
 
         final Label scalarName = new Label(ID_SCALAR_NAME, getRendering().getLabelCaption(select2Field));
+        if(getModel().isRequired()) {
+            final String label = scalarName.getDefaultModelObjectAsString();
+            if(!Strings.isNullOrEmpty(label)) {
+                scalarName.add(new CssClassAppender("mandatory"));
+            }
+        }
         labelIfRegular.addOrReplace(scalarName);
         NamedFacet namedFacet = getModel().getFacet(NamedFacet.class);
         if (namedFacet != null) {

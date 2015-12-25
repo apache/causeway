@@ -22,6 +22,10 @@
                 "General": {
                     "members": {
                         "name": {
+                            "propertyLayout": {
+                                "named": "Name",
+                                "namedEscaped": false
+                            },
                             "actions": {
                                 "updateName": {
                                     "actionLayout": {
