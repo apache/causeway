@@ -196,9 +196,6 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
         final CommandContext commandContext = getServicesInjector().lookupService(CommandContext.class);
         final Command command = commandContext != null ? commandContext.getCommand() : null;
 
-        final AuthenticationSession session = getAuthenticationSession();
-        final DeploymentCategory deploymentCategory = getDeploymentCategory();
-
         // ... post the executing event
         final ActionDomainEvent<?> event =
                 domainEventHelper.postEventForAction(
@@ -402,7 +399,7 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
                     public Object call() throws Exception {
                         return method.invoke(targetPojo, executionParameters);
                     }
-                }, targetPojo.getClass(), method.getName(), executionParameters);
+                }, targetPojo.getClass(), method.getName(), targetPojo, executionParameters);
             } else {
                 result = method.invoke(targetPojo, executionParameters);
             }
