@@ -480,6 +480,7 @@
                             <licenseFamilyName>MIT  </licenseFamilyName>
                             <notes />
                             <patterns>
+                              <pattern>The MIT License (MIT)</pattern>
                               <pattern>Dual licensed under the MIT</pattern>
                             </patterns>
                           </license>
