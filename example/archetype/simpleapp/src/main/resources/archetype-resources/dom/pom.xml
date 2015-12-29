@@ -155,7 +155,7 @@
             <id>isis-validate</id>
             <activation>
                 <property>
-                    <name>isis-validate</name>
+                    <name>!skip.isis-validate</name>
                 </property>
             </activation>
             <build>
@@ -170,7 +170,7 @@
                         <dependencies>
                             <dependency>
                                 <groupId>${project.groupId}</groupId>
-                                <artifactId>simpleapp-dom</artifactId>
+                                <artifactId>${project.artifactId}</artifactId>
                                 <version>${project.version}</version>
                             </dependency>
                             <!--
@@ -221,7 +221,7 @@
                         <dependencies>
                             <dependency>
                                 <groupId>${project.groupId}</groupId>
-                                <artifactId>simpleapp-dom</artifactId>
+                                <artifactId>${project.artifactId}</artifactId>
                                 <version>${project.version}</version>
                             </dependency>
                             <!--
