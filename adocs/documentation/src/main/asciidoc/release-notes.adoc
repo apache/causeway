@@ -21,6 +21,14 @@ This table summarises all releases of Apache Isis to date.
 | Improves
 | Bugs
 
+| xref:r1.11.0[1.11.0]
+| xx-xxx-20xx
+| * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[1.11.0]
+| Combined release notes for core and simpleapp-archetype.
+| 9
+| 19
+| 12
+
 | xref:r1.10.0[1.10.0]
 | 10-nov-2015
 | * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333354[1.10.0]
