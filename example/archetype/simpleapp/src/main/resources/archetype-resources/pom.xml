@@ -32,7 +32,7 @@
     </prerequisites>
 
     <properties>
-        <isis.version>1.10.0</isis.version>
+        <isis.version>1.11.0</isis.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -184,7 +184,7 @@
                 <plugin>
                     <groupId>org.eclipse.jetty</groupId>
                     <artifactId>jetty-maven-plugin</artifactId>
-                    <version>9.3.2.v20150730</version>
+                    <version>9.3.5.v20151012</version>
                 </plugin>
 
                 <plugin>

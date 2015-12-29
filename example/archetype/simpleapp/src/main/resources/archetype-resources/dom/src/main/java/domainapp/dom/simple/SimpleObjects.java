@@ -31,14 +31,20 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.DomainServiceLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.SemanticsOf;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.services.eventbus.ActionDomainEvent;
 import org.apache.isis.applib.services.i18n.TranslatableString;
 
-@DomainService(repositoryFor = SimpleObject.class)
-@DomainServiceLayout(menuOrder = "10")
+@DomainService(
+        nature = NatureOfService.VIEW,
+        repositoryFor = SimpleObject.class
+)
+@DomainServiceLayout(
+        menuOrder = "10"
+)
 public class SimpleObjects {
 
     //region > title
