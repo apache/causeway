@@ -52,6 +52,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ArrayExtensions;
 import org.apache.isis.core.commons.lang.ThrowableExtensions;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
@@ -394,12 +395,14 @@ public abstract class ActionInvocationFacetForDomainEventAbstract
             Object result;
             if(cacheable) {
                 final QueryResultsCache queryResultsCache = getServicesInjector().lookupService(QueryResultsCache.class);
+                final Object[] targetPojoPlusExecutionParameters = ArrayExtensions
+                        .appendT(executionParameters, targetPojo);
                 result = queryResultsCache.execute(new Callable<Object>() {
                     @Override
                     public Object call() throws Exception {
                         return method.invoke(targetPojo, executionParameters);
                     }
-                }, targetPojo.getClass(), method.getName(), targetPojo, executionParameters);
+                }, targetPojo.getClass(), method.getName(), targetPojoPlusExecutionParameters);
             } else {
                 result = method.invoke(targetPojo, executionParameters);
             }
