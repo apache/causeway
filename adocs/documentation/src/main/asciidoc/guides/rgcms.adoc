@@ -14,7 +14,7 @@ reserved and prefix xref:rgcms.adoc#_rgcms_methods[methods] (such as `title()` a
 supporting xref:rgcms.adoc#_rgcms_classes[classes].
 
 It also describes the xref:rgcms.adoc#_rgcms_schema[XSD schema] defined by Apache Isis.  One use case is for the
-JAXB serialization of view models (`1.11.0-SNAPSHOT`).
+JAXB serialization of view models.
 
 === Other Guides
 

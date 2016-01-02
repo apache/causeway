@@ -10,11 +10,6 @@ any difficulties then let us know via the link:support.html[users mailing list],
 issues here.
 
 
-[NOTE]
-====
-At the time of writing `1.11.0` has not been released; these notes relate to `1.11.0-SNAPSHOT`.
-====
-
 
 == Swagger UI
 

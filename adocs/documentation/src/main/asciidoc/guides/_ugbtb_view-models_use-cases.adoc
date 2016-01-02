@@ -92,7 +92,7 @@ go).  Then, identify if there any view models that could be introduced which wou
 with the system (perhaps automating several related use cases together).
 ****
 
-== DTOs (`1.11.0-SNAPSHOT`)
+== DTOs
 
 DTOs (data transfer objects) are simple classes that (according to link:https://en.wikipedia.org/wiki/Data_transfer_object[wikipedia]) "carries data between processes".
 
@@ -107,7 +107,7 @@ In such cases, exposing domain entities over xref:ugvro.adoc#[RestfulObjects] wo
 easily changed by the producer.
 
 Instead, a view model can be defined to act as a DTO.  To put this formal contract onto a solid footing, this view
-model can (as of `1.11.0-SNAPSHOT`) simply be defined as a JAXB-annotated entity; this allows the consumer to obtain
+model can simply be defined as a JAXB-annotated entity; this allows the consumer to obtain
 the DTO in XML format along with a corresponding XSD schema describing the structure of that XML.  These XML
 representations can be surfaced by the xref:ugvro.adoc#[RestfulObjects viewer] (by implementing
 the xref:rgsvc.adoc#_rgsvc_spi_ContentMappingService[`ContentMappingService`]); the XSD can be obtained

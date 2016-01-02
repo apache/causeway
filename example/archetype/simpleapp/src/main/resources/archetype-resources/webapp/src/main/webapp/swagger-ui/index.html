@@ -1,3 +1,6 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
 <!DOCTYPE html>
 <!--
   Licensed to the Apache Software Foundation (ASF) under one
@@ -47,7 +50,7 @@
     <!-- <script src='lang/en.js' type='text/javascript'></script> -->
 
     <script type="text/javascript">
-    $(function () {
+    ${symbol_dollar}(function () {
       var url = document.getElementById("input_baseUrl").selectedOptions[0].value;
 
       // Pre load translate...
@@ -73,7 +76,7 @@
             window.SwaggerTranslator.translate();
           }
 
-          $('pre code').each(function(i, e) {
+          ${symbol_dollar}('pre code').each(function(i, e) {
             hljs.highlightBlock(e)
           });
 
@@ -90,7 +93,7 @@
 
       function addApiKeyAuthorization(){
         /*
-        var key = encodeURIComponent($('#input_apiKey')[0].value);
+        var key = encodeURIComponent(${symbol_dollar}('${symbol_pound}input_apiKey')[0].value);
         if(key && key.trim() != "") {
             var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("api_key", key, "query");
             window.swaggerUi.api.clientAuthorizations.add("api_key", apiKeyAuth);
@@ -110,15 +113,15 @@
 
       // if you have an apiKey you would like to pre-populate on the page for demonstration purposes...
         /*
-      $('#input_apiKey').change(addApiKeyAuthorization);
+      ${symbol_dollar}('${symbol_pound}input_apiKey').change(addApiKeyAuthorization);
       */
 
       /*
         var apiKey = "myApiKeyXXXX123456789";
-        $('#input_apiKey').val(apiKey);
+        ${symbol_dollar}('${symbol_pound}input_apiKey').val(apiKey);
       */
-      $('#input_user').val("sven");
-      $('#input_pass').val("pass");
+      ${symbol_dollar}('${symbol_pound}input_user').val("sven");
+      ${symbol_dollar}('${symbol_pound}input_pass').val("pass");
 
 
 
@@ -149,7 +152,7 @@
                 </select>
             </div>
             <div class='input' style="display:none;"><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
-            <div class='input'><a id="explore" href="#" data-sw-translate>Reload</a></div>
+            <div class='input'><a id="explore" href="${symbol_pound}" data-sw-translate>Reload</a></div>
         </form>
 
     </div>

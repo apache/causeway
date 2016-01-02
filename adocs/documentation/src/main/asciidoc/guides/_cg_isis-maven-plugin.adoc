@@ -13,11 +13,11 @@ Use to verify at build time that the metamodel of an application is valid.  This
 
 * `swagger` +
 +
-(`1.11.0-SNAPSHOT`) Uses the xref:rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ugvro.adoc#[RestfulObjects viewer].
+Uses the xref:rgsvc.adoc#_rgsvc_api_SwaggerService[`SwaggerService`] to generate link:http://swagger.io[Swagger] spec files that describe the public and/or private RESTful APIs exposed by the xref:ugvro.adoc#[RestfulObjects viewer].
 
 * `xsd` +
 +
-(`1.11.0-SNAPSHOT`) Uses the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
+Uses the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to generate XSD schemas from any JAXB-annotated view models/DTOs. +
 +
 This is instead of and preferable to using the JAXB link:https://jaxb.java.net/2.2.4/docs/schemagen.html[schemagen] tool, because it uses the framework's support (via xref:rgant.adoc#_rgant-XmlJavaValueType[`@XmlJavaValueType`]) to translate any references to domain objects into ``OidDto``s (as defined by the Apache Isis xref:rgcms.adoc#_rgcms_schema-common[common schema]).
 

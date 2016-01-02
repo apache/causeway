@@ -210,9 +210,8 @@ The xref:rgsvc.adoc#_rgsvc_api_BookmarkService[`BookmarkService`] provides a mec
 
 The xref:rgsvc.adoc#_rgsvc_api_MementoService[`MementoService`] also provides a mechanism for generating string representations of domain objects.
 
-The xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] (`1.11.0-SNAPSHOT`) is a simple wrapper around
-standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that (as of
-`1.11.0-SNAPSHOT`) there is built-in support for JAXB classes (ie annotated with
+The xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] is a simple wrapper around
+standard JAXB functionality for generating both XMLs and XSDs from JAXB-annotated classes.  Note that there is built-in support for JAXB classes (ie annotated with
 xref:rgant.adoc#_rgant-XmlRootElement[`@XmlRootElement`]) to be used as view models.
 
 
