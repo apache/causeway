@@ -145,7 +145,7 @@ It is also possible to abort the transaction during the executing or executed ph
 
 
 
-== Default, Doop and Noop events (`1.11.0-SNAPSHOT`)
+== Default, Doop and Noop events
 
 If the `domainEvent` attribute is not explicitly specified (is left as its default value, `CollectionDomainEvent.Default`),
 then the framework will, by default, post an event.

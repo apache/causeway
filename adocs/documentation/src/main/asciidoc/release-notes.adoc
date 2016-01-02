@@ -22,7 +22,7 @@ This table summarises all releases of Apache Isis to date.
 | Bugs
 
 | xref:r1.11.0[1.11.0]
-| xx-xxx-20xx
+| 02-jan-2016
 | * https://issues.apache.org/jira/secure/ReleaseNote.jspa?projectId=12311171&version=12333974[1.11.0]
 | Combined release notes for core and simpleapp-archetype.
 | 9
@@ -210,6 +210,7 @@ This table summarises all releases of Apache Isis to date.
 
 
 
+include::_release-notes_1.11.0.adoc[leveloffset=+1]
 include::_release-notes_1.10.0.adoc[leveloffset=+1]
 include::_release-notes_1.9.0.adoc[leveloffset=+1]
 include::_release-notes_1.8.0.adoc[leveloffset=+1]

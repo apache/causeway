@@ -277,7 +277,7 @@ NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_domainevent[domain event] classes
 
 
 
-=== UI Events (`1.11.0-SNAPSHOT`)
+=== UI Events
 
 NOTE: TODO; see xref:rgcms.adoc#_rgcms_classes_uievent[UI event] classes.
 

@@ -22,7 +22,7 @@ To build the app from the latest stable release, then run the following command:
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.10.0 \
+    -D archetypeVersion=1.11.0 \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \
@@ -47,7 +47,7 @@ The process is almost identical to that for stable releases, however the `archet
 mvn archetype:generate  \
     -D archetypeGroupId=org.apache.isis.archetype \
     -D archetypeArtifactId=simpleapp-archetype \
-    -D archetypeVersion=1.11.0-SNAPSHOT \
+    -D archetypeVersion=1.12.0-SNAPSHOT \
     -D groupId=com.mycompany \
     -D artifactId=myapp \
     -D version=1.0-SNAPSHOT \

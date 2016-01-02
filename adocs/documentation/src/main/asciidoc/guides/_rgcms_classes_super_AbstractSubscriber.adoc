@@ -15,4 +15,4 @@ seeds certain domain entities; these will generate xref:rgcms.adoc#_rgcms_classe
 any subscribers must be registered before such seed services.  The easiest way to do this is to use the
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 
-As a convenience, (as of `1.11.0-SNAPSHOT`) the `AbstractSubscriber` specifies this attribute.
+As a convenience, the `AbstractSubscriber` specifies this attribute.

@@ -32,8 +32,7 @@ The following configuration properties are supported:
 |A mechanism for reducing the number of round-trips by eagerly rendering collections; discussed xref:ugvro.adoc#_ugvro_ro-spec_extensions_minimizing-round-trips_honor-ui-hints[here].
 
 |`isis.viewer.restfulobjects.` +
-`strictAcceptChecking` +
-(`1.11.0-SNAPSHOT`)
+`strictAcceptChecking`
 | `true`,`false` (`_false_`)
 |Whether to strictly enforce the `Accept` header checking for the default RO-spec representations (by the
 `ContentNegotiationServiceForRestfulObjectsV1_0` service). Will otherwise accept anything.  +
@@ -51,7 +50,7 @@ handful of resources that supported that profile.
 There are also a number of configuration properties that can be used to suppress or simplify the default RO-spec
 representations.
 
-These configuration properties pre-date the support, introduced in `1.11.0-SNAPSHOT`, for the Apache Isis profile, and
+These configuration properties pre-date the support, introduced in `1.11.0`, for the Apache Isis profile, and
 are limited by the fact that they are global configuration settings, so cannot be influenced on a request-by-request
 basis (as is the case with the `Accept` header used for the Apache Isis profile). They have therefore been
 deprecated, and may be removed in the future.

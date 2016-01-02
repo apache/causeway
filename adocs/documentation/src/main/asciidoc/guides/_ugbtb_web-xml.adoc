@@ -401,8 +401,8 @@ The `IsisSessionFilter` is responsible for the (persistence) session management;
 </filter>
 ----
 <1> pluggable strategy for determining what the authentication session (credentials) are of the request
-<2> what the servlet should do if no existing session was found.  Usual values are either `unauthorized`, `basicAuthChallenge` or `auto` (`1.11.0-SNAPSHOT`).  Discussed in more detail below.
-<3> (`1.11.0-SNAPSHOT`), specify which URIs to ignore and simply passthru.  Originally introduced to allow the SwaggerSpec resource (which does not require a session) to be invoked.
+<2> what the servlet should do if no existing session was found.  Usual values are either `unauthorized`, `basicAuthChallenge` or `auto`.  Discussed in more detail below.
+<3> specify which URIs to ignore and simply passthru.  Originally introduced to allow the `SwaggerSpec` resource (which does not require a session) to be invoked.
 <4> List of paths that are allowed through even if not authenticated.  The servlets mapped to these paths are expected to be able to deal with there being no session. Typically they will be logon pages.  See below for further details.
 <5> where to redirect to if an exception occurs.
 
@@ -411,7 +411,7 @@ The `whenNoSession` parameter determines what the behaviour should be if no exis
 
 * `unauthorized` will generates a 401 response
 * `basicAuthChallenge` will also generate a 401 response, and also issues a Basic Auth challenge using `WWW-Authenticate` response header
-* `auto` (`1.11.0-SNAPSHOT`) combines the `unauthorized` and `basicAuthChallenge` strategies: it will generate a 401 response, but only issues a Basic Auth challenge if it detects that the request originates from a web browser (ie that the HTTP `Accept` header is set to `text/html`).  This means that custom Javascript apps can perform their authentication correctly, while the REST API can still be explored using the web browser (relying upon the web browser's in-built support for HTTP Basic Auth).
+* `auto` combines the `unauthorized` and `basicAuthChallenge` strategies: it will generate a 401 response, but only issues a Basic Auth challenge if it detects that the request originates from a web browser (ie that the HTTP `Accept` header is set to `text/html`).  This means that custom Javascript apps can perform their authentication correctly, while the REST API can still be explored using the web browser (relying upon the web browser's in-built support for HTTP Basic Auth).
 * `continue`, in which case the request is allowed to continue but the destination expected to know that there will be no open session
 * `restricted`, which allows access to a restricted list of URLs, otherwise will redirect to the first of that list of URLs
 

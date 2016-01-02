@@ -6,7 +6,7 @@
 :toc: right
 
 
-The main focus for Apache Isis 1.11.0 is on the REST API and also on view models:
+The main focus for Apache Isis 1.11.0 is on the REST API and on view models using JAXB:
 
 * the xref:guides/ugvro.adoc#[Restful Objects viewer] now supports simplified
 representations intended to make it easier to write custom Javascript (and other) clients that consume the REST API;

@@ -43,7 +43,7 @@ This file should be placed can be placed in `src/main/java/META-INF` within your
 
 [TIP]
 ====
-(As of `1.11.0-SNAPSHOT`) you can use a mixin action on xref:rgcms.adoc#_rgcms_classes_mixins_Persistable[`Persistable`] mixin
+You can use a mixin action on xref:rgcms.adoc#_rgcms_classes_mixins_Persistable[`Persistable`] mixin
 to download the JDO class metadata in XML form.
 ====
 
@@ -58,7 +58,7 @@ For example, in writing up the above example we found that writing `schema=&quot
 
 * As of 1.9.0 Apache Isis will automatically (attempt) to create the owning schema for a given table if it does not exist. This behaviour can be customized, as described in the section on xref:_ugbtb_decoupling_db-schemas[using modules].
 
-* You may need to override the entire class metadata rather than individual elements; the mixin (`1.11.0-SNAPSHOT`) mentioned above can help here.
+* You may need to override the entire class metadata rather than individual elements; the mixin mentioned above can help here.
 ====
 
 

@@ -90,7 +90,7 @@ This works for both singleton (application-scoped) and also xref:rgant.adoc#_rga
 [TIP]
 ====
 The xref:rgcms.adoc#_rgcms_classes_super_AbstractSubscriber[`AbstractSubscriber`] class automatically performs this
-registration.  As a convenience, (as of `1.11.0-SNAPSHOT`) it is also annotated with the
+registration.  As a convenience, it is also annotated with the
 xref:rgant.adoc#_rgant-DomainServiceLayout_menuOrder[`@DomainServiceLayout#menuOrder()`] attribute.
 ====
 

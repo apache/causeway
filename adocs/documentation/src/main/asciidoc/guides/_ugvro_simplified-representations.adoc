@@ -14,7 +14,7 @@ link:http://vitalets.github.io/angular-xeditable/[Angular XEditable],
 link:https://github.com/mgcrea/angular-strap[Angular Strap].
 
 
-As of `1.11.0-SNAPSHOT`, Apache Isis provides support for its own simplified representation for the most commonly-used
+As of `1.11.0`, Apache Isis provides support for its own simplified representation for the most commonly-used
 representations.  This is implemented using the `ContentNegotiationService` described in the
 xref:ugvro.adoc#_ugvro_architecture[architecture] chapter.
 
