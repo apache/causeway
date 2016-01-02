@@ -90,7 +90,7 @@ public class VersionReprRenderer extends ReprRendererAbstract<VersionReprRendere
         try {
             URL resource = Resources.getResource(META_INF_POM_PROPERTIES);
             Properties p = new Properties();
-            p.load(Resources.newReaderSupplier(resource, Charset.defaultCharset()).getInput());
+            p.load(Resources.asCharSource(resource, Charset.defaultCharset()).openStream());
             return p.getProperty("version");
         } catch (final Exception ex) {
             return "UNKNOWN";
