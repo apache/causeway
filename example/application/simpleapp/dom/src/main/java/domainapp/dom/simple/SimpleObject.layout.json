@@ -33,10 +33,21 @@
                                     }
                                 }
                             }
-                        },
+                        }
+                    }
+                },
+                "Metadata": {
+                    "members": {
                         "versionSequence": {
                             "propertyLayout": {
                                 "named": "Version"
+                            },
+                            "actions": {
+                                "downloadJdoMetadata": {
+                                    "actionLayout": {
+                                        "position": "PANEL_DROPDOWN"
+                                    }
+                                }
                             }
                         }
                     }
