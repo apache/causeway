@@ -194,7 +194,9 @@ Close all JIRA tickets for the release, or moved to future releases if not yet a
 
 === Mark the version as released
 
-In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the versions as released.
+In JIRA, go to the link:https://issues.apache.org/jira/plugins/servlet/project-config/ISIS/versions[administration section] for the Apache Isis project and update the version as being released.
+
+In the link:https://issues.apache.org/jira/secure/RapidBoard.jspa?rapidView=87[Kanban view] this will have the effect of marking all tickets as released (clearing the "done" column).
 
 
 === Create new JIRA
@@ -215,6 +217,8 @@ Update the Apache Isis (asciidoc) website:
 * Paste in the JIRA-generated release notes generated above, adding to top of `adocs/documentation/src/main/asciidoc/release-notes.adoc`.  Also add a summary line for the release.
 
 * Search for any `-SNAPSHOT` suffices, and remove
+
+* Search these release procedures, and update any hard-coded reference to the release to the next release (so when they are followed next time the text will be correct).
 
 * Update the link:../downloads.html[downloads page] with a link to the source release zip file (under https://dist.apache.org/repos/dist/release/isis[https://dist.apache.org/repos/dist/release/isis])
 
@@ -275,7 +279,7 @@ Enjoy!
 
 == Blog post
 
-Finally, https://blogs.apache.org/roller-ui/login.rol[log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post. Copy-n-paste the above mailing list announcement should suffice.
+link:https://blogs.apache.org/roller-ui/login.rol[Log onto] the http://blogs.apache.org/isis/[Apache blog] and create a new post. Copy-n-paste the above mailing list announcement should suffice.
 
 
 
@@ -295,10 +299,11 @@ git push origin --delete release-1.12.0-RC1   # remote branch no longer needed
 ----
 
 
+Finally, update the simpleapp's root `pom.xml` to reference the next SNAPSHOT release (`1.12.0-SNAPSHOT`)
 
 
 
-== Tidy up code
+== Update dependencies
 
 With the release complete, now is a good time to bump versions of dependencies (so that there is a full release cycle to identify any possible issues).
 
@@ -371,13 +376,13 @@ For these artifacts you will need to search http://search.maven.org[Maven centra
 
 
 
-=== Code cleanup / formatting
+== Code formatting
 
-While we're at it, this is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions. Use link:resources/Apache-code-style-formatting.xml[this] Eclipse template and link:resources/isis.importorder[this] import order.
+This is also a good time to make source code has been cleaned up and formatted according to the Apache Isis and ASF conventions. Use link:resources/Apache-code-style-formatting.xml[this] Eclipse template and link:resources/isis.importorder[this] import order.
 
 
 
-=== Push changes
+== Push changes
 
 Finally, push the changes up to origin:
 
@@ -388,7 +393,7 @@ git push
 ----
 
 
-== Update Isis Addons
+== Release Isis Addons
 
 Once the Apache Isis release is available, all of the (non-ASF) link:http://isisaddons.org[Isis Addons] should also be released.
 
@@ -405,7 +410,7 @@ sh forsub.sh sh bumpver_isis.sh 1.12.0
 +
 [source,bash]
 ----
-sh forsub.sh sh release.sh "1.12.0" "1.13.0-SNAPSHOT" "dan@haywood-associates.co.uk" "this is not really my password"
+sh forsub.sh sh release.sh "1.12.0" "1.13.0-SNAPSHOT" "dan@haywood-associates.co.uk" \"this is not really my password\"
 ----
 
 * update its dependency on Apache Isis to reference the next SNAPSHOT version: +
