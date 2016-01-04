@@ -64,7 +64,6 @@ public class IsisContext implements DebuggableWithTitle {
     private static IsisContext singleton;
 
     private final IsisSessionFactory sessionFactory;
-    private final ContextReplacePolicy replacePolicy;
     private final SessionClosePolicy sessionClosePolicy;
 
     private static IsisConfiguration configuration;
@@ -108,35 +107,27 @@ public class IsisContext implements DebuggableWithTitle {
         AUTO_CLOSE
     }
 
-    /**
-     * Whether the {@link IsisContext#getInstance() singleton} itself may be
-     * replaced.
-     */
-    protected static enum ContextReplacePolicy {
-        NOT_REPLACEABLE, REPLACEABLE
-    }
-
 
     /**
      * Creates a new instance of the {@link IsisSession} holder.
      * 
      * <p>
-     * Will throw an exception if an instance has already been created and is
-     * not {@link ContextReplacePolicy#REPLACEABLE}.
+     * Will throw an exception if an instance has already been created.
      */
-    protected IsisContext(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy, final IsisSessionFactory sessionFactory) {
-        if (singleton != null && !singleton.isContextReplaceable()) {
-            throw new IsisException("Isis Context already set up and cannot be replaced");
+    protected IsisContext(
+            final SessionClosePolicy sessionClosePolicy,
+            final IsisSessionFactory sessionFactory) {
+        if (singleton != null) {
+            throw new IsisException("Isis Context already set up");
         }
         singleton = this;
         this.sessionFactory = sessionFactory;
         this.sessionClosePolicy = sessionClosePolicy;
-        this.replacePolicy = replacePolicy;
     }
 
 
     protected IsisContext(final IsisSessionFactory sessionFactory) {
-        this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.AUTO_CLOSE, sessionFactory);
+        this(SessionClosePolicy.AUTO_CLOSE, sessionFactory);
     }
 
 
@@ -166,13 +157,6 @@ public class IsisContext implements DebuggableWithTitle {
     // ///////////////////////////////////////////////////////////
     // Policies
     // ///////////////////////////////////////////////////////////
-
-    /**
-     * Whether a context singleton can simply be replaced or not.
-     */
-    public final boolean isContextReplaceable() {
-        return replacePolicy == ContextReplacePolicy.REPLACEABLE;
-    }
 
     /**
      * Whether any open session can be automatically
