@@ -1,4 +1,4 @@
-[[_cg_committers_verifying-releases]]
+[[_cgcom_verifying-releases]]
 = Verifying a Release
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -8,9 +8,9 @@
 
 The release process consists of:
 
-* the release manager xref:cg.adoc#_cg_committers_cutting-a-release[cutting the release]
+* the release manager xref:cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
 * members of the Apache Isis PMC verifying and voting on the release (documented below)
-* the release manager performing post-release tasks, for either a xref:cg.adoc#_cg_committers_post-release-successful[successful] or an xref:cg.adoc#_cg_committers_post-release-unsuccessful[unsuccessful] vote.
+* the release manager performing post-release tasks, for either a xref:cgcom.adoc#_cgcom_post-release-successful[successful] or an xref:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote.
 
 This section describes some guidance on what a voter (members of the Apache Isis PMC and anyone else who wishes) is expected to do before casting their vote in order to verify a release.
 
@@ -18,7 +18,7 @@ This section describes some guidance on what a voter (members of the Apache Isis
 
 == Background
 
-Whenever a release manager announces a vote on a release (as per the xref:cg.adoc#_cg_committers_release-process[release process]) on the link:../support.html[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
+Whenever a release manager announces a vote on a release (as per the xref:cgcom.adoc#_cgcom_release-process[release process]) on the link:../support.html[dev mailing list], it is the responsibility of the project's PMC to cast their vote on the release.  Anyone else can also vote, but only members of the Apache Isis PMC's vote are binding.
 
 Per this http://www.apache.org/dev/release.html[ASF documentation], the legal requirements for an ASF release are:
 
@@ -53,10 +53,10 @@ rm -rf ~/.m2/repository/org/apache/isis
 
 == Verifying source artifacts
 
-You can either verify the source artifacts xref:cg.adoc#_cg_committers_verifying-releases_manual-procedure[manuall], or use a script that xref:cg.adoc#__cg_committers_verifying-releases_automated-procedure[automates] the steps.
+You can either verify the source artifacts xref:cgcom.adoc#_cgcom_verifying-releases_manual-procedure[manuall], or use a script that xref:cgcom.adoc#_cgcom_verifying-releases_automated-procedure[automates] the steps.
 
 
-[[_cg_committers_verifying-releases_manual-procedure]]
+[[_cgcom_verifying-releases_manual-procedure]]
 === Manual procedure
 
 The following section describes the steps to perform to manually verify a release.
@@ -134,7 +134,7 @@ Once the vote has completed, the staging repositories will be removed and so you
 
 
 
-[[_cg_committers_verifying-releases_automated-procedure]]
+[[_cgcom_verifying-releases_automated-procedure]]
 === Automated procedure
 
 To save some time in verifying an Apache Isis release we've assembled a script to automate the process. The script is tested on Mac OSX and Linux. Windows users can use Cygwin or http://msysgit.github.io/[msysgit].
@@ -249,12 +249,12 @@ Execute...
 
 
 
-[[_cg_committers_verifying-releases_creadur]]
+[[_cgcom_verifying-releases_creadur]]
 == (Optional) Creadur Tools
 
 The http://creadur.apache.org[Apache Creadur] project exists to provide a set of tools to ensure compliance with Apache's licensing standards.
 
-The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:cg.adoc#_cg_committers_cutting-a-release[release process].
+The main release auditing tool, http://creadur.apache.org/rat[Apache RAT] is used in the xref:cgcom.adoc#_cgcom_cutting-a-release[release process].
 
 Creadur's remaining tools - link:http://creadur.apache.org/tentacles/[Tentacles] and link:http://creadur.apache.org/whisker/[Whisker] - are to support the verification process.
 
@@ -292,7 +292,7 @@ mvn clean install -o
 mvn -P self-host antrun:run
 ----
 
-If it runs up ok, then it's time to xref:cg.adoc#_cg_committers_verifying-releases[vote]!
+If it runs up ok, then it's time to xref:cgcom.adoc#_cgcom_verifying-releases[vote]!
 
 
 

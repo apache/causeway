@@ -1,4 +1,4 @@
-[[_cg_policies_git-policy]]
+[[_cgcon_policies_git-policy]]
 = Git Policy
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -95,4 +95,4 @@ ISIS-nnn: brief summary here
 
 where `ISIS-nnn` is a ticket raised in our https://issues.apache.org/jira/browse/ISIS[JIRA issue tracker].
 
-For non-committers we typically expect more detail again; see the xref:cg.adoc#_cg_contributing[contributing] page for the longer format recommended for contributors to use.
+For non-committers we typically expect more detail again; see the xref:cgcon.adoc#_cgcon_contributing[contributing] page for the longer format recommended for contributors to use.

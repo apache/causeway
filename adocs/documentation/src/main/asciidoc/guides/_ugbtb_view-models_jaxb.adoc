@@ -230,7 +230,7 @@ on the server).
 
 == Generating XSDs and DTOs
 
-The xref:cg.adoc#_cg_isis-maven-plugin[Apache Isis maven plugin] provides the xref:cg.adoc#_cg_isis-maven-plugin_xsd[xsd] goal that allows the XSDs to be generated from any JAXB-annotated view models.
+The xref:cgcon.adoc#_cgcon_isis-maven-plugin[Apache Isis maven plugin] provides the xref:cgcon.adoc#_cgcon_isis-maven-plugin_xsd[xsd] goal that allows the XSDs to be generated from any JAXB-annotated view models.
 These use the xref:rgsvc.adoc#_rgsvc_api_JaxbService[`JaxbService`] to generate the schemas; using the
 standard `schemagen` command line will not correctly interpret any references to domain entities as OIDs.
 

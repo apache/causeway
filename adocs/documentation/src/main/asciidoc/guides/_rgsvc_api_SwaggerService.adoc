@@ -66,6 +66,6 @@ implementation of `SwaggerService` service is automatically registered and injec
 
 A `SwaggerServiceMenu` domain service provides a prototype action that enables the swagger spec to be downloaded from the Wicket viewer's UI.
 
-Apache Isis' xref:cg.adoc#_cg_isis-maven-plugin[Maven plugin] also provides a xref:cg.adoc#_cg_isis-maven-plugin_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
+Apache Isis' xref:cgcon.adoc#_cgcon_isis-maven-plugin[Maven plugin] also provides a xref:cgcon.adoc#_cgcon_isis-maven-plugin_swagger[swagger goal] which allows the spec file(s) to be generated at build time.  this then allows client-side stubs can then be generated in turn as part of a build pipeline.
 
 

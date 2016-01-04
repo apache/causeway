@@ -1,4 +1,4 @@
-[[_cg_committers_post-release-unsuccessful]]
+[[_cgcom_post-release-unsuccessful]]
 = Post Release (Unsuccessful)
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -8,9 +8,9 @@
 
 The release process consists of:
 
-* the release manager xref:cg.adoc#_cg_committers_cutting-a-release[cutting the release]
-* members of the Apache Isis PMC xref:cg.adoc#_cg_committers_verifying-releases[verifying] and voting on the release
-* the release manager performing post-release tasks, for either a xref:cg.adoc#_cg_committers_post-release-successful[successful] or an unsuccessful vote (latter documented below).
+* the release manager xref:cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
+* members of the Apache Isis PMC xref:cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a xref:cgcom.adoc#_cgcom_post-release-successful[successful] or an unsuccessful vote (latter documented below).
 
 If the vote did not succeed (did not achieve +3 votes after 72 hours and/or is unlikely to do so), then the vote should be closed and the following steps performed.
 

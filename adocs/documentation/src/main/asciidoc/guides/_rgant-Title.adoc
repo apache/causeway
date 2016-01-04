@@ -40,7 +40,7 @@ present in the title column. This convention can be overridden using
 
 == Lombok support
 
-If xref:cg.adoc#_cg_ide_project-lombok[Project Lombok] is being used, then `@Title` can be specified on the backing field.
+If xref:cgcon.adoc#_cgcon_ide_project-lombok[Project Lombok] is being used, then `@Title` can be specified on the backing field.
 
 For example:
 

@@ -1,4 +1,4 @@
-[[_cg_asciidoc]]
+[[_cgcon_asciidoc]]
 = AsciiDoc Documentation
 
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
@@ -14,7 +14,7 @@ The website and guides are created by running build tools (documented below) whi
 
 Publishing is performed by copying the generated HTML to a different git repository (link:https://git-wip-us.apache.org/repos/asf?p=isis-site.git[isis-site]).  This is synced by ASF infrastructure over to link:http://isis.apache.org[isis.apache.org].
 
-And to help write the Asciidoc text itself, we provide some xref:cg.adoc#_cg__cg_ide-templates[templates].
+And to help write the Asciidoc text itself, we provide some xref:cgcon.adoc#_cgcon__cg_ide-templates[templates].
 
 
 == Where to find the Docs
@@ -62,9 +62,9 @@ xxx-xxx/resources/.
 
 == Writing the docs
 
-We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:cg.adoc#_cg_ide-templates[IDE templates].  These provide a large number of helper templates.
+We highly recommend that you install the (IntelliJ) live templates for Asciidoctor, as described in xref:cgcon.adoc#_cgcon_ide-templates[IDE templates].  These provide a large number of helper templates.
 
-An xref:cg.adoc#_cg_appendix_asciidoc-templates[appendix] lists all the templates available, demonstrating their intended usage and output.
+An xref:cgcon.adoc#_cgcon_appendix_asciidoc-templates[appendix] lists all the templates available, demonstrating their intended usage and output.
 
 
 == Build and Review (using Maven)
@@ -139,7 +139,7 @@ usage: monitor.rb [options]
 
 == Publish procedure
 
-Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  We've decided to include these procedures here here (rather than put them in the xref:cg.adoc#_cg_committers[committers' section] of this guide, just to keep things together.
+Only Apache Isis committers can publish to link:http://isis.apache.org[isis.apache.org].  We've decided to include these procedures here here (rather than put them in the xref:cgcom.adoc#[Committers' Guide]), just to keep things together.
 
 
 === One-time setup

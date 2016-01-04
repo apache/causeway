@@ -290,7 +290,7 @@
       <option name="AsciiDoc" value="true" />
     </context>
   </template>
-  <template name="adcg" value="xref:cg.adoc#$bookmark$[$DisplayText$]" description="x-ref to contributors guide" toReformat="false" toShortenFQNames="true">
+  <template name="adcgcon" value="xref:cgcon.adoc#$bookmark$[$DisplayText$]" description="x-ref to contributors guide" toReformat="false" toShortenFQNames="true">
     <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="DisplayText" expression="" defaultValue="Contributors guide" alwaysStopAt="true" />
     <context>
@@ -321,6 +321,20 @@
   <template name="adugsec" value="xref:ugsec.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide security guide" toReformat="false" toShortenFQNames="true">
     <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="DisplayText" expression="" defaultValue="Security guide" alwaysStopAt="true" />
+    <context>
+      <option name="AsciiDoc" value="true" />
+    </context>
+  </template>
+  <template name="adugvro" value="xref:ugvro.adoc#$bookmark$[$DisplayText$]" description="x-ref to user guide restful objects viewer" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Wicket viewer" alwaysStopAt="true" />
+    <context>
+      <option name="AsciiDoc" value="true" />
+    </context>
+  </template>
+  <template name="adcgcom" value="xref:cgcom.adoc#$bookmark$[$DisplayText$]" description="x-ref to committers guide" toReformat="false" toShortenFQNames="true">
+    <variable name="bookmark" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="DisplayText" expression="" defaultValue="Contributors guide" alwaysStopAt="true" />
     <context>
       <option name="AsciiDoc" value="true" />
     </context>

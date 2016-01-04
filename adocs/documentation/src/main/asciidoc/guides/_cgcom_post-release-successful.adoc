@@ -1,4 +1,4 @@
-[[_cg_committers_post-release-successful]]
+[[_cgcom_post-release-successful]]
 = Post Release (Successful)
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -8,9 +8,9 @@
 
 The release process consists of:
 
-* the release manager xref:cg.adoc#_cg_committers_cutting-a-release[cutting the release]
-* members of the Apache Isis PMC xref:cg.adoc#_cg_committers_verifying-releases[verifying] and voting on the release
-* the release manager performing post-release tasks, for either a successful or an xref:cg.adoc#_cg_committers_post-release-unsuccessful[unsuccessful] vote (former documented below)
+* the release manager xref:cgcom.adoc#_cgcom_cutting-a-release[cutting the release]
+* members of the Apache Isis PMC xref:cgcom.adoc#_cgcom_verifying-releases[verifying] and voting on the release
+* the release manager performing post-release tasks, for either a successful or an xref:cgcom.adoc#_cgcom_post-release-unsuccessful[unsuccessful] vote (former documented below)
 
 For a vote to succeed, there must be +3 votes from PMC members, and the vote must have been open at least 72 hours.  If there are not +3 votes after this time then it is perfectly permissible to keep the vote open longer.
 

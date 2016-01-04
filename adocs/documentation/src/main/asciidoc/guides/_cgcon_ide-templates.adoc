@@ -1,4 +1,4 @@
-[[_cg_ide-templates]]
+[[_cgcon_ide-templates]]
 = Code and File Templates
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -13,7 +13,7 @@ On IntelliJ we provide both file templates (`File > Settings > Editor > File and
 
 On Eclipse we provide only the latter sort of template (Windows > Preferences > Java > Editor > Templates).
 
-There are templates for writing Apache Isis domain objects, for writing unit tests (JUnit and JMock), and also for writing Asciidoc documentation (see also the xref:cg.adoc#_cg_asciidoc-templates[appendix]).
+There are templates for writing Apache Isis domain objects, for writing unit tests (JUnit and JMock), and also for writing Asciidoc documentation (see also the xref:cgcon.adoc#_cgcon_asciidoc-templates[appendix]).
 
 
 == Download

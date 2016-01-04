@@ -1,4 +1,4 @@
-[[_cg_asciidoc-templates]]
+[[_cgcon_asciidoc-templates]]
 = Appendix: Asciidoc Templates
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -7,7 +7,7 @@
 
 
 
-This appendix lists the (IntelliJ) live templates available for xref:cg.adoc#_cg_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:cg.adoc#_cg_ide-templates[here].
+This appendix lists the (IntelliJ) live templates available for xref:cgcon.adoc#_cgcon_asciidoc[writing documentation] using Asciidoc.  Instructions for installing the templates can be found xref:cgcon.adoc#_cgcon_ide-templates[here].
 
 In the examples below the text `xxx`, `yyy`, `zzz` are correspond to template variables (ie placeholders).
 
@@ -103,19 +103,31 @@ Cross-references (links) to the various guides
 | Example
 
 
-|`adcg`
-|pass:[<pre>xref:cg.adoc#xxx[ttt\]</pre>]
+|`adcgcom`
+|pass:[<pre>xref:cgcom.adoc#xxx[ttt\]</pre>]
 
-a hyperlink to a bookmark within the contributors guide, where:
+a hyperlink to a bookmark within the committers' guide, where:
 
 * `xxx` is the bookmark's anchor
 * `ttt` is the text to display as the hyperlink
 
 for example:
 
-pass:[<pre>xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates\]</pre>]
+pass:[<pre>xref:cgcon.adoc#_cgcom_cutting-a-release[Cutting a release\]</pre>]
 
-|xref:cg.adoc#_cg_asciidoc-templates[Asciidoc templates]
+|`adcgcon`
+|pass:[<pre>xref:cgcom.adoc#xxx[ttt\]</pre>]
+
+a hyperlink to a bookmark within the contributors' guide, where:
+
+* `xxx` is the bookmark's anchor
+* `ttt` is the text to display as the hyperlink
+
+for example:
+
+pass:[<pre>xref:cgcon.adoc#_cgcon_asciidoc-templates[Asciidoc templates\]</pre>]
+
+|xref:cgcon.adoc#_cgcon_asciidoc-templates[Asciidoc templates]
 
 
 

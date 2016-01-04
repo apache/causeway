@@ -90,7 +90,7 @@ Go back to the splash screen, and quit the app. Note that the database runs in-m
 
 == Dev environment
 
-Set up xref:cg.adoc#_cg_ide[an IDE] and import the project to be able to run and debug the app.
+Set up xref:cgcon.adoc#_cgcon_ide[an IDE] and import the project to be able to run and debug the app.
 
 Then set up a launch configuration and check that you can:
 

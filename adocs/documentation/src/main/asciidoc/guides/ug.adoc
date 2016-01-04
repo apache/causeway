@@ -6,7 +6,7 @@
 :numbered:
 
 
-Apache Isis documentation is broken out into a number of user and reference guides.
+Apache Isis documentation is broken out into a number of user, reference and "supporting procedures" guides.
 
 The user guides available are:
 
@@ -24,4 +24,8 @@ The reference guides are:
 * xref:rgcfg.adoc#[Configuration Properties]
 * xref:rgcms.adoc#[Classes, Methods and Schema]
 
-In addition, there is a xref:cg.adoc#_cg[Contributors' Guide] describing development practices for contributors and committers alike.
+The "supporting procedures" guides are:
+
+* xref:cgcon.adoc#[Contributors' Guide] (how to set up a development environment
+for Apache Isis and contribute back to the project)
+* xref:cgcon.adoc#[Committers' Guide] (release procedures and related practices)

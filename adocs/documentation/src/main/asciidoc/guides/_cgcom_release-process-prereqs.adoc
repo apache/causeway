@@ -1,4 +1,4 @@
-[[_cg_committers_release-process-prereqs]]
+[[_cgcom_release-process-prereqs]]
 = Appendix: Release Prereqs
 :notice: licensed to the apache software foundation (asf) under one or more contributor license agreements. see the notice file distributed with this work for additional information regarding copyright ownership. the asf licenses this file to you under the apache license, version 2.0 (the "license"); you may not use this file except in compliance with the license. you may obtain a copy of the license at. http://www.apache.org/licenses/license-2.0 . unless required by applicable law or agreed to in writing, software distributed under the license is distributed on an "as is" basis, without warranties or  conditions of any kind, either express or implied. see the license for the specific language governing permissions and limitations under the license.
 :_basedir: ../
@@ -7,13 +7,13 @@
 
 
 
-This section (appendix) describes the prerequisites for the xref:cg.adoc#_cg_committers_release-process[release process].
+This section (appendix) describes the prerequisites for the xref:cgcom.adoc#_cgcom_release-process[release process].
 
 
 
 == Public/private key
 
-The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on xref:cg.adoc#_cg_committers_key-generation[key generation] for more details.
+The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on xref:cgcom.adoc#_cgcom_key-generation[key generation] for more details.
 
 In order to prepare the release, you'll (need to) have a `~/.gnupg` directory with the relevant files (`gpg.conf`, `pubring.gpg`, `secring.gpg` etc), and have `gpg` on your operating system PATH.
 
