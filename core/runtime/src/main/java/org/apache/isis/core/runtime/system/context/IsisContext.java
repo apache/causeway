@@ -19,7 +19,9 @@
 
 package org.apache.isis.core.runtime.system.context;
 
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +57,7 @@ import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
  * <p>
  * Somewhat analogous to (the static methods in) <tt>HibernateUtil</tt>.
  */
-public abstract class IsisContext implements DebuggableWithTitle {
+public class IsisContext implements DebuggableWithTitle {
 
     private static final Logger LOG = LoggerFactory.getLogger(IsisContext.class);
 
@@ -114,6 +116,7 @@ public abstract class IsisContext implements DebuggableWithTitle {
         NOT_REPLACEABLE, REPLACEABLE
     }
 
+
     /**
      * Creates a new instance of the {@link IsisSession} holder.
      * 
@@ -130,6 +133,13 @@ public abstract class IsisContext implements DebuggableWithTitle {
         this.sessionClosePolicy = sessionClosePolicy;
         this.replacePolicy = replacePolicy;
     }
+
+
+    protected IsisContext(final IsisSessionFactory sessionFactory) {
+        this(ContextReplacePolicy.NOT_REPLACEABLE, SessionClosePolicy.AUTO_CLOSE, sessionFactory);
+    }
+
+
 
     protected void shutdownInstance() {
         this.sessionFactory.shutdown();
@@ -194,10 +204,39 @@ public abstract class IsisContext implements DebuggableWithTitle {
     /**
      * Creates a new {@link IsisSession} and binds into the current context.
      * 
+     * Is only intended to be called through
+     * {@link IsisContext#openSession(AuthenticationSession)}.
+     *
+     * <p>
+     * Implementation note: an alternative design would have just been to bind
+     * onto a thread local.
+     *
      * @throws IllegalStateException
      *             if already opened.
      */
-    public abstract IsisSession openSessionInstance(AuthenticationSession session);
+    public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
+        final Thread thread = Thread.currentThread();
+        synchronized (sessionsByThread) {
+            applySessionClosePolicy();
+            final IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
+            }
+            saveSession(thread, session);
+            session.open();
+            return session;
+        }
+    }
+
+    private IsisSession saveSession(final Thread thread, final IsisSession session) {
+        synchronized (sessionsByThread) {
+            sessionsByThread.put(thread, session);
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("  saving session " + session + "; now have " + sessionsByThread.size() + " sessions");
+        }
+        return session;
+    }
 
     /**
      * Closes the {@link IsisSession} for the current context.
@@ -230,32 +269,43 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * already have been {@link IsisSession#close() closed}.
      */
     protected void doClose() {
+        sessionsByThread.remove(Thread.currentThread());
     }
 
     /**
      * Shutdown the application.
      */
-    protected abstract void closeAllSessionsInstance();
+    public void closeAllSessionsInstance() {
+        shutdownAllThreads();
+    }
 
-    
+
 
     // ///////////////////////////////////////////////////////////
     // getSession()
     // ///////////////////////////////////////////////////////////
 
     /**
-     * Locates the current {@link IsisSession}.
-     * 
-     * <p>
-     * This might just be a singleton (eg {@link IsisContextStatic}), or could
-     * be retrieved from the thread (eg {@link IsisContextThreadLocal}).
+     * Locates the current {@link IsisSession} from the threadlocal.
+     *
+     * @see #openSessionInstance(AuthenticationSession)
      */
-    public abstract IsisSession getSessionInstance();
+    public IsisSession getSessionInstance() {
+        final Thread thread = Thread.currentThread();
+        return sessionsByThread.get(thread);
+    }
 
     /**
      * The {@link IsisSession} for specified {@link IsisSession#getId()}.
      */
-    protected abstract IsisSession getSessionInstance(String sessionId);
+    protected IsisSession getSessionInstance(final String executionContextId) {
+        for (final IsisSession data : sessionsByThread.values()) {
+            if (data.getId().equals(executionContextId)) {
+                return data;
+            }
+        }
+        return null;
+    }
 
     /**
      * All known session Ids.
@@ -263,7 +313,14 @@ public abstract class IsisContext implements DebuggableWithTitle {
      * <p>
      * Provided primarily for debugging.
      */
-    public abstract String[] allSessionIds();
+    public String[] allSessionIds() {
+        final String[] ids = new String[sessionsByThread.size()];
+        int i = 0;
+        for (final IsisSession data  : sessionsByThread.values()) {
+            ids[i++] = data.getId();
+        }
+        return ids;
+    }
 
     // ///////////////////////////////////////////////////////////
     // Static Convenience methods (session management)
@@ -517,6 +574,12 @@ public abstract class IsisContext implements DebuggableWithTitle {
     @Override
     public void debugData(final DebugBuilder debug) {
         debug.appendln("context ", this);
+        debug.appendTitle("Threads based Contexts");
+        for (final Map.Entry<Thread, IsisSession> entry : sessionsByThread.entrySet()) {
+            final Thread thread = entry.getKey();
+            final IsisSession data = entry.getValue();
+            debug.appendln(thread.toString(), data);
+        }
     }
 
     /**
@@ -562,4 +625,49 @@ public abstract class IsisContext implements DebuggableWithTitle {
             }
         }
     }
+
+
+
+    public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
+        return new IsisContext(sessionFactory);
+    }
+
+    // TODO: could convert this to a regular ThreadLocal, I think; except for the closeAllSessionsInstance() method...; is that method really needed?
+    private final Map<Thread, IsisSession> sessionsByThread = new IdentityHashMap<>();
+
+
+
+
+    // /////////////////////////////////////////////////////////
+    // Session
+    // /////////////////////////////////////////////////////////
+
+
+    protected void shutdownAllThreads() {
+        synchronized (sessionsByThread) {
+            for (final Map.Entry<Thread, IsisSession> entry : sessionsByThread.entrySet()) {
+                LOG.info("Shutting down thread: {}", entry.getKey().getName());
+                final IsisSession data = entry.getValue();
+                data.closeAll();
+            }
+        }
+    }
+
+
+
+    // /////////////////////////////////////////////////////////
+    // Debugging
+    // /////////////////////////////////////////////////////////
+
+    @Override
+    public String debugTitle() {
+        return "Isis (by thread) " + Thread.currentThread().getName();
+    }
+
+
+
+
+
+
+
 }
