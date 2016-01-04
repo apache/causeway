@@ -4,7 +4,7 @@
 :_basedir: ../
 :_imagesdir: images/
 
-From the Apache Isis mailing list is:
+From the Apache Isis mailing list:
 
 * _I am trying to internationalize the label descriptions of form actions, eg those in `ActionParametersFormPanel`.  Referencing those via their message id inside a .po file didn't work either.  Can this be done?_
 
