@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
                 , "properties"
         }
 )
-public class PropertyGroup implements ColumnContent {
+public class PropertyGroup implements ColumnContent, ActionHolder {
 
     private String name;
 

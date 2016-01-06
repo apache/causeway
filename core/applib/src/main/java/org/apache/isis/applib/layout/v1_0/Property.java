@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
                 , "layout"
         }
 )
-public class Property {
+public class Property implements ActionHolder {
 
     private String id;
 

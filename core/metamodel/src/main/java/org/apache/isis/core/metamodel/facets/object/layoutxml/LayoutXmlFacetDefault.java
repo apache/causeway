@@ -18,16 +18,22 @@
  */
 package org.apache.isis.core.metamodel.facets.object.layoutxml;
 
-
 import java.util.List;
+import java.util.Map;
 
+import org.apache.isis.applib.layout.v1_0.Action;
+import org.apache.isis.applib.layout.v1_0.Collection;
+import org.apache.isis.applib.layout.v1_0.DomainObject;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.applib.layout.v1_0.DomainObject;
-import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 public class LayoutXmlFacetDefault
@@ -74,12 +80,49 @@ public class LayoutXmlFacetDefault
 
     private void doFleshOut(final DomainObject metadata) {
         ObjectSpecification objectSpec = (ObjectSpecification) getFacetHolder();
-        List<OneToOneAssociation> properties = getProperties(objectSpec);
-        List<TabGroup> tabses = metadata.getTabGroups();
+
+        final List<OneToOneAssociation> oneToOneAssociations = getOneToOneAssociations(objectSpec);
+        final Map<String, OneToOneAssociation> oneToOneAssociationById = ObjectMember.Util.mapById(oneToOneAssociations);
+
+        final List<OneToManyAssociation> oneToManyAssociations = getOneToManyAssociations(objectSpec);
+        final Map<String, OneToManyAssociation> oneToManyAssociationById = ObjectMember.Util.mapById(oneToManyAssociations);
+
+        final List<ObjectAction> objectActions = objectSpec.getObjectActions(Contributed.INCLUDED);
+        final Map<String, ObjectAction> objectActionById = ObjectMember.Util.mapById(objectActions);
+
+        metadata.traverse(new DomainObject.VisitorAdapter() {
+            @Override
+            public void visit(final Property property) {
+                oneToOneAssociationById.remove(property.getId());
+            }
+            @Override
+            public void visit(final Collection collection) {
+                oneToManyAssociationById.remove(collection.getId());
+            }
+            @Override
+            public void visit(final Action action) {
+                objectActionById.remove(action.getId());
+            }
+        });
+
+        if(!oneToOneAssociationById.isEmpty()) {
+
+        }
+        if(!oneToManyAssociationById.isEmpty()) {
+
+        }
+        if(!objectActionById.isEmpty()) {
+
+        }
     }
 
-    private List getProperties(final ObjectSpecification objectSpec) {
+
+    private List getOneToOneAssociations(final ObjectSpecification objectSpec) {
         return objectSpec
-                .getAssociations(Contributed.INCLUDED, OneToOneAssociation.Filters.PROPERTIES);
+                .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
+    }
+    private List getOneToManyAssociations(final ObjectSpecification objectSpec) {
+        return objectSpec
+                .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
     }
 }

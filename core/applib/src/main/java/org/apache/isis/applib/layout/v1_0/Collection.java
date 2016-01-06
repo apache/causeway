@@ -34,7 +34,7 @@ import com.google.common.collect.Lists;
                 , "layout"
         }
 )
-public class Collection implements ColumnContent {
+public class Collection implements ColumnContent, ActionHolder {
 
     private String id;
 

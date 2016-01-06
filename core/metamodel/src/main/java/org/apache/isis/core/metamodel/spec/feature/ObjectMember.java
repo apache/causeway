@@ -19,6 +19,14 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.HashMap;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -154,4 +162,27 @@ public interface ObjectMember extends ObjectFeature {
         }
 
     }
+
+    class Functions {
+
+        private Functions(){}
+        public static Function<ObjectMember, String> getId() {
+            return new Function<ObjectMember, String>() {
+                @Nullable @Override public String apply(@Nullable final ObjectMember oneToOneAssociation) {
+                    return oneToOneAssociation.getId();
+                }
+            };
+        }
+
+    }
+
+    class Util {
+
+        private Util(){}
+
+        public static <T extends ObjectMember> HashMap<String, T> mapById(final List<T> members) {
+            return Maps.newHashMap(Maps.uniqueIndex(members, ObjectMember.Functions.getId()));
+        }
+    }
+
 }
