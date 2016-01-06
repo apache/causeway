@@ -36,7 +36,7 @@ public class EntityTabbedPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "combined";
+    private static final String NAME = "tabbed";
 
     public EntityTabbedPanelFactory() {
         super(ComponentType.ENTITY, NAME, EntityTabbedPanel.class);
@@ -45,7 +45,7 @@ public class EntityTabbedPanelFactory extends EntityComponentFactoryAbstract {
     @Override
     protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        return appliesExclusivelyIf(specification.containsDoOpFacet(LayoutXmlFacet.class));
+        return appliesIf(specification.containsDoOpFacet(LayoutXmlFacet.class));
     }
 
     @Override

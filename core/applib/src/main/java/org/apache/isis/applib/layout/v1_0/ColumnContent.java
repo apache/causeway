@@ -18,29 +18,6 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface ColumnContent {
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-
-@XmlType(
-        //propOrder = {"tabs"}
-)
-public class TabGroup {
-
-    // must be at least one tab.
-    private List<Tab> tabs = new ArrayList<Tab>(){{
-        add(new Tab());
-    }};
-
-    // no wrapper
-    @XmlElement(name = "tab", required = true)
-    public List<Tab> getTabs() {
-        return tabs;
-    }
-
-    public void setTabs(List<Tab> tabs) {
-        this.tabs = tabs;
-    }
 }

@@ -32,7 +32,8 @@ import org.apache.isis.applib.services.dto.Dto;
 
 @XmlRootElement
 @XmlType(
-        propOrder = {
+        name="domain-object"
+        , propOrder = {
                 "actions"
                 , "tabGroups"
         }
@@ -41,7 +42,7 @@ public class DomainObject implements Dto {
 
     private List<Action> actions = Lists.newArrayList();
 
-    @XmlElementWrapper(required = true)
+    @XmlElementWrapper(name = "actions", required = true)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
         return actions;
@@ -57,7 +58,7 @@ public class DomainObject implements Dto {
         add(new TabGroup());
     }};
 
-    @XmlElementWrapper(required = true)
+    // no wrapper
     @XmlElement(name = "tabGroup", required = true)
     public List<TabGroup> getTabGroups() {
         return tabGroups;

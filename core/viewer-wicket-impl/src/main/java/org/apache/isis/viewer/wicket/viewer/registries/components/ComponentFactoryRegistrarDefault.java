@@ -167,8 +167,8 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForEntity(final ComponentFactoryList componentFactories) {
 
         // top-level
+        componentFactories.add(new EntityTabbedPanelFactory());
         componentFactories.add(new EntityCombinedPanelFactory());
-        componentFactories.add(new EntityTabbedPanelFactory()); // last one wins, apparently.
 
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());

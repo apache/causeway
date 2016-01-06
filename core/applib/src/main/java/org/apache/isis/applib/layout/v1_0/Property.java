@@ -29,25 +29,25 @@ import com.google.common.collect.Lists;
 
 @XmlType(
         propOrder = {
-                "identifier"
-                , "layout"
+                "id"
                 , "actions"
+                , "layout"
         }
 )
-public class Property  {
+public class Property {
 
-    private String identifier;
+    private String id;
 
     /**
      * Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
-    public String getIdentifier() {
-        return identifier;
+    public String getId() {
+        return id;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setId(String id) {
+        this.id = id;
     }
 
 

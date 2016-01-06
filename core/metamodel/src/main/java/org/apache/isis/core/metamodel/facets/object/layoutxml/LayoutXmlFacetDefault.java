@@ -75,7 +75,7 @@ public class LayoutXmlFacetDefault
     private void doFleshOut(final DomainObject metadata) {
         ObjectSpecification objectSpec = (ObjectSpecification) getFacetHolder();
         List<OneToOneAssociation> properties = getProperties(objectSpec);
-        List<TabGroup> tabGroups = metadata.getTabGroups();
+        List<TabGroup> tabses = metadata.getTabGroups();
     }
 
     private List getProperties(final ObjectSpecification objectSpec) {

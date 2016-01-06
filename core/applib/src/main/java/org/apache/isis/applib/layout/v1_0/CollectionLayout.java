@@ -17,6 +17,7 @@
 package org.apache.isis.applib.layout.v1_0;
 
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -32,13 +33,8 @@ import org.apache.isis.applib.annotation.Where;
  */
 @XmlType(
         propOrder = {
-                "cssClass"
+                "named"
                 ,"describedAs"
-                ,"defaultView"
-                ,"hidden"
-                ,"named"
-                ,"namedEscaped"
-                ,"paged"
                 ,"sortedBy"
         }
 )
@@ -46,7 +42,7 @@ public class CollectionLayout {
 
     private String cssClass;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
@@ -70,13 +66,13 @@ public class CollectionLayout {
 
 
 
-    private String defaultView = "table";
+    private String defaultView;
 
     /**
      * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
      * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
      */
-    @XmlElement(required = true, defaultValue = "table")
+    @XmlAttribute(required = false)
     public String getDefaultView() {
         return defaultView;
     }
@@ -88,7 +84,7 @@ public class CollectionLayout {
 
     private Where hidden;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
@@ -112,7 +108,7 @@ public class CollectionLayout {
 
     private Boolean namedEscaped;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
@@ -124,7 +120,7 @@ public class CollectionLayout {
 
     private Integer paged;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Integer getPaged() {
         return paged;
     }

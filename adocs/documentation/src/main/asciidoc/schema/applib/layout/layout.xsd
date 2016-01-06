@@ -1,9 +1,9 @@
 <?xml version="1.0" standalone="yes"?>
 <xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout" xmlns:tns="http://isis.apache.org/schema/applib/layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="domainObject" type="tns:domainObject"/>
+  <xs:element name="domainObject" type="tns:domain-object"/>
 
-  <xs:complexType name="domainObject">
+  <xs:complexType name="domain-object">
     <xs:sequence>
       <xs:element name="actions">
         <xs:complexType>
@@ -12,46 +12,34 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="tabGroups">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="tabGroup" type="tns:tabGroup" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="tabGroup" type="tns:tabGroup" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="action">
     <xs:sequence>
-      <xs:element name="layout" type="tns:actionLayout"/>
+      <xs:element name="layout" type="tns:actionLayout" minOccurs="0"/>
     </xs:sequence>
-    <xs:attribute name="identifier" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="actionLayout">
     <xs:sequence>
-      <xs:element name="bookmarking" type="tns:bookmarkPolicy" default="NEVER" minOccurs="0"/>
-      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
-      <xs:element name="cssClassFa" type="xs:string" minOccurs="0"/>
-      <xs:element name="cssClassFaPosition" type="tns:cssClassFaPosition" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="position" type="tns:position" default="BELOW"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
+    <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="position" type="tns:position" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="tabGroup">
     <xs:sequence>
-      <xs:element name="tabs">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="tab" type="tns:tab" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="tab" type="tns:tab" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -66,22 +54,12 @@
 
   <xs:complexType name="column">
     <xs:sequence>
-      <xs:element name="span" type="xs:int" default="4"/>
-      <xs:element name="propertyGroups">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="propertyGroup" type="tns:propertyGroup" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="collections">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="collection" type="tns:collection" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="propertyGroup" type="tns:propertyGroup"/>
+        <xs:element name="collection" type="tns:collection"/>
+      </xs:choice>
     </xs:sequence>
+    <xs:attribute name="span" type="xs:int" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="propertyGroup">
@@ -93,20 +71,13 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="properties">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="property" type="tns:property" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="property" type="tns:property" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="property">
     <xs:sequence>
-      <xs:element name="layout" type="tns:propertyLayout"/>
       <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
@@ -114,27 +85,27 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="layout" type="tns:propertyLayout"/>
     </xs:sequence>
-    <xs:attribute name="identifier" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="propertyLayout">
     <xs:sequence>
-      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
-      <xs:element name="labelPosition" type="tns:labelPosition" default="LEFT"/>
-      <xs:element name="multiLine" type="xs:int" minOccurs="0"/>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="renderedAsDayBefore" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="typicalLength" type="xs:int" default="-1"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="labelPosition" type="tns:labelPosition"/>
+    <xs:attribute name="multiLine" type="xs:int"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="renderedAsDayBefore" type="xs:boolean"/>
+    <xs:attribute name="typicalLength" type="xs:int"/>
   </xs:complexType>
 
   <xs:complexType name="collection">
     <xs:sequence>
-      <xs:element name="layout" type="tns:collectionLayout"/>
       <xs:element name="actions">
         <xs:complexType>
           <xs:sequence>
@@ -142,21 +113,22 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="layout" type="tns:collectionLayout"/>
     </xs:sequence>
-    <xs:attribute name="identifier" type="xs:string" use="required"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="collectionLayout">
     <xs:sequence>
-      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="defaultView" type="xs:string" default="table"/>
-      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
-      <xs:element name="paged" type="xs:int" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
       <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="defaultView" type="xs:string"/>
+    <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="namedEscaped" type="xs:boolean"/>
+    <xs:attribute name="paged" type="xs:int"/>
   </xs:complexType>
 
   <xs:simpleType name="bookmarkPolicy">

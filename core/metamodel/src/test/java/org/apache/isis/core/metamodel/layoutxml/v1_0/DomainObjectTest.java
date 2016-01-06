@@ -29,6 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.layout.v1_0.Action;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.applib.layout.v1_0.Column;
 import org.apache.isis.applib.layout.v1_0.DomainObject;
 import org.apache.isis.applib.layout.v1_0.Property;
@@ -36,6 +37,10 @@ import org.apache.isis.applib.layout.v1_0.PropertyGroup;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class DomainObjectTest {
 
@@ -61,20 +66,22 @@ public class DomainObjectTest {
         Column left = tab.getLeft();
 
         PropertyGroup leftPropGroup = new PropertyGroup();
-        left.getPropertyGroups().add(leftPropGroup);
-
+        left.getContent().add(leftPropGroup);
         leftPropGroup.setName("General");
 
-        Property nameProperty = leftPropGroup.getProperties().get(0);
+        Collection similarToColl = new Collection();
+        left.getContent().add(similarToColl);
+        similarToColl.setId("similarTo");
 
-        nameProperty.setIdentifier("name");
+        Property nameProperty = leftPropGroup.getProperties().get(0);
+        nameProperty.setId("name");
 
         Action updateNameAction = new Action();
-        updateNameAction.setIdentifier("updateName");
+        updateNameAction.setId("updateName");
         nameProperty.getActions().add(updateNameAction);
 
         Action deleteAction = new Action();
-        deleteAction.setIdentifier("delete");
+        deleteAction.setId("delete");
         domainObject.getActions().add(deleteAction);
 
         String xml = jaxbService.toXml(domainObject,
@@ -84,7 +91,14 @@ public class DomainObjectTest {
                 ));
         System.out.println(xml);
 
-        jaxbService.fromXml(DomainObject.class, xml);
+        DomainObject domainObjectRoundtripped = jaxbService.fromXml(DomainObject.class, xml);
+        String xmlRoundtripped = jaxbService.toXml(domainObjectRoundtripped,
+                ImmutableMap.<String,Object>of(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        "http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd"
+                ));
+        assertThat(xml, is(equalTo(xmlRoundtripped)));
+
 
         System.out.println("==========");
 

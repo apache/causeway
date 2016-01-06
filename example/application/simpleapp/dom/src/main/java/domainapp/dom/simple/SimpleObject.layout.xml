@@ -1,44 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <domainObject xsi:schemaLocation="http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd" xmlns="http://isis.apache.org/schema/applib/layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actions>
-        <action identifier="delete">
-            <layout>
-                <bookmarking>NEVER</bookmarking>
-                <position>BELOW</position>
-            </layout>
-        </action>
+        <action id="delete"/>
     </actions>
-    <tabGroups>
-        <tabGroup>
-            <tabs>
-                <tab>
-                    <left>
-                        <span>4</span>
-                        <propertyGroups>
-                            <propertyGroup name="General">
-                                <actions/>
-                                <properties>
-                                    <property identifier="name">
-                                        <layout>
-                                            <labelPosition>LEFT</labelPosition>
-                                            <typicalLength>-1</typicalLength>
-                                        </layout>
-                                        <actions>
-                                            <action identifier="updateName">
-                                                <layout>
-                                                    <bookmarking>NEVER</bookmarking>
-                                                    <position>BELOW</position>
-                                                </layout>
-                                            </action>
-                                        </actions>
-                                    </property>
-                                </properties>
-                            </propertyGroup>
-                        </propertyGroups>
-                        <collections/>
-                    </left>
-                </tab>
-            </tabs>
-        </tabGroup>
-    </tabGroups>
+    <tabGroup>
+        <tab>
+            <left span="4">
+                <propertyGroup name="General">
+                    <actions/>
+                    <property id="name">
+                        <actions>
+                            <action id="updateName"/>
+                        </actions>
+                        <layout/>
+                    </property>
+                </propertyGroup>
+            </left>
+        </tab>
+    </tabGroup>
 </domainObject>

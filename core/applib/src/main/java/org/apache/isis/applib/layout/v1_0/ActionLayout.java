@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -33,22 +33,15 @@ import org.apache.isis.applib.annotation.Where;
  */
 @XmlType(
         propOrder = {
-                "bookmarking"
-                , "cssClass"
-                , "cssClassFa"
-                , "cssClassFaPosition"
+                "named"
                 , "describedAs"
-                , "hidden"
-                , "named"
-                , "namedEscaped"
-                , "position"
         }
 )
 public class ActionLayout {
 
-    private BookmarkPolicy bookmarking = BookmarkPolicy.NEVER;
+    private BookmarkPolicy bookmarking;
 
-    @XmlElement(required = false, defaultValue = "NEVER")
+    @XmlAttribute(required = false)
     public BookmarkPolicy getBookmarking() {
         return bookmarking;
     }
@@ -60,7 +53,7 @@ public class ActionLayout {
 
     private String cssClass;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
@@ -72,7 +65,7 @@ public class ActionLayout {
 
     private String cssClassFa;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public String getCssClassFa() {
         return cssClassFa;
     }
@@ -85,7 +78,7 @@ public class ActionLayout {
 
     private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
         return cssClassFaPosition;
     }
@@ -110,7 +103,7 @@ public class ActionLayout {
 
     private Where hidden;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
@@ -136,7 +129,7 @@ public class ActionLayout {
 
     private Boolean namedEscaped;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
@@ -147,9 +140,9 @@ public class ActionLayout {
 
 
 
-    private org.apache.isis.applib.annotation.ActionLayout.Position position = org.apache.isis.applib.annotation.ActionLayout.Position.BELOW;
+    private org.apache.isis.applib.annotation.ActionLayout.Position position;
 
-    @XmlElement(required = true, defaultValue = "BELOW")
+    @XmlAttribute(required = true)
     public org.apache.isis.applib.annotation.ActionLayout.Position getPosition() {
         return position;
     }

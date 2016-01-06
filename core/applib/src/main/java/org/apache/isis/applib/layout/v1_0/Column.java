@@ -20,8 +20,9 @@ package org.apache.isis.applib.layout.v1_0;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
@@ -29,15 +30,14 @@ import com.google.common.collect.Lists;
 @XmlType(
         propOrder = {
                 "span"
-                , "propertyGroups"
-                , "collections"
+                , "content"
         }
 )
 public class Column {
 
     private int span = 4;
 
-    @XmlElement(required = true, defaultValue = "4")
+    @XmlAttribute(required = true)
     public int getSpan() {
         return span;
     }
@@ -48,29 +48,19 @@ public class Column {
 
 
 
-    private List<PropertyGroup> propertyGroups = Lists.newArrayList();
+    private List<ColumnContent> content = Lists.newArrayList();
 
-    @XmlElementWrapper(required = true)
-    @XmlElement(name = "propertyGroup", required = false)
-    public List<PropertyGroup> getPropertyGroups() {
-        return propertyGroups;
+    @XmlElements({
+        @XmlElement(name = "propertyGroup", required = false, type = PropertyGroup.class),
+        @XmlElement(name = "collection", required = false, type = Collection.class)
+
+    })
+    public List<ColumnContent> getContent() {
+        return content;
     }
 
-    public void setPropertyGroups(List<PropertyGroup> propertyGroups) {
-        this.propertyGroups = propertyGroups;
+    public void setContent(List<ColumnContent> content) {
+        this.content = content;
     }
 
-
-
-    private List<Collection> collections = Lists.newArrayList();
-
-    @XmlElementWrapper(required = true)
-    @XmlElement(name = "collection", required = false)
-    public List<Collection> getCollections() {
-        return collections;
-    }
-
-    public void setCollections(List<Collection> collections) {
-        this.collections = collections;
-    }
 }

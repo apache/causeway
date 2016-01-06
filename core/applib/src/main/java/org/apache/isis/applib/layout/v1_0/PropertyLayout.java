@@ -16,7 +16,7 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -25,22 +25,15 @@ import org.apache.isis.applib.annotation.Where;
 
 @XmlType(
         propOrder = {
-                "cssClass"
+                "named"
                 , "describedAs"
-                , "hidden"
-                , "labelPosition"
-                , "multiLine"
-                , "named"
-                , "namedEscaped"
-                , "renderedAsDayBefore"
-                , "typicalLength"
         }
 )
 public class PropertyLayout {
 
     private String cssClass;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
@@ -64,7 +57,7 @@ public class PropertyLayout {
 
     private Where hidden;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
@@ -74,9 +67,9 @@ public class PropertyLayout {
     }
 
 
-    private LabelPosition labelPosition = LabelPosition.LEFT;
+    private LabelPosition labelPosition;
 
-    @XmlElement(required = true, defaultValue = "LEFT")
+    @XmlAttribute(required = false)
     public LabelPosition getLabelPosition() {
         return labelPosition;
     }
@@ -88,7 +81,7 @@ public class PropertyLayout {
 
     private Integer multiLine;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Integer getMultiLine() {
         return multiLine;
     }
@@ -112,7 +105,7 @@ public class PropertyLayout {
 
     private Boolean namedEscaped;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
@@ -124,7 +117,7 @@ public class PropertyLayout {
 
     private Boolean renderedAsDayBefore;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = false)
     public Boolean getRenderedAsDayBefore() {
         return renderedAsDayBefore;
     }
@@ -134,9 +127,9 @@ public class PropertyLayout {
     }
 
 
-    private Integer typicalLength = -1;
+    private Integer typicalLength;
 
-    @XmlElement(required = true, defaultValue = "-1")
+    @XmlAttribute(required = false)
     public Integer getTypicalLength() {
         return typicalLength;
     }

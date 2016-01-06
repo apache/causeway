@@ -23,15 +23,16 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
-        propOrder = {
-                "identifier"
+        name="action"
+        , propOrder = {
+                "id"
                 , "layout"
         }
 )
 public class Action {
 
 
-    private String identifier;
+    private String id;
     /**
      * Method name.
      *
@@ -39,19 +40,19 @@ public class Action {
      *     Overloaded methods are not supported.
      * </p>
      */
-    @XmlAttribute(required = true)
-    public String getIdentifier() {
-        return identifier;
+    @XmlAttribute(name="id", required = true)
+    public String getId() {
+        return id;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setId(String id) {
+        this.id = id;
     }
 
 
 
-    private ActionLayout layout = new ActionLayout();
-    @XmlElement(required = true)
+    private ActionLayout layout;
+    @XmlElement(name="layout", required = false)
     public ActionLayout getLayout() {
         return layout;
     }

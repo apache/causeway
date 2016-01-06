@@ -22,7 +22,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
-        propOrder = {
+        name="tab"
+        , propOrder = {
                 "name"
                 , "left"
                 , "middle"

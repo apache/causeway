@@ -29,32 +29,44 @@ import com.google.common.collect.Lists;
 
 @XmlType(
         propOrder = {
-                "identifier"
-                , "layout"
+                "id"
                 , "actions"
+                , "layout"
         }
 )
-public class Collection {
+public class Collection implements ColumnContent {
 
-    private String identifier;
+    private String id;
 
     /**
      * Collection identifier, being the getter method without "get" prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
-    public String getIdentifier() {
-        return identifier;
+    public String getId() {
+        return id;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setId(String id) {
+        this.id = id;
     }
 
+
+    private List<Action> actions = Lists.newArrayList();
+
+    @XmlElementWrapper(name = "actions", required = true)
+    @XmlElement(name = "action", required = false)
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }
 
 
     private CollectionLayout layout = new CollectionLayout();
 
-    @XmlElement(required = true)
+    @XmlElement(name = "layout", required = true)
     public CollectionLayout getLayout() {
         return layout;
     }
@@ -65,15 +77,4 @@ public class Collection {
 
 
 
-    private List<Action> actions = Lists.newArrayList();
-
-    @XmlElementWrapper(required = true)
-    @XmlElement(name = "action", required = false)
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
 }

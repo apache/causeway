@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
                 , "properties"
         }
 )
-public class PropertyGroup {
+public class PropertyGroup implements ColumnContent {
 
     private String name;
 
@@ -74,7 +74,6 @@ public class PropertyGroup {
         add(new Property());
     }};
 
-    @XmlElementWrapper(required = true)
     @XmlElement(name = "property", required = true)
     public List<Property> getProperties() {
         return properties;
