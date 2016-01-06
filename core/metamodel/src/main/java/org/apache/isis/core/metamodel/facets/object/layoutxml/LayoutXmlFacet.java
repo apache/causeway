@@ -16,28 +16,17 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package org.apache.isis.core.metamodel.facets.object.layoutxml;
 
-import javax.xml.bind.annotation.XmlType;
+
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.applib.layout.v1_0.DomainObject;
 
 /**
- * The positioning of a label for a property or action parameter.
- *
- * @see org.apache.isis.applib.annotation.PropertyLayout
- * @see org.apache.isis.applib.annotation.ParameterLayout
+ * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
  */
-@XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout"
-)
-public enum LabelPosition {
-    DEFAULT,
-    LEFT,
+public interface LayoutXmlFacet extends Facet {
 
-    /**
-     * Right position of the label for Boolean properties.
-     * <strong>Not supported</strong> for now for other types.
-     */
-    RIGHT,
-    TOP,
-    NONE
+    public DomainObject getLayoutMetadata();
+
 }

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.schema.services.jaxb;
+package org.apache.isis.applib.services.jaxb;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -27,8 +27,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
-import org.apache.isis.applib.services.jaxb.JaxbService;
 
 /**
  * An implementation of {@link SchemaOutputResolver} that keeps track of all the schemas for which it has

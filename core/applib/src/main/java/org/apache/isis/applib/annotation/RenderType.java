@@ -18,6 +18,11 @@
  */
 package org.apache.isis.applib.annotation;
 
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(
+        namespace = "http://isis.apache.org/schema/applib/layout"
+)
 public enum RenderType {
     EAGERLY,
     LAZILY;

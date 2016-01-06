@@ -1,0 +1,210 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout" xmlns:tns="http://isis.apache.org/schema/applib/layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="domainObject" type="tns:domainObject"/>
+
+  <xs:complexType name="domainObject">
+    <xs:sequence>
+      <xs:element name="actions">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="tabGroups">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="tabGroup" type="tns:tabGroup" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="action">
+    <xs:sequence>
+      <xs:element name="layout" type="tns:actionLayout"/>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="actionLayout">
+    <xs:sequence>
+      <xs:element name="bookmarking" type="tns:bookmarkPolicy" default="NEVER" minOccurs="0"/>
+      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
+      <xs:element name="cssClassFa" type="xs:string" minOccurs="0"/>
+      <xs:element name="cssClassFaPosition" type="tns:cssClassFaPosition" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="position" type="tns:position" default="BELOW"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tabGroup">
+    <xs:sequence>
+      <xs:element name="tabs">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="tab" type="tns:tab" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tab">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="left" type="tns:column"/>
+      <xs:element name="middle" type="tns:column" minOccurs="0"/>
+      <xs:element name="right" type="tns:column" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="column">
+    <xs:sequence>
+      <xs:element name="span" type="xs:int" default="4"/>
+      <xs:element name="propertyGroups">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="propertyGroup" type="tns:propertyGroup" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="collections">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="collection" type="tns:collection" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="propertyGroup">
+    <xs:sequence>
+      <xs:element name="actions">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="property" type="tns:property" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="property">
+    <xs:sequence>
+      <xs:element name="layout" type="tns:propertyLayout"/>
+      <xs:element name="actions" minOccurs="0">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="action" type="tns:action" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="propertyLayout">
+    <xs:sequence>
+      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
+      <xs:element name="labelPosition" type="tns:labelPosition" default="LEFT"/>
+      <xs:element name="multiLine" type="xs:int" minOccurs="0"/>
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="renderedAsDayBefore" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="typicalLength" type="xs:int" default="-1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="collection">
+    <xs:sequence>
+      <xs:element name="layout" type="tns:collectionLayout"/>
+      <xs:element name="actions">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="identifier" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="collectionLayout">
+    <xs:sequence>
+      <xs:element name="cssClass" type="xs:string" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="defaultView" type="xs:string" default="table"/>
+      <xs:element name="hidden" type="tns:where" minOccurs="0"/>
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="namedEscaped" type="xs:boolean" minOccurs="0"/>
+      <xs:element name="paged" type="xs:int" minOccurs="0"/>
+      <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="bookmarkPolicy">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="AS_ROOT"/>
+      <xs:enumeration value="AS_CHILD"/>
+      <xs:enumeration value="NEVER"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="cssClassFaPosition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="RIGHT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="where">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="EVERYWHERE"/>
+      <xs:enumeration value="ANYWHERE"/>
+      <xs:enumeration value="OBJECT_FORMS"/>
+      <xs:enumeration value="REFERENCES_PARENT"/>
+      <xs:enumeration value="PARENTED_TABLES"/>
+      <xs:enumeration value="STANDALONE_TABLES"/>
+      <xs:enumeration value="ALL_TABLES"/>
+      <xs:enumeration value="ALL_EXCEPT_STANDALONE_TABLES"/>
+      <xs:enumeration value="NOWHERE"/>
+      <xs:enumeration value="NOT_SPECIFIED"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="position">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="BELOW"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="PANEL"/>
+      <xs:enumeration value="PANEL_DROPDOWN"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="labelPosition">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="DEFAULT"/>
+      <xs:enumeration value="LEFT"/>
+      <xs:enumeration value="RIGHT"/>
+      <xs:enumeration value="TOP"/>
+      <xs:enumeration value="NONE"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

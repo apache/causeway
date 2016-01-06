@@ -16,28 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
-
-import javax.xml.bind.annotation.XmlType;
-
-/**
- * The positioning of a label for a property or action parameter.
- *
- * @see org.apache.isis.applib.annotation.PropertyLayout
- * @see org.apache.isis.applib.annotation.ParameterLayout
- */
-@XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout"
+@javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://isis.apache.org/schema/applib/layout",
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+        // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
+        //, location = "http://isis.apache.org/schema/metamodel/layout/layout-1.0.xsd"
 )
-public enum LabelPosition {
-    DEFAULT,
-    LEFT,
-
-    /**
-     * Right position of the label for Boolean properties.
-     * <strong>Not supported</strong> for now for other types.
-     */
-    RIGHT,
-    TOP,
-    NONE
-}
+package org.apache.isis.applib.layout.v1_0;

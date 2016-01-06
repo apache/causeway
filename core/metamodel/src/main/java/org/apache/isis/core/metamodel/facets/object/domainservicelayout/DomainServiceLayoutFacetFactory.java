@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.annotation.DomainServiceLayoutFacetAnnotation;
 
 
-public class DomainServiceLayoutFactory extends FacetFactoryAbstract {
+public class DomainServiceLayoutFacetFactory extends FacetFactoryAbstract {
 
-    public DomainServiceLayoutFactory() {
+    public DomainServiceLayoutFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 

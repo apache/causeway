@@ -16,16 +16,31 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.applib.layout.v1_0;
 
-/**
- * This package defines all of the annotations that are recognized within
- * the default Isis programming model.
- * 
- * <p>
- * For example, {@link org.apache.isis.applib.annotation.Optional} is used to
- * indicate that a property or a parameter is optional rather than mandatory.
- * The {@link org.apache.isis.applib.annotation.MaxLength} annotation is used
- * to indicate the maximum length allowable for a (string) property or
- * parameter, or to indicate the maximum length of a (string-based) value type.
- */
-package org.apache.isis.applib.annotation;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(
+        propOrder = {"tabs"}
+) public class TabGroup  {
+
+    // must be at least one tab.
+    private List<Tab> tabs = new ArrayList<Tab>(){{
+        add(new Tab());
+    }};
+
+    @XmlElementWrapper(required = true)
+    @XmlElement(name = "tab", required = true)
+    public List<Tab> getTabs() {
+        return tabs;
+    }
+
+    public void setTabs(List<Tab> tabs) {
+        this.tabs = tabs;
+    }
+}

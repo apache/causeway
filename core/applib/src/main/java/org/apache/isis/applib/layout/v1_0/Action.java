@@ -16,28 +16,47 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib.layout.v1_0;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-/**
- * The positioning of a label for a property or action parameter.
- *
- * @see org.apache.isis.applib.annotation.PropertyLayout
- * @see org.apache.isis.applib.annotation.ParameterLayout
- */
 @XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout"
+        propOrder = {
+                "identifier"
+                , "layout"
+        }
 )
-public enum LabelPosition {
-    DEFAULT,
-    LEFT,
+public class Action {
 
+
+    private String identifier;
     /**
-     * Right position of the label for Boolean properties.
-     * <strong>Not supported</strong> for now for other types.
+     * Method name.
+     *
+     * <p>
+     *     Overloaded methods are not supported.
+     * </p>
      */
-    RIGHT,
-    TOP,
-    NONE
+    @XmlAttribute(required = true)
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+
+
+    private ActionLayout layout = new ActionLayout();
+    @XmlElement(required = true)
+    public ActionLayout getLayout() {
+        return layout;
+    }
+
+    public void setLayout(ActionLayout layout) {
+        this.layout = layout;
+    }
 }

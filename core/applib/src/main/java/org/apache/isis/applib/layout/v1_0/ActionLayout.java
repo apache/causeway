@@ -1,0 +1,161 @@
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.apache.isis.applib.layout.v1_0;
+
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.Where;
+
+/**
+ * Broadly corresponds to {@link org.apache.isis.applib.annotation.ActionLayout}.
+ *
+ * <p>
+ *  Note that {@link org.apache.isis.applib.annotation.ActionLayout#contributed()} is omitted because this only applies
+ *  to domain services.
+ * </p>
+ */
+@XmlType(
+        propOrder = {
+                "bookmarking"
+                , "cssClass"
+                , "cssClassFa"
+                , "cssClassFaPosition"
+                , "describedAs"
+                , "hidden"
+                , "named"
+                , "namedEscaped"
+                , "position"
+        }
+)
+public class ActionLayout {
+
+    private BookmarkPolicy bookmarking = BookmarkPolicy.NEVER;
+
+    @XmlElement(required = false, defaultValue = "NEVER")
+    public BookmarkPolicy getBookmarking() {
+        return bookmarking;
+    }
+
+    public void setBookmarking(BookmarkPolicy bookmarking) {
+        this.bookmarking = bookmarking;
+    }
+
+
+    private String cssClass;
+
+    @XmlElement(required = false)
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+
+    private String cssClassFa;
+
+    @XmlElement(required = false)
+    public String getCssClassFa() {
+        return cssClassFa;
+    }
+
+    public void setCssClassFa(String cssClassFa) {
+        this.cssClassFa = cssClassFa;
+    }
+
+
+
+    private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
+
+    @XmlElement(required = false)
+    public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+        return cssClassFaPosition;
+    }
+
+    public void setCssClassFaPosition(org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition) {
+        this.cssClassFaPosition = cssClassFaPosition;
+    }
+
+
+    private String describedAs;
+
+    @XmlElement(required = false)
+    public String getDescribedAs() {
+        return describedAs;
+    }
+
+    public void setDescribedAs(String describedAs) {
+        this.describedAs = describedAs;
+    }
+
+
+
+    private Where hidden;
+
+    @XmlElement(required = false)
+    public Where getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Where hidden) {
+        this.hidden = hidden;
+    }
+
+
+
+    private String named;
+
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+
+
+
+    private Boolean namedEscaped;
+
+    @XmlElement(required = false)
+    public Boolean getNamedEscaped() {
+        return namedEscaped;
+    }
+
+    public void setNamedEscaped(Boolean namedEscaped) {
+        this.namedEscaped = namedEscaped;
+    }
+
+
+
+    private org.apache.isis.applib.annotation.ActionLayout.Position position = org.apache.isis.applib.annotation.ActionLayout.Position.BELOW;
+
+    @XmlElement(required = true, defaultValue = "BELOW")
+    public org.apache.isis.applib.annotation.ActionLayout.Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(org.apache.isis.applib.annotation.ActionLayout.Position position) {
+        this.position = position;
+    }
+
+}

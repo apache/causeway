@@ -26,19 +26,19 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacet;
-import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFactory;
+import org.apache.isis.core.metamodel.facets.object.domainservicelayout.DomainServiceLayoutFacetFactory;
 
 import static org.hamcrest.Matchers.is;
 
-public class DomainServiceLayoutFactoryTest extends AbstractFacetFactoryTest {
+public class DomainServiceLayoutFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private DomainServiceLayoutFactory facetFactory;
+    private DomainServiceLayoutFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new DomainServiceLayoutFactory();
+        facetFactory = new DomainServiceLayoutFacetFactory();
     }
 
     @Override
