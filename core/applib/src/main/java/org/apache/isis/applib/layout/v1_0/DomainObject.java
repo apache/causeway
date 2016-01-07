@@ -36,8 +36,7 @@ import org.apache.isis.applib.services.dto.Dto;
 
 @XmlRootElement
 @XmlType(
-        name="domain-object"
-        , propOrder = {
+        propOrder = {
                 "actions"
                 , "tabGroups"
         }
@@ -75,12 +74,16 @@ public class DomainObject implements Dto, ActionHolder {
 
     public interface Visitor {
         void visit(DomainObject domainObject);
-        void visit(Property property);
-        void visit(Collection collection);
-        void visit(Action action);
         void visit(TabGroup tabGroup);
         void visit(Tab tab);
         void visit(Column column);
+        void visit(PropertyGroup propertyGroup);
+        void visit(Property property);
+        void visit(@Nullable PropertyLayout propertyLayout, Property forProperty);
+        void visit(Collection collection);
+        void visit(@Nullable CollectionLayout collectionLayout, Collection forCollection);
+        void visit(Action action, ActionHolder holder);
+        void visit(@Nullable ActionLayout actionLayout, Action forAction);
     }
 
     public static class VisitorAdapter implements Visitor {
@@ -93,15 +96,23 @@ public class DomainObject implements Dto, ActionHolder {
         @Override
         public void visit(final Column column) { }
         @Override
+        public void visit(PropertyGroup propertyGroup) {}
+        @Override
         public void visit(Property property) {}
+        @Override
+        public void visit(@Nullable final PropertyLayout propertyLayout, final Property forProperty) { }
         @Override
         public void visit(Collection collection) {}
         @Override
-        public void visit(Action action) {}
+        public void visit(@Nullable final CollectionLayout collectionLayout, final Collection forCollection) { }
+        @Override
+        public void visit(final Action action, final ActionHolder actionHolder) { }
+        @Override
+        public void visit(@Nullable final ActionLayout actionLayout, final Action forAction) { }
     }
 
 
-    public void traverse(final Visitor visitor) {
+    public void visit(final Visitor visitor) {
         visitor.visit(this);
         traverseActions(this, visitor);
         final List<TabGroup> tabGroups = getTabGroups();
@@ -118,20 +129,27 @@ public class DomainObject implements Dto, ActionHolder {
     }
 
     private void traverseColumn(final Column column, final Visitor visitor) {
+        if(column == null) {
+            return;
+        }
         visitor.visit(column);
         traversePropertyGroups(column, visitor);
         traverseCollections(column, visitor);
     }
 
     private void traversePropertyGroups(final Column column, final Visitor visitor) {
+        List<ColumnContent> content = column.getContent();
         final Iterable<PropertyGroup> propertyGroups =
                 Iterables.transform(
-                        Iterables.filter(column.getContent(), is(PropertyGroup.class)),
+                        Iterables.filter(content, is(PropertyGroup.class)),
                         cast(PropertyGroup.class));
         for (final PropertyGroup propertyGroup : propertyGroups) {
+            visitor.visit(propertyGroup);
+            traverseActions(propertyGroup, visitor);
             final List<Property> properties = propertyGroup.getProperties();
             for (final Property property : properties) {
                 visitor.visit(property);
+                visitor.visit(property.getLayout(), property);
                 traverseActions(property, visitor);
             }
         }
@@ -144,6 +162,7 @@ public class DomainObject implements Dto, ActionHolder {
                         cast(Collection.class));
         for (final Collection collection : collections) {
             visitor.visit(collection);
+            visitor.visit(collection.getLayout(), collection);
             traverseActions(collection, visitor);
         }
     }
@@ -151,7 +170,8 @@ public class DomainObject implements Dto, ActionHolder {
     private void traverseActions(final ActionHolder actionHolder, final Visitor visitor) {
         final List<Action> actions = actionHolder.getActions();
         for (final Action action : actions) {
-            visitor.visit(action);
+            visitor.visit(action, actionHolder);
+            visitor.visit(action.getLayout(), action);
         }
     }
 

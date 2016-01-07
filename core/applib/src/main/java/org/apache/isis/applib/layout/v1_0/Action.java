@@ -31,6 +31,11 @@ import javax.xml.bind.annotation.XmlType;
 )
 public class Action {
 
+    public Action() {
+    }
+    public Action(final String id) {
+        setId(id);
+    }
 
     private String id;
     /**

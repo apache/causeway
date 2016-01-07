@@ -36,6 +36,14 @@ import com.google.common.collect.Lists;
 )
 public class Collection implements ColumnContent, ActionHolder {
 
+
+    public Collection() {
+    }
+    public Collection(final String id) {
+        setId(id);
+    }
+
+
     private String id;
 
     /**

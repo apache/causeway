@@ -19,9 +19,12 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 
+import org.apache.isis.applib.layout.v1_0.DomainObject;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutxml.LayoutXmlFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -50,9 +53,13 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
             CssClassAppender.appendCssClassTo(this, cssClass);
         }
 
-//        addOrReplace(ComponentType.ENTITY_SUMMARY, model);
-//
-//        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, model);
+        LayoutXmlFacet layoutXmlFacet = model.getTypeOfSpecification().getFacet(LayoutXmlFacet.class);
+        // force metadata to be derived && synced
+        DomainObject currentlyUnused = layoutXmlFacet.getLayoutMetadata();
+
+        addOrReplace(ComponentType.ENTITY_SUMMARY, model);
+
+        getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, model);
     }
 
 

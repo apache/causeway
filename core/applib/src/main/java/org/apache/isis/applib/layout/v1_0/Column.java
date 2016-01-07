@@ -35,6 +35,14 @@ import com.google.common.collect.Lists;
 )
 public class Column {
 
+
+    public Column() {
+    }
+
+    public Column(final int span) {
+        setSpan(span);
+    }
+
     private int span = 4;
 
     @XmlAttribute(required = true)

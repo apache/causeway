@@ -36,6 +36,13 @@ import com.google.common.collect.Lists;
 )
 public class Property implements ActionHolder {
 
+    public Property() {
+    }
+
+    public Property(final String id) {
+        this.id = id;
+    }
+
     private String id;
 
     /**

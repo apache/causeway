@@ -17,30 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.collection.defaultview;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import java.util.Properties;
-
-import com.google.common.base.Strings;
-
+import org.apache.isis.applib.layout.v1_0.PropertyLayout;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
-public class DefaultViewFacetOnCollectionFromLayoutProperties extends DefaultViewFacetAbstract {
+public class MultiLineFacetForPropertyLayoutXml extends MultiLineFacetAbstract {
 
-    private DefaultViewFacetOnCollectionFromLayoutProperties(String defaultView, FacetHolder holder) {
-        super(defaultView, holder);
-    }
-
-    public static DefaultViewFacet create(Properties properties, FacetHolder holder) {
-        final String defaultView = defaultView(properties);
-        return defaultView != null ? new DefaultViewFacetOnCollectionFromLayoutProperties(defaultView, holder) : null;
-    }
-
-    public static String defaultView(Properties properties) {
-        if (properties == null) {
+    public static MultiLineFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
             return null;
         }
-
-        return Strings.emptyToNull(properties.getProperty("defaultView"));
+        final Integer multiLine = propertyLayout.getMultiLine();
+        return multiLine != null && multiLine > 1 ? new MultiLineFacetForPropertyLayoutXml(multiLine, false, holder) : null;
     }
+
+    private MultiLineFacetForPropertyLayoutXml(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
+        super(numberOfLines, preventWrapping, holder);
+    }
+
 }

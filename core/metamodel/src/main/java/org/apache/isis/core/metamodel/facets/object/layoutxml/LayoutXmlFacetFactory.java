@@ -24,6 +24,7 @@ import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -47,7 +48,8 @@ public class LayoutXmlFacetFactory extends FacetFactoryAbstract implements Servi
         final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        FacetUtil.addFacet(LayoutXmlFacetDefault.create(facetHolder, readMetadata(cls)));
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
+        FacetUtil.addFacet(LayoutXmlFacetDefault.create(facetHolder, readMetadata(cls), translationService));
     }
 
     private final Set<Class<?>> blacklisted = Sets.newConcurrentHashSet();

@@ -39,6 +39,13 @@ import org.apache.isis.applib.annotation.MemberOrder;
 )
 public class PropertyGroup implements ColumnContent, ActionHolder {
 
+    public PropertyGroup() {
+    }
+
+    public PropertyGroup(final String name) {
+        setName(name);
+    }
+
     private String name;
 
     /**

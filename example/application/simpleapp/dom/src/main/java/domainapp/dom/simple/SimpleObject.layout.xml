@@ -11,8 +11,9 @@
                     <property id="name">
                         <actions>
                             <action id="updateName"/>
+                            <action id="downloadJdoMetadata"/>
                         </actions>
-                        <layout/>
+                        <layout labelPosition="TOP" multiLine="5" cssClass="abcde"/>
                     </property>
                 </propertyGroup>
             </left>
