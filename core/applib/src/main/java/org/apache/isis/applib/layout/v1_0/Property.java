@@ -58,6 +58,21 @@ public class Property implements ActionHolder {
     }
 
 
+    private List<Action> actions = Lists.newArrayList();
+
+    /**
+     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
+     */
+    @XmlElementWrapper(required = true)
+    @XmlElement(name = "action", required = false)
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }
+
     private PropertyLayout layout = new PropertyLayout();
 
     @XmlElement(required = true)
@@ -70,15 +85,4 @@ public class Property implements ActionHolder {
     }
 
 
-    private List<Action> actions = Lists.newArrayList();
-
-    @XmlElementWrapper(required = false)
-    @XmlElement(name = "action", required = true)
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
-    }
 }

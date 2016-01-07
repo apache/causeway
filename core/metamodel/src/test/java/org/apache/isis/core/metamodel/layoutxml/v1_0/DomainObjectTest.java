@@ -63,6 +63,7 @@ public class DomainObjectTest {
 
         TabGroup tabGroup = domainObject.getTabGroups().get(0);
         Tab tab = tabGroup.getTabs().get(0);
+        tab.setName("Common");
         Column left = tab.getLeft();
 
         PropertyGroup leftPropGroup = new PropertyGroup();

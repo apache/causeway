@@ -45,6 +45,10 @@ public class DomainObject implements Dto, ActionHolder {
 
     private List<Action> actions = Lists.newArrayList();
 
+
+    /**
+     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
+     */
     @XmlElementWrapper(name = "actions", required = true)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
@@ -62,6 +66,10 @@ public class DomainObject implements Dto, ActionHolder {
     }};
 
     // no wrapper
+
+    /**
+     * Must have at least one tab group; no wrapper.
+     */
     @XmlElement(name = "tabGroup", required = true)
     public List<TabGroup> getTabGroups() {
         return tabGroups;

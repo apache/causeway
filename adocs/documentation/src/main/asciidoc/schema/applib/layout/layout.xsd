@@ -1,9 +1,9 @@
 <?xml version="1.0" standalone="yes"?>
 <xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout" xmlns:tns="http://isis.apache.org/schema/applib/layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="domainObject" type="tns:domain-object"/>
+  <xs:element name="domainObject" type="tns:domainObject"/>
 
-  <xs:complexType name="domain-object">
+  <xs:complexType name="domainObject">
     <xs:sequence>
       <xs:element name="actions">
         <xs:complexType>
@@ -45,11 +45,11 @@
 
   <xs:complexType name="tab">
     <xs:sequence>
-      <xs:element name="name" type="xs:string" minOccurs="0"/>
       <xs:element name="left" type="tns:column"/>
       <xs:element name="middle" type="tns:column" minOccurs="0"/>
       <xs:element name="right" type="tns:column" minOccurs="0"/>
     </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="column">
@@ -78,10 +78,10 @@
 
   <xs:complexType name="property">
     <xs:sequence>
-      <xs:element name="actions" minOccurs="0">
+      <xs:element name="actions">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="action" type="tns:action" maxOccurs="unbounded"/>
+            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

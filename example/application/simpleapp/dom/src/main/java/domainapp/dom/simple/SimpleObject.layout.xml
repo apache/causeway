@@ -4,15 +4,27 @@
         <action id="delete"/>
     </actions>
     <tabGroup>
-        <tab>
+        <tab name="Common">
             <left span="4">
                 <propertyGroup name="General">
                     <actions/>
                     <property id="name">
                         <actions>
                             <action id="updateName"/>
-                            <action id="downloadJdoMetadata"/>
                         </actions>
+                        <layout/>
+                    </property>
+                </propertyGroup>
+            </left>
+        </tab>
+        <tab name="Other">
+            <left span="4">
+                <propertyGroup name="Metadata">
+                    <actions>
+                        <action id="downloadJdoMetadata"/>
+                    </actions>
+                    <property id="versionSequence">
+                        <actions/>
                         <layout labelPosition="TOP" multiLine="5" cssClass="abcde"/>
                     </property>
                 </propertyGroup>

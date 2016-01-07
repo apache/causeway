@@ -64,6 +64,9 @@ public class PropertyGroup implements ColumnContent, ActionHolder {
 
     private List<Action> actions = Lists.newArrayList();
 
+    /**
+     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
+     */
     @XmlElementWrapper(required = true)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {

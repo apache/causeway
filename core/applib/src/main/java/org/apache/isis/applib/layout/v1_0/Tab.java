@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -34,7 +35,7 @@ public class Tab {
 
     private String name;
 
-    @XmlElement(required = false)
+    @XmlAttribute(required = true)
     public String getName() {
         return name;
     }
