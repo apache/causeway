@@ -16,8 +16,11 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.LabelPosition;
@@ -29,7 +32,9 @@ import org.apache.isis.applib.annotation.Where;
                 , "describedAs"
         }
 )
-public class PropertyLayout {
+public class PropertyLayout implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String cssClass;
 
@@ -137,4 +142,25 @@ public class PropertyLayout {
     public void setTypicalLength(Integer typicalLength) {
         this.typicalLength = typicalLength;
     }
+
+
+
+
+    private Property owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public Property getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final Property owner) {
+        this.owner = owner;
+    }
+
 }

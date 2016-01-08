@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
 
@@ -418,7 +419,7 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                     return;
                 }
             }
-            getFrom(associationsByGroup, "General").add(association);
+            getFrom(associationsByGroup, MemberGroupLayoutFacet.DEFAULT_GROUP).add(association);
         }
 
         private static List<ObjectAssociation> getFrom(Map<String, List<ObjectAssociation>> associationsByGroup, final String groupName) {

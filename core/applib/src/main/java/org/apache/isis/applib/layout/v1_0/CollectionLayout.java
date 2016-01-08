@@ -17,8 +17,11 @@
 package org.apache.isis.applib.layout.v1_0;
 
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.Where;
@@ -38,7 +41,9 @@ import org.apache.isis.applib.annotation.Where;
                 ,"sortedBy"
         }
 )
-public class CollectionLayout {
+public class CollectionLayout implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String cssClass;
 
@@ -141,4 +146,24 @@ public class CollectionLayout {
     public void setSortedBy(String sortedBy) {
         this.sortedBy = sortedBy;
     }
+
+
+
+    private Collection owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public Collection getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final Collection owner) {
+        this.owner = owner;
+    }
+
 }

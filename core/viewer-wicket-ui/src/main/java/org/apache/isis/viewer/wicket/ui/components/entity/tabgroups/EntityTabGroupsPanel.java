@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
+package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 
 import java.util.List;
 
@@ -25,6 +25,8 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
@@ -45,14 +47,15 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbed
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
+public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_PROPERTIES_AND_COLLECTIONS = "entityPropertiesAndCollections";
+    private static final String ID_TAB_GROUPS = "tabGroups";
+    private static final String ID_TAB_GROUP = "tabGroup";
 
-    
-    public EntityTabbedPanel(final String id, final EntityModel entityModel) {
+    public EntityTabGroupsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -70,45 +73,47 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
         final LayoutXmlFacet layoutXmlFacet = model.getTypeOfSpecification().getFacet(LayoutXmlFacet.class);
         final DomainObject domainObject = layoutXmlFacet.getLayoutMetadata();
 
-
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
+        final List<TabGroup> tabGroups = domainObject.getTabGroups();
+        final ListView<TabGroup> tabGroupsList =
+                new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
 
-        List<TabGroup> tabGroups = domainObject.getTabGroups();
-        TabGroup tabGroup = tabGroups.get(0);
+            @Override
+            protected void populateItem(final ListItem<TabGroup> item) {
 
-        List<ITab> tabs = Lists.newArrayList();
-        List<Tab> tabList = tabGroup.getTabs();
+                final List<ITab> tabs = Lists.newArrayList();
+                final TabGroup tabGroup = item.getModelObject();
+                final List<Tab> tabList = tabGroup.getTabs();
 
-        for (Tab tab : tabList) {
+                for (final Tab tab : tabList) {
 
-            tabs.add(new AbstractTab(Model.of(tab.getName())) {
-                private static final long serialVersionUID = 1L;
+                    tabs.add(new AbstractTab(Model.of(tab.getName())) {
+                        private static final long serialVersionUID = 1L;
 
-                @Override
-                public Panel getPanel(String panelId) {
-                    return new EntityTabPanel(panelId, getModel());
+                        @Override
+                        public Panel getPanel(String panelId) {
+                            return new EntityTabPanel(panelId, model, tab);
+                        }
+                    });
                 }
-
-            });
-
-        }
-
-
-        addOrReplace(new AjaxBootstrapTabbedPanel("tabs", tabs));
-
+                item.add(new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs));
+            }
+        };
+        add(tabGroupsList);
     }
 
     private static class EntityTabPanel extends PanelAbstract {
         private static final long serialVersionUID = 1L;
 
-        public EntityTabPanel(String id, final EntityModel model) {
+        public EntityTabPanel(String id, final EntityModel model, final Tab tab) {
             super(id);
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, model);
+
+            final EntityModel modelWithTabHints = new EntityModel(model.getPageParameters());
+            model.setTab(tab);
+
+            getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
 
         }
-
     }
-
-
 }

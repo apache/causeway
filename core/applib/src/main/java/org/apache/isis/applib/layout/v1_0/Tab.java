@@ -18,8 +18,11 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
@@ -31,7 +34,9 @@ import javax.xml.bind.annotation.XmlType;
                 , "right"
         }
 )
-public class Tab {
+public class Tab implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String name;
 
@@ -80,4 +85,26 @@ public class Tab {
     public void setRight(final Column right) {
         this.right = right;
     }
+
+
+
+    private TabGroup owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public TabGroup getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final TabGroup owner) {
+        this.owner = owner;
+    }
+
+
+
 }

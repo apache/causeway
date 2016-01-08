@@ -26,6 +26,8 @@ import java.util.Set;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
+import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
 
@@ -43,11 +45,22 @@ public final class ObjectSpecifications {
             if(this == LEFT) return columnSpans.getLeft();
             if(this == MIDDLE) return columnSpans.getMiddle();
             if(this == RIGHT) return columnSpans.getRight();
-            return 0;
+            throw new IllegalStateException();
+        }
+
+        public Column from(final Tab tab) {
+            if(this == LEFT) {return tab.getLeft();}
+            if(this == MIDDLE) return tab.getMiddle();
+            if(this == RIGHT) return tab.getRight();
+            throw new IllegalStateException();
         }
     }
 
-    public static List<String> orderByMemberGroups(ObjectSpecification objSpec, Set<String> groupNamesToOrder, MemberGroupLayoutHint memberGroupLayoutHint) {
+    public static List<String> orderByMemberGroups(
+            final ObjectSpecification objSpec,
+            final Set<String> groupNamesToOrder,
+            final MemberGroupLayoutHint memberGroupLayoutHint) {
+
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
         

@@ -18,8 +18,11 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
@@ -29,7 +32,9 @@ import javax.xml.bind.annotation.XmlType;
                 , "layout"
         }
 )
-public class Action {
+public class Action implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public Action() {
     }
@@ -57,7 +62,8 @@ public class Action {
 
 
     private ActionLayout layout;
-    @XmlElement(name="layout", required = false)
+
+    @XmlElement(name="layout", required = true)
     public ActionLayout getLayout() {
         return layout;
     }
@@ -65,4 +71,23 @@ public class Action {
     public void setLayout(ActionLayout layout) {
         this.layout = layout;
     }
+
+
+    private ActionHolder owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public ActionHolder getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final ActionHolder owner) {
+        this.owner = owner;
+    }
+
 }

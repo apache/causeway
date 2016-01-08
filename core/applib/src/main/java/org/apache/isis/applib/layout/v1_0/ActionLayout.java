@@ -16,8 +16,11 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -37,7 +40,9 @@ import org.apache.isis.applib.annotation.Where;
                 , "describedAs"
         }
 )
-public class ActionLayout {
+public class ActionLayout implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private BookmarkPolicy bookmarking;
 
@@ -149,6 +154,25 @@ public class ActionLayout {
 
     public void setPosition(org.apache.isis.applib.annotation.ActionLayout.Position position) {
         this.position = position;
+    }
+
+
+
+    private Action owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public Action getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final Action owner) {
+        this.owner = owner;
     }
 
 }

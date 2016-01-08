@@ -18,11 +18,13 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
@@ -34,7 +36,9 @@ import com.google.common.collect.Lists;
                 , "layout"
         }
 )
-public class Property implements ActionHolder {
+public class Property implements ActionHolder, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     public Property() {
     }
@@ -84,5 +88,24 @@ public class Property implements ActionHolder {
         this.layout = layout;
     }
 
+
+
+
+    private PropertyGroup owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public PropertyGroup getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final PropertyGroup owner) {
+        this.owner = owner;
+    }
 
 }

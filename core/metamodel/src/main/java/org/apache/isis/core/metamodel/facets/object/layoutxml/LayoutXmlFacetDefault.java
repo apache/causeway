@@ -58,6 +58,7 @@ import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCol
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionLayoutXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionLayoutXml;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyLayoutXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
@@ -106,22 +107,22 @@ public class LayoutXmlFacetDefault
     }
 
 
-    private boolean derivedAndSynced;
+    private boolean derived;
 
     public DomainObject getLayoutMetadata() {
-        //return derivedAndSynced ? metadata : deriveAndSync(metadata);
-        return deriveAndSync(metadata);
+        //return derived ? metadata : deriveAndOverwrite(metadata);
+        return deriveAndOverwrite(metadata);
     }
 
-    private  DomainObject deriveAndSync(final DomainObject metadata) {
+    private  DomainObject deriveAndOverwrite(final DomainObject metadata) {
         synchronized (metadata) {
-            doDeriveAndSync(metadata);
-            derivedAndSynced = true;
+            doDeriveAndOverwrite(metadata);
+            derived = true;
         }
         return metadata;
     }
 
-    private void doDeriveAndSync(final DomainObject metadata) {
+    private void doDeriveAndOverwrite(final DomainObject metadata) {
 
         final ObjectSpecification objectSpec = (ObjectSpecification) getFacetHolder();
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
@@ -132,11 +133,17 @@ public class LayoutXmlFacetDefault
                 ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
 
         derive(metadata, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
-
-        sync(metadata, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+        overwrite(metadata, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
     }
 
-    private void derive(
+    /**
+     * Ensures that all object members (properties, collections and actions) are in the metadata.
+     *
+     * <p>
+     *     If they are missing then they will be added to default tabs (created on the fly if need be).
+     * </p>
+     */
+    private static void derive(
             final DomainObject metadata,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
@@ -144,10 +151,11 @@ public class LayoutXmlFacetDefault
         final List<String> propertyIds = Lists.newArrayList();
         final List<String> collectionIds = Lists.newArrayList();
         final List<String> actionIds = Lists.newArrayList();
-        final AtomicReference<PropertyGroup> generalPropertyGroupRef = new AtomicReference<>();
+        final AtomicReference<PropertyGroup> defaultPropertyGroupRef = new AtomicReference<>();
         final AtomicReference<Column> firstColumnRef = new AtomicReference<>();
         final AtomicReference<TabGroup> lastTabGroupRef = new AtomicReference<>();
 
+        // catalog which property, collection and action Ids appear (anywhere) in the metadata
         metadata.visit(new DomainObject.VisitorAdapter() {
             @Override
             public void visit(final Property property) {
@@ -158,17 +166,22 @@ public class LayoutXmlFacetDefault
                 collectionIds.add(collection.getId());
             }
             @Override
-            public void visit(final Action action, final ActionHolder holder) {
+            public void visit(final Action action) {
                 actionIds.add(action.getId());
             }
+        });
+
+        // capture the first column, and also
+        // capture the first property group (if any) with the default name ('General')
+        metadata.visit(new DomainObject.VisitorAdapter() {
             @Override
             public void visit(final Column column) {
                 firstColumnRef.compareAndSet(null, column);
             }
             @Override
             public void visit(final PropertyGroup propertyGroup) {
-                if(propertyGroup.getName().equals("General")) {
-                    generalPropertyGroupRef.compareAndSet(null, propertyGroup);
+                if(MemberGroupLayoutFacet.DEFAULT_GROUP.equals(propertyGroup.getName())) {
+                    defaultPropertyGroupRef.compareAndSet(null, propertyGroup);
                 }
             }
             @Override
@@ -178,20 +191,21 @@ public class LayoutXmlFacetDefault
         });
 
         // any missing properties will be added to the (first) 'General' property group found
-        // if there is no 'General' property group then one will be added to the first Column of the first Tab.
+        // if there is no default ('General') property group
+        // then one will be added to the first Column of the first Tab.
         final List<String> missingPropertyIds = Lists.newArrayList(oneToOneAssociationById.keySet());
         missingPropertyIds.removeAll(propertyIds);
 
         if(!missingPropertyIds.isEmpty()) {
             // ensure that there is a property group to use
-            boolean wasSet = generalPropertyGroupRef.compareAndSet(null, new PropertyGroup("General"));
-            final PropertyGroup generalPropertyGroup = generalPropertyGroupRef.get();
+            boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new PropertyGroup(MemberGroupLayoutFacet.DEFAULT_GROUP));
+            final PropertyGroup defaultPropertyGroup = defaultPropertyGroupRef.get();
             if(wasSet) {
-                firstColumnRef.get().getContent().add(generalPropertyGroup);
+                firstColumnRef.get().getContent().add(defaultPropertyGroup);
             }
             Iterables.removeAll(propertyIds, oneToOneAssociationById.keySet());
             for (final String propertyId : missingPropertyIds) {
-                generalPropertyGroup.getProperties().add(new Property(propertyId));
+                defaultPropertyGroup.getProperties().add(new Property(propertyId));
             }
         }
 
@@ -227,21 +241,22 @@ public class LayoutXmlFacetDefault
         }
     }
 
-    private void sync(
+    private void overwrite(
             final DomainObject metadata,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
         metadata.visit(new DomainObject.VisitorAdapter() {
-            private int domainObjectSequence = 1;
-            private int propertyGroupSequence = 1;
-            private int propertySequence = 1;
-            private int collectionSequence = 1;
-            private Map<Action, ActionHolder> actionHolderByAction = Maps.newHashMap();
+            private final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
+            private int actionDomainObjectSequence = 1;
+            private int actionPropertyGroupSequence = 1;
+            private int actionPropertySequence = 1;
+            private int actionCollectionSequence = 1;
+
             @Override
-            public void visit(final Action action, final ActionHolder actionHolder) {
-                actionHolderByAction.put(action, actionHolder);
+            public void visit(final Action action) {
+                final ActionHolder actionHolder = action.getOwner();
                 final ObjectAction objectAction = objectActionById.get(action.getId());
                 final String memberOrderName;
                 final int memberOrderSequence;
@@ -250,51 +265,48 @@ public class LayoutXmlFacetDefault
                     final List<Property> properties = propertyGroup.getProperties();
                     final Property property = properties.get(0); // any will do
                     memberOrderName = property.getId();
-                    memberOrderSequence = propertyGroupSequence++;
+                    memberOrderSequence = actionPropertyGroupSequence++;
                 } else if(actionHolder instanceof Property) {
                     final Property property = (Property) actionHolder;
                     memberOrderName = property.getId();
-                    memberOrderSequence = propertySequence++;
+                    memberOrderSequence = actionPropertySequence++;
                 } else if(actionHolder instanceof Collection) {
                     final Collection collection = (Collection) actionHolder;
                     memberOrderName = collection.getId();
-                    memberOrderSequence = collectionSequence++;
+                    memberOrderSequence = actionCollectionSequence++;
                 } else {
                     // DomainObject
                     memberOrderName = null;
-                    memberOrderSequence = domainObjectSequence++;
+                    memberOrderSequence = actionDomainObjectSequence++;
                 }
                 FacetUtil.addFacet(
                     new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
             }
-            @Override
-            public void visit(final ActionLayout actionLayout, final Action action) {
-                final ObjectAction objectAction = objectActionById.get(action.getId());
-                final ActionHolder actionHolder = actionHolderByAction.get(action);
 
-                final ActionLayout actionLayoutForPosition;
+            @Override
+            public void visit(final ActionLayout actionLayout) {
+                final Action action = actionLayout.getOwner();
+                final ActionHolder actionHolder = action.getOwner();
+
                 if(actionHolder instanceof PropertyGroup) {
-                    // ensure that there is a non-null valid ActionLayout#position()
-                    actionLayoutForPosition = actionLayout != null ? actionLayout : new ActionLayout();
-                    if(     actionLayoutForPosition.getPosition() == null ||
-                            actionLayoutForPosition.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
-                            actionLayoutForPosition.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
-                        actionLayoutForPosition.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
+                    if(actionLayout.getPosition() == null ||
+                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
+                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
+                       actionLayout.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
                 } else if(actionHolder instanceof Property) {
-                    // ensure that there is a non-null valid ActionLayout#position()
-                    actionLayoutForPosition = actionLayout != null ? actionLayout : new ActionLayout();
-                    if(     actionLayoutForPosition.getPosition() == null ||
-                            actionLayoutForPosition.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
-                            actionLayoutForPosition.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
-                        actionLayoutForPosition.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
+                    if(actionLayout.getPosition() == null ||
+                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
+                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
+                       actionLayout.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
                     }
                 } else {
                     // doesn't do anything for DomainObject or Collection
-                    actionLayoutForPosition = null;
+                    actionLayout.setPosition(null);
                 }
-                FacetUtil.addFacet(ActionPositionFacetForActionLayoutXml.create(actionLayoutForPosition, objectAction));
 
+                final ObjectAction objectAction = objectActionById.get(action.getId());
+                FacetUtil.addFacet(ActionPositionFacetForActionLayoutXml.create(actionLayout, objectAction));
                 FacetUtil.addFacet(BookmarkPolicyFacetForActionLayoutXml.create(actionLayout, objectAction));
                 FacetUtil.addFacet(CssClassFacetForActionLayoutXml.create(actionLayout, objectAction));
                 FacetUtil.addFacet(CssClassFaFacetForActionLayoutXml.create(actionLayout, objectAction));
@@ -302,8 +314,11 @@ public class LayoutXmlFacetDefault
                 FacetUtil.addFacet(HiddenFacetForActionLayoutXml.create(actionLayout, objectAction));
                 FacetUtil.addFacet(NamedFacetForActionLayoutXml.create(actionLayout, objectAction));
             }
+
             @Override
-            public void visit(final PropertyLayout propertyLayout, final Property property) {
+            public void visit(final PropertyLayout propertyLayout) {
+                final Property property = propertyLayout.getOwner();
+
                 final OneToOneAssociation oneToOneAssociation = oneToOneAssociationById.get(property.getId());
                 FacetUtil.addFacet(CssClassFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
                 FacetUtil.addFacet(DescribedAsFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
@@ -313,10 +328,20 @@ public class LayoutXmlFacetDefault
                 FacetUtil.addFacet(NamedFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
                 FacetUtil.addFacet(RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
                 FacetUtil.addFacet(TypicalLengthFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
+
+                // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
+                final PropertyGroup propertyGroup = property.getOwner();
+                final String groupName = propertyGroup.getName();
+                final String sequence = nextInSequenceFor(groupName);
+                FacetUtil.addFacet(
+                        new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
             }
+
             @Override
-            public void visit(final CollectionLayout collectionLayout, final Collection collection) {
+            public void visit(final CollectionLayout collectionLayout) {
+                final Collection collection = collectionLayout.getOwner();
                 final OneToManyAssociation oneToManyAssociation = oneToManyAssociationById.get(collection.getId());
+
                 FacetUtil.addFacet(CssClassFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
                 FacetUtil.addFacet(DefaultViewFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
                 FacetUtil.addFacet(DescribedAsFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
@@ -324,17 +349,34 @@ public class LayoutXmlFacetDefault
                 FacetUtil.addFacet(NamedFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
                 FacetUtil.addFacet(PagedFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
                 FacetUtil.addFacet(SortedByFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
+
+                // copy the collection name onto the tab
+                final Column column = collection.getOwner();
+                final Tab tab = column.getOwner();
+                tab.setName(collection.getId());
+            }
+
+            private String nextInSequenceFor(final String propertyGroupName) {
+                synchronized (propertySequenceByGroup) {
+                    int[] holder = propertySequenceByGroup.get(propertyGroupName);
+                    if(holder == null) {
+                        holder = new int[]{0};
+                        propertySequenceByGroup.put(propertyGroupName, holder);
+                    }
+                    holder[0]++;
+                    return ""+holder[0];
+                }
             }
         });
 
     }
 
-    private List<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
+    private static List<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
         List associations = objectSpec
                 .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
         return associations;
     }
-    private List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
+    private static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
         List associations = objectSpec
                 .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         return associations;

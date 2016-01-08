@@ -18,21 +18,25 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(
-        //propOrder = {"tabs"}
-)
-public class TabGroup {
+@XmlType()
+public class TabGroup implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     // must be at least one tab.
     private List<Tab> tabs = new ArrayList<Tab>(){{
         add(new Tab());
     }};
+
+
 
     // no wrapper
     @XmlElement(name = "tab", required = true)
@@ -43,4 +47,25 @@ public class TabGroup {
     public void setTabs(List<Tab> tabs) {
         this.tabs = tabs;
     }
+
+
+
+    private DomainObject owner;
+
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public DomainObject getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final DomainObject owner) {
+        this.owner = owner;
+    }
+
 }

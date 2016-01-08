@@ -31,4 +31,14 @@
             </left>
         </tab>
     </tabGroup>
+    <tabGroup>
+        <tab name="Similar To">
+            <left span="12">
+                <collection id="similarTo">
+                    <actions/>
+                    <layout/>
+                </collection>
+            </left>
+        </tab>
+    </tabGroup>
 </domainObject>

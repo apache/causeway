@@ -18,13 +18,16 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElements;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 @XmlType(
@@ -33,8 +36,9 @@ import com.google.common.collect.Lists;
                 , "content"
         }
 )
-public class Column {
+public class Column implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     public Column() {
     }
@@ -70,5 +74,39 @@ public class Column {
     public void setContent(List<ColumnContent> content) {
         this.content = content;
     }
+
+    @XmlTransient
+    public Iterable<PropertyGroup> getPropertyGroups() {
+        return Iterables.transform(
+                        Iterables.filter(getContent(), Util.is(PropertyGroup.class)),
+                        Util.cast(PropertyGroup.class));
+    }
+    @XmlTransient
+    public Iterable<Collection> getCollections() {
+        return Iterables.transform(
+                        Iterables.filter(getContent(), Util.is(Collection.class)),
+                        Util.cast(Collection.class));
+    }
+
+
+
+
+    private Tab owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public Tab getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final Tab owner) {
+        this.owner = owner;
+    }
+
 
 }

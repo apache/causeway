@@ -29,6 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -633,9 +634,23 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
+    // tab (if any)
+    // //////////////////////////////////////////////////////////
+
+    private Tab tab;
+
+    public Tab getTab() {
+        return tab;
+    }
+
+    public void setTab(final Tab tab) {
+        this.tab = tab;
+    }
+
+    // //////////////////////////////////////////////////////////
     // equals, hashCode
     // //////////////////////////////////////////////////////////
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;

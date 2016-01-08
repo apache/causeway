@@ -21,6 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -49,6 +53,9 @@ import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.PropertyGroup;
+import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -147,9 +154,17 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        MemberGroupLayoutFacet memberGroupLayoutFacet =
-                entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
-        final ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
+
+        final Tab tabIfAny = entityModel.getTab();
+
+        final ColumnSpans columnSpans;
+        if(tabIfAny != null) {
+            columnSpans = ColumnSpans.asSpans(tabIfAny.getLeft().getSpan(), tabIfAny.getMiddle().getSpan(), tabIfAny.getRight().getSpan());
+        } else {
+            final MemberGroupLayoutFacet memberGroupLayoutFacet =
+                    entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
+            columnSpans = memberGroupLayoutFacet.getColumnSpans();
+        }
 
         renderedFirstField = false;
         
@@ -159,7 +174,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, columnSpans);
+            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, tabIfAny, columnSpans);
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -177,7 +192,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getMiddle() > 0) {
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, columnSpans);
+            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, tabIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
@@ -186,7 +201,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getRight() > 0) {
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, columnSpans);
+            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, tabIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
@@ -220,6 +235,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private boolean addPropertiesInColumn(
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
+            final Tab tabIfAny,
             final ColumnSpans columnSpans) {
         final int span = hint.from(columnSpans);
         
@@ -234,10 +250,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
         
-        final List<String> groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
+        final List<String> groupNames;
+        if(tabIfAny != null) {
+            final Column column = hint.from(tabIfAny);
+            groupNames = Lists.newArrayList(Iterables.transform(column.getPropertyGroups(), propertyGroupName()));
+        } else {
+            groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
+        }
 
-
-        for(String groupName: groupNames) {
+        for(final String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
             if(associationsInGroup==null) {
                 continue;
@@ -276,6 +297,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         addClassForSpan(markupContainer, span);
         return !groupNames.isEmpty();
+    }
+
+    private static Function<? super PropertyGroup, String> propertyGroupName() {
+        return new Function<PropertyGroup, String>() {
+            @Nullable @Override
+            public String apply(@Nullable final PropertyGroup propertyGroup) {
+                return propertyGroup.getName();
+            }
+        };
     }
 
     private void addPropertyToForm(

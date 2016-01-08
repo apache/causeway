@@ -18,6 +18,7 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,6 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.dto.Dto;
@@ -41,7 +39,9 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "tabGroups"
         }
 )
-public class DomainObject implements Dto, ActionHolder {
+public class DomainObject implements Dto, ActionHolder, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private List<Action> actions = Lists.newArrayList();
 
@@ -81,17 +81,17 @@ public class DomainObject implements Dto, ActionHolder {
 
 
     public interface Visitor {
-        void visit(DomainObject domainObject);
-        void visit(TabGroup tabGroup);
-        void visit(Tab tab);
-        void visit(Column column);
-        void visit(PropertyGroup propertyGroup);
-        void visit(Property property);
-        void visit(@Nullable PropertyLayout propertyLayout, Property forProperty);
-        void visit(Collection collection);
-        void visit(@Nullable CollectionLayout collectionLayout, Collection forCollection);
-        void visit(Action action, ActionHolder holder);
-        void visit(@Nullable ActionLayout actionLayout, Action forAction);
+        void visit(final DomainObject domainObject);
+        void visit(final TabGroup tabGroup);
+        void visit(final Tab tab);
+        void visit(final Column column);
+        void visit(final PropertyGroup propertyGroup);
+        void visit(final Property property);
+        void visit(final PropertyLayout propertyLayout);
+        void visit(final Collection collection);
+        void visit(final CollectionLayout collectionLayout);
+        void visit(final Action action);
+        void visit(@Nullable final ActionLayout actionLayout);
     }
 
     public static class VisitorAdapter implements Visitor {
@@ -104,73 +104,80 @@ public class DomainObject implements Dto, ActionHolder {
         @Override
         public void visit(final Column column) { }
         @Override
-        public void visit(PropertyGroup propertyGroup) {}
+        public void visit(final PropertyGroup propertyGroup) {}
         @Override
-        public void visit(Property property) {}
+        public void visit(final Property property) {}
         @Override
-        public void visit(@Nullable final PropertyLayout propertyLayout, final Property forProperty) { }
+        public void visit(final PropertyLayout propertyLayout) { }
         @Override
-        public void visit(Collection collection) {}
+        public void visit(final Collection collection) {}
         @Override
-        public void visit(@Nullable final CollectionLayout collectionLayout, final Collection forCollection) { }
+        public void visit(final CollectionLayout collectionLayout) { }
         @Override
-        public void visit(final Action action, final ActionHolder actionHolder) { }
+        public void visit(final Action action) { }
         @Override
-        public void visit(@Nullable final ActionLayout actionLayout, final Action forAction) { }
+        public void visit(final ActionLayout actionLayout) { }
     }
 
+    /**
+     * Initializes all "owner" references across the graph, eg {@link TabGroup#setOwner(DomainObject)} and {@link Tab#setOwner(TabGroup)} .
+     */
+    public void init() {
+        visit(new VisitorAdapter());
+    }
 
     public void visit(final Visitor visitor) {
         visitor.visit(this);
         traverseActions(this, visitor);
         final List<TabGroup> tabGroups = getTabGroups();
         for (final TabGroup tabGroup : tabGroups) {
+            tabGroup.setOwner(this);
             visitor.visit(tabGroup);
             final List<Tab> tabs = tabGroup.getTabs();
             for (final Tab tab : tabs) {
+                tab.setOwner(tabGroup);
                 visitor.visit(tab);
-                traverseColumn(tab.getLeft(), visitor);
-                traverseColumn(tab.getMiddle(), visitor);
-                traverseColumn(tab.getRight(), visitor);
+                traverseColumn(tab.getLeft(), tab, visitor);
+                traverseColumn(tab.getMiddle(), tab, visitor);
+                traverseColumn(tab.getRight(), tab, visitor);
             }
         }
     }
 
-    private void traverseColumn(final Column column, final Visitor visitor) {
+    private void traverseColumn(final Column column, final Tab tab, final Visitor visitor) {
         if(column == null) {
             return;
         }
+        column.setOwner(tab);
         visitor.visit(column);
         traversePropertyGroups(column, visitor);
         traverseCollections(column, visitor);
     }
 
     private void traversePropertyGroups(final Column column, final Visitor visitor) {
-        List<ColumnContent> content = column.getContent();
-        final Iterable<PropertyGroup> propertyGroups =
-                Iterables.transform(
-                        Iterables.filter(content, is(PropertyGroup.class)),
-                        cast(PropertyGroup.class));
-        for (final PropertyGroup propertyGroup : propertyGroups) {
+        for (final PropertyGroup propertyGroup : column.getPropertyGroups()) {
+            propertyGroup.setOwner(column);
             visitor.visit(propertyGroup);
             traverseActions(propertyGroup, visitor);
             final List<Property> properties = propertyGroup.getProperties();
             for (final Property property : properties) {
+                property.setOwner(propertyGroup);
                 visitor.visit(property);
-                visitor.visit(property.getLayout(), property);
+                final PropertyLayout layout = property.getLayout();
+                layout.setOwner(property);
+                visitor.visit(layout);
                 traverseActions(property, visitor);
             }
         }
     }
 
     private void traverseCollections(final Column column, final Visitor visitor) {
-        final Iterable<Collection> collections =
-                Iterables.transform(
-                        Iterables.filter(column.getContent(), is(Collection.class)),
-                        cast(Collection.class));
-        for (final Collection collection : collections) {
+        for (final Collection collection : column.getCollections()) {
+            collection.setOwner(column);
             visitor.visit(collection);
-            visitor.visit(collection.getLayout(), collection);
+            final CollectionLayout layout = collection.getLayout();
+            layout.setOwner(collection);
+            visitor.visit(layout);
             traverseActions(collection, visitor);
         }
     }
@@ -178,27 +185,11 @@ public class DomainObject implements Dto, ActionHolder {
     private void traverseActions(final ActionHolder actionHolder, final Visitor visitor) {
         final List<Action> actions = actionHolder.getActions();
         for (final Action action : actions) {
-            visitor.visit(action, actionHolder);
-            visitor.visit(action.getLayout(), action);
-        }
-    }
-
-    private <F, T extends F> CastFunction<F, T> cast(final Class<T> cls) {
-        return new CastFunction<>();
-    }
-
-    private <F,T> Predicate<F> is(final Class<T> cls) {
-        return new Predicate<F>() {
-            @Override public boolean apply(@Nullable final F from) {
-                return cls.isAssignableFrom(from.getClass());
-            }
-        };
-    }
-
-    private static class CastFunction<F, T extends F> implements Function<F, T> {
-        @Override
-        public final T apply(final F from) {
-            return (T) from;
+            action.setOwner(actionHolder);
+            visitor.visit(action);
+            final ActionLayout layout = action.getLayout();
+            layout.setOwner(action);
+            visitor.visit(layout);
         }
     }
 
