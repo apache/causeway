@@ -20,4 +20,5 @@ package org.apache.isis.applib.layout.v1_0;
 
 public interface ColumnContent {
 
+
 }

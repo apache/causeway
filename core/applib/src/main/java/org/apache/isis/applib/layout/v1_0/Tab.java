@@ -19,11 +19,16 @@
 package org.apache.isis.applib.layout.v1_0;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Programmatic;
 
 @XmlType(
         name="tab"
@@ -105,6 +110,29 @@ public class Tab implements Serializable {
         this.owner = owner;
     }
 
+    /**
+     * Aggregates the contents of all collections on this tab.
+     */
+    @Programmatic
+    public List<ColumnContent> getContents() {
+        final List<ColumnContent> contents = Lists.newArrayList();
+        appendContent(contents, getLeft());
+        appendContent(contents, getMiddle());
+        appendContent(contents, getRight());
+        return contents;
+    }
 
-
+    private static void appendContent(final List<ColumnContent> contents, final Column column) {
+        if(column == null) {
+            return;
+        }
+        final List<PropertyGroup> propertyGroups = column.getPropertyGroups();
+        if(propertyGroups != null) {
+            contents.addAll(propertyGroups);
+        }
+        final List<Collection> collections = column.getCollections();
+        if(collections != null) {
+            contents.addAll(collections);
+        }
+    }
 }

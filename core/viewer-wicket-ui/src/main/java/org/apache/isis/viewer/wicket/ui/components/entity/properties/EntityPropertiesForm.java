@@ -155,11 +155,14 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final EntityModel entityModel = (EntityModel) getModel();
 
-        final Tab tabIfAny = entityModel.getTab();
+        final Tab tabMetaDataIfAny = entityModel.getTabMetadata();
 
         final ColumnSpans columnSpans;
-        if(tabIfAny != null) {
-            columnSpans = ColumnSpans.asSpans(tabIfAny.getLeft().getSpan(), tabIfAny.getMiddle().getSpan(), tabIfAny.getRight().getSpan());
+        if(tabMetaDataIfAny != null) {
+            columnSpans = ColumnSpans.asSpans(
+                    tabMetaDataIfAny.getLeft().getSpan(),
+                    tabMetaDataIfAny.getMiddle().getSpan(),
+                    tabMetaDataIfAny.getRight().getSpan());
         } else {
             final MemberGroupLayoutFacet memberGroupLayoutFacet =
                     entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
@@ -174,7 +177,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, tabIfAny, columnSpans);
+            addedProperties = addMembersInColumn(leftColumn, MemberGroupLayoutHint.LEFT, tabMetaDataIfAny, columnSpans);
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -192,7 +195,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getMiddle() > 0) {
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, tabIfAny, columnSpans);
+            addMembersInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, tabMetaDataIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
@@ -201,13 +204,13 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getRight() > 0) {
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, tabIfAny, columnSpans);
+            addMembersInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, tabMetaDataIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
 
-        // collections
-        if(columnSpans.getCollections() > 0) {
+        // collections (only if not being added to a tab)
+        if(tabMetaDataIfAny == null && columnSpans.getCollections() > 0) {
             final String idCollectionsToShow;
             final String idCollectionsToHide;
             int collectionSpan;
@@ -223,19 +226,18 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
             final Component collectionsColumn = getComponentFactoryRegistry().addOrReplaceComponent(this, idCollectionsToShow, ComponentType.ENTITY_COLLECTIONS, entityModel);
             addClassForSpan(collectionsColumn, collectionSpan);
-            
+
             Components.permanentlyHide(this, idCollectionsToHide);
         } else {
             Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS);
             Components.permanentlyHide(this, ID_ENTITY_COLLECTIONS_OVERFLOW);
         }
-
     }
 
-    private boolean addPropertiesInColumn(
+    private boolean addMembersInColumn(
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
-            final Tab tabIfAny,
+            final Tab tabMetaDataIfAny,
             final ColumnSpans columnSpans) {
         final int span = hint.from(columnSpans);
         
@@ -243,20 +245,20 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
-        final List<ObjectAssociation> associations = visibleProperties(adapter, objSpec, Where.OBJECT_FORMS);
+        final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint.from(tabMetaDataIfAny) : null;
+
+        // if in a tab, then collections are also rendered.
+        final List<ObjectAssociation> properties = visibleAssociations(adapter, ObjectAssociation.Filters.PROPERTIES);
 
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(associations);
-        
-        final List<String> groupNames;
-        if(tabIfAny != null) {
-            final Column column = hint.from(tabIfAny);
-            groupNames = Lists.newArrayList(Iterables.transform(column.getPropertyGroups(), propertyGroupName()));
-        } else {
-            groupNames = ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
-        }
+        final Map<String, List<ObjectAssociation>> associationsByGroup =
+                ObjectAssociation.Util.groupByMemberOrderName(properties);
+
+        final List<String> groupNames = tabMetaDataIfAny != null
+                ? Lists.newArrayList(Iterables.transform(columnMetaDataIfAny.getPropertyGroups(), propertyGroupName()))
+                : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
 
         for(final String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
@@ -296,6 +298,13 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
         
         addClassForSpan(markupContainer, span);
+
+        // if in a tab, then also render collections
+        if(columnMetaDataIfAny != null) {
+            final List<ObjectAssociation> collections = visibleAssociations(adapter, ObjectAssociation.Filters.COLLECTIONS);
+
+        }
+
         return !groupNames.isEmpty();
     }
 
@@ -330,13 +339,21 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     }
 
 
-    private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter, final ObjectSpecification objSpec, Where where) {
-        return objSpec.getAssociations(Contributed.INCLUDED, visiblePropertyFilter(adapter, where));
+    private List<ObjectAssociation> visibleAssociations(
+            final ObjectAdapter adapter,
+            final Filter<ObjectAssociation> associationFilter) {
+        final ObjectSpecification objSpec = adapter.getSpecification();
+
+        return objSpec.getAssociations(Contributed.INCLUDED, visibleAssociationFilter(adapter, Where.OBJECT_FORMS,
+                associationFilter));
     }
 
     @SuppressWarnings("unchecked")
-    private Filter<ObjectAssociation> visiblePropertyFilter(final ObjectAdapter adapter, Where where) {
-        return Filters.and(ObjectAssociation.Filters.PROPERTIES, ObjectAssociation.Filters.dynamicallyVisible(adapter,
+    private static Filter<ObjectAssociation> visibleAssociationFilter(
+            final ObjectAdapter adapter,
+            final Where where,
+            final Filter<ObjectAssociation> associationFilter) {
+        return Filters.and(associationFilter, ObjectAssociation.Filters.dynamicallyVisible(adapter,
                 InteractionInitiatedBy.USER, where
         ));
     }

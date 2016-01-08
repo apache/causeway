@@ -66,12 +66,9 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
 
 
 
-    private List<Action> actions = Lists.newArrayList();
+    private List<Action> actions;
 
-    /**
-     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
-     */
-    @XmlElementWrapper(required = true)
+    @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
         return actions;

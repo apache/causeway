@@ -634,17 +634,17 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
-    // tab (if any)
+    // tab metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private Tab tab;
+    private Tab tabMetadata;
 
-    public Tab getTab() {
-        return tab;
+    public Tab getTabMetadata() {
+        return tabMetadata;
     }
 
-    public void setTab(final Tab tab) {
-        this.tab = tab;
+    public void setTabMetadata(final Tab tabMetadata) {
+        this.tabMetadata = tabMetadata;
     }
 
     // //////////////////////////////////////////////////////////

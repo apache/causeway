@@ -48,17 +48,15 @@
 
   <xs:complexType name="column">
     <xs:sequence>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="propertyGroup" type="tns:propertyGroup"/>
-        <xs:element name="collection" type="tns:collection"/>
-      </xs:choice>
+      <xs:element name="propertyGroup" type="tns:propertyGroup" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="collection" type="tns:collection" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="span" type="xs:int" use="required"/>
   </xs:complexType>
 
   <xs:complexType name="propertyGroup">
     <xs:sequence>
-      <xs:element name="actions">
+      <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>

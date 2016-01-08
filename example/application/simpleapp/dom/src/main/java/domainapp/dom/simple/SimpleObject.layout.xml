@@ -1,3 +1,5 @@
+DELIBERATE SYNTAX ERROR TO DISABLE NEW RENDERING
+
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <domainObject xsi:schemaLocation="http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd" xmlns="http://isis.apache.org/schema/applib/layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actions>
@@ -7,7 +9,6 @@
         <tab name="Common">
             <left span="4">
                 <propertyGroup name="General">
-                    <actions/>
                     <property id="name" labelPosition="TOP">
                         <actions>
                             <action id="updateName"/>

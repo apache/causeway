@@ -23,17 +23,15 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 @XmlType(
         propOrder = {
-                "span"
-                , "content"
+                "propertyGroups"
+                , "collections"
         }
 )
 public class Column implements Serializable {
@@ -60,35 +58,30 @@ public class Column implements Serializable {
 
 
 
-    private List<ColumnContent> content = Lists.newArrayList();
+    private List<PropertyGroup> propertyGroups = Lists.newArrayList();
 
-    @XmlElements({
-        @XmlElement(name = "propertyGroup", required = false, type = PropertyGroup.class),
-        @XmlElement(name = "collection", required = false, type = Collection.class)
-
-    })
-    public List<ColumnContent> getContent() {
-        return content;
+    // no wrapper
+    @XmlElement(name = "propertyGroup", required = false)
+    public List<PropertyGroup> getPropertyGroups() {
+        return propertyGroups;
     }
 
-    public void setContent(List<ColumnContent> content) {
-        this.content = content;
-    }
-
-    @XmlTransient
-    public Iterable<PropertyGroup> getPropertyGroups() {
-        return Iterables.transform(
-                        Iterables.filter(getContent(), Util.is(PropertyGroup.class)),
-                        Util.cast(PropertyGroup.class));
-    }
-    @XmlTransient
-    public Iterable<Collection> getCollections() {
-        return Iterables.transform(
-                        Iterables.filter(getContent(), Util.is(Collection.class)),
-                        Util.cast(Collection.class));
+    public void setPropertyGroups(final List<PropertyGroup> propertyGroups) {
+        this.propertyGroups = propertyGroups;
     }
 
 
+    private List<Collection> collections = Lists.newArrayList();
+
+    // no wrapper
+    @XmlElement(name = "collection", required = false)
+    public List<Collection> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(final List<Collection> collections) {
+        this.collections = collections;
+    }
 
 
     private Tab owner;

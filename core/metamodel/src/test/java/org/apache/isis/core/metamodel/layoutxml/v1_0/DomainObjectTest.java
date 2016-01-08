@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.layoutxml.v1_0;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
@@ -69,11 +68,13 @@ public class DomainObjectTest {
         Column left = tab.getLeft();
 
         PropertyGroup leftPropGroup = new PropertyGroup();
-        left.getContent().add(leftPropGroup);
+        left.setPropertyGroups(Lists.<PropertyGroup>newArrayList());
+        left.getPropertyGroups().add(leftPropGroup);
         leftPropGroup.setName("General");
 
         Collection similarToColl = new Collection();
-        left.getContent().add(similarToColl);
+        left.setCollections(Lists.<Collection>newArrayList());
+        left.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
         Property nameProperty = leftPropGroup.getProperties().get(0);
@@ -81,14 +82,12 @@ public class DomainObjectTest {
 
         Action updateNameAction = new Action();
         updateNameAction.setId("updateName");
-        final List<Action> propertyActions = Lists.newArrayList();
-        nameProperty.setActions(propertyActions);
+        nameProperty.setActions(Lists.<Action>newArrayList());
         nameProperty.getActions().add(updateNameAction);
 
         Action deleteAction = new Action();
         deleteAction.setId("delete");
-        final List<Action> domainObjectActions = Lists.newArrayList();
-        domainObject.setActions(domainObjectActions);
+        domainObject.setActions(Lists.<Action>newArrayList());
         domainObject.getActions().add(deleteAction);
 
         String xml = jaxbService.toXml(domainObject,
@@ -115,7 +114,7 @@ public class DomainObjectTest {
     protected void dumpXsd(final DomainObject domainObject) {
         Map<String, String> schemas = jaxbService.toXsd(domainObject, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
-            System.out.println(entry.getKey() + ":");
+            //System.out.println(entry.getKey() + ":");
             System.out.println(entry.getValue());
         }
     }

@@ -198,7 +198,7 @@ public class LayoutXmlFacetDefault
             boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new PropertyGroup(MemberGroupLayoutFacet.DEFAULT_GROUP));
             final PropertyGroup defaultPropertyGroup = defaultPropertyGroupRef.get();
             if(wasSet) {
-                firstColumnRef.get().getContent().add(defaultPropertyGroup);
+                firstColumnRef.get().getPropertyGroups().add(defaultPropertyGroup);
             }
             Iterables.removeAll(propertyIds, oneToOneAssociationById.keySet());
             for (final String propertyId : missingPropertyIds) {
@@ -223,7 +223,7 @@ public class LayoutXmlFacetDefault
                 lastTabGroup.getTabs().add(tab);
                 Column left = new Column(12);
                 tab.setLeft(left);
-                left.getContent().add(new Collection(collectionId));
+                left.getCollections().add(new Collection(collectionId));
             }
         }
 
@@ -339,10 +339,18 @@ public class LayoutXmlFacetDefault
                 FacetUtil.addFacet(PagedFacetForCollectionXml.create(collection, oneToManyAssociation));
                 FacetUtil.addFacet(SortedByFacetForCollectionXml.create(collection, oneToManyAssociation));
 
-                // copy the collection name onto the tab
+                // @MemberOrder#name based on the collection's id (so that each has a single "member group")
+                final String groupName = collection.getId();
+                final String sequence = nextInSequenceFor(groupName);
+                FacetUtil.addFacet(
+                        new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
+
+                // if there is only a single column and no other contents, then copy the collection Id onto the tab'
                 final Column column = collection.getOwner();
                 final Tab tab = column.getOwner();
-                tab.setName(collection.getId());
+                if(tab.getContents().size() == 1) {
+                    tab.setName(collection.getId());
+                }
             }
 
             private String nextInSequenceFor(final String propertyGroupName) {
