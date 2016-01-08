@@ -5,7 +5,7 @@
     </actions>
     <tabGroup>
         <tab name="Common">
-            <left span="4">
+            <left span="6">
                 <propertyGroup name="General">
                     <property id="name" labelPosition="TOP">
                         <actions>
@@ -14,11 +14,13 @@
                     </property>
                 </propertyGroup>
             </left>
-            <middle span="4">
-            </middle>
+            <right span="6">
+                <collection id="similarTo" defaultView="table"/>
+                <collection id="others" defaultView="hide"/>
+            </right>
         </tab>
         <tab name="Metadata">
-            <left span="4">
+            <left span="6">
                 <propertyGroup name="Persistence">
                     <actions>
                         <action id="downloadJdoMetadata"/>
@@ -26,13 +28,6 @@
                     </actions>
                     <property id="versionSequence"/>
                 </propertyGroup>
-            </left>
-        </tab>
-    </tabGroup>
-    <tabGroup>
-        <tab name="Similar To">
-            <left span="12">
-                <collection id="similarTo"/>
             </left>
         </tab>
     </tabGroup>

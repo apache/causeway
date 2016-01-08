@@ -19,23 +19,32 @@
 
 package org.apache.isis.viewer.wicket.ui.components.entity.collections;
 
+import java.util.Comparator;
 import java.util.List;
+
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
+
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.Column;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.services.DeweyOrderComparator;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -89,8 +98,34 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private void addCollections() {
         final EntityModel entityModel = getModel();
         final ObjectAdapter adapter = entityModel.getObject();
-        final ObjectSpecification noSpec = adapter.getSpecification();
-        final List<ObjectAssociation> associations = visibleCollections(adapter, noSpec);
+
+        final Column columnMetadataIfAny = entityModel.getColumnMetadata();
+        final Filter<ObjectAssociation> filter;
+        if (columnMetadataIfAny != null) {
+            final ImmutableList<String> collectionIds = FluentIterable
+                    .from(columnMetadataIfAny.getCollections())
+                    .transform(CollectionLayoutMetadata.Functions.id())
+                    .toList();
+            filter = new Filter<ObjectAssociation>() {
+                @Override
+                public boolean accept(final ObjectAssociation objectAssociation) {
+                    return collectionIds.contains(objectAssociation.getId());
+                }
+            };
+        } else {
+            filter = Filters.any();
+        }
+
+        final List<ObjectAssociation> associations = visibleCollections(adapter, filter);
+        associations.sort(new Comparator<ObjectAssociation>() {
+            private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
+            @Override
+            public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
+                final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
+                final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                return deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+            }
+        });
 
         final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
         add(collectionRv);
@@ -104,7 +139,8 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         }
     }
 
-    private void addCollectionToForm(final EntityModel entityModel,
+    private void addCollectionToForm(
+            final EntityModel entityModel,
             final ObjectAssociation association,
             final WebMarkupContainer collectionRvContainer) {
 
@@ -163,15 +199,22 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
     }
 
-    private List<ObjectAssociation> visibleCollections(final ObjectAdapter adapter, final ObjectSpecification noSpec) {
-        return noSpec.getAssociations(Contributed.INCLUDED, visibleCollectionsFilter(adapter));
+    private static List<ObjectAssociation> visibleCollections(
+            final ObjectAdapter adapter,
+            final Filter<ObjectAssociation> filter) {
+        return adapter.getSpecification().getAssociations(
+                Contributed.INCLUDED, visibleCollectionsFilter(adapter, filter));
     }
 
     @SuppressWarnings("unchecked")
-    private Filter<ObjectAssociation> visibleCollectionsFilter(final ObjectAdapter adapter) {
-        return Filters.and(ObjectAssociation.Filters.COLLECTIONS, ObjectAssociation.Filters.dynamicallyVisible(adapter,
-                InteractionInitiatedBy.USER, Where.PARENTED_TABLES
-        ));
+    private static Filter<ObjectAssociation> visibleCollectionsFilter(
+            final ObjectAdapter adapter,
+            final Filter<ObjectAssociation> filter) {
+        return Filters.and(
+                ObjectAssociation.Filters.COLLECTIONS,
+                ObjectAssociation.Filters.dynamicallyVisible(
+                        adapter, InteractionInitiatedBy.USER, Where.PARENTED_TABLES),
+                filter);
     }
 
 }

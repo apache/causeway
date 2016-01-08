@@ -121,7 +121,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
             super(id);
 
             final EntityModel modelWithTabHints = new EntityModel(model.getPageParameters());
-            modelWithTabHints.setTabMetadata(tab);
+            modelWithTabHints.withTabMetadata(tab);
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
         }

@@ -29,6 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.v1_0.Column;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -63,7 +64,6 @@ import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     private static final long serialVersionUID = 1L;
-    
 
     // //////////////////////////////////////////////////////////
     // factory methods for PageParameters
@@ -90,7 +90,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
         return pageParameters;
     }
-
 
     public enum RenderingHint {
         REGULAR,
@@ -634,7 +633,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     // //////////////////////////////////////////////////////////
-    // tab metadata (if any)
+    // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
     private Tab tabMetadata;
@@ -643,9 +642,24 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return tabMetadata;
     }
 
-    public void setTabMetadata(final Tab tabMetadata) {
+    public EntityModel withTabMetadata(final Tab tabMetadata) {
         this.tabMetadata = tabMetadata;
+        return this;
     }
+
+
+    private Column columnMetadata;
+
+    public EntityModel withColumnMetadata(final Column columnMetadata) {
+        this.columnMetadata = columnMetadata;
+        this.tabMetadata = columnMetadata.getOwner();
+        return this;
+    }
+
+    public Column getColumnMetadata() {
+        return columnMetadata;
+    }
+
 
     // //////////////////////////////////////////////////////////
     // equals, hashCode

@@ -54,6 +54,7 @@ public class Object_viewLayout {
         return getObjectLayoutMetadata();
     }
 
+    @Programmatic // TODO ... excluded for now (getting an Isis framework exception in the view model rendering).
     public boolean hide$$() {
         return getObjectLayoutMetadata() == null;
     }

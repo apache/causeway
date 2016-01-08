@@ -254,7 +254,9 @@ public class ObjectLayoutMetadataServiceDefault
                 lastTabGroup.getTabs().add(tab);
                 Column left = new Column(12);
                 tab.setLeft(left);
-                left.getCollections().add(new CollectionLayoutMetadata(collectionId));
+                final CollectionLayoutMetadata layoutMetadata = new CollectionLayoutMetadata(collectionId);
+                layoutMetadata.setDefaultView("table");
+                left.getCollections().add(layoutMetadata);
             }
         }
 
@@ -293,6 +295,7 @@ public class ObjectLayoutMetadataServiceDefault
 
         metadata.visit(new ObjectLayoutMetadata.VisitorAdapter() {
             private final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
+            private int collectionSequence = 1;
             private int actionDomainObjectSequence = 1;
             private int actionPropertyGroupSequence = 1;
             private int actionPropertySequence = 1;
@@ -376,7 +379,7 @@ public class ObjectLayoutMetadataServiceDefault
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
                 final PropertyGroup propertyGroup = propertyLayoutMetadata.getOwner();
                 final String groupName = propertyGroup.getName();
-                final String sequence = nextInSequenceFor(groupName);
+                final String sequence = nextInSequenceFor(groupName, propertySequenceByGroup);
                 FacetUtil.addFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
             }
@@ -398,7 +401,7 @@ public class ObjectLayoutMetadataServiceDefault
 
                 // @MemberOrder#name based on the collection's id (so that each has a single "member group")
                 final String groupName = collectionLayoutMetadata.getId();
-                final String sequence = nextInSequenceFor(groupName);
+                final String sequence = "" + collectionSequence++;
                 FacetUtil.addFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
 
@@ -406,16 +409,18 @@ public class ObjectLayoutMetadataServiceDefault
                 final Column column = collectionLayoutMetadata.getOwner();
                 final Tab tab = column.getOwner();
                 if(tab.getContents().size() == 1) {
-                    tab.setName(collectionLayoutMetadata.getNamed());
+                    final String collectionName = oneToManyAssociation.getName();
+                    tab.setName(collectionName);
                 }
             }
 
-            private String nextInSequenceFor(final String propertyGroupName) {
-                synchronized (propertySequenceByGroup) {
-                    int[] holder = propertySequenceByGroup.get(propertyGroupName);
+            private String nextInSequenceFor(
+                    final String key, final Map<String, int[]> seqByKey) {
+                synchronized (seqByKey) {
+                    int[] holder = seqByKey.get(key);
                     if(holder == null) {
                         holder = new int[]{0};
-                        propertySequenceByGroup.put(propertyGroupName, holder);
+                        seqByKey.put(key, holder);
                     }
                     holder[0]++;
                     return ""+holder[0];

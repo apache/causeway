@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.Function;
+
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -223,4 +225,17 @@ public class CollectionLayoutMetadata implements ColumnContent, ActionHolder, Se
         this.metadataError = metadataError;
     }
 
+
+    public static class Functions {
+        private Functions(){}
+
+        public static Function<CollectionLayoutMetadata, String> id() {
+            return new Function<CollectionLayoutMetadata, String>() {
+                @Override
+                public String apply(final CollectionLayoutMetadata metadata) {
+                    return metadata.getId();
+                }
+            };
+        }
+    }
 }
