@@ -16,24 +16,23 @@
             </left>
             <middle span="4">
             </middle>
-            <right span="4">
-                <propertyGroup name="Metadata">
+        </tab>
+        <tab name="Metadata">
+            <left span="4">
+                <propertyGroup name="Persistence">
                     <actions>
                         <action id="downloadJdoMetadata"/>
+                        <action id="downloadLayoutXml"/>
                     </actions>
                     <property id="versionSequence"/>
                 </propertyGroup>
-            </right>
-        </tab>
-        <tab name="Other">
-            <left span="4">
             </left>
         </tab>
     </tabGroup>
     <tabGroup>
         <tab name="Similar To">
             <left span="12">
-                <collection id="similarTox"/>
+                <collection id="similarTo"/>
             </left>
         </tab>
     </tabGroup>

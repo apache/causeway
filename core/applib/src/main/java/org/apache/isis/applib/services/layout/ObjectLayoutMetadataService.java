@@ -21,14 +21,29 @@ import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 
 public interface ObjectLayoutMetadataService {
 
-    @Programmatic ObjectLayoutMetadata fromXml(Class<?> domainClass);
+    /**
+     * Returns raw (unnormalized) metadata, per the <code>.layout.xml</code> file.
+     */
+    @Programmatic
+    ObjectLayoutMetadata fromXml(Class<?> domainClass);
 
     /**
      *  @param objectLayoutMetadata - the layout to be validated.
      * @param domainClass - as per domain class.
      */
-    @Programmatic ObjectLayoutMetadata normalize(final ObjectLayoutMetadata objectLayoutMetadata, final Class<?> domainClass);
+    @Programmatic
+    ObjectLayoutMetadata normalize(final ObjectLayoutMetadata objectLayoutMetadata, final Class<?> domainClass);
 
-    @Programmatic String toXml(ObjectLayoutMetadata objectLayoutMetadata);
+    /**
+     * Obtains the layout metadata for the specified domain object.  It will have been {@link #normalize(ObjectLayoutMetadata, Class) normalized} already.
+     */
+    @Programmatic
+    ObjectLayoutMetadata toMetadata(Object domainObject);
+
+    /**
+     * Obtains the layout metadata for the specified domain class.  It will have been {@link #normalize(ObjectLayoutMetadata, Class) normalized} already.
+     */
+    @Programmatic
+    ObjectLayoutMetadata toMetadata(Class<?> domainClass);
 
 }

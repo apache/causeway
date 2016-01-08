@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.applib.services.dto;
+package org.apache.isis.applib.services.layout;
 
 import javax.inject.Inject;
 
@@ -22,45 +22,49 @@ import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
-import org.apache.isis.applib.annotation.ParameterLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.value.Clob;
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 
 @Mixin
-public class Dto_downloadXml {
+public class Object_viewLayout {
 
-    private final Dto dto;
+    private final Object object;
 
-    public Dto_downloadXml(final Dto dto) {
-        this.dto = dto;
+    public Object_viewLayout(final Object object) {
+        this.object = object;
     }
 
-    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Dto_downloadXml> {}
+    public static class ActionDomainEvent extends org.apache.isis.applib.IsisApplibModule.ActionDomainEvent<Object_viewLayout> {}
 
+
+
+    @Programmatic // TODO ... excluded for now (getting an Isis framework exception in the view model rendering).
     @Action(
             domainEvent = ActionDomainEvent.class,
             semantics = SemanticsOf.SAFE,
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+            cssClassFa = "fa-th"
     )
-    @MemberOrder(sequence = "500.1")
-    public Object $$(
-            @ParameterLayout(named = "File name")
-            final String fileName) {
-        final String xml = jaxbService.toXml(dto);
-        return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
+    @MemberOrder(sequence = "550.2")
+    public ObjectLayoutMetadata $$() {
+        return getObjectLayoutMetadata();
     }
 
-    public String default0$$() {
-        return Util.withSuffix(dto.getClass().getName(), "xml");
+    public boolean hide$$() {
+        return getObjectLayoutMetadata() == null;
     }
+
+    protected ObjectLayoutMetadata getObjectLayoutMetadata() {
+        return objectLayoutMetadataService.toMetadata(object);
+    }
+
 
 
     @Inject
-    JaxbService jaxbService;
+    ObjectLayoutMetadataService objectLayoutMetadataService;
 
 }

@@ -16,18 +16,16 @@
  */
 package org.apache.isis.applib.services.layout;
 
-import java.io.IOException;
-
 import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Mixin;
+import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.services.dto.Dto;
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
@@ -36,7 +34,7 @@ public class Object_downloadLayoutXml {
 
     private final Object object;
 
-    public Object_downloadLayoutXml(final Dto object) {
+    public Object_downloadLayoutXml(final Object object) {
         this.object = object;
     }
 
@@ -51,17 +49,31 @@ public class Object_downloadLayoutXml {
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence = "550.1")
-    public Object $$(final String fileName) throws JAXBException, IOException {
-        final String xml = layoutXmlService.toXml(object);
+    public Object $$(
+            @ParameterLayout(named = "File name")
+            final String fileName) {
+        final ObjectLayoutMetadata metadata = getObjectLayoutMetadata();
+        final String xml = jaxbService.toXml(metadata);
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
     }
 
+    public boolean hide$$() {
+        return getObjectLayoutMetadata() == null;
+    }
     public String default0$$() {
-        return Util.withSuffix(object.getClass().getName(), "xml");
+        return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
+    }
+
+    protected ObjectLayoutMetadata getObjectLayoutMetadata() {
+        return objectLayoutMetadataService.toMetadata(object);
     }
 
 
+
     @Inject
-    JaxbService layoutXmlService;
+    ObjectLayoutMetadataService objectLayoutMetadataService;
+
+    @Inject
+    JaxbService jaxbService;
 
 }

@@ -68,6 +68,7 @@ import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCol
 import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
@@ -436,9 +437,17 @@ public class ObjectLayoutMetadataServiceDefault
 
 
     @Override
-    public String toXml(final ObjectLayoutMetadata objectLayoutMetadata) {
-        return jaxbService.toXml(objectLayoutMetadata);
+    public ObjectLayoutMetadata toMetadata(final Object domainObject) {
+        return toMetadata(domainObject.getClass());
     }
+
+    @Override
+    public ObjectLayoutMetadata toMetadata(final Class<?> domainClass) {
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        final ObjectLayoutMetadataFacet facet = objectSpec.getFacet(ObjectLayoutMetadataFacet.class);
+        return facet != null? facet.getMetadata(): null;
+    }
+
 
 
     //region > injected dependencies

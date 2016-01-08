@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutxml;
+package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 
 import org.apache.isis.core.metamodel.facetapi.Facet;

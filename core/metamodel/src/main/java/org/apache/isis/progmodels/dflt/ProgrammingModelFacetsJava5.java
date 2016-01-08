@@ -108,7 +108,7 @@ import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoEnhancem
 import org.apache.isis.core.metamodel.facets.object.ignore.jdo.RemoveJdoPrefixedMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutableannot.CopyImmutableFacetOntoMembersFactory;
 import org.apache.isis.core.metamodel.facets.object.immutable.immutablemarkerifc.ImmutableFacetMarkerInterfaceFactory;
-import org.apache.isis.core.metamodel.facets.object.layoutxml.LayoutXmlFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.mask.annotation.MaskFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.maxlen.annotation.MaxLengthFacetOnTypeAnnotationFactory;
 import org.apache.isis.core.metamodel.facets.object.membergroups.annotprop.MemberGroupLayoutFacetFactory;
@@ -391,7 +391,7 @@ public final class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract 
         // must come after DomainObjectAnnotationFacetFactory & MixinFacetFactory
         addFactory(NotContributedFacetDerivedFromMixinFacetFactory.class);
 
-        addFactory(LayoutXmlFacetFactory.class);
+        addFactory(ObjectLayoutMetadataFacetFactory.class);
 
         addFactory(DomainServiceLayoutFacetFactory.class);
         addFactory(DomainObjectLayoutFacetFactory.class);

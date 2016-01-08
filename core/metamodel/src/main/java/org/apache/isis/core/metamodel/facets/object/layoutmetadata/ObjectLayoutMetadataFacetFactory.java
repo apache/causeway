@@ -14,7 +14,7 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.isis.core.metamodel.facets.object.layoutxml;
+package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +28,11 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 
-public class LayoutXmlFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class ObjectLayoutMetadataFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(LayoutXmlFacetFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataFacetFactory.class);
 
-    public LayoutXmlFacetFactory() {
+    public ObjectLayoutMetadataFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
