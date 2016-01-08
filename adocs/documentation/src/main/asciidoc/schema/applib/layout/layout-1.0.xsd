@@ -1,14 +1,14 @@
 <?xml version="1.0" standalone="yes"?>
 <xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout" xmlns:tns="http://isis.apache.org/schema/applib/layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="domainObject" type="tns:domainObject"/>
+  <xs:element name="objectLayout" type="tns:objectLayout"/>
 
-  <xs:complexType name="domainObject">
+  <xs:complexType name="objectLayout">
     <xs:sequence>
       <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
@@ -16,10 +16,11 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="action">
+  <xs:complexType name="actionLayout">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -49,7 +50,7 @@
   <xs:complexType name="column">
     <xs:sequence>
       <xs:element name="propertyGroup" type="tns:propertyGroup" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="collection" type="tns:collection" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="collection" type="tns:collectionLayoutXml" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="span" type="xs:int" use="required"/>
   </xs:complexType>
@@ -59,26 +60,27 @@
       <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="property" type="tns:property" maxOccurs="unbounded"/>
+      <xs:element name="property" type="tns:propertyLayout" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="property">
+  <xs:complexType name="propertyLayout">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
       <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
@@ -90,7 +92,7 @@
     <xs:attribute name="typicalLength" type="xs:int"/>
   </xs:complexType>
 
-  <xs:complexType name="collection">
+  <xs:complexType name="collectionLayoutXml">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
@@ -98,10 +100,11 @@
       <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="defaultView" type="xs:string"/>

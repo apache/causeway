@@ -1,7 +1,5 @@
-DELIBERATE SYNTAX ERROR TO DISABLE NEW RENDERING
-
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<domainObject xsi:schemaLocation="http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd" xmlns="http://isis.apache.org/schema/applib/layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<objectLayout xsi:schemaLocation="http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd" xmlns="http://isis.apache.org/schema/applib/layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <actions>
         <action id="delete"/>
     </actions>
@@ -16,23 +14,27 @@ DELIBERATE SYNTAX ERROR TO DISABLE NEW RENDERING
                     </property>
                 </propertyGroup>
             </left>
-        </tab>
-        <tab name="Other">
-            <left span="4">
+            <middle span="4">
+            </middle>
+            <right span="4">
                 <propertyGroup name="Metadata">
                     <actions>
                         <action id="downloadJdoMetadata"/>
                     </actions>
                     <property id="versionSequence"/>
                 </propertyGroup>
+            </right>
+        </tab>
+        <tab name="Other">
+            <left span="4">
             </left>
         </tab>
     </tabGroup>
     <tabGroup>
         <tab name="Similar To">
             <left span="12">
-                <collection id="similarTo"/>
+                <collection id="similarTox"/>
             </left>
         </tab>
     </tabGroup>
-</domainObject>
+</objectLayout>

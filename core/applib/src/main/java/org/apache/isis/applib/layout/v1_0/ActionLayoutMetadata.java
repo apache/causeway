@@ -37,18 +37,20 @@ import org.apache.isis.applib.annotation.Where;
  * </p>
  */
 @XmlType(
-    propOrder = {
+    name = "actionLayout"
+    , propOrder = {
         "named"
         , "describedAs"
+        , "metadataError"
     }
 )
-public class Action implements Serializable {
+public class ActionLayoutMetadata implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Action() {
+    public ActionLayoutMetadata() {
     }
-    public Action(final String id) {
+    public ActionLayoutMetadata(final String id) {
         setId(id);
     }
 
@@ -184,6 +186,8 @@ public class Action implements Serializable {
     }
 
 
+
+
     private ActionHolder owner;
     /**
      * Owner.
@@ -199,6 +203,21 @@ public class Action implements Serializable {
 
     public void setOwner(final ActionHolder owner) {
         this.owner = owner;
+    }
+
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
     }
 
 }

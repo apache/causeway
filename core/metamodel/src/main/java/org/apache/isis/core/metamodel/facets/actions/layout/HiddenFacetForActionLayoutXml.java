@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.v1_0.Action;
+import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
 public class HiddenFacetForActionLayoutXml extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final Action actionLayout, final FacetHolder holder) {
+    public static HiddenFacet create(final ActionLayoutMetadata actionLayout, final FacetHolder holder) {
         if (actionLayout == null) {
             return null;
         }

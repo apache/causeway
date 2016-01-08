@@ -48,7 +48,6 @@ public class MetaModelServiceDefault implements MetaModelService, SpecificationL
     private final static Logger LOG = LoggerFactory.getLogger(MetaModelServiceDefault.class);
 
 
-
     //region > fromObjectType, toObjectType
     @Programmatic
     public Class<?> fromObjectType(final String objectType) {

@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.Property;
+import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
 public class TypicalLengthFacetForPropertyXml extends TypicalLengthFacetAbstract {
 
-    public static TypicalLengthFacet create(Property propertyLayout, FacetHolder holder) {
+    public static TypicalLengthFacet create(PropertyLayoutMetadata propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }

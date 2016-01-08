@@ -71,15 +71,15 @@ public class Column implements Serializable {
     }
 
 
-    private List<Collection> collections = Lists.newArrayList();
+    private List<CollectionLayoutMetadata> collections = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "collection", required = false)
-    public List<Collection> getCollections() {
+    public List<CollectionLayoutMetadata> getCollections() {
         return collections;
     }
 
-    public void setCollections(final List<Collection> collections) {
+    public void setCollections(final List<CollectionLayoutMetadata> collections) {
         this.collections = collections;
     }
 

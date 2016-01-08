@@ -20,13 +20,16 @@ package org.apache.isis.core.metamodel.facets.object.layoutxml;
 
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.applib.layout.v1_0.DomainObject;
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 
 /**
  * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
  */
-public interface LayoutXmlFacet extends Facet {
+public interface ObjectLayoutMetadataFacet extends Facet {
 
-    public DomainObject getLayoutMetadata();
+    /**
+     * Will have been {@link org.apache.isis.applib.services.layout.ObjectLayoutMetadataService#normalize(ObjectLayoutMetadata, Class) normalized}.
+     */
+    ObjectLayoutMetadata getMetadata();
 
 }

@@ -21,10 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
@@ -159,10 +156,12 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final ColumnSpans columnSpans;
         if(tabMetaDataIfAny != null) {
+            final Column middle = tabMetaDataIfAny.getMiddle();
+            final Column right = tabMetaDataIfAny.getRight();
             columnSpans = ColumnSpans.asSpans(
                     tabMetaDataIfAny.getLeft().getSpan(),
-                    tabMetaDataIfAny.getMiddle().getSpan(),
-                    tabMetaDataIfAny.getRight().getSpan());
+                    middle != null? middle.getSpan(): 0,
+                    right != null? right.getSpan(): 0);
         } else {
             final MemberGroupLayoutFacet memberGroupLayoutFacet =
                     entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
@@ -177,7 +176,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            addedProperties = addMembersInColumn(leftColumn, MemberGroupLayoutHint.LEFT, tabMetaDataIfAny, columnSpans);
+            addedProperties = addPropertiesInColumn(leftColumn, MemberGroupLayoutHint.LEFT, tabMetaDataIfAny, columnSpans);
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -195,7 +194,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getMiddle() > 0) {
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addMembersInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, tabMetaDataIfAny, columnSpans);
+            addPropertiesInColumn(middleColumn, MemberGroupLayoutHint.MIDDLE, tabMetaDataIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
@@ -204,7 +203,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getRight() > 0) {
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addMembersInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, tabMetaDataIfAny, columnSpans);
+            addPropertiesInColumn(rightColumn, MemberGroupLayoutHint.RIGHT, tabMetaDataIfAny, columnSpans);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
@@ -234,7 +233,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
     }
 
-    private boolean addMembersInColumn(
+    private boolean addPropertiesInColumn(
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
             final Tab tabMetaDataIfAny,
@@ -247,17 +246,18 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint.from(tabMetaDataIfAny) : null;
 
-        // if in a tab, then collections are also rendered.
         final List<ObjectAssociation> properties = visibleAssociations(adapter, ObjectAssociation.Filters.PROPERTIES);
 
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
-        final Map<String, List<ObjectAssociation>> associationsByGroup =
-                ObjectAssociation.Util.groupByMemberOrderName(properties);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(properties);
 
         final List<String> groupNames = tabMetaDataIfAny != null
-                ? Lists.newArrayList(Iterables.transform(columnMetaDataIfAny.getPropertyGroups(), propertyGroupName()))
+                ? FluentIterable
+                    .from(columnMetaDataIfAny.getPropertyGroups())
+                    .transform(PropertyGroup.Util.nameOf())
+                    .toList()
                 : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
 
         for(final String groupName: groupNames) {
@@ -306,15 +306,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
 
         return !groupNames.isEmpty();
-    }
-
-    private static Function<? super PropertyGroup, String> propertyGroupName() {
-        return new Function<PropertyGroup, String>() {
-            @Nullable @Override
-            public String apply(@Nullable final PropertyGroup propertyGroup) {
-                return propertyGroup.getName();
-            }
-        };
     }
 
     private void addPropertyToForm(

@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.Property;
+import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
 public class MultiLineFacetForPropertyXml extends MultiLineFacetAbstract {
 
-    public static MultiLineFacet create(Property propertyLayout, FacetHolder holder) {
+    public static MultiLineFacet create(PropertyLayoutMetadata propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }

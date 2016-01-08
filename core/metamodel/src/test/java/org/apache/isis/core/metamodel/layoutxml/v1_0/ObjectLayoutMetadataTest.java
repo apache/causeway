@@ -29,11 +29,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.v1_0.Action;
-import org.apache.isis.applib.layout.v1_0.Collection;
+import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.DomainObject;
-import org.apache.isis.applib.layout.v1_0.Property;
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroup;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
@@ -43,7 +43,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class DomainObjectTest {
+public class ObjectLayoutMetadataTest {
 
     private JaxbService jaxbService;
 
@@ -60,9 +60,9 @@ public class DomainObjectTest {
     @Test
     public void xxx() throws Exception {
 
-        final DomainObject domainObject = new DomainObject();
+        final ObjectLayoutMetadata objectLayoutMetadata = new ObjectLayoutMetadata();
 
-        TabGroup tabGroup = domainObject.getTabGroups().get(0);
+        TabGroup tabGroup = objectLayoutMetadata.getTabGroups().get(0);
         Tab tab = tabGroup.getTabs().get(0);
         tab.setName("Common");
         Column left = tab.getLeft();
@@ -72,33 +72,33 @@ public class DomainObjectTest {
         left.getPropertyGroups().add(leftPropGroup);
         leftPropGroup.setName("General");
 
-        Collection similarToColl = new Collection();
-        left.setCollections(Lists.<Collection>newArrayList());
+        CollectionLayoutMetadata similarToColl = new CollectionLayoutMetadata();
+        left.setCollections(Lists.<CollectionLayoutMetadata>newArrayList());
         left.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        Property nameProperty = leftPropGroup.getProperties().get(0);
-        nameProperty.setId("name");
+        PropertyLayoutMetadata namePropertyLayoutMetadata = leftPropGroup.getProperties().get(0);
+        namePropertyLayoutMetadata.setId("name");
 
-        Action updateNameAction = new Action();
-        updateNameAction.setId("updateName");
-        nameProperty.setActions(Lists.<Action>newArrayList());
-        nameProperty.getActions().add(updateNameAction);
+        ActionLayoutMetadata updateNameActionLayoutMetadata = new ActionLayoutMetadata();
+        updateNameActionLayoutMetadata.setId("updateName");
+        namePropertyLayoutMetadata.setActions(Lists.<ActionLayoutMetadata>newArrayList());
+        namePropertyLayoutMetadata.getActions().add(updateNameActionLayoutMetadata);
 
-        Action deleteAction = new Action();
-        deleteAction.setId("delete");
-        domainObject.setActions(Lists.<Action>newArrayList());
-        domainObject.getActions().add(deleteAction);
+        ActionLayoutMetadata deleteActionLayoutMetadata = new ActionLayoutMetadata();
+        deleteActionLayoutMetadata.setId("delete");
+        objectLayoutMetadata.setActions(Lists.<ActionLayoutMetadata>newArrayList());
+        objectLayoutMetadata.getActions().add(deleteActionLayoutMetadata);
 
-        String xml = jaxbService.toXml(domainObject,
+        String xml = jaxbService.toXml(objectLayoutMetadata,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         "http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd"
                 ));
         System.out.println(xml);
 
-        DomainObject domainObjectRoundtripped = jaxbService.fromXml(DomainObject.class, xml);
-        String xmlRoundtripped = jaxbService.toXml(domainObjectRoundtripped,
+        ObjectLayoutMetadata objectLayoutMetadataRoundtripped = jaxbService.fromXml(ObjectLayoutMetadata.class, xml);
+        String xmlRoundtripped = jaxbService.toXml(objectLayoutMetadataRoundtripped,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
                         "http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd"
@@ -108,11 +108,11 @@ public class DomainObjectTest {
 
         System.out.println("==========");
 
-        dumpXsd(domainObject);
+        dumpXsd(objectLayoutMetadata);
     }
 
-    protected void dumpXsd(final DomainObject domainObject) {
-        Map<String, String> schemas = jaxbService.toXsd(domainObject, JaxbService.IsisSchemas.INCLUDE);
+    protected void dumpXsd(final ObjectLayoutMetadata objectLayoutMetadata) {
+        Map<String, String> schemas = jaxbService.toXsd(objectLayoutMetadata, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             //System.out.println(entry.getKey() + ":");
             System.out.println(entry.getValue());

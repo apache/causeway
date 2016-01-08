@@ -43,15 +43,16 @@ import org.apache.isis.applib.annotation.Where;
                 ,"describedAs"
                 ,"sortedBy"
                 , "actions"
+                , "metadataError"
         }
 )
-public class Collection implements ColumnContent, ActionHolder, Serializable {
+public class CollectionLayoutMetadata implements ColumnContent, ActionHolder, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Collection() {
+    public CollectionLayoutMetadata() {
     }
-    public Collection(final String id) {
+    public CollectionLayoutMetadata(final String id) {
         setId(id);
     }
 
@@ -176,16 +177,16 @@ public class Collection implements ColumnContent, ActionHolder, Serializable {
 
 
 
-    private List<Action> actions;
+    private List<ActionLayoutMetadata> actions;
 
     @XmlElementWrapper(name = "actions", required = false)
     @XmlElement(name = "action", required = false)
-    public List<Action> getActions() {
+    public List<ActionLayoutMetadata> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
+    public void setActions(List<ActionLayoutMetadata> actionLayoutMetadatas) {
+        this.actions = actionLayoutMetadatas;
     }
 
 
@@ -208,5 +209,18 @@ public class Collection implements ColumnContent, ActionHolder, Serializable {
     }
 
 
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
 
 }

@@ -34,20 +34,22 @@ import org.apache.isis.applib.annotation.Where;
  * Broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
  */
 @XmlType(
-        propOrder = {
+        name = "propertyLayout"
+        , propOrder = {
                 "named"
                 , "describedAs"
                 , "actions"
+                , "metadataError"
         }
 )
-public class Property implements ActionHolder, Serializable {
+public class PropertyLayoutMetadata implements ActionHolder, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public Property() {
+    public PropertyLayoutMetadata() {
     }
 
-    public Property(final String id) {
+    public PropertyLayoutMetadata(final String id) {
         this.id = id;
     }
 
@@ -176,16 +178,16 @@ public class Property implements ActionHolder, Serializable {
 
 
 
-    private List<Action> actions;
+    private List<ActionLayoutMetadata> actions;
 
     @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
-    public List<Action> getActions() {
+    public List<ActionLayoutMetadata> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
+    public void setActions(List<ActionLayoutMetadata> actionLayoutMetadatas) {
+        this.actions = actionLayoutMetadatas;
     }
 
 
@@ -204,6 +206,22 @@ public class Property implements ActionHolder, Serializable {
 
     public void setOwner(final PropertyGroup owner) {
         this.owner = owner;
+    }
+
+
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
     }
 
 }

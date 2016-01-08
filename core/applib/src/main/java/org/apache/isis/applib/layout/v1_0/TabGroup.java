@@ -26,6 +26,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+
 @XmlType()
 public class TabGroup implements Serializable {
 
@@ -50,7 +53,7 @@ public class TabGroup implements Serializable {
 
 
 
-    private DomainObject owner;
+    private ObjectLayoutMetadata owner;
 
     /**
      * Owner.
@@ -60,12 +63,26 @@ public class TabGroup implements Serializable {
      * </p>
      */
     @XmlTransient
-    public DomainObject getOwner() {
+    public ObjectLayoutMetadata getOwner() {
         return owner;
     }
 
-    public void setOwner(final DomainObject owner) {
+    public void setOwner(final ObjectLayoutMetadata owner) {
         this.owner = owner;
+    }
+
+
+    public static class Predicates {
+        public static Predicate<TabGroup> notEmpty() {
+            return new Predicate<TabGroup>() {
+                @Override
+                public boolean apply(final TabGroup tabGroup) {
+                    return FluentIterable
+                            .from(tabGroup.getTabs())
+                            .anyMatch(Tab.Predicates.notEmpty());
+                }
+            };
+        }
     }
 
 }

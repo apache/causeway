@@ -206,7 +206,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
         try {
             Constructor<? extends Page> constructor = signInPageClass.getConstructor(PageParameters.class, ExceptionModel.class);
             signInPage = constructor.newInstance(parameters, exceptionModel);
-        } catch (Exception _) {
+        } catch (Exception ex) {
             try {
                 IPageFactory pageFactory = Application.get().getPageFactory();
                 signInPage = pageFactory.newPage(signInPageClass, parameters);

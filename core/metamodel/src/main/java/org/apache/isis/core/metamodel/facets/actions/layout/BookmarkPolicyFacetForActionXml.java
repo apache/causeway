@@ -20,14 +20,14 @@
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.v1_0.Action;
+import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
 public class BookmarkPolicyFacetForActionXml extends BookmarkPolicyFacetAbstract {
 
-    public static BookmarkPolicyFacet create(final Action actionLayout, final FacetHolder holder) {
+    public static BookmarkPolicyFacet create(final ActionLayoutMetadata actionLayout, final FacetHolder holder) {
         if (actionLayout == null) {
             return null;
         }

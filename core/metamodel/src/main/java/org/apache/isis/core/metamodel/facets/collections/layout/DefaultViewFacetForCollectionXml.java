@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.Collection;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
 import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
@@ -32,7 +32,7 @@ public class DefaultViewFacetForCollectionXml extends DefaultViewFacetAbstract {
         super(value, holder);
     }
 
-    public static DefaultViewFacet create(Collection collectionLayout, FacetHolder holder) {
+    public static DefaultViewFacet create(CollectionLayoutMetadata collectionLayout, FacetHolder holder) {
         if (collectionLayout == null) {
             return null;
         }

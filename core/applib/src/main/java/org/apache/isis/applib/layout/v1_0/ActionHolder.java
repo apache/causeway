@@ -21,5 +21,5 @@ package org.apache.isis.applib.layout.v1_0;
 import java.util.List;
 
 public interface ActionHolder {
-    List<Action> getActions();
+    List<ActionLayoutMetadata> getActions();
 }

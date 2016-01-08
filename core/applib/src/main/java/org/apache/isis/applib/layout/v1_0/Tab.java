@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -130,9 +131,20 @@ public class Tab implements Serializable {
         if(propertyGroups != null) {
             contents.addAll(propertyGroups);
         }
-        final List<Collection> collections = column.getCollections();
-        if(collections != null) {
-            contents.addAll(collections);
+        final List<CollectionLayoutMetadata> collectionLayoutMetadatas = column.getCollections();
+        if(collectionLayoutMetadatas != null) {
+            contents.addAll(collectionLayoutMetadatas);
+        }
+    }
+
+    public static class Predicates {
+        public static Predicate<Tab> notEmpty() {
+            return new Predicate<Tab>() {
+                @Override
+                public boolean apply(final Tab tab) {
+                    return !tab.getContents().isEmpty();
+                }
+            };
         }
     }
 }

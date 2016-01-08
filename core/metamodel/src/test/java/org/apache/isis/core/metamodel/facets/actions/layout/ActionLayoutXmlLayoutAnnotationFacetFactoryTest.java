@@ -41,7 +41,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
+public class ActionLayoutXmlLayoutAnnotationFacetFactoryTest extends AbstractFacetFactoryJUnit4TestCase {
 
     ActionLayoutFacetFactory facetFactory;
 
@@ -119,7 +119,7 @@ public class ActionLayoutAnnotationFacetFactoryTest extends AbstractFacetFactory
         Assert.assertTrue(facet instanceof ActionPositionFacetFallback);
     }
 
-    public static class CssClassFa extends ActionLayoutAnnotationFacetFactoryTest {
+    public static class CssClassFa extends ActionLayoutXmlLayoutAnnotationFacetFactoryTest {
 
         @Test
         public void testDefaultPosition() {

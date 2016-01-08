@@ -22,13 +22,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
+import com.google.common.base.Function;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 
@@ -66,31 +67,31 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
 
 
 
-    private List<Action> actions;
+    private List<ActionLayoutMetadata> actions;
 
     @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
-    public List<Action> getActions() {
+    public List<ActionLayoutMetadata> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
+    public void setActions(List<ActionLayoutMetadata> actionLayoutMetadatas) {
+        this.actions = actionLayoutMetadatas;
     }
 
 
 
     // must be at least one property in the property group
-    private List<Property> properties = new ArrayList<Property>() {{
-        add(new Property());
+    private List<PropertyLayoutMetadata> properties = new ArrayList<PropertyLayoutMetadata>() {{
+        add(new PropertyLayoutMetadata());
     }};
 
     @XmlElement(name = "property", required = true)
-    public List<Property> getProperties() {
+    public List<PropertyLayoutMetadata> getProperties() {
         return properties;
     }
 
-    public void setProperties(List<Property> properties) {
+    public void setProperties(List<PropertyLayoutMetadata> properties) {
         this.properties = properties;
     }
 
@@ -112,5 +113,17 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
         this.owner = owner;
     }
 
+
+    public static class Util {
+        private Util(){}
+        public static Function<? super PropertyGroup, String> nameOf() {
+            return new Function<PropertyGroup, String>() {
+                @Nullable @Override
+                public String apply(@Nullable final PropertyGroup propertyGroup) {
+                    return propertyGroup.getName();
+                }
+            };
+        }
+    }
 
 }

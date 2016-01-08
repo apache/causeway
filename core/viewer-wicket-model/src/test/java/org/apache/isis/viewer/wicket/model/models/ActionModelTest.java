@@ -19,14 +19,14 @@
 
 package org.apache.isis.viewer.wicket.model.models;
 
+import java.util.Map;
+
+import org.junit.Test;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-
-import java.util.Map;
-
-import org.junit.Test;
 
 public class ActionModelTest {
 

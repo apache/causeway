@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 
 import java.util.List;
 
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -30,13 +31,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.v1_0.DomainObject;
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.layoutxml.LayoutXmlFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutxml.ObjectLayoutMetadataFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -71,16 +72,19 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         }
 
         // forces metadata to be derived && synced
-        final LayoutXmlFacet layoutXmlFacet = model.getTypeOfSpecification().getFacet(LayoutXmlFacet.class);
-        final DomainObject domainObject = layoutXmlFacet.getLayoutMetadata();
+        final ObjectLayoutMetadataFacet objectLayoutMetadataFacet = model.getTypeOfSpecification().getFacet(ObjectLayoutMetadataFacet.class);
+        final ObjectLayoutMetadata objectLayoutMetadata = objectLayoutMetadataFacet.getMetadata();
 
         // TODO: debugging, remove
-        final String xml = getServicesInjector().lookupService(JaxbService.class).toXml(domainObject);
+        final String xml = getServicesInjector().lookupService(JaxbService.class).toXml(objectLayoutMetadata);
         System.out.println(xml);
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
-        final List<TabGroup> tabGroups = domainObject.getTabGroups();
+        final List<TabGroup> tabGroups = FluentIterable
+                .from(objectLayoutMetadata.getTabGroups())
+                .filter(TabGroup.Predicates.notEmpty())
+                .toList();
         final ListView<TabGroup> tabGroupsList =
                 new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
 
@@ -89,10 +93,12 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
                 final List<ITab> tabs = Lists.newArrayList();
                 final TabGroup tabGroup = item.getModelObject();
-                final List<Tab> tabList = tabGroup.getTabs();
+                final List<Tab> tabList = FluentIterable
+                        .from(tabGroup.getTabs())
+                        .filter(Tab.Predicates.notEmpty())
+                        .toList();
 
                 for (final Tab tab : tabList) {
-
                     tabs.add(new AbstractTab(Model.of(tab.getName())) {
                         private static final long serialVersionUID = 1L;
 
@@ -115,10 +121,9 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
             super(id);
 
             final EntityModel modelWithTabHints = new EntityModel(model.getPageParameters());
-            model.setTabMetadata(tab);
+            modelWithTabHints.setTabMetadata(tab);
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
-
         }
     }
 }

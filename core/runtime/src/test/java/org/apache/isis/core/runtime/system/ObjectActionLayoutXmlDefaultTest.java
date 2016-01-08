@@ -45,7 +45,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
-public class ObjectActionDefaultTest {
+public class ObjectActionLayoutXmlDefaultTest {
 
     @Rule
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(Mode.INTERFACES_AND_CLASSES);

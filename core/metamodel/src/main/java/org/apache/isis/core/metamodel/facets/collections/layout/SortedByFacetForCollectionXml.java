@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import java.util.Comparator;
 
-import org.apache.isis.applib.layout.v1_0.Collection;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetA
 
 public class SortedByFacetForCollectionXml extends SortedByFacetAbstract {
 
-    public static SortedByFacet create(Collection collectionLayout, FacetHolder holder) {
+    public static SortedByFacet create(CollectionLayoutMetadata collectionLayout, FacetHolder holder) {
         if(collectionLayout == null) {
             return null;
         }
