@@ -28,14 +28,11 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.layout.v1_0.Action;
 import org.apache.isis.applib.layout.v1_0.ActionHolder;
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
 import org.apache.isis.applib.layout.v1_0.Collection;
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
 import org.apache.isis.applib.layout.v1_0.Column;
 import org.apache.isis.applib.layout.v1_0.DomainObject;
 import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.applib.layout.v1_0.PropertyGroup;
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.i18n.TranslationService;
@@ -43,30 +40,30 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionLayoutXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionLayoutXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionLayoutXml;
+import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
+import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
 import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyLayoutXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyLayoutXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
+import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -281,53 +278,46 @@ public class LayoutXmlFacetDefault
                 }
                 FacetUtil.addFacet(
                     new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
-            }
 
-            @Override
-            public void visit(final ActionLayout actionLayout) {
-                final Action action = actionLayout.getOwner();
-                final ActionHolder actionHolder = action.getOwner();
 
                 if(actionHolder instanceof PropertyGroup) {
-                    if(actionLayout.getPosition() == null ||
-                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
-                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
-                       actionLayout.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
+                    if(action.getPosition() == null ||
+                       action.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
+                       action.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
+                       action.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
                 } else if(actionHolder instanceof Property) {
-                    if(actionLayout.getPosition() == null ||
-                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
-                       actionLayout.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
-                       actionLayout.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
+                    if(action.getPosition() == null ||
+                       action.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
+                       action.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
+                       action.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
                     }
                 } else {
                     // doesn't do anything for DomainObject or Collection
-                    actionLayout.setPosition(null);
+                    action.setPosition(null);
                 }
 
-                final ObjectAction objectAction = objectActionById.get(action.getId());
-                FacetUtil.addFacet(ActionPositionFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(BookmarkPolicyFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(CssClassFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(CssClassFaFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(DescribedAsFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(HiddenFacetForActionLayoutXml.create(actionLayout, objectAction));
-                FacetUtil.addFacet(NamedFacetForActionLayoutXml.create(actionLayout, objectAction));
+                FacetUtil.addFacet(ActionPositionFacetForActionXml.create(action, objectAction));
+                FacetUtil.addFacet(BookmarkPolicyFacetForActionXml.create(action, objectAction));
+                FacetUtil.addFacet(CssClassFacetForActionXml.create(action, objectAction));
+                FacetUtil.addFacet(CssClassFaFacetForActionXml.create(action, objectAction));
+                FacetUtil.addFacet(DescribedAsFacetForActionXml.create(action, objectAction));
+                FacetUtil.addFacet(HiddenFacetForActionLayoutXml.create(action, objectAction));
+                FacetUtil.addFacet(NamedFacetForActionXml.create(action, objectAction));
             }
 
             @Override
-            public void visit(final PropertyLayout propertyLayout) {
-                final Property property = propertyLayout.getOwner();
+            public void visit(final Property property) {
 
                 final OneToOneAssociation oneToOneAssociation = oneToOneAssociationById.get(property.getId());
-                FacetUtil.addFacet(CssClassFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(DescribedAsFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(HiddenFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(LabelAtFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(MultiLineFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(NamedFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(RenderedAdjustedFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
-                FacetUtil.addFacet(TypicalLengthFacetForPropertyLayoutXml.create(propertyLayout, oneToOneAssociation));
+                FacetUtil.addFacet(CssClassFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(DescribedAsFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(HiddenFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(LabelAtFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(MultiLineFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(NamedFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(RenderedAdjustedFacetForPropertyXml.create(property, oneToOneAssociation));
+                FacetUtil.addFacet(TypicalLengthFacetForPropertyXml.create(property, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
                 final PropertyGroup propertyGroup = property.getOwner();
@@ -338,17 +328,16 @@ public class LayoutXmlFacetDefault
             }
 
             @Override
-            public void visit(final CollectionLayout collectionLayout) {
-                final Collection collection = collectionLayout.getOwner();
+            public void visit(final Collection collection) {
                 final OneToManyAssociation oneToManyAssociation = oneToManyAssociationById.get(collection.getId());
 
-                FacetUtil.addFacet(CssClassFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(DefaultViewFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(DescribedAsFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(HiddenFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(NamedFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(PagedFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
-                FacetUtil.addFacet(SortedByFacetForCollectionLayoutXml.create(collectionLayout, oneToManyAssociation));
+                FacetUtil.addFacet(CssClassFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(DefaultViewFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(DescribedAsFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(HiddenFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(NamedFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(PagedFacetForCollectionXml.create(collection, oneToManyAssociation));
+                FacetUtil.addFacet(SortedByFacetForCollectionXml.create(collection, oneToManyAssociation));
 
                 // copy the collection name onto the tab
                 final Column column = collection.getOwner();

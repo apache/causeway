@@ -21,25 +21,23 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
+import org.apache.isis.applib.layout.v1_0.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaFacetAbstract;
-import org.apache.isis.core.metamodel.facets.members.cssclassfa.CssClassFaPosition;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class CssClassFaFacetForActionLayoutXml extends CssClassFaFacetAbstract {
+public class CssClassFacetForActionXml extends CssClassFacetAbstract {
 
-    public static CssClassFaFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
+    public static CssClassFacet create(Action actionLayout, FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }
-        final String cssClassFa = Strings.emptyToNull(actionLayout.getCssClassFa());
-        CssClassFaPosition cssClassFaPosition = CssClassFaPosition.from(actionLayout.getCssClassFaPosition());
-        return cssClassFa != null ? new CssClassFaFacetForActionLayoutXml(cssClassFa, cssClassFaPosition, holder) : null;
+        final String cssClass = Strings.emptyToNull(actionLayout.getCssClass());
+        return cssClass != null ? new CssClassFacetForActionXml(cssClass, holder) : null;
     }
 
-    private CssClassFaFacetForActionLayoutXml(final String value, final CssClassFaPosition position, final FacetHolder holder) {
-        super(value, position, holder);
+    private CssClassFacetForActionXml(String value, FacetHolder holder) {
+        super(value, holder);
     }
 
 }

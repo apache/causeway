@@ -19,34 +19,25 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import java.util.Comparator;
+import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
-import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class SortedByFacetForCollectionLayoutXml extends SortedByFacetAbstract {
+public class DescribedAsFacetForCollectionXml extends DescribedAsFacetAbstract {
 
-    public static SortedByFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
+    public static DescribedAsFacet create(Collection collectionLayout, FacetHolder holder) {
         if(collectionLayout == null) {
             return null;
         }
-        final String sortedBy = collectionLayout.getSortedBy();
-        if (sortedBy == null) {
-            return null;
-        }
-        final Class sortedByClass = ClassUtil.forName(sortedBy);
-        if(sortedByClass == Comparator.class) {
-            return null;
-        }
-
-        return sortedByClass != null ? new SortedByFacetForCollectionLayoutXml(sortedByClass, holder) : null;
+        final String describedAs = Strings.emptyToNull(collectionLayout.getDescribedAs());
+        return describedAs != null ? new DescribedAsFacetForCollectionXml(describedAs, holder) : null;
     }
 
-    private SortedByFacetForCollectionLayoutXml(Class<? extends Comparator<?>> sortedBy, FacetHolder holder) {
-        super(sortedBy, holder);
+    private DescribedAsFacetForCollectionXml(String value, FacetHolder holder) {
+        super(value, holder);
     }
 
 }

@@ -17,25 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
-import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
 
-public class ActionPositionFacetForActionLayoutXml extends ActionPositionFacetAbstract {
+public class LabelAtFacetForPropertyXml extends LabelAtFacetAbstract {
 
-    public static ActionPositionFacet create(ActionLayout actionLayout, FacetHolder holder) {
-        if(actionLayout == null) {
+    public static LabelAtFacet create(final Property propertyLayout, FacetHolder holder) {
+        if (propertyLayout == null) {
             return null;
         }
-        final org.apache.isis.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
-        return position != null ? new ActionPositionFacetForActionLayoutXml(position, holder) : null;
+        final LabelPosition labelPosition = propertyLayout.getLabelPosition();
+        return labelPosition != null ? new LabelAtFacetForPropertyXml(labelPosition, holder) : null;
     }
 
-    private ActionPositionFacetForActionLayoutXml(final org.apache.isis.applib.annotation.ActionLayout.Position position, final FacetHolder holder) {
-        super(position, holder);
+    private LabelAtFacetForPropertyXml(final LabelPosition value, final FacetHolder holder) {
+        super(value, holder);
     }
 
 }

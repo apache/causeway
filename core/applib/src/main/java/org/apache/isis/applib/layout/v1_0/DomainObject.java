@@ -22,13 +22,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-
-import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.services.dto.Dto;
 
@@ -43,13 +40,9 @@ public class DomainObject implements Dto, ActionHolder, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private List<Action> actions = Lists.newArrayList();
+    private List<Action> actions;
 
-
-    /**
-     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
-     */
-    @XmlElementWrapper(name = "actions", required = true)
+    @XmlElementWrapper(name = "actions", required = false)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
         return actions;
@@ -87,11 +80,8 @@ public class DomainObject implements Dto, ActionHolder, Serializable {
         void visit(final Column column);
         void visit(final PropertyGroup propertyGroup);
         void visit(final Property property);
-        void visit(final PropertyLayout propertyLayout);
         void visit(final Collection collection);
-        void visit(final CollectionLayout collectionLayout);
         void visit(final Action action);
-        void visit(@Nullable final ActionLayout actionLayout);
     }
 
     public static class VisitorAdapter implements Visitor {
@@ -108,15 +98,9 @@ public class DomainObject implements Dto, ActionHolder, Serializable {
         @Override
         public void visit(final Property property) {}
         @Override
-        public void visit(final PropertyLayout propertyLayout) { }
-        @Override
         public void visit(final Collection collection) {}
         @Override
-        public void visit(final CollectionLayout collectionLayout) { }
-        @Override
         public void visit(final Action action) { }
-        @Override
-        public void visit(final ActionLayout actionLayout) { }
     }
 
     /**
@@ -163,9 +147,6 @@ public class DomainObject implements Dto, ActionHolder, Serializable {
             for (final Property property : properties) {
                 property.setOwner(propertyGroup);
                 visitor.visit(property);
-                final PropertyLayout layout = property.getLayout();
-                layout.setOwner(property);
-                visitor.visit(layout);
                 traverseActions(property, visitor);
             }
         }
@@ -175,21 +156,18 @@ public class DomainObject implements Dto, ActionHolder, Serializable {
         for (final Collection collection : column.getCollections()) {
             collection.setOwner(column);
             visitor.visit(collection);
-            final CollectionLayout layout = collection.getLayout();
-            layout.setOwner(collection);
-            visitor.visit(layout);
             traverseActions(collection, visitor);
         }
     }
 
     private void traverseActions(final ActionHolder actionHolder, final Visitor visitor) {
         final List<Action> actions = actionHolder.getActions();
+        if(actions == null) {
+            return;
+        }
         for (final Action action : actions) {
             action.setOwner(actionHolder);
             visitor.visit(action);
-            final ActionLayout layout = action.getLayout();
-            layout.setOwner(action);
-            visitor.visit(layout);
         }
     }
 

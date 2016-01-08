@@ -17,26 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DescribedAsFacetForCollectionLayoutXml extends DescribedAsFacetAbstract {
+public class DescribedAsFacetForPropertyXml extends DescribedAsFacetAbstract {
 
-    public static DescribedAsFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
-        if(collectionLayout == null) {
+    public static DescribedAsFacet create(Property propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
             return null;
         }
-        final String describedAs = Strings.emptyToNull(collectionLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForCollectionLayoutXml(describedAs, holder) : null;
+        final String describedAs = Strings.emptyToNull(propertyLayout.getDescribedAs());
+        return describedAs != null ? new DescribedAsFacetForPropertyXml(describedAs, holder) : null;
     }
 
-    private DescribedAsFacetForCollectionLayoutXml(String value, FacetHolder holder) {
+    private DescribedAsFacetForPropertyXml(String value, FacetHolder holder) {
         super(value, holder);
     }
 

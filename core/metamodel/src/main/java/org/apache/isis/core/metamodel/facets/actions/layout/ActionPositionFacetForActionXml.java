@@ -17,25 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.layout;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
+import org.apache.isis.applib.layout.v1_0.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
-import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
+import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
 
-public class PagedFacetForCollectionLayoutXml extends PagedFacetAbstract {
+public class ActionPositionFacetForActionXml extends ActionPositionFacetAbstract {
 
-    public static PagedFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
-        if(collectionLayout == null) {
+    public static ActionPositionFacet create(Action actionLayout, FacetHolder holder) {
+        if(actionLayout == null) {
             return null;
         }
-        final Integer paged = collectionLayout.getPaged();
-        return paged != null && paged != -1 ? new PagedFacetForCollectionLayoutXml(paged, holder) : null;
+        final org.apache.isis.applib.annotation.ActionLayout.Position position = actionLayout.getPosition();
+        return position != null ? new ActionPositionFacetForActionXml(position, holder) : null;
     }
 
-    private PagedFacetForCollectionLayoutXml(int paged, FacetHolder holder) {
-        super(paged, holder);
+    private ActionPositionFacetForActionXml(final org.apache.isis.applib.annotation.ActionLayout.Position position, final FacetHolder holder) {
+        super(position, holder);
     }
 
 }

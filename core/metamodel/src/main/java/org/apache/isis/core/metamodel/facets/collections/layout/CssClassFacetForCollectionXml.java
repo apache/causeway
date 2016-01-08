@@ -17,25 +17,26 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
+import com.google.common.base.Strings;
+
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class LabelAtFacetForPropertyLayoutXml extends LabelAtFacetAbstract {
+public class CssClassFacetForCollectionXml extends CssClassFacetAbstract {
 
-    public static LabelAtFacet create(final PropertyLayout propertyLayout, FacetHolder holder) {
-        if (propertyLayout == null) {
+    public static CssClassFacet create(Collection collectionLayout, FacetHolder holder) {
+        if(collectionLayout == null) {
             return null;
         }
-        final LabelPosition labelPosition = propertyLayout.getLabelPosition();
-        return labelPosition != null ? new LabelAtFacetForPropertyLayoutXml(labelPosition, holder) : null;
+        final String cssClass = Strings.emptyToNull(collectionLayout.getCssClass());
+        return cssClass != null ? new CssClassFacetForCollectionXml(cssClass, holder) : null;
     }
 
-    private LabelAtFacetForPropertyLayoutXml(final LabelPosition value, final FacetHolder holder) {
+    private CssClassFacetForCollectionXml(String value, FacetHolder holder) {
         super(value, holder);
     }
 

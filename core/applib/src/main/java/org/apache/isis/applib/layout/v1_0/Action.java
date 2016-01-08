@@ -25,12 +25,22 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.Where;
+
+/**
+ * Broadly corresponds to {@link org.apache.isis.applib.annotation.ActionLayout}.
+ *
+ * <p>
+ *  Note that {@link org.apache.isis.applib.annotation.ActionLayout#contributed()} is omitted because this only applies
+ *  to domain services.
+ * </p>
+ */
 @XmlType(
-        name="action"
-        , propOrder = {
-                "id"
-                , "layout"
-        }
+    propOrder = {
+        "named"
+        , "describedAs"
+    }
 )
 public class Action implements Serializable {
 
@@ -61,15 +71,116 @@ public class Action implements Serializable {
 
 
 
-    private ActionLayout layout;
+    private BookmarkPolicy bookmarking;
 
-    @XmlElement(name="layout", required = true)
-    public ActionLayout getLayout() {
-        return layout;
+    @XmlAttribute(required = false)
+    public BookmarkPolicy getBookmarking() {
+        return bookmarking;
     }
 
-    public void setLayout(ActionLayout layout) {
-        this.layout = layout;
+    public void setBookmarking(BookmarkPolicy bookmarking) {
+        this.bookmarking = bookmarking;
+    }
+
+
+    private String cssClass;
+
+    @XmlAttribute(required = false)
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+
+    private String cssClassFa;
+
+    @XmlAttribute(required = false)
+    public String getCssClassFa() {
+        return cssClassFa;
+    }
+
+    public void setCssClassFa(String cssClassFa) {
+        this.cssClassFa = cssClassFa;
+    }
+
+
+
+    private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
+
+    @XmlAttribute(required = false)
+    public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
+        return cssClassFaPosition;
+    }
+
+    public void setCssClassFaPosition(org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition) {
+        this.cssClassFaPosition = cssClassFaPosition;
+    }
+
+
+    private String describedAs;
+
+    @XmlElement(required = false)
+    public String getDescribedAs() {
+        return describedAs;
+    }
+
+    public void setDescribedAs(String describedAs) {
+        this.describedAs = describedAs;
+    }
+
+
+
+    private Where hidden;
+
+    @XmlAttribute(required = false)
+    public Where getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Where hidden) {
+        this.hidden = hidden;
+    }
+
+
+
+    private String named;
+
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+
+
+
+    private Boolean namedEscaped;
+
+    @XmlAttribute(required = false)
+    public Boolean getNamedEscaped() {
+        return namedEscaped;
+    }
+
+    public void setNamedEscaped(Boolean namedEscaped) {
+        this.namedEscaped = namedEscaped;
+    }
+
+
+
+    private org.apache.isis.applib.annotation.ActionLayout.Position position;
+
+    @XmlAttribute(required = false)
+    public org.apache.isis.applib.annotation.ActionLayout.Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(org.apache.isis.applib.annotation.ActionLayout.Position position) {
+        this.position = position;
     }
 
 

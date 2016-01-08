@@ -19,25 +19,24 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import com.google.common.base.Strings;
-
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
+import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.v1_0.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
+import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacetAbstract;
 
-public class CssClassFacetForActionLayoutXml extends CssClassFacetAbstract {
+public class BookmarkPolicyFacetForActionXml extends BookmarkPolicyFacetAbstract {
 
-    public static CssClassFacet create(ActionLayout actionLayout, FacetHolder holder) {
-        if(actionLayout == null) {
+    public static BookmarkPolicyFacet create(final Action actionLayout, final FacetHolder holder) {
+        if (actionLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(actionLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForActionLayoutXml(cssClass, holder) : null;
+        final BookmarkPolicy bookmarkPolicy = actionLayout.getBookmarking();
+        return bookmarkPolicy != null && bookmarkPolicy != BookmarkPolicy.NEVER ? new BookmarkPolicyFacetForActionXml(bookmarkPolicy, holder) : null;
     }
 
-    private CssClassFacetForActionLayoutXml(String value, FacetHolder holder) {
-        super(value, holder);
+    private BookmarkPolicyFacetForActionXml(final BookmarkPolicy bookmarkPolicy, final FacetHolder holder) {
+        super(bookmarkPolicy, holder);
     }
 
 }

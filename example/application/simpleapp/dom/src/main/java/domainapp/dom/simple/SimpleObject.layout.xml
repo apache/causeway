@@ -8,11 +8,10 @@
             <left span="4">
                 <propertyGroup name="General">
                     <actions/>
-                    <property id="name">
+                    <property id="name" labelPosition="TOP">
                         <actions>
                             <action id="updateName"/>
                         </actions>
-                        <layout/>
                     </property>
                 </propertyGroup>
             </left>
@@ -23,10 +22,7 @@
                     <actions>
                         <action id="downloadJdoMetadata"/>
                     </actions>
-                    <property id="versionSequence">
-                        <actions/>
-                        <layout labelPosition="TOP" multiLine="5" cssClass="abcde"/>
-                    </property>
+                    <property id="versionSequence"/>
                 </propertyGroup>
             </left>
         </tab>
@@ -34,10 +30,7 @@
     <tabGroup>
         <tab name="Similar To">
             <left span="12">
-                <collection id="similarTo">
-                    <actions/>
-                    <layout/>
-                </collection>
+                <collection id="similarTo"/>
             </left>
         </tab>
     </tabGroup>

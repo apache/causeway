@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class NamedFacetForPropertyLayoutXml extends NamedFacetAbstract {
+public class NamedFacetForCollectionXml extends NamedFacetAbstract {
 
-    public static NamedFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
+    public static NamedFacet create(Collection collectionLayout, FacetHolder holder) {
+        if(collectionLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(propertyLayout.getNamed());
-        final Boolean escaped = propertyLayout.getNamedEscaped();
-        return named != null ? new NamedFacetForPropertyLayoutXml(named, (escaped == null || escaped), holder) : null;
+        final String named = Strings.emptyToNull(collectionLayout.getNamed());
+        final Boolean escaped = collectionLayout.getNamedEscaped();
+        return named != null ? new NamedFacetForCollectionXml(named, escaped == null || escaped, holder) : null;
     }
 
-    private NamedFacetForPropertyLayoutXml(
+    private NamedFacetForCollectionXml(
         final String value,
         final boolean escaped,
         final FacetHolder holder) {

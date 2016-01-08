@@ -17,27 +17,32 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
-public class DescribedAsFacetForActionLayoutXml extends DescribedAsFacetAbstract {
+public class NamedFacetForPropertyXml extends NamedFacetAbstract {
 
-    public static DescribedAsFacet create(ActionLayout actionLayout, FacetHolder holder) {
-        if(actionLayout == null) {
+    public static NamedFacet create(Property propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
             return null;
         }
-        final String describedAs = Strings.emptyToNull(actionLayout.getDescribedAs());
-        return describedAs != null ? new DescribedAsFacetForActionLayoutXml(describedAs, holder) : null;
+        final String named = Strings.emptyToNull(propertyLayout.getNamed());
+        final Boolean escaped = propertyLayout.getNamedEscaped();
+        return named != null ? new NamedFacetForPropertyXml(named, (escaped == null || escaped), holder) : null;
     }
 
-    private DescribedAsFacetForActionLayoutXml(String value, FacetHolder holder) {
-        super(value, holder);
+    private NamedFacetForPropertyXml(
+        final String value,
+        final boolean escaped,
+        final FacetHolder holder) {
+
+        super(value, escaped, holder);
     }
 
 }

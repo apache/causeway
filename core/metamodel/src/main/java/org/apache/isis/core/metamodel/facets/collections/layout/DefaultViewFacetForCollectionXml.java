@@ -21,23 +21,23 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
+import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
 
-public class CssClassFacetForCollectionLayoutXml extends CssClassFacetAbstract {
+public class DefaultViewFacetForCollectionXml extends DefaultViewFacetAbstract {
 
-    public static CssClassFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
-        if(collectionLayout == null) {
-            return null;
-        }
-        final String cssClass = Strings.emptyToNull(collectionLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForCollectionLayoutXml(cssClass, holder) : null;
-    }
-
-    private CssClassFacetForCollectionLayoutXml(String value, FacetHolder holder) {
+    private DefaultViewFacetForCollectionXml(String value, FacetHolder holder) {
         super(value, holder);
     }
 
+    public static DefaultViewFacet create(Collection collectionLayout, FacetHolder holder) {
+        if (collectionLayout == null) {
+            return null;
+        }
+
+        final String defaultView = Strings.emptyToNull(collectionLayout.getDefaultView());
+        return defaultView != null ? new DefaultViewFacetForCollectionXml(defaultView, holder) : null;
+    }
 }

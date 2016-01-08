@@ -27,13 +27,17 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.LabelPosition;
+import org.apache.isis.applib.annotation.Where;
 
+/**
+ * Broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
+ */
 @XmlType(
         propOrder = {
-                "id"
+                "named"
+                , "describedAs"
                 , "actions"
-                , "layout"
         }
 )
 public class Property implements ActionHolder, Serializable {
@@ -62,12 +66,119 @@ public class Property implements ActionHolder, Serializable {
     }
 
 
-    private List<Action> actions = Lists.newArrayList();
 
-    /**
-     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
-     */
-    @XmlElementWrapper(required = true)
+    private String cssClass;
+
+    @XmlAttribute(required = false)
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+
+    private String describedAs;
+
+    @XmlElement(required = false)
+    public String getDescribedAs() {
+        return describedAs;
+    }
+
+    public void setDescribedAs(String describedAs) {
+        this.describedAs = describedAs;
+    }
+
+
+    private Where hidden;
+
+    @XmlAttribute(required = false)
+    public Where getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Where hidden) {
+        this.hidden = hidden;
+    }
+
+
+    private LabelPosition labelPosition;
+
+    @XmlAttribute(required = false)
+    public LabelPosition getLabelPosition() {
+        return labelPosition;
+    }
+
+    public void setLabelPosition(LabelPosition labelPosition) {
+        this.labelPosition = labelPosition;
+    }
+
+
+    private Integer multiLine;
+
+    @XmlAttribute(required = false)
+    public Integer getMultiLine() {
+        return multiLine;
+    }
+
+    public void setMultiLine(Integer multiLine) {
+        this.multiLine = multiLine;
+    }
+
+
+    private String named;
+
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+
+
+    private Boolean namedEscaped;
+
+    @XmlAttribute(required = false)
+    public Boolean getNamedEscaped() {
+        return namedEscaped;
+    }
+
+    public void setNamedEscaped(Boolean namedEscaped) {
+        this.namedEscaped = namedEscaped;
+    }
+
+
+    private Boolean renderedAsDayBefore;
+
+    @XmlAttribute(required = false)
+    public Boolean getRenderedAsDayBefore() {
+        return renderedAsDayBefore;
+    }
+
+    public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
+        this.renderedAsDayBefore = renderedAsDayBefore;
+    }
+
+
+    private Integer typicalLength;
+
+    @XmlAttribute(required = false)
+    public Integer getTypicalLength() {
+        return typicalLength;
+    }
+
+    public void setTypicalLength(Integer typicalLength) {
+        this.typicalLength = typicalLength;
+    }
+
+
+
+    private List<Action> actions;
+
+    @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
         return actions;
@@ -76,19 +187,6 @@ public class Property implements ActionHolder, Serializable {
     public void setActions(List<Action> actions) {
         this.actions = actions;
     }
-
-    private PropertyLayout layout = new PropertyLayout();
-
-    @XmlElement(required = true)
-    public PropertyLayout getLayout() {
-        return layout;
-    }
-
-    public void setLayout(PropertyLayout layout) {
-        this.layout = layout;
-    }
-
-
 
 
     private PropertyGroup owner;

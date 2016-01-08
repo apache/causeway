@@ -21,23 +21,23 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.hidden.HiddenFacetAbstract;
 
-public class HiddenFacetForCollectionLayoutXml extends HiddenFacetAbstract {
+public class HiddenFacetForCollectionXml extends HiddenFacetAbstract {
 
-    public static HiddenFacet create(final CollectionLayout collectionLayout, final FacetHolder holder) {
+    public static HiddenFacet create(final Collection collectionLayout, final FacetHolder holder) {
         if (collectionLayout == null) {
             return null;
         }
         final Where where = collectionLayout.getHidden();
-        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForCollectionLayoutXml(where, holder) : null;
+        return where != null && where != Where.NOT_SPECIFIED  ? new HiddenFacetForCollectionXml(where, holder) : null;
     }
 
-    private HiddenFacetForCollectionLayoutXml(final Where where, final FacetHolder holder) {
+    private HiddenFacetForCollectionXml(final Where where, final FacetHolder holder) {
         super(When.ALWAYS, where, holder);
     }
 

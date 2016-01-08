@@ -18,6 +18,9 @@
  */
 package domainapp.dom.simple;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.jdo.JDOHelper;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.VersionStrategy;
@@ -143,6 +146,18 @@ public class SimpleObject implements Comparable<SimpleObject> {
 
     @javax.inject.Inject
     @SuppressWarnings("unused")
-    private DomainObjectContainer container;
+    DomainObjectContainer container;
+
+
+    public List<SimpleObject> getSimilarTo() {
+        return simpleObjects.findByName(getName().substring(0,1));
+    }
+
+    public List<SimpleObject> getOthers() {
+        return simpleObjects.listAll();
+    }
+
+    @Inject
+    SimpleObjects simpleObjects;
 
 }

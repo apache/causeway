@@ -17,29 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.actions.layout;
+package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import com.google.common.base.Strings;
-
-import org.apache.isis.applib.layout.v1_0.ActionLayout;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
 
-public class NamedFacetForActionLayoutXml extends NamedFacetAbstract {
+public class MultiLineFacetForPropertyXml extends MultiLineFacetAbstract {
 
-    public static NamedFacet create(final ActionLayout actionLayout, final FacetHolder holder) {
-        if(actionLayout == null) {
+    public static MultiLineFacet create(Property propertyLayout, FacetHolder holder) {
+        if(propertyLayout == null) {
             return null;
         }
-        final String named = Strings.emptyToNull(actionLayout.getNamed());
-        Boolean escaped = actionLayout.getNamedEscaped();
-        return named != null ? new NamedFacetForActionLayoutXml(named, (escaped == null || escaped), holder) : null;
+        final Integer multiLine = propertyLayout.getMultiLine();
+        return multiLine != null && multiLine > 1 ? new MultiLineFacetForPropertyXml(multiLine, false, holder) : null;
     }
 
-    private NamedFacetForActionLayoutXml(final String value, final boolean escaped, final FacetHolder holder) {
-
-        super(value, escaped, holder);
+    private MultiLineFacetForPropertyXml(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
+        super(numberOfLines, preventWrapping, holder);
     }
 
 }

@@ -18,11 +18,13 @@
  */
 package org.apache.isis.core.metamodel.layoutxml.v1_0;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import org.junit.After;
 import org.junit.Before;
@@ -79,10 +81,14 @@ public class DomainObjectTest {
 
         Action updateNameAction = new Action();
         updateNameAction.setId("updateName");
+        final List<Action> propertyActions = Lists.newArrayList();
+        nameProperty.setActions(propertyActions);
         nameProperty.getActions().add(updateNameAction);
 
         Action deleteAction = new Action();
         deleteAction.setId("delete");
+        final List<Action> domainObjectActions = Lists.newArrayList();
+        domainObject.setActions(domainObjectActions);
         domainObject.getActions().add(deleteAction);
 
         String xml = jaxbService.toXml(domainObject,

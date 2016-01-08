@@ -27,13 +27,22 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Lists;
+import org.apache.isis.applib.annotation.Where;
 
+/**
+ * Broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
+ *
+ * <p>
+ *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
+ *     {@link #defaultView} is its replacement.
+ * </p>
+ */
 @XmlType(
         propOrder = {
-                "id"
+                "named"
+                ,"describedAs"
+                ,"sortedBy"
                 , "actions"
-                , "layout"
         }
 )
 public class Collection implements ColumnContent, ActionHolder, Serializable {
@@ -62,12 +71,114 @@ public class Collection implements ColumnContent, ActionHolder, Serializable {
     }
 
 
-    private List<Action> actions = Lists.newArrayList();
+
+    private String cssClass;
+
+    @XmlAttribute(required = false)
+    public String getCssClass() {
+        return cssClass;
+    }
+
+    public void setCssClass(String cssClass) {
+        this.cssClass = cssClass;
+    }
+
+
+
+    private String describedAs;
+
+    @XmlElement(required = false)
+    public String getDescribedAs() {
+        return describedAs;
+    }
+
+    public void setDescribedAs(String describedAs) {
+        this.describedAs = describedAs;
+    }
+
+
+
+    private String defaultView;
 
     /**
-     * The <code>&lt;actions&gt;</code> element must be present but can be empty.
+     * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
+     * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
      */
-    @XmlElementWrapper(name = "actions", required = true)
+    @XmlAttribute(required = false)
+    public String getDefaultView() {
+        return defaultView;
+    }
+
+    public void setDefaultView(String defaultView) {
+        this.defaultView = defaultView;
+    }
+
+
+    private Where hidden;
+
+    @XmlAttribute(required = false)
+    public Where getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Where hidden) {
+        this.hidden = hidden;
+    }
+
+
+    private String named;
+
+    @XmlElement(required = false)
+    public String getNamed() {
+        return named;
+    }
+
+    public void setNamed(String named) {
+        this.named = named;
+    }
+
+
+    private Boolean namedEscaped;
+
+    @XmlAttribute(required = false)
+    public Boolean getNamedEscaped() {
+        return namedEscaped;
+    }
+
+    public void setNamedEscaped(Boolean namedEscaped) {
+        this.namedEscaped = namedEscaped;
+    }
+
+
+    private Integer paged;
+
+    @XmlAttribute(required = false)
+    public Integer getPaged() {
+        return paged;
+    }
+
+    public void setPaged(Integer paged) {
+        this.paged = paged;
+    }
+
+
+
+    private String sortedBy;
+
+    @XmlElement(required = false)
+    public String getSortedBy() {
+        return sortedBy;
+    }
+
+    public void setSortedBy(String sortedBy) {
+        this.sortedBy = sortedBy;
+    }
+
+
+
+    private List<Action> actions;
+
+    @XmlElementWrapper(name = "actions", required = false)
     @XmlElement(name = "action", required = false)
     public List<Action> getActions() {
         return actions;
@@ -77,17 +188,6 @@ public class Collection implements ColumnContent, ActionHolder, Serializable {
         this.actions = actions;
     }
 
-
-    private CollectionLayout layout = new CollectionLayout();
-
-    @XmlElement(name = "layout", required = true)
-    public CollectionLayout getLayout() {
-        return layout;
-    }
-
-    public void setLayout(CollectionLayout layout) {
-        this.layout = layout;
-    }
 
 
     private Column owner;

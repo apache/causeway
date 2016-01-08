@@ -19,25 +19,31 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacetAbstract;
 
-public class RenderedAdjustedFacetForPropertyLayoutXml extends RenderedAdjustedFacetAbstract {
+public class TypicalLengthFacetForPropertyXml extends TypicalLengthFacetAbstract {
 
-    public static RenderedAdjustedFacet create(final PropertyLayout propertyLayout, FacetHolder holder) {
+    public static TypicalLengthFacet create(Property propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final Boolean renderedAsDayBefore = propertyLayout.getRenderedAsDayBefore();
-        return renderedAsDayBefore != null && renderedAsDayBefore ? new RenderedAdjustedFacetForPropertyLayoutXml(holder) : null;
+        final Integer typicalLength = propertyLayout.getTypicalLength();
+        return typicalLength != null && typicalLength != -1 ? new TypicalLengthFacetForPropertyXml(typicalLength, holder) : null;
     }
 
-    public static final int ADJUST_BY = -1;
+    private final int typicalLength;
 
-    private RenderedAdjustedFacetForPropertyLayoutXml(FacetHolder holder) {
-        super(ADJUST_BY, holder);
+    private TypicalLengthFacetForPropertyXml(int typicalLength, FacetHolder holder) {
+        super(holder, Derivation.NOT_DERIVED);
+        this.typicalLength = typicalLength;
+    }
+
+    @Override
+    public int value() {
+        return typicalLength;
     }
 
 }

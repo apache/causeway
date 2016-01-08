@@ -5,7 +5,7 @@
 
   <xs:complexType name="domainObject">
     <xs:sequence>
-      <xs:element name="actions">
+      <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
@@ -18,13 +18,6 @@
 
   <xs:complexType name="action">
     <xs:sequence>
-      <xs:element name="layout" type="tns:actionLayout" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  <xs:complexType name="actionLayout">
-    <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
     </xs:sequence>
@@ -33,8 +26,9 @@
     <xs:attribute name="cssClassFa" type="xs:string"/>
     <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
     <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
-    <xs:attribute name="position" type="tns:position" use="required"/>
+    <xs:attribute name="position" type="tns:position"/>
   </xs:complexType>
 
   <xs:complexType name="tabGroup">
@@ -78,25 +72,19 @@
 
   <xs:complexType name="property">
     <xs:sequence>
-      <xs:element name="actions">
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="layout" type="tns:propertyLayout"/>
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  <xs:complexType name="propertyLayout">
-    <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="labelPosition" type="tns:labelPosition"/>
     <xs:attribute name="multiLine" type="xs:int"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
@@ -106,27 +94,21 @@
 
   <xs:complexType name="collection">
     <xs:sequence>
-      <xs:element name="actions">
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
+      <xs:element name="actions" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="action" type="tns:action" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="layout" type="tns:collectionLayout"/>
-    </xs:sequence>
-    <xs:attribute name="id" type="xs:string" use="required"/>
-  </xs:complexType>
-
-  <xs:complexType name="collectionLayout">
-    <xs:sequence>
-      <xs:element name="named" type="xs:string" minOccurs="0"/>
-      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
     <xs:attribute name="defaultView" type="xs:string"/>
     <xs:attribute name="hidden" type="tns:where"/>
+    <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="paged" type="xs:int"/>
   </xs:complexType>

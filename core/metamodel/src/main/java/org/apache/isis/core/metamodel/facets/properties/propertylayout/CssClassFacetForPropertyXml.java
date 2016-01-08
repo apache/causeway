@@ -19,23 +19,25 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
+import com.google.common.base.Strings;
+
+import org.apache.isis.applib.layout.v1_0.Property;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.multiline.MultiLineFacetAbstract;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
+import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
-public class MultiLineFacetForPropertyLayoutXml extends MultiLineFacetAbstract {
+public class CssClassFacetForPropertyXml extends CssClassFacetAbstract {
 
-    public static MultiLineFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
+    public static CssClassFacet create(Property propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }
-        final Integer multiLine = propertyLayout.getMultiLine();
-        return multiLine != null && multiLine > 1 ? new MultiLineFacetForPropertyLayoutXml(multiLine, false, holder) : null;
+        final String cssClass = Strings.emptyToNull(propertyLayout.getCssClass());
+        return cssClass != null ? new CssClassFacetForPropertyXml(cssClass, holder) : null;
     }
 
-    private MultiLineFacetForPropertyLayoutXml(int numberOfLines, boolean preventWrapping, FacetHolder holder) {
-        super(numberOfLines, preventWrapping, holder);
+    private CssClassFacetForPropertyXml(String value, FacetHolder holder) {
+        super(value, holder);
     }
 
 }

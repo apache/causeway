@@ -17,27 +17,27 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.collections.layout;
+package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayout;
+import org.apache.isis.applib.layout.v1_0.Action;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacet;
-import org.apache.isis.core.metamodel.facets.collections.collection.defaultview.DefaultViewFacetAbstract;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacetAbstract;
 
-public class DefaultViewFacetForCollectionLayoutXml extends DefaultViewFacetAbstract {
+public class DescribedAsFacetForActionXml extends DescribedAsFacetAbstract {
 
-    private DefaultViewFacetForCollectionLayoutXml(String value, FacetHolder holder) {
+    public static DescribedAsFacet create(Action actionLayout, FacetHolder holder) {
+        if(actionLayout == null) {
+            return null;
+        }
+        final String describedAs = Strings.emptyToNull(actionLayout.getDescribedAs());
+        return describedAs != null ? new DescribedAsFacetForActionXml(describedAs, holder) : null;
+    }
+
+    private DescribedAsFacetForActionXml(String value, FacetHolder holder) {
         super(value, holder);
     }
 
-    public static DefaultViewFacet create(CollectionLayout collectionLayout, FacetHolder holder) {
-        if (collectionLayout == null) {
-            return null;
-        }
-
-        final String defaultView = Strings.emptyToNull(collectionLayout.getDefaultView());
-        return defaultView != null ? new DefaultViewFacetForCollectionLayoutXml(defaultView, holder) : null;
-    }
 }

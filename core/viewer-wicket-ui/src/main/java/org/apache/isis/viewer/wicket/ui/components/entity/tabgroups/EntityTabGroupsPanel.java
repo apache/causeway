@@ -33,6 +33,7 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.layout.v1_0.DomainObject;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
+import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutxml.LayoutXmlFacet;
@@ -72,6 +73,10 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         // forces metadata to be derived && synced
         final LayoutXmlFacet layoutXmlFacet = model.getTypeOfSpecification().getFacet(LayoutXmlFacet.class);
         final DomainObject domainObject = layoutXmlFacet.getLayoutMetadata();
+
+        // TODO: debugging, remove
+        final String xml = getServicesInjector().lookupService(JaxbService.class).toXml(domainObject);
+        System.out.println(xml);
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 

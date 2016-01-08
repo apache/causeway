@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.properties.propertylayout;
+package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import com.google.common.base.Strings;
-
-import org.apache.isis.applib.layout.v1_0.PropertyLayout;
+import org.apache.isis.applib.layout.v1_0.Collection;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
+import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
-public class CssClassFacetForPropertyLayoutXml extends CssClassFacetAbstract {
+public class PagedFacetForCollectionXml extends PagedFacetAbstract {
 
-    public static CssClassFacet create(PropertyLayout propertyLayout, FacetHolder holder) {
-        if(propertyLayout == null) {
+    public static PagedFacet create(Collection collectionLayout, FacetHolder holder) {
+        if(collectionLayout == null) {
             return null;
         }
-        final String cssClass = Strings.emptyToNull(propertyLayout.getCssClass());
-        return cssClass != null ? new CssClassFacetForPropertyLayoutXml(cssClass, holder) : null;
+        final Integer paged = collectionLayout.getPaged();
+        return paged != null && paged != -1 ? new PagedFacetForCollectionXml(paged, holder) : null;
     }
 
-    private CssClassFacetForPropertyLayoutXml(String value, FacetHolder holder) {
-        super(value, holder);
+    private PagedFacetForCollectionXml(int paged, FacetHolder holder) {
+        super(paged, holder);
     }
 
 }
