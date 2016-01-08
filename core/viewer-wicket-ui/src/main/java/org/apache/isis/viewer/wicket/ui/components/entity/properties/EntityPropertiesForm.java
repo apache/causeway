@@ -242,9 +242,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             final MarkupContainer col,
             final MemberGroupLayoutHint hint,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny, final ColumnSpans columnSpans) {
-        final boolean addedProperties;
-        addedProperties = addPropertiesInColumn(col, hint, entityModel, tabMetaDataIfAny, columnSpans);
+            final Tab tabMetaDataIfAny,
+            final ColumnSpans columnSpans) {
+        final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint.from(tabMetaDataIfAny) : null;
+        final boolean addedProperties = addPropertiesInColumn(col, hint, entityModel, columnSpans, columnMetaDataIfAny);
         addCollectionsIfRequired(col, hint, entityModel, tabMetaDataIfAny);
         return addedProperties;
     }
@@ -253,14 +254,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny,
-            final ColumnSpans columnSpans) {
+            final ColumnSpans columnSpans, final Column columnMetaDataIfAny) {
         final int span = hint.from(columnSpans);
-
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
-
-        final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint.from(tabMetaDataIfAny) : null;
 
         final List<ObjectAssociation> properties = visibleProperties(adapter);
 
@@ -269,7 +266,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(properties);
 
-        final List<String> groupNames = tabMetaDataIfAny != null
+        final List<String> groupNames = columnMetaDataIfAny != null
                 ? FluentIterable
                     .from(columnMetaDataIfAny.getPropertyGroups())
                     .transform(PropertyGroup.Util.nameOf())
@@ -312,7 +309,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                     actionsPanelDropDown,
                     AdditionalLinksPanel.Style.DROPDOWN);
         }
-        
+
         addClassForSpan(markupContainer, span);
 
         return !groupNames.isEmpty();

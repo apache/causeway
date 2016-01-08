@@ -652,7 +652,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     public EntityModel withColumnMetadata(final Column columnMetadata) {
         this.columnMetadata = columnMetadata;
-        this.tabMetadata = columnMetadata.getOwner();
         return this;
     }
 

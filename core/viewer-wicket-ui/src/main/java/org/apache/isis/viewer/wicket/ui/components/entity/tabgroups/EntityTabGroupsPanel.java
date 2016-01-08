@@ -112,6 +112,8 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
             }
         };
         add(tabGroupsList);
+
+        
     }
 
     private static class EntityTabPanel extends PanelAbstract {

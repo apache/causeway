@@ -30,7 +30,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 @XmlType()
-public class TabGroup implements Serializable {
+public class TabGroup implements ColumnHolder, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -52,6 +52,17 @@ public class TabGroup implements Serializable {
     }
 
 
+
+    private Column fixed;
+
+    @XmlElement(required = false)
+    public Column getFixed() {
+        return fixed;
+    }
+
+    public void setFixed(final Column fixed) {
+        this.fixed = fixed;
+    }
 
     private ObjectLayoutMetadata owner;
 

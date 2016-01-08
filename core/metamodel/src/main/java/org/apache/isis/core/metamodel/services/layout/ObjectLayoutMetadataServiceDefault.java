@@ -42,6 +42,7 @@ import org.apache.isis.applib.layout.v1_0.ActionHolder;
 import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnHolder;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroup;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
@@ -407,10 +408,13 @@ public class ObjectLayoutMetadataServiceDefault
 
                 // if there is only a single column and no other contents, then copy the collection Id onto the tab'
                 final Column column = collectionLayoutMetadata.getOwner();
-                final Tab tab = column.getOwner();
-                if(tab.getContents().size() == 1) {
-                    final String collectionName = oneToManyAssociation.getName();
-                    tab.setName(collectionName);
+                final ColumnHolder holder = column.getOwner();
+                if(holder instanceof Tab) {
+                    final Tab tab = (Tab) holder;
+                    if(tab.getContents().size() == 1) {
+                        final String collectionName = oneToManyAssociation.getName();
+                        tab.setName(collectionName);
+                    }
                 }
             }
 

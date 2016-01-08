@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "right"
         }
 )
-public class Tab implements Serializable {
+public class Tab implements ColumnHolder, Serializable {
 
     private static final long serialVersionUID = 1L;
 

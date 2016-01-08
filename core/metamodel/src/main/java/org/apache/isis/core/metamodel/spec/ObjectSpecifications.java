@@ -59,7 +59,7 @@ public final class ObjectSpecifications {
     public static List<String> orderByMemberGroups(
             final ObjectSpecification objSpec,
             final Set<String> groupNamesToOrder,
-            final MemberGroupLayoutHint memberGroupLayoutHint) {
+            final MemberGroupLayoutHint hint) {
 
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
@@ -69,10 +69,10 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(memberGroupLayoutHint == MemberGroupLayoutHint.MIDDLE) {
+        if(hint == MemberGroupLayoutHint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
-        if(memberGroupLayoutHint == MemberGroupLayoutHint.RIGHT) {
+        if(hint == MemberGroupLayoutHint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
         

@@ -123,7 +123,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
                 final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
                 final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
-                return deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+                return o1Facet == null? +1:
+                        o2Facet == null? -1:
+                        deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
             }
         });
 

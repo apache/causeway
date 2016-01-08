@@ -84,7 +84,7 @@ public class Column implements Serializable {
     }
 
 
-    private Tab owner;
+    private ColumnHolder owner;
     /**
      * Owner.
      *
@@ -93,11 +93,11 @@ public class Column implements Serializable {
      * </p>
      */
     @XmlTransient
-    public Tab getOwner() {
+    public ColumnHolder getOwner() {
         return owner;
     }
 
-    public void setOwner(final Tab owner) {
+    public void setOwner(final ColumnHolder owner) {
         this.owner = owner;
     }
 
