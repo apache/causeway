@@ -24,25 +24,27 @@
                 <form wicket:id="entityProperties" class="inputForm" role="form">
                     <div class="row" style="padding-bottom: 20px">
                         <div wicket:id="leftColumn">
-                            <div class="inputFormTable properties">
-                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
-                                            <div class="pull-right additionalLinks">
-                                                <div wicket:id="associatedActionLinksPanel"></div>
-                                                <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                            <div class="columnMembers">
+                                <div class="inputFormTable properties">
+                                    <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
+                                                <div class="pull-right additionalLinks">
+                                                    <div wicket:id="associatedActionLinksPanel"></div>
+                                                    <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                                                </div>
+                                            </div>
+                                            <div class="properties panel-body">
+                                                <div wicket:id="properties">
+                                                    <div wicket:id="property" class="property">[property]</div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="properties panel-body">
-                                            <div wicket:id="properties">
-                                                <div wicket:id="property" class="property">[property]</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
+                                </div>
+                                <div wicket:id="collections"></div>
                             </div>
-                            <div wicket:id="collections"></div>
                             <div class="feedbackPanel">
                                 <span wicket:id="feedback"></span>
                             </div>
@@ -53,46 +55,50 @@
                             </div>
                         </div>
                         <div wicket:id="middleColumn">
-                            <div class="inputFormTable properties">
-                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
-                                            <div class="pull-right additionalLinks">
-                                                <div wicket:id="associatedActionLinksPanel"></div>
-                                                <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                            <div class="columnMembers">
+                                <div class="inputFormTable properties">
+                                    <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
+                                                <div class="pull-right additionalLinks">
+                                                    <div wicket:id="associatedActionLinksPanel"></div>
+                                                    <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                                                </div>
+                                            </div>
+                                            <div class="properties panel-body">
+                                                <div wicket:id="properties">
+                                                    <div wicket:id="property" class="property">[property]</div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="properties panel-body">
-                                            <div wicket:id="properties">
-                                                <div wicket:id="property" class="property">[property]</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
+                                </div>
+                                <div wicket:id="collections"></div>
                             </div>
-                            <div wicket:id="collections"></div>
                         </div>
                         <div wicket:id="rightColumn">
-                            <div class="inputFormTable properties">
-                                <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
-                                            <div class="pull-right additionalLinks">
-                                                <div wicket:id="associatedActionLinksPanel"></div>
-                                                <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                            <div class="columnMembers">
+                                <div class="inputFormTable properties">
+                                    <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
+                                                <div class="pull-right additionalLinks">
+                                                    <div wicket:id="associatedActionLinksPanel"></div>
+                                                    <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                                                </div>
+                                            </div>
+                                            <div class="properties panel-body">
+                                                <div wicket:id="properties">
+                                                    <div wicket:id="property" class="property">[property]</div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="properties panel-body">
-                                            <div wicket:id="properties">
-                                                <div wicket:id="property" class="property">[property]</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
+                                </div>
+                                <div wicket:id="collections"></div>
                             </div>
-                            <div wicket:id="collections"></div>
                         </div>
                         <div wicket:id="entityCollections"></div>
                     </div>

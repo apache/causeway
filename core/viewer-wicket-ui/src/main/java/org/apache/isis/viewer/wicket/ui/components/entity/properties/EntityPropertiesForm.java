@@ -176,8 +176,29 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         
         boolean addedProperties;
         if(columnSpans.getLeft() > 0) {
-            addedProperties = addPropertiesAndCollections(
-                    leftColumn, MemberGroupLayoutHint.LEFT, entityModel, tabMetaDataIfAny, columnSpans);
+            final MemberGroupLayoutHint hint = MemberGroupLayoutHint.LEFT;
+
+            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint
+                    .from(tabMetaDataIfAny) : null;
+            addPropertiesAndCollections(leftColumn, hint, entityModel,
+                    columnSpans, columnMetaDataIfAny);
+
+            final ObjectAdapter adapter = entityModel.getObject();
+            final ObjectSpecification objSpec = adapter.getSpecification();
+
+            final Map<String, List<ObjectAssociation>> associationsByGroup =
+                    PropUtil
+                    .propertiesByMemberOrder(adapter);
+
+            final List<String> groupNames = columnMetaDataIfAny != null
+                    ? FluentIterable
+                    .from(columnMetaDataIfAny.getPropertyGroups())
+                    .transform(PropertyGroup.Util.nameOf())
+                    .toList()
+                    : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(),
+                    hint);
+
+            addedProperties = !groupNames.isEmpty();
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
         } else {
@@ -195,8 +216,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getMiddle() > 0) {
             MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesAndCollections(
-                    middleColumn, MemberGroupLayoutHint.MIDDLE, entityModel, tabMetaDataIfAny, columnSpans);
+            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? MemberGroupLayoutHint.MIDDLE
+                    .from(tabMetaDataIfAny) : null;
+            addPropertiesAndCollections(middleColumn, MemberGroupLayoutHint.MIDDLE, entityModel, columnSpans, columnMetaDataIfAny);
         } else {
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
@@ -205,8 +227,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         if(columnSpans.getRight() > 0) {
             MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesAndCollections(
-                    rightColumn, MemberGroupLayoutHint.RIGHT, entityModel, tabMetaDataIfAny, columnSpans);
+            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? MemberGroupLayoutHint.RIGHT
+                    .from(tabMetaDataIfAny) : null;
+            addPropertiesAndCollections(rightColumn, MemberGroupLayoutHint.RIGHT, entityModel, columnSpans, columnMetaDataIfAny);
         } else {
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
@@ -238,19 +261,16 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
     }
 
-    private boolean addPropertiesAndCollections(
+    private void addPropertiesAndCollections(
             final MarkupContainer col,
             final MemberGroupLayoutHint hint,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny,
-            final ColumnSpans columnSpans) {
-        final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint.from(tabMetaDataIfAny) : null;
-        final boolean addedProperties = addPropertiesInColumn(col, hint, entityModel, columnSpans, columnMetaDataIfAny);
-        addCollectionsIfRequired(col, hint, entityModel, tabMetaDataIfAny);
-        return addedProperties;
+            final ColumnSpans columnSpans, final Column columnMetaDataIfAny) {
+        addPropertiesInColumn(col, hint, entityModel, columnSpans, columnMetaDataIfAny);
+        addCollectionsIfRequired(col, entityModel, columnMetaDataIfAny);
     }
 
-    private boolean addPropertiesInColumn(
+    private void addPropertiesInColumn(
             final MarkupContainer markupContainer,
             final MemberGroupLayoutHint hint,
             final EntityModel entityModel,
@@ -259,19 +279,17 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
-        final List<ObjectAssociation> properties = visibleProperties(adapter);
-
-        final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
-        markupContainer.add(memberGroupRv);
-
-        final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(properties);
-
+        final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil
+                .propertiesByMemberOrder(adapter);
         final List<String> groupNames = columnMetaDataIfAny != null
                 ? FluentIterable
                     .from(columnMetaDataIfAny.getPropertyGroups())
                     .transform(PropertyGroup.Util.nameOf())
                     .toList()
                 : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
+
+        final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
+        markupContainer.add(memberGroupRv);
 
         for(final String groupName: groupNames) {
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
@@ -311,19 +329,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
 
         addClassForSpan(markupContainer, span);
-
-        return !groupNames.isEmpty();
     }
 
     private void addCollectionsIfRequired(
             final MarkupContainer column,
-            final MemberGroupLayoutHint hint,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny) {
-
-        if(tabMetaDataIfAny != null) {
-            final Column columnMetadata = hint.from(tabMetaDataIfAny);
-            final EntityModel modelWithMetadata = new EntityModel(entityModel.getPageParameters()).withColumnMetadata(columnMetadata);
+            final Column columnMetaDataIfAny) {
+        if(columnMetaDataIfAny != null) {
+            final EntityModel modelWithMetadata = new EntityModel(entityModel.getPageParameters()).withColumnMetadata(
+                    columnMetaDataIfAny);
             getComponentFactoryRegistry()
                     .addOrReplaceComponent(column, "collections", ComponentType.ENTITY_COLLECTIONS, modelWithMetadata);
         } else {
@@ -350,30 +364,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             component.add(new CssClassAppender("first-field"));
             renderedFirstField = true;
         }
-    }
-
-    private List<ObjectAssociation> visibleProperties(final ObjectAdapter adapter) {
-        return visibleProperties(adapter, Filters.<ObjectAssociation>any());
-    }
-
-    private List<ObjectAssociation> visibleProperties(
-            final ObjectAdapter adapter,
-            final Filter<ObjectAssociation> filter) {
-        final ObjectSpecification objSpec = adapter.getSpecification();
-
-        return objSpec.getAssociations(
-                Contributed.INCLUDED, visiblePropertiesFilter(adapter, filter));
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Filter<ObjectAssociation> visiblePropertiesFilter(
-            final ObjectAdapter adapter,
-            final Filter<ObjectAssociation> filter) {
-        return Filters.and(
-                ObjectAssociation.Filters.PROPERTIES,
-                ObjectAssociation.Filters.dynamicallyVisible(
-                        adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS),
-                filter);
     }
 
     @Override
@@ -815,7 +805,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     }
 
     
-    private static void addClassForSpan(final Component component, final int numGridCols) {
+    static void addClassForSpan(final Component component, final int numGridCols) {
         component.add(new CssClassAppender("col-xs-"+numGridCols));
     }
 
