@@ -15,8 +15,6 @@
                 </propertyGroup>
             </left>
             <right span="6">
-                <collection id="similarTo" defaultView="table"/>
-                <collection id="others" defaultView="hide"/>
             </right>
         </tab>
         <tab name="Metadata">
@@ -28,6 +26,14 @@
                     </actions>
                     <property id="versionSequence"/>
                 </propertyGroup>
+            </left>
+        </tab>
+    </tabGroup>
+    <tabGroup>
+        <tab name="Collections">
+            <left span="6">
+                <collection id="similarTo" defaultView="table"/>
+                <collection id="others" defaultView="hide"/>
             </left>
         </tab>
     </tabGroup>

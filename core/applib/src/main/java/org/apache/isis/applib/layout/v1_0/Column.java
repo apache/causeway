@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.MemberGroupLayout;
+
 @XmlType(
         propOrder = {
                 "propertyGroups"
@@ -101,5 +103,27 @@ public class Column implements Serializable {
         this.owner = owner;
     }
 
+    public enum Hint {
+        LEFT,
+        MIDDLE,
+        RIGHT;
 
+        public int from(MemberGroupLayout.ColumnSpans columnSpans) {
+            if(this == LEFT) return columnSpans.getLeft();
+            if(this == MIDDLE) return columnSpans.getMiddle();
+            if(this == RIGHT) return columnSpans.getRight();
+            throw new IllegalStateException();
+        }
+
+        public Column from(final Tab tab) {
+            if(tab == null) {
+                return null;
+            }
+            if(this == LEFT) return tab.getLeft();
+            if(this == MIDDLE) return tab.getMiddle();
+            if(this == RIGHT) return tab.getRight();
+            throw new IllegalStateException();
+        }
+
+    }
 }

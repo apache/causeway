@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
@@ -130,7 +130,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
     private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
-    private MemberGroupLayoutHint memberGroupLayoutHint;
+    private Hint hint;
 
     /**
      * Toggled by 'entityDetailsButton'.
@@ -451,11 +451,11 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         entityDetailsVisible = !entityDetailsVisible;
     }
 
-    public MemberGroupLayoutHint getMemberGroupLayoutHint() {
-        return memberGroupLayoutHint;
+    public Hint getHint() {
+        return hint;
     }
-    public void setMemberGroupLayoutHint(MemberGroupLayoutHint memberGroupLayoutHint) {
-        this.memberGroupLayoutHint = memberGroupLayoutHint;
+    public void setHint(Hint hint) {
+        this.hint = hint;
     }
 
     
@@ -649,14 +649,19 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     private Column columnMetadata;
+    private Column.Hint columnHint;
 
-    public EntityModel withColumnMetadata(final Column columnMetadata) {
+    public EntityModel withColumnMetadata(final Column columnMetadata, final Column.Hint columnHint) {
         this.columnMetadata = columnMetadata;
+        this.columnHint = columnHint;
         return this;
     }
 
     public Column getColumnMetadata() {
         return columnMetadata;
+    }
+    public Column.Hint getColumnHint() {
+        return columnHint;
     }
 
 

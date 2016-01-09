@@ -64,7 +64,7 @@ import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayo
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -151,7 +151,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-
         final Tab tabMetaDataIfAny = entityModel.getTabMetadata();
 
         final ColumnSpans columnSpans;
@@ -169,70 +168,70 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         }
 
         renderedFirstField = false;
-        
+
         // left column
+        // (unlike middle and right columns, the left column is always added to hold the edit buttons and feedback)
         MarkupContainer leftColumn = new WebMarkupContainer(ID_LEFT_COLUMN);
         add(leftColumn);
-        
-        boolean addedProperties;
+
         if(columnSpans.getLeft() > 0) {
-            final MemberGroupLayoutHint hint = MemberGroupLayoutHint.LEFT;
 
-            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? hint
-                    .from(tabMetaDataIfAny) : null;
-            addPropertiesAndCollections(leftColumn, hint, entityModel,
-                    columnSpans, columnMetaDataIfAny);
+            addPropertiesAndCollections(leftColumn, entityModel, tabMetaDataIfAny, Hint.LEFT);
 
-            final ObjectAdapter adapter = entityModel.getObject();
-            final ObjectSpecification objSpec = adapter.getSpecification();
-
-            final Map<String, List<ObjectAssociation>> associationsByGroup =
-                    PropUtil
-                    .propertiesByMemberOrder(adapter);
-
-            final List<String> groupNames = columnMetaDataIfAny != null
-                    ? FluentIterable
-                    .from(columnMetaDataIfAny.getPropertyGroups())
-                    .transform(PropertyGroup.Util.nameOf())
-                    .toList()
-                    : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(),
-                    hint);
-
-            addedProperties = !groupNames.isEmpty();
-            addButtons(leftColumn);
-            addFeedbackGui(leftColumn);
         } else {
             Components.permanentlyHide(this, ID_LEFT_COLUMN);
-            addedProperties = false;
         }
-        if(!addedProperties) {
-            // a bit hacky...
-            Components.permanentlyHide(this,
-                    ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON,
-                    ID_FEEDBACK);
-        }
-        
+
         // middle column
+        MarkupContainer middleColumn;
         if(columnSpans.getMiddle() > 0) {
-            MarkupContainer middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
+            middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? MemberGroupLayoutHint.MIDDLE
-                    .from(tabMetaDataIfAny) : null;
-            addPropertiesAndCollections(middleColumn, MemberGroupLayoutHint.MIDDLE, entityModel, columnSpans, columnMetaDataIfAny);
+
+            addPropertiesAndCollections(middleColumn, entityModel, tabMetaDataIfAny, Hint.MIDDLE);
         } else {
+            middleColumn = null;
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
         }
 
         // right column
+        MarkupContainer rightColumn;
         if(columnSpans.getRight() > 0) {
-            MarkupContainer rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
+            rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            final Column columnMetaDataIfAny = tabMetaDataIfAny != null ? MemberGroupLayoutHint.RIGHT
-                    .from(tabMetaDataIfAny) : null;
-            addPropertiesAndCollections(rightColumn, MemberGroupLayoutHint.RIGHT, entityModel, columnSpans, columnMetaDataIfAny);
+
+            addPropertiesAndCollections(rightColumn, entityModel, tabMetaDataIfAny, Hint.RIGHT);
         } else {
+            rightColumn = null;
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
         }
+
+        // column spans
+        if(columnSpans.getLeft() > 0) {
+            addClassForSpan(leftColumn, Hint.LEFT.from(columnSpans));
+        }
+        if(columnSpans.getMiddle() > 0) {
+            addClassForSpan(middleColumn, Hint.MIDDLE.from(columnSpans));
+        }
+        if(columnSpans.getRight() > 0) {
+            addClassForSpan(rightColumn, Hint.RIGHT.from(columnSpans));
+        }
+
+        // edit buttons and feedback
+        final Hint leftHint = Hint.LEFT;
+        final Column leftColumnMetaDataIfAny = leftHint.from(tabMetaDataIfAny);
+        final List<String> groupNames = PropUtil.propertyGroupNames(entityModel, leftHint, leftColumnMetaDataIfAny);
+        final boolean hasProperties = !groupNames.isEmpty();
+        if (hasProperties) {
+            addButtons(leftColumn);
+            addFeedbackGui(leftColumn);
+
+        } else {
+            Components.permanentlyHide(this,
+                    ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON,
+                    ID_FEEDBACK);
+        }
+
 
         // collections (only if not being added to a tab)
         if(tabMetaDataIfAny == null && columnSpans.getCollections() > 0) {
@@ -262,20 +261,31 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     }
 
     private void addPropertiesAndCollections(
-            final MarkupContainer col,
-            final MemberGroupLayoutHint hint,
+            final MarkupContainer middleColumn,
             final EntityModel entityModel,
-            final ColumnSpans columnSpans, final Column columnMetaDataIfAny) {
-        addPropertiesInColumn(col, hint, entityModel, columnSpans, columnMetaDataIfAny);
-        addCollectionsIfRequired(col, entityModel, columnMetaDataIfAny);
+            final Tab tabMetaDataIfAny, final Hint hint) {
+        final Column columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
+
+        final EntityModel entityModelWithHints =
+                new EntityModel(entityModel.getPageParameters())
+                        .withColumnMetadata(columnMetaDataIfAny, hint);
+
+        addPropertiesAndCollections(middleColumn, entityModelWithHints);
+    }
+
+    private void addPropertiesAndCollections(
+            final MarkupContainer col,
+            final EntityModel entityModel) {
+        addPropertiesInColumn(col, entityModel);
+        addCollectionsIfRequired(col, entityModel);
     }
 
     private void addPropertiesInColumn(
             final MarkupContainer markupContainer,
-            final MemberGroupLayoutHint hint,
-            final EntityModel entityModel,
-            final ColumnSpans columnSpans, final Column columnMetaDataIfAny) {
-        final int span = hint.from(columnSpans);
+            final EntityModel entityModel) {
+
+        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
+        final Hint hint = entityModel.getColumnHint();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
@@ -327,19 +337,17 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                     actionsPanelDropDown,
                     AdditionalLinksPanel.Style.DROPDOWN);
         }
-
-        addClassForSpan(markupContainer, span);
     }
 
     private void addCollectionsIfRequired(
             final MarkupContainer column,
-            final EntityModel entityModel,
-            final Column columnMetaDataIfAny) {
+            final EntityModel entityModel) {
+
+        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
+
         if(columnMetaDataIfAny != null) {
-            final EntityModel modelWithMetadata = new EntityModel(entityModel.getPageParameters()).withColumnMetadata(
-                    columnMetaDataIfAny);
             getComponentFactoryRegistry()
-                    .addOrReplaceComponent(column, "collections", ComponentType.ENTITY_COLLECTIONS, modelWithMetadata);
+                    .addOrReplaceComponent(column, "collections", ComponentType.ENTITY_COLLECTIONS, entityModel);
         } else {
             Components.permanentlyHide(column, "collections");
         }

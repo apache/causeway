@@ -25,9 +25,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
 
@@ -36,30 +34,10 @@ public final class ObjectSpecifications {
     private ObjectSpecifications() {
     }
 
-    public enum MemberGroupLayoutHint {
-        LEFT,
-        MIDDLE,
-        RIGHT;
-
-        public int from(ColumnSpans columnSpans) {
-            if(this == LEFT) return columnSpans.getLeft();
-            if(this == MIDDLE) return columnSpans.getMiddle();
-            if(this == RIGHT) return columnSpans.getRight();
-            throw new IllegalStateException();
-        }
-
-        public Column from(final Tab tab) {
-            if(this == LEFT) {return tab.getLeft();}
-            if(this == MIDDLE) return tab.getMiddle();
-            if(this == RIGHT) return tab.getRight();
-            throw new IllegalStateException();
-        }
-    }
-
     public static List<String> orderByMemberGroups(
             final ObjectSpecification objSpec,
             final Set<String> groupNamesToOrder,
-            final MemberGroupLayoutHint hint) {
+            final Column.Hint hint) {
 
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
@@ -69,10 +47,10 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(hint == MemberGroupLayoutHint.MIDDLE) {
+        if(hint == Column.Hint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
-        if(hint == MemberGroupLayoutHint.RIGHT) {
+        if(hint == Column.Hint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
         

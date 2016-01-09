@@ -21,18 +21,42 @@ package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.collect.FluentIterable;
+
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.PropertyGroup;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 public final class PropUtil {
 
     private PropUtil() {
+    }
+
+    static List<String> propertyGroupNames(
+            final EntityModel entityModel,
+            final Column.Hint hint, final Column columnMetaDataIfAny) {
+        final ObjectAdapter adapter = entityModel.getObject();
+        final ObjectSpecification objSpec = adapter.getSpecification();
+
+        final Map<String, List<ObjectAssociation>> associationsByGroup =
+                propertiesByMemberOrder(adapter);
+
+        return columnMetaDataIfAny != null
+                ? FluentIterable
+                .from(columnMetaDataIfAny.getPropertyGroups())
+                .transform(PropertyGroup.Util.nameOf())
+                .toList()
+                : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(),
+                hint);
     }
 
     static Map<String, List<ObjectAssociation>> propertiesByMemberOrder(final ObjectAdapter adapter) {
@@ -63,6 +87,5 @@ public final class PropUtil {
                         adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS),
                 filter);
     }
-
 
 }

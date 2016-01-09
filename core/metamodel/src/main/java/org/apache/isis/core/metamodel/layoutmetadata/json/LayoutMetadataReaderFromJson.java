@@ -81,7 +81,7 @@ import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications.MemberGroupLayoutHint;
+import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -462,13 +462,13 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         ColumnRepr columnRepr;
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getLeft());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.LEFT, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.LEFT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getMiddle());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.MIDDLE, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.MIDDLE, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getRight());
-        updateColumnMemberGroups(objectSpec, MemberGroupLayoutHint.RIGHT, columnRepr, actionIdsForAssociations);
+        updateColumnMemberGroups(objectSpec, Hint.RIGHT, columnRepr, actionIdsForAssociations);
         
         columnRepr = addColumnWithSpan(metadata, columnSpans.getCollections());
         updateCollectionColumnRepr(objectSpec, columnRepr, actionIdsForAssociations);
@@ -479,7 +479,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
         return gson.toJson(metadata);
     }
 
-    private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final MemberGroupLayoutHint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
+    private static void updateColumnMemberGroups(final ObjectSpecification objectSpec, final Hint hint, final ColumnRepr columnRepr, final Set<String> actionIdsForAssociations) {
         final List<ObjectAssociation> objectAssociations = propertiesOf(objectSpec);
         final Map<String, List<ObjectAssociation>> associationsByGroup = ObjectAssociation.Util.groupByMemberOrderName(objectAssociations
         );
