@@ -227,7 +227,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             addFeedbackGui(leftColumn);
 
         } else {
-            Components.permanentlyHide(this,
+            Components.permanentlyHide(leftColumn,
                     ID_EDIT_BUTTON, ID_OK_BUTTON, ID_CANCEL_BUTTON,
                     ID_FEEDBACK);
         }
