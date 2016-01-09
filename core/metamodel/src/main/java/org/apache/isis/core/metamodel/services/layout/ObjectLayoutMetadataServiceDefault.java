@@ -272,7 +272,12 @@ public class ObjectLayoutMetadataServiceDefault
 
         if(!missingActionIds.isEmpty()) {
             for (String actionId : missingActionIds) {
-                metadata.getActions().add(new ActionLayoutMetadata(actionId));
+                List<ActionLayoutMetadata> actions = metadata.getActions();
+                if(actions == null) {
+                    actions = Lists.newArrayList();
+                    metadata.setActions(actions);
+                }
+                actions.add(new ActionLayoutMetadata(actionId));
             }
         }
     }
