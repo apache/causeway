@@ -662,8 +662,10 @@
                     <version>2.9.1</version>
                     <inherited>true</inherited>
                     <configuration>
-                        <!-- as per http://stackoverflow.com/a/16743137/56880 -->
+                        <!-- as per http://stackoverflow.com/a/16743137/56880; only if using java 8 to build -->
+<!--
                         <additionalparam>-Xdoclint:none</additionalparam>
+-->
                         <debug>true</debug>
                         <minmemory>128m</minmemory>      
                         <maxmemory>1024m</maxmemory>
