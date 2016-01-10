@@ -128,7 +128,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     private NotificationPanel feedback;
     
-    private boolean renderedFirstField;
 
     public EntityPropertiesForm(
             final String id,
@@ -166,8 +165,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                     entityModel.getObject().getSpecification().getFacet(MemberGroupLayoutFacet.class);
             columnSpans = memberGroupLayoutFacet.getColumnSpans();
         }
-
-        renderedFirstField = false;
 
         // left column
         // (unlike middle and right columns, the left column is always added to hold the edit buttons and feedback)
@@ -263,7 +260,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void addPropertiesAndCollections(
             final MarkupContainer middleColumn,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny, final Hint hint) {
+            final Tab tabMetaDataIfAny,
+            final Hint hint) {
         final Column columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
 
         final EntityModel entityModelWithHints =
@@ -367,11 +365,6 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                 otoa, getDeploymentType());
 
         entityActions.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
-
-        if(!renderedFirstField) {
-            component.add(new CssClassAppender("first-field"));
-            renderedFirstField = true;
-        }
     }
 
     @Override
