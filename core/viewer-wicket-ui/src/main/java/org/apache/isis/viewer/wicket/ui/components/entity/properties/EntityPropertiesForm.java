@@ -19,10 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.properties;
 
 import java.util.List;
-import java.util.Map;
-
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -37,7 +33,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.Response;
@@ -45,13 +40,12 @@ import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
-import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.PropertyGroup;
+import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
@@ -63,26 +57,15 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
-import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
@@ -98,21 +81,12 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_MEMBER_GROUP = "memberGroup";
-    private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
-
-    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL = "associatedActionLinksPanel";
-    private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN = "associatedActionLinksPanelDropDown";
-
     private static final String ID_LEFT_COLUMN = "leftColumn";
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
     
     private static final String ID_ENTITY_COLLECTIONS = "entityCollections";
     private static final String ID_ENTITY_COLLECTIONS_OVERFLOW = "entityCollectionsOverflow";
-    
-    private static final String ID_PROPERTIES = "properties";
-    private static final String ID_PROPERTY = "property";
 
     private static final String ID_EDIT_BUTTON = "edit";
     private static final String ID_OK_BUTTON = "ok";
@@ -258,7 +232,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     }
 
     private void addPropertiesAndCollections(
-            final MarkupContainer middleColumn,
+            final MarkupContainer markupContainer,
             final EntityModel entityModel,
             final Tab tabMetaDataIfAny,
             final Hint hint) {
@@ -268,104 +242,11 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
                 new EntityModel(entityModel.getPageParameters())
                         .withColumnMetadata(columnMetaDataIfAny, hint);
 
-        addPropertiesAndCollections(middleColumn, entityModelWithHints);
+        final EntityColumnMembers columnMembers =
+                new EntityColumnMembers("entityMembers", entityModelWithHints, markupContainer);
+        markupContainer.add(columnMembers);
     }
 
-    private void addPropertiesAndCollections(
-            final MarkupContainer col,
-            final EntityModel entityModel) {
-        addPropertiesInColumn(col, entityModel);
-        addCollectionsIfRequired(col, entityModel);
-    }
-
-    private void addPropertiesInColumn(
-            final MarkupContainer markupContainer,
-            final EntityModel entityModel) {
-
-        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
-        final Hint hint = entityModel.getColumnHint();
-        final ObjectAdapter adapter = entityModel.getObject();
-        final ObjectSpecification objSpec = adapter.getSpecification();
-
-        final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil
-                .propertiesByMemberOrder(adapter);
-        final List<String> groupNames = columnMetaDataIfAny != null
-                ? FluentIterable
-                    .from(columnMetaDataIfAny.getPropertyGroups())
-                    .transform(PropertyGroup.Util.nameOf())
-                    .toList()
-                : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
-
-        final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
-        markupContainer.add(memberGroupRv);
-
-        for(final String groupName: groupNames) {
-            final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
-            if(associationsInGroup==null) {
-                continue;
-            }
-
-            final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
-            memberGroupRv.add(memberGroupRvContainer);
-            memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
-
-            final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
-
-            final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
-            memberGroupRvContainer.add(propertyRv);
-
-            @SuppressWarnings("unused")
-            Component component;
-            for (final ObjectAssociation association : associationsInGroup) {
-                final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
-                propertyRv.add(propertyRvContainer);
-
-                addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
-            }
-
-            final List<LinkAndLabel> actionsPanel = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL);
-            final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
-
-            AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL,
-                    actionsPanel,
-                    AdditionalLinksPanel.Style.INLINE_LIST);
-            AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
-                    actionsPanelDropDown,
-                    AdditionalLinksPanel.Style.DROPDOWN);
-        }
-    }
-
-    private void addCollectionsIfRequired(
-            final MarkupContainer column,
-            final EntityModel entityModel) {
-
-        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
-
-        if(columnMetaDataIfAny != null) {
-            getComponentFactoryRegistry()
-                    .addOrReplaceComponent(column, "collections", ComponentType.ENTITY_COLLECTIONS, entityModel);
-        } else {
-            Components.permanentlyHide(column, "collections");
-        }
-    }
-
-    private void addPropertyToForm(
-            final EntityModel entityModel,
-            final OneToOneAssociation otoa,
-            final WebMarkupContainer container,
-            final List<LinkAndLabel> entityActions) {
-        final PropertyMemento pm = new PropertyMemento(otoa);
-
-        final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-        final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
-
-        final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel,
-                otoa, getDeploymentType());
-
-        entityActions.addAll(EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
-    }
 
     @Override
     protected void onComponentTag(ComponentTag tag) {
@@ -828,8 +709,5 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         return getAuthenticationSession().getMessageBroker();
     }
 
-    protected DeploymentType getDeploymentType() {
-        return IsisContext.getDeploymentType();
-    }
 
 }
