@@ -185,7 +185,7 @@ public final class Annotations  {
 
         for (Method method : cls.getDeclaredMethods()) {
             if(MethodScope.OBJECT.matchesScopeOf(method) &&
-                    method.getParameterCount() == 0) {
+                    method.getParameterTypes().length == 0) {
                 final Annotation annotation = method.getAnnotation(annotationClass);
                 if(annotation != null) {
                     evaluators.add(new MethodEvaluator(method, annotation));
