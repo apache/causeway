@@ -28,6 +28,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanel;
 
 /**
  * {@link ComponentFactory} for {@link EntityTabGroupsPanel}.
@@ -44,13 +45,20 @@ public class EntityTabGroupsPanelFactory extends EntityComponentFactoryAbstract 
 
     @Override
     protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        return appliesIf(specification.containsDoOpFacet(ObjectLayoutMetadataFacet.class));
+        return super.doAppliesTo(entityModel); // TODO: remove this override
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
+
         final EntityModel entityModel = (EntityModel) model;
-        return new EntityTabGroupsPanel(id, entityModel);
+
+        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
+        final ObjectLayoutMetadataFacet facet = specification.getFacet(ObjectLayoutMetadataFacet.class);
+        facet.reloadMetadata();
+        final boolean hasLayout = !facet.isNoop();
+        return hasLayout
+                ? new EntityTabGroupsPanel(id, entityModel)
+                : new EntityCombinedPanel(id, entityModel);
     }
 }

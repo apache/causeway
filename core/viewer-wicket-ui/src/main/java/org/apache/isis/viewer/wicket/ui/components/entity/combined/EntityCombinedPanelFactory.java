@@ -22,8 +22,6 @@ package org.apache.isis.viewer.wicket.ui.components.entity.combined;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -44,14 +42,11 @@ public class EntityCombinedPanelFactory extends EntityComponentFactoryAbstract {
 
     @Override
     protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        // opposite to the EntityTabbedPanelFactory
-        return appliesIf(!specification.containsDoOpFacet(ObjectLayoutMetadataFacet.class));
+        return appliesIf(false); // TODO: remove
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-        final EntityModel entityModel = (EntityModel) model;
-        return new EntityCombinedPanel(id, entityModel);
+        throw new IllegalStateException("shouldn't be called"); // TODO: remove
     }
 }

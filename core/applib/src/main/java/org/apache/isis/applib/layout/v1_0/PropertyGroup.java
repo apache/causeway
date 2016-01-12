@@ -19,7 +19,6 @@
 package org.apache.isis.applib.layout.v1_0;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -30,6 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 
@@ -67,7 +67,7 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
 
 
 
-    private List<ActionLayoutMetadata> actions;
+    private List<ActionLayoutMetadata> actions = Lists.newArrayList();
 
     @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
@@ -81,10 +81,7 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
 
 
 
-    // must be at least one property in the property group
-    private List<PropertyLayoutMetadata> properties = new ArrayList<PropertyLayoutMetadata>() {{
-        add(new PropertyLayoutMetadata());
-    }};
+    private List<PropertyLayoutMetadata> properties = Lists.newArrayList();
 
     @XmlElement(name = "property", required = true)
     public List<PropertyLayoutMetadata> getProperties() {

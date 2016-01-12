@@ -126,11 +126,14 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         VIEW, EDIT;
     }
 
+    private final Map<PropertyMemento, ScalarModel> propertyScalarModels;
     private ObjectAdapterMemento adapterMemento;
+    private ObjectAdapterMemento contextAdapterIfAny;
+
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
-    private final Map<PropertyMemento, ScalarModel> propertyScalarModels = Maps.newHashMap();
     private Hint hint;
+    private final PendingModel pendingModel;
 
     /**
      * Toggled by 'entityDetailsButton'.
@@ -149,7 +152,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
 
     public EntityModel() {
-        pendingModel = new PendingModel(this);
+        this((ObjectAdapterMemento)null);
     }
 
     public EntityModel(final PageParameters pageParameters) {
@@ -162,8 +165,13 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
     public EntityModel(final ObjectAdapterMemento adapterMemento) {
+        this(adapterMemento, Maps.<PropertyMemento, ScalarModel>newHashMap());
+    }
+
+    public EntityModel(final ObjectAdapterMemento adapterMemento, final Map<PropertyMemento, ScalarModel> propertyScalarModels) {
         this.adapterMemento = adapterMemento;
         this.pendingModel = new PendingModel(this);
+        this.propertyScalarModels = propertyScalarModels;
     }
 
     public static String oidStr(final PageParameters pageParameters) {
@@ -608,8 +616,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
     }
     
-    private final PendingModel pendingModel;
-    private ObjectAdapterMemento contextAdapterIfAny;
 
     public ObjectAdapter getPendingElseCurrentAdapter() {
         return pendingModel.getPendingElseCurrentAdapter();
@@ -642,19 +648,27 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return tabMetadata;
     }
 
-    public EntityModel withTabMetadata(final Tab tabMetadata) {
-        this.tabMetadata = tabMetadata;
-        return this;
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithTabMetadata(final Tab tabMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.tabMetadata = tabMetadata;
+        return entityModel;
     }
 
 
     private Column columnMetadata;
     private Column.Hint columnHint;
 
-    public EntityModel withColumnMetadata(final Column columnMetadata, final Column.Hint columnHint) {
-        this.columnMetadata = columnMetadata;
-        this.columnHint = columnHint;
-        return this;
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithColumnMetadata(final Column columnMetadata, final Column.Hint columnHint) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.columnMetadata = columnMetadata;
+        entityModel.columnHint = columnHint;
+        return entityModel;
     }
 
     public Column getColumnMetadata() {

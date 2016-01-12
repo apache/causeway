@@ -21,7 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 
 import java.util.List;
 
+import javax.xml.bind.Marshaller;
+
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -35,6 +38,7 @@ import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.layout.Object_downloadLayoutXml;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
@@ -75,9 +79,15 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         final ObjectLayoutMetadataFacet objectLayoutMetadataFacet = model.getTypeOfSpecification().getFacet(ObjectLayoutMetadataFacet.class);
         final ObjectLayoutMetadata objectLayoutMetadata = objectLayoutMetadataFacet.getMetadata();
 
+
         // TODO: debugging, remove
-        final String xml = getServicesInjector().lookupService(JaxbService.class).toXml(objectLayoutMetadata);
+        final JaxbService jaxbService = getServicesInjector().lookupService(JaxbService.class);
+        final String xml = jaxbService.toXml(objectLayoutMetadata,
+                ImmutableMap.<String,Object>of(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        Object_downloadLayoutXml.TNS + " " + Object_downloadLayoutXml.SCHEMA_LOCATION));
         System.out.println(xml);
+
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
@@ -122,8 +132,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         public EntityTabPanel(String id, final EntityModel model, final Tab tab) {
             super(id);
 
-            final EntityModel modelWithTabHints = new EntityModel(model.getPageParameters());
-            modelWithTabHints.withTabMetadata(tab);
+            final EntityModel modelWithTabHints = model.cloneWithTabMetadata(tab);
 
             getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
         }

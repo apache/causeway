@@ -73,14 +73,13 @@ public class EntityColumnMembers extends PanelAbstract<EntityModel> {
             final Component owningPanel) {
 
         super(id, entityModel);
-        this.owningPanel = owningPanel; // for repainting
+        this.owningPanel = owningPanel; // for repainting, perhaps
 
         buildGui();
     }
 
     private void buildGui() {
-        final EntityModel entityModel = (EntityModel) getModel();
-        addPropertiesAndCollections(this, entityModel);
+        addPropertiesAndCollections(this, getModel());
     }
 
     private void addPropertiesAndCollections(

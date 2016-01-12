@@ -176,6 +176,8 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
             sortCacheAndUpdateActions(actions);
         }
 
+
+
         if(isNotIntrospected()) {
             facetedMethodsBuilder.introspectClassPostProcessing(metadataProperties);    
         }

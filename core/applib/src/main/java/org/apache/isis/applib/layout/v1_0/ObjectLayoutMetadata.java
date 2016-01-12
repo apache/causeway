@@ -33,7 +33,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.dto.Dto;
-import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 
 @XmlRootElement(
         name = "objectLayout"
@@ -182,62 +181,74 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutMetadata> getAllPropertiesById() {
-        final LinkedHashMap<String, PropertyLayoutMetadata> propertyIds = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, PropertyLayoutMetadata> propertiesById = Maps.newLinkedHashMap();
         visit(new ObjectLayoutMetadata.VisitorAdapter() {
             public void visit(final PropertyLayoutMetadata propertyLayoutMetadata) {
-                propertyIds.put(propertyLayoutMetadata.getId(), propertyLayoutMetadata);
+                propertiesById.put(propertyLayoutMetadata.getId(), propertyLayoutMetadata);
             }
         });
-        return propertyIds;
+        return propertiesById;
     }
 
 
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, CollectionLayoutMetadata> getAllCollectionsById() {
-        final LinkedHashMap<String, CollectionLayoutMetadata> collectionIds = Maps.newLinkedHashMap();
-        final LinkedHashMap<String, ActionLayoutMetadata> actionIds = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, CollectionLayoutMetadata> collectionsById = Maps.newLinkedHashMap();
 
         visit(new ObjectLayoutMetadata.VisitorAdapter() {
             @Override
             public void visit(final CollectionLayoutMetadata collectionLayoutMetadata) {
-                collectionIds.put(collectionLayoutMetadata.getId(), collectionLayoutMetadata);
+                collectionsById.put(collectionLayoutMetadata.getId(), collectionLayoutMetadata);
             }
         });
-        return collectionIds;
+        return collectionsById;
     }
 
 
     @Programmatic
     @XmlTransient
     public LinkedHashMap<String, ActionLayoutMetadata> getAllActionsById() {
-        final LinkedHashMap<String, ActionLayoutMetadata> actionIds = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, ActionLayoutMetadata> actionsById = Maps.newLinkedHashMap();
 
         visit(new ObjectLayoutMetadata.VisitorAdapter() {
             @Override
             public void visit(final ActionLayoutMetadata actionLayoutMetadata) {
-                actionIds.put(actionLayoutMetadata.getId(), actionLayoutMetadata);
+                actionsById.put(actionLayoutMetadata.getId(), actionLayoutMetadata);
             }
         });
-        return actionIds;
+        return actionsById;
     }
 
 
-
-    private boolean normalized;
-
-    /**
-     * Whether {@link ObjectLayoutMetadataService#normalize(ObjectLayoutMetadata, Class)}
-     * has been called on this instance.
-     */
     @Programmatic
     @XmlTransient
-    public boolean isNormalized() {
-        return normalized;
+    public LinkedHashMap<String, Tab> getAllTabsByName() {
+        final LinkedHashMap<String, Tab> tabsByName = Maps.newLinkedHashMap();
+
+        visit(new ObjectLayoutMetadata.VisitorAdapter() {
+            @Override
+            public void visit(final Tab tab) {
+                tabsByName.put(tab.getName(), tab);
+            }
+        });
+        return tabsByName;
     }
 
-    public void setNormalized(final boolean normalized) {
-        this.normalized = normalized;
+
+    @Programmatic
+    @XmlTransient
+    public LinkedHashMap<String, PropertyGroup> getAllPropertyGroupsByName() {
+        final LinkedHashMap<String, PropertyGroup> propertyGroupsByName = Maps.newLinkedHashMap();
+
+        visit(new ObjectLayoutMetadata.VisitorAdapter() {
+            @Override
+            public void visit(final PropertyGroup propertyGroup) {
+                propertyGroupsByName.put(propertyGroup.getName(), propertyGroup);
+            }
+        });
+        return propertyGroupsByName;
     }
+
 
 }

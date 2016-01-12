@@ -77,8 +77,9 @@ public class ObjectLayoutMetadataTest {
         left.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        PropertyLayoutMetadata namePropertyLayoutMetadata = leftPropGroup.getProperties().get(0);
-        namePropertyLayoutMetadata.setId("name");
+        left.getPropertyGroups().add(new PropertyGroup("General"));
+        PropertyLayoutMetadata namePropertyLayoutMetadata = new PropertyLayoutMetadata("name");
+        left.getPropertyGroups().get(0).getProperties().add(namePropertyLayoutMetadata);
 
         ActionLayoutMetadata updateNameActionLayoutMetadata = new ActionLayoutMetadata();
         updateNameActionLayoutMetadata.setId("updateName");

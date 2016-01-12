@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.AppManifest;
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugBuilder;
@@ -256,7 +258,12 @@ public final class ObjectReflectorDefault
 
     private void loadSpecificationsForServices() {
         for (final Class<?> serviceClass : getServiceClasses()) {
-            internalLoadSpecification(serviceClass);
+            final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
+            if(domainService != null) {
+                if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
+                    internalLoadSpecification(serviceClass);
+                }
+            }
         }
     }
 
@@ -515,6 +522,7 @@ public final class ObjectReflectorDefault
         facetDecoratorSet.decorate(specSpi);
         specSpi.updateFromFacetValues();
         specSpi.setIntrospectionState(IntrospectionState.INTROSPECTED);
+
     }
 
     @Override

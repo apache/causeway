@@ -238,9 +238,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             final Hint hint) {
         final Column columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
 
-        final EntityModel entityModelWithHints =
-                new EntityModel(entityModel.getPageParameters())
-                        .withColumnMetadata(columnMetaDataIfAny, hint);
+        final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 
         final EntityColumnMembers columnMembers =
                 new EntityColumnMembers("entityMembers", entityModelWithHints, markupContainer);

@@ -49,6 +49,7 @@ import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader.ReaderException;
 import org.apache.isis.core.metamodel.layoutmetadata.LayoutMetadataReader2;
@@ -189,13 +190,14 @@ public class FacetedMethodsBuilder {
 
 
     public Properties introspectClass() {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("introspecting " + getClassName() + ": class-level details");
+        if (LOG.isInfoEnabled()) {
+            LOG.info("introspecting " + getClassName() + ": class-level details");
         }
 
         // process facets at object level
         // this will also remove some methods, such as the superclass methods.
 
+        final ObjectLayoutMetadataFacet facet = spec.getFacet(ObjectLayoutMetadataFacet.class);
         final Properties metadataProperties = readMetadataProperties(introspectedClass);
 
         getFacetProcessor().process(introspectedClass, metadataProperties, methodRemover, spec);

@@ -19,8 +19,8 @@
 package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 
-import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
@@ -28,8 +28,13 @@ import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 public interface ObjectLayoutMetadataFacet extends Facet {
 
     /**
-     * Will have been {@link org.apache.isis.applib.services.layout.ObjectLayoutMetadataService#normalize(ObjectLayoutMetadata, Class) normalized}.
+     * Will have been normalized by framework earlier.
      */
     ObjectLayoutMetadata getMetadata();
+
+    /**
+     * (Re)load, in support of dynamic layout reloading.
+     */
+    void reloadMetadata();
 
 }

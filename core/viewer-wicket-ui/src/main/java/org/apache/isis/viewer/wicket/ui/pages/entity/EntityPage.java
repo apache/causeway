@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChec
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -134,19 +135,16 @@ public class EntityPage extends PageAbstract {
         //
         // invalidate the cache so that can do dynamic reloading of layout metadata etc.
         //
-        // Note that it's necessary to load the page twice.  (I think) that the first time is to load the new
-        // Java class files into the webapp (but too "late" to be used), the second then works.
-        // Moving this functionality earlier on in the web request pipeline (eg WebRequestCycleForIsis)
-        // made no difference.
-        //
-        // what might help is using some sort of daemon process to monitor when the class files change, and then
-        // reload (a la JRebel).  Don't think DCEVM by itself is enough, but possibly using
-        // https://github.com/fakereplace/fakereplace or https://github.com/spring-projects/spring-loaded
-        // might instead suffice since they provide a java agent similar to JRebel.
-        //
-        if(!getDeploymentType().isProduction()) {
-            getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+        final ObjectLayoutMetadataFacet facet = entityModel.getTypeOfSpecification()
+                .getFacet(ObjectLayoutMetadataFacet.class);
+        if(facet != null) {
+            // the facet should always exist
+            //
+            // it's sufficient to simply call reloadMetadata().
+            // The facet checks the ObjectLayoutMetadataService to determine if dynamic reloading is enabled.
+            facet.reloadMetadata();
         }
+
 
         if(titleString == null) {
             final String titleStr = objectAdapter.titleString(null);

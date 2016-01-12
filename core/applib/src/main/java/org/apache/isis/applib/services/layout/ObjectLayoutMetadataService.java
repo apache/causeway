@@ -28,22 +28,21 @@ public interface ObjectLayoutMetadataService {
     ObjectLayoutMetadata fromXml(Class<?> domainClass);
 
     /**
-     *  @param objectLayoutMetadata - the layout to be validated.
-     * @param domainClass - as per domain class.
-     */
-    @Programmatic
-    ObjectLayoutMetadata normalize(final ObjectLayoutMetadata objectLayoutMetadata, final Class<?> domainClass);
-
-    /**
-     * Obtains the layout metadata for the specified domain object.  It will have been {@link #normalize(ObjectLayoutMetadata, Class) normalized} already.
+     * Obtains the layout metadata, if any, for the (domain class of the) specified domain object.
      */
     @Programmatic
     ObjectLayoutMetadata toMetadata(Object domainObject);
 
     /**
-     * Obtains the layout metadata for the specified domain class.  It will have been {@link #normalize(ObjectLayoutMetadata, Class) normalized} already.
+     * Obtains the layout metadata, if any, for the specified domain class.
      */
     @Programmatic
     ObjectLayoutMetadata toMetadata(Class<?> domainClass);
+
+    @Programmatic
+    void toggleDynamicReloading();
+
+    @Programmatic
+    boolean isDynamicReloading();
 
 }

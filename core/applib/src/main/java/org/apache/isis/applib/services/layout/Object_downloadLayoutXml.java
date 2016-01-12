@@ -17,6 +17,9 @@
 package org.apache.isis.applib.services.layout;
 
 import javax.inject.Inject;
+import javax.xml.bind.Marshaller;
+
+import com.google.common.collect.ImmutableMap;
 
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -31,6 +34,9 @@ import org.apache.isis.applib.value.Clob;
 
 @Mixin
 public class Object_downloadLayoutXml {
+
+    public static final String TNS = "http://isis.apache.org/schema/applib/layout";
+    public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/layout-1.0.xsd";
 
     private final Object object;
 
@@ -53,7 +59,12 @@ public class Object_downloadLayoutXml {
             @ParameterLayout(named = "File name")
             final String fileName) {
         final ObjectLayoutMetadata metadata = getObjectLayoutMetadata();
-        final String xml = jaxbService.toXml(metadata);
+        final String xml = jaxbService.toXml(metadata,
+                ImmutableMap.<String,Object>of(
+                        Marshaller.JAXB_SCHEMA_LOCATION,
+                        TNS + " " + SCHEMA_LOCATION
+                ));
+
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
     }
 

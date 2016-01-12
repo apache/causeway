@@ -22,6 +22,9 @@ import java.util.List;
 
 import com.google.common.collect.Lists;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Bulk;
 import org.apache.isis.applib.annotation.InvokedOn;

@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
+import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -38,17 +38,13 @@ public class ObjectLayoutMetadataFacetFactory extends FacetFactoryAbstract imple
 
     @Override
     public void process(final ProcessClassContext processClassContext) {
-        final Class<?> cls = processClassContext.getCls();
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
+        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
         final ObjectLayoutMetadataService objectLayoutMetadataService = servicesInjector.lookupService(ObjectLayoutMetadataService.class);
         FacetUtil.addFacet(
-                ObjectLayoutMetadataFacetDefault.create(facetHolder, readMetadata(cls), objectLayoutMetadataService));
-    }
-
-    private ObjectLayoutMetadata readMetadata(final Class<?> domainClass) {
-        final ObjectLayoutMetadataService objectLayoutMetadataService = servicesInjector.lookupService(ObjectLayoutMetadataService.class);
-        return objectLayoutMetadataService.fromXml(domainClass);
+                ObjectLayoutMetadataFacetDefault.create(facetHolder,
+                        translationService, objectLayoutMetadataService));
     }
 
     private ServicesInjector servicesInjector;
