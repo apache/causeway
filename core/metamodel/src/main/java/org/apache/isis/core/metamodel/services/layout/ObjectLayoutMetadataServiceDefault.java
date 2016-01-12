@@ -46,14 +46,8 @@ public class ObjectLayoutMetadataServiceDefault
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataServiceDefault.class);
 
-    private final Set<Class<?>> blacklisted = Sets.newConcurrentHashSet();
-
     @Programmatic
     public ObjectLayoutMetadata fromXml(Class<?> domainClass) {
-
-        if(blacklisted.contains(domainClass)) {
-            return null;
-        }
 
         final String xml;
         final String resourceName = domainClass.getSimpleName() + ".layout.xml";
@@ -61,7 +55,6 @@ public class ObjectLayoutMetadataServiceDefault
             xml = resourceContentOf(domainClass, resourceName);
         } catch (IOException | IllegalArgumentException ex) {
 
-            blacklisted.add(domainClass);
             final String message = String .format(
                     "Failed to locate file %s (relative to %s.class); ex: %s)",
                     resourceName, domainClass.getName(), ex.getMessage());

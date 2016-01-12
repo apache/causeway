@@ -143,6 +143,12 @@ public class EntityPage extends PageAbstract {
             // it's sufficient to simply call reloadMetadata().
             // The facet checks the ObjectLayoutMetadataService to determine if dynamic reloading is enabled.
             facet.reloadMetadata();
+            if(facet.getMetadata() == null) {
+                // fallback to invalidating entire cache
+                if(!getDeploymentType().isProduction()) {
+                    getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+                }
+            }
         }
 
 

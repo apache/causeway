@@ -111,7 +111,7 @@ public interface JaxbService {
                 return (T) unmarshal;
 
             } catch (final JAXBException ex) {
-                throw new NonRecoverableException("Error unmarshalling domain object from XML; domain object class is '" + domainClass.getName() + "'", ex);
+                throw new NonRecoverableException("Error unmarshalling XML to class '" + domainClass.getName() + "'", ex);
             }
         }
 

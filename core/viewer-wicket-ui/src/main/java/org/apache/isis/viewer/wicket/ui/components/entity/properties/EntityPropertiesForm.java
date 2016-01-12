@@ -188,11 +188,10 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             addClassForSpan(rightColumn, Hint.RIGHT.from(columnSpans));
         }
 
-        // edit buttons and feedback
+        // edit buttons and feedback (not supported on tabbed view)
         final Hint leftHint = Hint.LEFT;
         final Column leftColumnMetaDataIfAny = leftHint.from(tabMetaDataIfAny);
-        final List<String> groupNames = PropUtil.propertyGroupNames(entityModel, leftHint, leftColumnMetaDataIfAny);
-        final boolean hasProperties = !groupNames.isEmpty();
+        final boolean hasProperties = leftColumnMetaDataIfAny == null && !PropUtil.propertyGroupNames(entityModel, leftHint, leftColumnMetaDataIfAny).isEmpty();
         if (hasProperties) {
             addButtons(leftColumn);
             addFeedbackGui(leftColumn);
