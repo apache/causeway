@@ -245,6 +245,9 @@ public final class ObjectReflectorDefault
 
         // wire subcomponents into each other
         this.runtimeContext.injectInto(facetProcessor);
+        for (final LayoutMetadataReader layoutMetadataReader : layoutMetadataReaders) {
+            this.runtimeContext.injectInto(layoutMetadataReader);
+        }
 
         // initialize subcomponents
         facetDecoratorSet.init();
@@ -261,11 +264,12 @@ public final class ObjectReflectorDefault
             final DomainService domainService = serviceClass.getAnnotation(DomainService.class);
             if(domainService != null) {
                 if(domainService.nature() == NatureOfService.VIEW || domainService.nature() == NatureOfService.VIEW_CONTRIBUTIONS_ONLY) {
-                    internalLoadSpecification(serviceClass);
+                    internalLoadSpecification(serviceClass, domainService.nature());
                 }
             }
         }
     }
+
 
     private void loadSpecificationsForMixins() {
         final Set<Class<?>> mixinTypes = AppManifest.Registry.instance().getMixinTypes();
@@ -390,11 +394,16 @@ public final class ObjectReflectorDefault
     }
 
     private ObjectSpecification internalLoadSpecification(final Class<?> type) {
-        final Class<?> substitutedType = classSubstitutor.getClass(type);
-        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType) : null;
+        return internalLoadSpecification(type, null);
     }
 
-    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type) {
+    private ObjectSpecification internalLoadSpecification(final Class<?> type, final NatureOfService nature) {
+        final Class<?> substitutedType = classSubstitutor.getClass(type);
+        return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType, nature) : null;
+    }
+
+
+    private ObjectSpecification loadSpecificationForSubstitutedClass(final Class<?> type, final NatureOfService nature) {
         Assert.assertNotNull(type);
         final String typeName = type.getName();
 
@@ -405,6 +414,9 @@ public final class ObjectReflectorDefault
                 return spec;
             }
             final ObjectSpecification specification = createSpecification(type);
+            if(nature != null) {
+                specification.markAsService();
+            }
             if (specification == null) {
                 throw new IsisException("Failed to create specification for class " + typeName);
             }

@@ -27,14 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ObjectLayoutMetadataFacet extends Facet {
 
-    /**
-     * Will have been normalized by framework earlier.
-     */
     ObjectLayoutMetadata getMetadata();
 
-    /**
-     * (Re)load, in support of dynamic layout reloading.
-     */
-    void reloadMetadata();
 
 }

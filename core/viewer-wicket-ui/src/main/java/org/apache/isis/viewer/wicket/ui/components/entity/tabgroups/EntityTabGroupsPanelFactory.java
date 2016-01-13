@@ -22,6 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -44,19 +45,14 @@ public class EntityTabGroupsPanelFactory extends EntityComponentFactoryAbstract 
     }
 
     @Override
-    protected ApplicationAdvice doAppliesTo(final EntityModel entityModel) {
-        return super.doAppliesTo(entityModel); // TODO: remove this override
-    }
-
-    @Override
     public Component createComponent(final String id, final IModel<?> model) {
 
         final EntityModel entityModel = (EntityModel) model;
 
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
         final ObjectLayoutMetadataFacet facet = specification.getFacet(ObjectLayoutMetadataFacet.class);
-        facet.reloadMetadata();
-        final boolean hasLayout = !facet.isNoop();
+        final ObjectLayoutMetadata layoutMetadata = facet.getMetadata();
+        final boolean hasLayout = layoutMetadata != null;
         return hasLayout
                 ? new EntityTabGroupsPanel(id, entityModel)
                 : new EntityCombinedPanel(id, entityModel);

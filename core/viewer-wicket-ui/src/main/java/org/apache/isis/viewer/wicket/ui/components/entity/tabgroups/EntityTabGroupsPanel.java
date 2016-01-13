@@ -21,10 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 
 import java.util.List;
 
-import javax.xml.bind.Marshaller;
-
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
@@ -37,8 +34,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
-import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.Object_downloadLayoutXml;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
@@ -78,15 +73,6 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         // forces metadata to be derived && synced
         final ObjectLayoutMetadataFacet objectLayoutMetadataFacet = model.getTypeOfSpecification().getFacet(ObjectLayoutMetadataFacet.class);
         final ObjectLayoutMetadata objectLayoutMetadata = objectLayoutMetadataFacet.getMetadata();
-
-
-        // TODO: debugging, remove
-        final JaxbService jaxbService = getServicesInjector().lookupService(JaxbService.class);
-        final String xml = jaxbService.toXml(objectLayoutMetadata,
-                ImmutableMap.<String,Object>of(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        Object_downloadLayoutXml.TNS + " " + Object_downloadLayoutXml.SCHEMA_LOCATION));
-        System.out.println(xml);
 
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);

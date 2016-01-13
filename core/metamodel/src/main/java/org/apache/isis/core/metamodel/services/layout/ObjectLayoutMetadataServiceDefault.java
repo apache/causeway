@@ -19,11 +19,12 @@ package org.apache.isis.core.metamodel.services.layout;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.Set;
+import java.util.Map;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 
 import org.slf4j.Logger;
@@ -35,6 +36,8 @@ import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -42,15 +45,29 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
 @DomainService(nature = NatureOfService.DOMAIN)
 public class ObjectLayoutMetadataServiceDefault
-        implements ObjectLayoutMetadataService, SpecificationLoaderAware {
+        implements ObjectLayoutMetadataService, SpecificationLoaderAware, DeploymentCategoryAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataServiceDefault.class);
 
+    // for better logging messages (used only in prototyping mode)
+    private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
+
+    // cache (used only in prototyping mode)
+    private final Map<String, ObjectLayoutMetadata> metadataByXml = Maps.newHashMap();
+
+    @Override
+    @Programmatic
+    public boolean exists(final Class<?> domainClass) {
+        final URL resource = Resources.getResource(domainClass, resourceNameFor(domainClass));
+        return resource != null;
+    }
+
+    @Override
     @Programmatic
     public ObjectLayoutMetadata fromXml(Class<?> domainClass) {
 
+        final String resourceName = resourceNameFor(domainClass);
         final String xml;
-        final String resourceName = domainClass.getSimpleName() + ".layout.xml";
         try {
             xml = resourceContentOf(domainClass, resourceName);
         } catch (IOException | IllegalArgumentException ex) {
@@ -63,10 +80,38 @@ public class ObjectLayoutMetadataServiceDefault
             return null;
         }
 
+
+        if(!deploymentCategory.isProduction()) {
+            final ObjectLayoutMetadata objectLayoutMetadata = metadataByXml.get(xml);
+            if(objectLayoutMetadata != null) {
+                return objectLayoutMetadata;
+            }
+
+            final String badXml = badXmlByClass.get(domainClass);
+            if(badXml != null) {
+                if(Objects.equals(xml, badXml)) {
+                    // seen this before and already logged; just quit
+                    return null;
+                } else {
+                    // this different XML might be good
+                    badXmlByClass.remove(domainClass);
+                }
+            }
+
+        }
+
         try {
             final ObjectLayoutMetadata metadata = jaxbService.fromXml(ObjectLayoutMetadata.class, xml);
+            if(!deploymentCategory.isProduction()) {
+                metadataByXml.put(xml, metadata);
+            }
             return metadata;
         } catch(Exception ex) {
+
+            if(!deploymentCategory.isProduction()) {
+                // save fact that this was bad XML, so that we don't log again if called next time
+                badXmlByClass.put(domainClass, xml);
+            }
 
             // note that we don't blacklist if the file exists but couldn't be parsed;
             // the developer might fix so we will want to retry.
@@ -82,9 +127,13 @@ public class ObjectLayoutMetadataServiceDefault
         return Resources.toString(url, Charset.defaultCharset());
     }
 
+    private String resourceNameFor(final Class<?> domainClass) {
+        return domainClass.getSimpleName() + ".layout.xml";
+    }
 
 
     @Override
+    @Programmatic
     public ObjectLayoutMetadata toMetadata(final Object domainObject) {
         return toMetadata(domainObject.getClass());
     }
@@ -98,17 +147,6 @@ public class ObjectLayoutMetadataServiceDefault
 
     ////////////////////////////////////////////////////////
 
-    private boolean dynamicReloading;
-
-    @Override
-    public void toggleDynamicReloading() {
-        this.dynamicReloading = !this.dynamicReloading;
-    }
-
-    @Override
-    public boolean isDynamicReloading() {
-        return this.dynamicReloading;
-    }
 
     //region > injected dependencies
 
@@ -119,9 +157,15 @@ public class ObjectLayoutMetadataServiceDefault
         this.specificationLookup = specificationLookup;
     }
 
+    private DeploymentCategory deploymentCategory;
+
+    @Override
+    public void setDeploymentCategory(final DeploymentCategory deploymentCategory) {
+        this.deploymentCategory = deploymentCategory;
+    }
+
     @Inject
     JaxbService jaxbService;
-
 
     //endregion
 

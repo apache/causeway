@@ -174,6 +174,11 @@ public final class ClassExtensions {
         return Resources.toString(url, Charset.defaultCharset());
     }
 
+    public static boolean exists(final Class<?> cls, final String resourceName) {
+        final URL url = Resources.getResource(cls, resourceName);
+        return url != null;
+    }
+
     public static Class<?> asWrapped(final Class<?> primitiveClassExtendee) {
         return ClassUtil.wrapperClasses.get(primitiveClassExtendee);
     }

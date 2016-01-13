@@ -29,6 +29,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
+import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -138,16 +139,15 @@ public class EntityPage extends PageAbstract {
         final ObjectLayoutMetadataFacet facet = entityModel.getTypeOfSpecification()
                 .getFacet(ObjectLayoutMetadataFacet.class);
         if(facet != null) {
-            // the facet should always exist
-            //
-            // it's sufficient to simply call reloadMetadata().
-            // The facet checks the ObjectLayoutMetadataService to determine if dynamic reloading is enabled.
-            facet.reloadMetadata();
-            if(facet.getMetadata() == null) {
-                // fallback to invalidating entire cache
-                if(!getDeploymentType().isProduction()) {
-                    getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
-                }
+            // the facet should always exist, in fact
+            // just enough to ask for the metadata.
+            // This will cause the current ObjectSpec to be updated as a side effect.
+            final ObjectLayoutMetadata metadata = facet.getMetadata();
+
+            // if none, then fallback to invalidating entire cache
+            // (this is the original LayoutMetadataFromJson behaviour)
+            if(metadata == null && !getDeploymentType().isProduction()) {
+                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
             }
         }
 

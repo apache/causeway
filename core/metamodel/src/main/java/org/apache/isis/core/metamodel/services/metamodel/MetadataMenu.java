@@ -130,49 +130,6 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
     }
 
 
-    // //////////////////////////////////////
-
-    public static class SwitchOnDynamicReloadingOfLayoutsDomainEvent extends ActionDomainEvent {
-    }
-
-    @Action(
-            domainEvent = SwitchOnDynamicReloadingOfLayoutsDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-    )
-    @ActionLayout(
-            cssClassFa = "fa-check"
-    )
-    @MemberOrder(sequence="500.400.2")
-    public void switchOnDynamicReloadingOfLayouts() {
-        objectLayoutMetadataService.toggleDynamicReloading();
-    }
-    public boolean hideSwitchOnDynamicReloadingOfLayouts() {
-        return objectLayoutMetadataService.isDynamicReloading();
-    }
-
-    // //////////////////////////////////////
-
-    public static class SwitchOffDynamicReloadingOfLayoutsDomainEvent extends ActionDomainEvent {
-    }
-
-    @Action(
-            domainEvent = SwitchOffDynamicReloadingOfLayoutsDomainEvent.class,
-            semantics = SemanticsOf.SAFE,
-            restrictTo = RestrictTo.PROTOTYPING
-    )
-    @ActionLayout(
-            cssClassFa = "fa-times"
-    )
-    @MemberOrder(sequence="500.400.3")
-    public void switchOffDynamicReloadingOfLayouts() {
-        objectLayoutMetadataService.toggleDynamicReloading();
-    }
-    public boolean hideSwitchOffDynamicReloadingOfLayouts() {
-        return !objectLayoutMetadataService.isDynamicReloading();
-    }
-
-
 
     // //////////////////////////////////////
 

@@ -43,6 +43,7 @@ import org.apache.isis.applib.annotation.Render.Type;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.commons.lang.ClassExtensions;
 import org.apache.isis.core.metamodel.facets.all.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
@@ -78,6 +79,8 @@ import org.apache.isis.core.metamodel.layoutmetadata.PagedFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.PropertyLayoutFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.RenderFacetRepr;
 import org.apache.isis.core.metamodel.layoutmetadata.TypicalLengthFacetRepr;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -86,7 +89,7 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
-public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
+public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, ServicesInjectorAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(LayoutMetadataReaderFromJson.class);
 
@@ -411,6 +414,17 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
             return null;
         }
 
+        try {
+            final ObjectLayoutMetadataService objectLayoutMetadataService = getObjectLayoutMetadataService();
+            if(objectLayoutMetadataService.exists(domainClass)) {
+                blacklisted.add(domainClass);
+                return null;
+            }
+        } catch (IllegalArgumentException ex) {
+            // ignore
+        }
+
+
         final String resourceName = domainClass.getSimpleName() + ".layout.json";
         try {
             content = ClassExtensions.resourceContentOf(domainClass, resourceName);
@@ -681,6 +695,20 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2 {
     @Override
     public String toString() {
         return getClass().getName();
+    }
+
+
+
+    private ObjectLayoutMetadataService getObjectLayoutMetadataService() {
+        return servicesInjector.lookupService(ObjectLayoutMetadataService.class);
+    }
+
+
+    private ServicesInjector servicesInjector;
+
+    @Override
+    public void setServicesInjector(final ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
     }
 
 }

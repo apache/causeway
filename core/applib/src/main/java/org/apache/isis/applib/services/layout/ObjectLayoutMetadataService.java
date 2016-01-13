@@ -22,7 +22,13 @@ import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 public interface ObjectLayoutMetadataService {
 
     /**
-     * Returns raw (unnormalized) metadata, per the <code>.layout.xml</code> file.
+     * Whether any metadata exists for this domain class, and if so then whether it is valid or invalid.
+     */
+    @Programmatic
+    boolean exists(Class<?> domainClass);
+
+    /**
+     * Returns raw (unnormalized) metadata, eg per the <code>.layout.xml</code> file.
      */
     @Programmatic
     ObjectLayoutMetadata fromXml(Class<?> domainClass);
@@ -39,10 +45,5 @@ public interface ObjectLayoutMetadataService {
     @Programmatic
     ObjectLayoutMetadata toMetadata(Class<?> domainClass);
 
-    @Programmatic
-    void toggleDynamicReloading();
-
-    @Programmatic
-    boolean isDynamicReloading();
 
 }

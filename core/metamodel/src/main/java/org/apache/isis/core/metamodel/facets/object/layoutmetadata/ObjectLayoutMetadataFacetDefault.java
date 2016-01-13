@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -42,6 +43,7 @@ import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -93,59 +95,57 @@ public class ObjectLayoutMetadataFacetDefault
     public static ObjectLayoutMetadataFacet create(
             final FacetHolder facetHolder,
             final TranslationService translationService,
-            final ObjectLayoutMetadataService objectLayoutMetadataService) {
-        return new ObjectLayoutMetadataFacetDefault(facetHolder, translationService, objectLayoutMetadataService);
+            final ObjectLayoutMetadataService objectLayoutMetadataService,
+            final DeploymentCategory deploymentCategory) {
+        return new ObjectLayoutMetadataFacetDefault(facetHolder, translationService, objectLayoutMetadataService, deploymentCategory);
     }
 
     private final TranslationService translationService;
+    private final DeploymentCategory deploymentCategory;
     private final ObjectLayoutMetadataService objectLayoutMetadataService;
 
-    private boolean blacklisted;
     private ObjectLayoutMetadata metadata;
+    private boolean blacklisted;
 
     private ObjectLayoutMetadataFacetDefault(
             final FacetHolder facetHolder,
             final TranslationService translationService,
-            final ObjectLayoutMetadataService objectLayoutMetadataService) {
+            final ObjectLayoutMetadataService objectLayoutMetadataService,
+            final DeploymentCategory deploymentCategory) {
         super(ObjectLayoutMetadataFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
         this.objectLayoutMetadataService = objectLayoutMetadataService;
         this.translationService = translationService;
+        this.deploymentCategory = deploymentCategory;
     }
 
-    @Override
-    public boolean isNoop() {
-        getMetadata();
-        return blacklisted;
-    }
-
+    /**
+     * Blacklisting only occurs if running in production mode.
+     */
     @Override
     public ObjectLayoutMetadata getMetadata() {
-        if(blacklisted) {
-            return null;
-        }
-        reloadMetadata();
-        return this.metadata;
-    }
-
-    @Override
-    public void reloadMetadata() {
-        if (metadata != null && !objectLayoutMetadataService.isDynamicReloading()) {
-            return;
+        if (deploymentCategory.isProduction() || blacklisted) {
+            return metadata;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
         final ObjectLayoutMetadata metadata = objectLayoutMetadataService.fromXml(domainClass);
+        if(deploymentCategory.isProduction() && metadata == null) {
+            blacklisted = true;
+        }
         this.metadata = normalize(metadata);
-        blacklisted = this.metadata == null;
+        return this.metadata;
     }
 
     private ObjectLayoutMetadata normalize(final ObjectLayoutMetadata metadata) {
         if(metadata == null) {
             return null;
         }
-        if(LOG.isInfoEnabled()) {
-            LOG.info("Normalizing layout metadata for " + getSpecification().getCorrespondingClass().getName());
-        }
+        // if have .layout.json and then add a .layout.xml without restarting, then the normalizing is required
+        // in order to trample over the .layout.json's original facets.
+        // if(metadata.isNormalized()) {
+        //     return metadata;
+        // }
         doNormalize(metadata, getSpecification());
+        metadata.setNormalized(true);
         return metadata;
     }
 
@@ -424,7 +424,7 @@ public class ObjectLayoutMetadataFacetDefault
                 final ColumnHolder holder = column.getOwner();
                 if(holder instanceof Tab) {
                     final Tab tab = (Tab) holder;
-                    if(tab.getContents().size() == 1) {
+                    if(tab.getContents().size() == 1 && Strings.isNullOrEmpty(tab.getName()) ) {
                         final String collectionName = oneToManyAssociation.getName();
                         tab.setName(collectionName);
                     }

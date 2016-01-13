@@ -251,4 +251,17 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
     }
 
 
+    private boolean normalized;
+
+    @Programmatic
+    @XmlTransient
+    public boolean isNormalized() {
+        return normalized;
+    }
+
+    @Programmatic
+    public void setNormalized(final boolean normalized) {
+        this.normalized = normalized;
+    }
+
 }

@@ -44,7 +44,7 @@ public class ObjectLayoutMetadataFacetFactory extends FacetFactoryAbstract imple
         final ObjectLayoutMetadataService objectLayoutMetadataService = servicesInjector.lookupService(ObjectLayoutMetadataService.class);
         FacetUtil.addFacet(
                 ObjectLayoutMetadataFacetDefault.create(facetHolder,
-                        translationService, objectLayoutMetadataService));
+                        translationService, objectLayoutMetadataService, getDeploymentCategory()));
     }
 
     private ServicesInjector servicesInjector;
