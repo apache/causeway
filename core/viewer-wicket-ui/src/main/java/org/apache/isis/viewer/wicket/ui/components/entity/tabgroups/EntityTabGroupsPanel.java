@@ -26,6 +26,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -35,8 +36,12 @@ import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
+import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -81,6 +86,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
                 .from(objectLayoutMetadata.getTabGroups())
                 .filter(TabGroup.Predicates.notEmpty())
                 .toList();
+        final int[] tabGroupCount = new int[]{0};
         final ListView<TabGroup> tabGroupsList =
                 new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
 
@@ -104,13 +110,58 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
                         }
                     });
                 }
-                item.add(new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs));
+                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel = newTabbedPanel(tabs, tabGroupCount[0]);
+
+                item.add(ajaxBootstrapTabbedPanel);
+
+                tabGroupCount[0]++;
             }
+
+            private AjaxBootstrapTabbedPanel newTabbedPanel(final List<ITab> tabs, final int tabGroupNumber) {
+                final AjaxBootstrapTabbedPanel tabbedPanel = new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs) {
+                    @Override
+                    public TabbedPanel setSelectedTab(final int index) {
+                        saveSelectedTabInSession(tabGroupNumber, index);
+                        return super.setSelectedTab(index);
+                    }
+                };
+                setSelectedTabFromSessionIfAny(tabbedPanel, tabGroupNumber);
+                return tabbedPanel;
+
+            }
+
+            private void setSelectedTabFromSessionIfAny(
+                    final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
+                    final int tabGroupNumber) {
+                final String key = buildKey(tabGroupNumber);
+                final String value = (String) getSession().getAttribute(key);
+                if(value != null) {
+                    final int tabIndex = Integer.parseInt(value);
+                    ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
+                }
+            }
+
+            private void saveSelectedTabInSession(final int tabGroupNumber, final int tabIndex) {
+                final String key = buildKey(tabGroupNumber);
+                getSession().setAttribute(key, "" + tabIndex);
+            }
+
+            private String buildKey(final int tabGroupNumber) {
+                final ObjectAdapterMemento objectAdapterMemento = EntityTabGroupsPanel.this.getModel().getObjectAdapterMemento();
+                final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
+                        AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
+                final String key =
+                        IsisContext.getOidMarshaller().marshalNoVersion(oid) + "." + tabGroupNumber + ".selectedTab";
+                return key;
+            }
+
         };
+
         add(tabGroupsList);
 
-        
+
     }
+
 
     private static class EntityTabPanel extends PanelAbstract {
         private static final long serialVersionUID = 1L;

@@ -4,6 +4,17 @@
         <action id="delete"/>
     </actions>
     <tabGroup>
+        <tab name="Metadata">
+            <left span="6">
+                <propertyGroup name="Persistence">
+                    <actions>
+                        <action id="downloadJdoMetadata"/>
+                        <action id="downloadLayoutXml"/>
+                    </actions>
+                    <property id="versionSequence"/>
+                </propertyGroup>
+            </left>
+        </tab>
         <tab name="Common">
             <left span="6">
                 <propertyGroup name="General">
@@ -18,17 +29,6 @@
             <right span="6">
                 <collection id="others" defaultView="hide"/>
             </right>
-        </tab>
-        <tab name="Metadata">
-            <left span="6">
-                <propertyGroup name="Persistence">
-                    <actions>
-                        <action id="downloadJdoMetadata"/>
-                        <action id="downloadLayoutXml"/>
-                    </actions>
-                    <property id="versionSequence"/>
-                </propertyGroup>
-            </left>
         </tab>
     </tabGroup>
 <!--
