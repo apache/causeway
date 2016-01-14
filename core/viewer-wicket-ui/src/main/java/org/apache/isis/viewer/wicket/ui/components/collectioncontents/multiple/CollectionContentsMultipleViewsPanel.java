@@ -73,8 +73,7 @@ public class CollectionContentsMultipleViewsPanel
         this.ignoreFactory = ignoreFactory;
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
         this.componentType = ignoreFactory.getComponentType();
-        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry());
-
+        selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), model.getSelectedItemSessionAttribute());
     }
 
     /**

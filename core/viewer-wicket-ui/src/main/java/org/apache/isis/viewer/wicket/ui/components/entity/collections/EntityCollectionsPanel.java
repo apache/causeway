@@ -53,6 +53,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -74,8 +75,15 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
     private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
 
+    // view metadata (if any available)
+    private final ColumnMetadata columnMetadataIfAny;
+    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
+
+        columnMetadataIfAny = entityModel.getColumnMetadata();
+        selectedItemSessionAttribute = ScopedSessionAttribute.create(entityModel, columnMetadataIfAny, "selectedItem");
 
         buildGui();
     }
@@ -99,7 +107,6 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final EntityModel entityModel = getModel();
         final ObjectAdapter adapter = entityModel.getObject();
 
-        final ColumnMetadata columnMetadataIfAny = entityModel.getColumnMetadata();
         final Filter<ObjectAssociation> filter;
         if (columnMetadataIfAny != null) {
             final ImmutableList<String> collectionIds = FluentIterable
@@ -176,7 +183,8 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
         AdditionalLinksPanel.addAdditionalLinks (fieldset,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry());
+        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), selectedItemSessionAttribute
+        );
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
 
@@ -184,7 +192,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             permanentlyHide(ID_SELECTOR_DROPDOWN);
         } else {
             CollectionSelectorPanel selectorDropdownPanel;
-            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel);
+            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, selectedItemSessionAttribute);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 

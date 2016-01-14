@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "collections"
         }
 )
-public class ColumnMetadata implements Serializable, Owner, Owned<ColumnOwner> {
+public class ColumnMetadata implements Serializable, Owner, Owned<ColumnOwner>, HasPath {
 
     private static final long serialVersionUID = 1L;
 

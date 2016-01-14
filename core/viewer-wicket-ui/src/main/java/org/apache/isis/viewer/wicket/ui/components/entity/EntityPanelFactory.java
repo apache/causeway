@@ -29,10 +29,10 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.ColumnTabGroupListColumnPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.EntityTabbedPanel;
 
 /**
- * {@link ComponentFactory} for {@link ColumnTabGroupListColumnPanel}.
+ * {@link ComponentFactory} for {@link EntityTabbedPanel}.
  */
 public class EntityPanelFactory extends EntityComponentFactoryAbstract {
 
@@ -41,7 +41,7 @@ public class EntityPanelFactory extends EntityComponentFactoryAbstract {
     private static final String NAME = "tabbed";
 
     public EntityPanelFactory() {
-        super(ComponentType.ENTITY, NAME, ColumnTabGroupListColumnPanel.class);
+        super(ComponentType.ENTITY, NAME, EntityTabbedPanel.class);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EntityPanelFactory extends EntityComponentFactoryAbstract {
         final ObjectLayoutMetadata layoutMetadata = facet.getMetadata();
         final boolean hasLayout = layoutMetadata != null;
         return hasLayout
-                ? new ColumnTabGroupListColumnPanel(id, entityModel)
+                ? new EntityTabbedPanel(id, entityModel)
                 : new EntityEditablePanel(id, entityModel);
     }
 }

@@ -51,6 +51,7 @@ import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.mementos.CollectionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 /**
  * Model representing a collection of entities, either {@link Type#STANDALONE
@@ -432,7 +433,23 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public EntityCollectionModel asDummy() {
         return new EntityCollectionModel(typeOf, Collections.<ObjectAdapterMemento>emptyList(), pageSize);
     }
-    
+
+    // //////////////////////////////////////
+
+    private ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+
+    /**
+     * provides a mechanism to retrieve the selected item (view selector) from the session.
+     */
+    public ScopedSessionAttribute<Integer> getSelectedItemSessionAttribute() {
+        return selectedItemSessionAttribute;
+    }
+
+    public void setSelectedItemSessionAttribute(final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
+        this.selectedItemSessionAttribute = selectedItemSessionAttribute;
+    }
+
+
     // //////////////////////////////////////
 
     private static AdapterManager getAdapterManagerStatic() {

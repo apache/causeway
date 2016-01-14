@@ -34,6 +34,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -53,6 +54,16 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPath
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
+/**
+ * Adds properties (in property groups) and collections to a column.
+ *
+ * <p>
+ *     If {@link ColumnMetadata} is present, then only those properties and collections for that
+ *     column metadata are rendered.   Otherwise the {@link MemberGroupLayoutFacet} on the
+ *     {@link ObjectSpecification} in conjunction with the provided {@link ColumnMetadata.Hint} is
+ *     used to filter down to just those properties/collections in the column.
+ * </p>
+ */
 public class EntityColumn extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
@@ -66,15 +77,19 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
 
-    private final Component owningPanel;
+    // view metadata (populated for EntityTabbedPanel, absent for EntityEditablePanel)
+    private final ColumnMetadata columnMetaDataIfAny;
+    // which column to render (populated for EntityEditablePanel, not required and so absent for EntityTabbedPanel)
+    final ColumnMetadata.Hint hint;
 
     public EntityColumn(
             final String id,
-            final EntityModel entityModel,
-            final Component owningPanel) {
+            final EntityModel entityModel) {
 
         super(id, entityModel);
-        this.owningPanel = owningPanel; // for repainting, perhaps
+
+        columnMetaDataIfAny = entityModel.getColumnMetadata();
+        hint = entityModel.getColumnHint();
 
         buildGui();
     }
@@ -94,8 +109,6 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
             final MarkupContainer markupContainer,
             final EntityModel entityModel) {
 
-        final ColumnMetadata columnMetaDataIfAny = entityModel.getColumnMetadata();
-        final ColumnMetadata.Hint hint = entityModel.getColumnHint();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
@@ -153,8 +166,6 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
             final MarkupContainer column,
             final EntityModel entityModel) {
 
-        final ColumnMetadata columnMetaDataIfAny = entityModel.getColumnMetadata();
-
         if(columnMetaDataIfAny != null) {
             getComponentFactoryRegistry()
                     .addOrReplaceComponent(column, "collections", ComponentType.ENTITY_COLLECTIONS, entityModel);
@@ -171,7 +182,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
         final PropertyMemento pm = new PropertyMemento(otoa);
 
         final ScalarModel scalarModel = entityModel.getPropertyModel(pm);
-        final Component component = getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
+        getComponentFactoryRegistry().addOrReplaceComponent(container, ID_PROPERTY, ComponentType.SCALAR_NAME_AND_VALUE, scalarModel);
 
         final List<ObjectAction> associatedActions = EntityActionUtil.getObjectActionsForAssociation(entityModel,
                 otoa, getDeploymentType());

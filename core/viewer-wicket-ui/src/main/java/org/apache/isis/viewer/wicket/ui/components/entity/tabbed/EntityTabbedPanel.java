@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
+public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
 
-    public ColumnTabGroupListColumnPanel(final String id, final EntityModel entityModel) {
+    public EntityTabbedPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -100,7 +100,7 @@ public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
                     getModel().cloneWithColumnMetadata(col, hint);
             final int span = entityModel.getColumnMetadata().getSpan();
             if(span > 0) {
-                final EntityColumn entityColumn = new EntityColumn(id, entityModel, this);
+                final EntityColumn entityColumn = new EntityColumn(id, entityModel);
                 addOrReplace(entityColumn);
                 CssClassAppender.appendCssClassTo(entityColumn, "col-xs-" + span);
                 return span;

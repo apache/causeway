@@ -42,6 +42,7 @@ import org.apache.isis.viewer.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.CollectionContentsAsAjaxTablePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.CollectionContentsMultipleViewsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 public class CollectionSelectorHelper implements Serializable {
 
@@ -50,13 +51,27 @@ public class CollectionSelectorHelper implements Serializable {
     static final String UIHINT_EVENT_VIEW_KEY = "view";
 
     private final EntityCollectionModel model;
+
     private final List<ComponentFactory> componentFactories;
+    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
 
     public CollectionSelectorHelper(
             final EntityCollectionModel model,
             final ComponentFactoryRegistry componentFactoryRegistry) {
+        this(model, componentFactoryRegistry, ScopedSessionAttribute.<Integer>noop());
+    }
+
+    public CollectionSelectorHelper(
+            final EntityCollectionModel model,
+            final ComponentFactoryRegistry componentFactoryRegistry,
+            final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
         this.model = model;
         this.componentFactories = locateComponentFactories(componentFactoryRegistry);
+        this.selectedItemSessionAttribute =
+                selectedItemSessionAttribute != null
+                        ? selectedItemSessionAttribute
+                        : ScopedSessionAttribute.<Integer>noop();
+        model.setSelectedItemSessionAttribute(selectedItemSessionAttribute);
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
@@ -108,6 +123,14 @@ public class CollectionSelectorHelper implements Serializable {
      * otherwise first factory.
      */
     private int determineInitialFactory() {
+
+        // try to load from session, if can
+        final Integer sessionAttribute = selectedItemSessionAttribute.get();
+        if(sessionAttribute != null) {
+            return sessionAttribute;
+        }
+
+        // else @CollectionLayout#defaultView attribute
         if (hasDefaultViewFacet(model)) {
             DefaultViewFacet defaultViewFacet = model.getCollectionMemento().getCollection().getFacet(DefaultViewFacet.class);
             for (int i = 0; i < componentFactories.size(); i++) {
@@ -118,6 +141,8 @@ public class CollectionSelectorHelper implements Serializable {
                 }
             }
         }
+
+        // else @CollectionLayout#renderEagerly
         if (!hasRenderEagerlyFacet(model)) {
             for (int i = 0; i < componentFactories.size(); i++) {
                 if (componentFactories.get(i) instanceof CollectionContentsAsUnresolvedPanelFactory) {

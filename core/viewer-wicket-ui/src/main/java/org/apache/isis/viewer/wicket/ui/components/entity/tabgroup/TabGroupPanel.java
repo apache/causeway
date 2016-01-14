@@ -1,3 +1,21 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
 package org.apache.isis.viewer.wicket.ui.components.entity.tabgroup;
 
 import java.util.List;
@@ -11,22 +29,21 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
-import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
-import org.apache.isis.core.metamodel.adapter.oid.RootOid;
-import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabpanel.TabPanel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
 
+    public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
     private final EntityModel entityModel;
     // the view metadata
     private final TabGroupMetadata tabGroup;
+    private final ScopedSessionAttribute<Integer> selectedTabInSession;
 
     private static final String ID_TAB_GROUP = "tabGroup";
 
@@ -57,24 +74,21 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
 
         this.entityModel = entityModel;
         this.tabGroup = entityModel.getTabGroupMetadata();
+        this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, tabGroup, SESSION_ATTR_SELECTED_TAB);
 
-        setSelectedTabFromSessionIfAny(this.tabGroup, this, entityModel);
+        setSelectedTabFromSessionIfAny(this);
     }
 
     @Override
     public TabbedPanel setSelectedTab(final int index) {
-        saveSelectedTabInSession(tabGroup, index, entityModel);
+        selectedTabInSession.set(index);
         return super.setSelectedTab(index);
     }
 
     private void setSelectedTabFromSessionIfAny(
-            final TabGroupMetadata tabGroup,
-            final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
-            final EntityModel entityModel) {
-        final String key = buildKey(tabGroup, entityModel);
-        final String value = (String) getSession().getAttribute(key);
-        if (value != null) {
-            final int tabIndex = Integer.parseInt(value);
+            final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel) {
+        final Integer tabIndex = selectedTabInSession.get();
+        if (tabIndex != null) {
             final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
             if (tabIndex < numTabs) {
                 // to support dynamic reloading; the data in the session might not be compatible with current layout.
@@ -82,22 +96,4 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
             }
         }
     }
-
-    private void saveSelectedTabInSession(
-            final TabGroupMetadata tabGroup,
-            final int tabIndex,
-            final EntityModel entityModel) {
-        final String key = buildKey(tabGroup, entityModel);
-        getSession().setAttribute(key, "" + tabIndex);
-    }
-
-    private String buildKey(final TabGroupMetadata tabGroup, final EntityModel entityModel) {
-        final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
-                AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
-        final String key =
-                IsisContext.getOidMarshaller().marshalNoVersion(oid) + ":" + tabGroup.getPath() + "#selectedTab";
-        return key;
-    }
-
 }

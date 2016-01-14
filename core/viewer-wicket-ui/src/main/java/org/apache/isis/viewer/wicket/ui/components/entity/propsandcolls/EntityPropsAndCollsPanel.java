@@ -17,30 +17,37 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.editable;
+package org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.EntityTabbedPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
- * {@link PanelAbstract Panel} representing the properties of an entity, as per
+ * {@link PanelAbstract Panel} representing the properties and collections of an entity, as per
  * the provided {@link EntityModel}.
+ * 
+ * <p>
+ *     Used by both {@link EntityTabbedPanel} and also {@link EntityEditablePanel}.  In the former
+ *     case the collections are never shown, and edit buttons suppressed. In the latter case the
+ *     collections are shown, possibly overflowing to region below.
+ * </p>
  */
-public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
+public class EntityPropsAndCollsPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_PROPERTIES = "entityProperties";
 
-    private EntityPropertiesForm form;
+    private EntityPropsAndCollsForm form;
 
-    public EntityPropertiesPanel(final String id, final EntityModel entityModel) {
+    public EntityPropsAndCollsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
         form.toViewMode(null);
     }
-
 
     private void buildGui() {
         buildEntityPropertiesAndOrCollectionsGui();
@@ -51,7 +58,7 @@ public class EntityPropertiesPanel extends PanelAbstract<EntityModel> {
         final EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
-            form = new EntityPropertiesForm(ID_ENTITY_PROPERTIES, model, this);
+            form = new EntityPropsAndCollsForm(ID_ENTITY_PROPERTIES, model, this);
             addOrReplace(form);
         } else {
             permanentlyHide(ID_ENTITY_PROPERTIES);

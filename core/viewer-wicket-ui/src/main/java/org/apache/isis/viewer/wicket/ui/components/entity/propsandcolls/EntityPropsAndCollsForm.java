@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.editable;
+package org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.util.Attributes;
 
-public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider {
+public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider {
 
     private static final long serialVersionUID = 1L;
 
@@ -105,7 +105,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private NotificationPanel feedback;
     
 
-    public EntityPropertiesForm(
+    public EntityPropsAndCollsForm(
             final String id,
             final EntityModel entityModel,
             final Component owningPanel) {
@@ -243,7 +243,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 
         final EntityColumn columnMembers =
-                new EntityColumn("entityMembers", entityModelWithHints, markupContainer);
+                new EntityColumn("entityMembers", entityModelWithHints);
         markupContainer.add(columnMembers);
     }
 
@@ -344,15 +344,15 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
         @Override
         public void validate() {
             // add in any error message that we might have recognized from above
-            EntityPropertiesForm form = EntityPropertiesForm.this;
+            EntityPropsAndCollsForm form = EntityPropsAndCollsForm.this;
             String preValidationErrorIfAny = form.getPreValidationErrorIfAny();
 
             if(preValidationErrorIfAny != null) {
                 feedbackOrNotifyAnyRecognizedError(preValidationErrorIfAny, form);
                 // skip validation, because would relate to old values
 
-                final EntityPage entityPage = new EntityPage(EntityPropertiesForm.this.getModelObject(), null);
-                EntityPropertiesForm.this.setResponsePage(entityPage);
+                final EntityPage entityPage = new EntityPage(EntityPropsAndCollsForm.this.getModelObject(), null);
+                EntityPropsAndCollsForm.this.setResponsePage(entityPage);
             } else {
                 // run Wicket's validation
                 super.validate();
@@ -398,7 +398,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
             }
 
             final EntityPage entityPage = new EntityPage(objectAdapter, null);
-            EntityPropertiesForm.this.setResponsePage(entityPage);
+            EntityPropsAndCollsForm.this.setResponsePage(entityPage);
         }
 
         /**
