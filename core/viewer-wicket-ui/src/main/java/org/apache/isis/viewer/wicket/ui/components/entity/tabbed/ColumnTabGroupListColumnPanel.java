@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
+package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 
 import java.util.List;
 
@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutM
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityColumn;
+import org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist.TabGroupListPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -39,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
+public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +48,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
 
-    public EntityTabGroupsPanel(final String id, final EntityModel entityModel) {
+    public ColumnTabGroupListColumnPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -70,7 +71,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
         final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, objectLayoutMetadata.getLeft(), Column.Hint.LEFT);
 
-        final ListOfTabGroupsPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, objectLayoutMetadata.getTabGroups());
+        final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, objectLayoutMetadata.getTabGroups());
 
         final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, objectLayoutMetadata.getRight(), Column.Hint.RIGHT);
 
@@ -80,7 +81,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
     }
 
-    private ListOfTabGroupsPanel addTabGroups(
+    private TabGroupListPanel addTabGroups(
             final String id, final List<TabGroup> tabGroupList) {
         final EntityModel model = getModel();
         final List<TabGroup> tabGroups = FluentIterable
@@ -88,7 +89,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
                 .filter(TabGroup.Predicates.notEmpty())
                 .toList();
         final EntityModel entityModelWitHints = model.cloneWithTabGroupListMetadata(tabGroups);
-        final ListOfTabGroupsPanel middleComponent = new ListOfTabGroupsPanel(id, entityModelWitHints);
+        final TabGroupListPanel middleComponent = new TabGroupListPanel(id, entityModelWitHints);
         addOrReplace(middleComponent);
         return middleComponent;
     }

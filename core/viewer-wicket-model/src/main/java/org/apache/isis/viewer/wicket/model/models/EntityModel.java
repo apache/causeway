@@ -660,6 +660,22 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
+    private TabGroup tabGroupMetadata;
+
+    public TabGroup getTabGroupMetadata() {
+        return tabGroupMetadata;
+    }
+
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithTabGroupMetadata(final TabGroup tabGroupMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.tabGroupMetadata = tabGroupMetadata;
+        return entityModel;
+    }
+
+
     private Tab tabMetadata;
 
     public Tab getTabMetadata() {

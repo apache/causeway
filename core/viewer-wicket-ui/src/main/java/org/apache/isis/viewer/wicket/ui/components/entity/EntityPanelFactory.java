@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
+package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -28,20 +28,20 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.ColumnTabGroupListColumnPanel;
 
 /**
- * {@link ComponentFactory} for {@link EntityTabGroupsPanel}.
+ * {@link ComponentFactory} for {@link ColumnTabGroupListColumnPanel}.
  */
-public class EntityTabGroupsPanelFactory extends EntityComponentFactoryAbstract {
+public class EntityPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
     private static final String NAME = "tabbed";
 
-    public EntityTabGroupsPanelFactory() {
-        super(ComponentType.ENTITY, NAME, EntityTabGroupsPanel.class);
+    public EntityPanelFactory() {
+        super(ComponentType.ENTITY, NAME, ColumnTabGroupListColumnPanel.class);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class EntityTabGroupsPanelFactory extends EntityComponentFactoryAbstract 
         final ObjectLayoutMetadata layoutMetadata = facet.getMetadata();
         final boolean hasLayout = layoutMetadata != null;
         return hasLayout
-                ? new EntityTabGroupsPanel(id, entityModel)
+                ? new ColumnTabGroupListColumnPanel(id, entityModel)
                 : new EntityCombinedPanel(id, entityModel);
     }
 }

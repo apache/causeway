@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
+package org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,11 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -42,18 +40,19 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.entity.tabpanel.TabPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
-public class ListOfTabGroupsPanel extends PanelAbstract<EntityModel> {
+public class TabGroupListPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_TAB_GROUPS = "tabGroups";
     private static final String ID_TAB_GROUP = "tabGroup";
 
-    public ListOfTabGroupsPanel(final String id, final EntityModel entityModel) {
+    public TabGroupListPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -83,7 +82,7 @@ public class ListOfTabGroupsPanel extends PanelAbstract<EntityModel> {
 
                         @Override
                         public Panel getPanel(String panelId) {
-                            return new EntityTabPanel(panelId, model, tab);
+                            return new TabPanel(panelId, model, tab);
                         }
                     });
                 }
@@ -128,7 +127,7 @@ public class ListOfTabGroupsPanel extends PanelAbstract<EntityModel> {
             }
 
             private String buildKey(final int tabGroupNumber) {
-                final ObjectAdapterMemento objectAdapterMemento = ListOfTabGroupsPanel.this.getModel().getObjectAdapterMemento();
+                final ObjectAdapterMemento objectAdapterMemento = TabGroupListPanel.this.getModel().getObjectAdapterMemento();
                 final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
                         AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
                 final String key =
