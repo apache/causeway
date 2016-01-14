@@ -20,6 +20,7 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +31,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.applib.layout.v1_0.Tab;
+import org.apache.isis.applib.layout.v1_0.TabGroup;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -44,7 +47,6 @@ import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolic
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.applib.layout.v1_0.Column.Hint;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
@@ -641,6 +643,22 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // //////////////////////////////////////////////////////////
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
+
+    private List<TabGroup> tabGroupListMetadata;
+
+    public List<TabGroup> getTabGroupListMetadata() {
+        return tabGroupListMetadata;
+    }
+
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithTabGroupListMetadata(final List<TabGroup> tabGroupListMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.tabGroupListMetadata = tabGroupListMetadata;
+        return entityModel;
+    }
+
 
     private Tab tabMetadata;
 

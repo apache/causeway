@@ -52,7 +52,7 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPath
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class EntityColumnMembers extends PanelAbstract<EntityModel> {
+public class EntityColumn extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -67,7 +67,7 @@ public class EntityColumnMembers extends PanelAbstract<EntityModel> {
 
     private final Component owningPanel;
 
-    public EntityColumnMembers(
+    public EntityColumn(
             final String id,
             final EntityModel entityModel,
             final Component owningPanel) {

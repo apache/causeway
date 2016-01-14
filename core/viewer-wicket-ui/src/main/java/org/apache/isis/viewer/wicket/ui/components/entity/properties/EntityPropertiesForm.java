@@ -239,8 +239,8 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 
-        final EntityColumnMembers columnMembers =
-                new EntityColumnMembers("entityMembers", entityModelWithHints, markupContainer);
+        final EntityColumn columnMembers =
+                new EntityColumn("entityMembers", entityModelWithHints, markupContainer);
         markupContainer.add(columnMembers);
     }
 
