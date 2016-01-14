@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -62,54 +61,55 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
 
         final List<TabGroup> tabGroups = model.getTabGroupListMetadata();
 
-        final AtomicInteger tabGroupRef = new AtomicInteger(0);
-        final ListView<TabGroup> tabGroupsList =
-                new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
+        final ListView<TabGroup> tabGroupsList = new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
 
             @Override
             protected void populateItem(final ListItem<TabGroup> item) {
 
-                final List<ITab> tabs = Lists.newArrayList();
                 final TabGroup tabGroup = item.getModelObject();
-                final List<Tab> tabList = FluentIterable
-                        .from(tabGroup.getTabs())
-                        .filter(Tab.Predicates.notEmpty())
-                        .toList();
 
-                for (final Tab tab : tabList) {
-                    tabs.add(new AbstractTab(Model.of(tab.getName())) {
-                        private static final long serialVersionUID = 1L;
+                final EntityModel entityModelWithHints = model.cloneWithTabGroupMetadata(tabGroup);
 
-                        @Override
-                        public Panel getPanel(String panelId) {
-                            return new TabPanel(panelId, model, tab);
-                        }
-                    });
-                }
-                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel = newTabbedPanel(tabs, tabGroupRef.get());
+                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel = newTabbedPanel(entityModelWithHints);
 
                 item.add(ajaxBootstrapTabbedPanel);
-
-                tabGroupRef.incrementAndGet();
             }
 
-            private AjaxBootstrapTabbedPanel newTabbedPanel(final List<ITab> tabs, final int tabGroupNumber) {
-                final AjaxBootstrapTabbedPanel tabbedPanel = new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs) {
-                    @Override
-                    public TabbedPanel setSelectedTab(final int index) {
-                        saveSelectedTabInSession(tabGroupNumber, index);
-                        return super.setSelectedTab(index);
+                private AjaxBootstrapTabbedPanel newTabbedPanel(
+                        final EntityModel entityModel) {
+
+                    final TabGroup tabGroup = entityModel.getTabGroupMetadata();
+                    final List<ITab> tabs = Lists.newArrayList();
+                    final List<Tab> tabList = FluentIterable
+                            .from(tabGroup.getTabs())
+                            .filter(Tab.Predicates.notEmpty())
+                            .toList();
+
+                    for (final Tab tab : tabList) {
+                        tabs.add(new AbstractTab(Model.of(tab.getName())) {
+                            private static final long serialVersionUID = 1L;
+
+                            @Override
+                            public Panel getPanel(String panelId) {
+                                return new TabPanel(panelId, model, tab);
+                            }
+                        });
                     }
-                };
-                setSelectedTabFromSessionIfAny(tabbedPanel, tabGroupNumber);
-                return tabbedPanel;
-
-            }
+                    final AjaxBootstrapTabbedPanel tabbedPanel = new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs) {
+                        @Override
+                        public TabbedPanel setSelectedTab(final int index) {
+                            saveSelectedTabInSession(tabGroup, index, entityModel);
+                            return super.setSelectedTab(index);
+                        }
+                    };
+                    setSelectedTabFromSessionIfAny(tabGroup, tabbedPanel, entityModel);
+                    return tabbedPanel;
+                }
 
             private void setSelectedTabFromSessionIfAny(
-                    final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
-                    final int tabGroupNumber) {
-                final String key = buildKey(tabGroupNumber);
+                    final TabGroup tabGroup, final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
+                    final EntityModel entityModel) {
+                final String key = buildKey(tabGroup, entityModel);
                 final String value = (String) getSession().getAttribute(key);
                 if(value != null) {
                     final int tabIndex = Integer.parseInt(value);
@@ -121,17 +121,20 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
                 }
             }
 
-            private void saveSelectedTabInSession(final int tabGroupNumber, final int tabIndex) {
-                final String key = buildKey(tabGroupNumber);
+            private void saveSelectedTabInSession(
+                    final TabGroup tabGroup,
+                    final int tabIndex,
+                    final EntityModel entityModel) {
+                final String key = buildKey(tabGroup, entityModel);
                 getSession().setAttribute(key, "" + tabIndex);
             }
 
-            private String buildKey(final int tabGroupNumber) {
-                final ObjectAdapterMemento objectAdapterMemento = TabGroupListPanel.this.getModel().getObjectAdapterMemento();
+            private String buildKey(final TabGroup tabGroup, final EntityModel entityModel) {
+                final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
                 final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
                         AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
                 final String key =
-                        IsisContext.getOidMarshaller().marshalNoVersion(oid) + "." + tabGroupNumber + ".selectedTab";
+                        IsisContext.getOidMarshaller().marshalNoVersion(oid) + ":" + tabGroup.getPath() + "#selectedTab";
                 return key;
             }
 
