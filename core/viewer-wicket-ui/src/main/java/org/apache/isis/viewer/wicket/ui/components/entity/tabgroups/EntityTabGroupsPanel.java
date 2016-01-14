@@ -62,11 +62,12 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_PROPERTIES_AND_COLLECTIONS = "entityPropertiesAndCollections";
     private static final String ID_TAB_GROUPS = "tabGroups";
     private static final String ID_TAB_GROUP = "tabGroup";
     private static final String ID_LEFT_COLUMN = "leftColumn";
+    private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
+    private static final String ID_COLUMN = "column";
 
     public EntityTabGroupsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -170,7 +171,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
         };
 
-        final MarkupContainer tabGroupsContainer = new WebMarkupContainer("tabGroupsContainer");
+        final MarkupContainer tabGroupsContainer = new WebMarkupContainer(ID_MIDDLE_COLUMN);
         add(tabGroupsContainer);
 
         tabGroupsContainer.add(tabGroupsList);
@@ -209,7 +210,7 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
             getComponentFactoryRegistry()
                     .addOrReplaceComponent(this,
-                            ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
+                            ID_COLUMN, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
 
         }
     }
