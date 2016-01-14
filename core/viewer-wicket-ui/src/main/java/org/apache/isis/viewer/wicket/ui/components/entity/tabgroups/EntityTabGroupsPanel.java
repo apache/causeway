@@ -67,7 +67,6 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_LEFT_COLUMN = "leftColumn";
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
-    private static final String ID_COLUMN = "column";
 
     public EntityTabGroupsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -200,18 +199,4 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
         return 0;
     }
 
-    private static class EntityTabPanel extends PanelAbstract {
-        private static final long serialVersionUID = 1L;
-
-        public EntityTabPanel(String id, final EntityModel model, final Tab tab) {
-            super(id);
-
-            final EntityModel modelWithTabHints = model.cloneWithTabMetadata(tab);
-
-            getComponentFactoryRegistry()
-                    .addOrReplaceComponent(this,
-                            ID_COLUMN, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
-
-        }
-    }
 }
