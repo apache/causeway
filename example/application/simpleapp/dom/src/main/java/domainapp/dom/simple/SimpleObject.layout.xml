@@ -6,32 +6,41 @@
     <left span="0">
     </left>
     <tabGroup>
+        <tab name="Metadata">
+            <left span="12">
+                <propertyGroup name="Foo">
+                    <property id="versionSequence"/>
+                </propertyGroup>
+            </left>
+        </tab>
         <tab name="General">
-            <left span="6">
+            <left span="12">
                 <propertyGroup name="General">
+                    <actions>
+                        <action id="downloadJdoMetadata" position="PANEL"/>
+                        <action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                    </actions>
                     <property id="name" labelPosition="TOP">
                         <actions>
-                            <action id="updateName"/>
+                            <action id="updateName" cssClassFa="fa-download">
+                                <named>xxx</named>
+                                <describedAs>This allows the name to be updated</describedAs>
+                            </action>
                         </actions>
                     </property>
                 </propertyGroup>
             </left>
-            <right span="6">
-                <propertyGroup name="Metadata">
-                    <actions>
-                        <action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
-                        <action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                    </actions>
-                    <property id="versionSequence"/>
-                </propertyGroup>
-            </right>
         </tab>
     </tabGroup>
     <tabGroup>
-        <tab name="Collections">
+        <tab name="SimilarTo">
+            <left span="12">
+                <collection id="similarTo" defaultView="hide"/>
+            </left>
+        </tab>
+        <tab name="Others">
             <left span="12">
                 <collection id="others" defaultView="table"/>
-                <collection id="similarTo" defaultView="hide"/>
             </left>
         </tab>
     </tabGroup>

@@ -31,6 +31,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 /**
  * Adapter for {@link LoadableDetachableModel}s, providing access to some of the
@@ -52,13 +53,21 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
     // Hint support
     // //////////////////////////////////////////////////////////
 
+    protected final Map<String, ScopedSessionAttribute> scopedSessionAttributeByName = Maps.newHashMap();
     private final Map<String, String> hints = Maps.newTreeMap();
 
     public String getHint(final Component component, final String key) {
         if(component == null) {
             return null;
         }
-        String hintKey = hintKey(component, key);
+        String hintKey = hintPathFor(component) + "-" + key;
+        final ScopedSessionAttribute<String> scopedSessionAttribute = scopedSessionAttributeByName.get(hintKey);
+        if(scopedSessionAttribute != null) {
+            final String sessionHint = scopedSessionAttribute.get();
+            if(sessionHint != null) {
+                return sessionHint;
+            }
+        }
         return hints.get(hintKey);
     }
 
@@ -67,22 +76,26 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
         if(component == null) {
             return;
         }
-        String hintKey = hintKey(component, key);
+        final String scopeKey = hintPathFor(component);
+        String hintKey = scopeKey + "-" + key;
         if(value != null) {
             hints.put(hintKey, value);
         } else {
             hints.remove(hintKey);
         }
+        doSetHint(scopeKey, key, value);
+    }
+
+    /**
+     * Optional hook, eg to also store the hint in the session.
+     */
+    protected void doSetHint(final String scopeKey, final String attribute, final String value) {
+
     }
 
     @Override
     public void clearHint(Component component, String key) {
         setHint(component, key, null);
-    }
-
-
-    private static String hintKey(Component component, String key) {
-        return hintPathFor(component) + "-" + key;
     }
 
     private static String hintPathFor(Component component)

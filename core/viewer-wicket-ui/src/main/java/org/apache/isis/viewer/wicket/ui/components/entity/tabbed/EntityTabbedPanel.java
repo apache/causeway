@@ -29,6 +29,7 @@ import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
@@ -40,7 +41,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
+public class EntityTabbedPanel extends PanelAbstract<EntityModel>  implements UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 

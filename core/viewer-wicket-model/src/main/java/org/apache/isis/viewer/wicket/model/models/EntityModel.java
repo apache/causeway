@@ -32,8 +32,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
-import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -55,6 +55,7 @@ import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
 /**
  * Backing model to represent a {@link ObjectAdapter}.
@@ -712,6 +713,14 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         return columnHint;
     }
 
+    @Override
+    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
+        ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
+        if(scopedSessionAttribute == null) {
+            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
+        }
+        scopedSessionAttribute.set(value);
+    }
 
     // //////////////////////////////////////////////////////////
     // equals, hashCode

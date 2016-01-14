@@ -449,8 +449,11 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         return sessionAttributeByName.get(attributionName);
     }
 
-    public void putSessionAttribute(final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
-        this.sessionAttributeByName.put(selectedItemSessionAttribute.getAttributeName(), selectedItemSessionAttribute);
+    public void putSessionAttribute(final ScopedSessionAttribute<Integer> sessionAttribute) {
+        if(sessionAttribute == null || sessionAttribute.getAttributeName() == null) {
+            return;
+        }
+        this.sessionAttributeByName.put(sessionAttribute.getAttributeName(), sessionAttribute);
     }
 
     public void clearSelectedItemSessionAttribute(final String attributeName) {

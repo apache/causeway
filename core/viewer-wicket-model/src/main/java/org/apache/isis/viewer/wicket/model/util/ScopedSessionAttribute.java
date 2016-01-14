@@ -72,7 +72,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
             return noop();
         }
         final String oidStr = asStr(objectAdapterMemento);
-        final String key = oidStr + ":" + scopeKey + "#" + attributeName;
+        final String key = oidStr + ":" + scopeKey + "-" + attributeName;
         return new ScopedSessionAttribute<T>(key, attributeName);
     }
 
@@ -95,7 +95,11 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
     }
 
     public void set(T t) {
-        Session.get().setAttribute(key, t);
+        if(t != null) {
+            Session.get().setAttribute(key, t);
+        } else {
+            remove();
+        }
     }
 
     public T get() {
