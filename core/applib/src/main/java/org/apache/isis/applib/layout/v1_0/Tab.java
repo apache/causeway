@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "right"
         }
 )
-public class Tab implements ColumnHolder, Serializable {
+public class Tab implements ColumnOwner, Serializable, HasPath, Owned<TabGroup> {
 
     private static final long serialVersionUID = 1L;
 
@@ -122,6 +122,24 @@ public class Tab implements ColumnHolder, Serializable {
         appendContent(contents, getRight());
         return contents;
     }
+
+
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
+
 
     private static void appendContent(final List<ColumnContent> contents, final Column column) {
         if(column == null) {

@@ -29,8 +29,15 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
-@XmlType()
-public class TabGroup implements ColumnHolder, Serializable {
+import org.apache.isis.applib.annotation.Programmatic;
+
+@XmlType(
+        propOrder = {
+                "tabs"
+        }
+
+)
+public class TabGroup implements ColumnOwner, Serializable, HasPath, Owned<TabGroupOwner> {
 
     private static final long serialVersionUID = 1L;
 
@@ -53,18 +60,7 @@ public class TabGroup implements ColumnHolder, Serializable {
 
 
 
-    private Column fixed;
-
-    @XmlElement(required = false)
-    public Column getFixed() {
-        return fixed;
-    }
-
-    public void setFixed(final Column fixed) {
-        this.fixed = fixed;
-    }
-
-    private ObjectLayoutMetadata owner;
+    private TabGroupOwner owner;
 
     /**
      * Owner.
@@ -74,13 +70,30 @@ public class TabGroup implements ColumnHolder, Serializable {
      * </p>
      */
     @XmlTransient
-    public ObjectLayoutMetadata getOwner() {
+    public TabGroupOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ObjectLayoutMetadata owner) {
+    public void setOwner(final TabGroupOwner owner) {
         this.owner = owner;
     }
+
+
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
 
 
     public static class Predicates {

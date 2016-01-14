@@ -20,18 +20,22 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.tabgroups;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.layout.v1_0.Column;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
 import org.apache.isis.applib.layout.v1_0.TabGroup;
@@ -44,6 +48,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityColumnMembers;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -60,6 +65,8 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_ENTITY_PROPERTIES_AND_COLLECTIONS = "entityPropertiesAndCollections";
     private static final String ID_TAB_GROUPS = "tabGroups";
     private static final String ID_TAB_GROUP = "tabGroup";
+    private static final String ID_LEFT_COLUMN = "leftColumn";
+    private static final String ID_RIGHT_COLUMN = "rightColumn";
 
     public EntityTabGroupsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -82,11 +89,13 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
+        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, objectLayoutMetadata.getLeft(), Column.Hint.LEFT);
+
         final List<TabGroup> tabGroups = FluentIterable
                 .from(objectLayoutMetadata.getTabGroups())
                 .filter(TabGroup.Predicates.notEmpty())
                 .toList();
-        final int[] tabGroupCount = new int[]{0};
+        final AtomicInteger tabGroupRef = new AtomicInteger(0);
         final ListView<TabGroup> tabGroupsList =
                 new ListView<TabGroup>(ID_TAB_GROUPS, tabGroups) {
 
@@ -110,11 +119,11 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
                         }
                     });
                 }
-                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel = newTabbedPanel(tabs, tabGroupCount[0]);
+                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel = newTabbedPanel(tabs, tabGroupRef.get());
 
                 item.add(ajaxBootstrapTabbedPanel);
 
-                tabGroupCount[0]++;
+                tabGroupRef.incrementAndGet();
             }
 
             private AjaxBootstrapTabbedPanel newTabbedPanel(final List<ITab> tabs, final int tabGroupNumber) {
@@ -137,7 +146,11 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
                 final String value = (String) getSession().getAttribute(key);
                 if(value != null) {
                     final int tabIndex = Integer.parseInt(value);
-                    ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
+                    final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
+                    if(tabIndex < numTabs) {
+                        // to support dynamic reloading; the data in the session might not be compatible with current layout.
+                        ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
+                    }
                 }
             }
 
@@ -157,11 +170,34 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
         };
 
-        add(tabGroupsList);
+        final MarkupContainer tabGroupsContainer = new WebMarkupContainer("tabGroupsContainer");
+        add(tabGroupsContainer);
 
+        tabGroupsContainer.add(tabGroupsList);
+
+        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, objectLayoutMetadata.getRight(), Column.Hint.RIGHT);
+
+        final int columnSpans = leftSpan + rightSpan;
+        int tabGroupSpan = columnSpans < 12 ? 12 - (columnSpans) : 12;
+        CssClassAppender.appendCssClassTo(tabGroupsContainer, "col-xs-" + tabGroupSpan);
 
     }
 
+    private int addColumnIfRequired(final String id, final Column col, final Column.Hint hint) {
+        if(col != null) {
+            final EntityModel entityModel =
+                    getModel().cloneWithColumnMetadata(col, hint);
+            final int span = entityModel.getColumnMetadata().getSpan();
+            if(span > 0) {
+                final EntityColumnMembers entityColumnMembers = new EntityColumnMembers(id, entityModel, this);
+                addOrReplace(entityColumnMembers);
+                CssClassAppender.appendCssClassTo(entityColumnMembers, "col-xs-" + span);
+                return span;
+            }
+        }
+        permanentlyHide(id);
+        return 0;
+    }
 
     private static class EntityTabPanel extends PanelAbstract {
         private static final long serialVersionUID = 1L;
@@ -171,7 +207,10 @@ public class EntityTabGroupsPanel extends PanelAbstract<EntityModel> {
 
             final EntityModel modelWithTabHints = model.cloneWithTabMetadata(tab);
 
-            getComponentFactoryRegistry().addOrReplaceComponent(this, ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
+            getComponentFactoryRegistry()
+                    .addOrReplaceComponent(this,
+                            ID_ENTITY_PROPERTIES_AND_COLLECTIONS, ComponentType.ENTITY_PROPERTIES, modelWithTabHints);
+
         }
     }
 }

@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
+import org.apache.isis.applib.annotation.Programmatic;
 
 @XmlType(
         propOrder = {
@@ -36,7 +37,7 @@ import org.apache.isis.applib.annotation.MemberGroupLayout;
                 , "collections"
         }
 )
-public class Column implements Serializable {
+public class Column implements Serializable, Owner, Owned<ColumnOwner> {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,7 +87,7 @@ public class Column implements Serializable {
     }
 
 
-    private ColumnHolder owner;
+    private ColumnOwner owner;
     /**
      * Owner.
      *
@@ -95,13 +96,31 @@ public class Column implements Serializable {
      * </p>
      */
     @XmlTransient
-    public ColumnHolder getOwner() {
+    public ColumnOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ColumnHolder owner) {
+    public void setOwner(final ColumnOwner owner) {
         this.owner = owner;
     }
+
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
+
+
 
     public enum Hint {
         LEFT,

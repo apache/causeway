@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -44,7 +45,7 @@ import org.apache.isis.applib.annotation.Where;
         , "metadataError"
     }
 )
-public class ActionLayoutMetadata implements Serializable {
+public class ActionLayoutMetadata implements Serializable, HasPath, Owned<ActionOwner> {
 
     private static final long serialVersionUID = 1L;
 
@@ -188,7 +189,7 @@ public class ActionLayoutMetadata implements Serializable {
 
 
 
-    private ActionHolder owner;
+    private ActionOwner owner;
     /**
      * Owner.
      *
@@ -197,11 +198,11 @@ public class ActionLayoutMetadata implements Serializable {
      * </p>
      */
     @XmlTransient
-    public ActionHolder getOwner() {
+    public ActionOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ActionHolder owner) {
+    public void setOwner(final ActionOwner owner) {
         this.owner = owner;
     }
 
@@ -219,5 +220,22 @@ public class ActionLayoutMetadata implements Serializable {
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
     }
+
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
+
 
 }

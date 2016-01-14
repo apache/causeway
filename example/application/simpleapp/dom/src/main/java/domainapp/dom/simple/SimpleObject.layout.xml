@@ -3,19 +3,10 @@
     <actions>
         <action id="delete"/>
     </actions>
+    <left span="0">
+    </left>
     <tabGroup>
-        <tab name="Metadata">
-            <left span="6">
-                <propertyGroup name="Persistence">
-                    <actions>
-                        <action id="downloadJdoMetadata"/>
-                        <action id="downloadLayoutXml"/>
-                    </actions>
-                    <property id="versionSequence"/>
-                </propertyGroup>
-            </left>
-        </tab>
-        <tab name="Common">
+        <tab name="General">
             <left span="6">
                 <propertyGroup name="General">
                     <property id="name" labelPosition="TOP">
@@ -24,19 +15,24 @@
                         </actions>
                     </property>
                 </propertyGroup>
-                <collection id="similarTo" defaultView="table"/>
             </left>
             <right span="6">
-                <collection id="others" defaultView="hide"/>
+                <propertyGroup name="Metadata">
+                    <actions>
+                        <action id="downloadJdoMetadata" position="PANEL_DROPDOWN"/>
+                        <action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                    </actions>
+                    <property id="versionSequence"/>
+                </propertyGroup>
             </right>
         </tab>
     </tabGroup>
-<!--
     <tabGroup>
         <tab name="Collections">
-            <left span="6">
+            <left span="12">
+                <collection id="others" defaultView="table"/>
+                <collection id="similarTo" defaultView="hide"/>
             </left>
         </tab>
     </tabGroup>
--->
 </objectLayout>

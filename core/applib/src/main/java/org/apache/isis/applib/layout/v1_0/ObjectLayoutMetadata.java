@@ -19,7 +19,6 @@
 package org.apache.isis.applib.layout.v1_0;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -41,10 +40,12 @@ import org.apache.isis.applib.services.dto.Dto;
         name = "objectLayout"
         , propOrder = {
                 "actions"
+                , "left"
                 , "tabGroups"
+                , "right"
         }
 )
-public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
+public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, ColumnOwner, HasPath, TabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,16 +62,23 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
     }
 
 
-    // must have at least one tab group
-    private List<TabGroup> tabGroups = new ArrayList<TabGroup>() {{
-        add(new TabGroup());
-    }};
+
+    private Column left;
+
+    @XmlElement(required = false)
+    public Column getLeft() {
+        return left;
+    }
+
+    public void setLeft(final Column left) {
+        this.left = left;
+    }
+
+
+
+    private List<TabGroup> tabGroups;
 
     // no wrapper
-
-    /**
-     * Must have at least one tab group; no wrapper.
-     */
     @XmlElement(name = "tabGroup", required = true)
     public List<TabGroup> getTabGroups() {
         return tabGroups;
@@ -80,6 +88,19 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
         this.tabGroups = tabGroups;
     }
 
+
+
+    private Column right;
+
+    @XmlElement(required = false)
+    public Column getRight() {
+        return right;
+    }
+
+    public void setRight(final Column right) {
+        this.right = right;
+    }
+    
 
     public interface Visitor {
         void visit(final ObjectLayoutMetadata objectLayoutMetadata);
@@ -119,6 +140,7 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
     public void visit(final Visitor visitor) {
         visitor.visit(this);
         traverseActions(this, visitor);
+        traverseColumn(getLeft(), this, visitor);
         final List<TabGroup> tabGroups = getTabGroups();
         for (final TabGroup tabGroup : tabGroups) {
             tabGroup.setOwner(this);
@@ -132,13 +154,14 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
                 traverseColumn(tab.getRight(), tab, visitor);
             }
         }
+        traverseColumn(getRight(), this, visitor);
     }
 
-    private void traverseColumn(final Column column, final Tab tab, final Visitor visitor) {
+    private void traverseColumn(final Column column, final ColumnOwner columnOwner, final Visitor visitor) {
         if(column == null) {
             return;
         }
-        column.setOwner(tab);
+        column.setOwner(columnOwner);
         visitor.visit(column);
         traversePropertyGroups(column, visitor);
         traverseCollections(column, visitor);
@@ -166,13 +189,13 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
         }
     }
 
-    private void traverseActions(final ActionHolder actionHolder, final Visitor visitor) {
-        final List<ActionLayoutMetadata> actionLayoutMetadatas = actionHolder.getActions();
+    private void traverseActions(final ActionOwner actionOwner, final Visitor visitor) {
+        final List<ActionLayoutMetadata> actionLayoutMetadatas = actionOwner.getActions();
         if(actionLayoutMetadatas == null) {
             return;
         }
         for (final ActionLayoutMetadata actionLayoutMetadata : actionLayoutMetadatas) {
-            actionLayoutMetadata.setOwner(actionHolder);
+            actionLayoutMetadata.setOwner(actionOwner);
             visitor.visit(actionLayoutMetadata);
         }
     }
@@ -248,6 +271,20 @@ public class ObjectLayoutMetadata implements Dto, ActionHolder, Serializable {
             }
         });
         return propertyGroupsByName;
+    }
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
     }
 
 

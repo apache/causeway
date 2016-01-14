@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.base.Strings;
@@ -31,12 +32,13 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.layout.v1_0.ActionHolder;
 import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.ActionOwner;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.ColumnHolder;
+import org.apache.isis.applib.layout.v1_0.ColumnOwner;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.Owned;
 import org.apache.isis.applib.layout.v1_0.PropertyGroup;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Tab;
@@ -273,6 +275,65 @@ public class ObjectLayoutMetadataFacetDefault
                 actions.add(new ActionLayoutMetadata(actionId));
             }
         }
+
+        // set paths
+        metadata.visit(new ObjectLayoutMetadata.Visitor() {
+
+            private final Map<String,AtomicInteger> sequenceByPath = Maps.newHashMap();
+
+            @Override
+            public void visit(final ObjectLayoutMetadata objectLayoutMetadata) {
+                objectLayoutMetadata.setPath("/layout");
+            }
+
+            @Override
+            public void visit(final TabGroup tabGroup) {
+                tabGroup.setPath(pathFor(tabGroup, "tabGroup"));
+            }
+
+            @Override
+            public void visit(final Tab tab) {
+                tab.setPath(pathFor(tab, "tab"));
+            }
+
+            @Override
+            public void visit(final Column column) {
+                column.setPath(pathFor(column, "column"));
+            }
+
+            @Override
+            public void visit(final PropertyGroup propertyGroup) {
+                propertyGroup.setPath(pathFor(propertyGroup, "propertyGroup"));
+            }
+
+            @Override
+            public void visit(final PropertyLayoutMetadata propertyLayoutMetadata) {
+                propertyLayoutMetadata.setPath(pathFor(propertyLayoutMetadata, "property"));
+            }
+
+            @Override
+            public void visit(final CollectionLayoutMetadata collectionLayoutMetadata) {
+                collectionLayoutMetadata.setPath(pathFor(collectionLayoutMetadata, "collection"));
+            }
+
+            @Override
+            public void visit(final ActionLayoutMetadata actionLayoutMetadata) {
+                actionLayoutMetadata.setPath(pathFor(actionLayoutMetadata, "action"));
+            }
+
+            private String pathFor(final Owned<?> owned, final String type) {
+                final String ownerPath = owned.getOwner().getPath();
+                final String prefix = ownerPath + "/" + type;
+                AtomicInteger atomicInteger = sequenceByPath.get(prefix);
+                if(atomicInteger == null) {
+                    atomicInteger = new AtomicInteger(-1);
+                    sequenceByPath.put(prefix, atomicInteger);
+                }
+                final int seq = atomicInteger.incrementAndGet();
+                return prefix + seq;
+            }
+
+        });
     }
 
     static class Tuple<T> {
@@ -314,7 +375,7 @@ public class ObjectLayoutMetadataFacetDefault
 
             @Override
             public void visit(final ActionLayoutMetadata actionLayoutMetadata) {
-                final ActionHolder actionHolder = actionLayoutMetadata.getOwner();
+                final ActionOwner actionOwner = actionLayoutMetadata.getOwner();
                 final ObjectAction objectAction = objectActionById.get(actionLayoutMetadata.getId());
                 if(objectAction == null) {
                     return;
@@ -322,18 +383,18 @@ public class ObjectLayoutMetadataFacetDefault
 
                 final String memberOrderName;
                 final int memberOrderSequence;
-                if(actionHolder instanceof PropertyGroup) {
-                    final PropertyGroup propertyGroup = (PropertyGroup) actionHolder;
+                if(actionOwner instanceof PropertyGroup) {
+                    final PropertyGroup propertyGroup = (PropertyGroup) actionOwner;
                     final List<PropertyLayoutMetadata> properties = propertyGroup.getProperties();
                     final PropertyLayoutMetadata propertyLayoutMetadata = properties.get(0); // any will do
                     memberOrderName = propertyLayoutMetadata.getId();
                     memberOrderSequence = actionPropertyGroupSequence++;
-                } else if(actionHolder instanceof PropertyLayoutMetadata) {
-                    final PropertyLayoutMetadata propertyLayoutMetadata = (PropertyLayoutMetadata) actionHolder;
+                } else if(actionOwner instanceof PropertyLayoutMetadata) {
+                    final PropertyLayoutMetadata propertyLayoutMetadata = (PropertyLayoutMetadata) actionOwner;
                     memberOrderName = propertyLayoutMetadata.getId();
                     memberOrderSequence = actionPropertySequence++;
-                } else if(actionHolder instanceof CollectionLayoutMetadata) {
-                    final CollectionLayoutMetadata collectionLayoutMetadata = (CollectionLayoutMetadata) actionHolder;
+                } else if(actionOwner instanceof CollectionLayoutMetadata) {
+                    final CollectionLayoutMetadata collectionLayoutMetadata = (CollectionLayoutMetadata) actionOwner;
                     memberOrderName = collectionLayoutMetadata.getId();
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
@@ -345,13 +406,13 @@ public class ObjectLayoutMetadataFacetDefault
                         new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
 
 
-                if(actionHolder instanceof PropertyGroup) {
+                if(actionOwner instanceof PropertyGroup) {
                     if(actionLayoutMetadata.getPosition() == null ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
                         actionLayoutMetadata.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
-                } else if(actionHolder instanceof PropertyLayoutMetadata) {
+                } else if(actionOwner instanceof PropertyLayoutMetadata) {
                     if(actionLayoutMetadata.getPosition() == null ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
@@ -421,7 +482,7 @@ public class ObjectLayoutMetadataFacetDefault
 
                 // if there is only a single column and no other contents, then copy the collection Id onto the tab'
                 final Column column = collectionLayoutMetadata.getOwner();
-                final ColumnHolder holder = column.getOwner();
+                final ColumnOwner holder = column.getOwner();
                 if(holder instanceof Tab) {
                     final Tab tab = (Tab) holder;
                     if(tab.getContents().size() == 1 && Strings.isNullOrEmpty(tab.getName()) ) {

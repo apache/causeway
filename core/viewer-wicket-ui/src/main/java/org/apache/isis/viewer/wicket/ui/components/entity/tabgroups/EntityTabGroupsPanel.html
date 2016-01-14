@@ -23,12 +23,14 @@
 	<div class="entityTabbed">
 		<div wicket:id="entitySummary"></div>
 
-        <div wicket:id="tabGroups">
-            <div class="row">
-                <div wicket:id="tabGroup" class="col-xs-12">[tabbed panel will be here]</div>
-                <div XXXXwicket:id="entityColumnMembers" class = "fixedColumn col-xs-4">
+        <div class="row">
+            <div wicket:id="leftColumn" class = "leftColumn"/>
+            <div wicket:id="tabGroupsContainer" class="tabGroups">
+                <div class="row" wicket:id="tabGroups">
+                    <div wicket:id="tabGroup" class="col-xs-12">[tabbed panel will be here]</div>
                 </div>
             </div>
+            <div wicket:id="rightColumn" class = "rightColumn"/>
         </div>
 	</div>
 </wicket:panel>

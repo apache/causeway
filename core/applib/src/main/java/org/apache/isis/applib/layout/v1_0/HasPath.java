@@ -18,8 +18,15 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
-public interface ActionHolder {
-    List<ActionLayoutMetadata> getActions();
+import org.apache.isis.applib.annotation.Programmatic;
+
+public interface HasPath {
+
+    @Programmatic
+    @XmlTransient
+    String getPath();
+
+
 }

@@ -32,6 +32,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Programmatic;
 
 @XmlType(
         propOrder = {
@@ -40,7 +41,7 @@ import org.apache.isis.applib.annotation.MemberOrder;
                 , "properties"
         }
 )
-public class PropertyGroup implements ColumnContent, ActionHolder, Serializable {
+public class PropertyGroup implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<Column> {
 
     private static final long serialVersionUID = 1L;
 
@@ -109,6 +110,24 @@ public class PropertyGroup implements ColumnContent, ActionHolder, Serializable 
     public void setOwner(final Column owner) {
         this.owner = owner;
     }
+
+
+
+
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
+
 
 
     public static class Util {

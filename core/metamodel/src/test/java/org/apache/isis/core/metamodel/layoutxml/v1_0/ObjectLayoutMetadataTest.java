@@ -62,6 +62,8 @@ public class ObjectLayoutMetadataTest {
 
         final ObjectLayoutMetadata objectLayoutMetadata = new ObjectLayoutMetadata();
 
+        objectLayoutMetadata.setTabGroups(Lists.<TabGroup>newArrayList());
+        objectLayoutMetadata.getTabGroups().add(new TabGroup());
         TabGroup tabGroup = objectLayoutMetadata.getTabGroups().get(0);
         Tab tab = tabGroup.getTabs().get(0);
         tab.setName("Common");
