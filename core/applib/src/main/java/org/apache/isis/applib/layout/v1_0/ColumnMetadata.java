@@ -37,14 +37,14 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "collections"
         }
 )
-public class Column implements Serializable, Owner, Owned<ColumnOwner> {
+public class ColumnMetadata implements Serializable, Owner, Owned<ColumnOwner> {
 
     private static final long serialVersionUID = 1L;
 
-    public Column() {
+    public ColumnMetadata() {
     }
 
-    public Column(final int span) {
+    public ColumnMetadata(final int span) {
         setSpan(span);
     }
 
@@ -61,15 +61,15 @@ public class Column implements Serializable, Owner, Owned<ColumnOwner> {
 
 
 
-    private List<PropertyGroup> propertyGroups = Lists.newArrayList();
+    private List<PropertyGroupMetadata> propertyGroups = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "propertyGroup", required = false)
-    public List<PropertyGroup> getPropertyGroups() {
+    public List<PropertyGroupMetadata> getPropertyGroups() {
         return propertyGroups;
     }
 
-    public void setPropertyGroups(final List<PropertyGroup> propertyGroups) {
+    public void setPropertyGroups(final List<PropertyGroupMetadata> propertyGroups) {
         this.propertyGroups = propertyGroups;
     }
 
@@ -134,13 +134,13 @@ public class Column implements Serializable, Owner, Owned<ColumnOwner> {
             throw new IllegalStateException();
         }
 
-        public Column from(final Tab tab) {
-            if(tab == null) {
+        public ColumnMetadata from(final TabMetadata tabMetadata) {
+            if(tabMetadata == null) {
                 return null;
             }
-            if(this == LEFT) return tab.getLeft();
-            if(this == MIDDLE) return tab.getMiddle();
-            if(this == RIGHT) return tab.getRight();
+            if(this == LEFT) return tabMetadata.getLeft();
+            if(this == MIDDLE) return tabMetadata.getMiddle();
+            if(this == RIGHT) return tabMetadata.getRight();
             throw new IllegalStateException();
         }
 

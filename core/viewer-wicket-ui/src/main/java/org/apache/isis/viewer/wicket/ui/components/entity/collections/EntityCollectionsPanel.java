@@ -35,7 +35,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
@@ -99,7 +99,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final EntityModel entityModel = getModel();
         final ObjectAdapter adapter = entityModel.getObject();
 
-        final Column columnMetadataIfAny = entityModel.getColumnMetadata();
+        final ColumnMetadata columnMetadataIfAny = entityModel.getColumnMetadata();
         final Filter<ObjectAssociation> filter;
         if (columnMetadataIfAny != null) {
             final ImmutableList<String> collectionIds = FluentIterable

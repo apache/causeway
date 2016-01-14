@@ -49,7 +49,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<Column> {
+public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<ColumnMetadata> {
 
     private static final long serialVersionUID = 1L;
 
@@ -194,7 +194,7 @@ public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Ser
 
 
 
-    private Column owner;
+    private ColumnMetadata owner;
     /**
      * Owner.
      *
@@ -203,11 +203,11 @@ public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Ser
      * </p>
      */
     @XmlTransient
-    public Column getOwner() {
+    public ColumnMetadata getOwner() {
         return owner;
     }
 
-    public void setOwner(final Column owner) {
+    public void setOwner(final ColumnMetadata owner) {
         this.owner = owner;
     }
 

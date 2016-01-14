@@ -37,24 +37,24 @@ import org.apache.isis.applib.annotation.Programmatic;
         }
 
 )
-public class TabGroup implements ColumnOwner, Serializable, HasPath, Owned<TabGroupOwner> {
+public class TabGroupMetadata implements ColumnOwner, Serializable, HasPath, Owned<TabGroupOwner> {
 
     private static final long serialVersionUID = 1L;
 
     // must be at least one tab.
-    private List<Tab> tabs = new ArrayList<Tab>(){{
-        add(new Tab());
+    private List<TabMetadata> tabs = new ArrayList<TabMetadata>(){{
+        add(new TabMetadata());
     }};
 
 
 
     // no wrapper
     @XmlElement(name = "tab", required = true)
-    public List<Tab> getTabs() {
+    public List<TabMetadata> getTabs() {
         return tabs;
     }
 
-    public void setTabs(List<Tab> tabs) {
+    public void setTabs(List<TabMetadata> tabs) {
         this.tabs = tabs;
     }
 
@@ -97,13 +97,13 @@ public class TabGroup implements ColumnOwner, Serializable, HasPath, Owned<TabGr
 
 
     public static class Predicates {
-        public static Predicate<TabGroup> notEmpty() {
-            return new Predicate<TabGroup>() {
+        public static Predicate<TabGroupMetadata> notEmpty() {
+            return new Predicate<TabGroupMetadata>() {
                 @Override
-                public boolean apply(final TabGroup tabGroup) {
+                public boolean apply(final TabGroupMetadata tabGroup) {
                     return FluentIterable
                             .from(tabGroup.getTabs())
-                            .anyMatch(Tab.Predicates.notEmpty());
+                            .anyMatch(TabMetadata.Predicates.notEmpty());
                 }
             };
         }

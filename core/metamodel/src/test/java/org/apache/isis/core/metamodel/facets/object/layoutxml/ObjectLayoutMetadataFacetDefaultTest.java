@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.v1_0.PropertyGroup;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -33,10 +33,10 @@ public class ObjectLayoutMetadataFacetDefaultTest {
     @Test
     public void xxx() throws Exception {
 
-        final AtomicReference<PropertyGroup> x = new AtomicReference<>();
+        final AtomicReference<PropertyGroupMetadata> x = new AtomicReference<>();
 
-        PropertyGroup firstValue = new PropertyGroup();
-        PropertyGroup otherValue = new PropertyGroup();
+        PropertyGroupMetadata firstValue = new PropertyGroupMetadata();
+        PropertyGroupMetadata otherValue = new PropertyGroupMetadata();
 
         assertThat(x.get(), is(nullValue()));
 

@@ -30,10 +30,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.Column.Hint;
-import org.apache.isis.applib.layout.v1_0.Tab;
-import org.apache.isis.applib.layout.v1_0.TabGroup;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
+import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -644,71 +644,71 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private List<TabGroup> tabGroupListMetadata;
+    private List<TabGroupMetadata> tabGroupListMetadata;
 
-    public List<TabGroup> getTabGroupListMetadata() {
+    public List<TabGroupMetadata> getTabGroupListMetadata() {
         return tabGroupListMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupListMetadata(final List<TabGroup> tabGroupListMetadata) {
+    public EntityModel cloneWithTabGroupListMetadata(final List<TabGroupMetadata> tabGroupListMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.tabGroupListMetadata = tabGroupListMetadata;
         return entityModel;
     }
 
 
-    private TabGroup tabGroupMetadata;
+    private TabGroupMetadata tabGroupMetadata;
 
-    public TabGroup getTabGroupMetadata() {
+    public TabGroupMetadata getTabGroupMetadata() {
         return tabGroupMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupMetadata(final TabGroup tabGroupMetadata) {
+    public EntityModel cloneWithTabGroupMetadata(final TabGroupMetadata tabGroupMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.tabGroupMetadata = tabGroupMetadata;
         return entityModel;
     }
 
 
-    private Tab tabMetadata;
+    private TabMetadata tabMetadata;
 
-    public Tab getTabMetadata() {
+    public TabMetadata getTabMetadata() {
         return tabMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabMetadata(final Tab tabMetadata) {
+    public EntityModel cloneWithTabMetadata(final TabMetadata tabMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.tabMetadata = tabMetadata;
         return entityModel;
     }
 
 
-    private Column columnMetadata;
-    private Column.Hint columnHint;
+    private ColumnMetadata columnMetadata;
+    private ColumnMetadata.Hint columnHint;
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithColumnMetadata(final Column columnMetadata, final Column.Hint columnHint) {
+    public EntityModel cloneWithColumnMetadata(final ColumnMetadata columnMetadata, final ColumnMetadata.Hint columnHint) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.columnMetadata = columnMetadata;
         entityModel.columnHint = columnHint;
         return entityModel;
     }
 
-    public Column getColumnMetadata() {
+    public ColumnMetadata getColumnMetadata() {
         return columnMetadata;
     }
-    public Column.Hint getColumnHint() {
+    public ColumnMetadata.Hint getColumnHint() {
         return columnHint;
     }
 

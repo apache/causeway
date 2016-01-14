@@ -41,14 +41,14 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "properties"
         }
 )
-public class PropertyGroup implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<Column> {
+public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<ColumnMetadata> {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyGroup() {
+    public PropertyGroupMetadata() {
     }
 
-    public PropertyGroup(final String name) {
+    public PropertyGroupMetadata(final String name) {
         setName(name);
     }
 
@@ -94,7 +94,7 @@ public class PropertyGroup implements ColumnContent, ActionOwner, Serializable, 
     }
 
 
-    private Column owner;
+    private ColumnMetadata owner;
     /**
      * Owner.
      *
@@ -103,11 +103,11 @@ public class PropertyGroup implements ColumnContent, ActionOwner, Serializable, 
      * </p>
      */
     @XmlTransient
-    public Column getOwner() {
+    public ColumnMetadata getOwner() {
         return owner;
     }
 
-    public void setOwner(final Column owner) {
+    public void setOwner(final ColumnMetadata owner) {
         this.owner = owner;
     }
 
@@ -132,11 +132,11 @@ public class PropertyGroup implements ColumnContent, ActionOwner, Serializable, 
 
     public static class Util {
         private Util(){}
-        public static Function<? super PropertyGroup, String> nameOf() {
-            return new Function<PropertyGroup, String>() {
+        public static Function<? super PropertyGroupMetadata, String> nameOf() {
+            return new Function<PropertyGroupMetadata, String>() {
                 @Nullable @Override
-                public String apply(@Nullable final PropertyGroup propertyGroup) {
-                    return propertyGroup.getName();
+                public String apply(@Nullable final PropertyGroupMetadata propertyGroupMetadata) {
+                    return propertyGroupMetadata.getName();
                 }
             };
         }

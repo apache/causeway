@@ -63,51 +63,51 @@ public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, Col
 
 
 
-    private Column left;
+    private ColumnMetadata left;
 
     @XmlElement(required = false)
-    public Column getLeft() {
+    public ColumnMetadata getLeft() {
         return left;
     }
 
-    public void setLeft(final Column left) {
+    public void setLeft(final ColumnMetadata left) {
         this.left = left;
     }
 
 
 
-    private List<TabGroup> tabGroups;
+    private List<TabGroupMetadata> tabGroups;
 
     // no wrapper
     @XmlElement(name = "tabGroup", required = true)
-    public List<TabGroup> getTabGroups() {
+    public List<TabGroupMetadata> getTabGroups() {
         return tabGroups;
     }
 
-    public void setTabGroups(List<TabGroup> tabGroups) {
+    public void setTabGroups(List<TabGroupMetadata> tabGroups) {
         this.tabGroups = tabGroups;
     }
 
 
 
-    private Column right;
+    private ColumnMetadata right;
 
     @XmlElement(required = false)
-    public Column getRight() {
+    public ColumnMetadata getRight() {
         return right;
     }
 
-    public void setRight(final Column right) {
+    public void setRight(final ColumnMetadata right) {
         this.right = right;
     }
     
 
     public interface Visitor {
         void visit(final ObjectLayoutMetadata objectLayoutMetadata);
-        void visit(final TabGroup tabGroup);
-        void visit(final Tab tab);
-        void visit(final Column column);
-        void visit(final PropertyGroup propertyGroup);
+        void visit(final TabGroupMetadata tabGroup);
+        void visit(final TabMetadata tabMetadata);
+        void visit(final ColumnMetadata columnMetadata);
+        void visit(final PropertyGroupMetadata propertyGroupMetadata);
         void visit(final PropertyLayoutMetadata propertyLayoutMetadata);
         void visit(final CollectionLayoutMetadata collectionLayoutMetadata);
         void visit(final ActionLayoutMetadata actionLayoutMetadata);
@@ -117,13 +117,13 @@ public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, Col
         @Override
         public void visit(final ObjectLayoutMetadata objectLayoutMetadata) { }
         @Override
-        public void visit(final TabGroup tabGroup) { }
+        public void visit(final TabGroupMetadata tabGroup) { }
         @Override
-        public void visit(final Tab tab) { }
+        public void visit(final TabMetadata tabMetadata) { }
         @Override
-        public void visit(final Column column) { }
+        public void visit(final ColumnMetadata columnMetadata) { }
         @Override
-        public void visit(final PropertyGroup propertyGroup) {}
+        public void visit(final PropertyGroupMetadata propertyGroupMetadata) {}
         @Override
         public void visit(final PropertyLayoutMetadata propertyLayoutMetadata) {}
         @Override
@@ -141,49 +141,49 @@ public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, Col
         visitor.visit(this);
         traverseActions(this, visitor);
         traverseColumn(getLeft(), this, visitor);
-        final List<TabGroup> tabGroups = getTabGroups();
-        for (final TabGroup tabGroup : tabGroups) {
+        final List<TabGroupMetadata> tabGroups = getTabGroups();
+        for (final TabGroupMetadata tabGroup : tabGroups) {
             tabGroup.setOwner(this);
             visitor.visit(tabGroup);
-            final List<Tab> tabs = tabGroup.getTabs();
-            for (final Tab tab : tabs) {
-                tab.setOwner(tabGroup);
-                visitor.visit(tab);
-                traverseColumn(tab.getLeft(), tab, visitor);
-                traverseColumn(tab.getMiddle(), tab, visitor);
-                traverseColumn(tab.getRight(), tab, visitor);
+            final List<TabMetadata> tabs = tabGroup.getTabs();
+            for (final TabMetadata tabMetadata : tabs) {
+                tabMetadata.setOwner(tabGroup);
+                visitor.visit(tabMetadata);
+                traverseColumn(tabMetadata.getLeft(), tabMetadata, visitor);
+                traverseColumn(tabMetadata.getMiddle(), tabMetadata, visitor);
+                traverseColumn(tabMetadata.getRight(), tabMetadata, visitor);
             }
         }
         traverseColumn(getRight(), this, visitor);
     }
 
-    private void traverseColumn(final Column column, final ColumnOwner columnOwner, final Visitor visitor) {
-        if(column == null) {
+    private void traverseColumn(final ColumnMetadata columnMetadata, final ColumnOwner columnOwner, final Visitor visitor) {
+        if(columnMetadata == null) {
             return;
         }
-        column.setOwner(columnOwner);
-        visitor.visit(column);
-        traversePropertyGroups(column, visitor);
-        traverseCollections(column, visitor);
+        columnMetadata.setOwner(columnOwner);
+        visitor.visit(columnMetadata);
+        traversePropertyGroups(columnMetadata, visitor);
+        traverseCollections(columnMetadata, visitor);
     }
 
-    private void traversePropertyGroups(final Column column, final Visitor visitor) {
-        for (final PropertyGroup propertyGroup : column.getPropertyGroups()) {
-            propertyGroup.setOwner(column);
-            visitor.visit(propertyGroup);
-            traverseActions(propertyGroup, visitor);
-            final List<PropertyLayoutMetadata> properties = propertyGroup.getProperties();
+    private void traversePropertyGroups(final ColumnMetadata columnMetadata, final Visitor visitor) {
+        for (final PropertyGroupMetadata propertyGroupMetadata : columnMetadata.getPropertyGroups()) {
+            propertyGroupMetadata.setOwner(columnMetadata);
+            visitor.visit(propertyGroupMetadata);
+            traverseActions(propertyGroupMetadata, visitor);
+            final List<PropertyLayoutMetadata> properties = propertyGroupMetadata.getProperties();
             for (final PropertyLayoutMetadata propertyLayoutMetadata : properties) {
-                propertyLayoutMetadata.setOwner(propertyGroup);
+                propertyLayoutMetadata.setOwner(propertyGroupMetadata);
                 visitor.visit(propertyLayoutMetadata);
                 traverseActions(propertyLayoutMetadata, visitor);
             }
         }
     }
 
-    private void traverseCollections(final Column column, final Visitor visitor) {
-        for (final CollectionLayoutMetadata collectionLayoutMetadata : column.getCollections()) {
-            collectionLayoutMetadata.setOwner(column);
+    private void traverseCollections(final ColumnMetadata columnMetadata, final Visitor visitor) {
+        for (final CollectionLayoutMetadata collectionLayoutMetadata : columnMetadata.getCollections()) {
+            collectionLayoutMetadata.setOwner(columnMetadata);
             visitor.visit(collectionLayoutMetadata);
             traverseActions(collectionLayoutMetadata, visitor);
         }
@@ -246,13 +246,13 @@ public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, Col
 
     @Programmatic
     @XmlTransient
-    public LinkedHashMap<String, Tab> getAllTabsByName() {
-        final LinkedHashMap<String, Tab> tabsByName = Maps.newLinkedHashMap();
+    public LinkedHashMap<String, TabMetadata> getAllTabsByName() {
+        final LinkedHashMap<String, TabMetadata> tabsByName = Maps.newLinkedHashMap();
 
         visit(new ObjectLayoutMetadata.VisitorAdapter() {
             @Override
-            public void visit(final Tab tab) {
-                tabsByName.put(tab.getName(), tab);
+            public void visit(final TabMetadata tabMetadata) {
+                tabsByName.put(tabMetadata.getName(), tabMetadata);
             }
         });
         return tabsByName;
@@ -261,13 +261,13 @@ public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, Col
 
     @Programmatic
     @XmlTransient
-    public LinkedHashMap<String, PropertyGroup> getAllPropertyGroupsByName() {
-        final LinkedHashMap<String, PropertyGroup> propertyGroupsByName = Maps.newLinkedHashMap();
+    public LinkedHashMap<String, PropertyGroupMetadata> getAllPropertyGroupsByName() {
+        final LinkedHashMap<String, PropertyGroupMetadata> propertyGroupsByName = Maps.newLinkedHashMap();
 
         visit(new ObjectLayoutMetadata.VisitorAdapter() {
             @Override
-            public void visit(final PropertyGroup propertyGroup) {
-                propertyGroupsByName.put(propertyGroup.getName(), propertyGroup);
+            public void visit(final PropertyGroupMetadata propertyGroupMetadata) {
+                propertyGroupsByName.put(propertyGroupMetadata.getName(), propertyGroupMetadata);
             }
         });
         return propertyGroupsByName;

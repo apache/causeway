@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class PropertyLayoutMetadata implements ActionOwner, Serializable, HasPath, Owned<PropertyGroup> {
+public class PropertyLayoutMetadata implements ActionOwner, Serializable, HasPath, Owned<PropertyGroupMetadata> {
 
     private static final long serialVersionUID = 1L;
 
@@ -192,7 +192,7 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, HasPat
     }
 
 
-    private PropertyGroup owner;
+    private PropertyGroupMetadata owner;
     /**
      * Owner.
      *
@@ -201,11 +201,11 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, HasPat
      * </p>
      */
     @XmlTransient
-    public PropertyGroup getOwner() {
+    public PropertyGroupMetadata getOwner() {
         return owner;
     }
 
-    public void setOwner(final PropertyGroup owner) {
+    public void setOwner(final PropertyGroupMetadata owner) {
         this.owner = owner;
     }
 

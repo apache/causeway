@@ -40,7 +40,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "right"
         }
 )
-public class Tab implements ColumnOwner, Serializable, HasPath, Owned<TabGroup> {
+public class TabMetadata implements ColumnOwner, Serializable, HasPath, Owned<TabGroupMetadata> {
 
     private static final long serialVersionUID = 1L;
 
@@ -57,44 +57,44 @@ public class Tab implements ColumnOwner, Serializable, HasPath, Owned<TabGroup> 
 
 
 
-    private Column left = new Column();
+    private ColumnMetadata left = new ColumnMetadata();
 
     @XmlElement(required = true)
-    public Column getLeft() {
+    public ColumnMetadata getLeft() {
         return left;
     }
 
-    public void setLeft(final Column left) {
+    public void setLeft(final ColumnMetadata left) {
         this.left = left;
     }
 
 
-    private Column middle;
+    private ColumnMetadata middle;
 
     @XmlElement(required = false)
-    public Column getMiddle() {
+    public ColumnMetadata getMiddle() {
         return middle;
     }
 
-    public void setMiddle(final Column middle) {
+    public void setMiddle(final ColumnMetadata middle) {
         this.middle = middle;
     }
 
 
-    private Column right;
+    private ColumnMetadata right;
 
     @XmlElement(required = false)
-    public Column getRight() {
+    public ColumnMetadata getRight() {
         return right;
     }
 
-    public void setRight(final Column right) {
+    public void setRight(final ColumnMetadata right) {
         this.right = right;
     }
 
 
 
-    private TabGroup owner;
+    private TabGroupMetadata owner;
     /**
      * Owner.
      *
@@ -103,11 +103,11 @@ public class Tab implements ColumnOwner, Serializable, HasPath, Owned<TabGroup> 
      * </p>
      */
     @XmlTransient
-    public TabGroup getOwner() {
+    public TabGroupMetadata getOwner() {
         return owner;
     }
 
-    public void setOwner(final TabGroup owner) {
+    public void setOwner(final TabGroupMetadata owner) {
         this.owner = owner;
     }
 
@@ -141,26 +141,26 @@ public class Tab implements ColumnOwner, Serializable, HasPath, Owned<TabGroup> 
 
 
 
-    private static void appendContent(final List<ColumnContent> contents, final Column column) {
-        if(column == null) {
+    private static void appendContent(final List<ColumnContent> contents, final ColumnMetadata columnMetadata) {
+        if(columnMetadata == null) {
             return;
         }
-        final List<PropertyGroup> propertyGroups = column.getPropertyGroups();
+        final List<PropertyGroupMetadata> propertyGroups = columnMetadata.getPropertyGroups();
         if(propertyGroups != null) {
             contents.addAll(propertyGroups);
         }
-        final List<CollectionLayoutMetadata> collectionLayoutMetadatas = column.getCollections();
+        final List<CollectionLayoutMetadata> collectionLayoutMetadatas = columnMetadata.getCollections();
         if(collectionLayoutMetadatas != null) {
             contents.addAll(collectionLayoutMetadatas);
         }
     }
 
     public static class Predicates {
-        public static Predicate<Tab> notEmpty() {
-            return new Predicate<Tab>() {
+        public static Predicate<TabMetadata> notEmpty() {
+            return new Predicate<TabMetadata>() {
                 @Override
-                public boolean apply(final Tab tab) {
-                    return !tab.getContents().isEmpty();
+                public boolean apply(final TabMetadata tabMetadata) {
+                    return !tabMetadata.getContents().isEmpty();
                 }
             };
         }

@@ -23,9 +23,9 @@ import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 
-import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.TabGroup;
+import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
@@ -69,11 +69,11 @@ public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
-        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, objectLayoutMetadata.getLeft(), Column.Hint.LEFT);
+        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, objectLayoutMetadata.getLeft(), ColumnMetadata.Hint.LEFT);
 
         final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, objectLayoutMetadata.getTabGroups());
 
-        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, objectLayoutMetadata.getRight(), Column.Hint.RIGHT);
+        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, objectLayoutMetadata.getRight(), ColumnMetadata.Hint.RIGHT);
 
         final int columnSpans = leftSpan + rightSpan;
         int tabGroupSpan = columnSpans < 12 ? 12 - (columnSpans) : 12;
@@ -82,11 +82,11 @@ public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
     }
 
     private TabGroupListPanel addTabGroups(
-            final String id, final List<TabGroup> tabGroupList) {
+            final String id, final List<TabGroupMetadata> tabGroupList) {
         final EntityModel model = getModel();
-        final List<TabGroup> tabGroups = FluentIterable
+        final List<TabGroupMetadata> tabGroups = FluentIterable
                 .from(tabGroupList)
-                .filter(TabGroup.Predicates.notEmpty())
+                .filter(TabGroupMetadata.Predicates.notEmpty())
                 .toList();
         final EntityModel entityModelWitHints = model.cloneWithTabGroupListMetadata(tabGroups);
         final TabGroupListPanel middleComponent = new TabGroupListPanel(id, entityModelWitHints);
@@ -94,7 +94,7 @@ public class ColumnTabGroupListColumnPanel extends PanelAbstract<EntityModel> {
         return middleComponent;
     }
 
-    private int addColumnIfRequired(final String id, final Column col, final Column.Hint hint) {
+    private int addColumnIfRequired(final String id, final ColumnMetadata col, final ColumnMetadata.Hint hint) {
         if(col != null) {
             final EntityModel entityModel =
                     getModel().cloneWithColumnMetadata(col, hint);

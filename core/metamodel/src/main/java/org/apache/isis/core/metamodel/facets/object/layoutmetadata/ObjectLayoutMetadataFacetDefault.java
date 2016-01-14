@@ -35,14 +35,14 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.ActionOwner;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnOwner;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.Owned;
-import org.apache.isis.applib.layout.v1_0.PropertyGroup;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Tab;
-import org.apache.isis.applib.layout.v1_0.TabGroup;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
+import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -184,25 +184,25 @@ public class ObjectLayoutMetadataFacetDefault
         final LinkedHashMap<String, CollectionLayoutMetadata> collectionIds = metadata.getAllCollectionsById();
         final LinkedHashMap<String, ActionLayoutMetadata> actionIds = metadata.getAllActionsById();
 
-        final AtomicReference<PropertyGroup> defaultPropertyGroupRef = new AtomicReference<>();
-        final AtomicReference<Column> firstColumnRef = new AtomicReference<>();
-        final AtomicReference<TabGroup> lastTabGroupRef = new AtomicReference<>();
+        final AtomicReference<PropertyGroupMetadata> defaultPropertyGroupRef = new AtomicReference<>();
+        final AtomicReference<ColumnMetadata> firstColumnRef = new AtomicReference<>();
+        final AtomicReference<TabGroupMetadata> lastTabGroupRef = new AtomicReference<>();
 
         // capture the first column, and also
         // capture the first property group (if any) with the default name ('General')
         metadata.visit(new ObjectLayoutMetadata.VisitorAdapter() {
             @Override
-            public void visit(final Column column) {
-                firstColumnRef.compareAndSet(null, column);
+            public void visit(final ColumnMetadata columnMetadata) {
+                firstColumnRef.compareAndSet(null, columnMetadata);
             }
             @Override
-            public void visit(final PropertyGroup propertyGroup) {
-                if(MemberGroupLayoutFacet.DEFAULT_GROUP.equals(propertyGroup.getName())) {
-                    defaultPropertyGroupRef.compareAndSet(null, propertyGroup);
+            public void visit(final PropertyGroupMetadata propertyGroupMetadata) {
+                if(MemberGroupLayoutFacet.DEFAULT_GROUP.equals(propertyGroupMetadata.getName())) {
+                    defaultPropertyGroupRef.compareAndSet(null, propertyGroupMetadata);
                 }
             }
             @Override
-            public void visit(final TabGroup tabGroup) {
+            public void visit(final TabGroupMetadata tabGroup) {
                 lastTabGroupRef.set(tabGroup);
             }
         });
@@ -220,13 +220,13 @@ public class ObjectLayoutMetadataFacetDefault
 
         if(!missingPropertyIds.isEmpty()) {
             // ensure that there is a property group to use
-            boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new PropertyGroup(MemberGroupLayoutFacet.DEFAULT_GROUP));
-            final PropertyGroup defaultPropertyGroup = defaultPropertyGroupRef.get();
+            boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new PropertyGroupMetadata(MemberGroupLayoutFacet.DEFAULT_GROUP));
+            final PropertyGroupMetadata defaultPropertyGroupMetadata = defaultPropertyGroupRef.get();
             if(wasSet) {
-                firstColumnRef.get().getPropertyGroups().add(defaultPropertyGroup);
+                firstColumnRef.get().getPropertyGroups().add(defaultPropertyGroupMetadata);
             }
             for (final String propertyId : missingPropertyIds) {
-                defaultPropertyGroup.getProperties().add(new PropertyLayoutMetadata(propertyId));
+                defaultPropertyGroupMetadata.getProperties().add(new PropertyLayoutMetadata(propertyId));
             }
         }
 
@@ -243,16 +243,16 @@ public class ObjectLayoutMetadataFacetDefault
 
         if(!missingCollectionIds.isEmpty()) {
             while(metadata.getTabGroups().size() < 2) {
-                final TabGroup tabGroup = new TabGroup();
+                final TabGroupMetadata tabGroup = new TabGroupMetadata();
                 metadata.getTabGroups().add(tabGroup);
                 lastTabGroupRef.set(tabGroup);
             }
-            final TabGroup lastTabGroup = lastTabGroupRef.get();
+            final TabGroupMetadata lastTabGroup = lastTabGroupRef.get();
             for (final String collectionId : missingCollectionIds) {
-                final Tab tab = new Tab();
-                lastTabGroup.getTabs().add(tab);
-                Column left = new Column(12);
-                tab.setLeft(left);
+                final TabMetadata tabMetadata = new TabMetadata();
+                lastTabGroup.getTabs().add(tabMetadata);
+                ColumnMetadata left = new ColumnMetadata(12);
+                tabMetadata.setLeft(left);
                 final CollectionLayoutMetadata layoutMetadata = new CollectionLayoutMetadata(collectionId);
                 layoutMetadata.setDefaultView("table");
                 left.getCollections().add(layoutMetadata);
@@ -290,23 +290,23 @@ public class ObjectLayoutMetadataFacetDefault
             }
 
             @Override
-            public void visit(final TabGroup tabGroup) {
+            public void visit(final TabGroupMetadata tabGroup) {
                 tabGroup.setPath(pathFor(tabGroup, "tabGroup"));
             }
 
             @Override
-            public void visit(final Tab tab) {
-                tab.setPath(pathFor(tab, "tab"));
+            public void visit(final TabMetadata tabMetadata) {
+                tabMetadata.setPath(pathFor(tabMetadata, "tab"));
             }
 
             @Override
-            public void visit(final Column column) {
-                column.setPath(pathFor(column, "column"));
+            public void visit(final ColumnMetadata columnMetadata) {
+                columnMetadata.setPath(pathFor(columnMetadata, "column"));
             }
 
             @Override
-            public void visit(final PropertyGroup propertyGroup) {
-                propertyGroup.setPath(pathFor(propertyGroup, "propertyGroup"));
+            public void visit(final PropertyGroupMetadata propertyGroupMetadata) {
+                propertyGroupMetadata.setPath(pathFor(propertyGroupMetadata, "propertyGroup"));
             }
 
             @Override
@@ -386,9 +386,9 @@ public class ObjectLayoutMetadataFacetDefault
 
                 final String memberOrderName;
                 final int memberOrderSequence;
-                if(actionOwner instanceof PropertyGroup) {
-                    final PropertyGroup propertyGroup = (PropertyGroup) actionOwner;
-                    final List<PropertyLayoutMetadata> properties = propertyGroup.getProperties();
+                if(actionOwner instanceof PropertyGroupMetadata) {
+                    final PropertyGroupMetadata propertyGroupMetadata = (PropertyGroupMetadata) actionOwner;
+                    final List<PropertyLayoutMetadata> properties = propertyGroupMetadata.getProperties();
                     final PropertyLayoutMetadata propertyLayoutMetadata = properties.get(0); // any will do
                     memberOrderName = propertyLayoutMetadata.getId();
                     memberOrderSequence = actionPropertyGroupSequence++;
@@ -409,7 +409,7 @@ public class ObjectLayoutMetadataFacetDefault
                         new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
 
 
-                if(actionOwner instanceof PropertyGroup) {
+                if(actionOwner instanceof PropertyGroupMetadata) {
                     if(actionLayoutMetadata.getPosition() == null ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
                             actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
@@ -453,8 +453,8 @@ public class ObjectLayoutMetadataFacetDefault
                 FacetUtil.addFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
-                final PropertyGroup propertyGroup = propertyLayoutMetadata.getOwner();
-                final String groupName = propertyGroup.getName();
+                final PropertyGroupMetadata propertyGroupMetadata = propertyLayoutMetadata.getOwner();
+                final String groupName = propertyGroupMetadata.getName();
                 final String sequence = nextInSequenceFor(groupName, propertySequenceByGroup);
                 FacetUtil.addFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
@@ -484,13 +484,13 @@ public class ObjectLayoutMetadataFacetDefault
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
 
                 // if there is only a single column and no other contents, then copy the collection Id onto the tab'
-                final Column column = collectionLayoutMetadata.getOwner();
-                final ColumnOwner holder = column.getOwner();
-                if(holder instanceof Tab) {
-                    final Tab tab = (Tab) holder;
-                    if(tab.getContents().size() == 1 && Strings.isNullOrEmpty(tab.getName()) ) {
+                final ColumnMetadata columnMetadata = collectionLayoutMetadata.getOwner();
+                final ColumnOwner holder = columnMetadata.getOwner();
+                if(holder instanceof TabMetadata) {
+                    final TabMetadata tabMetadata = (TabMetadata) holder;
+                    if(tabMetadata.getContents().size() == 1 && Strings.isNullOrEmpty(tabMetadata.getName()) ) {
                         final String collectionName = oneToManyAssociation.getName();
-                        tab.setName(collectionName);
+                        tabMetadata.setName(collectionName);
                     }
                 }
             }

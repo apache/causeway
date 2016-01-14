@@ -25,7 +25,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
 
@@ -37,7 +37,7 @@ public final class ObjectSpecifications {
     public static List<String> orderByMemberGroups(
             final ObjectSpecification objSpec,
             final Set<String> groupNamesToOrder,
-            final Column.Hint hint) {
+            final ColumnMetadata.Hint hint) {
 
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
@@ -47,10 +47,10 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(hint == Column.Hint.MIDDLE) {
+        if(hint == ColumnMetadata.Hint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
-        if(hint == Column.Hint.RIGHT) {
+        if(hint == ColumnMetadata.Hint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
         

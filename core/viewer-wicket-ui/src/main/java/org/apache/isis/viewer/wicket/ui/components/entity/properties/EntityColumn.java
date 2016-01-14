@@ -31,8 +31,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.PropertyGroup;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
@@ -93,8 +93,8 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
             final MarkupContainer markupContainer,
             final EntityModel entityModel) {
 
-        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
-        final Column.Hint hint = entityModel.getColumnHint();
+        final ColumnMetadata columnMetaDataIfAny = entityModel.getColumnMetadata();
+        final ColumnMetadata.Hint hint = entityModel.getColumnHint();
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
@@ -103,7 +103,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
         final List<String> groupNames = columnMetaDataIfAny != null
                 ? FluentIterable
                 .from(columnMetaDataIfAny.getPropertyGroups())
-                .transform(PropertyGroup.Util.nameOf())
+                .transform(PropertyGroupMetadata.Util.nameOf())
                 .toList()
                 : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
 
@@ -152,7 +152,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
             final MarkupContainer column,
             final EntityModel entityModel) {
 
-        final Column columnMetaDataIfAny = entityModel.getColumnMetadata();
+        final ColumnMetadata columnMetaDataIfAny = entityModel.getColumnMetadata();
 
         if(columnMetaDataIfAny != null) {
             getComponentFactoryRegistry()

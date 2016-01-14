@@ -44,9 +44,9 @@ import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.v1_0.Column;
-import org.apache.isis.applib.layout.v1_0.Column.Hint;
-import org.apache.isis.applib.layout.v1_0.Tab;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -124,12 +124,12 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        final Tab tabMetaDataIfAny = entityModel.getTabMetadata();
+        final TabMetadata tabMetaDataIfAny = entityModel.getTabMetadata();
 
         final ColumnSpans columnSpans;
         if(tabMetaDataIfAny != null) {
-            final Column middle = tabMetaDataIfAny.getMiddle();
-            final Column right = tabMetaDataIfAny.getRight();
+            final ColumnMetadata middle = tabMetaDataIfAny.getMiddle();
+            final ColumnMetadata right = tabMetaDataIfAny.getRight();
             columnSpans = ColumnSpans.asSpans(
                     tabMetaDataIfAny.getLeft().getSpan(),
                     middle != null? middle.getSpan(): 0,
@@ -190,7 +190,7 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
 
         // edit buttons and feedback (not supported on tabbed view)
         final Hint leftHint = Hint.LEFT;
-        final Column leftColumnMetaDataIfAny = leftHint.from(tabMetaDataIfAny);
+        final ColumnMetadata leftColumnMetaDataIfAny = leftHint.from(tabMetaDataIfAny);
         final boolean hasProperties = leftColumnMetaDataIfAny == null && !PropUtil.propertyGroupNames(entityModel, leftHint, leftColumnMetaDataIfAny).isEmpty();
         if (hasProperties) {
             addButtons(leftColumn);
@@ -233,9 +233,9 @@ public class EntityPropertiesForm extends FormAbstract<ObjectAdapter> implements
     private void addPropertiesAndCollections(
             final MarkupContainer markupContainer,
             final EntityModel entityModel,
-            final Tab tabMetaDataIfAny,
+            final TabMetadata tabMetaDataIfAny,
             final Hint hint) {
-        final Column columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
+        final ColumnMetadata columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
 
         final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 

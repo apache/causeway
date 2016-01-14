@@ -31,12 +31,12 @@ import org.junit.Test;
 
 import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Column;
+import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyGroup;
-import org.apache.isis.applib.layout.v1_0.Tab;
-import org.apache.isis.applib.layout.v1_0.TabGroup;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.v1_0.TabMetadata;
+import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -62,15 +62,15 @@ public class ObjectLayoutMetadataTest {
 
         final ObjectLayoutMetadata objectLayoutMetadata = new ObjectLayoutMetadata();
 
-        objectLayoutMetadata.setTabGroups(Lists.<TabGroup>newArrayList());
-        objectLayoutMetadata.getTabGroups().add(new TabGroup());
-        TabGroup tabGroup = objectLayoutMetadata.getTabGroups().get(0);
-        Tab tab = tabGroup.getTabs().get(0);
-        tab.setName("Common");
-        Column left = tab.getLeft();
+        objectLayoutMetadata.setTabGroups(Lists.<TabGroupMetadata>newArrayList());
+        objectLayoutMetadata.getTabGroups().add(new TabGroupMetadata());
+        TabGroupMetadata tabGroup = objectLayoutMetadata.getTabGroups().get(0);
+        TabMetadata tabMetadata = tabGroup.getTabs().get(0);
+        tabMetadata.setName("Common");
+        ColumnMetadata left = tabMetadata.getLeft();
 
-        PropertyGroup leftPropGroup = new PropertyGroup();
-        left.setPropertyGroups(Lists.<PropertyGroup>newArrayList());
+        PropertyGroupMetadata leftPropGroup = new PropertyGroupMetadata();
+        left.setPropertyGroups(Lists.<PropertyGroupMetadata>newArrayList());
         left.getPropertyGroups().add(leftPropGroup);
         leftPropGroup.setName("General");
 
@@ -79,7 +79,7 @@ public class ObjectLayoutMetadataTest {
         left.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-        left.getPropertyGroups().add(new PropertyGroup("General"));
+        left.getPropertyGroups().add(new PropertyGroupMetadata("General"));
         PropertyLayoutMetadata namePropertyLayoutMetadata = new PropertyLayoutMetadata("name");
         left.getPropertyGroups().get(0).getProperties().add(namePropertyLayoutMetadata);
 
