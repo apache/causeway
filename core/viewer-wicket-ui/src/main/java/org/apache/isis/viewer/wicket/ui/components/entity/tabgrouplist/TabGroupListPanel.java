@@ -95,52 +95,70 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
                             }
                         });
                     }
-                    final AjaxBootstrapTabbedPanel tabbedPanel = new AjaxBootstrapTabbedPanel(ID_TAB_GROUP, tabs) {
-                        @Override
-                        public TabbedPanel setSelectedTab(final int index) {
-                            saveSelectedTabInSession(tabGroup, index, entityModel);
-                            return super.setSelectedTab(index);
-                        }
-                    };
-                    setSelectedTabFromSessionIfAny(tabGroup, tabbedPanel, entityModel);
+                    final AjaxBootstrapTabbedPanel tabbedPanel = new MyAjaxBootstrapTabbedPanel(tabs, tabGroup,
+                            entityModel);
                     return tabbedPanel;
                 }
 
-            private void setSelectedTabFromSessionIfAny(
-                    final TabGroup tabGroup, final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
-                    final EntityModel entityModel) {
-                final String key = buildKey(tabGroup, entityModel);
-                final String value = (String) getSession().getAttribute(key);
-                if(value != null) {
-                    final int tabIndex = Integer.parseInt(value);
-                    final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
-                    if(tabIndex < numTabs) {
-                        // to support dynamic reloading; the data in the session might not be compatible with current layout.
-                        ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
-                    }
-                }
-            }
-
-            private void saveSelectedTabInSession(
-                    final TabGroup tabGroup,
-                    final int tabIndex,
-                    final EntityModel entityModel) {
-                final String key = buildKey(tabGroup, entityModel);
-                getSession().setAttribute(key, "" + tabIndex);
-            }
-
-            private String buildKey(final TabGroup tabGroup, final EntityModel entityModel) {
-                final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-                final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
-                        AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
-                final String key =
-                        IsisContext.getOidMarshaller().marshalNoVersion(oid) + ":" + tabGroup.getPath() + "#selectedTab";
-                return key;
-            }
 
         };
 
         add(tabGroupsList);
     }
 
+    private static class MyAjaxBootstrapTabbedPanel extends AjaxBootstrapTabbedPanel {
+        private final TabGroup tabGroup;
+        private final EntityModel entityModel;
+
+        public MyAjaxBootstrapTabbedPanel(
+                final List<ITab> tabs,
+                final TabGroup tabGroup,
+                final EntityModel entityModel) {
+            super(TabGroupListPanel.ID_TAB_GROUP, tabs);
+            this.tabGroup = tabGroup;
+            this.entityModel = entityModel;
+
+            setSelectedTabFromSessionIfAny(tabGroup, this, entityModel);
+        }
+
+        @Override
+        public TabbedPanel setSelectedTab(final int index) {
+            saveSelectedTabInSession(tabGroup, index, entityModel);
+            return super.setSelectedTab(index);
+        }
+
+        private void setSelectedTabFromSessionIfAny(
+                final TabGroup tabGroup,
+                final AjaxBootstrapTabbedPanel ajaxBootstrapTabbedPanel,
+                final EntityModel entityModel) {
+            final String key = buildKey(tabGroup, entityModel);
+            final String value = (String) getSession().getAttribute(key);
+            if(value != null) {
+                final int tabIndex = Integer.parseInt(value);
+                final int numTabs = ajaxBootstrapTabbedPanel.getTabs().size();
+                if(tabIndex < numTabs) {
+                    // to support dynamic reloading; the data in the session might not be compatible with current layout.
+                    ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
+                }
+            }
+        }
+
+        private void saveSelectedTabInSession(
+                final TabGroup tabGroup,
+                final int tabIndex,
+                final EntityModel entityModel) {
+            final String key = buildKey(tabGroup, entityModel);
+            getSession().setAttribute(key, "" + tabIndex);
+        }
+
+        private String buildKey(final TabGroup tabGroup, final EntityModel entityModel) {
+            final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
+            final RootOid oid = (RootOid) objectAdapterMemento.getObjectAdapter(
+                    AdapterManager.ConcurrencyChecking.NO_CHECK).getOid();
+            final String key =
+                    IsisContext.getOidMarshaller().marshalNoVersion(oid) + ":" + tabGroup.getPath() + "#selectedTab";
+            return key;
+        }
+
+    }
 }
