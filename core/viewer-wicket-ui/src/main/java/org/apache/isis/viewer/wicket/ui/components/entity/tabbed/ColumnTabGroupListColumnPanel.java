@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityColumn;
+import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist.TabGroupListPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;

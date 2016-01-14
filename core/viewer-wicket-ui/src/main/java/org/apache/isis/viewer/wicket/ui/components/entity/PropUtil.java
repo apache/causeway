@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.properties;
+package org.apache.isis.viewer.wicket.ui.components.entity;
 
 import java.util.List;
 import java.util.Map;
@@ -41,7 +41,7 @@ public final class PropUtil {
     private PropUtil() {
     }
 
-    static List<String> propertyGroupNames(
+    public static List<String> propertyGroupNames(
             final EntityModel entityModel,
             final ColumnMetadata.Hint hint, final ColumnMetadata columnMetaDataIfAny) {
         final ObjectAdapter adapter = entityModel.getObject();
@@ -59,7 +59,7 @@ public final class PropUtil {
                 hint);
     }
 
-    static Map<String, List<ObjectAssociation>> propertiesByMemberOrder(final ObjectAdapter adapter) {
+    public static Map<String, List<ObjectAssociation>> propertiesByMemberOrder(final ObjectAdapter adapter) {
         final List<ObjectAssociation> properties = visibleProperties(adapter);
         return ObjectAssociation.Util.groupByMemberOrderName(properties);
     }

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.combined.EntityCombinedPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.ColumnTabGroupListColumnPanel;
 
 /**
@@ -55,6 +55,6 @@ public class EntityPanelFactory extends EntityComponentFactoryAbstract {
         final boolean hasLayout = layoutMetadata != null;
         return hasLayout
                 ? new ColumnTabGroupListColumnPanel(id, entityModel)
-                : new EntityCombinedPanel(id, entityModel);
+                : new EntityEditablePanel(id, entityModel);
     }
 }

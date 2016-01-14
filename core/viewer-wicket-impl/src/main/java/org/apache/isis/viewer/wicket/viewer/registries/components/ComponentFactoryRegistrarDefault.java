@@ -43,7 +43,7 @@ import org.apache.isis.viewer.wicket.ui.components.entity.collections.EntityColl
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.properties.EntityPropertiesPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityPropertiesPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
