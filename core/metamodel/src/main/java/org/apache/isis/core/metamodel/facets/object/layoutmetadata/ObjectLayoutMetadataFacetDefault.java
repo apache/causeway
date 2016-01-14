@@ -141,11 +141,14 @@ public class ObjectLayoutMetadataFacetDefault
         if(metadata == null) {
             return null;
         }
-        // if have .layout.json and then add a .layout.xml without restarting, then the normalizing is required
-        // in order to trample over the .layout.json's original facets.
-        // if(metadata.isNormalized()) {
-        //     return metadata;
-        // }
+
+        // if have .layout.json and then add a .layout.xml without restarting, then note that
+        // the changes won't be picked up.  Normalizing would be required
+        // in order to trample over the .layout.json's original facets
+        if(metadata.isNormalized()) {
+            return metadata;
+        }
+        
         doNormalize(metadata, getSpecification());
         metadata.setNormalized(true);
         return metadata;
