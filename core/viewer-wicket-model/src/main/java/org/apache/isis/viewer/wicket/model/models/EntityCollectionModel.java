@@ -23,11 +23,13 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
@@ -436,17 +438,23 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
 
     // //////////////////////////////////////
 
-    private ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
+    public static final String SESSION_ATTRIBUTE_SELECTED_ITEM = "selectedItem";
+
+    private final Map<String,ScopedSessionAttribute> sessionAttributeByName = Maps.newHashMap();
 
     /**
-     * provides a mechanism to retrieve the selected item (view selector) from the session.
+     * provides a mechanism to retrieve hints (identified by an attribute name) from the session.
      */
-    public ScopedSessionAttribute<Integer> getSelectedItemSessionAttribute() {
-        return selectedItemSessionAttribute;
+    public <T extends Serializable> ScopedSessionAttribute<T> getSessionAttribute(final String attributionName) {
+        return sessionAttributeByName.get(attributionName);
     }
 
-    public void setSelectedItemSessionAttribute(final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
-        this.selectedItemSessionAttribute = selectedItemSessionAttribute;
+    public void putSessionAttribute(final ScopedSessionAttribute<Integer> selectedItemSessionAttribute) {
+        this.sessionAttributeByName.put(selectedItemSessionAttribute.getAttributeName(), selectedItemSessionAttribute);
+    }
+
+    public void clearSelectedItemSessionAttribute(final String attributeName) {
+        this.sessionAttributeByName.remove(attributeName);
     }
 
 

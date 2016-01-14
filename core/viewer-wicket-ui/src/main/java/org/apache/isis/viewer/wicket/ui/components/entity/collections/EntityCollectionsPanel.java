@@ -83,7 +83,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         super(id, entityModel);
 
         columnMetadataIfAny = entityModel.getColumnMetadata();
-        selectedItemSessionAttribute = ScopedSessionAttribute.create(entityModel, columnMetadataIfAny, "selectedItem");
+        selectedItemSessionAttribute = ScopedSessionAttribute.create(entityModel, columnMetadataIfAny, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
 
         buildGui();
     }

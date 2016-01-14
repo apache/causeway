@@ -73,7 +73,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
         }
         final String oidStr = asStr(objectAdapterMemento);
         final String key = oidStr + ":" + scopeKey + "#" + attributeName;
-        return new ScopedSessionAttribute<T>(key);
+        return new ScopedSessionAttribute<T>(key, attributeName);
     }
 
     private static String asStr(final ObjectAdapterMemento objectAdapterMemento) {
@@ -83,9 +83,15 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
     }
 
     private final String key;
+    private final String attributeName;
 
-    private ScopedSessionAttribute(final String key) {
+    private ScopedSessionAttribute(final String key, final String attributeName) {
         this.key = key;
+        this.attributeName = attributeName;
+    }
+
+    public String getAttributeName() {
+        return attributeName;
     }
 
     public void set(T t) {
@@ -101,7 +107,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
     }
 
     public static <T extends Serializable> ScopedSessionAttribute<T> noop() {
-        return new ScopedSessionAttribute<T>(null) {
+        return new ScopedSessionAttribute<T>(null, null) {
             @Override public void set(final T serializable) {
             }
 

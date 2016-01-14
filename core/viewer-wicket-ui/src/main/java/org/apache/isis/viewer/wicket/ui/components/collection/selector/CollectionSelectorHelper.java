@@ -71,7 +71,7 @@ public class CollectionSelectorHelper implements Serializable {
                 selectedItemSessionAttribute != null
                         ? selectedItemSessionAttribute
                         : ScopedSessionAttribute.<Integer>noop();
-        model.setSelectedItemSessionAttribute(selectedItemSessionAttribute);
+        model.putSessionAttribute(selectedItemSessionAttribute);
     }
 
     private List<ComponentFactory> locateComponentFactories(ComponentFactoryRegistry componentFactoryRegistry) {
