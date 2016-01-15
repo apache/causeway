@@ -22,8 +22,7 @@
                     </actions>
                     <property id="name" labelPosition="TOP">
                         <actions>
-                            <action id="updateName" cssClassFa="fa-download">
-                                <named>xxx</named>
+                            <action id="updateName">
                                 <describedAs>This allows the name to be updated</describedAs>
                             </action>
                         </actions>

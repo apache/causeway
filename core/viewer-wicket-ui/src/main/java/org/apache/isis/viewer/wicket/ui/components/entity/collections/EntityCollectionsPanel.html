@@ -22,24 +22,25 @@
         <wicket:panel>
             <div class="entityCollectionsPanel entityCollectionsComponentType">
                 <div wicket:id="collections">
-                    <div wicket:id="collectionGroup" class="panel panel-default">
+                    <div wicket:id="collectionGroup">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <span wicket:id="collectionName" class="panel-title">[collection name]</span>
+                                <div class="additionalLinksAndSelectorDropDown pull-right">
 
-                        <div class="panel-heading">
-                            <span wicket:id="collectionName" class="panel-title">[collection name]</span>
-                            <div class="additionalLinksAndSelectorDropDown pull-right">
+                                    <div class="btn-group">
+                                        <div wicket:id="additionalLinks"></div>
+                                    </div>
+                                    <div class="btn-group">
+                                        <span wicket:id="selectorDropdown"/>
+                                    </div>
 
-                                <div class="btn-group">
-                                    <div wicket:id="additionalLinks"></div>
                                 </div>
-                                <div class="btn-group">
-                                    <span wicket:id="selectorDropdown"/>
-                                </div>
-
                             </div>
-                        </div>
 
-                        <div wicket:id="collection" class="collection panel-body">
-                            [collection]
+                            <div wicket:id="collection" class="collection panel-body">
+                                [collection]
+                            </div>
                         </div>
                     </div>
                 </div>

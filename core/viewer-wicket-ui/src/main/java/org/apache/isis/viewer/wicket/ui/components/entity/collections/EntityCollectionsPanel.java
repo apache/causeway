@@ -159,7 +159,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             final String cssClass = facet.cssClass(objectAdapter);
             CssClassAppender.appendCssClassTo(collectionRvContainer, cssClass);
         }
+
         final WebMarkupContainer fieldset = new WebMarkupContainer(ID_COLLECTION_GROUP);
+
         collectionRvContainer.add(fieldset);
 
         final OneToManyAssociation otma = (OneToManyAssociation) association;
