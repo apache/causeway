@@ -22,22 +22,24 @@
         <wicket:panel>
             <div class="columnMembers">
                 <div class="inputFormTable properties">
-                    <fieldset wicket:id="memberGroup" class="memberGroup myBlockContainer">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
-                                <div class="pull-right additionalLinks">
-                                    <div wicket:id="associatedActionLinksPanel"></div>
-                                    <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                    <div wicket:id="memberGroup">
+                        <fieldset class="memberGroup myBlockContainer">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <span wicket:id="memberGroupName" class="panel-title">[group name]</span>
+                                    <div class="pull-right additionalLinks">
+                                        <div wicket:id="associatedActionLinksPanel"></div>
+                                        <div wicket:id="associatedActionLinksPanelDropDown"></div>
+                                    </div>
+                                </div>
+                                <div class="properties panel-body">
+                                    <div wicket:id="properties">
+                                        <div wicket:id="property" class="property">[property]</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="properties panel-body">
-                                <div wicket:id="properties">
-                                    <div wicket:id="property" class="property">[property]</div>
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+                        </fieldset>
+                    </div>
                 </div>
                 <div wicket:id="collections"></div>
             </div>

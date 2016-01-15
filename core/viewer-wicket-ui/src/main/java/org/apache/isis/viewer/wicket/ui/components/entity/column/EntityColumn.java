@@ -18,13 +18,16 @@
  */
 package org.apache.isis.viewer.wicket.ui.components.entity.column;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,6 +36,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -113,54 +117,112 @@ public class EntityColumn extends PanelAbstract<EntityModel> implements UiHintPa
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
-        final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil
-                .propertiesByMemberOrder(adapter);
-        final List<String> groupNames = columnMetaDataIfAny != null
-                ? FluentIterable
-                .from(columnMetaDataIfAny.getPropertyGroups())
-                .transform(PropertyGroupMetadata.Util.nameOf())
-                .toList()
-                : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
+        final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil.propertiesByMemberOrder(adapter);
 
         final RepeatingView memberGroupRv = new RepeatingView(ID_MEMBER_GROUP);
         markupContainer.add(memberGroupRv);
 
+        final ImmutableMap<String, PropertyGroupMetadata> propertyGroupMetadataByNameIfAny =
+                columnMetaDataIfAny != null
+                    ? Maps.uniqueIndex(columnMetaDataIfAny.getPropertyGroups(), PropertyGroupMetadata.Util.nameOf())
+                    : null;
+
+        final Collection<String> groupNames =
+                propertyGroupMetadataByNameIfAny != null
+                    ? propertyGroupMetadataByNameIfAny.keySet()
+                    : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(), hint);
+
         for(final String groupName: groupNames) {
+
             final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
             if(associationsInGroup==null) {
                 continue;
             }
 
-            final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(memberGroupRv.newChildId());
-            memberGroupRv.add(memberGroupRvContainer);
-            memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
-
-            final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
-
-            final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
-            memberGroupRvContainer.add(propertyRv);
-
-            @SuppressWarnings("unused")
-            Component component;
-            for (final ObjectAssociation association : associationsInGroup) {
-                final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
-                propertyRv.add(propertyRvContainer);
-
-                addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
+            final PropertyGroupMetadata propertyGroupMetadata;
+            if (propertyGroupMetadataByNameIfAny != null) {
+                propertyGroupMetadata = propertyGroupMetadataByNameIfAny.get(groupName);
+            }
+            else {
+                propertyGroupMetadata = new PropertyGroupMetadata(groupName);
+                propertyGroupMetadata.setProperties(
+                        FluentIterable
+                                .from(associationsInGroup)
+                                .transform(
+                                    new Function<ObjectAssociation, PropertyLayoutMetadata>() {
+                                        @Override
+                                        public PropertyLayoutMetadata apply(final ObjectAssociation assoc) {
+                                            return new PropertyLayoutMetadata(assoc.getId());
+                                        }
+                                    }).toList());
             }
 
-            final List<LinkAndLabel> actionsPanel = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL);
-            final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
+            if(propertyGroupMetadata.getProperties().isEmpty()) {
+                continue;
+            }
 
-            AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL,
-                    actionsPanel,
-                    AdditionalLinksPanel.Style.INLINE_LIST);
-            AdditionalLinksPanel.addAdditionalLinks(
-                    memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
-                    actionsPanelDropDown,
-                    AdditionalLinksPanel.Style.DROPDOWN);
+            final String id = memberGroupRv.newChildId();
+
+            final EntityModel entityModelWithHints = entityModel.cloneWithPropertyGroupMetadata(propertyGroupMetadata);
+            final WebMarkupContainer memberGroupRvContainer = newPropertyGroup(id, entityModelWithHints);
+
+            memberGroupRv.add(memberGroupRvContainer);
         }
+    }
+
+    private WebMarkupContainer newPropertyGroup(
+            final String id,
+            final EntityModel entityModel) {
+
+        final PropertyGroupMetadata propertyGroupMetadata = entityModel.getPropertyGroupMetadata();
+        String groupName = propertyGroupMetadata.getName();
+
+        final ObjectAdapter adapter = entityModel.getObject();
+
+
+        final WebMarkupContainer memberGroupRvContainer = new WebMarkupContainer(id);
+
+        memberGroupRvContainer.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
+
+        final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
+
+        final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
+        memberGroupRvContainer.add(propertyRv);
+
+
+        final List<PropertyLayoutMetadata> properties = propertyGroupMetadata.getProperties();
+        for (PropertyLayoutMetadata property : properties) {
+            final ObjectAssociation association = adapter.getSpecification().getAssociation(property.getId());
+
+            final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
+            propertyRv.add(propertyRvContainer);
+
+            addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
+        }
+
+// final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil.propertiesByMemberOrder(adapter);
+// final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
+//        @SuppressWarnings("unused")
+//        Component component;
+//        for (final ObjectAssociation association : associationsInGroup) {
+//            final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(propertyRv.newChildId());
+//            propertyRv.add(propertyRvContainer);
+//
+//            addPropertyToForm(entityModel, (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
+//        }
+
+        final List<LinkAndLabel> actionsPanel = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL);
+        final List<LinkAndLabel> actionsPanelDropDown = LinkAndLabel.positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
+
+        AdditionalLinksPanel.addAdditionalLinks(
+                memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL,
+                actionsPanel,
+                AdditionalLinksPanel.Style.INLINE_LIST);
+        AdditionalLinksPanel.addAdditionalLinks(
+                memberGroupRvContainer, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
+                actionsPanelDropDown,
+                AdditionalLinksPanel.Style.DROPDOWN);
+        return memberGroupRvContainer;
     }
 
     private void addCollectionsIfRequired(

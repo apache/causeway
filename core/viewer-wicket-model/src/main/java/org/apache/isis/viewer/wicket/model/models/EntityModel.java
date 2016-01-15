@@ -32,6 +32,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.TabMetadata;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
@@ -721,6 +722,25 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         }
         scopedSessionAttribute.set(value);
     }
+
+
+    private PropertyGroupMetadata propertyGroupMetadata;
+
+    public PropertyGroupMetadata getPropertyGroupMetadata() {
+        return propertyGroupMetadata;
+    }
+
+    /**
+     * Returns a new copy that SHARES the property scalar models (for edit form).
+     */
+    public EntityModel cloneWithPropertyGroupMetadata(
+            final PropertyGroupMetadata propertyGroupMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.propertyGroupMetadata = propertyGroupMetadata;
+        return entityModel;
+    }
+
+
 
     // //////////////////////////////////////////////////////////
     // equals, hashCode

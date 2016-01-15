@@ -86,7 +86,8 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private static final String ID_LEFT_COLUMN = "leftColumn";
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
-    
+
+    private static final String ID_ENTITY_COLUMN = "entityColumn";
     private static final String ID_ENTITY_COLLECTIONS = "entityCollections";
     private static final String ID_ENTITY_COLLECTIONS_OVERFLOW = "entityCollectionsOverflow";
 
@@ -148,9 +149,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         add(leftColumn);
 
         if(columnSpans.getLeft() > 0) {
-
             addPropertiesAndCollections(leftColumn, entityModel, tabMetaDataIfAny, Hint.LEFT);
-
         } else {
             Components.permanentlyHide(this, ID_LEFT_COLUMN);
         }
@@ -160,7 +159,6 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         if(columnSpans.getMiddle() > 0) {
             middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-
             addPropertiesAndCollections(middleColumn, entityModel, tabMetaDataIfAny, Hint.MIDDLE);
         } else {
             middleColumn = null;
@@ -172,7 +170,6 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         if(columnSpans.getRight() > 0) {
             rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-
             addPropertiesAndCollections(rightColumn, entityModel, tabMetaDataIfAny, Hint.RIGHT);
         } else {
             rightColumn = null;
@@ -243,7 +240,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 
         final EntityColumn columnMembers =
-                new EntityColumn("entityMembers", entityModelWithHints);
+                new EntityColumn(ID_ENTITY_COLUMN, entityModelWithHints);
         markupContainer.add(columnMembers);
     }
 

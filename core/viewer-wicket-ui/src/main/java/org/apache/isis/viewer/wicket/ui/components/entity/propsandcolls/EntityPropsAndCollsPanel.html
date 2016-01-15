@@ -21,10 +21,11 @@
     <body>
         <wicket:panel>
             <div class="entityPropertiesPanel entityPropertiesComponentType">
-                <form wicket:id="entityProperties" class="inputForm" role="form">
+                <!-- EntityPropsAndCollsForm:start -->
+                <form wicket:id="entityForm" class="inputForm" role="form">
                     <div class="row">
                         <div wicket:id="leftColumn">
-                            <div wicket:id="entityMembers"/>
+                            <div wicket:id="entityColumn"/>
                             <div class="feedbackPanel">
                                 <span wicket:id="feedback"></span>
                             </div>
@@ -35,10 +36,10 @@
                             </div>
                         </div>
                         <div wicket:id="middleColumn">
-                            <div wicket:id="entityMembers"/>
+                            <div wicket:id="entityColumn"/>
                         </div>
                         <div wicket:id="rightColumn">
-                            <div wicket:id="entityMembers"/>
+                            <div wicket:id="entityColumn"/>
                         </div>
                         <div wicket:id="entityCollections"></div>
                     </div>
@@ -46,6 +47,7 @@
                         <div wicket:id="entityCollectionsOverflow"></div>
                     </div>
                 </form>
+                <!-- EntityPropsAndCollsForm:end -->
             </div>
         </wicket:panel>
     </body>

@@ -39,7 +39,7 @@ public class EntityPropsAndCollsPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String ID_ENTITY_PROPERTIES = "entityProperties";
+    private static final String ID_ENTITY_FORM = "entityForm";
 
     private EntityPropsAndCollsForm form;
 
@@ -58,10 +58,10 @@ public class EntityPropsAndCollsPanel extends PanelAbstract<EntityModel> {
         final EntityModel model = getModel();
         final ObjectAdapter adapter = model.getObject();
         if (adapter != null) {
-            form = new EntityPropsAndCollsForm(ID_ENTITY_PROPERTIES, model, this);
+            form = new EntityPropsAndCollsForm(ID_ENTITY_FORM, model, this);
             addOrReplace(form);
         } else {
-            permanentlyHide(ID_ENTITY_PROPERTIES);
+            permanentlyHide(ID_ENTITY_FORM);
         }
     }
 }
