@@ -8,12 +8,13 @@
 
 
 
-
+[[_cgcon_building-isis_git]]
 == Git
 
 The Apache Isis source code lives in a git repo.
 
 
+[[_cgcon_building-isis_git_installation]]
 === Installation
 
 The easiest place to get hold of command-line git is probably the http://git-scm.com/downloads[github download page].
@@ -33,7 +34,7 @@ If using Mac, you might also want to check out Atlassian's http://www.atlassian.
 
 
 
-
+[[_cgcon_building-isis_git_installation_cloning-the-apache-isis-repo]]
 ==== Cloning the Apache Isis repo
 
 First, clone the Apache Isis repo.
@@ -48,6 +49,8 @@ git clone https://git-wip-us.apache.org/repos/asf/isis.git
 
 If you are *not a committer*, please see the xref:cgcon.adoc#_cgcon_contributing[contributing] page for details on which repo to clone from.
 
+
+[[_cgcon_building-isis_git_installation_configuring-git]]
 ==== Configuring Git
 
 Next up is to configure your user name and password; see also https://git-wip-us.apache.org/[Apache's git] docs:
@@ -107,6 +110,7 @@ If you don't use git outside of Apache, you can add the `--global` flag so that 
 
 
 
+[[_cgcon_building-isis_git_getting-help]]
 === Getting help
 
 Three commands of git that in particular worth knowing:
@@ -132,8 +136,27 @@ For further reading, see:
 * http://git-scm.com/docs/gitattributes[.gitattributes git-scm.com docs]
 
 
+[[_cgcon_building-isis_installing-java-7]]
+== Installing Java 7
+
+Apache Isis is compatible with Java 7 and Java 8.  To ensure backward compatibility with Java 7 the framework is built
+using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin].
+(The discussion of toolchains itself is discussed xref:_cgcon_building-isis_configure-maven-toolchains-plugin[below]).
 
 
+Therefore install Java 7 JDK (and optionally Java 8 JDK as well).  Note that the JRE is _not_ sufficient.
+
+
+[TIP]
+====
+If you intend to contribute back patches to Apache Isis, note that you can still use Java 8 within your IDE to
+make changes.  Just be sure not to use any Java 8 APIs.
+====
+
+
+
+
+[[_cgcon_building-isis_installing-maven]]
 == Installing Maven
 
 Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
@@ -152,6 +175,52 @@ Previously we suggested `-XX:MaxPermSize=256m`, but this option has been removed
 ====
 
 
+[[_cgcon_building-isis_configure-maven-toolchains-plugin]]
+== Configure Maven toolchains plugin
+
+As noted xref:_cgcon_building-isis_installing-java-7[earlier], Apache Isis is built using Java 7, leveraging the
+link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin.  This is configured by placing the
+`toolchains.xml` file in `~/.m2` directory.
+
+You can use the following file as a template, adjusting paths for your platform:
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF8"?>
+<toolchains>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>1.8</version>
+            <vendor>oracle</vendor>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib64/jvm/jdk1.8.0_65</jdkHome>
+            <!--
+            <jdkHome>c:\Program Files\Java\jdk1.8.0_65</jdkHome>
+            -->
+        </configuration>
+    </toolchain>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <version>1.7</version>   <!--1-->
+            <vendor>oracle</vendor>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib64/jvm/jdk1.7.0_79</jdkHome>
+            <!--
+            <jdkHome>c:\Program Files\Java\jdk1.7.0_79</jdkHome>
+            -->
+        </configuration>
+    </toolchain>
+</toolchains>
+----
+<1> The Apache Isis build is configured to search for the (`1.7, oracle`) JDK toolchain.
+
+
+
+[[_cgcon_building-isis_building-all-of-apache-isis]]
 == Building all of Apache Isis
 
 To build the source code from the command line, simply go to the root directory and type:
@@ -178,6 +247,7 @@ When using Eclipse, a Maven profile is configured such that Eclipse compiles to 
 
 
 
+[[_cgcon_building-isis_checking-for-vulnerabilities]]
 == Checking for Vulnerabilities
 
 Apache Isis configures the link:https://www.owasp.org/index.php/Main_Page[OWASP] link:https://www.owasp.org/index.php/OWASP_Dependency_Check[dependency check] link:http://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[Maven plugin] to determine whether the framework uses libraries that are known to have security vulnerabilities.
@@ -201,6 +271,7 @@ To disable, either run in offline mode (add `-o` or `--offline`) or omit the `ow
 
 
 
+[[_cgcon_building-isis_checking-for-use-of-internal-jdk-apis]]
 == Checking for use of internal JDK APIs
 
 Apache Isis configures the link:https://maven.apache.org/plugins-archives/maven-jdeps-plugin-3.0.0/[jdeps maven plugin] to check for any usage of internal JDK APIs.  This is in preparation for Java 9 module system (Jigsaw) which will prevent such usage of APIs.
@@ -215,8 +286,9 @@ mvn clean install -Djdeps
 This will fail the build on any module that currently uses an internal JDK API.
 
 
-[NOTE]
+[WARNING]
 ====
 At the time of writing the `isis-core-schema` module fails the build.
 ====
+
 
