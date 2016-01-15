@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderFacetComparator;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -76,10 +77,16 @@ public final class EntityActionUtil {
             final EntityModel entityModel,
             final ObjectAssociation association,
             final DeploymentType deploymentType) {
+        return getObjectActionsForAssociation(entityModel, association, deploymentType.getDeploymentCategory());
+    }
+
+    public static List<ObjectAction> getObjectActionsForAssociation(
+            final EntityModel entityModel,
+            final ObjectAssociation association, final DeploymentCategory deploymentCategory) {
         final List<ObjectAction> associatedActions = Lists.newArrayList();
 
         addActions(ActionType.USER, entityModel, association, associatedActions);
-        if(deploymentType.isPrototyping()) {
+        if(deploymentCategory.isPrototyping()) {
             addActions(ActionType.EXPLORATION, entityModel, association, associatedActions);
             addActions(ActionType.PROTOTYPE, entityModel, association, associatedActions);
         }
