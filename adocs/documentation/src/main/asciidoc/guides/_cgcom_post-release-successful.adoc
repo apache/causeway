@@ -155,22 +155,30 @@ svn delete $fullname-$old_ver-$zip
 popd
 ----
 
-For example:
-
 [source,bash]
 ----
 sh upd.sh 1.11.0 1.12.0
 ----
 
-The script downloads the artefacts from the Nexus release repository, adds the artefacts to subsversion and deletes the previous version.
+The script downloads the artifacts from the Nexus release repository, adds the artifacts to subversion and deletes the previous version.
 
-At the end, commit the changes:
+
+
+Double check that the files are correct; there is sometimes a small delay in the files becoming available in the release repository.  It should be sufficient to check just the `md5` or `.asc` files that these look valid (aren't HTML 404 error pages):
+
+[source,bash]
+----
+vi `find . -name *.md5`
+----
+
+Assuming all is good, commit the changes:
 
 [source]
 ----
 svn commit -m "publishing isis source releases to dist.apache.org"
 ----
 
+If the files are invalid, then revert using `svn revert . --recursive` and try again in a little while.
 
 
 

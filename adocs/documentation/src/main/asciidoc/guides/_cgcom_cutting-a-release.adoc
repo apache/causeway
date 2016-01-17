@@ -124,7 +124,7 @@ cd core
 [[_cgcom_cutting-a-release_releasing-core_set-environment-variables]]
 === Set environment variables
 
-Set additional environment variables for the core "artefact":
+Set additional environment variables for the core "artifact":
 
 [source,bash]
 ----
@@ -378,7 +378,7 @@ cd ../example/application/simpleapp
 [[_cgcom_cutting-a-release_releasing-the-archetype_setup-environment-variables]]
 === Setup environment variables
 
-Set additional environment variables for the `simpleapp-archetype` artefact:
+Set additional environment variables for the `simpleapp-archetype` artifact:
 
 [source,bash]
 ----
