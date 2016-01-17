@@ -195,7 +195,7 @@ public class DomainObjectContainerDefault
         }
         final Constructor<?>[] constructors = mixinClass.getConstructors();
         for (Constructor<?> constructor : constructors) {
-            if(constructor.getParameterCount() == 1 &&
+            if(constructor.getParameterTypes().length == 1 &&
                constructor.getParameterTypes()[0].isAssignableFrom(mixedIn.getClass())) {
                 final Object mixin;
                 try {

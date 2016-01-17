@@ -57,11 +57,11 @@ import org.apache.isis.applib.util.ObjectContracts;
         @javax.jdo.annotations.Query(
                 name = "find", language = "JDOQL",
                 value = "SELECT "
-                        + "FROM domainapp.dom.modules.simple.SimpleObject "),
+                        + "FROM domainapp.dom.simple.SimpleObject "),
         @javax.jdo.annotations.Query(
                 name = "findByName", language = "JDOQL",
                 value = "SELECT "
-                        + "FROM domainapp.dom.modules.simple.SimpleObject "
+                        + "FROM domainapp.dom.simple.SimpleObject "
                         + "WHERE name.indexOf(:name) >= 0 ")
 })
 @javax.jdo.annotations.Unique(name="SimpleObject_name_UNQ", members = {"name"})

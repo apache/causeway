@@ -684,8 +684,10 @@
                     <version>2.9.1</version>
                     <inherited>true</inherited>
                     <configuration>
-                        <!-- as per http://stackoverflow.com/a/16743137/56880 -->
+                        <!-- as per http://stackoverflow.com/a/16743137/56880; only if using java 8 to build -->
+<!--
                         <additionalparam>-Xdoclint:none</additionalparam>
+-->
                         <debug>true</debug>
                         <minmemory>128m</minmemory>      
                         <maxmemory>1024m</maxmemory>
@@ -967,6 +969,27 @@
             and deploy plugins are automatically included because they provide the default 
             bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-toolchains-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>toolchain</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <toolchains>
+                        <jdk>
+                            <version>1.7</version>
+                            <vendor>oracle</vendor>
+                        </jdk>
+                    </toolchains>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
