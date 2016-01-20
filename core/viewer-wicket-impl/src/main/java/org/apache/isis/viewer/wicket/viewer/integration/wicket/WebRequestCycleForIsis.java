@@ -179,7 +179,7 @@ public class WebRequestCycleForIsis extends AbstractRequestCycleListener {
                 return new MmvErrorPage(Model.ofList(validationErrors));
             }
             // not sure whether this can ever happen now...
-            LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception");
+            LOG.warn("Unable to obtain exceptionRecognizers (no session), will be treated as unrecognized exception", ex);
         }
         String recognizedMessageIfAny = new ExceptionRecognizerComposite(exceptionRecognizers).recognize(ex);
         ExceptionModel exceptionModel = ExceptionModel.create(recognizedMessageIfAny, ex);
