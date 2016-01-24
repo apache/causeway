@@ -7,7 +7,7 @@
 
 Isis ships with an implementation of http://shiro.apache.org[Apache Shiro]'s `Realm` class that allows user authentication and authorization to be performed against an LDAP server.
 
-image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.png[width="600px"]
+image::{_imagesdir}security/security-apis-impl/configure-shiro-to-use-isis-ldap-realm.PNG[width="600px"]
 
 The LDAP database stores the user/passwords and user groups, while the `shiro.ini` file is used to map the LDAP groups to roles, and to map the roles to permissions.
 
