@@ -19,9 +19,7 @@
 
 package org.apache.isis.applib;
 
-import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Programmatic;
-
 
 /**
  * Indicates that an object belongs to the UI/application layer, and is intended to be used as a view model.
@@ -57,7 +55,7 @@ public interface ViewModel {
      * view model whose state has been edited.
      */
     public interface Cloneable extends java.lang.Cloneable {
-        @Hidden
+        @Programmatic
         public Object clone();
     }
 }
