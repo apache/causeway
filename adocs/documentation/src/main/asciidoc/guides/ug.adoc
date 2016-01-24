@@ -28,4 +28,4 @@ The "supporting procedures" guides are:
 
 * xref:cgcon.adoc#[Contributors' Guide] (how to set up a development environment
 for Apache Isis and contribute back to the project)
-* xref:cgcon.adoc#[Committers' Guide] (release procedures and related practices)
+* xref:cgcom.adoc#[Committers' Guide] (release procedures and related practices)

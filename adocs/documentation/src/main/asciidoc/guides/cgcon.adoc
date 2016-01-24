@@ -44,7 +44,7 @@ The reference guides are:
 The "supporting procedures" guides are:
 
 * xref:cgcon.adoc#[Contributors' Guide] (this guide)
-* xref:cgcon.adoc#[Committers' Guide] (release procedures and related practices)
+* xref:cgcom.adoc#[Committers' Guide] (release procedures and related practices)
 
 
 
