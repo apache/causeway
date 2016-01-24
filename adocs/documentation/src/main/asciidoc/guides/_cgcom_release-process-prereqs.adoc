@@ -11,6 +11,14 @@ This section (appendix) describes the prerequisites for the xref:cgcom.adoc#_cgc
 
 
 
+== Configure toolchains plugin
+
+Apache Isis releases are built using Java 7, enforced using the maven toolchains plugin.  Ensure that Java 7 is
+installed and the toolchains plugin is configured, as described in the
+xref:_cgcon_building-isis_configure-maven-toolchains-plugin[contributors' guide].
+
+
+
 == Public/private key
 
 The most important configuration you require is to set up public/private key pair. This is used by the `maven-release-plugin` to sign the code artifacts. See the page on xref:cgcom.adoc#_cgcom_key-generation[key generation] for more details.
@@ -74,5 +82,7 @@ Also, set up keyphrase for `gpg`; this avoids being prompted during release:
   ...
 </activeProfiles>
 ----
+
+
 
 

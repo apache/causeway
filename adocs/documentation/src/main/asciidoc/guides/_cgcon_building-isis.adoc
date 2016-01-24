@@ -136,53 +136,31 @@ For further reading, see:
 * http://git-scm.com/docs/gitattributes[.gitattributes git-scm.com docs]
 
 
-[[_cgcon_building-isis_installing-java-7]]
-== Installing Java 7
+[[_cgcon_building-isis_installing-java]]
+== Installing Java
 
-Apache Isis is compatible with Java 7 and Java 8.  To ensure backward compatibility with Java 7 the framework is built
-using Java 7, leveraging the link:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin].
-(The discussion of toolchains itself is discussed xref:_cgcon_building-isis_configure-maven-toolchains-plugin[below]).
+Apache Isis is compatible with Java 7 and Java 8.  For every-day use, the framework is usually compiled against Java 8.
 
+Releases however are xref:_cgcom_cutting-a-release[cut] using Java 7, leveraging the link
+:http://maven.apache.org/plugins/maven-toolchains-plugin/[Maven toolchains plugin]).
 
-Therefore install Java 7 JDK (and optionally Java 8 JDK as well).  Note that the JRE is _not_ sufficient.
-
+Therefore install either/both of Java 7 JDK and Java 8 JDK.  Note that the JRE is _not_ sufficient.
 
 [TIP]
 ====
-If you intend to contribute back patches to Apache Isis, note that you can still use Java 8 within your IDE to
-make changes.  Just be sure not to use any Java 8 APIs.
+If you intend to contribute back patches to Apache Isis, note that while you can develop using Java 8 within your IDE,
+be sure not to use any Java 8 APIs.
 ====
-
-
-
-
-[[_cgcon_building-isis_installing-maven]]
-== Installing Maven
-
-Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
-
-Set `MAVEN_OPTS` environment variable:
-
-[source,bash]
-----
-export MAVEN_OPTS="-Xms512m -Xmx1024m"
-----
-
-
-[NOTE]
-====
-Previously we suggested `-XX:MaxPermSize=256m`, but this option has been removed in Java 8.  (As of 1.9.0, Apache Isis is built using Java 8 but with source and target set to JDK 1.7).
-====
-
 
 [[_cgcon_building-isis_configure-maven-toolchains-plugin]]
-== Configure Maven toolchains plugin
+=== Configure Maven toolchains plugin
 
-As noted xref:_cgcon_building-isis_installing-java-7[earlier], Apache Isis is built using Java 7, leveraging the
-link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin.  This is configured by placing the
-`toolchains.xml` file in `~/.m2` directory.
+If you are a committer that will be performing releases of Apache Isis, then you _must_ configure the
+link:http://maven.apache.org/plugins/maven-toolchains-plugin/[toolchains] plugin so that releases can be built using
+Java 7.
 
-You can use the following file as a template, adjusting paths for your platform:
+This is done by placing the `toolchains.xml` file in `~/.m2` directory.  Use the following file as a template,
+adjusting paths for your platform:
 
 [source,xml]
 ----
@@ -218,6 +196,28 @@ You can use the following file as a template, adjusting paths for your platform:
 ----
 <1> The Apache Isis build is configured to search for the (`1.7, oracle`) JDK toolchain.
 
+The Apache Isis parent `pom.xml` activates this plugin whenever the `apache-release` profile is enabled.
+
+
+
+
+[[_cgcon_building-isis_installing-maven]]
+== Installing Maven
+
+Install Maven 3.0.x, downloadable http://maven.apache.org/download.html[here].
+
+Set `MAVEN_OPTS` environment variable:
+
+[source,bash]
+----
+export MAVEN_OPTS="-Xms512m -Xmx1024m"
+----
+
+
+[NOTE]
+====
+Previously we suggested `-XX:MaxPermSize=256m`, but this option has been removed in Java 8.  (As of 1.9.0, Apache Isis is built using Java 8 but with source and target set to JDK 1.7).
+====
 
 
 [[_cgcon_building-isis_building-all-of-apache-isis]]
