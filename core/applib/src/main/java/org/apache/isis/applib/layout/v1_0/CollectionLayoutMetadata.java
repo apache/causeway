@@ -49,7 +49,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<ColumnMetadata> {
+public class CollectionLayoutMetadata implements ColumnContent, ActionOwner, Serializable, Owned<ColumnMetadata> {
 
     private static final long serialVersionUID = 1L;
 

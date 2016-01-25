@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class PropertyLayoutMetadata implements ActionOwner, Serializable, HasPath, Owned<PropertyGroupMetadata> {
+public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<PropertyGroupMetadata> {
 
     private static final long serialVersionUID = 1L;
 

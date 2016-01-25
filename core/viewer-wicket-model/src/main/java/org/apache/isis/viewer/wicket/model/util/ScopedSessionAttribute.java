@@ -23,7 +23,6 @@ import java.io.Serializable;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 
-import org.apache.isis.applib.layout.v1_0.HasPath;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -32,7 +31,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
 /**
- * Scoped by both {@link EntityModel object} and either {@link HasPath path} (if view metadata is in use)
+ * Scoped by both {@link EntityModel object} and also the {@link Component component's path} (if view metadata is in use)
  * or simply a string constructed by some other mechanism ("legacy").
  */
 public class ScopedSessionAttribute<T extends Serializable> implements Serializable {

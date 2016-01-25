@@ -37,7 +37,7 @@ import org.apache.isis.applib.annotation.Programmatic;
         }
 
 )
-public class TabGroupMetadata implements ColumnOwner, Serializable, HasPath, Owned<TabGroupOwner> {
+public class TabGroupMetadata implements ColumnOwner, Serializable, Owned<TabGroupOwner> {
 
     private static final long serialVersionUID = 1L;
 

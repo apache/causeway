@@ -45,7 +45,7 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "right"
         }
 )
-public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, ColumnOwner, HasPath, TabGroupOwner {
+public class ObjectLayoutMetadata implements Dto, ActionOwner, Serializable, ColumnOwner, TabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 

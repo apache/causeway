@@ -41,7 +41,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "properties"
         }
 )
-public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serializable, HasPath, Owned<ColumnMetadata> {
+public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serializable, Owned<ColumnMetadata> {
 
     private static final long serialVersionUID = 1L;
 

@@ -278,65 +278,6 @@ public class ObjectLayoutMetadataFacetDefault
                 actions.add(new ActionLayoutMetadata(actionId));
             }
         }
-
-        // set paths
-        metadata.visit(new ObjectLayoutMetadata.Visitor() {
-
-            private final Map<String,AtomicInteger> sequenceByPath = Maps.newHashMap();
-
-            @Override
-            public void visit(final ObjectLayoutMetadata objectLayoutMetadata) {
-                objectLayoutMetadata.setPath("/layout");
-            }
-
-            @Override
-            public void visit(final TabGroupMetadata tabGroup) {
-                tabGroup.setPath(pathFor(tabGroup, "tabGroup"));
-            }
-
-            @Override
-            public void visit(final TabMetadata tabMetadata) {
-                tabMetadata.setPath(pathFor(tabMetadata, "tab"));
-            }
-
-            @Override
-            public void visit(final ColumnMetadata columnMetadata) {
-                columnMetadata.setPath(pathFor(columnMetadata, "column"));
-            }
-
-            @Override
-            public void visit(final PropertyGroupMetadata propertyGroupMetadata) {
-                propertyGroupMetadata.setPath(pathFor(propertyGroupMetadata, "propertyGroup"));
-            }
-
-            @Override
-            public void visit(final PropertyLayoutMetadata propertyLayoutMetadata) {
-                propertyLayoutMetadata.setPath(pathFor(propertyLayoutMetadata, "property"));
-            }
-
-            @Override
-            public void visit(final CollectionLayoutMetadata collectionLayoutMetadata) {
-                collectionLayoutMetadata.setPath(pathFor(collectionLayoutMetadata, "collection"));
-            }
-
-            @Override
-            public void visit(final ActionLayoutMetadata actionLayoutMetadata) {
-                actionLayoutMetadata.setPath(pathFor(actionLayoutMetadata, "action"));
-            }
-
-            private String pathFor(final Owned<?> owned, final String type) {
-                final String ownerPath = owned.getOwner().getPath();
-                final String prefix = ownerPath + "/" + type;
-                AtomicInteger atomicInteger = sequenceByPath.get(prefix);
-                if(atomicInteger == null) {
-                    atomicInteger = new AtomicInteger(-1);
-                    sequenceByPath.put(prefix, atomicInteger);
-                }
-                final int seq = atomicInteger.incrementAndGet();
-                return prefix + seq;
-            }
-
-        });
     }
 
     static class Tuple<T> {
