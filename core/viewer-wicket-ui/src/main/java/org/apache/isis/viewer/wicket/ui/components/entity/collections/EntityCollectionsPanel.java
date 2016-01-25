@@ -48,12 +48,12 @@ import org.apache.isis.core.runtime.services.DeweyOrderComparator;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
@@ -143,31 +143,33 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
             final WebMarkupContainer collectionRvContainer = new UiHintPathSignificantWebMarkupContainer(collectionRv.newChildId());
             collectionRv.add(collectionRvContainer);
-            
-            addCollectionToForm(entityModel, association, collectionRvContainer);
+
+            final CollectionLayoutMetadata collectionLayoutMetadata = new CollectionLayoutMetadata(association.getId());
+            final EntityModel entityModelWithCollectionLayoutMetadata =
+                    entityModel.cloneWithCollectionLayoutMetadata(collectionLayoutMetadata);
+            addCollectionToForm(entityModelWithCollectionLayoutMetadata, collectionRvContainer);
         }
     }
 
     private void addCollectionToForm(
-            final EntityModel entityModel,
-            final ObjectAssociation association,
+            final EntityModel entityModelWithLayoutMetadata,
             final WebMarkupContainer collectionRvContainer) {
+
+        final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModelWithLayoutMetadata);
+        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
 
         final CssClassFacet facet = association.getFacet(CssClassFacet.class);
         if(facet != null) {
-            final ObjectAdapter objectAdapter = entityModel.getObject();
+            final ObjectAdapter objectAdapter = entityModelWithLayoutMetadata.getObject();
             final String cssClass = facet.cssClass(objectAdapter);
             CssClassAppender.appendCssClassTo(collectionRvContainer, cssClass);
         }
 
-        final WebMarkupContainer fieldset = new WebMarkupContainer(ID_COLLECTION_GROUP);
+        final WebMarkupContainer fieldSet = new WebMarkupContainer(ID_COLLECTION_GROUP);
+        collectionRvContainer.add(fieldSet);
 
-        collectionRvContainer.add(fieldset);
-
-        final OneToManyAssociation otma = (OneToManyAssociation) association;
-
-        final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityModel, otma);
-        fieldset.addOrReplace(collectionPanel);
+        final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+        fieldSet.addOrReplace(collectionPanel);
 
         Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
         final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
@@ -178,14 +180,13 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             labelComponent.add(new AttributeAppender("title", Model.of(description)));
         }
 
-        fieldset.add(labelComponent);
+        fieldSet.add(labelComponent);
 
-        final EntityCollectionModel entityCollectionModel = collectionPanel.getModel();
-        List<LinkAndLabel> links = entityCollectionModel.getLinks();
+        final List<LinkAndLabel> links = entityCollectionModel.getLinks();
+        AdditionalLinksPanel.addAdditionalLinks (fieldSet,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
 
-        AdditionalLinksPanel.addAdditionalLinks (fieldset,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
-
-        final CollectionSelectorHelper selectorHelper = new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), selectedItemSessionAttribute
+        final CollectionSelectorHelper selectorHelper =
+                new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), selectedItemSessionAttribute
         );
 
         final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
@@ -204,7 +205,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             componentFactoryModel.setObject(selectedComponentFactory);
 
             this.setOutputMarkupId(true);
-            fieldset.addOrReplace(selectorDropdownPanel);
+            fieldSet.addOrReplace(selectorDropdownPanel);
 
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
         }

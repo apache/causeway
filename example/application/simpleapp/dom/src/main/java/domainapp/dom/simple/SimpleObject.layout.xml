@@ -34,12 +34,12 @@
     <tabGroup>
         <tab name="SimilarTo">
             <left span="12">
-                <collection id="similarTo" defaultView="hide"/>
+                <collection id="similarTo" defaultView="table"/>
             </left>
         </tab>
         <tab name="Others">
             <left span="12">
-                <collection id="others" defaultView="table"/>
+                <collection id="others" defaultView="hide"/>
             </left>
         </tab>
     </tabGroup>

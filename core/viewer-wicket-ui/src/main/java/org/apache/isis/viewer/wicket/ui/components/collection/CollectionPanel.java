@@ -19,13 +19,14 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collection;
 
-import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
-
 import java.util.List;
+
 import com.google.common.collect.Lists;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -39,6 +40,8 @@ import org.apache.isis.viewer.wicket.ui.components.collection.selector.Collectio
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorProvider;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+
+import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 
 /**
  * Panel for rendering entity collection; analogous to (any concrete subclass
@@ -64,7 +67,7 @@ public class CollectionPanel extends PanelAbstract<EntityCollectionModel> implem
         return collectionModel;
     }
 
-    CollectionPanel(
+    public CollectionPanel(
             final String id,
             final EntityCollectionModel collectionModel) {
         this(id, collectionModel, new EntityModel(collectionModel.getParentObjectAdapterMemento()), collectionModel.getCollectionMemento().getCollection());

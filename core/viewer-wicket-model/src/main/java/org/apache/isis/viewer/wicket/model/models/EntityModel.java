@@ -30,6 +30,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
@@ -725,7 +726,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
 
     private PropertyGroupMetadata propertyGroupMetadata;
-
     public PropertyGroupMetadata getPropertyGroupMetadata() {
         return propertyGroupMetadata;
     }
@@ -737,6 +737,22 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
             final PropertyGroupMetadata propertyGroupMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.propertyGroupMetadata = propertyGroupMetadata;
+        return entityModel;
+    }
+
+
+    private CollectionLayoutMetadata collectionLayoutMetadata;
+    public CollectionLayoutMetadata getCollectionLayoutMetadata() {
+        return collectionLayoutMetadata;
+    }
+
+    /**
+     * Returns a new copy that SHARES the property scalar models.
+     */
+    public EntityModel cloneWithCollectionLayoutMetadata(
+            final CollectionLayoutMetadata collectionLayoutMetadata) {
+        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
+        entityModel.collectionLayoutMetadata = collectionLayoutMetadata;
         return entityModel;
     }
 

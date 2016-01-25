@@ -31,6 +31,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.Closure;
@@ -43,6 +44,7 @@ import org.apache.isis.core.metamodel.facets.collections.sortedby.SortedByFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.metamodel.services.ServicesInjectorSpi;
+import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -254,6 +256,9 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     public static EntityCollectionModel createParented(final EntityModel model, final OneToManyAssociation collection) {
         return new EntityCollectionModel(model, collection);
     }
+    public static EntityCollectionModel createParented(final EntityModel modelWithCollectionLayoutMetadata) {
+        return new EntityCollectionModel(modelWithCollectionLayoutMetadata);
+    }
 
     private final Type type;
 
@@ -319,6 +324,26 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
         this.sortedBy = sortedByFacet != null?sortedByFacet.value(): null;
     }
     
+    private EntityCollectionModel(final EntityModel entityModel) {
+        this(entityModel.getObjectAdapterMemento(), entityModel.getCollectionLayoutMetadata());
+    }
+
+    private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutMetadata collectionLayoutMetadata) {
+        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutMetadata));
+    }
+
+    private static OneToManyAssociation collectionFor(
+            final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutMetadata collectionLayoutMetadata) {
+        if(collectionLayoutMetadata == null) {
+            throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
+        }
+        final String collectionId = collectionLayoutMetadata.getId();
+        final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
+        final ObjectSpecification objectSpec = getSpecificationLoaderStatic().lookupBySpecId(objectSpecId);
+        final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);
+        return otma;
+    }
+
     private static Class<?> forName(final ObjectSpecification objectSpec) {
         final String fullName = objectSpec.getFullIdentifier();
         return ClassUtil.forName(fullName);
