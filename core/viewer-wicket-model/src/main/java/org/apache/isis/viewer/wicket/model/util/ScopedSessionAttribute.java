@@ -20,12 +20,14 @@ package org.apache.isis.viewer.wicket.model.util;
 
 import java.io.Serializable;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 
 import org.apache.isis.applib.layout.v1_0.HasPath;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
+import org.apache.isis.viewer.wicket.model.hints.HintUtil;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -39,21 +41,21 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
 
     public static <T extends Serializable> ScopedSessionAttribute<T> create(
             final EntityModel entityModel,
-            final HasPath hasPath,
+            final Component component,
             final String attributeName) {
         final ObjectAdapterMemento objectAdapterMemento = entityModel.getObjectAdapterMemento();
-        return create(objectAdapterMemento, hasPath, attributeName);
+        return create(objectAdapterMemento, component, attributeName);
     }
 
     public static <T extends Serializable> ScopedSessionAttribute<T> create(
             final ObjectAdapterMemento objectAdapterMemento,
-            final HasPath hasPath,
+            final Component scopeComponent,
             final String attributeName) {
-        if (hasPath == null) {
+        if (scopeComponent == null) {
             return noop();
         }
-        final String path = hasPath.getPath();
-        return create(objectAdapterMemento, path, attributeName);
+        final String oidStr = asStr(objectAdapterMemento);
+        return new ScopedSessionAttribute<T>(oidStr, null, scopeComponent, attributeName);
     }
 
     public static <T extends Serializable> ScopedSessionAttribute<T> create(
@@ -72,8 +74,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
             return noop();
         }
         final String oidStr = asStr(objectAdapterMemento);
-        final String key = oidStr + ":" + scopeKey + "-" + attributeName;
-        return new ScopedSessionAttribute<T>(key, attributeName);
+        return new ScopedSessionAttribute<T>(oidStr, scopeKey, null, attributeName);
     }
 
     private static String asStr(final ObjectAdapterMemento objectAdapterMemento) {
@@ -82,12 +83,33 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
         return IsisContext.getOidMarshaller().marshalNoVersion(oid);
     }
 
-    private final String key;
+    private final String oidStr;
+    private final String scopeKey;
+    private final Component component;
     private final String attributeName;
 
-    private ScopedSessionAttribute(final String key, final String attributeName) {
-        this.key = key;
+    private ScopedSessionAttribute(
+            final String oidStr,
+            final String scopeKey,
+            final Component component,
+            final String attributeName) {
+        this.oidStr = oidStr;
+        this.scopeKey = scopeKey;
+        this.component = component;
         this.attributeName = attributeName;
+    }
+
+    String getKey() {
+        return oidStr + ":" + getScopeKey() + "-" + attributeName;
+    }
+
+    private String getScopeKey() {
+        if (scopeKey != null) {
+            return scopeKey;
+        }
+        else {
+            return HintUtil.hintPathFor(component);
+        }
     }
 
     public String getAttributeName() {
@@ -96,6 +118,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
 
     public void set(T t) {
         if(t != null) {
+            final String key = getKey();
             Session.get().setAttribute(key, t);
         } else {
             remove();
@@ -103,15 +126,17 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
     }
 
     public T get() {
+        final String key = getKey();
         return (T) Session.get().getAttribute(key);
     }
 
     public void remove() {
+        final String key = getKey();
         Session.get().removeAttribute(key);
     }
 
     public static <T extends Serializable> ScopedSessionAttribute<T> noop() {
-        return new ScopedSessionAttribute<T>(null, null) {
+        return new ScopedSessionAttribute<T>(null, null, null, null) {
             @Override public void set(final T serializable) {
             }
 

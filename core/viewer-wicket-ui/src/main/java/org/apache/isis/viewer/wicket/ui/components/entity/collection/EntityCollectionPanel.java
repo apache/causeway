@@ -26,11 +26,11 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -47,7 +47,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityCollectionPanel extends PanelAbstract<EntityModel>  {
+public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
@@ -63,9 +63,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel>  {
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        final CollectionLayoutMetadata collectionLayoutMetadata = entityModel.getCollectionLayoutMetadata();
         selectedItemSessionAttribute = ScopedSessionAttribute.create(
-                entityModel, collectionLayoutMetadata, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
+                entityModel, this, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
 
         buildGui();
     }

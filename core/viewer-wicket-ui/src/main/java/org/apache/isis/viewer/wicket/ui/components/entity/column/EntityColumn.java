@@ -44,6 +44,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
+import org.apache.isis.viewer.wicket.ui.components.RepeatingViewUiHintPathSignificant;
 import org.apache.isis.viewer.wicket.ui.components.entity.PropUtil;
 import org.apache.isis.viewer.wicket.ui.components.entity.propgroup.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -103,7 +104,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> implements UiHintPa
 
         final Map<String, List<ObjectAssociation>> associationsByGroup = PropUtil.propertiesByMemberOrder(adapter);
 
-        final RepeatingView memberGroupRv = new RepeatingView(ID_PROPERTY_GROUP);
+        final RepeatingView memberGroupRv = new RepeatingViewUiHintPathSignificant(ID_PROPERTY_GROUP);
         markupContainer.add(memberGroupRv);
 
         final ImmutableMap<String, PropertyGroupMetadata> propertyGroupMetadataByNameIfAny =

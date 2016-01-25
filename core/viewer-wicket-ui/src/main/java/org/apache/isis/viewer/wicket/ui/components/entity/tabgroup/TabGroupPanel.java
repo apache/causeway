@@ -75,9 +75,14 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel implements UiHintPat
 
         this.entityModel = entityModel;
         this.tabGroup = entityModel.getTabGroupMetadata();
-        this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, tabGroup, SESSION_ATTR_SELECTED_TAB);
+        this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, this, SESSION_ATTR_SELECTED_TAB);
 
+    }
+
+    @Override
+    protected void onInitialize() {
         setSelectedTabFromSessionIfAny(this);
+        super.onInitialize();
     }
 
     @Override

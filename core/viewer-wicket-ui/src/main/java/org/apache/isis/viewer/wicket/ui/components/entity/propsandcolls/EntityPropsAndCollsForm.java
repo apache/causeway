@@ -62,6 +62,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
+import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -79,7 +80,8 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
 import de.agilecoders.wicket.core.util.Attributes;
 
-public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider {
+public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> implements ActionPromptProvider,
+        UiHintPathSignificant {
 
     private static final long serialVersionUID = 1L;
 
