@@ -57,6 +57,8 @@ sh scripts/promoterctag.sh isis-1.12.0 RC1
 sh scripts/promoterctag.sh simpleapp-archetype-1.12.0 RC1
 ----
 
+This script pushes the tag under `refs/tags/rel`.  As per Apache policy (communicated on 10th Jan 2016 to Apache PMCs),
+this path is 'protected' and is unmodifiable (guaranteeing the provenance that the ASF needs for releases).
 
 Then, continue onto the next section for the steps to promote and announce the release.
 
