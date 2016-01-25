@@ -18,6 +18,8 @@ package org.apache.isis.viewer.wicket.model.hints;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.util.string.PrependingStringBuffer;
+import org.apache.wicket.util.string.Strings;
 
 public interface UiHintContainer {
 
@@ -46,6 +48,23 @@ public interface UiHintContainer {
             }
             return hintContainerOf(component.getParent(), additionalConstraint);
         }
+
+
+        public static String hintPathFor(Component component) {
+            return Strings.afterFirstPathComponent(fullHintPathFor(component), Component.PATH_SEPARATOR);
+        }
+
+        private static String fullHintPathFor(Component component) {
+            final PrependingStringBuffer buffer = new PrependingStringBuffer(32);
+            for (Component c = component; c != null; c = c.getParent()) {
+                if (buffer.length() > 0) {
+                    buffer.prepend(Component.PATH_SEPARATOR);
+                }
+                buffer.prepend(c.getId());
+            }
+            return buffer.toString();
+        }
+
 
     }
 }

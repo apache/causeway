@@ -26,7 +26,7 @@ import org.apache.wicket.Session;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.runtime.system.context.IsisContext;
-import org.apache.isis.viewer.wicket.model.hints.HintUtil;
+import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 
@@ -107,7 +107,7 @@ public class ScopedSessionAttribute<T extends Serializable> implements Serializa
             return scopeKey;
         }
         else {
-            return HintUtil.hintPathFor(component);
+            return UiHintContainer.Util.hintPathFor(component);
         }
     }
 

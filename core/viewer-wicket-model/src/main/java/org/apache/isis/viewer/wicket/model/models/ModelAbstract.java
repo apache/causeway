@@ -30,7 +30,6 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.persistence.PersistenceSession;
-import org.apache.isis.viewer.wicket.model.hints.HintUtil;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 
@@ -101,7 +100,7 @@ public abstract class ModelAbstract<T> extends LoadableDetachableModel<T> implem
 
     private static String hintPathFor(Component component)
     {
-        return HintUtil.hintPathFor(component);
+        return Util.hintPathFor(component);
     }
 
     protected Map<String, String> getHints() {
