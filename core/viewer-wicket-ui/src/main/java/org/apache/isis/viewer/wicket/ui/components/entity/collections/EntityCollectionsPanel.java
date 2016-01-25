@@ -25,11 +25,8 @@ import java.util.List;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
@@ -38,25 +35,14 @@ import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.runtime.services.DeweyOrderComparator;
-import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
-import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
-import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
-import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
@@ -67,23 +53,16 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ENTITY_COLLECTIONS = "entityCollections";
-    private static final String ID_COLLECTION_GROUP = "collectionGroup";
-    private static final String ID_COLLECTION_NAME = "collectionName";
     private static final String ID_COLLECTIONS = "collections";
     private static final String ID_COLLECTION = "collection";
 
-    private static final String ID_ADDITIONAL_LINKS = "additionalLinks";
-    private static final String ID_SELECTOR_DROPDOWN = "selectorDropdown";
-
     // view metadata (if any available)
     private final ColumnMetadata columnMetadataIfAny;
-    private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
         columnMetadataIfAny = entityModel.getColumnMetadata();
-        selectedItemSessionAttribute = ScopedSessionAttribute.create(entityModel, columnMetadataIfAny, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
 
         buildGui();
     }
@@ -147,69 +126,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             final CollectionLayoutMetadata collectionLayoutMetadata = new CollectionLayoutMetadata(association.getId());
             final EntityModel entityModelWithCollectionLayoutMetadata =
                     entityModel.cloneWithCollectionLayoutMetadata(collectionLayoutMetadata);
-            addCollectionToForm(entityModelWithCollectionLayoutMetadata, collectionRvContainer);
+
+            collectionRvContainer.add(new EntityCollectionPanel(ID_COLLECTION, entityModelWithCollectionLayoutMetadata));
         }
-    }
-
-    private void addCollectionToForm(
-            final EntityModel entityModelWithLayoutMetadata,
-            final WebMarkupContainer collectionRvContainer) {
-
-        final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(entityModelWithLayoutMetadata);
-        final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
-
-        final CssClassFacet facet = association.getFacet(CssClassFacet.class);
-        if(facet != null) {
-            final ObjectAdapter objectAdapter = entityModelWithLayoutMetadata.getObject();
-            final String cssClass = facet.cssClass(objectAdapter);
-            CssClassAppender.appendCssClassTo(collectionRvContainer, cssClass);
-        }
-
-        final WebMarkupContainer fieldSet = new WebMarkupContainer(ID_COLLECTION_GROUP);
-        collectionRvContainer.add(fieldSet);
-
-        final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
-        fieldSet.addOrReplace(collectionPanel);
-
-        Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
-        final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
-        labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
-
-        final String description = association.getDescription();
-        if(description != null) {
-            labelComponent.add(new AttributeAppender("title", Model.of(description)));
-        }
-
-        fieldSet.add(labelComponent);
-
-        final List<LinkAndLabel> links = entityCollectionModel.getLinks();
-        AdditionalLinksPanel.addAdditionalLinks (fieldSet,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
-
-        final CollectionSelectorHelper selectorHelper =
-                new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(), selectedItemSessionAttribute
-        );
-
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_SELECTOR_DROPDOWN);
-        } else {
-            CollectionSelectorPanel selectorDropdownPanel;
-            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, selectedItemSessionAttribute);
-
-            final Model<ComponentFactory> componentFactoryModel = new Model<>();
-
-            final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-
-            ComponentFactory selectedComponentFactory = componentFactories.get(selected);
-            componentFactoryModel.setObject(selectedComponentFactory);
-
-            this.setOutputMarkupId(true);
-            fieldSet.addOrReplace(selectorDropdownPanel);
-
-            collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
-        }
-
     }
 
     private static List<ObjectAssociation> visibleCollections(
