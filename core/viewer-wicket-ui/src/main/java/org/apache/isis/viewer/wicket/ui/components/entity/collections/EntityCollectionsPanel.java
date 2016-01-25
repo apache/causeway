@@ -41,7 +41,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.services.DeweyOrderComparator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
-import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -120,7 +119,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
         for (final ObjectAssociation association : associations) {
 
-            final WebMarkupContainer collectionRvContainer = new UiHintPathSignificantWebMarkupContainer(collectionRv.newChildId());
+            final WebMarkupContainer collectionRvContainer = new WebMarkupContainer(collectionRv.newChildId());
             collectionRv.add(collectionRvContainer);
 
             final CollectionLayoutMetadata collectionLayoutMetadata = new CollectionLayoutMetadata(association.getId());
