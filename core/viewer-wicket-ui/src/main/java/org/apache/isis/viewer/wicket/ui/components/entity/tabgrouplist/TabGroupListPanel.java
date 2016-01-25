@@ -25,13 +25,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.ListViewUiHintPathSignificant;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabgroup.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class TabGroupListPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
+public class TabGroupListPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,7 +49,7 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> implements UiH
     private void buildGui() {
         final EntityModel model = getModel();
 
-        final ListView<TabGroupMetadata> tabGroupsList = new ListViewUiHintPathSignificant<TabGroupMetadata>(ID_TAB_GROUPS, this.tabGroups) {
+        final ListView<TabGroupMetadata> tabGroupsList = new ListView<TabGroupMetadata>(ID_TAB_GROUPS, this.tabGroups) {
 
             @Override
             protected void populateItem(final ListItem<TabGroupMetadata> item) {

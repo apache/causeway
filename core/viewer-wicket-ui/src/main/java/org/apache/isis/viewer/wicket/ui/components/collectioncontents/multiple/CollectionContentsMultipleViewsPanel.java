@@ -20,14 +20,15 @@
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple;
 
 import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
+
 import org.apache.isis.viewer.wicket.model.hints.IsisEnvelopeEvent;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -44,7 +45,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassRemover;
  * view for a backing {@link EntityCollectionModel}.
  */
 public class CollectionContentsMultipleViewsPanel
-        extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant,  CollectionCountProvider {
+        extends PanelAbstract<EntityCollectionModel> implements CollectionCountProvider {
 
     private static final long serialVersionUID = 1L;
 

@@ -31,14 +31,13 @@ import org.apache.wicket.model.Model;
 
 import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.TabMetadata;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabpanel.TabPanel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
-public class TabGroupPanel extends AjaxBootstrapTabbedPanel implements UiHintPathSignificant {
+public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
 
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
     private final EntityModel entityModel;

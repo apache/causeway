@@ -17,15 +17,15 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.Map;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.model.IModel;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+
 import org.apache.isis.core.unittestsupport.jmocking.JUnitRuleMockery2;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -37,34 +37,6 @@ public class ModelAbstractTest {
     public JUnitRuleMockery2 context = JUnitRuleMockery2.createFor(JUnitRuleMockery2.Mode.INTERFACES_AND_CLASSES);
 
     ModelAbstract<String> target;
-
-    static class UiHintPathSignificantComponent extends Component implements UiHintPathSignificant {
-        public UiHintPathSignificantComponent(String id) {
-            super(id);
-        }
-
-        public UiHintPathSignificantComponent(String id, IModel<?> model) {
-            super(id, model);
-        }
-
-        @Override
-        protected void onRender() {
-        }
-    }
-
-    static class UiHintPathSignificantMarkupContainer extends MarkupContainer implements UiHintPathSignificant {
-        public UiHintPathSignificantMarkupContainer(String id) {
-            super(id);
-        }
-
-        public UiHintPathSignificantMarkupContainer(String id, IModel<?> model) {
-            super(id, model);
-        }
-
-        @Override
-        protected void onRender() {
-        }
-    }
 
     MarkupContainer mockParent;
     Component mockComponent1;
@@ -79,9 +51,9 @@ public class ModelAbstractTest {
             }
         };
 
-        mockParent = context.mock(UiHintPathSignificantMarkupContainer.class, "parent");
-        mockComponent1 = context.mock(UiHintPathSignificantComponent.class, "component1");
-        mockComponent2 = context.mock(UiHintPathSignificantComponent.class, "component2");
+        mockParent = context.mock(MarkupContainer.class, "parent");
+        mockComponent1 = context.mock(Component.class, "component1");
+        mockComponent2 = context.mock(Component.class, "component2");
 
         context.checking(new Expectations() {{
             allowing(mockParent).getId();

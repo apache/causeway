@@ -37,12 +37,11 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.CollectionContentsAsFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
-import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -53,8 +52,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
  * {@link org.apache.isis.viewer.wicket.ui.ComponentType#COLLECTION_CONTENTS} with a backing
  * {@link org.apache.isis.viewer.wicket.model.models.EntityCollectionModel}.
  */
-public class CollectionSelectorPanel
-        extends PanelAbstract<EntityCollectionModel> implements UiHintPathSignificant {
+public class CollectionSelectorPanel extends PanelAbstract<EntityCollectionModel>  {
 
     private static final long serialVersionUID = 1L;
 

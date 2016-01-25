@@ -19,9 +19,7 @@ package org.apache.isis.viewer.wicket.ui.components.widgets.containers;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
-
-public class UiHintPathSignificantWebMarkupContainer extends WebMarkupContainer implements UiHintPathSignificant {
+public class UiHintPathSignificantWebMarkupContainer extends WebMarkupContainer {
     private static final long serialVersionUID = 1L;
 
     public UiHintPathSignificantWebMarkupContainer(String id, IModel<?> model) {

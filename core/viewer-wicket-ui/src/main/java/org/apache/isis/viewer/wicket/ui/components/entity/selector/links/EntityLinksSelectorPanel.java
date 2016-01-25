@@ -44,7 +44,6 @@ import org.apache.wicket.model.Model;
 import org.apache.isis.core.commons.lang.StringExtensions;
 import org.apache.isis.viewer.wicket.model.hints.IsisUiHintEvent;
 import org.apache.isis.viewer.wicket.model.hints.UiHintContainer;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.links.LinksProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -70,7 +69,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.button.Buttons;
  *     rendered by this component 'collapses' to just show that underlying view.
  * </p>
  */
-public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
+public class EntityLinksSelectorPanel extends PanelAbstract<EntityModel>  {
 
 
     private static final long serialVersionUID = 1L;

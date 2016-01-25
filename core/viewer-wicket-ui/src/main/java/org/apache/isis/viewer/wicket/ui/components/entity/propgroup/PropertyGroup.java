@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -41,10 +40,9 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
-import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class PropertyGroup extends PanelAbstract<EntityModel> implements UiHintPathSignificant {
+public class PropertyGroup extends PanelAbstract<EntityModel> {
 
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
@@ -82,8 +80,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements UiHintP
         for (PropertyLayoutMetadata property : properties) {
             final ObjectAssociation association = adapter.getSpecification().getAssociation(property.getId());
 
-            final WebMarkupContainer propertyRvContainer = new UiHintPathSignificantWebMarkupContainer(
-                    propertyRv.newChildId());
+            final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.add(propertyRvContainer);
 
             addPropertyToForm(getModel(), (OneToOneAssociation) association, propertyRvContainer,

@@ -1,12 +1,11 @@
 package org.apache.isis.viewer.wicket.ui.components.entity.tabpanel;
 
 import org.apache.isis.applib.layout.v1_0.TabMetadata;
-import org.apache.isis.viewer.wicket.model.hints.UiHintPathSignificant;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class TabPanel extends PanelAbstract implements UiHintPathSignificant {
+public class TabPanel extends PanelAbstract {
 
     private static final long serialVersionUID = 1L;
 

@@ -40,7 +40,6 @@ import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.services.DeweyOrderComparator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.RepeatingViewUiHintPathSignificant;
 import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.widgets.containers.UiHintPathSignificantWebMarkupContainer;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -116,7 +115,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             }
         });
 
-        final RepeatingView collectionRv = new RepeatingViewUiHintPathSignificant(ID_COLLECTIONS);
+        final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
         add(collectionRv);
 
         for (final ObjectAssociation association : associations) {
