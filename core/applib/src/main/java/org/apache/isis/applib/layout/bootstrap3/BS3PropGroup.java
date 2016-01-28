@@ -16,18 +16,29 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.applib.layout.bootstrap3;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(
+        name = "propGroup"
+        , propOrder = {
+            "name"
+        }
+)
+public class BS3PropGroup {
 
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
-import org.apache.isis.core.metamodel.facetapi.Facet;
+    private String name;
 
-/**
- * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
- */
-public interface ObjectLayoutMetadataFacet extends Facet {
+    @XmlAttribute(required = true)
+    public String getName() {
+        return name;
+    }
 
-    ObjectLayoutMetadata getMetadata();
-
+    public void setName(final String name) {
+        this.name = name;
+    }
 
 }

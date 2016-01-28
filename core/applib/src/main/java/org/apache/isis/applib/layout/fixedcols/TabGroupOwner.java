@@ -16,18 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.applib.layout.fixedcols;
 
+import org.apache.isis.applib.layout.v1_0.Owner;
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
-/**
- * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
- */
-public interface ObjectLayoutMetadataFacet extends Facet {
-
-    ObjectLayoutMetadata getMetadata();
-
+public interface TabGroupOwner extends Owner {
 
 }

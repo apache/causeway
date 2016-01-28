@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +30,11 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.ColumnOwner;
+import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadataOwner;
+import org.apache.isis.applib.layout.v1_0.Owned;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 
 @XmlType(
         propOrder = {
@@ -37,7 +42,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "collections"
         }
 )
-public class ColumnMetadata implements Serializable, Owner, Owned<ColumnOwner> {
+public class ColumnMetadata implements Serializable, MemberLayoutMetadataOwner, Owned<ColumnOwner> {
 
     private static final long serialVersionUID = 1L;
 

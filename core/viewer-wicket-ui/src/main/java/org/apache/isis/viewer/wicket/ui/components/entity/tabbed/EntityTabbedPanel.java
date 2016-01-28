@@ -23,9 +23,9 @@ import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
-import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
+import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;

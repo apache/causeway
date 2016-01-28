@@ -16,18 +16,37 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.applib.layout.bootstrap3;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlType(
+        name = "div-row"
+        , propOrder = {
+            "columns"
+        }
+)
+public class DivRow {
 
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
-import org.apache.isis.core.metamodel.facetapi.Facet;
 
-/**
- * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
- */
-public interface ObjectLayoutMetadataFacet extends Facet {
+    private List<DivColumn> columns = new ArrayList<DivColumn>(){{
+        add(new DivColumn());
+    }};
 
-    ObjectLayoutMetadata getMetadata();
+    // no wrapper
+    @XmlElement(name = "column", required = true)
+    public List<DivColumn> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(final List<DivColumn> columns) {
+        this.columns = columns;
+    }
 
 
 }

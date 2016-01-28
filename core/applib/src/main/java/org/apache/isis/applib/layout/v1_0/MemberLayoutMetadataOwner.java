@@ -18,6 +18,6 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-public interface TabGroupOwner extends Owner {
+public interface MemberLayoutMetadataOwner extends Owner {
 
 }

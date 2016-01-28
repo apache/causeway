@@ -74,9 +74,6 @@ public enum ComponentType {
     ENTITY_PROPERTIES,
     /**
      * The set of collections of a single entity, designed to be standalone outside of a form.
-     * 
-     * <p>
-     * compare with {@value #ENTITY_COLLECTIONS}.
      */
     ENTITY_COLLECTIONS,
     /**

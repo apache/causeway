@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,6 +30,11 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.ColumnOwner;
+import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.Owned;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 
 @XmlType(
         name="tab"
@@ -115,8 +120,8 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
      * Aggregates the contents of all collections on this tab.
      */
     @Programmatic
-    public List<ColumnContent> getContents() {
-        final List<ColumnContent> contents = Lists.newArrayList();
+    public List<MemberLayoutMetadata> getContents() {
+        final List<MemberLayoutMetadata> contents = Lists.newArrayList();
         appendContent(contents, getLeft());
         appendContent(contents, getMiddle());
         appendContent(contents, getRight());
@@ -141,7 +146,7 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
 
 
 
-    private static void appendContent(final List<ColumnContent> contents, final ColumnMetadata columnMetadata) {
+    private static void appendContent(final List<MemberLayoutMetadata> contents, final ColumnMetadata columnMetadata) {
         if(columnMetadata == null) {
             return;
         }

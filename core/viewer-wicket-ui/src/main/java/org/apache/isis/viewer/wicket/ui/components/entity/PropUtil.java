@@ -26,7 +26,7 @@ import com.google.common.collect.FluentIterable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;

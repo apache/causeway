@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
 import java.util.LinkedHashMap;
@@ -31,6 +31,12 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.ActionOwner;
+import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.ColumnOwner;
+import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.applib.services.dto.Dto;
 
 @XmlRootElement(

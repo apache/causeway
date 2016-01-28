@@ -31,11 +31,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata.Hint;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata.Hint;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
-import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
-import org.apache.isis.applib.layout.v1_0.TabMetadata;
+import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.TabMetadata;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -137,7 +137,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
     private Mode mode = Mode.VIEW;
     private RenderingHint renderingHint = RenderingHint.REGULAR;
-    private Hint hint;
     private final PendingModel pendingModel;
 
     /**
@@ -464,10 +463,12 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         entityDetailsVisible = !entityDetailsVisible;
     }
 
-    public Hint getHint() {
+    private Hint hint;
+
+    private Hint getHint() {
         return hint;
     }
-    public void setHint(Hint hint) {
+    private void setHint(Hint hint) {
         this.hint = hint;
     }
 

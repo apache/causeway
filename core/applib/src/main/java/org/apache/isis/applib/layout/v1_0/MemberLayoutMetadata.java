@@ -18,32 +18,7 @@
  */
 package org.apache.isis.applib.layout.v1_0;
 
-import javax.annotation.Nullable;
+public interface MemberLayoutMetadata extends Owned<MemberLayoutMetadataOwner> {
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-
-class Util {
-
-    private Util(){}
-
-    static <F,T> Predicate<F> is(final Class<T> cls) {
-        return new Predicate<F>() {
-            @Override public boolean apply(@Nullable final F from) {
-                return cls.isAssignableFrom(from.getClass());
-            }
-        };
-    }
-
-    static <F, T extends F> CastFunction<F, T> cast(final Class<T> cls) {
-        return new CastFunction<>();
-    }
-
-    private static class CastFunction<F, T extends F> implements Function<F, T> {
-        @Override
-        public final T apply(final F from) {
-            return (T) from;
-        }
-    }
 
 }

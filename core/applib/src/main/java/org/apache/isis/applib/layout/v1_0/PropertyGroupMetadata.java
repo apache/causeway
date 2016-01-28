@@ -41,7 +41,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "properties"
         }
 )
-public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serializable, Owned<ColumnMetadata> {
+public class PropertyGroupMetadata implements MemberLayoutMetadata, ActionOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -94,7 +94,7 @@ public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serial
     }
 
 
-    private ColumnMetadata owner;
+    private MemberLayoutMetadataOwner owner;
     /**
      * Owner.
      *
@@ -103,11 +103,11 @@ public class PropertyGroupMetadata implements ColumnContent, ActionOwner, Serial
      * </p>
      */
     @XmlTransient
-    public ColumnMetadata getOwner() {
+    public MemberLayoutMetadataOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ColumnMetadata owner) {
+    public void setOwner(final MemberLayoutMetadataOwner owner) {
         this.owner = owner;
     }
 

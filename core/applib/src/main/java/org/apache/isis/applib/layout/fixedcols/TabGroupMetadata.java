@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -30,6 +30,8 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.v1_0.ColumnOwner;
+import org.apache.isis.applib.layout.v1_0.Owned;
 
 @XmlType(
         propOrder = {

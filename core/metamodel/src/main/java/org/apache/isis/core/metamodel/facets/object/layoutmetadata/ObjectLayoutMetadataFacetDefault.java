@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.google.common.base.Strings;
@@ -35,14 +34,14 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
 import org.apache.isis.applib.layout.v1_0.ActionOwner;
 import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.ColumnOwner;
-import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Owned;
+import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadataOwner;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.TabMetadata;
-import org.apache.isis.applib.layout.v1_0.TabGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.TabMetadata;
+import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -425,13 +424,16 @@ public class ObjectLayoutMetadataFacetDefault
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
 
                 // if there is only a single column and no other contents, then copy the collection Id onto the tab'
-                final ColumnMetadata columnMetadata = collectionLayoutMetadata.getOwner();
-                final ColumnOwner holder = columnMetadata.getOwner();
-                if(holder instanceof TabMetadata) {
-                    final TabMetadata tabMetadata = (TabMetadata) holder;
-                    if(tabMetadata.getContents().size() == 1 && Strings.isNullOrEmpty(tabMetadata.getName()) ) {
-                        final String collectionName = oneToManyAssociation.getName();
-                        tabMetadata.setName(collectionName);
+                final MemberLayoutMetadataOwner memberLayoutMetadataOwner = collectionLayoutMetadata.getOwner();
+                if(memberLayoutMetadataOwner instanceof ColumnMetadata) {
+                    final ColumnMetadata columnMetadata = (ColumnMetadata) memberLayoutMetadataOwner;
+                    final ColumnOwner holder = columnMetadata.getOwner();
+                    if(holder instanceof TabMetadata) {
+                        final TabMetadata tabMetadata = (TabMetadata) holder;
+                        if(tabMetadata.getContents().size() == 1 && Strings.isNullOrEmpty(tabMetadata.getName()) ) {
+                            final String collectionName = oneToManyAssociation.getName();
+                            tabMetadata.setName(collectionName);
+                        }
                     }
                 }
             }

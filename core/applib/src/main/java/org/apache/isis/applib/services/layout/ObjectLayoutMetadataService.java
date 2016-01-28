@@ -17,7 +17,7 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.v1_0.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
 
 public interface ObjectLayoutMetadataService {
 

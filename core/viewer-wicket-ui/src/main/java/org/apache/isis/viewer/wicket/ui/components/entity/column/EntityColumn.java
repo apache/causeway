@@ -31,7 +31,7 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.v1_0.ColumnMetadata;
+import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
 import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
