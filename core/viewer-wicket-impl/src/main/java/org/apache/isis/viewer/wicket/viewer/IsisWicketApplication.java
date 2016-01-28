@@ -321,7 +321,18 @@ public class IsisWicketApplication
         select2Settings.setIncludeJqueryUI(false);
     }
 
-    private void configureWicketSourcePlugin() {
+    /**
+     * as temporary measure, this method now does nothing.
+     *
+     * the original behaviour can be re-enabled by overriding this method and calling doConfigureWicketSourcePlugin();
+     */
+    protected void configureWicketSourcePlugin() {
+        // see Javadoc above.
+        //
+        // doConfigureWicketSourcePlugin();
+    }
+
+    protected void doConfigureWicketSourcePlugin() {
         if(!deploymentType.isProduction()) {
             WicketSource.configure(this);
         }
