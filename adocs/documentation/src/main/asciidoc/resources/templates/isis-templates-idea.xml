@@ -60,7 +60,7 @@
       <option name="OTHER" value="false" />
     </context>
   </template>
-  <template name="isa-p-val" value="public String validate$ParamNum}$ActionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: return reason why action argument are invalid, null if ok&#10;}" description="Apache Isis Action parameter validation" toReformat="true" toShortenFQNames="true">
+  <template name="isa-p-val" value="public String validate$ParamNum$$ActionName$(final $ParameterType$ $parameterType$) {&#10;    return $END$null; // TODO: return reason why action argument are invalid, null if ok&#10;}" description="Apache Isis Action parameter validation" toReformat="true" toShortenFQNames="true">
     <variable name="ActionName" expression="&quot;ActionName&quot;" defaultValue="" alwaysStopAt="true" />
     <variable name="ParameterType" expression="className()" defaultValue="" alwaysStopAt="true" />
     <variable name="parameterType" expression="suggestVariableName()" defaultValue="" alwaysStopAt="true" />

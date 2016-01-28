@@ -21,7 +21,7 @@ Configuration properties for the JDO/DataNucleus objectstore can be found in the
 (default value)
 |Description
 
-|`isis.object.` +
+|`isis.objects.` +
 `editing`
 |`true`,`false` +
 (`true`)

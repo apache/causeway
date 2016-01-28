@@ -33,6 +33,11 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 |Description
 
 |`isis.viewer.wicket.` +
+`ajaxDebugMode`
+| `true`,`false` (`_false_`)
+| whether the Wicket debug mode should be enabled.
+
+|`isis.viewer.wicket.` +
 `bookmarkedPages`
 | +ve int (`_15_`)
 | number of pages to bookmark
@@ -98,6 +103,14 @@ Note that action pages are still used for bookmarked actions.
 `themes.showChooser`
 | `true`,`false` (`_false_`)
 | Whether to show chooser for Bootstrap themes.  See discussion xref:ugvw.adoc#_ugvw_configuration-properties_showing-theme-chooser[below]
+
+|`isis.viewer.wicket.` +
+`wicketSourcePlugin`
+| `true`,`false` (`_false_`)
+| (`1.12.0-SNAPSHOT`) whether the Wicketsource plugin should be enabled; by default it is not enabled.
+
+Prior to `1.12.0` this was enabled by default for prototyping (not production).  However it can significantly
+slow down rendering, hence the introduction of this configuration setting.
 
 |===
 

@@ -154,6 +154,8 @@ public class IsisWicketApplication
     private static final boolean STRIP_WICKET_TAGS_DEFAULT = true;
     private static final String AJAX_DEBUG_MODE_KEY = "isis.viewer.wicket.ajaxDebugMode";
     private static final boolean AJAX_DEBUG_MODE_DEFAULT = false;
+    private static final String WICKET_SOURCE_PLUGIN_KEY = "isis.viewer.wicket.wicketSourcePlugin";
+    private static final boolean WICKET_SOURCE_PLUGIN_DEFAULT = false;
 
     private final IsisLoggingConfigurer loggingConfigurer = new IsisLoggingConfigurer();
 
@@ -279,7 +281,7 @@ public class IsisWicketApplication
 
             filterJavascriptContributions();
 
-            configureWicketSourcePlugin();
+            configureWicketSourcePluginIfNecessary(configuration);
 
             // TODO ISIS-987 Either make the API better (no direct access to the map) or use DB records
             int maxEntries = 1000;
@@ -321,7 +323,13 @@ public class IsisWicketApplication
         select2Settings.setIncludeJqueryUI(false);
     }
 
-    private void configureWicketSourcePlugin() {
+    protected void configureWicketSourcePluginIfNecessary(final IsisConfiguration configuration) {
+        if(isWicketSourcePluginEnabled(configuration)) {
+            configureWicketSourcePlugin();
+        }
+    }
+
+    protected void configureWicketSourcePlugin() {
         if(!deploymentType.isProduction()) {
             WicketSource.configure(this);
         }
@@ -650,8 +658,19 @@ public class IsisWicketApplication
      * If the <tt>isis.viewer.wicket.ajaxDebugMode</tt> is set, then this is used, otherwise the default is to disable.
      */
     private boolean determineAjaxDebugModeEnabled(IsisConfiguration configuration) {
-        final boolean debugMode = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
-        return debugMode;
+        final boolean debugModeEnabled = configuration.getBoolean(AJAX_DEBUG_MODE_KEY, AJAX_DEBUG_MODE_DEFAULT);
+        return debugModeEnabled;
+    }
+
+    /**
+     * Whether the Wicket source plugin should be enabled, as specified by configuration settings.
+     *
+     * <p>
+     * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
+     */
+    private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
+        final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
+        return pluginEnabled;
     }
 
     // //////////////////////////////////////
