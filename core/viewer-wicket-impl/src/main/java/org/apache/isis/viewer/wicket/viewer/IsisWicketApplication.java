@@ -324,7 +324,7 @@ public class IsisWicketApplication
     }
 
     protected void configureWicketSourcePluginIfNecessary(final IsisConfiguration configuration) {
-        if(isEnabledWicketSourcePluginEnabled(configuration)) {
+        if(isWicketSourcePluginEnabled(configuration)) {
             configureWicketSourcePlugin();
         }
     }
@@ -668,7 +668,7 @@ public class IsisWicketApplication
      * <p>
      * If the <tt>isis.viewer.wicket.wicketSourcePlugin</tt> is set, then this is used, otherwise the default is to disable.
      */
-    private boolean isEnabledWicketSourcePluginEnabled(IsisConfiguration configuration) {
+    private boolean isWicketSourcePluginEnabled(IsisConfiguration configuration) {
         final boolean pluginEnabled = configuration.getBoolean(WICKET_SOURCE_PLUGIN_KEY, WICKET_SOURCE_PLUGIN_DEFAULT);
         return pluginEnabled;
     }
