@@ -22,21 +22,21 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-public class ObjectLayoutMetadataFacetDefaultTest {
+public class FCPageFacetDefaultTest {
 
     @Test
     public void xxx() throws Exception {
 
-        final AtomicReference<PropertyGroupMetadata> x = new AtomicReference<>();
+        final AtomicReference<FieldSet> x = new AtomicReference<>();
 
-        PropertyGroupMetadata firstValue = new PropertyGroupMetadata();
-        PropertyGroupMetadata otherValue = new PropertyGroupMetadata();
+        FieldSet firstValue = new FieldSet();
+        FieldSet otherValue = new FieldSet();
 
         assertThat(x.get(), is(nullValue()));
 

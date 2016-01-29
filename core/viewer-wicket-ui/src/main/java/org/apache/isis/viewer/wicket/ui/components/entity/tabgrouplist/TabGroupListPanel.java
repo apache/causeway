@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
-import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabgroup.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
@@ -36,7 +36,7 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
     private static final String ID_TAB_GROUPS = "tabGroups";
 
     // the view metadata
-    private final List<TabGroupMetadata> tabGroups;
+    private final List<FCTabGroup> tabGroups;
 
     public TabGroupListPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
@@ -49,12 +49,12 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
     private void buildGui() {
         final EntityModel model = getModel();
 
-        final ListView<TabGroupMetadata> tabGroupsList = new ListView<TabGroupMetadata>(ID_TAB_GROUPS, this.tabGroups) {
+        final ListView<FCTabGroup> tabGroupsList = new ListView<FCTabGroup>(ID_TAB_GROUPS, this.tabGroups) {
 
             @Override
-            protected void populateItem(final ListItem<TabGroupMetadata> item) {
+            protected void populateItem(final ListItem<FCTabGroup> item) {
 
-                final TabGroupMetadata tabGroup = item.getModelObject();
+                final FCTabGroup tabGroup = item.getModelObject();
                 final EntityModel entityModelWithHints = model.cloneWithTabGroupMetadata(tabGroup);
                 final TabGroupPanel tabGroupPanel = new TabGroupPanel(entityModelWithHints);
                 item.add(tabGroupPanel);

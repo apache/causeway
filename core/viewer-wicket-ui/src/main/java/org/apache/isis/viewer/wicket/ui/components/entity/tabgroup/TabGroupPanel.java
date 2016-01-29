@@ -29,8 +29,8 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 import org.apache.isis.viewer.wicket.ui.components.entity.tabpanel.TabPanel;
@@ -42,7 +42,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
     private final EntityModel entityModel;
     // the view metadata
-    private final TabGroupMetadata tabGroup;
+    private final FCTabGroup tabGroup;
     private final ScopedSessionAttribute<Integer> selectedTabInSession;
 
     private static final String ID_TAB_GROUP = "tabGroup";
@@ -50,19 +50,19 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
     private static List<ITab> tabsFor(final EntityModel entityModel) {
         final List<ITab> tabs = Lists.newArrayList();
 
-        final TabGroupMetadata tabGroup = entityModel.getTabGroupMetadata();
-        final List<TabMetadata> tabMetadataList = FluentIterable
+        final FCTabGroup tabGroup = entityModel.getFCTabGroup();
+        final List<FCTab> FCTabList = FluentIterable
                 .from(tabGroup.getTabs())
-                .filter(TabMetadata.Predicates.notEmpty())
+                .filter(FCTab.Predicates.notEmpty())
                 .toList();
 
-        for (final TabMetadata tabMetadata : tabMetadataList) {
-            tabs.add(new AbstractTab(Model.of(tabMetadata.getName())) {
+        for (final FCTab FCTab : FCTabList) {
+            tabs.add(new AbstractTab(Model.of(FCTab.getName())) {
                 private static final long serialVersionUID1 = 1L;
 
                 @Override
                 public Panel getPanel(String panelId) {
-                    return new TabPanel(panelId, entityModel, tabMetadata);
+                    return new TabPanel(panelId, entityModel, FCTab);
                 }
             });
         }
@@ -73,7 +73,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
         super(ID_TAB_GROUP, tabsFor(entityModel));
 
         this.entityModel = entityModel;
-        this.tabGroup = entityModel.getTabGroupMetadata();
+        this.tabGroup = entityModel.getFCTabGroup();
         this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, this, SESSION_ATTR_SELECTED_TAB);
 
     }

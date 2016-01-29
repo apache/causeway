@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -53,7 +53,7 @@ public class ObjectLayoutMetadataServiceDefault
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
 
     // cache (used only in prototyping mode)
-    private final Map<String, ObjectLayoutMetadata> metadataByXml = Maps.newHashMap();
+    private final Map<String, FCPage> metadataByXml = Maps.newHashMap();
 
     @Override
     @Programmatic
@@ -64,7 +64,7 @@ public class ObjectLayoutMetadataServiceDefault
 
     @Override
     @Programmatic
-    public ObjectLayoutMetadata fromXml(Class<?> domainClass) {
+    public FCPage fromXml(Class<?> domainClass) {
 
         final String resourceName = resourceNameFor(domainClass);
         final String xml;
@@ -82,9 +82,9 @@ public class ObjectLayoutMetadataServiceDefault
 
 
         if(!deploymentCategory.isProduction()) {
-            final ObjectLayoutMetadata objectLayoutMetadata = metadataByXml.get(xml);
-            if(objectLayoutMetadata != null) {
-                return objectLayoutMetadata;
+            final FCPage FCPage = metadataByXml.get(xml);
+            if(FCPage != null) {
+                return FCPage;
             }
 
             final String badXml = badXmlByClass.get(domainClass);
@@ -101,7 +101,7 @@ public class ObjectLayoutMetadataServiceDefault
         }
 
         try {
-            final ObjectLayoutMetadata metadata = jaxbService.fromXml(ObjectLayoutMetadata.class, xml);
+            final FCPage metadata = jaxbService.fromXml(FCPage.class, xml);
             if(!deploymentCategory.isProduction()) {
                 metadataByXml.put(xml, metadata);
             }
@@ -134,12 +134,12 @@ public class ObjectLayoutMetadataServiceDefault
 
     @Override
     @Programmatic
-    public ObjectLayoutMetadata toMetadata(final Object domainObject) {
+    public FCPage toMetadata(final Object domainObject) {
         return toMetadata(domainObject.getClass());
     }
 
     @Override
-    public ObjectLayoutMetadata toMetadata(final Class<?> domainClass) {
+    public FCPage toMetadata(final Class<?> domainClass) {
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
         final ObjectLayoutMetadataFacet facet = objectSpec.getFacet(ObjectLayoutMetadataFacet.class);
         return facet != null? facet.getMetadata(): null;

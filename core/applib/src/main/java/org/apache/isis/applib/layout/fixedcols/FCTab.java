@@ -30,11 +30,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnOwner;
-import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.Owned;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.members.MemberRegion;
+import org.apache.isis.applib.layout.members.Owned;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
 
 @XmlType(
         name="tab"
@@ -45,7 +44,7 @@ import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
                 , "right"
         }
 )
-public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMetadata> {
+public class FCTab implements FCColumnOwner, Serializable, Owned<FCTabGroup> {
 
     private static final long serialVersionUID = 1L;
 
@@ -62,44 +61,44 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
 
 
 
-    private ColumnMetadata left = new ColumnMetadata();
+    private FCColumn left = new FCColumn();
 
     @XmlElement(required = true)
-    public ColumnMetadata getLeft() {
+    public FCColumn getLeft() {
         return left;
     }
 
-    public void setLeft(final ColumnMetadata left) {
+    public void setLeft(final FCColumn left) {
         this.left = left;
     }
 
 
-    private ColumnMetadata middle;
+    private FCColumn middle;
 
     @XmlElement(required = false)
-    public ColumnMetadata getMiddle() {
+    public FCColumn getMiddle() {
         return middle;
     }
 
-    public void setMiddle(final ColumnMetadata middle) {
+    public void setMiddle(final FCColumn middle) {
         this.middle = middle;
     }
 
 
-    private ColumnMetadata right;
+    private FCColumn right;
 
     @XmlElement(required = false)
-    public ColumnMetadata getRight() {
+    public FCColumn getRight() {
         return right;
     }
 
-    public void setRight(final ColumnMetadata right) {
+    public void setRight(final FCColumn right) {
         this.right = right;
     }
 
 
 
-    private TabGroupMetadata owner;
+    private FCTabGroup owner;
     /**
      * Owner.
      *
@@ -108,11 +107,11 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
      * </p>
      */
     @XmlTransient
-    public TabGroupMetadata getOwner() {
+    public FCTabGroup getOwner() {
         return owner;
     }
 
-    public void setOwner(final TabGroupMetadata owner) {
+    public void setOwner(final FCTabGroup owner) {
         this.owner = owner;
     }
 
@@ -120,8 +119,8 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
      * Aggregates the contents of all collections on this tab.
      */
     @Programmatic
-    public List<MemberLayoutMetadata> getContents() {
-        final List<MemberLayoutMetadata> contents = Lists.newArrayList();
+    public List<MemberRegion> getContents() {
+        final List<MemberRegion> contents = Lists.newArrayList();
         appendContent(contents, getLeft());
         appendContent(contents, getMiddle());
         appendContent(contents, getRight());
@@ -146,26 +145,26 @@ public class TabMetadata implements ColumnOwner, Serializable, Owned<TabGroupMet
 
 
 
-    private static void appendContent(final List<MemberLayoutMetadata> contents, final ColumnMetadata columnMetadata) {
-        if(columnMetadata == null) {
+    private static void appendContent(final List<MemberRegion> contents, final FCColumn FCColumn) {
+        if(FCColumn == null) {
             return;
         }
-        final List<PropertyGroupMetadata> propertyGroups = columnMetadata.getPropertyGroups();
-        if(propertyGroups != null) {
-            contents.addAll(propertyGroups);
+        final List<FieldSet> fieldSets = FCColumn.getFieldSets();
+        if(fieldSets != null) {
+            contents.addAll(fieldSets);
         }
-        final List<CollectionLayoutMetadata> collectionLayoutMetadatas = columnMetadata.getCollections();
-        if(collectionLayoutMetadatas != null) {
-            contents.addAll(collectionLayoutMetadatas);
+        final List<CollectionLayoutData> collectionLayoutDatas = FCColumn.getCollections();
+        if(collectionLayoutDatas != null) {
+            contents.addAll(collectionLayoutDatas);
         }
     }
 
     public static class Predicates {
-        public static Predicate<TabMetadata> notEmpty() {
-            return new Predicate<TabMetadata>() {
+        public static Predicate<FCTab> notEmpty() {
+            return new Predicate<FCTab>() {
                 @Override
-                public boolean apply(final TabMetadata tabMetadata) {
-                    return !tabMetadata.getContents().isEmpty();
+                public boolean apply(final FCTab FCTab) {
+                    return !FCTab.getContents().isEmpty();
                 }
             };
         }

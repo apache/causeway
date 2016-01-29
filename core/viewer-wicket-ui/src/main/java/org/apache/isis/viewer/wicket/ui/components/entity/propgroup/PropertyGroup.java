@@ -27,8 +27,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.ActionLayout;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -52,11 +52,11 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
     private static final String ID_PROPERTIES = "properties";
     private static final String ID_PROPERTY = "property";
 
-    private final PropertyGroupMetadata propertyGroupMetadata;
+    private final FieldSet fieldSet;
 
     public PropertyGroup(final String id, final EntityModel model) {
         super(id, model);
-        propertyGroupMetadata = model.getPropertyGroupMetadata();
+        fieldSet = model.getFieldSet();
 
         buildGui();
     }
@@ -66,7 +66,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
     }
 
     private void buildGui() {
-        String groupName = propertyGroupMetadata.getName();
+        String groupName = fieldSet.getName();
         final ObjectAdapter adapter = getModel().getObject();
 
         add(new Label(ID_MEMBER_GROUP_NAME, groupName));
@@ -76,8 +76,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
         add(propertyRv);
 
-        final List<PropertyLayoutMetadata> properties = propertyGroupMetadata.getProperties();
-        for (PropertyLayoutMetadata property : properties) {
+        final List<PropertyLayoutData> properties = fieldSet.getProperties();
+        for (PropertyLayoutData property : properties) {
             final ObjectAssociation association = adapter.getSpecification().getAssociation(property.getId());
 
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());

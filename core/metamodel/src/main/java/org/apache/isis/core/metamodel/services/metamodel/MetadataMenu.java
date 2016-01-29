@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.applib.value.Blob;
@@ -108,7 +108,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             final OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (final ObjectSpecification objectSpec : domainObjectSpecs) {
                 final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final ObjectLayoutMetadata metadata = objectLayoutMetadataService.toMetadata(domainClass);
+                final FCPage metadata = objectLayoutMetadataService.toMetadata(domainClass);
                 if(metadata != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
                     String xml = jaxbService.toXml(metadata);

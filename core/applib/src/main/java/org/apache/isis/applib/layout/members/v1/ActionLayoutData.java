@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.members.v1;
 
 import java.io.Serializable;
 
@@ -27,9 +27,10 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.members.Owned;
 
 /**
- * Broadly corresponds to {@link org.apache.isis.applib.annotation.ActionLayout}.
+ * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
  *
  * <p>
  *  Note that {@link org.apache.isis.applib.annotation.ActionLayout#contributed()} is omitted because this only applies
@@ -44,13 +45,13 @@ import org.apache.isis.applib.annotation.Where;
         , "metadataError"
     }
 )
-public class ActionLayoutMetadata implements Serializable, Owned<ActionOwner> {
+public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLayoutMetadata() {
+    public ActionLayoutData() {
     }
-    public ActionLayoutMetadata(final String id) {
+    public ActionLayoutData(final String id) {
         setId(id);
     }
 

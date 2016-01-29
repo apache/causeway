@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
  */
 public interface ObjectLayoutMetadataFacet extends Facet {
 
-    ObjectLayoutMetadata getMetadata();
+    FCPage getMetadata();
 
 
 }

@@ -16,10 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.fixedcols;
+package org.apache.isis.applib.layout.members;
 
-import org.apache.isis.applib.layout.v1_0.Owner;
+/**
+ * Represents an area on the page containing one or several related members.
+ *
+ * <p>
+ *     Implementations include a <code>FieldSet</code> (containing a number
+ *     of properties and their actions), and a <code>CollectionLayoutData</code>
+ *     (containing a single collection and associated actions)
+ * </p>
+ */
+public interface MemberRegion extends Owned<MemberRegionOwner> {
 
-public interface TabGroupOwner extends Owner {
 
 }

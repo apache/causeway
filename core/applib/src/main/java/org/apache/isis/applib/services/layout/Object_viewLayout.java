@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 
 @Mixin
 public class Object_viewLayout {
@@ -50,7 +50,7 @@ public class Object_viewLayout {
             cssClassFa = "fa-th"
     )
     @MemberOrder(sequence = "550.2")
-    public ObjectLayoutMetadata $$() {
+    public FCPage $$() {
         return getObjectLayoutMetadata();
     }
 
@@ -59,7 +59,7 @@ public class Object_viewLayout {
         return getObjectLayoutMetadata() == null;
     }
 
-    protected ObjectLayoutMetadata getObjectLayoutMetadata() {
+    protected FCPage getObjectLayoutMetadata() {
         return objectLayoutMetadataService.toMetadata(object);
     }
 

@@ -22,60 +22,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * This is the top-level region for the domain object's properties, collections and actions.  It simply consists
+ * of a number of rows.
+ *
+ * <p>
+ *     Note that the title's
+ * </p>
+ */
+@XmlRootElement(
+        name = "page"
+)
 @XmlType(
-        name = "div-column"
+        name = "page"
         , propOrder = {
-            "rows",
-            "tabGroup",
-            "propGroups",
-            "collections",
+            "rows"
         }
 )
-public class DivColumn {
+public class BS3Page {
 
-
-    private List<DivRow> rows = new ArrayList<DivRow>();
+    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
+        add(new BS3Row());
+    }};
 
     // no wrapper
-    @XmlElement(name = "row", required = false)
-    public List<DivRow> getRows() {
+    @XmlElement(name = "row", required = true)
+    public List<BS3Row> getRows() {
         return rows;
     }
 
-    public void setRows(final List<DivRow> rows) {
+    public void setRows(final List<BS3Row> rows) {
         this.rows = rows;
     }
-
-
-
-    private BS3TabGroup tabGroup;
-
-    @XmlElement(name="tabGroup", required = false)
-    public BS3TabGroup getTabGroup() {
-        return tabGroup;
-    }
-
-    public void setTabGroup(final BS3TabGroup tabGroup) {
-        this.tabGroup = tabGroup;
-    }
-
-
-
-
-    private List<BS3PropGroup> propGroups = new ArrayList<BS3PropGroup>();
-
-    // no wrapper
-    @XmlElement(name = "propGroup", required = false)
-    public List<BS3PropGroup> getPropGroups() {
-        return propGroups;
-    }
-
-    public void setPropGroups(final List<BS3PropGroup> propGroups) {
-        this.propGroups = propGroups;
-    }
-
 
 
 

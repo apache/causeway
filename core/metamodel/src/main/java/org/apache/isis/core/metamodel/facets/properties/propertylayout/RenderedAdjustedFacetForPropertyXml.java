@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
-import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.renderedadjusted.RenderedAdjustedFacetAbstract;
 
 public class RenderedAdjustedFacetForPropertyXml extends RenderedAdjustedFacetAbstract {
 
-    public static RenderedAdjustedFacet create(final PropertyLayoutMetadata propertyLayout, FacetHolder holder) {
+    public static RenderedAdjustedFacet create(final PropertyLayoutData propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }

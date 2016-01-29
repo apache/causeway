@@ -16,29 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.bootstrap3;
+package org.apache.isis.applib.layout.fixedcols;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import org.apache.isis.applib.layout.members.Owner;
 
-@XmlType(
-        name = "propGroup"
-        , propOrder = {
-            "name"
-        }
-)
-public class BS3PropGroup {
-
-
-    private String name;
-
-    @XmlAttribute(required = true)
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-    }
+public interface FCColumnOwner extends Owner {
 
 }

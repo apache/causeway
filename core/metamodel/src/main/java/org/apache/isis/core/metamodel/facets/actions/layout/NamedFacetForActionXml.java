@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForActionXml extends NamedFacetAbstract {
 
-    public static NamedFacet create(final ActionLayoutMetadata actionLayout, final FacetHolder holder) {
+    public static NamedFacet create(final ActionLayoutData actionLayout, final FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }

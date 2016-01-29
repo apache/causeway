@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -51,7 +51,7 @@ public class EntityPanelFactory extends EntityComponentFactoryAbstract {
 
         final ObjectSpecification specification = entityModel.getTypeOfSpecification();
         final ObjectLayoutMetadataFacet facet = specification.getFacet(ObjectLayoutMetadataFacet.class);
-        final ObjectLayoutMetadata layoutMetadata = facet.getMetadata();
+        final FCPage layoutMetadata = facet.getMetadata();
         final boolean hasLayout = layoutMetadata != null;
         return hasLayout
                 ? new EntityTabbedPanel(id, entityModel)

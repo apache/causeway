@@ -31,17 +31,17 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.ActionOwner;
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnOwner;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadataOwner;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
+import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
+import org.apache.isis.applib.layout.members.v1.ActionOwner;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.MemberRegionOwner;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -105,7 +105,7 @@ public class ObjectLayoutMetadataFacetDefault
     private final DeploymentCategory deploymentCategory;
     private final ObjectLayoutMetadataService objectLayoutMetadataService;
 
-    private ObjectLayoutMetadata metadata;
+    private FCPage metadata;
     private boolean blacklisted;
 
     private ObjectLayoutMetadataFacetDefault(
@@ -123,12 +123,12 @@ public class ObjectLayoutMetadataFacetDefault
      * Blacklisting only occurs if running in production mode.
      */
     @Override
-    public ObjectLayoutMetadata getMetadata() {
+    public FCPage getMetadata() {
         if (deploymentCategory.isProduction() || blacklisted) {
             return metadata;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        final ObjectLayoutMetadata metadata = objectLayoutMetadataService.fromXml(domainClass);
+        final FCPage metadata = objectLayoutMetadataService.fromXml(domainClass);
         if(deploymentCategory.isProduction() && metadata == null) {
             blacklisted = true;
         }
@@ -136,7 +136,7 @@ public class ObjectLayoutMetadataFacetDefault
         return this.metadata;
     }
 
-    private ObjectLayoutMetadata normalize(final ObjectLayoutMetadata metadata) {
+    private FCPage normalize(final FCPage metadata) {
         if(metadata == null) {
             return null;
         }
@@ -153,7 +153,7 @@ public class ObjectLayoutMetadataFacetDefault
         return metadata;
     }
 
-    private void doNormalize(final ObjectLayoutMetadata metadata, final ObjectSpecification objectSpec) {
+    private void doNormalize(final FCPage metadata, final ObjectSpecification objectSpec) {
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
                 ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
@@ -174,34 +174,34 @@ public class ObjectLayoutMetadataFacetDefault
      * </p>
      */
     private static void derive(
-            final ObjectLayoutMetadata metadata,
+            final FCPage metadata,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
-        final LinkedHashMap<String, PropertyLayoutMetadata> propertyIds = metadata.getAllPropertiesById();
-        final LinkedHashMap<String, CollectionLayoutMetadata> collectionIds = metadata.getAllCollectionsById();
-        final LinkedHashMap<String, ActionLayoutMetadata> actionIds = metadata.getAllActionsById();
+        final LinkedHashMap<String, PropertyLayoutData> propertyIds = metadata.getAllPropertiesById();
+        final LinkedHashMap<String, CollectionLayoutData> collectionIds = metadata.getAllCollectionsById();
+        final LinkedHashMap<String, ActionLayoutData> actionIds = metadata.getAllActionsById();
 
-        final AtomicReference<PropertyGroupMetadata> defaultPropertyGroupRef = new AtomicReference<>();
-        final AtomicReference<ColumnMetadata> firstColumnRef = new AtomicReference<>();
-        final AtomicReference<TabGroupMetadata> lastTabGroupRef = new AtomicReference<>();
+        final AtomicReference<FieldSet> defaultPropertyGroupRef = new AtomicReference<>();
+        final AtomicReference<FCColumn> firstColumnRef = new AtomicReference<>();
+        final AtomicReference<FCTabGroup> lastTabGroupRef = new AtomicReference<>();
 
         // capture the first column, and also
         // capture the first property group (if any) with the default name ('General')
-        metadata.visit(new ObjectLayoutMetadata.VisitorAdapter() {
+        metadata.visit(new FCPage.VisitorAdapter() {
             @Override
-            public void visit(final ColumnMetadata columnMetadata) {
-                firstColumnRef.compareAndSet(null, columnMetadata);
+            public void visit(final FCColumn FCColumn) {
+                firstColumnRef.compareAndSet(null, FCColumn);
             }
             @Override
-            public void visit(final PropertyGroupMetadata propertyGroupMetadata) {
-                if(MemberGroupLayoutFacet.DEFAULT_GROUP.equals(propertyGroupMetadata.getName())) {
-                    defaultPropertyGroupRef.compareAndSet(null, propertyGroupMetadata);
+            public void visit(final FieldSet fieldSet) {
+                if(MemberGroupLayoutFacet.DEFAULT_GROUP.equals(fieldSet.getName())) {
+                    defaultPropertyGroupRef.compareAndSet(null, fieldSet);
                 }
             }
             @Override
-            public void visit(final TabGroupMetadata tabGroup) {
+            public void visit(final FCTabGroup tabGroup) {
                 lastTabGroupRef.set(tabGroup);
             }
         });
@@ -219,13 +219,13 @@ public class ObjectLayoutMetadataFacetDefault
 
         if(!missingPropertyIds.isEmpty()) {
             // ensure that there is a property group to use
-            boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new PropertyGroupMetadata(MemberGroupLayoutFacet.DEFAULT_GROUP));
-            final PropertyGroupMetadata defaultPropertyGroupMetadata = defaultPropertyGroupRef.get();
+            boolean wasSet = defaultPropertyGroupRef.compareAndSet(null, new FieldSet(MemberGroupLayoutFacet.DEFAULT_GROUP));
+            final FieldSet defaultFieldSet = defaultPropertyGroupRef.get();
             if(wasSet) {
-                firstColumnRef.get().getPropertyGroups().add(defaultPropertyGroupMetadata);
+                firstColumnRef.get().getFieldSets().add(defaultFieldSet);
             }
             for (final String propertyId : missingPropertyIds) {
-                defaultPropertyGroupMetadata.getProperties().add(new PropertyLayoutMetadata(propertyId));
+                defaultFieldSet.getProperties().add(new PropertyLayoutData(propertyId));
             }
         }
 
@@ -242,17 +242,17 @@ public class ObjectLayoutMetadataFacetDefault
 
         if(!missingCollectionIds.isEmpty()) {
             while(metadata.getTabGroups().size() < 2) {
-                final TabGroupMetadata tabGroup = new TabGroupMetadata();
+                final FCTabGroup tabGroup = new FCTabGroup();
                 metadata.getTabGroups().add(tabGroup);
                 lastTabGroupRef.set(tabGroup);
             }
-            final TabGroupMetadata lastTabGroup = lastTabGroupRef.get();
+            final FCTabGroup lastTabGroup = lastTabGroupRef.get();
             for (final String collectionId : missingCollectionIds) {
-                final TabMetadata tabMetadata = new TabMetadata();
-                lastTabGroup.getTabs().add(tabMetadata);
-                ColumnMetadata left = new ColumnMetadata(12);
-                tabMetadata.setLeft(left);
-                final CollectionLayoutMetadata layoutMetadata = new CollectionLayoutMetadata(collectionId);
+                final FCTab FCTab = new FCTab();
+                lastTabGroup.getTabs().add(FCTab);
+                FCColumn left = new FCColumn(12);
+                FCTab.setLeft(left);
+                final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
                 layoutMetadata.setDefaultView("table");
                 left.getCollections().add(layoutMetadata);
             }
@@ -269,12 +269,12 @@ public class ObjectLayoutMetadataFacetDefault
 
         if(!missingActionIds.isEmpty()) {
             for (String actionId : missingActionIds) {
-                List<ActionLayoutMetadata> actions = metadata.getActions();
+                List<ActionLayoutData> actions = metadata.getActions();
                 if(actions == null) {
                     actions = Lists.newArrayList();
                     metadata.setActions(actions);
                 }
-                actions.add(new ActionLayoutMetadata(actionId));
+                actions.add(new ActionLayoutData(actionId));
             }
         }
     }
@@ -302,14 +302,14 @@ public class ObjectLayoutMetadataFacetDefault
     }
 
     private void overwrite(
-            final ObjectLayoutMetadata metadata,
+            final FCPage metadata,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
         final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
 
-        metadata.visit(new ObjectLayoutMetadata.VisitorAdapter() {
+        metadata.visit(new FCPage.VisitorAdapter() {
             private int collectionSequence = 1;
             private int actionDomainObjectSequence = 1;
             private int actionPropertyGroupSequence = 1;
@@ -317,28 +317,28 @@ public class ObjectLayoutMetadataFacetDefault
             private int actionCollectionSequence = 1;
 
             @Override
-            public void visit(final ActionLayoutMetadata actionLayoutMetadata) {
-                final ActionOwner actionOwner = actionLayoutMetadata.getOwner();
-                final ObjectAction objectAction = objectActionById.get(actionLayoutMetadata.getId());
+            public void visit(final ActionLayoutData actionLayoutData) {
+                final ActionOwner actionOwner = actionLayoutData.getOwner();
+                final ObjectAction objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) {
                     return;
                 }
 
                 final String memberOrderName;
                 final int memberOrderSequence;
-                if(actionOwner instanceof PropertyGroupMetadata) {
-                    final PropertyGroupMetadata propertyGroupMetadata = (PropertyGroupMetadata) actionOwner;
-                    final List<PropertyLayoutMetadata> properties = propertyGroupMetadata.getProperties();
-                    final PropertyLayoutMetadata propertyLayoutMetadata = properties.get(0); // any will do
-                    memberOrderName = propertyLayoutMetadata.getId();
+                if(actionOwner instanceof FieldSet) {
+                    final FieldSet fieldSet = (FieldSet) actionOwner;
+                    final List<PropertyLayoutData> properties = fieldSet.getProperties();
+                    final PropertyLayoutData propertyLayoutData = properties.get(0); // any will do
+                    memberOrderName = propertyLayoutData.getId();
                     memberOrderSequence = actionPropertyGroupSequence++;
-                } else if(actionOwner instanceof PropertyLayoutMetadata) {
-                    final PropertyLayoutMetadata propertyLayoutMetadata = (PropertyLayoutMetadata) actionOwner;
-                    memberOrderName = propertyLayoutMetadata.getId();
+                } else if(actionOwner instanceof PropertyLayoutData) {
+                    final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionOwner;
+                    memberOrderName = propertyLayoutData.getId();
                     memberOrderSequence = actionPropertySequence++;
-                } else if(actionOwner instanceof CollectionLayoutMetadata) {
-                    final CollectionLayoutMetadata collectionLayoutMetadata = (CollectionLayoutMetadata) actionOwner;
-                    memberOrderName = collectionLayoutMetadata.getId();
+                } else if(actionOwner instanceof CollectionLayoutData) {
+                    final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionOwner;
+                    memberOrderName = collectionLayoutData.getId();
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
                     // DomainObject
@@ -349,90 +349,90 @@ public class ObjectLayoutMetadataFacetDefault
                         new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
 
 
-                if(actionOwner instanceof PropertyGroupMetadata) {
-                    if(actionLayoutMetadata.getPosition() == null ||
-                            actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
-                            actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
-                        actionLayoutMetadata.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
+                if(actionOwner instanceof FieldSet) {
+                    if(actionLayoutData.getPosition() == null ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
+                        actionLayoutData.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
-                } else if(actionOwner instanceof PropertyLayoutMetadata) {
-                    if(actionLayoutMetadata.getPosition() == null ||
-                            actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
-                            actionLayoutMetadata.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
-                        actionLayoutMetadata.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
+                } else if(actionOwner instanceof PropertyLayoutData) {
+                    if(actionLayoutData.getPosition() == null ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
+                            actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {
+                        actionLayoutData.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.BELOW);
                     }
                 } else {
                     // doesn't do anything for DomainObject or Collection
-                    actionLayoutMetadata.setPosition(null);
+                    actionLayoutData.setPosition(null);
                 }
 
-                FacetUtil.addFacet(ActionPositionFacetForActionXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(BookmarkPolicyFacetForActionXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(CssClassFacetForActionXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(CssClassFaFacetForActionXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(DescribedAsFacetForActionXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(HiddenFacetForActionLayoutXml.create(actionLayoutMetadata, objectAction));
-                FacetUtil.addFacet(NamedFacetForActionXml.create(actionLayoutMetadata, objectAction));
+                FacetUtil.addFacet(ActionPositionFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(BookmarkPolicyFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(CssClassFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(CssClassFaFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(DescribedAsFacetForActionXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(HiddenFacetForActionLayoutXml.create(actionLayoutData, objectAction));
+                FacetUtil.addFacet(NamedFacetForActionXml.create(actionLayoutData, objectAction));
             }
 
             @Override
-            public void visit(final PropertyLayoutMetadata propertyLayoutMetadata) {
-                final OneToOneAssociation oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutMetadata.getId());
+            public void visit(final PropertyLayoutData propertyLayoutData) {
+                final OneToOneAssociation oneToOneAssociation = oneToOneAssociationById.get(propertyLayoutData.getId());
                 if(oneToOneAssociation == null) {
                     return;
                 }
 
-                FacetUtil.addFacet(CssClassFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(HiddenFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(LabelAtFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(MultiLineFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(NamedFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
+                FacetUtil.addFacet(CssClassFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(DescribedAsFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(HiddenFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(LabelAtFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(MultiLineFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(NamedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
                 FacetUtil.addFacet(
-                        RenderedAdjustedFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
-                FacetUtil.addFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutMetadata, oneToOneAssociation));
+                        RenderedAdjustedFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
+                FacetUtil.addFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
-                final PropertyGroupMetadata propertyGroupMetadata = propertyLayoutMetadata.getOwner();
-                final String groupName = propertyGroupMetadata.getName();
+                final FieldSet fieldSet = propertyLayoutData.getOwner();
+                final String groupName = fieldSet.getName();
                 final String sequence = nextInSequenceFor(groupName, propertySequenceByGroup);
                 FacetUtil.addFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
             }
 
             @Override
-            public void visit(final CollectionLayoutMetadata collectionLayoutMetadata) {
-                final OneToManyAssociation oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutMetadata.getId());
+            public void visit(final CollectionLayoutData collectionLayoutData) {
+                final OneToManyAssociation oneToManyAssociation = oneToManyAssociationById.get(collectionLayoutData.getId());
                 if(oneToManyAssociation == null) {
                     return;
                 }
 
-                FacetUtil.addFacet(CssClassFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
+                FacetUtil.addFacet(CssClassFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 FacetUtil.addFacet(
-                        DefaultViewFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
+                        DefaultViewFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
                 FacetUtil.addFacet(
-                        DescribedAsFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
-                FacetUtil.addFacet(HiddenFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
-                FacetUtil.addFacet(NamedFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
-                FacetUtil.addFacet(PagedFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
-                FacetUtil.addFacet(SortedByFacetForCollectionXml.create(collectionLayoutMetadata, oneToManyAssociation));
+                        DescribedAsFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                FacetUtil.addFacet(HiddenFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                FacetUtil.addFacet(NamedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                FacetUtil.addFacet(PagedFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
+                FacetUtil.addFacet(SortedByFacetForCollectionXml.create(collectionLayoutData, oneToManyAssociation));
 
                 // @MemberOrder#name based on the collection's id (so that each has a single "member group")
-                final String groupName = collectionLayoutMetadata.getId();
+                final String groupName = collectionLayoutData.getId();
                 final String sequence = "" + collectionSequence++;
                 FacetUtil.addFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
 
                 // if there is only a single column and no other contents, then copy the collection Id onto the tab'
-                final MemberLayoutMetadataOwner memberLayoutMetadataOwner = collectionLayoutMetadata.getOwner();
-                if(memberLayoutMetadataOwner instanceof ColumnMetadata) {
-                    final ColumnMetadata columnMetadata = (ColumnMetadata) memberLayoutMetadataOwner;
-                    final ColumnOwner holder = columnMetadata.getOwner();
-                    if(holder instanceof TabMetadata) {
-                        final TabMetadata tabMetadata = (TabMetadata) holder;
-                        if(tabMetadata.getContents().size() == 1 && Strings.isNullOrEmpty(tabMetadata.getName()) ) {
+                final MemberRegionOwner memberRegionOwner = collectionLayoutData.getOwner();
+                if(memberRegionOwner instanceof FCColumn) {
+                    final FCColumn FCColumn = (FCColumn) memberRegionOwner;
+                    final FCColumnOwner holder = FCColumn.getOwner();
+                    if(holder instanceof FCTab) {
+                        final FCTab FCTab = (FCTab) holder;
+                        if(FCTab.getContents().size() == 1 && Strings.isNullOrEmpty(FCTab.getName()) ) {
                             final String collectionName = oneToManyAssociation.getName();
-                            tabMetadata.setName(collectionName);
+                            FCTab.setName(collectionName);
                         }
                     }
                 }

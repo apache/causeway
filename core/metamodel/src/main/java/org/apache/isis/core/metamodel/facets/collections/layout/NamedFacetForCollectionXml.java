@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.facets.collections.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacetAbstract;
 
 public class NamedFacetForCollectionXml extends NamedFacetAbstract {
 
-    public static NamedFacet create(CollectionLayoutMetadata collectionLayout, FacetHolder holder) {
+    public static NamedFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
         if(collectionLayout == null) {
             return null;
         }

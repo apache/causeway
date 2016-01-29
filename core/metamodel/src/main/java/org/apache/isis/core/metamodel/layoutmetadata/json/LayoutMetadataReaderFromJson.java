@@ -84,7 +84,7 @@ import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata.Hint;
+import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;

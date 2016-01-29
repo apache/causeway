@@ -21,14 +21,14 @@ package org.apache.isis.core.metamodel.facets.properties.propertylayout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;
 
 public class CssClassFacetForPropertyXml extends CssClassFacetAbstract {
 
-    public static CssClassFacet create(PropertyLayoutMetadata propertyLayout, FacetHolder holder) {
+    public static CssClassFacet create(PropertyLayoutData propertyLayout, FacetHolder holder) {
         if(propertyLayout == null) {
             return null;
         }

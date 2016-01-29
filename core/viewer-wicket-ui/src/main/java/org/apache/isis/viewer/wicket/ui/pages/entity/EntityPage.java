@@ -29,7 +29,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
@@ -142,7 +142,7 @@ public class EntityPage extends PageAbstract {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final ObjectLayoutMetadata metadata = facet.getMetadata();
+            final FCPage metadata = facet.getMetadata();
 
             // if none, then fallback to invalidating entire cache
             // (this is the original LayoutMetadataFromJson behaviour)

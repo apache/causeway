@@ -24,29 +24,61 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+
 @XmlType(
-        name = "div-row"
+        name = "col"
         , propOrder = {
-            "columns"
+            "rows",
+            "tabGroup",
+            "propGroups",
+            "collections",
         }
 )
-public class DivRow {
+public class BS3Col {
 
 
-
-    private List<DivColumn> columns = new ArrayList<DivColumn>(){{
-        add(new DivColumn());
-    }};
+    private List<BS3Row> rows = new ArrayList<BS3Row>();
 
     // no wrapper
-    @XmlElement(name = "column", required = true)
-    public List<DivColumn> getColumns() {
-        return columns;
+    @XmlElement(name = "row", required = false)
+    public List<BS3Row> getRows() {
+        return rows;
     }
 
-    public void setColumns(final List<DivColumn> columns) {
-        this.columns = columns;
+    public void setRows(final List<BS3Row> rows) {
+        this.rows = rows;
     }
+
+
+
+    private BS3TabGroup tabGroup;
+
+    @XmlElement(name="tabGroup", required = false)
+    public BS3TabGroup getTabGroup() {
+        return tabGroup;
+    }
+
+    public void setTabGroup(final BS3TabGroup tabGroup) {
+        this.tabGroup = tabGroup;
+    }
+
+
+
+
+    private List<FieldSet> propGroups = new ArrayList<FieldSet>();
+
+    // no wrapper
+    @XmlElement(name = "propGroup", required = false)
+    public List<FieldSet> getPropGroups() {
+        return propGroups;
+    }
+
+    public void setPropGroups(final List<FieldSet> propGroups) {
+        this.propGroups = propGroups;
+    }
+
+
 
 
 }

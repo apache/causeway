@@ -31,7 +31,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.Closure;
@@ -325,19 +325,19 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     
     private EntityCollectionModel(final EntityModel entityModel) {
-        this(entityModel.getObjectAdapterMemento(), entityModel.getCollectionLayoutMetadata());
+        this(entityModel.getObjectAdapterMemento(), entityModel.getCollectionLayoutData());
     }
 
-    private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutMetadata collectionLayoutMetadata) {
-        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutMetadata));
+    private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
+        this(parentObjectAdapterMemento, collectionFor(parentObjectAdapterMemento, collectionLayoutData));
     }
 
     private static OneToManyAssociation collectionFor(
-            final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutMetadata collectionLayoutMetadata) {
-        if(collectionLayoutMetadata == null) {
+            final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {
+        if(collectionLayoutData == null) {
             throw new IllegalArgumentException("EntityModel must have a CollectionLayoutMetadata");
         }
-        final String collectionId = collectionLayoutMetadata.getId();
+        final String collectionId = collectionLayoutData.getId();
         final ObjectSpecId objectSpecId = parentObjectAdapterMemento.getObjectSpecId();
         final ObjectSpecification objectSpec = getSpecificationLoaderStatic().lookupBySpecId(objectSpecId);
         final OneToManyAssociation otma = (OneToManyAssociation) objectSpec.getAssociation(collectionId);

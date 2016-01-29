@@ -44,9 +44,9 @@ import org.apache.isis.applib.annotation.MemberGroupLayout.ColumnSpans;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata.Hint;
-import org.apache.isis.applib.layout.fixedcols.TabMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;
 import org.apache.isis.core.commons.authentication.MessageBroker;
@@ -127,14 +127,14 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        final TabMetadata tabMetaDataIfAny = entityModel.getTabMetadata();
+        final FCTab FCTabMetaDataIfAny = entityModel.getFCTab();
 
         final ColumnSpans columnSpans;
-        if(tabMetaDataIfAny != null) {
-            final ColumnMetadata middle = tabMetaDataIfAny.getMiddle();
-            final ColumnMetadata right = tabMetaDataIfAny.getRight();
+        if(FCTabMetaDataIfAny != null) {
+            final FCColumn middle = FCTabMetaDataIfAny.getMiddle();
+            final FCColumn right = FCTabMetaDataIfAny.getRight();
             columnSpans = ColumnSpans.asSpans(
-                    tabMetaDataIfAny.getLeft().getSpan(),
+                    FCTabMetaDataIfAny.getLeft().getSpan(),
                     middle != null? middle.getSpan(): 0,
                     right != null? right.getSpan(): 0);
         } else {
@@ -149,7 +149,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         add(leftColumn);
 
         if(columnSpans.getLeft() > 0) {
-            addPropertiesAndCollections(leftColumn, entityModel, tabMetaDataIfAny, Hint.LEFT);
+            addPropertiesAndCollections(leftColumn, entityModel, FCTabMetaDataIfAny, Hint.LEFT);
         } else {
             Components.permanentlyHide(this, ID_LEFT_COLUMN);
         }
@@ -159,7 +159,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         if(columnSpans.getMiddle() > 0) {
             middleColumn = new WebMarkupContainer(ID_MIDDLE_COLUMN);
             add(middleColumn);
-            addPropertiesAndCollections(middleColumn, entityModel, tabMetaDataIfAny, Hint.MIDDLE);
+            addPropertiesAndCollections(middleColumn, entityModel, FCTabMetaDataIfAny, Hint.MIDDLE);
         } else {
             middleColumn = null;
             Components.permanentlyHide(this, ID_MIDDLE_COLUMN);
@@ -170,7 +170,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
         if(columnSpans.getRight() > 0) {
             rightColumn = new WebMarkupContainer(ID_RIGHT_COLUMN);
             add(rightColumn);
-            addPropertiesAndCollections(rightColumn, entityModel, tabMetaDataIfAny, Hint.RIGHT);
+            addPropertiesAndCollections(rightColumn, entityModel, FCTabMetaDataIfAny, Hint.RIGHT);
         } else {
             rightColumn = null;
             Components.permanentlyHide(this, ID_RIGHT_COLUMN);
@@ -189,7 +189,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
 
         // edit buttons and feedback (not supported on tabbed view)
         final Hint leftHint = Hint.LEFT;
-        final ColumnMetadata leftColumnMetaDataIfAny = leftHint.from(tabMetaDataIfAny);
+        final FCColumn leftColumnMetaDataIfAny = leftHint.from(FCTabMetaDataIfAny);
         final boolean hasProperties = leftColumnMetaDataIfAny == null && !PropUtil
                 .propertyGroupNames(entityModel, leftHint, leftColumnMetaDataIfAny).isEmpty();
         if (hasProperties) {
@@ -204,7 +204,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
 
 
         // collections (only if not being added to a tab)
-        if(tabMetaDataIfAny == null && columnSpans.getCollections() > 0) {
+        if(FCTabMetaDataIfAny == null && columnSpans.getCollections() > 0) {
             final String idCollectionsToShow;
             final String idCollectionsToHide;
             int collectionSpan;
@@ -233,9 +233,9 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private void addPropertiesAndCollections(
             final MarkupContainer markupContainer,
             final EntityModel entityModel,
-            final TabMetadata tabMetaDataIfAny,
+            final FCTab FCTabMetaDataIfAny,
             final Hint hint) {
-        final ColumnMetadata columnMetaDataIfAny = hint.from(tabMetaDataIfAny);
+        final FCColumn columnMetaDataIfAny = hint.from(FCTabMetaDataIfAny);
 
         final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
 

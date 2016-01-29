@@ -31,8 +31,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
@@ -56,12 +56,12 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_COLLECTION = "collection";
 
     // view metadata (if any available)
-    private final ColumnMetadata columnMetadataIfAny;
+    private final FCColumn FCColumnIfAny;
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        columnMetadataIfAny = entityModel.getColumnMetadata();
+        FCColumnIfAny = entityModel.getFCColumn();
 
         buildGui();
     }
@@ -86,10 +86,10 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = entityModel.getObject();
 
         final Filter<ObjectAssociation> filter;
-        if (columnMetadataIfAny != null) {
+        if (FCColumnIfAny != null) {
             final ImmutableList<String> collectionIds = FluentIterable
-                    .from(columnMetadataIfAny.getCollections())
-                    .transform(CollectionLayoutMetadata.Functions.id())
+                    .from(FCColumnIfAny.getCollections())
+                    .transform(CollectionLayoutData.Functions.id())
                     .toList();
             filter = new Filter<ObjectAssociation>() {
                 @Override
@@ -122,9 +122,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
             final WebMarkupContainer collectionRvContainer = new WebMarkupContainer(collectionRv.newChildId());
             collectionRv.add(collectionRvContainer);
 
-            final CollectionLayoutMetadata collectionLayoutMetadata = new CollectionLayoutMetadata(association.getId());
+            final CollectionLayoutData collectionLayoutData = new CollectionLayoutData(association.getId());
             final EntityModel entityModelWithCollectionLayoutMetadata =
-                    entityModel.cloneWithCollectionLayoutMetadata(collectionLayoutMetadata);
+                    entityModel.cloneWithCollectionLayoutMetadata(collectionLayoutData);
 
             collectionRvContainer.add(new EntityCollectionPanel(ID_COLLECTION, entityModelWithCollectionLayoutMetadata));
         }

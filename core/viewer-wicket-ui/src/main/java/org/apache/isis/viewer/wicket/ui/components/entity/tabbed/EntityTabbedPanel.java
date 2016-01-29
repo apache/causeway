@@ -23,9 +23,9 @@ import java.util.List;
 
 import com.google.common.collect.FluentIterable;
 
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
@@ -64,16 +64,16 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
 
         // forces metadata to be derived && synced
         final ObjectLayoutMetadataFacet objectLayoutMetadataFacet = model.getTypeOfSpecification().getFacet(ObjectLayoutMetadataFacet.class);
-        final ObjectLayoutMetadata objectLayoutMetadata = objectLayoutMetadataFacet.getMetadata();
+        final FCPage FCPage = objectLayoutMetadataFacet.getMetadata();
 
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
-        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, objectLayoutMetadata.getLeft(), ColumnMetadata.Hint.LEFT);
+        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, FCPage.getLeft(), FCColumn.Hint.LEFT);
 
-        final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, objectLayoutMetadata.getTabGroups());
+        final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, FCPage.getTabGroups());
 
-        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, objectLayoutMetadata.getRight(), ColumnMetadata.Hint.RIGHT);
+        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, FCPage.getRight(), FCColumn.Hint.RIGHT);
 
         final int columnSpans = leftSpan + rightSpan;
         int tabGroupSpan = columnSpans < 12 ? 12 - (columnSpans) : 12;
@@ -82,11 +82,11 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
     }
 
     private TabGroupListPanel addTabGroups(
-            final String id, final List<TabGroupMetadata> tabGroupList) {
+            final String id, final List<FCTabGroup> tabGroupList) {
         final EntityModel model = getModel();
-        final List<TabGroupMetadata> tabGroups = FluentIterable
+        final List<FCTabGroup> tabGroups = FluentIterable
                 .from(tabGroupList)
-                .filter(TabGroupMetadata.Predicates.notEmpty())
+                .filter(FCTabGroup.Predicates.notEmpty())
                 .toList();
         final EntityModel entityModelWitHints = model.cloneWithTabGroupListMetadata(tabGroups);
         final TabGroupListPanel middleComponent = new TabGroupListPanel(id, entityModelWitHints);
@@ -94,11 +94,11 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
         return middleComponent;
     }
 
-    private int addColumnIfRequired(final String id, final ColumnMetadata col, final ColumnMetadata.Hint hint) {
+    private int addColumnIfRequired(final String id, final FCColumn col, final FCColumn.Hint hint) {
         if(col != null) {
             final EntityModel entityModel =
                     getModel().cloneWithColumnMetadata(col, hint);
-            final int span = entityModel.getColumnMetadata().getSpan();
+            final int span = entityModel.getFCColumn().getSpan();
             if(span > 0) {
                 final EntityColumn entityColumn = new EntityColumn(id, entityModel);
                 addOrReplace(entityColumn);

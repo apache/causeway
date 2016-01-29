@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.members.v1;
 
 import java.io.Serializable;
 import java.util.List;
@@ -27,37 +27,45 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.LabelPosition;
+import com.google.common.base.Function;
+
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
+import org.apache.isis.applib.layout.members.MemberRegion;
+import org.apache.isis.applib.layout.members.MemberRegionOwner;
 
 /**
- * Broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
+ * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
+ *
+ * <p>
+ *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
+ *     {@link #defaultView} is its replacement.
+ * </p>
  */
 @XmlType(
-        name = "propertyLayout"
-        , propOrder = {
+        propOrder = {
                 "named"
-                , "describedAs"
+                ,"describedAs"
+                ,"sortedBy"
                 , "actions"
                 , "metadataError"
         }
 )
-public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<PropertyGroupMetadata> {
+public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyLayoutMetadata() {
+    public CollectionLayoutData() {
+    }
+    public CollectionLayoutData(final String id) {
+        setId(id);
     }
 
-    public PropertyLayoutMetadata(final String id) {
-        this.id = id;
-    }
 
     private String id;
 
     /**
-     * Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
+     * Collection identifier, being the getter method without "get" prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
     public String getId() {
@@ -82,6 +90,7 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
     }
 
 
+
     private String describedAs;
 
     @XmlElement(required = false)
@@ -94,6 +103,23 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
     }
 
 
+
+    private String defaultView;
+
+    /**
+     * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
+     * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
+     */
+    @XmlAttribute(required = false)
+    public String getDefaultView() {
+        return defaultView;
+    }
+
+    public void setDefaultView(String defaultView) {
+        this.defaultView = defaultView;
+    }
+
+
     private Where hidden;
 
     @XmlAttribute(required = false)
@@ -103,30 +129,6 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
 
     public void setHidden(Where hidden) {
         this.hidden = hidden;
-    }
-
-
-    private LabelPosition labelPosition;
-
-    @XmlAttribute(required = false)
-    public LabelPosition getLabelPosition() {
-        return labelPosition;
-    }
-
-    public void setLabelPosition(LabelPosition labelPosition) {
-        this.labelPosition = labelPosition;
-    }
-
-
-    private Integer multiLine;
-
-    @XmlAttribute(required = false)
-    public Integer getMultiLine() {
-        return multiLine;
-    }
-
-    public void setMultiLine(Integer multiLine) {
-        this.multiLine = multiLine;
     }
 
 
@@ -154,45 +156,47 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
     }
 
 
-    private Boolean renderedAsDayBefore;
+    private Integer paged;
 
     @XmlAttribute(required = false)
-    public Boolean getRenderedAsDayBefore() {
-        return renderedAsDayBefore;
+    public Integer getPaged() {
+        return paged;
     }
 
-    public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
-        this.renderedAsDayBefore = renderedAsDayBefore;
-    }
-
-
-    private Integer typicalLength;
-
-    @XmlAttribute(required = false)
-    public Integer getTypicalLength() {
-        return typicalLength;
-    }
-
-    public void setTypicalLength(Integer typicalLength) {
-        this.typicalLength = typicalLength;
+    public void setPaged(Integer paged) {
+        this.paged = paged;
     }
 
 
 
-    private List<ActionLayoutMetadata> actions;
+    private String sortedBy;
 
-    @XmlElementWrapper(required = false)
+    @XmlElement(required = false)
+    public String getSortedBy() {
+        return sortedBy;
+    }
+
+    public void setSortedBy(String sortedBy) {
+        this.sortedBy = sortedBy;
+    }
+
+
+
+    private List<ActionLayoutData> actions;
+
+    @XmlElementWrapper(name = "actions", required = false)
     @XmlElement(name = "action", required = false)
-    public List<ActionLayoutMetadata> getActions() {
+    public List<ActionLayoutData> getActions() {
         return actions;
     }
 
-    public void setActions(List<ActionLayoutMetadata> actionLayoutMetadatas) {
-        this.actions = actionLayoutMetadatas;
+    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
     }
 
 
-    private PropertyGroupMetadata owner;
+
+    private MemberRegionOwner owner;
     /**
      * Owner.
      *
@@ -201,14 +205,13 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
      * </p>
      */
     @XmlTransient
-    public PropertyGroupMetadata getOwner() {
+    public MemberRegionOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final PropertyGroupMetadata owner) {
+    public void setOwner(final MemberRegionOwner owner) {
         this.owner = owner;
     }
-
 
 
     private String metadataError;
@@ -242,4 +245,17 @@ public class PropertyLayoutMetadata implements ActionOwner, Serializable, Owned<
     }
 
 
+
+    public static class Functions {
+        private Functions(){}
+
+        public static Function<CollectionLayoutData, String> id() {
+            return new Function<CollectionLayoutData, String>() {
+                @Override
+                public String apply(final CollectionLayoutData metadata) {
+                    return metadata.getId();
+                }
+            };
+        }
+    }
 }

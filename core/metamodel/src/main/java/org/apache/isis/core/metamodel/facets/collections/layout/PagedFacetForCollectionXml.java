@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;
 
 public class PagedFacetForCollectionXml extends PagedFacetAbstract {
 
-    public static PagedFacet create(CollectionLayoutMetadata collectionLayout, FacetHolder holder) {
+    public static PagedFacet create(CollectionLayoutData collectionLayout, FacetHolder holder) {
         if(collectionLayout == null) {
             return null;
         }

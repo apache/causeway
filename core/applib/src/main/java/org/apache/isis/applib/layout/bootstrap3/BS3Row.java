@@ -18,27 +18,35 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
-        name = "collection"
+        name = "row"
         , propOrder = {
-            "name"
+            "columns"
         }
 )
-public class BS3Collection {
+public class BS3Row {
 
 
-    private String name;
 
-    @XmlAttribute(required = true)
-    public String getName() {
-        return name;
+    private List<BS3Col> columns = new ArrayList<BS3Col>(){{
+        add(new BS3Col());
+    }};
+
+    // no wrapper
+    @XmlElement(name = "column", required = true)
+    public List<BS3Col> getColumns() {
+        return columns;
     }
 
-    public void setName(final String name) {
-        this.name = name;
+    public void setColumns(final List<BS3Col> columns) {
+        this.columns = columns;
     }
+
 
 }

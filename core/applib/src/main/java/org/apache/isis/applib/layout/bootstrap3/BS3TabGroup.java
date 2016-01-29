@@ -32,17 +32,17 @@ import javax.xml.bind.annotation.XmlType;
 )
 public class BS3TabGroup {
 
-    private List<DivColumn> columns = new ArrayList<DivColumn>(){{
-        add(new DivColumn());
+    private List<BS3Col> columns = new ArrayList<BS3Col>(){{
+        add(new BS3Col());
     }};
 
     // no wrapper
     @XmlElement(name = "column", required = true)
-    public List<DivColumn> getColumns() {
+    public List<BS3Col> getColumns() {
         return columns;
     }
 
-    public void setColumns(final List<DivColumn> columns) {
+    public void setColumns(final List<BS3Col> columns) {
         this.columns = columns;
     }
 

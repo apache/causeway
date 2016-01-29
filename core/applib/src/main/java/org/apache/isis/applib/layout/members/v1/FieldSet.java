@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.members.v1;
 
 import java.io.Serializable;
 import java.util.List;
@@ -33,7 +33,14 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.members.MemberRegion;
+import org.apache.isis.applib.layout.members.MemberRegionOwner;
 
+/**
+ * A {@link MemberRegion region} of the page containing a set of
+ * related {@link PropertyLayoutData properties} and associated
+ * {@link ActionLayoutData actions}.
+ */
 @XmlType(
         propOrder = {
                 "name"
@@ -41,14 +48,14 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "properties"
         }
 )
-public class PropertyGroupMetadata implements MemberLayoutMetadata, ActionOwner, Serializable {
+public class FieldSet implements MemberRegion, ActionOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public PropertyGroupMetadata() {
+    public FieldSet() {
     }
 
-    public PropertyGroupMetadata(final String name) {
+    public FieldSet(final String name) {
         setName(name);
     }
 
@@ -68,33 +75,33 @@ public class PropertyGroupMetadata implements MemberLayoutMetadata, ActionOwner,
 
 
 
-    private List<ActionLayoutMetadata> actions = Lists.newArrayList();
+    private List<ActionLayoutData> actions = Lists.newArrayList();
 
     @XmlElementWrapper(required = false)
     @XmlElement(name = "action", required = false)
-    public List<ActionLayoutMetadata> getActions() {
+    public List<ActionLayoutData> getActions() {
         return actions;
     }
 
-    public void setActions(List<ActionLayoutMetadata> actionLayoutMetadatas) {
-        this.actions = actionLayoutMetadatas;
+    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
     }
 
 
 
-    private List<PropertyLayoutMetadata> properties = Lists.newArrayList();
+    private List<PropertyLayoutData> properties = Lists.newArrayList();
 
     @XmlElement(name = "property", required = true)
-    public List<PropertyLayoutMetadata> getProperties() {
+    public List<PropertyLayoutData> getProperties() {
         return properties;
     }
 
-    public void setProperties(List<PropertyLayoutMetadata> properties) {
+    public void setProperties(List<PropertyLayoutData> properties) {
         this.properties = properties;
     }
 
 
-    private MemberLayoutMetadataOwner owner;
+    private MemberRegionOwner owner;
     /**
      * Owner.
      *
@@ -103,11 +110,11 @@ public class PropertyGroupMetadata implements MemberLayoutMetadata, ActionOwner,
      * </p>
      */
     @XmlTransient
-    public MemberLayoutMetadataOwner getOwner() {
+    public MemberRegionOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final MemberLayoutMetadataOwner owner) {
+    public void setOwner(final MemberRegionOwner owner) {
         this.owner = owner;
     }
 
@@ -132,11 +139,11 @@ public class PropertyGroupMetadata implements MemberLayoutMetadata, ActionOwner,
 
     public static class Util {
         private Util(){}
-        public static Function<? super PropertyGroupMetadata, String> nameOf() {
-            return new Function<PropertyGroupMetadata, String>() {
+        public static Function<? super FieldSet, String> nameOf() {
+            return new Function<FieldSet, String>() {
                 @Nullable @Override
-                public String apply(@Nullable final PropertyGroupMetadata propertyGroupMetadata) {
-                    return propertyGroupMetadata.getName();
+                public String apply(@Nullable final FieldSet fieldSet) {
+                    return fieldSet.getName();
                 }
             };
         }

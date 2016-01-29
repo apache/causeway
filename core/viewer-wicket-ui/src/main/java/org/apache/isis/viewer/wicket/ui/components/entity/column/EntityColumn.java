@@ -31,9 +31,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,7 +44,6 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.PropUtil;
-import org.apache.isis.viewer.wicket.ui.components.entity.propgroup.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
@@ -52,9 +51,9 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * Adds properties (in property groups) and collections to a column.
  *
  * <p>
- *     If {@link ColumnMetadata} is present, then only those properties and collections for that
+ *     If {@link FCColumn} is present, then only those properties and collections for that
  *     column metadata are rendered.   Otherwise the {@link MemberGroupLayoutFacet} on the
- *     {@link ObjectSpecification} in conjunction with the provided {@link ColumnMetadata.Hint} is
+ *     {@link ObjectSpecification} in conjunction with the provided {@link FCColumn.Hint} is
  *     used to filter down to just those properties/collections in the column.
  * </p>
  */
@@ -66,9 +65,9 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
 
 
     // view metadata (populated for EntityTabbedPanel, absent for EntityEditablePanel)
-    private final ColumnMetadata columnMetaDataIfAny;
+    private final FCColumn columnMetaDataIfAny;
     // which column to render (populated for EntityEditablePanel, not required and so absent for EntityTabbedPanel)
-    final ColumnMetadata.Hint hint;
+    final FCColumn.Hint hint;
 
     public EntityColumn(
             final String id,
@@ -76,7 +75,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
 
         super(id, entityModel);
 
-        columnMetaDataIfAny = entityModel.getColumnMetadata();
+        columnMetaDataIfAny = entityModel.getFCColumn();
         hint = entityModel.getColumnHint();
 
         buildGui();
@@ -105,9 +104,9 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
         final RepeatingView memberGroupRv = new RepeatingView(ID_PROPERTY_GROUP);
         markupContainer.add(memberGroupRv);
 
-        final ImmutableMap<String, PropertyGroupMetadata> propertyGroupMetadataByNameIfAny =
+        final ImmutableMap<String, FieldSet> propertyGroupMetadataByNameIfAny =
                 columnMetaDataIfAny != null
-                    ? Maps.uniqueIndex(columnMetaDataIfAny.getPropertyGroups(), PropertyGroupMetadata.Util.nameOf())
+                    ? Maps.uniqueIndex(columnMetaDataIfAny.getFieldSets(), FieldSet.Util.nameOf())
                     : null;
 
         final Collection<String> groupNames =
@@ -118,33 +117,33 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
         for(final String groupName: groupNames) {
 
 
-            final PropertyGroupMetadata propertyGroupMetadata;
+            final FieldSet fieldSet;
             if (propertyGroupMetadataByNameIfAny != null) {
-                propertyGroupMetadata = propertyGroupMetadataByNameIfAny.get(groupName);
+                fieldSet = propertyGroupMetadataByNameIfAny.get(groupName);
             }
             else {
                 final List<ObjectAssociation> associationsInGroup = associationsByGroup.get(groupName);
-                propertyGroupMetadata = new PropertyGroupMetadata(groupName);
-                propertyGroupMetadata.setProperties(
+                fieldSet = new FieldSet(groupName);
+                fieldSet.setProperties(
                         FluentIterable
                                 .from(associationsInGroup)
                                 .transform(
-                                    new Function<ObjectAssociation, PropertyLayoutMetadata>() {
+                                    new Function<ObjectAssociation, PropertyLayoutData>() {
                                         @Override
-                                        public PropertyLayoutMetadata apply(final ObjectAssociation assoc) {
-                                            return new PropertyLayoutMetadata(assoc.getId());
+                                        public PropertyLayoutData apply(final ObjectAssociation assoc) {
+                                            return new PropertyLayoutData(assoc.getId());
                                         }
                                     }).toList());
             }
 
-            if(propertyGroupMetadata.getProperties().isEmpty()) {
+            if(fieldSet.getProperties().isEmpty()) {
                 continue;
             }
 
             final String id = memberGroupRv.newChildId();
 
-            final EntityModel entityModelWithHints = entityModel.cloneWithPropertyGroupMetadata(propertyGroupMetadata);
-            final WebMarkupContainer memberGroupRvContainer = new PropertyGroup(id, entityModelWithHints);
+            final EntityModel entityModelWithHints = entityModel.cloneWithPropertyGroupMetadata(fieldSet);
+            final WebMarkupContainer memberGroupRvContainer = new org.apache.isis.viewer.wicket.ui.components.entity.propgroup.PropertyGroup(id, entityModelWithHints);
 
             memberGroupRv.add(memberGroupRvContainer);
         }

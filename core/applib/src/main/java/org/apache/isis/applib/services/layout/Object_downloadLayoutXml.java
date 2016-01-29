@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
@@ -58,7 +58,7 @@ public class Object_downloadLayoutXml {
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName) {
-        final ObjectLayoutMetadata metadata = getObjectLayoutMetadata();
+        final FCPage metadata = getObjectLayoutMetadata();
         final String xml = jaxbService.toXml(metadata,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
@@ -75,7 +75,7 @@ public class Object_downloadLayoutXml {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
     }
 
-    protected ObjectLayoutMetadata getObjectLayoutMetadata() {
+    protected FCPage getObjectLayoutMetadata() {
         return objectLayoutMetadataService.toMetadata(object);
     }
 

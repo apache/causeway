@@ -19,14 +19,14 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import org.apache.isis.applib.layout.v1_0.ActionLayoutMetadata;
+import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;
 
 public class ActionPositionFacetForActionXml extends ActionPositionFacetAbstract {
 
-    public static ActionPositionFacet create(ActionLayoutMetadata actionLayout, FacetHolder holder) {
+    public static ActionPositionFacet create(ActionLayoutData actionLayout, FacetHolder holder) {
         if(actionLayout == null) {
             return null;
         }

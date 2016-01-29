@@ -16,9 +16,19 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
 
-public interface MemberLayoutMetadata extends Owned<MemberLayoutMetadataOwner> {
-
-
-}
+/**
+ * The classes in this package define how to layout the properties, collections and actions of a domain object - the
+ * building blocks - as defined in the <code>members.v1</code> package.
+ *
+ * <p>
+ *     The layout is modelled closely after <a href="http://getbootstrap.com/">Bootstrap</a>, and is intended to
+ *     support the grid layouts implemented by that CSS framework.  This flexibility comes at the cost of some
+ *     verbosity.
+ * </p>
+ */
+@javax.xml.bind.annotation.XmlSchema(
+        namespace = "http://isis.apache.org/schema/applib/layout/bootstrap3",
+        elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
+)
+package org.apache.isis.applib.layout.bootstrap3;

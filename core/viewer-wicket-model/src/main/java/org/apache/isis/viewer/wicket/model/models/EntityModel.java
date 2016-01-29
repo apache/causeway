@@ -30,12 +30,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata.Hint;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabGroupMetadata;
-import org.apache.isis.applib.layout.fixedcols.TabMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -648,71 +648,71 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private List<TabGroupMetadata> tabGroupListMetadata;
+    private List<FCTabGroup> tabGroupListMetadata;
 
-    public List<TabGroupMetadata> getTabGroupListMetadata() {
+    public List<FCTabGroup> getTabGroupListMetadata() {
         return tabGroupListMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupListMetadata(final List<TabGroupMetadata> tabGroupListMetadata) {
+    public EntityModel cloneWithTabGroupListMetadata(final List<FCTabGroup> tabGroupListMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.tabGroupListMetadata = tabGroupListMetadata;
         return entityModel;
     }
 
 
-    private TabGroupMetadata tabGroupMetadata;
+    private FCTabGroup FCTabGroup;
 
-    public TabGroupMetadata getTabGroupMetadata() {
-        return tabGroupMetadata;
+    public FCTabGroup getFCTabGroup() {
+        return FCTabGroup;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupMetadata(final TabGroupMetadata tabGroupMetadata) {
+    public EntityModel cloneWithTabGroupMetadata(final FCTabGroup FCTabGroup) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.tabGroupMetadata = tabGroupMetadata;
+        entityModel.FCTabGroup = FCTabGroup;
         return entityModel;
     }
 
 
-    private TabMetadata tabMetadata;
+    private FCTab FCTab;
 
-    public TabMetadata getTabMetadata() {
-        return tabMetadata;
+    public FCTab getFCTab() {
+        return FCTab;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabMetadata(final TabMetadata tabMetadata) {
+    public EntityModel cloneWithTabMetadata(final FCTab FCTab) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.tabMetadata = tabMetadata;
+        entityModel.FCTab = FCTab;
         return entityModel;
     }
 
 
-    private ColumnMetadata columnMetadata;
-    private ColumnMetadata.Hint columnHint;
+    private FCColumn FCColumn;
+    private FCColumn.Hint columnHint;
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithColumnMetadata(final ColumnMetadata columnMetadata, final ColumnMetadata.Hint columnHint) {
+    public EntityModel cloneWithColumnMetadata(final FCColumn FCColumn, final FCColumn.Hint columnHint) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.columnMetadata = columnMetadata;
+        entityModel.FCColumn = FCColumn;
         entityModel.columnHint = columnHint;
         return entityModel;
     }
 
-    public ColumnMetadata getColumnMetadata() {
-        return columnMetadata;
+    public FCColumn getFCColumn() {
+        return FCColumn;
     }
-    public ColumnMetadata.Hint getColumnHint() {
+    public FCColumn.Hint getColumnHint() {
         return columnHint;
     }
 
@@ -726,34 +726,34 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
-    private PropertyGroupMetadata propertyGroupMetadata;
-    public PropertyGroupMetadata getPropertyGroupMetadata() {
-        return propertyGroupMetadata;
+    private FieldSet fieldSet;
+    public FieldSet getFieldSet() {
+        return fieldSet;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
     public EntityModel cloneWithPropertyGroupMetadata(
-            final PropertyGroupMetadata propertyGroupMetadata) {
+            final FieldSet fieldSet) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.propertyGroupMetadata = propertyGroupMetadata;
+        entityModel.fieldSet = fieldSet;
         return entityModel;
     }
 
 
-    private CollectionLayoutMetadata collectionLayoutMetadata;
-    public CollectionLayoutMetadata getCollectionLayoutMetadata() {
-        return collectionLayoutMetadata;
+    private CollectionLayoutData collectionLayoutData;
+    public CollectionLayoutData getCollectionLayoutData() {
+        return collectionLayoutData;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models.
      */
     public EntityModel cloneWithCollectionLayoutMetadata(
-            final CollectionLayoutMetadata collectionLayoutMetadata) {
+            final CollectionLayoutData collectionLayoutData) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.collectionLayoutMetadata = collectionLayoutMetadata;
+        entityModel.collectionLayoutData = collectionLayoutData;
         return entityModel;
     }
 

@@ -35,8 +35,8 @@ import javax.xml.bind.annotation.XmlType;
 public class BS3Tab {
 
     // at least one row
-    private List<DivRow> rows = new ArrayList<DivRow>(){{
-        add(new DivRow());
+    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
+        add(new BS3Row());
     }};
 
 
@@ -53,11 +53,11 @@ public class BS3Tab {
 
     // no wrapper
     @XmlElement(name = "row", required = true)
-    public List<DivRow> getRows() {
+    public List<BS3Row> getRows() {
         return rows;
     }
 
-    public void setRows(final List<DivRow> rows) {
+    public void setRows(final List<BS3Row> rows) {
         this.rows = rows;
     }
 

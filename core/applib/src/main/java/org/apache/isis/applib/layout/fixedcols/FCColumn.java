@@ -30,26 +30,36 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.v1_0.CollectionLayoutMetadata;
-import org.apache.isis.applib.layout.v1_0.ColumnOwner;
-import org.apache.isis.applib.layout.v1_0.MemberLayoutMetadataOwner;
-import org.apache.isis.applib.layout.v1_0.Owned;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.members.MemberRegionOwner;
+import org.apache.isis.applib.layout.members.Owned;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 
+/**
+ * The column contains a mixture of {@link FieldSet}s (of {@link PropertyLayoutData properties}) and also
+ * {@link CollectionLayoutData collection}s.
+ *
+ * <p>
+ * A column generally is used within a {@link FCTab}; there can be up to three such (left, middle and right).  It is
+ * also possible for their to be a column far-left on the top-level {@link FCPage page}, and another far-right.
+ * </p>
+ *
+ */
 @XmlType(
         propOrder = {
                 "propertyGroups"
                 , "collections"
         }
 )
-public class ColumnMetadata implements Serializable, MemberLayoutMetadataOwner, Owned<ColumnOwner> {
+public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumnOwner> {
 
     private static final long serialVersionUID = 1L;
 
-    public ColumnMetadata() {
+    public FCColumn() {
     }
 
-    public ColumnMetadata(final int span) {
+    public FCColumn(final int span) {
         setSpan(span);
     }
 
@@ -66,33 +76,33 @@ public class ColumnMetadata implements Serializable, MemberLayoutMetadataOwner, 
 
 
 
-    private List<PropertyGroupMetadata> propertyGroups = Lists.newArrayList();
+    private List<FieldSet> fieldSets = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "propertyGroup", required = false)
-    public List<PropertyGroupMetadata> getPropertyGroups() {
-        return propertyGroups;
+    public List<FieldSet> getFieldSets() {
+        return fieldSets;
     }
 
-    public void setPropertyGroups(final List<PropertyGroupMetadata> propertyGroups) {
-        this.propertyGroups = propertyGroups;
+    public void setFieldSets(final List<FieldSet> fieldSets) {
+        this.fieldSets = fieldSets;
     }
 
 
-    private List<CollectionLayoutMetadata> collections = Lists.newArrayList();
+    private List<CollectionLayoutData> collections = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "collection", required = false)
-    public List<CollectionLayoutMetadata> getCollections() {
+    public List<CollectionLayoutData> getCollections() {
         return collections;
     }
 
-    public void setCollections(final List<CollectionLayoutMetadata> collections) {
+    public void setCollections(final List<CollectionLayoutData> collections) {
         this.collections = collections;
     }
 
 
-    private ColumnOwner owner;
+    private FCColumnOwner owner;
     /**
      * Owner.
      *
@@ -101,11 +111,11 @@ public class ColumnMetadata implements Serializable, MemberLayoutMetadataOwner, 
      * </p>
      */
     @XmlTransient
-    public ColumnOwner getOwner() {
+    public FCColumnOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ColumnOwner owner) {
+    public void setOwner(final FCColumnOwner owner) {
         this.owner = owner;
     }
 
@@ -139,13 +149,13 @@ public class ColumnMetadata implements Serializable, MemberLayoutMetadataOwner, 
             throw new IllegalStateException();
         }
 
-        public ColumnMetadata from(final TabMetadata tabMetadata) {
-            if(tabMetadata == null) {
+        public FCColumn from(final FCTab FCTab) {
+            if(FCTab == null) {
                 return null;
             }
-            if(this == LEFT) return tabMetadata.getLeft();
-            if(this == MIDDLE) return tabMetadata.getMiddle();
-            if(this == RIGHT) return tabMetadata.getRight();
+            if(this == LEFT) return FCTab.getLeft();
+            if(this == MIDDLE) return FCTab.getMiddle();
+            if(this == RIGHT) return FCTab.getRight();
             throw new IllegalStateException();
         }
 

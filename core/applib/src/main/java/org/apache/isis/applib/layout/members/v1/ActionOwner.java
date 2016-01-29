@@ -16,10 +16,12 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.members.v1;
 
 import java.util.List;
 
+import org.apache.isis.applib.layout.members.Owner;
+
 public interface ActionOwner extends Owner {
-    List<ActionLayoutMetadata> getActions();
+    List<ActionLayoutData> getActions();
 }

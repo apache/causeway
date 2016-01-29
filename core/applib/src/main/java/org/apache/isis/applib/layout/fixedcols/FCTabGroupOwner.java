@@ -16,8 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.fixedcols;
 
-public interface MemberLayoutMetadataOwner extends Owner {
+import org.apache.isis.applib.layout.members.Owner;
+
+public interface FCTabGroupOwner extends Owner {
 
 }

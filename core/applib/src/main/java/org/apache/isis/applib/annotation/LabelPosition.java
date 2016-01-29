@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlType;
  * @see org.apache.isis.applib.annotation.ParameterLayout
  */
 @XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout"
+        namespace = "http://isis.apache.org/schema/applib/layout/members/v1"
 )
 public enum LabelPosition {
     DEFAULT,

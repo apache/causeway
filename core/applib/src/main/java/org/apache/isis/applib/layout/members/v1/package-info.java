@@ -16,10 +16,21 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+
+/**
+ * The classes in this package provide layout metadata for a domain object's properties, collections and actions - the
+ * &quot;building blocks&quot; which then must be arranged into some sort of layout.
+ *
+ * <p>
+ *     The <code>bootstrap3</code> and <code>fixedcols</code> packages both provide different ways of doing the layout,
+ *     and both reference the classes in this package.
+ * </p>
+ *
+ */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/schema/applib/layout",
+        namespace = "http://isis.apache.org/schema/applib/layout/members",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
         // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
-        //, location = "http://isis.apache.org/schema/metamodel/layout/layout-1.0.xsd"
+        //, location = ..."http://isis.apache.org/schema/metamodel/layout/members/v1/members-1.0.xsd"
 )
-package org.apache.isis.applib.layout.v1_0;
+package org.apache.isis.applib.layout.members.v1;

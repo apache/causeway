@@ -30,8 +30,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.v1_0.ColumnOwner;
-import org.apache.isis.applib.layout.v1_0.Owned;
+import org.apache.isis.applib.layout.members.Owned;
 
 @XmlType(
         propOrder = {
@@ -39,30 +38,30 @@ import org.apache.isis.applib.layout.v1_0.Owned;
         }
 
 )
-public class TabGroupMetadata implements ColumnOwner, Serializable, Owned<TabGroupOwner> {
+public class FCTabGroup implements FCColumnOwner, Serializable, Owned<FCTabGroupOwner> {
 
     private static final long serialVersionUID = 1L;
 
     // must be at least one tab.
-    private List<TabMetadata> tabs = new ArrayList<TabMetadata>(){{
-        add(new TabMetadata());
+    private List<FCTab> tabs = new ArrayList<FCTab>(){{
+        add(new FCTab());
     }};
 
 
 
     // no wrapper
     @XmlElement(name = "tab", required = true)
-    public List<TabMetadata> getTabs() {
+    public List<FCTab> getTabs() {
         return tabs;
     }
 
-    public void setTabs(List<TabMetadata> tabs) {
+    public void setTabs(List<FCTab> tabs) {
         this.tabs = tabs;
     }
 
 
 
-    private TabGroupOwner owner;
+    private FCTabGroupOwner owner;
 
     /**
      * Owner.
@@ -72,11 +71,11 @@ public class TabGroupMetadata implements ColumnOwner, Serializable, Owned<TabGro
      * </p>
      */
     @XmlTransient
-    public TabGroupOwner getOwner() {
+    public FCTabGroupOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final TabGroupOwner owner) {
+    public void setOwner(final FCTabGroupOwner owner) {
         this.owner = owner;
     }
 
@@ -99,13 +98,13 @@ public class TabGroupMetadata implements ColumnOwner, Serializable, Owned<TabGro
 
 
     public static class Predicates {
-        public static Predicate<TabGroupMetadata> notEmpty() {
-            return new Predicate<TabGroupMetadata>() {
+        public static Predicate<FCTabGroup> notEmpty() {
+            return new Predicate<FCTabGroup>() {
                 @Override
-                public boolean apply(final TabGroupMetadata tabGroup) {
+                public boolean apply(final FCTabGroup tabGroup) {
                     return FluentIterable
                             .from(tabGroup.getTabs())
-                            .anyMatch(TabMetadata.Predicates.notEmpty());
+                            .anyMatch(FCTab.Predicates.notEmpty());
                 }
             };
         }

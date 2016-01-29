@@ -17,7 +17,7 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.fixedcols.ObjectLayoutMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
 
 public interface ObjectLayoutMetadataService {
 
@@ -30,20 +30,17 @@ public interface ObjectLayoutMetadataService {
     /**
      * Returns raw (unnormalized) metadata, eg per the <code>.layout.xml</code> file.
      */
-    @Programmatic
-    ObjectLayoutMetadata fromXml(Class<?> domainClass);
+    @Programmatic FCPage fromXml(Class<?> domainClass);
 
     /**
      * Obtains the layout metadata, if any, for the (domain class of the) specified domain object.
      */
-    @Programmatic
-    ObjectLayoutMetadata toMetadata(Object domainObject);
+    @Programmatic FCPage toMetadata(Object domainObject);
 
     /**
      * Obtains the layout metadata, if any, for the specified domain class.
      */
-    @Programmatic
-    ObjectLayoutMetadata toMetadata(Class<?> domainClass);
+    @Programmatic FCPage toMetadata(Class<?> domainClass);
 
 
 }

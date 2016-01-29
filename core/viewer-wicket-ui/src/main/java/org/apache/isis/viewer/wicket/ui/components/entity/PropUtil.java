@@ -26,8 +26,8 @@ import com.google.common.collect.FluentIterable;
 import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
-import org.apache.isis.applib.layout.fixedcols.ColumnMetadata;
-import org.apache.isis.applib.layout.v1_0.PropertyGroupMetadata;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -43,7 +43,7 @@ public final class PropUtil {
 
     public static List<String> propertyGroupNames(
             final EntityModel entityModel,
-            final ColumnMetadata.Hint hint, final ColumnMetadata columnMetaDataIfAny) {
+            final FCColumn.Hint hint, final FCColumn columnMetaDataIfAny) {
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 
@@ -52,8 +52,8 @@ public final class PropUtil {
 
         return columnMetaDataIfAny != null
                 ? FluentIterable
-                .from(columnMetaDataIfAny.getPropertyGroups())
-                .transform(PropertyGroupMetadata.Util.nameOf())
+                .from(columnMetaDataIfAny.getFieldSets())
+                .transform(FieldSet.Util.nameOf())
                 .toList()
                 : ObjectSpecifications.orderByMemberGroups(objSpec, associationsByGroup.keySet(),
                 hint);
