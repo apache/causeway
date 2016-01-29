@@ -18,42 +18,44 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlAttribute;
 
 /**
- * Contains a row of content, either on the top-level {@link BS3Page page} or at any other lower-level element that can
- * contain rows, eg {@link BS3Tab tabs}.
+ * Common superclass for any content of a row.
  *
  * <p>
- *     It is rendered as a &lt;div class=&quot;row ...&quot;&gt;
+ *     Most commonly the content of a row is {@link BS3Col col}umns, but it may be either of the
+ *     {@link BS3ClearFix clearfix} classes.
  * </p>
+ *
  */
-@XmlType(
-        name = "row"
-        , propOrder = {
-            "cols"
-        }
-)
-public class BS3Row extends BS3ElementAbstract {
+public abstract class BS3RowContent extends BS3ElementAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private List<BS3RowContent> cols = new ArrayList<BS3RowContent>(){{
-        add(new BS3Col());
-    }};
-
-    // no wrapper
-    @XmlElement(name = "col", required = true)
-    public List<BS3RowContent> getCols() {
-        return cols;
+    /**
+     * As per <a href="http://getbootstrap.com/css/#grid-options">grid options</a>, also used in
+     * <a href="http://getbootstrap.com/css/#responsive-utilities">responsive utility</a> classes.
+     */
+    public static enum Size {
+        XS,
+        SM,
+        MD,
+        LG
     }
 
-    public void setCols(final List<BS3RowContent> cols) {
-        this.cols = cols;
+    private Size size;
+
+    /**
+     * Default if not specified is {@link Size#MD}.
+     */
+    @XmlAttribute(required = false)
+    public Size getSize() {
+        return size;
+    }
+
+    public void setSize(final Size size) {
+        this.size = size;
     }
 
 }

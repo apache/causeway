@@ -18,42 +18,32 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-/**
- * Contains a row of content, either on the top-level {@link BS3Page page} or at any other lower-level element that can
- * contain rows, eg {@link BS3Tab tabs}.
- *
- * <p>
- *     It is rendered as a &lt;div class=&quot;row ...&quot;&gt;
- * </p>
- */
 @XmlType(
-        name = "row"
-        , propOrder = {
-            "cols"
-        }
+        name = "clearFixVisible"
 )
-public class BS3Row extends BS3ElementAbstract {
+public class BS3ClearFixVisible extends BS3ClearFix {
 
     private static final long serialVersionUID = 1L;
 
-    private List<BS3RowContent> cols = new ArrayList<BS3RowContent>(){{
-        add(new BS3Col());
-    }};
-
-    // no wrapper
-    @XmlElement(name = "col", required = true)
-    public List<BS3RowContent> getCols() {
-        return cols;
+    public enum CssDisplay {
+        BLOCK,
+        INLINE,
+        INLINE_BLOCK
     }
 
-    public void setCols(final List<BS3RowContent> cols) {
-        this.cols = cols;
+    private CssDisplay cssDisplay;
+
+
+    @XmlAttribute(required = true)
+    public CssDisplay getCssDisplay() {
+        return cssDisplay;
+    }
+
+    public void setCssDisplay(final CssDisplay cssDisplay) {
+        this.cssDisplay = cssDisplay;
     }
 
 }

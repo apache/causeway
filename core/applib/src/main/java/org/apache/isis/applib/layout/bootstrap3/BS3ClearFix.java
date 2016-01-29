@@ -18,37 +18,6 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
-import java.util.List;
+public abstract class BS3ClearFix extends BS3RowContent {
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
-
-/**
- * Represents a tab group containing one or more {@link BS3Tab tab}s.
- */
-@XmlType(
-        name = "tabGroup"
-        , propOrder = {
-            "tabs"
-        }
-)
-public class BS3TabGroup extends BS3ElementAbstract{
-
-    private static final long serialVersionUID = 1L;
-
-
-    private List<BS3Tab> tabs = new ArrayList<BS3Tab>(){{
-        add(new BS3Tab());
-    }};
-
-    // no wrapper
-    @XmlElement(name = "tab", required = true)
-    public List<BS3Tab> getTabs() {
-        return tabs;
-    }
-
-    public void setTabs(final List<BS3Tab> tabs) {
-        this.tabs = tabs;
-    }
 }

@@ -21,16 +21,32 @@ package org.apache.isis.applib.layout.bootstrap3;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
+import org.apache.isis.applib.layout.members.v1.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.services.dto.Dto;
+
 /**
- * This is the top-level region for the domain object's properties, collections and actions.  It simply consists
+ * This is the top-level for rendering the domain object's properties, collections and actions.  It simply consists
  * of a number of rows.
  *
  * <p>
- *     Note that the title's
+ *     The {@link #isHeader()} is intended as a convenience to automatically render the object's icon/title and any
+ *     {@link ActionLayoutData action}s not otherwise associated with object members.  It is required to be
+ *     specified and will be set to <code>true</code> for the vast majority of domain object.  If set to 
+ *     <code>false</code> then the icon/title and actions can instead be rendered within a {@link BS3Col col}umn, at
+ *     anywhere on the page.
+ * </p>
+ *
+ * <p>
+ *     The element is rendered as a &lt;div class=&quot;...&quot;&gt;
  * </p>
  */
 @XmlRootElement(
@@ -42,7 +58,31 @@ import javax.xml.bind.annotation.XmlType;
             "rows"
         }
 )
-public class BS3Page {
+public class BS3Page extends BS3ElementAbstract implements Page, Dto {
+
+    private static final long serialVersionUID = 1L;
+
+
+    private boolean header;
+
+    /**
+     * Whether to render the top-level header (consisting of {@link DomainObjectLayoutData icon/title} and any
+     * not-otherwise-identified {@link ActionLayoutData action}s.
+     *
+     * <p>
+     *     Most pages will have this set.  Note that it is possible however to leave this unset and then to manually
+     *     construct the header (or some other arrangement) using {@link BS3Col col}.
+     * </p>
+     */
+    @XmlAttribute(required = true)
+    public boolean isHeader() {
+        return header;
+    }
+
+    public void setHeader(final boolean header) {
+        this.header = header;
+    }
+
 
     private List<BS3Row> rows = new ArrayList<BS3Row>(){{
         add(new BS3Row());
@@ -58,6 +98,20 @@ public class BS3Page {
         this.rows = rows;
     }
 
+
+
+    private boolean normalized;
+
+    @Programmatic
+    @XmlTransient
+    public boolean isNormalized() {
+        return normalized;
+    }
+
+    @Programmatic
+    public void setNormalized(final boolean normalized) {
+        this.normalized = normalized;
+    }
 
 
 }

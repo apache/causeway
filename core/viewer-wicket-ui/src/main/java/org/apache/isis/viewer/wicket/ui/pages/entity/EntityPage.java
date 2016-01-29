@@ -29,13 +29,13 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.Strings;
 
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -136,17 +136,17 @@ public class EntityPage extends PageAbstract {
         //
         // invalidate the cache so that can do dynamic reloading of layout metadata etc.
         //
-        final ObjectLayoutMetadataFacet facet = entityModel.getTypeOfSpecification()
-                .getFacet(ObjectLayoutMetadataFacet.class);
+        final PageFacet facet = entityModel.getTypeOfSpecification()
+                .getFacet(PageFacet.class);
         if(facet != null) {
             // the facet should always exist, in fact
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
-            final FCPage metadata = facet.getMetadata();
+            final Page page = facet.getPage();
 
             // if none, then fallback to invalidating entire cache
             // (this is the original LayoutMetadataFromJson behaviour)
-            if(metadata == null && !getDeploymentType().isProduction()) {
+            if(page == null && !getDeploymentType().isProduction()) {
                 getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
             }
         }

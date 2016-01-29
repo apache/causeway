@@ -16,39 +16,23 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.bootstrap3;
+package org.apache.isis.applib.layout.members.v1;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlType;
+import org.apache.isis.applib.services.layout.PageService;
 
 /**
- * Represents a tab group containing one or more {@link BS3Tab tab}s.
+ * All top-level page layout classes should implement this interface.
+ *
+ * <p>
+ *     It is used by the {@link PageService} as a common based type for any layouts read in from XML.
+ * </p>
  */
-@XmlType(
-        name = "tabGroup"
-        , propOrder = {
-            "tabs"
-        }
-)
-public class BS3TabGroup extends BS3ElementAbstract{
-
-    private static final long serialVersionUID = 1L;
+public interface Page {
 
 
-    private List<BS3Tab> tabs = new ArrayList<BS3Tab>(){{
-        add(new BS3Tab());
-    }};
+    boolean isNormalized();
 
-    // no wrapper
-    @XmlElement(name = "tab", required = true)
-    public List<BS3Tab> getTabs() {
-        return tabs;
-    }
+    void setNormalized(final boolean normalized);
 
-    public void setTabs(final List<BS3Tab> tabs) {
-        this.tabs = tabs;
-    }
+
 }

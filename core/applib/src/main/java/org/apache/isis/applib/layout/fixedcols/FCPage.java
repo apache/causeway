@@ -23,7 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -35,6 +34,7 @@ import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
 import org.apache.isis.applib.layout.members.v1.ActionOwner;
 import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
@@ -43,10 +43,10 @@ import org.apache.isis.applib.services.dto.Dto;
  * far right, with the middle consisting of a number of {@link FCTabGroup tabgroup}s, stacked vertically.
  */
 @XmlRootElement(
-        name = "objectLayout"
+        name = "page"
 )
 @XmlType(
-        name = "objectLayout"
+        name = "page"
         , propOrder = {
                 "actions"
                 , "left"
@@ -54,13 +54,13 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "right"
         }
 )
-public class FCPage implements Dto, ActionOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
+public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 
     private List<ActionLayoutData> actions;
 
-    @XmlElementWrapper(name = "actions", required = false)
+    // no wrapper
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
@@ -109,9 +109,9 @@ public class FCPage implements Dto, ActionOwner, Serializable, FCColumnOwner, FC
     public void setRight(final FCColumn right) {
         this.right = right;
     }
-    
 
-    public interface Visitor {
+
+    interface Visitor {
         void visit(final FCPage FCPage);
         void visit(final FCTabGroup tabGroup);
         void visit(final FCTab FCTab);
@@ -283,18 +283,6 @@ public class FCPage implements Dto, ActionOwner, Serializable, FCColumnOwner, FC
     }
 
 
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
 
 
     private boolean normalized;

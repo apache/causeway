@@ -28,7 +28,7 @@ import org.apache.isis.applib.layout.fixedcols.FCPage;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
@@ -63,17 +63,17 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
         }
 
         // forces metadata to be derived && synced
-        final ObjectLayoutMetadataFacet objectLayoutMetadataFacet = model.getTypeOfSpecification().getFacet(ObjectLayoutMetadataFacet.class);
-        final FCPage FCPage = objectLayoutMetadataFacet.getMetadata();
+        final PageFacet PageFacet = model.getTypeOfSpecification().getFacet(PageFacet.class);
+        final FCPage page = (FCPage) PageFacet.getPage();
 
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
-        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, FCPage.getLeft(), FCColumn.Hint.LEFT);
+        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, page.getLeft(), FCColumn.Hint.LEFT);
 
-        final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, FCPage.getTabGroups());
+        final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, page.getTabGroups());
 
-        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, FCPage.getRight(), FCColumn.Hint.RIGHT);
+        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, page.getRight(), FCColumn.Hint.RIGHT);
 
         final int columnSpans = leftSpan + rightSpan;
         int tabGroupSpan = columnSpans < 12 ? 12 - (columnSpans) : 12;

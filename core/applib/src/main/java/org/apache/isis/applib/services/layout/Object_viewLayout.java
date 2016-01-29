@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 
 @Mixin
 public class Object_viewLayout {
@@ -50,22 +50,22 @@ public class Object_viewLayout {
             cssClassFa = "fa-th"
     )
     @MemberOrder(sequence = "550.2")
-    public FCPage $$() {
-        return getObjectLayoutMetadata();
+    public Page $$() {
+        return getPage();
     }
 
     @Programmatic // TODO ... excluded for now (getting an Isis framework exception in the view model rendering).
     public boolean hide$$() {
-        return getObjectLayoutMetadata() == null;
+        return getPage() == null;
     }
 
-    protected FCPage getObjectLayoutMetadata() {
-        return objectLayoutMetadataService.toMetadata(object);
+    protected Page getPage() {
+        return pageService.toPage(object);
     }
 
 
 
     @Inject
-    ObjectLayoutMetadataService objectLayoutMetadataService;
+    PageService pageService;
 
 }

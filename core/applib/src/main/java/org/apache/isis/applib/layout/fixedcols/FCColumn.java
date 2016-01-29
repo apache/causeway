@@ -48,7 +48,7 @@ import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
  */
 @XmlType(
         propOrder = {
-                "propertyGroups"
+                "fieldSets"
                 , "collections"
         }
 )
@@ -79,7 +79,7 @@ public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumn
     private List<FieldSet> fieldSets = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "propertyGroup", required = false)
+    @XmlElement(name = "fieldSet", required = false)
     public List<FieldSet> getFieldSets() {
         return fieldSets;
     }

@@ -24,7 +24,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -77,7 +76,7 @@ public class FieldSet implements MemberRegion, ActionOwner, Serializable {
 
     private List<ActionLayoutData> actions = Lists.newArrayList();
 
-    @XmlElementWrapper(required = false)
+    // no wrapper
     @XmlElement(name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;

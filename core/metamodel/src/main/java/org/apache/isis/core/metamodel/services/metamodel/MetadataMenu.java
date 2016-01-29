@@ -42,9 +42,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
+import org.apache.isis.applib.services.layout.PageService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -108,10 +108,10 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             final OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (final ObjectSpecification objectSpec : domainObjectSpecs) {
                 final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final FCPage metadata = objectLayoutMetadataService.toMetadata(domainClass);
-                if(metadata != null) {
+                final Page page = pageService.toPage(domainClass);
+                if(page != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
-                    String xml = jaxbService.toXml(metadata);
+                    String xml = jaxbService.toXml(page);
                     writer.write(xml);
                     writer.flush();
                     zos.closeEntry();
@@ -134,7 +134,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
     // //////////////////////////////////////
 
     @Inject
-    ObjectLayoutMetadataService objectLayoutMetadataService;
+    PageService pageService;
 
     @Inject
     JaxbService jaxbService;

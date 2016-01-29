@@ -1,22 +1,20 @@
-/*
- *  Licensed to the Apache Software Foundation (ASF) under one
- *  or more contributor license agreements.  See the NOTICE file
- *  distributed with this work for additional information
- *  regarding copyright ownership.  The ASF licenses this file
- *  to you under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+/**
+ *  Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  See the NOTICE file distributed with
+ *  this work for additional information regarding copyright ownership.
+ *  The ASF licenses this file to You under the Apache License, Version 2.0
+ *  (the "License"); you may not use this file except in compliance with
+ *  the License.  You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing,
- *  software distributed under the License is distributed on an
- *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- *  KIND, either express or implied.  See the License for the
- *  specific language governing permissions and limitations
- *  under the License.
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.core.metamodel.services.layout.provider;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -28,26 +26,18 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
-import org.apache.isis.applib.layout.members.v1.ActionOwner;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
 import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.members.MemberRegionOwner;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
-import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.applib.layout.members.MemberRegionOwner;
+import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
+import org.apache.isis.applib.layout.members.v1.ActionOwner;
+import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
-import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
 import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
@@ -74,6 +64,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFace
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -81,79 +72,22 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class ObjectLayoutMetadataFacetDefault
-            extends FacetAbstract
-            implements ObjectLayoutMetadataFacet {
+public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataFacetDefault.class);
-
-
-    public static Class<? extends Facet> type() {
-        return ObjectLayoutMetadataFacet.class;
-    }
+    public static final String TNS = "http://isis.apache.org/schema/applib/layout/fixedcols";
+    public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd";
 
 
-    public static ObjectLayoutMetadataFacet create(
-            final FacetHolder facetHolder,
+    public PageNormalizerFC(
             final TranslationService translationService,
-            final ObjectLayoutMetadataService objectLayoutMetadataService,
-            final DeploymentCategory deploymentCategory) {
-        return new ObjectLayoutMetadataFacetDefault(facetHolder, translationService, objectLayoutMetadataService, deploymentCategory);
+            final SpecificationLoader specificationLookup) {
+        super(translationService, specificationLookup);
     }
 
-    private final TranslationService translationService;
-    private final DeploymentCategory deploymentCategory;
-    private final ObjectLayoutMetadataService objectLayoutMetadataService;
-
-    private FCPage metadata;
-    private boolean blacklisted;
-
-    private ObjectLayoutMetadataFacetDefault(
-            final FacetHolder facetHolder,
-            final TranslationService translationService,
-            final ObjectLayoutMetadataService objectLayoutMetadataService,
-            final DeploymentCategory deploymentCategory) {
-        super(ObjectLayoutMetadataFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.objectLayoutMetadataService = objectLayoutMetadataService;
-        this.translationService = translationService;
-        this.deploymentCategory = deploymentCategory;
-    }
-
-    /**
-     * Blacklisting only occurs if running in production mode.
-     */
     @Override
-    public FCPage getMetadata() {
-        if (deploymentCategory.isProduction() || blacklisted) {
-            return metadata;
-        }
-        final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        final FCPage metadata = objectLayoutMetadataService.fromXml(domainClass);
-        if(deploymentCategory.isProduction() && metadata == null) {
-            blacklisted = true;
-        }
-        this.metadata = normalize(metadata);
-        return this.metadata;
-    }
+    public void normalize(final FCPage page, final Class<?> domainClass) {
 
-    private FCPage normalize(final FCPage metadata) {
-        if(metadata == null) {
-            return null;
-        }
-
-        // if have .layout.json and then add a .layout.xml without restarting, then note that
-        // the changes won't be picked up.  Normalizing would be required
-        // in order to trample over the .layout.json's original facets
-        if(metadata.isNormalized()) {
-            return metadata;
-        }
-        
-        doNormalize(metadata, getSpecification());
-        metadata.setNormalized(true);
-        return metadata;
-    }
-
-    private void doNormalize(final FCPage metadata, final ObjectSpecification objectSpec) {
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
                 ObjectMember.Util.mapById(getOneToOneAssociations(objectSpec));
@@ -162,8 +96,8 @@ public class ObjectLayoutMetadataFacetDefault
         final Map<String, ObjectAction> objectActionById =
                 ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
 
-        derive(metadata, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
-        overwrite(metadata, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+        derive(page, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+        overwrite(page, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
     }
 
     /**
@@ -302,14 +236,14 @@ public class ObjectLayoutMetadataFacetDefault
     }
 
     private void overwrite(
-            final FCPage metadata,
+            final FCPage page,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
         final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
 
-        metadata.visit(new FCPage.VisitorAdapter() {
+        page.visit(new FCPage.VisitorAdapter() {
             private int collectionSequence = 1;
             private int actionDomainObjectSequence = 1;
             private int actionPropertyGroupSequence = 1;
@@ -454,20 +388,12 @@ public class ObjectLayoutMetadataFacetDefault
     }
 
     private static List<OneToOneAssociation> getOneToOneAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec
-                .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
+        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.PROPERTIES);
         return associations;
     }
     private static List<OneToManyAssociation> getOneToManyAssociations(final ObjectSpecification objectSpec) {
-        List associations = objectSpec
-                .getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
+        List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         return associations;
     }
-
-    private ObjectSpecification getSpecification() {
-        return (ObjectSpecification)getFacetHolder();
-    }
-
-
 
 }

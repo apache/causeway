@@ -38,6 +38,7 @@ import org.apache.isis.applib.layout.members.v1.FieldSet;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerServiceDefault;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -60,11 +61,11 @@ public class FCPageTest {
     @Test
     public void xxx() throws Exception {
 
-        final FCPage FCPage = new FCPage();
+        final FCPage fcPage = new FCPage();
 
-        FCPage.setTabGroups(Lists.<FCTabGroup>newArrayList());
-        FCPage.getTabGroups().add(new FCTabGroup());
-        FCTabGroup tabGroup = FCPage.getTabGroups().get(0);
+        fcPage.setTabGroups(Lists.<FCTabGroup>newArrayList());
+        fcPage.getTabGroups().add(new FCTabGroup());
+        FCTabGroup tabGroup = fcPage.getTabGroups().get(0);
         FCTab FCTab = tabGroup.getTabs().get(0);
         FCTab.setName("Common");
         FCColumn left = FCTab.getLeft();
@@ -90,34 +91,29 @@ public class FCPageTest {
 
         ActionLayoutData deleteActionLayoutData = new ActionLayoutData();
         deleteActionLayoutData.setId("delete");
-        FCPage.setActions(Lists.<ActionLayoutData>newArrayList());
-        FCPage.getActions().add(deleteActionLayoutData);
+        fcPage.setActions(Lists.<ActionLayoutData>newArrayList());
+        fcPage.getActions().add(deleteActionLayoutData);
 
-        String xml = jaxbService.toXml(FCPage,
-                ImmutableMap.<String,Object>of(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        "http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd"
-                ));
+        final String schemaLocations = new PageNormalizerServiceDefault().schemaLocationsFor(fcPage);
+        String xml = jaxbService.toXml(fcPage,
+                ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
         FCPage FCPageRoundtripped = jaxbService.fromXml(FCPage.class, xml);
         String xmlRoundtripped = jaxbService.toXml(FCPageRoundtripped,
-                ImmutableMap.<String,Object>of(
-                        Marshaller.JAXB_SCHEMA_LOCATION,
-                        "http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd"
-                ));
+                ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
 
 
         System.out.println("==========");
 
-        dumpXsd(FCPage);
+        dumpXsd(fcPage);
     }
 
     protected void dumpXsd(final FCPage FCPage) {
         Map<String, String> schemas = jaxbService.toXsd(FCPage, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
-            //System.out.println(entry.getKey() + ":");
+            System.out.println(entry.getKey() + ":");
             System.out.println(entry.getValue());
         }
     }

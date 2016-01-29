@@ -19,15 +19,15 @@
 package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
  */
-public interface ObjectLayoutMetadataFacet extends Facet {
+public interface PageFacet extends Facet {
 
-    FCPage getMetadata();
+    Page getPage();
 
 
 }

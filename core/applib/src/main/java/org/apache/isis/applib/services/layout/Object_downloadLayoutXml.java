@@ -28,15 +28,12 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
 @Mixin
 public class Object_downloadLayoutXml {
-
-    public static final String TNS = "http://isis.apache.org/schema/applib/layout";
-    public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/layout-1.0.xsd";
 
     private final Object object;
 
@@ -58,31 +55,29 @@ public class Object_downloadLayoutXml {
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName) {
-        final FCPage metadata = getObjectLayoutMetadata();
-        final String xml = jaxbService.toXml(metadata,
+        final Page page = getPage();
+        final String xml = jaxbService.toXml(page,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
-                        TNS + " " + SCHEMA_LOCATION
+                        pageService.schemaLocations(page)
                 ));
 
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
     }
 
     public boolean hide$$() {
-        return getObjectLayoutMetadata() == null;
+        return getPage() == null;
     }
     public String default0$$() {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
     }
 
-    protected FCPage getObjectLayoutMetadata() {
-        return objectLayoutMetadataService.toMetadata(object);
+    protected Page getPage() {
+        return pageService.toPage(object);
     }
 
-
-
     @Inject
-    ObjectLayoutMetadataService objectLayoutMetadataService;
+    PageService pageService;
 
     @Inject
     JaxbService jaxbService;

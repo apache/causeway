@@ -25,6 +25,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+/**
+ * Represents a tab within a {@link BS3TabGroup tab group}.
+ *
+ * <p>
+ *     They simply contain one or more {@link BS3Row row}s.
+ * </p>
+ */
 @XmlType(
         name = "tab"
         , propOrder = {
@@ -32,13 +39,9 @@ import javax.xml.bind.annotation.XmlType;
             "rows"
         }
 )
-public class BS3Tab {
+public class BS3Tab extends BS3ElementAbstract {
 
-    // at least one row
-    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
-        add(new BS3Row());
-    }};
-
+    private static final long serialVersionUID = 1L;
 
     private String name;
     @XmlAttribute(required = true)
@@ -50,6 +53,11 @@ public class BS3Tab {
         this.name = name;
     }
 
+
+    // at least one row
+    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
+        add(new BS3Row());
+    }};
 
     // no wrapper
     @XmlElement(name = "row", required = true)

@@ -17,9 +17,9 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 
-public interface ObjectLayoutMetadataService {
+public interface PageService {
 
     /**
      * Whether any metadata exists for this domain class, and if so then whether it is valid or invalid.
@@ -28,19 +28,22 @@ public interface ObjectLayoutMetadataService {
     boolean exists(Class<?> domainClass);
 
     /**
-     * Returns raw (unnormalized) metadata, eg per the <code>.layout.xml</code> file.
+     * Returns (raw unnormalized) metadata, eg per the <code>.layout.xml</code> file.
      */
-    @Programmatic FCPage fromXml(Class<?> domainClass);
+    @Programmatic
+    Page fromXml(Class<?> domainClass);
 
     /**
-     * Obtains the layout metadata, if any, for the (domain class of the) specified domain object.
+     * Obtains the (normalized) layout metadata, if any, for the (domain class of the) specified domain object.
      */
-    @Programmatic FCPage toMetadata(Object domainObject);
+    @Programmatic
+    Page toPage(Object domainObject);
 
     /**
-     * Obtains the layout metadata, if any, for the specified domain class.
+     * Obtains the (normalized) layout metadata, if any, for the specified domain class.
      */
-    @Programmatic FCPage toMetadata(Class<?> domainClass);
+    @Programmatic
+    Page toPage(Class<?> domainClass);
 
-
+    String schemaLocations(final Page page);
 }

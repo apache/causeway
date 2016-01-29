@@ -19,10 +19,12 @@ package org.apache.isis.core.metamodel.services.layout;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.inject.Inject;
+import javax.xml.bind.JAXBContext;
 
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
@@ -33,27 +35,30 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.members.v1.Page;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
+import org.apache.isis.applib.services.layout.PageService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.ObjectLayoutMetadataFacet;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
+import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 
-@DomainService(nature = NatureOfService.DOMAIN)
-public class ObjectLayoutMetadataServiceDefault
-        implements ObjectLayoutMetadataService, SpecificationLoaderAware, DeploymentCategoryAware {
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+public class PageServiceDefault
+        implements PageService, SpecificationLoaderAware, DeploymentCategoryAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataServiceDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PageServiceDefault.class);
 
     // for better logging messages (used only in prototyping mode)
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
 
     // cache (used only in prototyping mode)
-    private final Map<String, FCPage> metadataByXml = Maps.newHashMap();
+    private final Map<String, Page> pageByXml = Maps.newHashMap();
 
     @Override
     @Programmatic
@@ -64,7 +69,7 @@ public class ObjectLayoutMetadataServiceDefault
 
     @Override
     @Programmatic
-    public FCPage fromXml(Class<?> domainClass) {
+    public Page fromXml(Class<?> domainClass) {
 
         final String resourceName = resourceNameFor(domainClass);
         final String xml;
@@ -82,9 +87,9 @@ public class ObjectLayoutMetadataServiceDefault
 
 
         if(!deploymentCategory.isProduction()) {
-            final FCPage FCPage = metadataByXml.get(xml);
-            if(FCPage != null) {
-                return FCPage;
+            final Page page = pageByXml.get(xml);
+            if(page != null) {
+                return page;
             }
 
             final String badXml = badXmlByClass.get(domainClass);
@@ -101,9 +106,13 @@ public class ObjectLayoutMetadataServiceDefault
         }
 
         try {
-            final FCPage metadata = jaxbService.fromXml(FCPage.class, xml);
+            // all known implementations of Page
+            List<Class<? extends Page>> pageImplementations = pageNormalizerService.pageImplementations();
+            final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(new Class[0]));
+
+            final Page metadata = (Page) jaxbService.fromXml(context, xml);
             if(!deploymentCategory.isProduction()) {
-                metadataByXml.put(xml, metadata);
+                pageByXml.put(xml, metadata);
             }
             return metadata;
         } catch(Exception ex) {
@@ -134,15 +143,21 @@ public class ObjectLayoutMetadataServiceDefault
 
     @Override
     @Programmatic
-    public FCPage toMetadata(final Object domainObject) {
-        return toMetadata(domainObject.getClass());
+    public Page toPage(final Object domainObject) {
+        return toPage(domainObject.getClass());
     }
 
     @Override
-    public FCPage toMetadata(final Class<?> domainClass) {
+    public Page toPage(final Class<?> domainClass) {
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-        final ObjectLayoutMetadataFacet facet = objectSpec.getFacet(ObjectLayoutMetadataFacet.class);
-        return facet != null? facet.getMetadata(): null;
+        final PageFacet facet = objectSpec.getFacet(PageFacet.class);
+        return facet != null? facet.getPage(): null;
+    }
+
+
+    @Override
+    public String schemaLocations(final Page page) {
+        return pageNormalizerService.schemaLocationsFor(page);
     }
 
     ////////////////////////////////////////////////////////
@@ -167,6 +182,8 @@ public class ObjectLayoutMetadataServiceDefault
     @Inject
     JaxbService jaxbService;
 
+    @Inject
+    PageNormalizerService pageNormalizerService;
     //endregion
 
 }

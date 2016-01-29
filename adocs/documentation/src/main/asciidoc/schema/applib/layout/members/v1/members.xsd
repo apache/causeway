@@ -1,22 +1,5 @@
 <?xml version="1.0" standalone="yes"?>
-<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout" xmlns:tns="http://isis.apache.org/schema/applib/layout" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
-  <xs:element name="objectLayout" type="tns:objectLayout"/>
-
-  <xs:complexType name="objectLayout">
-    <xs:sequence>
-      <xs:element name="actions" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="left" type="tns:column" minOccurs="0"/>
-      <xs:element name="tabGroup" type="tns:tabGroup" maxOccurs="unbounded"/>
-      <xs:element name="right" type="tns:column" minOccurs="0"/>
-    </xs:sequence>
-  </xs:complexType>
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:tns="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
   <xs:complexType name="actionLayout">
     <xs:sequence>
@@ -34,23 +17,9 @@
     <xs:attribute name="position" type="tns:position"/>
   </xs:complexType>
 
-  <xs:complexType name="column">
+  <xs:complexType name="fieldSet">
     <xs:sequence>
-      <xs:element name="propertyGroup" type="tns:propertyGroup" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="collection" type="tns:collectionLayoutMetadata" minOccurs="0" maxOccurs="unbounded"/>
-    </xs:sequence>
-    <xs:attribute name="span" type="xs:int" use="required"/>
-  </xs:complexType>
-
-  <xs:complexType name="propertyGroup">
-    <xs:sequence>
-      <xs:element name="actions" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="property" type="tns:propertyLayout" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required"/>
@@ -60,13 +29,7 @@
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="actions" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -79,18 +42,12 @@
     <xs:attribute name="typicalLength" type="xs:int"/>
   </xs:complexType>
 
-  <xs:complexType name="collectionLayoutMetadata">
+  <xs:complexType name="collectionLayoutData">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
       <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
-      <xs:element name="actions" minOccurs="0">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -99,21 +56,6 @@
     <xs:attribute name="id" type="xs:string" use="required"/>
     <xs:attribute name="namedEscaped" type="xs:boolean"/>
     <xs:attribute name="paged" type="xs:int"/>
-  </xs:complexType>
-
-  <xs:complexType name="tabGroup">
-    <xs:sequence>
-      <xs:element name="tab" type="tns:tab" maxOccurs="unbounded"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="tab">
-    <xs:sequence>
-      <xs:element name="left" type="tns:column"/>
-      <xs:element name="middle" type="tns:column" minOccurs="0"/>
-      <xs:element name="right" type="tns:column" minOccurs="0"/>
-    </xs:sequence>
-    <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
 
   <xs:simpleType name="bookmarkPolicy">

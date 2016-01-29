@@ -43,8 +43,20 @@ import org.apache.isis.applib.services.dto.Dto_downloadXsd;
 public interface JaxbService {
 
     @Programmatic
+    Object fromXml(JAXBContext jaxbContext, String xml);
+
+    @Programmatic
+    Object fromXml(JAXBContext jaxbContext, String xml, Map<String,Object> unmarshallerProperties);
+
+    /**
+     * As {@link #fromXml(JAXBContext, String)}, but downcast to a specific type.
+     */
+    @Programmatic
     <T> T fromXml(Class<T> domainClass, String xml);
 
+    /**
+     * As {@link #fromXml(JAXBContext, String, Map)}, but downcast to a specific type.
+     */
     @Programmatic
     <T> T fromXml(Class<T> domainClass, String xml, Map<String,Object> unmarshallerProperties);
 
@@ -91,15 +103,14 @@ public interface JaxbService {
     public static class Simple implements JaxbService {
 
         @Override
-        public <T> T fromXml(final Class<T> domainClass, final String xml) {
-            return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
+        public Object fromXml(final JAXBContext jaxbContext, final String xml) {
+            return fromXml(jaxbContext, xml, Maps.<String,Object>newHashMap());
         }
         @Override
-        public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
+        public Object fromXml(final JAXBContext jaxbContext, final String xml, final Map<String, Object> unmarshallerProperties) {
             try {
-                final JAXBContext context = JAXBContext.newInstance(domainClass);
 
-                final Unmarshaller unmarshaller = context.createUnmarshaller();
+                final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 
                 for (Map.Entry<String, Object> entry : unmarshallerProperties.entrySet()) {
                     unmarshaller.setProperty(entry.getKey(), entry.getValue());
@@ -108,7 +119,22 @@ public interface JaxbService {
                 configure(unmarshaller);
 
                 final Object unmarshal = unmarshaller.unmarshal(new StringReader(xml));
-                return (T) unmarshal;
+                return unmarshal;
+
+            } catch (final JAXBException ex) {
+                throw new NonRecoverableException("Error unmarshalling XML", ex);
+            }
+        }
+
+        @Override
+        public <T> T fromXml(final Class<T> domainClass, final String xml) {
+            return fromXml(domainClass, xml, Maps.<String,Object>newHashMap());
+        }
+        @Override
+        public <T> T fromXml(final Class<T> domainClass, final String xml, final Map<String, Object> unmarshallerProperties) {
+            try {
+                final JAXBContext context = JAXBContext.newInstance(domainClass);
+                return (T) fromXml(context, xml, unmarshallerProperties);
 
             } catch (final JAXBException ex) {
                 throw new NonRecoverableException("Error unmarshalling XML to class '" + domainClass.getName() + "'", ex);

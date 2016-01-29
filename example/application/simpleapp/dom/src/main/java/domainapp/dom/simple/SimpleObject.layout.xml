@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<objectLayout xsi:schemaLocation="http://isis.apache.org/schema/applib/layout http://isis.apache.org/schema/applib/layout/layout-1.0.xsd" xmlns="http://isis.apache.org/schema/applib/layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <actions>
-        <action id="delete"/>
-    </actions>
+<page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/members/v1 http://isis.apache.org/schema/applib/layout/members/v1/members.xsd http://isis.apache.org/schema/applib/layout/fixedcols http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd" xmlns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:ns2="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <action id="delete"/>
+
     <left span="0">
     </left>
     <tabGroup>
         <tab name="Metadata">
             <left span="12">
-                <propertyGroup name="Foo">
-                    <property id="versionSequence"/>
-                </propertyGroup>
+                <fieldSet name="Foo">
+                    <ns2:property id="versionSequence"/>
+                </fieldSet>
             </left>
         </tab>
         <tab name="General">
             <left span="12">
-                <propertyGroup name="General">
-                    <actions>
-                        <action id="downloadJdoMetadata" position="PANEL"/>
-                        <action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                    </actions>
-                    <property id="name" labelPosition="TOP">
-                        <actions>
-                            <action id="updateName">
-                                <describedAs>This allows the name to be updated</describedAs>
-                            </action>
-                        </actions>
-                    </property>
-                </propertyGroup>
+                <fieldSet name="General">
+                    <ns2:action id="downloadJdoMetadata" position="PANEL"/>
+                    <ns2:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                    <ns2:property id="name" labelPosition="TOP">
+                        <ns2:action id="updateName">
+                            <ns2:describedAs>This allows the name to be updated</ns2:describedAs>
+                        </ns2:action>
+                    </ns2:property>
+                </fieldSet>
             </left>
         </tab>
     </tabGroup>
@@ -39,4 +35,4 @@
             </left>
         </tab>
     </tabGroup>
-</objectLayout>
+</page>

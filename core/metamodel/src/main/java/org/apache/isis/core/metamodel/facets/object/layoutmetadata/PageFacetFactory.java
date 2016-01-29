@@ -20,19 +20,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.layout.ObjectLayoutMetadataService;
+import org.apache.isis.applib.services.layout.PageService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
+import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerService;
 
-public class ObjectLayoutMetadataFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class PageFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ObjectLayoutMetadataFacetFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PageFacetFactory.class);
 
-    public ObjectLayoutMetadataFacetFactory() {
+    public PageFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
@@ -40,11 +41,16 @@ public class ObjectLayoutMetadataFacetFactory extends FacetFactoryAbstract imple
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final TranslationService translationService = servicesInjector.lookupService(TranslationService.class);
-        final ObjectLayoutMetadataService objectLayoutMetadataService = servicesInjector.lookupService(ObjectLayoutMetadataService.class);
+        final TranslationService translationService =
+                servicesInjector.lookupService(TranslationService.class);
+        final PageService pageService =
+                servicesInjector.lookupService(PageService.class);
+        final PageNormalizerService pageNormalizerService =
+                servicesInjector.lookupService(PageNormalizerService.class);
+
         FacetUtil.addFacet(
-                ObjectLayoutMetadataFacetDefault.create(facetHolder,
-                        translationService, objectLayoutMetadataService, getDeploymentCategory()));
+                PageFacetDefault.create(facetHolder,
+                        translationService, pageService, pageNormalizerService, getDeploymentCategory()));
     }
 
     private ServicesInjector servicesInjector;
