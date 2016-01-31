@@ -82,6 +82,7 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
 
     public void setLeft(final FCColumn left) {
         this.left = left;
+        left.setHint(FCColumn.Hint.LEFT);
     }
 
 
@@ -109,6 +110,7 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
 
     public void setRight(final FCColumn right) {
         this.right = right;
+        right.setHint(FCColumn.Hint.RIGHT);
     }
 
 

@@ -137,6 +137,19 @@ public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumn
 
 
 
+    private Hint hint;
+
+    @XmlTransient
+    public Hint getHint() {
+        return hint;
+    }
+
+    public void setHint(final Hint hint) {
+        this.hint = hint;
+    }
+
+
+
     public enum Hint {
         LEFT,
         MIDDLE,

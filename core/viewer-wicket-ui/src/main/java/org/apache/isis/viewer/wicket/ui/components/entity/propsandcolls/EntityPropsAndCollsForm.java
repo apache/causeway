@@ -237,7 +237,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
             final Hint hint) {
         final FCColumn columnMetaDataIfAny = hint.from(FCTabMetaDataIfAny);
 
-        final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny, hint);
+        final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny);
 
         final EntityColumn columnMembers =
                 new EntityColumn(ID_ENTITY_COLUMN, entityModelWithHints);

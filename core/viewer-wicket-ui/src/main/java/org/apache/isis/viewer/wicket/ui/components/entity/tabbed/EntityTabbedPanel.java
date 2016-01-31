@@ -69,11 +69,11 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);
 
-        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, page.getLeft(), FCColumn.Hint.LEFT);
+        final int leftSpan = addColumnIfRequired(ID_LEFT_COLUMN, page.getLeft());
 
         final TabGroupListPanel middleTabs = addTabGroups(ID_MIDDLE_COLUMN, page.getTabGroups());
 
-        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, page.getRight(), FCColumn.Hint.RIGHT);
+        final int rightSpan = addColumnIfRequired(ID_RIGHT_COLUMN, page.getRight());
 
         final int columnSpans = leftSpan + rightSpan;
         int tabGroupSpan = columnSpans < 12 ? 12 - (columnSpans) : 12;
@@ -94,10 +94,10 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
         return middleComponent;
     }
 
-    private int addColumnIfRequired(final String id, final FCColumn col, final FCColumn.Hint hint) {
+    private int addColumnIfRequired(final String id, final FCColumn col) {
         if(col != null) {
             final EntityModel entityModel =
-                    getModel().cloneWithColumnMetadata(col, hint);
+                    getModel().cloneWithColumnMetadata(col);
             final int span = entityModel.getFCColumn().getSpan();
             if(span > 0) {
                 final EntityColumn entityColumn = new EntityColumn(id, entityModel);

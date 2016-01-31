@@ -76,7 +76,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
         super(id, entityModel);
 
         columnMetaDataIfAny = entityModel.getFCColumn();
-        hint = entityModel.getColumnHint();
+        hint = entityModel.getFCColumn().getHint();
 
         buildGui();
     }

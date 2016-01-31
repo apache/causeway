@@ -696,35 +696,20 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     }
 
 
-    private FCColumn FCColumn;
-    private FCColumn.Hint columnHint;
+    private FCColumn fcColumn;
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithColumnMetadata(final FCColumn FCColumn, final FCColumn.Hint columnHint) {
+    public EntityModel cloneWithColumnMetadata(final FCColumn fcColumn) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.FCColumn = FCColumn;
-        entityModel.columnHint = columnHint;
+        entityModel.fcColumn = fcColumn;
         return entityModel;
     }
 
     public FCColumn getFCColumn() {
-        return FCColumn;
+        return fcColumn;
     }
-    public FCColumn.Hint getColumnHint() {
-        return columnHint;
-    }
-
-    @Override
-    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
-        ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
-        if(scopedSessionAttribute == null) {
-            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
-        }
-        scopedSessionAttribute.set(value);
-    }
-
 
     private FieldSet fieldSet;
     public FieldSet getFieldSet() {
@@ -755,6 +740,15 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.collectionLayoutData = collectionLayoutData;
         return entityModel;
+    }
+
+    @Override
+    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
+        ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
+        if(scopedSessionAttribute == null) {
+            scopedSessionAttribute = ScopedSessionAttribute.create(this, scopeKey, attributeName);
+        }
+        scopedSessionAttribute.set(value);
     }
 
 
