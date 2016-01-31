@@ -17,49 +17,33 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.collections;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.common.Page;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.EntityTabbedPanel;
+import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 
 /**
- * {@link ComponentFactory} for {@link EntityTabbedPanel}.
+ * {@link ComponentFactory} for {@link EntityCollectionsPanel}.
  */
-public class EntityPanelFactory extends EntityComponentFactoryAbstract {
+public class EntityCollectionsPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String NAME = "tabbed";
-
-    public EntityPanelFactory() {
-        super(ComponentType.ENTITY, NAME, EntityTabbedPanel.class);
+    public EntityCollectionsPanelFactory() {
+        super(ComponentType.ENTITY_COLLECTIONS, EntityCollectionsPanel.class);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
-
         final EntityModel entityModel = (EntityModel) model;
-
-        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
-        final PageFacet facet = specification.getFacet(PageFacet.class);
-        final Page page = facet.getPage();
-        if (page != null) {
-            if(page instanceof FCPage) {
-                return new EntityTabbedPanel(id, entityModel);
-            }
-            // TODO: support BS3Page here...
-        }
-        // fallback
-        return new EntityEditablePanel(id, entityModel);
+        return new EntityCollectionsPanel(id, entityModel);
     }
 }
+
+
+

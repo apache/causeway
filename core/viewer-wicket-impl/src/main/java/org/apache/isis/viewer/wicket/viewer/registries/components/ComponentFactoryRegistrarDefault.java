@@ -39,13 +39,13 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.C
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.EntityCollectionsPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.collections.EntityCollectionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls.EntityPropsAndCollsPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls.EntityPropsAndCollsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.entity.EntityPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.EntityPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;

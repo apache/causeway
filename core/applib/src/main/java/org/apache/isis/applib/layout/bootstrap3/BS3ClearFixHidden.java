@@ -31,4 +31,8 @@ public class BS3ClearFixHidden extends BS3ClearFix {
 
     private static final long serialVersionUID = 1L;
 
+    @Override
+    public String toCssClass() {
+        return "clearfix hidden-" + getSize().toCssClassFragment();
+    }
 }

@@ -50,4 +50,10 @@ public class BS3ClearFixVisible extends BS3ClearFix {
         this.cssDisplay = cssDisplay;
     }
 
+
+    @Override
+    public String toCssClass() {
+        return "clearfix visible-" + getSize().toCssClassFragment() + "-" + getCssClass().toLowerCase().replace('_', '-');
+    }
+
 }

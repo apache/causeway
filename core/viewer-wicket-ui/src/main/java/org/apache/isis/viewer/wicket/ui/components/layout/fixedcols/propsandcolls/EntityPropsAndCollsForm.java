@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls;
 
 import java.util.List;
 
@@ -66,8 +66,8 @@ import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.PropUtil;
-import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.PropUtil;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.columns.EntityColumn;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelHintRequired;
 import org.apache.isis.viewer.wicket.ui.errors.JGrowlBehaviour;
 import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;

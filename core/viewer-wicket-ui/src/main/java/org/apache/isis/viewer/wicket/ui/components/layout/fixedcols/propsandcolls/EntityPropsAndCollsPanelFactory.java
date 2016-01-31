@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -26,24 +26,28 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.layout.fallback.EntityEditablePanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCPagePanel;
 
 /**
- * {@link ComponentFactory} for {@link EntityCollectionsPanel}.
+ * {@link ComponentFactory} for {@link EntityPropsAndCollsPanel}.
+ *
+ *
+ * <p>
+ *     Used by both {@link EntityEditablePanel} and also {@link FCPagePanel}.
+ * </p>
  */
-public class EntityCollectionsPanelFactory extends EntityComponentFactoryAbstract {
+public class EntityPropsAndCollsPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityCollectionsPanelFactory() {
-        super(ComponentType.ENTITY_COLLECTIONS, EntityCollectionsPanel.class);
+    public EntityPropsAndCollsPanelFactory() {
+        super(ComponentType.ENTITY_PROPERTIES, EntityPropsAndCollsPanel.class);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
-        return new EntityCollectionsPanel(id, entityModel);
+        return new EntityPropsAndCollsPanel(id, entityModel);
     }
 }
-
-
-

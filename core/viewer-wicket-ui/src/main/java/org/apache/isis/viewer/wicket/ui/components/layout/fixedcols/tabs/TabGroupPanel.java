@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabs;
 
 import java.util.List;
 
@@ -39,9 +39,11 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbed
 public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
 
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
+
     private final EntityModel entityModel;
     // the view metadata
     private final FCTabGroup tabGroup;
+
     private final ScopedSessionAttribute<Integer> selectedTabInSession;
 
     private static final String ID_TAB_GROUP = "tabGroup";
@@ -55,13 +57,13 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
                 .filter(FCTab.Predicates.notEmpty())
                 .toList();
 
-        for (final FCTab FCTab : FCTabList) {
-            tabs.add(new AbstractTab(Model.of(FCTab.getName())) {
-                private static final long serialVersionUID1 = 1L;
+        for (final FCTab fcTab : FCTabList) {
+            tabs.add(new AbstractTab(Model.of(fcTab.getName())) {
+                private static final long serialVersionUID = 1L;
 
                 @Override
                 public Panel getPanel(String panelId) {
-                    return new TabPanel(panelId, entityModel, FCTab);
+                    return new TabPanel(panelId, entityModel, fcTab);
                 }
             });
         }

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
+package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
 import java.util.List;
 
@@ -30,6 +30,7 @@ import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -67,7 +68,8 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
 
     private void buildGui() {
         String groupName = fieldSet.getName();
-        final ObjectAdapter adapter = getModel().getObject();
+        // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception (haven't investigated as to why).
+        final ObjectAdapter adapter = getModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
 
         add(new Label(ID_MEMBER_GROUP_NAME, groupName));
 

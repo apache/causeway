@@ -22,10 +22,17 @@ package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
+import org.apache.isis.applib.layout.bootstrap3.BS3Page;
+import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3PagePanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCPagePanel;
 
 /**
  * {@link ComponentFactory} for {@link EntityLinksSelectorPanel}.
@@ -41,7 +48,20 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
+
+        final ObjectSpecification specification = entityModel.getTypeOfSpecification();
+        final PageFacet facet = specification.getFacet(PageFacet.class);
+
+        final Page page = facet.getPage();
+        if (page != null) {
+            final EntityModel entityModelWithLayoutMetadata = entityModel.cloneWithLayoutMetadata(page);
+            if(page instanceof FCPage) {
+                return new FCPagePanel(id, entityModelWithLayoutMetadata);
+            }
+            if(page instanceof BS3Page) {
+                return new BS3PagePanel(id, entityModelWithLayoutMetadata);
+            }
+        }
         return new EntityLinksSelectorPanel(id, entityModel, this);
     }
-    
 }

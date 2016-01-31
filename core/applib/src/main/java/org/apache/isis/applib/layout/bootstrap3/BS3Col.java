@@ -220,4 +220,9 @@ public class BS3Col extends BS3RowContent {
 
 
 
+
+    public String toCssClass() {
+        final Size size = getSize() != null? getSize(): Size.MD;
+        return "col-" + size.toCssClassFragment() + "-" + getSpan();
+    }
 }

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabgrouplist;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class TabGroupListPanel extends PanelAbstract<EntityModel> {

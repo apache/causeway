@@ -484,6 +484,8 @@ div.additionalLinkList {
 
 
 
+.col .additionalLinks,
+.col .additionalLinksAndSelectorDropDown,
 .entityPropertiesPanel .additionalLinks,
 .entityCollectionsPanel .additionalLinksAndSelectorDropDown {
     margin-top: -4px;
@@ -750,6 +752,6 @@ tr.headers th form input {
     padding-bottom: 10px;
 }
 
-.entityPage .middleColumn .tabbable {
+.tabbable {
     padding-bottom: 10px;
 }

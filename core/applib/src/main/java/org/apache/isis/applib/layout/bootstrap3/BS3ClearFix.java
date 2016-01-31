@@ -20,4 +20,5 @@ package org.apache.isis.applib.layout.bootstrap3;
 
 public abstract class BS3ClearFix extends BS3RowContent {
 
+    public abstract String toCssClass();
 }

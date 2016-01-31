@@ -25,6 +25,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.base.Predicate;
+
 /**
  * Represents a tab within a {@link BS3TabGroup tab group}.
  *
@@ -67,6 +69,18 @@ public class BS3Tab extends BS3ElementAbstract {
 
     public void setRows(final List<BS3Row> rows) {
         this.rows = rows;
+    }
+
+
+    public static class Predicates {
+        public static Predicate<BS3Tab> notEmpty() {
+            return new Predicate<BS3Tab>() {
+                @Override
+                public boolean apply(final BS3Tab bs3Tab) {
+                    return !bs3Tab.getRows().isEmpty();
+                }
+            };
+        }
     }
 
 }

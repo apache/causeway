@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.List;
 import java.util.Map;

@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls;
+package org.apache.isis.viewer.wicket.ui.components.layout;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -26,28 +26,25 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
-import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.EntityTabbedPanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fallback.EntityEditablePanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCPagePanel;
 
 /**
- * {@link ComponentFactory} for {@link EntityPropsAndCollsPanel}.
- *
- *
- * <p>
- *     Used by both {@link EntityEditablePanel} and also {@link EntityTabbedPanel}.
- * </p>
+ * {@link ComponentFactory} for {@link FCPagePanel}.
  */
-public class EntityPropsAndCollsPanelFactory extends EntityComponentFactoryAbstract {
+public class EntityPanelFactory extends EntityComponentFactoryAbstract {
 
     private static final long serialVersionUID = 1L;
 
-    public EntityPropsAndCollsPanelFactory() {
-        super(ComponentType.ENTITY_PROPERTIES, EntityPropsAndCollsPanel.class);
+    private static final String NAME = "tabbed";
+
+    public EntityPanelFactory() {
+        super(ComponentType.ENTITY, NAME, EntityEditablePanel.class);
     }
 
     @Override
     public Component createComponent(final String id, final IModel<?> model) {
         final EntityModel entityModel = (EntityModel) model;
-        return new EntityPropsAndCollsPanel(id, entityModel);
+        return new EntityEditablePanel(id, entityModel);
     }
 }

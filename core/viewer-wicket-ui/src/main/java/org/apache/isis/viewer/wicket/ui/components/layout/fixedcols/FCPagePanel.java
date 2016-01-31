@@ -31,7 +31,8 @@ import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.columns.EntityColumn;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabgrouplist.TabGroupListPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -39,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
+public class FCPagePanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -47,7 +48,7 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
 
-    public EntityTabbedPanel(final String id, final EntityModel entityModel) {
+    public FCPagePanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }

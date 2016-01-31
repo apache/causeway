@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.column;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.columns;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,8 +43,8 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
-import org.apache.isis.viewer.wicket.ui.components.entity.PropUtil;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.PropertyGroup;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.PropUtil;
+import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
