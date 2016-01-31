@@ -162,13 +162,13 @@ public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumn
             throw new IllegalStateException();
         }
 
-        public FCColumn from(final FCTab FCTab) {
-            if(FCTab == null) {
+        public FCColumn from(final FCTab fcTab) {
+            if(fcTab == null) {
                 return null;
             }
-            if(this == LEFT) return FCTab.getLeft();
-            if(this == MIDDLE) return FCTab.getMiddle();
-            if(this == RIGHT) return FCTab.getRight();
+            if(this == LEFT) return fcTab.getLeft();
+            if(this == MIDDLE) return fcTab.getMiddle();
+            if(this == RIGHT) return fcTab.getRight();
             throw new IllegalStateException();
         }
 

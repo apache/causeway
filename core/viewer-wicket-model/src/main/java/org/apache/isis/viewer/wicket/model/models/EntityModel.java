@@ -29,10 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
-import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;
@@ -645,100 +642,22 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private Object tabGroupListMetadata;
+    private Object layoutMetadata;
 
-    public Object getTabGroupListMetadata() {
-        return tabGroupListMetadata;
+    public Object getLayoutMetadata() {
+        return layoutMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupListMetadata(final Object tabGroupListMetadata) {
+    public EntityModel cloneWithLayoutMetadata(final Object layoutMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.tabGroupListMetadata = tabGroupListMetadata;
+        entityModel.layoutMetadata = layoutMetadata;
         return entityModel;
     }
 
 
-    private Object fcTabGroup;
-
-    public Object getFCTabGroup() {
-        return fcTabGroup;
-    }
-
-    /**
-     * Returns a new copy that SHARES the property scalar models (for edit form).
-     */
-    public EntityModel cloneWithTabGroupMetadata(final Object fcTabgroup) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.fcTabGroup = fcTabgroup;
-        return entityModel;
-    }
-
-
-    private Object fcTab;
-
-    public Object getFCTab() {
-        return fcTab;
-    }
-
-    /**
-     * Returns a new copy that SHARES the property scalar models (for edit form).
-     */
-    public EntityModel cloneWithTabMetadata(final FCTab fcTab) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.fcTab = fcTab;
-        return entityModel;
-    }
-
-
-    private Object fcColumn;
-
-    public Object getFCColumn() {
-        return fcColumn;
-    }
-
-    /**
-     * Returns a new copy that SHARES the property scalar models (for edit form).
-     */
-    public EntityModel cloneWithColumnMetadata(final Object fcColumn) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.fcColumn = fcColumn;
-        return entityModel;
-    }
-
-
-    private FieldSet fieldSet;
-    public FieldSet getFieldSet() {
-        return fieldSet;
-    }
-
-    /**
-     * Returns a new copy that SHARES the property scalar models (for edit form).
-     */
-    public EntityModel cloneWithPropertyGroupMetadata(
-            final FieldSet fieldSet) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.fieldSet = fieldSet;
-        return entityModel;
-    }
-
-
-    private CollectionLayoutData collectionLayoutData;
-    public CollectionLayoutData getCollectionLayoutData() {
-        return collectionLayoutData;
-    }
-
-    /**
-     * Returns a new copy that SHARES the property scalar models.
-     */
-    public EntityModel cloneWithCollectionLayoutMetadata(
-            final CollectionLayoutData collectionLayoutData) {
-        final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.collectionLayoutData = collectionLayoutData;
-        return entityModel;
-    }
 
     @Override
     protected void doSetHint(final String scopeKey, final String attributeName, final String value) {

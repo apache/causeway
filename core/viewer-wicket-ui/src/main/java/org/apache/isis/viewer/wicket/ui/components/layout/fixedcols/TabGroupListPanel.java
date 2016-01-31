@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.List;
 
@@ -26,7 +26,6 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabgroup.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class TabGroupListPanel extends PanelAbstract<EntityModel> {
@@ -41,7 +40,7 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
     public TabGroupListPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        this.tabGroups = (List<FCTabGroup>) entityModel.getTabGroupListMetadata();
+        this.tabGroups = (List<FCTabGroup>) entityModel.getLayoutMetadata();
 
         buildGui();
     }
@@ -55,7 +54,7 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
             protected void populateItem(final ListItem<FCTabGroup> item) {
 
                 final FCTabGroup tabGroup = item.getModelObject();
-                final EntityModel entityModelWithHints = model.cloneWithTabGroupMetadata(tabGroup);
+                final EntityModel entityModelWithHints = model.cloneWithLayoutMetadata(tabGroup);
                 final TabGroupPanel tabGroupPanel = new TabGroupPanel(entityModelWithHints);
                 item.add(tabGroupPanel);
             }

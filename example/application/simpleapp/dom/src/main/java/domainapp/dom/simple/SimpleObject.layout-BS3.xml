@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs3:page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:common="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<bs3:page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bs3:row>
         <bs3:col span="12">
-            <common:domainObject/>
-            <common:action id="delete"/>
+            <c:domainObject/>
+            <c:action id="delete"/>
         </bs3:col>
     </bs3:row>
 
@@ -14,15 +14,15 @@
                 <bs3:tab name="Metadata">
                     <bs3:row>
                         <bs3:col span="7">
-                            <common:fieldSet name="General">
-                                <common:action id="downloadJdoMetadata" position="PANEL"/>
-                                <common:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                                <common:property id="name" labelPosition="TOP">
-                                    <common:action id="updateName">
-                                        <common:describedAs>This allows the name to be updated</common:describedAs>
-                                    </common:action>
-                                </common:property>
-                            </common:fieldSet>
+                            <c:fieldSet name="General">
+                                <c:action id="downloadJdoMetadata" position="PANEL"/>
+                                <c:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
+                                <c:property id="name" labelPosition="TOP">
+                                    <c:action id="updateName">
+                                        <c:describedAs>This allows the name to be updated</c:describedAs>
+                                    </c:action>
+                                </c:property>
+                            </c:fieldSet>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
@@ -31,8 +31,8 @@
                 <bs3:tab name="SimilarTo">
                     <bs3:row>
                         <bs3:col span="12">
-                            <common:collection id="similarTo" defaultView="table"/>
-                            <common:collection id="others" defaultView="hide"/>
+                            <c:collection id="similarTo" defaultView="table"/>
+                            <c:collection id="others" defaultView="hide"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>

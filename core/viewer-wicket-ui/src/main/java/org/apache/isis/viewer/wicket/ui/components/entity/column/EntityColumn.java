@@ -31,9 +31,9 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,6 +44,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.PropUtil;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 
@@ -66,18 +67,32 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
 
     // view metadata (populated for EntityTabbedPanel, absent for EntityEditablePanel)
     private final FCColumn columnMetaDataIfAny;
+
     // which column to render (populated for EntityEditablePanel, not required and so absent for EntityTabbedPanel)
     final FCColumn.Hint hint;
+
+    private static FCColumn.Hint hintFrom(final EntityModel entityModel) {
+        final FCColumn fcColumn = (FCColumn) entityModel.getLayoutMetadata();
+        return fcColumn.getHint();
+    }
+
 
     public EntityColumn(
             final String id,
             final EntityModel entityModel) {
 
+        this(id, entityModel, hintFrom(entityModel));
+    }
+
+    public EntityColumn(
+            final String id,
+            final EntityModel entityModel,
+            final FCColumn.Hint hint) {
+
         super(id, entityModel);
 
-        columnMetaDataIfAny = (FCColumn) entityModel.getFCColumn();
-        final FCColumn fcColumn = (FCColumn) entityModel.getFCColumn();
-        hint = fcColumn.getHint();
+        columnMetaDataIfAny = (FCColumn) entityModel.getLayoutMetadata();
+        this.hint = hint;
 
         buildGui();
     }
@@ -143,8 +158,8 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
 
             final String id = memberGroupRv.newChildId();
 
-            final EntityModel entityModelWithHints = entityModel.cloneWithPropertyGroupMetadata(fieldSet);
-            final WebMarkupContainer memberGroupRvContainer = new org.apache.isis.viewer.wicket.ui.components.entity.propgroup.PropertyGroup(id, entityModelWithHints);
+            final EntityModel entityModelWithHints = entityModel.cloneWithLayoutMetadata(fieldSet);
+            final WebMarkupContainer memberGroupRvContainer = new PropertyGroup(id, entityModelWithHints);
 
             memberGroupRv.add(memberGroupRvContainer);
         }

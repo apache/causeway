@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.collections;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.Comparator;
 import java.util.List;
@@ -56,12 +56,12 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     private static final String ID_COLLECTION = "collection";
 
     // view metadata (if any available)
-    private final FCColumn FCColumnIfAny;
+    private final FCColumn fcColumnIfAny;
 
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        FCColumnIfAny = (FCColumn) entityModel.getFCColumn();
+        fcColumnIfAny = (FCColumn) entityModel.getLayoutMetadata();
 
         buildGui();
     }
@@ -86,9 +86,9 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
         final ObjectAdapter adapter = entityModel.getObject();
 
         final Filter<ObjectAssociation> filter;
-        if (FCColumnIfAny != null) {
+        if (fcColumnIfAny != null) {
             final ImmutableList<String> collectionIds = FluentIterable
-                    .from(FCColumnIfAny.getCollections())
+                    .from(fcColumnIfAny.getCollections())
                     .transform(CollectionLayoutData.Functions.id())
                     .toList();
             filter = new Filter<ObjectAssociation>() {
@@ -124,7 +124,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
 
             final CollectionLayoutData collectionLayoutData = new CollectionLayoutData(association.getId());
             final EntityModel entityModelWithCollectionLayoutMetadata =
-                    entityModel.cloneWithCollectionLayoutMetadata(collectionLayoutData);
+                    entityModel.cloneWithLayoutMetadata(collectionLayoutData);
 
             collectionRvContainer.add(new EntityCollectionPanel(ID_COLLECTION, entityModelWithCollectionLayoutMetadata));
         }

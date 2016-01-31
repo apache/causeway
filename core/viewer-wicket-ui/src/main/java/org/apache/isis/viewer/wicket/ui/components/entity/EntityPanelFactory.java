@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.EntityTabbedPanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.EntityTabbedPanel;
 
 /**
  * {@link ComponentFactory} for {@link EntityTabbedPanel}.

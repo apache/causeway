@@ -24,6 +24,8 @@
                 </c:fieldSet>
             </middle>
         </tab>
+    </tabGroup>
+    <tabGroup>
         <tab name="Collections">
             <left span="6">
                 <c:collection id="similarTo" defaultView="table"/>

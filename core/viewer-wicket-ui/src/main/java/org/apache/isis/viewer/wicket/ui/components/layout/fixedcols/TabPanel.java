@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.wicket.ui.components.entity.tabpanel;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -14,7 +14,7 @@ public class TabPanel extends PanelAbstract {
     public TabPanel(String id, final EntityModel model, final FCTab FCTab) {
         super(id);
 
-        final EntityModel modelWithTabHints = model.cloneWithTabMetadata(FCTab);
+        final EntityModel modelWithTabHints = model.cloneWithLayoutMetadata(FCTab);
 
         getComponentFactoryRegistry()
                 .addOrReplaceComponent(this,

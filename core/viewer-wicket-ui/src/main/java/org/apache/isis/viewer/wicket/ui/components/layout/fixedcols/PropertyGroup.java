@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.propgroup;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
 
     public PropertyGroup(final String id, final EntityModel model) {
         super(id, model);
-        fieldSet = model.getFieldSet();
+        fieldSet = (FieldSet) model.getLayoutMetadata();
 
         buildGui();
     }

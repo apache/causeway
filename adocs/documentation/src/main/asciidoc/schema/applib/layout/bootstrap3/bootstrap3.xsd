@@ -53,9 +53,9 @@
                     <xs:element ref="ns1:collection" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:attribute name="span" type="xs:int" use="required"/>
-                <xs:attribute name="unreferencedActions" type="xs:boolean" use="required"/>
-                <xs:attribute name="unreferencedCollections" type="xs:boolean" use="required"/>
-                <xs:attribute name="unreferencedProperties" type="xs:boolean" use="required"/>
+                <xs:attribute name="unreferencedActions" type="xs:boolean" use="optional"/>
+                <xs:attribute name="unreferencedCollections" type="xs:boolean" use="optional"/>
+                <xs:attribute name="unreferencedProperties" type="xs:boolean" use="optional"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

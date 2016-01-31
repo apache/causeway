@@ -127,7 +127,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        final FCTab FCTabMetaDataIfAny = (FCTab) entityModel.getFCTab();
+        final FCTab FCTabMetaDataIfAny = (FCTab) entityModel.getLayoutMetadata();
 
         final ColumnSpans columnSpans;
         if(FCTabMetaDataIfAny != null) {
@@ -233,14 +233,14 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private void addPropertiesAndCollections(
             final MarkupContainer markupContainer,
             final EntityModel entityModel,
-            final FCTab FCTabMetaDataIfAny,
+            final FCTab fcTabMetaDataIfAny,
             final Hint hint) {
-        final FCColumn columnMetaDataIfAny = hint.from(FCTabMetaDataIfAny);
+        final FCColumn columnMetaDataIfAny = hint.from(fcTabMetaDataIfAny);
 
-        final EntityModel entityModelWithHints = entityModel.cloneWithColumnMetadata(columnMetaDataIfAny);
+        final EntityModel entityModelWithHints = entityModel.cloneWithLayoutMetadata(columnMetaDataIfAny);
 
         final EntityColumn columnMembers =
-                new EntityColumn(ID_ENTITY_COLUMN, entityModelWithHints);
+                new EntityColumn(ID_ENTITY_COLUMN, entityModelWithHints, hint);
         markupContainer.add(columnMembers);
     }
 

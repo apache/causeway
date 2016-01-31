@@ -43,13 +43,6 @@ import org.apache.isis.applib.layout.common.FieldSet;
  * </p>
  *
  * <p>
- *     It is also possible for them to contain specifically identified {@link ActionLayoutData action}s and even the domain object's
- *     {@link DomainObjectLayoutData title and icon}.  Most pages however tend to show these elements in a top-level
- *     header, and so if that's the case then use the page's {@link BS3Page#setHeader(boolean) header} attribute that
- *     is provided as a convenience.
- * </p>
- *
- * <p>
  *     It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
  * </p>
  */
@@ -94,7 +87,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedActions() {
+    public boolean getUnreferencedActions() {
         return unreferencedActions;
     }
 
@@ -112,7 +105,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedProperties() {
+    public boolean getUnreferencedProperties() {
         return unreferencedProperties;
     }
 
@@ -130,7 +123,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedCollections() {
+    public boolean getUnreferencedCollections() {
         return unreferencedCollections;
     }
 

@@ -325,7 +325,7 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
     
     private EntityCollectionModel(final EntityModel entityModel) {
-        this(entityModel.getObjectAdapterMemento(), entityModel.getCollectionLayoutData());
+        this(entityModel.getObjectAdapterMemento(), (CollectionLayoutData) entityModel.getLayoutMetadata());
     }
 
     private EntityCollectionModel(final ObjectAdapterMemento parentObjectAdapterMemento, final CollectionLayoutData collectionLayoutData) {

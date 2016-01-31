@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.List;
 
@@ -32,7 +32,6 @@ import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.column.EntityColumn;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabgrouplist.TabGroupListPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -88,7 +87,7 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
                 .from(tabGroupList)
                 .filter(FCTabGroup.Predicates.notEmpty())
                 .toList();
-        final EntityModel entityModelWitHints = model.cloneWithTabGroupListMetadata(tabGroups);
+        final EntityModel entityModelWitHints = model.cloneWithLayoutMetadata(tabGroups);
         final TabGroupListPanel middleComponent = new TabGroupListPanel(id, entityModelWitHints);
         addOrReplace(middleComponent);
         return middleComponent;
@@ -97,8 +96,8 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
     private int addColumnIfRequired(final String id, final FCColumn col) {
         if(col != null) {
             final EntityModel entityModel =
-                    getModel().cloneWithColumnMetadata(col);
-            final FCColumn fcColumn = (FCColumn) entityModel.getFCColumn();
+                    getModel().cloneWithLayoutMetadata(col);
+            final FCColumn fcColumn = (FCColumn) entityModel.getLayoutMetadata();
             final int span = fcColumn.getSpan();
             if(span > 0) {
                 final EntityColumn entityColumn = new EntityColumn(id, entityModel);

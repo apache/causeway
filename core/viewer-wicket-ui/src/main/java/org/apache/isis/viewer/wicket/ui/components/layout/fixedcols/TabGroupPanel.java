@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.wicket.ui.components.entity.tabgroup;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import java.util.List;
 
@@ -29,11 +29,10 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabpanel.TabPanel;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
@@ -50,7 +49,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
     private static List<ITab> tabsFor(final EntityModel entityModel) {
         final List<ITab> tabs = Lists.newArrayList();
 
-        final FCTabGroup tabGroup = (FCTabGroup) entityModel.getFCTabGroup();
+        final FCTabGroup tabGroup = (FCTabGroup) entityModel.getLayoutMetadata();
         final List<FCTab> FCTabList = FluentIterable
                 .from(tabGroup.getTabs())
                 .filter(FCTab.Predicates.notEmpty())
@@ -73,7 +72,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
         super(ID_TAB_GROUP, tabsFor(entityModel));
 
         this.entityModel = entityModel;
-        this.tabGroup = (FCTabGroup) entityModel.getFCTabGroup();
+        this.tabGroup = (FCTabGroup) entityModel.getLayoutMetadata();
         this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, this, SESSION_ATTR_SELECTED_TAB);
 
     }

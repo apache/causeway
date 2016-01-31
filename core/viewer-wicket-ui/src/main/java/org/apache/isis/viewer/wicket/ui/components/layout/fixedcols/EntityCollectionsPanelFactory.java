@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.viewer.wicket.ui.components.entity.collections;
+package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

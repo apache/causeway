@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.propsandcolls;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.editable.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.entity.tabbed.EntityTabbedPanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.EntityTabbedPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
