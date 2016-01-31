@@ -61,7 +61,7 @@ public class EntityCollectionsPanel extends PanelAbstract<EntityModel> {
     public EntityCollectionsPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        FCColumnIfAny = entityModel.getFCColumn();
+        FCColumnIfAny = (FCColumn) entityModel.getFCColumn();
 
         buildGui();
     }

@@ -41,7 +41,7 @@ public class TabGroupListPanel extends PanelAbstract<EntityModel> {
     public TabGroupListPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
-        this.tabGroups = entityModel.getTabGroupListMetadata();
+        this.tabGroups = (List<FCTabGroup>) entityModel.getTabGroupListMetadata();
 
         buildGui();
     }

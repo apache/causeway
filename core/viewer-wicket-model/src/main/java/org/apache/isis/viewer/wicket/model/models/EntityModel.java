@@ -20,7 +20,6 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,10 +30,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
 import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -648,68 +645,69 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     // tab and column metadata (if any)
     // //////////////////////////////////////////////////////////
 
-    private List<FCTabGroup> tabGroupListMetadata;
+    private Object tabGroupListMetadata;
 
-    public List<FCTabGroup> getTabGroupListMetadata() {
+    public Object getTabGroupListMetadata() {
         return tabGroupListMetadata;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupListMetadata(final List<FCTabGroup> tabGroupListMetadata) {
+    public EntityModel cloneWithTabGroupListMetadata(final Object tabGroupListMetadata) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.tabGroupListMetadata = tabGroupListMetadata;
         return entityModel;
     }
 
 
-    private FCTabGroup FCTabGroup;
+    private Object fcTabGroup;
 
-    public FCTabGroup getFCTabGroup() {
-        return FCTabGroup;
+    public Object getFCTabGroup() {
+        return fcTabGroup;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabGroupMetadata(final FCTabGroup FCTabGroup) {
+    public EntityModel cloneWithTabGroupMetadata(final Object fcTabgroup) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.FCTabGroup = FCTabGroup;
+        entityModel.fcTabGroup = fcTabgroup;
         return entityModel;
     }
 
 
-    private FCTab FCTab;
+    private Object fcTab;
 
-    public FCTab getFCTab() {
-        return FCTab;
+    public Object getFCTab() {
+        return fcTab;
     }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithTabMetadata(final FCTab FCTab) {
+    public EntityModel cloneWithTabMetadata(final FCTab fcTab) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
-        entityModel.FCTab = FCTab;
+        entityModel.fcTab = fcTab;
         return entityModel;
     }
 
 
-    private FCColumn fcColumn;
+    private Object fcColumn;
+
+    public Object getFCColumn() {
+        return fcColumn;
+    }
 
     /**
      * Returns a new copy that SHARES the property scalar models (for edit form).
      */
-    public EntityModel cloneWithColumnMetadata(final FCColumn fcColumn) {
+    public EntityModel cloneWithColumnMetadata(final Object fcColumn) {
         final EntityModel entityModel = new EntityModel(this.adapterMemento, this.propertyScalarModels);
         entityModel.fcColumn = fcColumn;
         return entityModel;
     }
 
-    public FCColumn getFCColumn() {
-        return fcColumn;
-    }
 
     private FieldSet fieldSet;
     public FieldSet getFieldSet() {

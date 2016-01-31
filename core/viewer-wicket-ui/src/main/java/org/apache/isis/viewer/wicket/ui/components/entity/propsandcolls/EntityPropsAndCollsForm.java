@@ -127,7 +127,7 @@ public class EntityPropsAndCollsForm extends FormAbstract<ObjectAdapter> impleme
     private void buildGui() {
 
         final EntityModel entityModel = (EntityModel) getModel();
-        final FCTab FCTabMetaDataIfAny = entityModel.getFCTab();
+        final FCTab FCTabMetaDataIfAny = (FCTab) entityModel.getFCTab();
 
         final ColumnSpans columnSpans;
         if(FCTabMetaDataIfAny != null) {

@@ -50,7 +50,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
     private static List<ITab> tabsFor(final EntityModel entityModel) {
         final List<ITab> tabs = Lists.newArrayList();
 
-        final FCTabGroup tabGroup = entityModel.getFCTabGroup();
+        final FCTabGroup tabGroup = (FCTabGroup) entityModel.getFCTabGroup();
         final List<FCTab> FCTabList = FluentIterable
                 .from(tabGroup.getTabs())
                 .filter(FCTab.Predicates.notEmpty())
@@ -73,7 +73,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
         super(ID_TAB_GROUP, tabsFor(entityModel));
 
         this.entityModel = entityModel;
-        this.tabGroup = entityModel.getFCTabGroup();
+        this.tabGroup = (FCTabGroup) entityModel.getFCTabGroup();
         this.selectedTabInSession = ScopedSessionAttribute.create(entityModel, this, SESSION_ATTR_SELECTED_TAB);
 
     }

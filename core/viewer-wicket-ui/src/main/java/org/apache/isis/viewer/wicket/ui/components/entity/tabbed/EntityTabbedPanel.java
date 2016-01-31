@@ -98,7 +98,8 @@ public class EntityTabbedPanel extends PanelAbstract<EntityModel> {
         if(col != null) {
             final EntityModel entityModel =
                     getModel().cloneWithColumnMetadata(col);
-            final int span = entityModel.getFCColumn().getSpan();
+            final FCColumn fcColumn = (FCColumn) entityModel.getFCColumn();
+            final int span = fcColumn.getSpan();
             if(span > 0) {
                 final EntityColumn entityColumn = new EntityColumn(id, entityModel);
                 addOrReplace(entityColumn);
