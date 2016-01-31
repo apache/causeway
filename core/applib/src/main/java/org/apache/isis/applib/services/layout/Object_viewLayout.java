@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 
 @Mixin
 public class Object_viewLayout {

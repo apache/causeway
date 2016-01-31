@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.PageService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;

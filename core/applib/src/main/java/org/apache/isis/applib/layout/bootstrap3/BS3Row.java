@@ -21,7 +21,8 @@ package org.apache.isis.applib.layout.bootstrap3;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -47,7 +48,11 @@ public class BS3Row extends BS3ElementAbstract {
     }};
 
     // no wrapper
-    @XmlElement(name = "col", required = true)
+    @XmlElementRefs({
+            @XmlElementRef(type = BS3Col.class, name="col", required = true),
+            @XmlElementRef(type = BS3ClearFixVisible.class,  name="clearFixVisible", required = false),
+            @XmlElementRef(type = BS3ClearFixHidden.class,  name="clearFixHidden", required = false)
+    })
     public List<BS3RowContent> getCols() {
         return cols;
     }

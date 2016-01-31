@@ -23,7 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

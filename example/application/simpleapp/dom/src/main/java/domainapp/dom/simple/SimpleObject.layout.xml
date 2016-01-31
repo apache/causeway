@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/members/v1 http://isis.apache.org/schema/applib/layout/members/v1/members.xsd http://isis.apache.org/schema/applib/layout/fixedcols http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd" xmlns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:ns2="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/fixedcols http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd" xmlns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <action id="delete"/>
 
     <left span="0">
     </left>
     <tabGroup>
-        <tab name="Metadata">
-            <left span="12">
-                <fieldSet name="Foo">
-                    <ns2:property id="versionSequence"/>
-                </fieldSet>
+        <tab name="Properties">
+            <left span="8">
+                <c:fieldSet name="General">
+                    <c:action id="delete"/>
+                    <c:property id="name" labelPosition="TOP">
+                        <c:action id="updateName">
+                            <c:describedAs>This allows the name to be updated</c:describedAs>
+                        </c:action>
+                    </c:property>
+                </c:fieldSet>
             </left>
+            <middle span="4">
+                <c:fieldSet name="Foo">
+                    <c:action id="downloadJdoMetadata" position="PANEL"/>
+                    <c:action id="downloadLayoutXml" position="PANEL"/>
+                    <c:property id="versionSequence"/>
+                </c:fieldSet>
+            </middle>
         </tab>
-        <tab name="General">
-            <left span="12">
-                <fieldSet name="General">
-                    <ns2:action id="downloadJdoMetadata" position="PANEL"/>
-                    <ns2:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                    <ns2:property id="name" labelPosition="TOP">
-                        <ns2:action id="updateName">
-                            <ns2:describedAs>This allows the name to be updated</ns2:describedAs>
-                        </ns2:action>
-                    </ns2:property>
-                </fieldSet>
+        <tab name="Collections">
+            <left span="6">
+                <c:collection id="similarTo" defaultView="table"/>
             </left>
-        </tab>
-    </tabGroup>
-    <tabGroup>
-        <tab name="SimilarTo">
-            <left span="12">
-                <collection id="similarTo" defaultView="table"/>
-                <collection id="others" defaultView="hide"/>
-            </left>
+            <right span="6">
+                <c:collection id="others" defaultView="table"/>
+            </right>
         </tab>
     </tabGroup>
 </page>

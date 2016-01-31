@@ -30,7 +30,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.Owned;
+import org.apache.isis.applib.layout.common.Owned;
 
 @XmlType(
         propOrder = {
@@ -46,8 +46,6 @@ public class FCTabGroup implements FCColumnOwner, Serializable, Owned<FCTabGroup
     private List<FCTab> tabs = new ArrayList<FCTab>(){{
         add(new FCTab());
     }};
-
-
 
     // no wrapper
     @XmlElement(name = "tab", required = true)

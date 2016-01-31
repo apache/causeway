@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -30,11 +30,11 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
-import org.apache.isis.applib.layout.members.MemberRegionOwner;
-import org.apache.isis.applib.layout.members.Owned;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
-import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.FieldSet;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.common.MemberRegionOwner;
+import org.apache.isis.applib.layout.common.Owned;
 
 /**
  * The column contains a mixture of {@link FieldSet}s (of {@link PropertyLayoutData properties}) and also
@@ -79,7 +79,7 @@ public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumn
     private List<FieldSet> fieldSets = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "fieldSet", required = false)
+    @XmlElementRef(type = FieldSet.class, name = "fieldSet", required = false)
     public List<FieldSet> getFieldSets() {
         return fieldSets;
     }
@@ -92,7 +92,7 @@ public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumn
     private List<CollectionLayoutData> collections = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "collection", required = false)
+    @XmlElementRef(type = CollectionLayoutData.class, name = "collection", required = false)
     public List<CollectionLayoutData> getCollections() {
         return collections;
     }

@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.services.layout.provider;
 
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 
 public interface PageNormalizer<P extends Page> {
 

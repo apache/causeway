@@ -16,8 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members;
+package org.apache.isis.applib.layout.common;
 
-public interface Owned<T extends Owner> {
-    T getOwner();
+import java.util.List;
+
+public interface ActionOwner extends Owner {
+    List<ActionLayoutData> getActions();
 }

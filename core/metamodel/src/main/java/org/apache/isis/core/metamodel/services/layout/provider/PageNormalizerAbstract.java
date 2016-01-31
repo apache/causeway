@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.services.layout.provider;
 
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 

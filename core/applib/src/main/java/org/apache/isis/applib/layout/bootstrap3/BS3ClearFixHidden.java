@@ -18,8 +18,12 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+@XmlRootElement(
+        name = "clearFixHidden"
+)
 @XmlType(
         name = "clearFixHidden"
 )

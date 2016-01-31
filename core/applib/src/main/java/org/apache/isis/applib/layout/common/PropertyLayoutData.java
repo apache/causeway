@@ -16,55 +16,51 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;
 
 import java.io.Serializable;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.base.Function;
-
+import org.apache.isis.applib.annotation.LabelPosition;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.members.MemberRegion;
-import org.apache.isis.applib.layout.members.MemberRegionOwner;
 
 /**
- * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
- *
- * <p>
- *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
- *     {@link #defaultView} is its replacement.
- * </p>
+ * Describes the layout of a single property, broadly corresponds to the {@link org.apache.isis.applib.annotation.PropertyLayout} annotation.
  */
+@XmlRootElement(
+        name = "property"
+)
 @XmlType(
-        propOrder = {
+        name = "property"
+        , propOrder = {
                 "named"
-                ,"describedAs"
-                ,"sortedBy"
+                , "describedAs"
                 , "actions"
                 , "metadataError"
         }
 )
-public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializable {
+public class PropertyLayoutData implements ActionOwner, Serializable, Owned<FieldSet> {
 
     private static final long serialVersionUID = 1L;
 
-    public CollectionLayoutData() {
-    }
-    public CollectionLayoutData(final String id) {
-        setId(id);
+    public PropertyLayoutData() {
     }
 
+    public PropertyLayoutData(final String id) {
+        this.id = id;
+    }
 
     private String id;
 
     /**
-     * Collection identifier, being the getter method without "get" prefix, first letter lower cased.
+     * Property identifier, being the getter method without "get" or "is" prefix, first letter lower cased.
      */
     @XmlAttribute(required = true)
     public String getId() {
@@ -89,7 +85,6 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
     }
 
 
-
     private String describedAs;
 
     @XmlElement(required = false)
@@ -102,23 +97,6 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
     }
 
 
-
-    private String defaultView;
-
-    /**
-     * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
-     * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
-     */
-    @XmlAttribute(required = false)
-    public String getDefaultView() {
-        return defaultView;
-    }
-
-    public void setDefaultView(String defaultView) {
-        this.defaultView = defaultView;
-    }
-
-
     private Where hidden;
 
     @XmlAttribute(required = false)
@@ -128,6 +106,30 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
 
     public void setHidden(Where hidden) {
         this.hidden = hidden;
+    }
+
+
+    private LabelPosition labelPosition;
+
+    @XmlAttribute(required = false)
+    public LabelPosition getLabelPosition() {
+        return labelPosition;
+    }
+
+    public void setLabelPosition(LabelPosition labelPosition) {
+        this.labelPosition = labelPosition;
+    }
+
+
+    private Integer multiLine;
+
+    @XmlAttribute(required = false)
+    public Integer getMultiLine() {
+        return multiLine;
+    }
+
+    public void setMultiLine(Integer multiLine) {
+        this.multiLine = multiLine;
     }
 
 
@@ -155,28 +157,27 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
     }
 
 
-    private Integer paged;
+    private Boolean renderedAsDayBefore;
 
     @XmlAttribute(required = false)
-    public Integer getPaged() {
-        return paged;
+    public Boolean getRenderedAsDayBefore() {
+        return renderedAsDayBefore;
     }
 
-    public void setPaged(Integer paged) {
-        this.paged = paged;
+    public void setRenderedAsDayBefore(Boolean renderedAsDayBefore) {
+        this.renderedAsDayBefore = renderedAsDayBefore;
     }
 
 
+    private Integer typicalLength;
 
-    private String sortedBy;
-
-    @XmlElement(required = false)
-    public String getSortedBy() {
-        return sortedBy;
+    @XmlAttribute(required = false)
+    public Integer getTypicalLength() {
+        return typicalLength;
     }
 
-    public void setSortedBy(String sortedBy) {
-        this.sortedBy = sortedBy;
+    public void setTypicalLength(Integer typicalLength) {
+        this.typicalLength = typicalLength;
     }
 
 
@@ -194,8 +195,7 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
     }
 
 
-
-    private MemberRegionOwner owner;
+    private FieldSet owner;
     /**
      * Owner.
      *
@@ -204,13 +204,14 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
      * </p>
      */
     @XmlTransient
-    public MemberRegionOwner getOwner() {
+    public FieldSet getOwner() {
         return owner;
     }
 
-    public void setOwner(final MemberRegionOwner owner) {
+    public void setOwner(final FieldSet owner) {
         this.owner = owner;
     }
+
 
 
     private String metadataError;
@@ -244,17 +245,4 @@ public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializ
     }
 
 
-
-    public static class Functions {
-        private Functions(){}
-
-        public static Function<CollectionLayoutData, String> id() {
-            return new Function<CollectionLayoutData, String>() {
-                @Override
-                public String apply(final CollectionLayoutData metadata) {
-                    return metadata.getId();
-                }
-            };
-        }
-    }
 }

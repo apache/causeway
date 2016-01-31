@@ -16,14 +16,16 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
@@ -32,16 +34,18 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.MemberRegion;
-import org.apache.isis.applib.layout.members.MemberRegionOwner;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
  * related {@link PropertyLayoutData properties} and associated
  * {@link ActionLayoutData actions}.
  */
+@XmlRootElement(
+        name = "fieldSet"
+)
 @XmlType(
-        propOrder = {
+        name = "fieldSet"
+        , propOrder = {
                 "name"
                 , "actions"
                 , "properties"
@@ -88,7 +92,9 @@ public class FieldSet implements MemberRegion, ActionOwner, Serializable {
 
 
 
-    private List<PropertyLayoutData> properties = Lists.newArrayList();
+    private List<PropertyLayoutData> properties = new ArrayList<PropertyLayoutData>() {{
+        add(new PropertyLayoutData());
+    }};
 
     @XmlElement(name = "property", required = true)
     public List<PropertyLayoutData> getProperties() {

@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.layoutxml.v1_0;
+package org.apache.isis.core.metamodel.layout.fixedcols;
 
 import java.util.Map;
 
@@ -29,14 +29,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.FieldSet;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerServiceDefault;
 
@@ -99,8 +99,8 @@ public class FCPageTest {
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
-        FCPage FCPageRoundtripped = jaxbService.fromXml(FCPage.class, xml);
-        String xmlRoundtripped = jaxbService.toXml(FCPageRoundtripped,
+        FCPage fcPageRoundtripped = jaxbService.fromXml(FCPage.class, xml);
+        String xmlRoundtripped = jaxbService.toXml(fcPageRoundtripped,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
 
@@ -110,8 +110,8 @@ public class FCPageTest {
         dumpXsd(fcPage);
     }
 
-    protected void dumpXsd(final FCPage FCPage) {
-        Map<String, String> schemas = jaxbService.toXsd(FCPage, JaxbService.IsisSchemas.INCLUDE);
+    protected void dumpXsd(final FCPage fcPage) {
+        Map<String, String> schemas = jaxbService.toXsd(fcPage, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             System.out.println(entry.getKey() + ":");
             System.out.println(entry.getValue());

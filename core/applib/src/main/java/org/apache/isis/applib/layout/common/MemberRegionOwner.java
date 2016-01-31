@@ -16,23 +16,8 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;
 
-import org.apache.isis.applib.services.layout.PageService;
-
-/**
- * All top-level page layout classes should implement this interface.
- *
- * <p>
- *     It is used by the {@link PageService} as a common based type for any layouts read in from XML.
- * </p>
- */
-public interface Page {
-
-
-    boolean isNormalized();
-
-    void setNormalized(final boolean normalized);
-
+public interface MemberRegionOwner extends Owner {
 
 }

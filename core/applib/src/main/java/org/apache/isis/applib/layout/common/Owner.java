@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members;
+package org.apache.isis.applib.layout.common;
 
-public interface MemberRegionOwner extends Owner {
+public interface Owner {
+
 
 }

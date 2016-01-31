@@ -30,10 +30,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.fixedcols.FCColumn.Hint;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.memento.MementoService.Memento;

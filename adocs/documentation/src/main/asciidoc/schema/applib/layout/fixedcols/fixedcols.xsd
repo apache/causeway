@@ -1,13 +1,13 @@
 <?xml version="1.0" standalone="yes"?>
-<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:tns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://isis.apache.org/schema/applib/layout/members/v1">
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:tns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://isis.apache.org/schema/applib/layout/common">
 
-    <xs:import namespace="http://isis.apache.org/schema/applib/layout/members/v1" schemaLocation="../members/v1"/>
+    <xs:import namespace="http://isis.apache.org/schema/applib/layout/common" schemaLocation="../common"/>
 
     <xs:element name="page" type="tns:page"/>
 
     <xs:complexType name="page">
         <xs:sequence>
-            <xs:element name="action" type="ns1:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ns1:action" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="left" type="tns:fcColumn" minOccurs="0"/>
             <xs:element name="tabGroup" type="tns:fcTabGroup" maxOccurs="unbounded"/>
             <xs:element name="right" type="tns:fcColumn" minOccurs="0"/>
@@ -16,8 +16,8 @@
 
     <xs:complexType name="fcColumn">
         <xs:sequence>
-            <xs:element name="fieldSet" type="ns1:fieldSet" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="collection" type="ns1:collectionLayoutData" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ns1:fieldSet" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ns1:collection" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="span" type="xs:int" use="required"/>
     </xs:complexType>

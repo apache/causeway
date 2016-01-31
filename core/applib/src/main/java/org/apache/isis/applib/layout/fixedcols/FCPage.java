@@ -23,6 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -30,12 +31,12 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
-import org.apache.isis.applib.layout.members.v1.ActionOwner;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
-import org.apache.isis.applib.layout.members.v1.Page;
-import org.apache.isis.applib.layout.members.v1.PropertyLayoutData;
+import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.ActionOwner;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.FieldSet;
+import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
 /**
@@ -61,7 +62,7 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
     private List<ActionLayoutData> actions;
 
     // no wrapper
-    @XmlElement(name = "action", required = false)
+    @XmlElementRef(type = ActionLayoutData.class, name="action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }

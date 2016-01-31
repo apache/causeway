@@ -41,7 +41,7 @@ import org.apache.isis.applib.util.Enums;
  * the framework developer should only use those values that represent concrete locations.  
  */
 @XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout/members/v1"
+        namespace = "http://isis.apache.org/schema/applib/layout/common"
 )
 public enum Where {
     /**

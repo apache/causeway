@@ -30,10 +30,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
-import org.apache.isis.applib.layout.members.MemberRegion;
-import org.apache.isis.applib.layout.members.Owned;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.MemberRegion;
+import org.apache.isis.applib.layout.common.Owned;
+import org.apache.isis.applib.layout.common.FieldSet;
 
 @XmlType(
         name="tab"

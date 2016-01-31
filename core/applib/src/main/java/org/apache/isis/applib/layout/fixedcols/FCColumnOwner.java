@@ -18,7 +18,7 @@
  */
 package org.apache.isis.applib.layout.fixedcols;
 
-import org.apache.isis.applib.layout.members.Owner;
+import org.apache.isis.applib.layout.common.Owner;
 
 public interface FCColumnOwner extends Owner {
 

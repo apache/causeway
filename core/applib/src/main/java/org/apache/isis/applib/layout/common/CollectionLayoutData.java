@@ -16,54 +16,60 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.annotation.BookmarkPolicy;
+import com.google.common.base.Function;
+
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
-import org.apache.isis.applib.layout.members.Owned;
 
 /**
- * Describes the layout of a single action, broadly corresponding to {@link org.apache.isis.applib.annotation.ActionLayout}.
+ * Describes the layout of a single collection, broadly corresponds to the {@link org.apache.isis.applib.annotation.CollectionLayout} annotation.
  *
  * <p>
- *  Note that {@link org.apache.isis.applib.annotation.ActionLayout#contributed()} is omitted because this only applies
- *  to domain services.
+ *     Note that {@link org.apache.isis.applib.annotation.CollectionLayout#render()} is omitted because
+ *     {@link #defaultView} is its replacement.
  * </p>
  */
-@XmlType(
-    name = "actionLayout"
-    , propOrder = {
-        "named"
-        , "describedAs"
-        , "metadataError"
-    }
+@XmlRootElement(
+        name = "collection"
 )
-public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
+@XmlType(
+        name = "collection"
+        , propOrder = {
+                "named"
+                ,"describedAs"
+                ,"sortedBy"
+                , "actions"
+                , "metadataError"
+        }
+)
+public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public ActionLayoutData() {
+    public CollectionLayoutData() {
     }
-    public ActionLayoutData(final String id) {
+    public CollectionLayoutData(final String id) {
         setId(id);
     }
 
+
     private String id;
+
     /**
-     * Method name.
-     *
-     * <p>
-     *     Overloaded methods are not supported.
-     * </p>
+     * Collection identifier, being the getter method without "get" prefix, first letter lower cased.
      */
-    @XmlAttribute(name="id", required = true)
+    @XmlAttribute(required = true)
     public String getId() {
         return id;
     }
@@ -72,18 +78,6 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
         this.id = id;
     }
 
-
-
-    private BookmarkPolicy bookmarking;
-
-    @XmlAttribute(required = false)
-    public BookmarkPolicy getBookmarking() {
-        return bookmarking;
-    }
-
-    public void setBookmarking(BookmarkPolicy bookmarking) {
-        this.bookmarking = bookmarking;
-    }
 
 
     private String cssClass;
@@ -97,30 +91,6 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
         this.cssClass = cssClass;
     }
 
-
-    private String cssClassFa;
-
-    @XmlAttribute(required = false)
-    public String getCssClassFa() {
-        return cssClassFa;
-    }
-
-    public void setCssClassFa(String cssClassFa) {
-        this.cssClassFa = cssClassFa;
-    }
-
-
-
-    private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
-
-    @XmlAttribute(required = false)
-    public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
-        return cssClassFaPosition;
-    }
-
-    public void setCssClassFaPosition(org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition) {
-        this.cssClassFaPosition = cssClassFaPosition;
-    }
 
 
     private String describedAs;
@@ -136,6 +106,22 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
 
 
 
+    private String defaultView;
+
+    /**
+     * Typically <code>table</code> or <code>hidden</code>, but could be any other named view that is configured and
+     * appropriate, eg <code>gmap3</code> or <code>fullcalendar2</code>.
+     */
+    @XmlAttribute(required = false)
+    public String getDefaultView() {
+        return defaultView;
+    }
+
+    public void setDefaultView(String defaultView) {
+        this.defaultView = defaultView;
+    }
+
+
     private Where hidden;
 
     @XmlAttribute(required = false)
@@ -146,7 +132,6 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
     public void setHidden(Where hidden) {
         this.hidden = hidden;
     }
-
 
 
     private String named;
@@ -161,7 +146,6 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
     }
 
 
-
     private Boolean namedEscaped;
 
     @XmlAttribute(required = false)
@@ -174,22 +158,47 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
     }
 
 
-
-    private org.apache.isis.applib.annotation.ActionLayout.Position position;
+    private Integer paged;
 
     @XmlAttribute(required = false)
-    public org.apache.isis.applib.annotation.ActionLayout.Position getPosition() {
-        return position;
+    public Integer getPaged() {
+        return paged;
     }
 
-    public void setPosition(org.apache.isis.applib.annotation.ActionLayout.Position position) {
-        this.position = position;
+    public void setPaged(Integer paged) {
+        this.paged = paged;
     }
 
 
 
+    private String sortedBy;
 
-    private ActionOwner owner;
+    @XmlElement(required = false)
+    public String getSortedBy() {
+        return sortedBy;
+    }
+
+    public void setSortedBy(String sortedBy) {
+        this.sortedBy = sortedBy;
+    }
+
+
+
+    private List<ActionLayoutData> actions;
+
+    // no wrapper
+    @XmlElement(name = "action", required = false)
+    public List<ActionLayoutData> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<ActionLayoutData> actionLayoutDatas) {
+        this.actions = actionLayoutDatas;
+    }
+
+
+
+    private MemberRegionOwner owner;
     /**
      * Owner.
      *
@@ -198,11 +207,11 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
      * </p>
      */
     @XmlTransient
-    public ActionOwner getOwner() {
+    public MemberRegionOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ActionOwner owner) {
+    public void setOwner(final MemberRegionOwner owner) {
         this.owner = owner;
     }
 
@@ -224,4 +233,31 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
 
 
 
+    private String path;
+
+    @Programmatic
+    @XmlTransient
+    public String getPath() {
+        return path;
+    }
+
+    @Programmatic
+    public void setPath(final String path) {
+        this.path = path;
+    }
+
+
+
+    public static class Functions {
+        private Functions(){}
+
+        public static Function<CollectionLayoutData, String> id() {
+            return new Function<CollectionLayoutData, String>() {
+                @Override
+                public String apply(final CollectionLayoutData metadata) {
+                    return metadata.getId();
+                }
+            };
+        }
+    }
 }

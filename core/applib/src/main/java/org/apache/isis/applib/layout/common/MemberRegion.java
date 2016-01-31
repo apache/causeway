@@ -16,7 +16,7 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members;
+package org.apache.isis.applib.layout.common;
 
 /**
  * Represents an area on the page containing one or several related members.

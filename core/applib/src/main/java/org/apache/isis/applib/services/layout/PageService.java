@@ -17,7 +17,7 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 
 public interface PageService {
 

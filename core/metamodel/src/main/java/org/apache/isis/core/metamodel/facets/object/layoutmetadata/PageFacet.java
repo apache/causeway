@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
 
 
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**

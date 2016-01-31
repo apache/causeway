@@ -1,7 +1,30 @@
 <?xml version="1.0" standalone="yes"?>
-<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:tns="http://isis.apache.org/schema/applib/layout/members/v1" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault="qualified" version="1.0" targetNamespace="http://isis.apache.org/schema/applib/layout/common" xmlns:tns="http://isis.apache.org/schema/applib/layout/common" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:complexType name="actionLayout">
+  <xs:element name="action" type="tns:action"/>
+
+  <xs:element name="collection" type="tns:collection"/>
+
+  <xs:element name="domainObject" type="tns:domainObject"/>
+
+  <xs:element name="fieldSet" type="tns:fieldSet"/>
+
+  <xs:element name="property" type="tns:property"/>
+
+  <xs:complexType name="domainObject">
+    <xs:sequence>
+      <xs:element name="named" type="xs:string" minOccurs="0"/>
+      <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
+      <xs:element name="plural" type="xs:string" minOccurs="0"/>
+      <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="bookmarking" type="tns:bookmarkPolicy"/>
+    <xs:attribute name="cssClass" type="xs:string"/>
+    <xs:attribute name="cssClassFa" type="xs:string"/>
+    <xs:attribute name="cssClassFaPosition" type="tns:cssClassFaPosition"/>
+  </xs:complexType>
+
+  <xs:complexType name="action">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
@@ -19,17 +42,17 @@
 
   <xs:complexType name="fieldSet">
     <xs:sequence>
-      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="property" type="tns:propertyLayout" maxOccurs="unbounded"/>
+      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="tns:property" maxOccurs="unbounded"/>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="propertyLayout">
+  <xs:complexType name="property">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
-      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>
@@ -42,12 +65,12 @@
     <xs:attribute name="typicalLength" type="xs:int"/>
   </xs:complexType>
 
-  <xs:complexType name="collectionLayoutData">
+  <xs:complexType name="collection">
     <xs:sequence>
       <xs:element name="named" type="xs:string" minOccurs="0"/>
       <xs:element name="describedAs" type="xs:string" minOccurs="0"/>
       <xs:element name="sortedBy" type="xs:string" minOccurs="0"/>
-      <xs:element name="action" type="tns:actionLayout" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element ref="tns:action" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="metadataError" type="xs:string" minOccurs="0"/>
     </xs:sequence>
     <xs:attribute name="cssClass" type="xs:string"/>

@@ -21,7 +21,7 @@ package org.apache.isis.applib.annotation;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout/members/v1"
+        namespace = "http://isis.apache.org/schema/applib/layout/common"
 )
 public enum RenderType {
     EAGERLY,

@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.services.layout.provider;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.core.metamodel.services.layout.PageServiceDefault;
 
 /**

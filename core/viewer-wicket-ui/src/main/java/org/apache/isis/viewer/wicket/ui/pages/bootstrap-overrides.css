@@ -749,3 +749,7 @@ tr.headers th form input {
 .tabGroups > .row {
     padding-bottom: 10px;
 }
+
+.entityPage .middleColumn .tabbable {
+    padding-bottom: 10px;
+}

@@ -28,9 +28,9 @@
  *
  */
 @javax.xml.bind.annotation.XmlSchema(
-        namespace = "http://isis.apache.org/schema/applib/layout/members/v1",
+        namespace = "http://isis.apache.org/schema/applib/layout/common",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
         // specifying the location seems to cause JaxbService#toXsd() to not generate the schema; not sure why...
-        //, location = ..."http://isis.apache.org/schema/metamodel/layout/members/v1/members-1.0.xsd"
+        //, location = ..."http://isis.apache.org/schema/metamodel/layout/common/common.xsd"
 )
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;

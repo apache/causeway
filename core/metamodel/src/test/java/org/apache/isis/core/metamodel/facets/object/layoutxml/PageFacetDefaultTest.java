@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.members.v1.FieldSet;
+import org.apache.isis.applib.layout.common.FieldSet;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

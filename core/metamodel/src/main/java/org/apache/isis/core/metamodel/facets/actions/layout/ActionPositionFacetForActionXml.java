@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
+import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacet;
 import org.apache.isis.core.metamodel.facets.actions.position.ActionPositionFacetAbstract;

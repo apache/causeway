@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.collections.layout;
 
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacet;
 import org.apache.isis.core.metamodel.facets.object.paged.PagedFacetAbstract;

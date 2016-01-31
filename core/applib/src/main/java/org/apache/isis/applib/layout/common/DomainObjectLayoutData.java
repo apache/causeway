@@ -16,12 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.members.v1;
+package org.apache.isis.applib.layout.common;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -29,14 +30,17 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 /**
  * Describes the layout of the title and icon of a domain object, broadly corresponding to {@link org.apache.isis.applib.annotation.DomainObjectLayout}.
  */
+@XmlRootElement(
+        name = "domainObject"
+)
 @XmlType(
-    name = "domainObjectLayout"
-    , propOrder = {
-        "named"
-        , "describedAs"
-        , "plural"
-        , "metadataError"
-    }
+        name = "domainObject"
+        , propOrder = {
+            "named"
+            , "describedAs"
+            , "plural"
+            , "metadataError"
+        }
 )
 public class DomainObjectLayoutData implements Serializable {
 

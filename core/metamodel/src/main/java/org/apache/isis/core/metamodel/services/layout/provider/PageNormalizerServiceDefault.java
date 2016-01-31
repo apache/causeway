@@ -32,7 +32,7 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.bootstrap3.BS3Page;
 import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.members.v1.Page;
+import org.apache.isis.applib.layout.common.Page;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -42,11 +42,11 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 )
 public class PageNormalizerServiceDefault implements PageNormalizerService, SpecificationLoaderAware {
 
-    public static final String MEMBERS_TNS = "http://isis.apache.org/schema/applib/layout/members/v1";
-    public static final String MEMBERS_SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/members/v1/members.xsd";
-
-
     private static final Logger LOG = LoggerFactory.getLogger(PageNormalizerServiceDefault.class);
+
+    public static final String COMMON_TNS = "http://isis.apache.org/schema/applib/layout/common";
+    public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/common/common.xsd";
+
     private SpecificationLoader specificationLookup;
 
     private PageNormalizerFC pageNormalizerFC;
@@ -86,8 +86,8 @@ public class PageNormalizerServiceDefault implements PageNormalizerService, Spec
     @Override
     public String schemaLocationsFor(final Page page) {
         final List<String> parts = Lists.newArrayList();
-        parts.add(MEMBERS_TNS);
-        parts.add(MEMBERS_SCHEMA_LOCATION);
+        parts.add(COMMON_TNS);
+        parts.add(COMMON_SCHEMA_LOCATION);
         if(page instanceof FCPage) {
             parts.add(PageNormalizerFC.TNS);
             parts.add(PageNormalizerFC.SCHEMA_LOCATION);

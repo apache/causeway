@@ -18,18 +18,20 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.layout.members.v1.ActionLayoutData;
-import org.apache.isis.applib.layout.members.v1.CollectionLayoutData;
-import org.apache.isis.applib.layout.members.v1.DomainObjectLayoutData;
-import org.apache.isis.applib.layout.members.v1.FieldSet;
+import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.common.FieldSet;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -41,7 +43,7 @@ import org.apache.isis.applib.layout.members.v1.FieldSet;
  * </p>
  *
  * <p>
- *     It is also possible for them to contain specifically identified {@link org.apache.isis.applib.layout.members.v1.ActionLayoutData action}s and even the domain object's
+ *     It is also possible for them to contain specifically identified {@link ActionLayoutData action}s and even the domain object's
  *     {@link DomainObjectLayoutData title and icon}.  Most pages however tend to show these elements in a top-level
  *     header, and so if that's the case then use the page's {@link BS3Page#setHeader(boolean) header} attribute that
  *     is provided as a convenience.
@@ -51,13 +53,16 @@ import org.apache.isis.applib.layout.members.v1.FieldSet;
  *     It is rendered as a (eg) &lt;div class=&quot;col-md-4 ...&quot;&gt;
  * </p>
  */
+@XmlRootElement(
+        name = "col"
+)
 @XmlType(
         name = "col"
         , propOrder = {
-            "domainObjectLayout",
+            "domainObject",
             "actions",
             "rows",
-            "tabGroup",
+            "tabGroups",
             "fieldSets",
             "collections",
         }
@@ -79,31 +84,83 @@ public class BS3Col extends BS3RowContent {
     }
 
 
+    private boolean unreferencedActions;
 
-    private DomainObjectLayoutData domainObjectLayoutData;
+    /**
+     * Whether this column should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one column that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public boolean isUnreferencedActions() {
+        return unreferencedActions;
+    }
+
+    public void setUnreferencedActions(final boolean unreferencedActions) {
+        this.unreferencedActions = unreferencedActions;
+    }
+
+
+    private boolean unreferencedProperties;
+    /**
+     * Whether the first fieldset in this column should be used to hold any unreferenced properties (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one column that has this attribute set, and that column must have at least one {@link FieldSet}.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public boolean isUnreferencedProperties() {
+        return unreferencedProperties;
+    }
+
+    public void setUnreferencedProperties(final boolean unreferencedProperties) {
+        this.unreferencedProperties = unreferencedProperties;
+    }
+
+
+    private boolean unreferencedCollections;
+    /**
+     * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one column that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public boolean isUnreferencedCollections() {
+        return unreferencedCollections;
+    }
+
+    public void setUnreferencedCollections(final boolean unreferencedCollections) {
+        this.unreferencedCollections = unreferencedCollections;
+    }
+
+
+
+
+    private DomainObjectLayoutData domainObject;
 
     /**
      * Whether to show the object's icon and title.
-     *
-     * <p>
-     *     Generally speaking it is easier
-     * </p>
      */
-    @XmlElement(name = "domainObjectLayout", required = false)
-    public DomainObjectLayoutData getDomainObjectLayoutData() {
-        return domainObjectLayoutData;
+    @XmlElementRef(type=DomainObjectLayoutData.class, name="domainObject", required = false)
+    public DomainObjectLayoutData getDomainObject() {
+        return domainObject;
     }
 
-    public void setDomainObjectLayoutData(final DomainObjectLayoutData domainObjectLayoutData) {
-        this.domainObjectLayoutData = domainObjectLayoutData;
+    public void setDomainObject(final DomainObjectLayoutData domainObjectLayoutData) {
+        this.domainObject = domainObjectLayoutData;
     }
 
 
 
-    private List<ActionLayoutData> actions = new ArrayList<ActionLayoutData>();
+    private List<ActionLayoutData> actions = Lists.newArrayList();
 
-    @XmlElementWrapper(required = false)
-    @XmlElement(name = "action", required = false)
+    // no wrapper
+    @XmlElementRef(type = ActionLayoutData.class, name = "action", required = false)
     public List<ActionLayoutData> getActions() {
         return actions;
     }
@@ -114,7 +171,7 @@ public class BS3Col extends BS3RowContent {
 
 
 
-    private List<BS3Row> rows = new ArrayList<BS3Row>();
+    private List<BS3Row> rows = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = false)
@@ -128,30 +185,44 @@ public class BS3Col extends BS3RowContent {
 
 
 
-    private BS3TabGroup tabGroup;
-
-    @XmlElement(name="tabGroup", required = false)
-    public BS3TabGroup getTabGroup() {
-        return tabGroup;
-    }
-
-    public void setTabGroup(final BS3TabGroup tabGroup) {
-        this.tabGroup = tabGroup;
-    }
-
-
-
-
-    private List<FieldSet> propGroups = new ArrayList<FieldSet>();
+    private List<BS3TabGroup> tabGroups = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "propGroup", required = false)
-    public List<FieldSet> getPropGroups() {
-        return propGroups;
+    @XmlElement(name = "tabGroup", required = false)
+    public List<BS3TabGroup> getTabGroups() {
+        return tabGroups;
     }
 
-    public void setPropGroups(final List<FieldSet> propGroups) {
-        this.propGroups = propGroups;
+    public void setTabGroups(final List<BS3TabGroup> tabGroups) {
+        this.tabGroups = tabGroups;
+    }
+
+
+
+    private List<FieldSet> fieldSets = Lists.newArrayList();
+
+    // no wrapper
+    @XmlElementRef(type=FieldSet.class, name = "fieldSet", required = false)
+    public List<FieldSet> getFieldSets() {
+        return fieldSets;
+    }
+
+    public void setFieldSets(final List<FieldSet> fieldSets) {
+        this.fieldSets = fieldSets;
+    }
+
+
+
+    private List<CollectionLayoutData> collections = Lists.newArrayList();
+
+    // no wrapper
+    @XmlElementRef(type=CollectionLayoutData.class, name = "collection", required = false)
+    public List<CollectionLayoutData> getCollections() {
+        return collections;
+    }
+
+    public void setCollections(final List<CollectionLayoutData> collections) {
+        this.collections = collections;
     }
 
 
