@@ -16,96 +16,95 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.core.metamodel.facets.object.grid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.layout.PageService;
+import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerService;
+import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
-public class PageFacetDefault
+public class GridFacetDefault
             extends FacetAbstract
-            implements PageFacet {
+            implements GridFacet {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PageFacetDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GridFacetDefault.class);
 
 
     public static Class<? extends Facet> type() {
-        return PageFacet.class;
+        return GridFacet.class;
     }
 
 
-    public static PageFacet create(
+    public static GridFacet create(
             final FacetHolder facetHolder,
             final TranslationService translationService,
-            final PageService pageService,
-            final PageNormalizerService pageNormalizerService, final DeploymentCategory deploymentCategory) {
-        return new PageFacetDefault(facetHolder, translationService, pageService, pageNormalizerService,
+            final GridService gridService,
+            final GridNormalizerService gridNormalizerService, final DeploymentCategory deploymentCategory) {
+        return new GridFacetDefault(facetHolder, translationService, gridService, gridNormalizerService,
                 deploymentCategory);
     }
 
     private final TranslationService translationService;
-    private final PageNormalizerService pageNormalizerService;
+    private final GridNormalizerService gridNormalizerService;
     private final DeploymentCategory deploymentCategory;
-    private final PageService pageService;
+    private final GridService gridService;
 
-    private Page page;
+    private Grid grid;
     private boolean blacklisted;
 
-    private PageFacetDefault(
+    private GridFacetDefault(
             final FacetHolder facetHolder,
             final TranslationService translationService,
-            final PageService pageService,
-            final PageNormalizerService pageNormalizerService,
+            final GridService gridService,
+            final GridNormalizerService gridNormalizerService,
             final DeploymentCategory deploymentCategory) {
-        super(PageFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
-        this.pageService = pageService;
+        super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
+        this.gridService = gridService;
         this.translationService = translationService;
-        this.pageNormalizerService = pageNormalizerService;
+        this.gridNormalizerService = gridNormalizerService;
         this.deploymentCategory = deploymentCategory;
     }
 
     /**
      * Blacklisting only occurs if running in production mode.
      */
-    @Override
-    public Page getPage() {
+    public Grid getGrid() {
         if (deploymentCategory.isProduction() || blacklisted) {
-            return page;
+            return this.grid;
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
-        final Page page = pageService.fromXml(domainClass);
-        if(deploymentCategory.isProduction() && page == null) {
+        final Grid grid = gridService.fromXml(domainClass);
+        if(deploymentCategory.isProduction() && grid == null) {
             blacklisted = true;
         }
-        this.page = normalize(page);
-        return this.page;
+        this.grid = normalize(grid);
+        return this.grid;
     }
 
-    private Page normalize(final Page page) {
-        if(page == null) {
+    private Grid normalize(final Grid grid) {
+        if(grid == null) {
             return null;
         }
 
         // if have .layout.json and then add a .layout.xml without restarting, then note that
         // the changes won't be picked up.  Normalizing would be required
         // in order to trample over the .layout.json's original facets
-        if(page.isNormalized()) {
-            return page;
+        if(grid.isNormalized()) {
+            return grid;
         }
 
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
 
-        pageNormalizerService.normalize(page, domainClass);
-        return page;
+        gridNormalizerService.normalize(grid, domainClass);
+        return grid;
     }
 
     private ObjectSpecification getSpecification() {

@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.layout.provider;
+package org.apache.isis.core.metamodel.services.grid.normalizer;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -28,7 +28,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.fixedcols.FCGrid;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.common.MemberRegionOwner;
@@ -72,20 +72,20 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
+public class GridNormalizerFC extends GridNormalizerAbstract<FCGrid> {
 
     public static final String TNS = "http://isis.apache.org/schema/applib/layout/fixedcols";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd";
 
 
-    public PageNormalizerFC(
+    public GridNormalizerFC(
             final TranslationService translationService,
             final SpecificationLoader specificationLookup) {
         super(translationService, specificationLookup);
     }
 
     @Override
-    public void normalize(final FCPage page, final Class<?> domainClass) {
+    public void normalize(final FCGrid page, final Class<?> domainClass) {
 
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
@@ -108,7 +108,7 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
      * </p>
      */
     private static void derive(
-            final FCPage metadata,
+            final FCGrid metadata,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
@@ -123,7 +123,7 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
 
         // capture the first column, and also
         // capture the first property group (if any) with the default name ('General')
-        metadata.visit(new FCPage.VisitorAdapter() {
+        metadata.visit(new FCGrid.VisitorAdapter() {
             @Override
             public void visit(final FCColumn fcColumn) {
                 firstColumnRef.compareAndSet(null, fcColumn);
@@ -236,14 +236,14 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
     }
 
     private void overwrite(
-            final FCPage page,
+            final FCGrid page,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
         final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
 
-        page.visit(new FCPage.VisitorAdapter() {
+        page.visit(new FCGrid.VisitorAdapter() {
             private int collectionSequence = 1;
             private int actionDomainObjectSequence = 1;
             private int actionPropertyGroupSequence = 1;

@@ -35,7 +35,7 @@ import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
@@ -44,10 +44,10 @@ import org.apache.isis.applib.services.dto.Dto;
  * far right, with the middle consisting of a number of {@link FCTabGroup tabgroup}s, stacked vertically.
  */
 @XmlRootElement(
-        name = "page"
+        name = "grid"
 )
 @XmlType(
-        name = "page"
+        name = "grid"
         , propOrder = {
                 "actions"
                 , "left"
@@ -55,7 +55,7 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "right"
         }
 )
-public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
+public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -115,7 +115,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
 
 
     interface Visitor {
-        void visit(final FCPage fcPage);
+        void visit(final FCGrid fcPage);
         void visit(final FCTabGroup fcTabGroup);
         void visit(final FCTab fcTab);
         void visit(final FCColumn fcColumn);
@@ -127,7 +127,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
 
     public static class VisitorAdapter implements Visitor {
         @Override
-        public void visit(final FCPage fcPage) { }
+        public void visit(final FCGrid fcPage) { }
         @Override
         public void visit(final FCTabGroup fcTabGroup) { }
         @Override
@@ -149,7 +149,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
      * Visits all elements of the graph.  The {@link Visitor} implementation
      * can assume that all "owner" references are populated.
      */
-    public void visit(final FCPage.Visitor visitor) {
+    public void visit(final FCGrid.Visitor visitor) {
         visitor.visit(this);
         traverseActions(this, visitor);
         traverseColumn(getLeft(), this, visitor);
@@ -218,7 +218,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
         final LinkedHashMap<String, PropertyLayoutData> propertiesById = Maps.newLinkedHashMap();
-        visit(new FCPage.VisitorAdapter() {
+        visit(new FCGrid.VisitorAdapter() {
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 propertiesById.put(propertyLayoutData.getId(), propertyLayoutData);
             }
@@ -232,7 +232,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
     public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
         final LinkedHashMap<String, CollectionLayoutData> collectionsById = Maps.newLinkedHashMap();
 
-        visit(new FCPage.VisitorAdapter() {
+        visit(new FCGrid.VisitorAdapter() {
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
                 collectionsById.put(collectionLayoutData.getId(), collectionLayoutData);
@@ -247,7 +247,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
     public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
         final LinkedHashMap<String, ActionLayoutData> actionsById = Maps.newLinkedHashMap();
 
-        visit(new FCPage.VisitorAdapter() {
+        visit(new FCGrid.VisitorAdapter() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionsById.put(actionLayoutData.getId(), actionLayoutData);
@@ -262,7 +262,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
     public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
         final LinkedHashMap<String, FieldSet> fieldSetsByName = Maps.newLinkedHashMap();
 
-        visit(new FCPage.VisitorAdapter() {
+        visit(new FCGrid.VisitorAdapter() {
             @Override
             public void visit(final FieldSet fieldSet) {
                 fieldSetsByName.put(fieldSet.getName(), fieldSet);
@@ -277,7 +277,7 @@ public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, F
     public LinkedHashMap<String, FCTab> getAllTabsByName() {
         final LinkedHashMap<String, FCTab> tabsByName = Maps.newLinkedHashMap();
 
-        visit(new FCPage.VisitorAdapter() {
+        visit(new FCGrid.VisitorAdapter() {
             @Override
             public void visit(final FCTab fcTab) {
                 tabsByName.put(fcTab.getName(), fcTab);

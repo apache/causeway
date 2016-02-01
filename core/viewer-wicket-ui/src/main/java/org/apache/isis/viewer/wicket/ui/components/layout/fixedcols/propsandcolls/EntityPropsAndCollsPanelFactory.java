@@ -27,14 +27,14 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.layout.fallback.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCPagePanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCGridPanel;
 
 /**
  * {@link ComponentFactory} for {@link EntityPropsAndCollsPanel}.
  *
  *
  * <p>
- *     Used by both {@link EntityEditablePanel} and also {@link FCPagePanel}.
+ *     Used by both {@link EntityEditablePanel} and also {@link FCGridPanel}.
  * </p>
  */
 public class EntityPropsAndCollsPanelFactory extends EntityComponentFactoryAbstract {

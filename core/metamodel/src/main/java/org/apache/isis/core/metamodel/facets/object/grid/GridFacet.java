@@ -16,18 +16,18 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.core.metamodel.facets.object.grid;
 
 
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Corresponds to providing a <code>.layout.xml</code> file for the domain object's class.
  */
-public interface PageFacet extends Facet {
+public interface GridFacet extends Facet {
 
-    Page getPage();
+    Grid getGrid();
 
 
 }

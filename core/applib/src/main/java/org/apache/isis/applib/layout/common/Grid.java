@@ -20,23 +20,17 @@ package org.apache.isis.applib.layout.common;
 
 import java.util.LinkedHashMap;
 
-import javax.xml.bind.annotation.XmlTransient;
-
-import com.google.common.collect.Maps;
-
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
-import org.apache.isis.applib.layout.fixedcols.FCTab;
-import org.apache.isis.applib.services.layout.PageService;
+import org.apache.isis.applib.services.layout.GridService;
 
 /**
  * All top-level page layout classes should implement this interface.
  *
  * <p>
- *     It is used by the {@link PageService} as a common based type for any layouts read in from XML.
+ *     It is used by the {@link GridService} as a common based type for any layouts read in from XML.
  * </p>
  */
-public interface Page {
+public interface Grid {
 
     boolean isNormalized();
 

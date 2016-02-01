@@ -36,7 +36,7 @@ import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
@@ -49,16 +49,16 @@ import org.apache.isis.applib.services.dto.Dto;
  * </p>
  */
 @XmlRootElement(
-        name = "page"
+        name = "grid"
 )
 @XmlType(
-        name = "page"
+        name = "grid"
         , propOrder = {
             "rows"
             , "metadataErrors"
         }
 )
-public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwner {
+public class BS3Grid extends BS3ElementAbstract implements Grid, Dto, BS3RowOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -113,7 +113,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     }
 
     interface Visitor {
-        void visit(final BS3Page bs3Page);
+        void visit(final BS3Grid bs3Page);
         void visit(final BS3Row bs3Row);
         void visit(final BS3Col bs3Col);
         void visit(final BS3ClearFix bs3ClearFix);
@@ -128,7 +128,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
 
     public static class VisitorAdapter implements Visitor {
         @Override
-        public void visit(final BS3Page bs3Page) { }
+        public void visit(final BS3Grid bs3Page) { }
         @Override
         public void visit(final BS3Row bs3Row) { }
         @Override
@@ -151,7 +151,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
         public void visit(final ActionLayoutData actionLayoutData) { }
     }
 
-    public void visit(final BS3Page.Visitor visitor) {
+    public void visit(final BS3Grid.Visitor visitor) {
         visitor.visit(this);
         traverseRows(this, visitor);
     }
@@ -257,7 +257,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     @XmlTransient
     public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
         final LinkedHashMap<String, PropertyLayoutData> propertiesById = Maps.newLinkedHashMap();
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             public void visit(final PropertyLayoutData propertyLayoutData) {
                 propertiesById.put(propertyLayoutData.getId(), propertyLayoutData);
             }
@@ -271,7 +271,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
         final LinkedHashMap<String, CollectionLayoutData> collectionsById = Maps.newLinkedHashMap();
 
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final CollectionLayoutData collectionLayoutData) {
                 collectionsById.put(collectionLayoutData.getId(), collectionLayoutData);
@@ -286,7 +286,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
         final LinkedHashMap<String, ActionLayoutData> actionsById = Maps.newLinkedHashMap();
 
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionsById.put(actionLayoutData.getId(), actionLayoutData);
@@ -301,7 +301,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
         final LinkedHashMap<String, FieldSet> fieldSetsByName = Maps.newLinkedHashMap();
 
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final FieldSet fieldSet) {
                 fieldSetsByName.put(fieldSet.getName(), fieldSet);
@@ -316,7 +316,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     public LinkedHashMap<String, BS3Tab> getAllTabsByName() {
         final LinkedHashMap<String, BS3Tab> tabsByName = Maps.newLinkedHashMap();
 
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final BS3Tab bS3Tab) {
                 tabsByName.put(bS3Tab.getName(), bS3Tab);
@@ -332,7 +332,7 @@ public class BS3Page extends BS3ElementAbstract implements Page, Dto, BS3RowOwne
     public LinkedHashMap<String, HasCssId> getAllCssId() {
         final LinkedHashMap<String, HasCssId> divsByCssId = Maps.newLinkedHashMap();
 
-        visit(new BS3Page.VisitorAdapter() {
+        visit(new BS3Grid.VisitorAdapter() {
             @Override
             public void visit(final BS3Row bs3Row) {
                 final String id = bs3Row.getId();

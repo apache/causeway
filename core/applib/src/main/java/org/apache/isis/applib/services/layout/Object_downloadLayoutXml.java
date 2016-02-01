@@ -28,7 +28,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.ParameterLayout;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.value.Clob;
 
@@ -55,11 +55,11 @@ public class Object_downloadLayoutXml {
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName) {
-        final Page page = getPage();
-        final String xml = jaxbService.toXml(page,
+        final Grid grid = getPage();
+        final String xml = jaxbService.toXml(grid,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
-                        pageService.schemaLocations(page)
+                        gridService.schemaLocations(grid)
                 ));
 
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
@@ -72,12 +72,12 @@ public class Object_downloadLayoutXml {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
     }
 
-    protected Page getPage() {
-        return pageService.toPage(object);
+    protected Grid getPage() {
+        return gridService.toGrid(object);
     }
 
     @Inject
-    PageService pageService;
+    GridService gridService;
 
     @Inject
     JaxbService jaxbService;

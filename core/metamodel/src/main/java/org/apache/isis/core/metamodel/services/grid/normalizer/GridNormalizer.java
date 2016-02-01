@@ -14,24 +14,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.layout.provider;
+package org.apache.isis.core.metamodel.services.grid.normalizer;
 
-import java.util.List;
+import org.apache.isis.applib.layout.common.Grid;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.common.Page;
-import org.apache.isis.core.metamodel.services.layout.PageServiceDefault;
+public interface GridNormalizer<G extends Grid> {
 
-/**
- * Internal SPI used by {@link PageServiceDefault}.
- */
-public interface PageNormalizerService {
+    void normalize(final G page, final Class<?> domainClass);
 
-    @Programmatic
-    List<Class<? extends Page>> pageImplementations();
-
-    @Programmatic
-    void normalize(Page page, Class<?> domainClass);
-
-    String schemaLocationsFor(final Page fcPage);
 }

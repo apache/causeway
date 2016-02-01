@@ -14,26 +14,26 @@
  * KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations
  * under the License. */
-package org.apache.isis.core.metamodel.facets.object.layoutmetadata;
+package org.apache.isis.core.metamodel.facets.object.grid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.applib.services.layout.PageService;
+import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerService;
+import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
 
-public class PageFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
+public class GridFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PageFacetFactory.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GridFacetFactory.class);
 
-    public PageFacetFactory() {
+    public GridFacetFactory() {
         super(FeatureType.OBJECTS_ONLY);
     }
 
@@ -43,14 +43,14 @@ public class PageFacetFactory extends FacetFactoryAbstract implements ServicesIn
 
         final TranslationService translationService =
                 servicesInjector.lookupService(TranslationService.class);
-        final PageService pageService =
-                servicesInjector.lookupService(PageService.class);
-        final PageNormalizerService pageNormalizerService =
-                servicesInjector.lookupService(PageNormalizerService.class);
+        final GridService gridService =
+                servicesInjector.lookupService(GridService.class);
+        final GridNormalizerService gridNormalizerService =
+                servicesInjector.lookupService(GridNormalizerService.class);
 
         FacetUtil.addFacet(
-                PageFacetDefault.create(facetHolder,
-                        translationService, pageService, pageNormalizerService, getDeploymentCategory()));
+                GridFacetDefault.create(facetHolder,
+                        translationService, gridService, gridNormalizerService, getDeploymentCategory()));
     }
 
     private ServicesInjector servicesInjector;

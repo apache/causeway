@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs3:page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bs3:row cssClass="bishbosh">
         <bs3:col span="8">
@@ -17,11 +17,9 @@
                     <bs3:row>
                         <bs3:col span="12">
                             <c:fieldSet name="Metadata">
-                                <c:action id="downloadJdMetadata">
-                                </c:action>
+                                <c:action id="downloadJdMetadata"/>
                                 <c:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                                <c:property id="versionSequence">
-                                </c:property>
+                                <c:property id="versionSequence"/>
                             </c:fieldSet>
                         </bs3:col>
                         <bs3:col span="6">
@@ -63,4 +61,4 @@
             </bs3:tabGroup>
         </bs3:col>
     </bs3:row>
-</bs3:page>
+</bs3:grid>

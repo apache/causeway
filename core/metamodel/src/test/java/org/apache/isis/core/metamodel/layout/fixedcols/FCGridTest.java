@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.fixedcols.FCGrid;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
@@ -38,13 +38,13 @@ import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerServiceDefault;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class FCPageTest {
+public class FCGridTest {
 
     private JaxbService jaxbService;
 
@@ -61,7 +61,7 @@ public class FCPageTest {
     @Test
     public void xxx() throws Exception {
 
-        final FCPage fcPage = new FCPage();
+        final FCGrid fcPage = new FCGrid();
 
         fcPage.setTabGroups(Lists.<FCTabGroup>newArrayList());
         fcPage.getTabGroups().add(new FCTabGroup());
@@ -94,12 +94,12 @@ public class FCPageTest {
         fcPage.setActions(Lists.<ActionLayoutData>newArrayList());
         fcPage.getActions().add(deleteActionLayoutData);
 
-        final String schemaLocations = new PageNormalizerServiceDefault().schemaLocationsFor(fcPage);
+        final String schemaLocations = new GridNormalizerServiceDefault().schemaLocationsFor(fcPage);
         String xml = jaxbService.toXml(fcPage,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
-        FCPage fcPageRoundtripped = jaxbService.fromXml(FCPage.class, xml);
+        FCGrid fcPageRoundtripped = jaxbService.fromXml(FCGrid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(fcPageRoundtripped,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
@@ -110,7 +110,7 @@ public class FCPageTest {
         dumpXsd(fcPage);
     }
 
-    protected void dumpXsd(final FCPage fcPage) {
+    protected void dumpXsd(final FCGrid fcPage) {
         Map<String, String> schemas = jaxbService.toXsd(fcPage, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             System.out.println(entry.getKey() + ":");

@@ -23,23 +23,23 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.bootstrap3.BS3ElementAbstract;
-import org.apache.isis.applib.layout.bootstrap3.BS3Page;
+import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.bootstrap3.BS3Row;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class BS3PagePanel extends PanelAbstract<EntityModel> {
+public class BS3GridPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_ROWS = "rows";
 
-    private final BS3Page bs3Page;
+    private final BS3Grid bs3Page;
 
-    public BS3PagePanel(final String id, final EntityModel entityModel) {
+    public BS3GridPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
-        this.bs3Page = (BS3Page) entityModel.getLayoutMetadata();
+        this.bs3Page = (BS3Grid) entityModel.getLayoutMetadata();
         buildGui();
     }
 

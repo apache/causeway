@@ -14,12 +14,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.layout.provider;
+package org.apache.isis.core.metamodel.services.grid.normalizer;
 
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public interface PageNormalizer<P extends Page> {
+public abstract class GridNormalizerAbstract<P extends Grid> implements GridNormalizer<P> {
 
-    void normalize(final P page, final Class<?> domainClass);
+    protected final SpecificationLoader specificationLookup;
+    protected final TranslationService translationService;
+
+    public GridNormalizerAbstract(
+            final TranslationService translationService,
+            final SpecificationLoader specificationLookup) {
+        this.specificationLookup = specificationLookup;
+        this.translationService = translationService;
+    }
 
 }

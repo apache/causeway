@@ -42,9 +42,9 @@ import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.PageService;
+import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.applib.value.Blob;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
@@ -108,10 +108,10 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             final OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (final ObjectSpecification objectSpec : domainObjectSpecs) {
                 final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final Page page = pageService.toPage(domainClass);
-                if(page != null) {
+                final Grid grid = gridService.toGrid(domainClass);
+                if(grid != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
-                    String xml = jaxbService.toXml(page);
+                    String xml = jaxbService.toXml(grid);
                     writer.write(xml);
                     writer.flush();
                     zos.closeEntry();
@@ -134,7 +134,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
     // //////////////////////////////////////
 
     @Inject
-    PageService pageService;
+    GridService gridService;
 
     @Inject
     JaxbService jaxbService;

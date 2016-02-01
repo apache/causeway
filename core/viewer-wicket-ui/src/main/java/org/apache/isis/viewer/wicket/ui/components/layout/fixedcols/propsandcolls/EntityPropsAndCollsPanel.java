@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcol
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.fallback.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCPagePanel;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCGridPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 /**
@@ -30,7 +30,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * the provided {@link EntityModel}.
  * 
  * <p>
- *     Used by both {@link FCPagePanel} and also {@link EntityEditablePanel}.  In the former
+ *     Used by both {@link FCGridPanel} and also {@link EntityEditablePanel}.  In the former
  *     case the collections are never shown, and edit buttons suppressed. In the latter case the
  *     collections are shown, possibly overflowing to region below.
  * </p>

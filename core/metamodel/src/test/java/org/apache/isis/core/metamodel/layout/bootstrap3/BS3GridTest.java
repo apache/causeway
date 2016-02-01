@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.layout.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.bootstrap3.BS3Page;
+import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.bootstrap3.BS3TabGroup;
@@ -40,13 +40,13 @@ import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerServiceDefault;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-public class BS3PageTest {
+public class BS3GridTest {
 
     private JaxbService jaxbService;
 
@@ -63,7 +63,7 @@ public class BS3PageTest {
     @Test
     public void xxx() throws Exception {
 
-        final BS3Page bs3Page = new BS3Page();
+        final BS3Grid bs3Page = new BS3Grid();
 
         // header
         final BS3Row headerRow = bs3Page.getRows().get(0);
@@ -123,12 +123,12 @@ public class BS3PageTest {
         similarToColl.setId("similarTo");
 
 
-        final String schemaLocations = new PageNormalizerServiceDefault().schemaLocationsFor(bs3Page);
+        final String schemaLocations = new GridNormalizerServiceDefault().schemaLocationsFor(bs3Page);
         String xml = jaxbService.toXml(bs3Page,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
-        BS3Page bs3Pageroundtripped = jaxbService.fromXml(BS3Page.class, xml);
+        BS3Grid bs3Pageroundtripped = jaxbService.fromXml(BS3Grid.class, xml);
         String xmlRoundtripped = jaxbService.toXml(bs3Pageroundtripped,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         assertThat(xml, is(equalTo(xmlRoundtripped)));
@@ -139,7 +139,7 @@ public class BS3PageTest {
         dumpXsd(bs3Page);
     }
 
-    protected void dumpXsd(final BS3Page bs3Page) {
+    protected void dumpXsd(final BS3Grid bs3Page) {
         Map<String, String> schemas = jaxbService.toXsd(bs3Page, JaxbService.IsisSchemas.INCLUDE);
         for (Map.Entry<String, String> entry : schemas.entrySet()) {
             System.out.println(entry.getKey() + ":");

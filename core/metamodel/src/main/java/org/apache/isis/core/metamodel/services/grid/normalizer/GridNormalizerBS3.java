@@ -14,22 +14,26 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.layout.provider;
+package org.apache.isis.core.metamodel.services.grid.normalizer;
 
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public abstract class PageNormalizerAbstract<P extends Page> implements PageNormalizer<P> {
+public class GridNormalizerBS3 extends GridNormalizerAbstract<BS3Grid> {
 
-    protected final SpecificationLoader specificationLookup;
-    protected final TranslationService translationService;
+    public static final String TNS = "http://isis.apache.org/schema/applib/layout/bootstrap3";
+    public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd";
 
-    public PageNormalizerAbstract(
+
+    public GridNormalizerBS3(
             final TranslationService translationService,
             final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-        this.translationService = translationService;
+        super(translationService, specificationLookup);
     }
 
+    @Override
+    public void normalize(final BS3Grid page, final Class<?> domainClass) {
+
+    }
 }

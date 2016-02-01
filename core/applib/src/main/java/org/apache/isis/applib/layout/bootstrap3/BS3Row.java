@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
- * Contains a row of content, either on the top-level {@link BS3Page page} or at any other lower-level element that can
+ * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
  * contain rows, eg {@link BS3Tab tabs}.
  *
  * <p>

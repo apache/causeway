@@ -42,7 +42,7 @@ import org.apache.isis.applib.layout.common.Owned;
  *
  * <p>
  * A column generally is used within a {@link FCTab}; there can be up to three such (left, middle and right).  It is
- * also possible for their to be a column far-left on the top-level {@link FCPage page}, and another far-right.
+ * also possible for their to be a column far-left on the top-level {@link FCGrid page}, and another far-right.
  * </p>
  *
  */

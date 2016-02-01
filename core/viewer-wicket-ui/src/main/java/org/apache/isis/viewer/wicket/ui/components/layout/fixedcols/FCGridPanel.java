@@ -24,11 +24,11 @@ import java.util.List;
 import com.google.common.collect.FluentIterable;
 
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.fixedcols.FCGrid;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.columns.EntityColumn;
@@ -40,7 +40,7 @@ import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
  * {@link PanelAbstract Panel} to represent an entity on a single page made up
  * of several &lt;div&gt; regions.
  */
-public class FCPagePanel extends PanelAbstract<EntityModel> {
+public class FCGridPanel extends PanelAbstract<EntityModel> {
 
     private static final long serialVersionUID = 1L;
 
@@ -48,7 +48,7 @@ public class FCPagePanel extends PanelAbstract<EntityModel> {
     private static final String ID_MIDDLE_COLUMN = "middleColumn";
     private static final String ID_RIGHT_COLUMN = "rightColumn";
 
-    public FCPagePanel(final String id, final EntityModel entityModel) {
+    public FCGridPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
         buildGui();
     }
@@ -63,8 +63,8 @@ public class FCPagePanel extends PanelAbstract<EntityModel> {
         }
 
         // forces metadata to be derived && synced
-        final PageFacet PageFacet = model.getTypeOfSpecification().getFacet(PageFacet.class);
-        final FCPage page = (FCPage) PageFacet.getPage();
+        final GridFacet GridFacet = model.getTypeOfSpecification().getFacet(GridFacet.class);
+        final FCGrid page = (FCGrid) GridFacet.getGrid();
 
 
         addOrReplace(ComponentType.ENTITY_SUMMARY, model);

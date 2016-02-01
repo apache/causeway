@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.layout;
+package org.apache.isis.core.metamodel.services.grid;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,13 +35,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.applib.services.layout.PageService;
+import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
-import org.apache.isis.core.metamodel.facets.object.layoutmetadata.PageFacet;
-import org.apache.isis.core.metamodel.services.layout.provider.PageNormalizerService;
+import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -49,16 +49,16 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 @DomainService(
         nature = NatureOfService.DOMAIN
 )
-public class PageServiceDefault
-        implements PageService, SpecificationLoaderAware, DeploymentCategoryAware {
+public class GridServiceDefault
+        implements GridService, SpecificationLoaderAware, DeploymentCategoryAware {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PageServiceDefault.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
 
     // for better logging messages (used only in prototyping mode)
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
 
     // cache (used only in prototyping mode)
-    private final Map<String, Page> pageByXml = Maps.newHashMap();
+    private final Map<String, Grid> pageByXml = Maps.newHashMap();
 
     @Override
     @Programmatic
@@ -69,7 +69,7 @@ public class PageServiceDefault
 
     @Override
     @Programmatic
-    public Page fromXml(Class<?> domainClass) {
+    public Grid fromXml(Class<?> domainClass) {
 
         final String resourceName = resourceNameFor(domainClass);
         final String xml;
@@ -87,9 +87,9 @@ public class PageServiceDefault
 
 
         if(!deploymentCategory.isProduction()) {
-            final Page page = pageByXml.get(xml);
-            if(page != null) {
-                return page;
+            final Grid grid = pageByXml.get(xml);
+            if(grid != null) {
+                return grid;
             }
 
             final String badXml = badXmlByClass.get(domainClass);
@@ -107,10 +107,10 @@ public class PageServiceDefault
 
         try {
             // all known implementations of Page
-            List<Class<? extends Page>> pageImplementations = pageNormalizerService.pageImplementations();
+            List<Class<? extends Grid>> pageImplementations = gridNormalizerService.pageImplementations();
             final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(new Class[0]));
 
-            final Page metadata = (Page) jaxbService.fromXml(context, xml);
+            final Grid metadata = (Grid) jaxbService.fromXml(context, xml);
             if(!deploymentCategory.isProduction()) {
                 pageByXml.put(xml, metadata);
             }
@@ -143,21 +143,21 @@ public class PageServiceDefault
 
     @Override
     @Programmatic
-    public Page toPage(final Object domainObject) {
-        return toPage(domainObject.getClass());
+    public Grid toGrid(final Object domainObject) {
+        return toGrid(domainObject.getClass());
     }
 
     @Override
-    public Page toPage(final Class<?> domainClass) {
+    public Grid toGrid(final Class<?> domainClass) {
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-        final PageFacet facet = objectSpec.getFacet(PageFacet.class);
-        return facet != null? facet.getPage(): null;
+        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+        return facet != null? facet.getGrid(): null;
     }
 
 
     @Override
-    public String schemaLocations(final Page page) {
-        return pageNormalizerService.schemaLocationsFor(page);
+    public String schemaLocations(final Grid grid) {
+        return gridNormalizerService.schemaLocationsFor(grid);
     }
 
     ////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ public class PageServiceDefault
     JaxbService jaxbService;
 
     @Inject
-    PageNormalizerService pageNormalizerService;
+    GridNormalizerService gridNormalizerService;
     //endregion
 
 }

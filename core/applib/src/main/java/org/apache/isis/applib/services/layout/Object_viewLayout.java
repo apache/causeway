@@ -25,7 +25,7 @@ import org.apache.isis.applib.annotation.Mixin;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.RestrictTo;
 import org.apache.isis.applib.annotation.SemanticsOf;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 
 @Mixin
 public class Object_viewLayout {
@@ -50,7 +50,7 @@ public class Object_viewLayout {
             cssClassFa = "fa-th"
     )
     @MemberOrder(sequence = "550.2")
-    public Page $$() {
+    public Grid $$() {
         return getPage();
     }
 
@@ -59,13 +59,13 @@ public class Object_viewLayout {
         return getPage() == null;
     }
 
-    protected Page getPage() {
-        return pageService.toPage(object);
+    protected Grid getPage() {
+        return gridService.toGrid(object);
     }
 
 
 
     @Inject
-    PageService pageService;
+    GridService gridService;
 
 }

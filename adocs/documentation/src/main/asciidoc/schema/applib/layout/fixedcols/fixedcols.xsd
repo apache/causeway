@@ -3,9 +3,9 @@
 
     <xs:import namespace="http://isis.apache.org/schema/applib/layout/common" schemaLocation="../common"/>
 
-    <xs:element name="page" type="tns:page"/>
+    <xs:element name="grid" type="tns:grid"/>
 
-    <xs:complexType name="page">
+    <xs:complexType name="grid">
         <xs:sequence>
             <xs:element ref="ns1:action" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="left" type="tns:fcColumn" minOccurs="0"/>

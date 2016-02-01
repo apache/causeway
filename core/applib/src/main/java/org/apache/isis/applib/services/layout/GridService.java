@@ -17,9 +17,9 @@
 package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.common.Page;
+import org.apache.isis.applib.layout.common.Grid;
 
-public interface PageService {
+public interface GridService {
 
     /**
      * Whether any metadata exists for this domain class, and if so then whether it is valid or invalid.
@@ -30,20 +30,17 @@ public interface PageService {
     /**
      * Returns (raw unnormalized) metadata, eg per the <code>.layout.xml</code> file.
      */
-    @Programmatic
-    Page fromXml(Class<?> domainClass);
+    @Programmatic Grid fromXml(Class<?> domainClass);
 
     /**
      * Obtains the (normalized) layout metadata, if any, for the (domain class of the) specified domain object.
      */
-    @Programmatic
-    Page toPage(Object domainObject);
+    @Programmatic Grid toGrid(Object domainObject);
 
     /**
      * Obtains the (normalized) layout metadata, if any, for the specified domain class.
      */
-    @Programmatic
-    Page toPage(Class<?> domainClass);
+    @Programmatic Grid toGrid(Class<?> domainClass);
 
-    String schemaLocations(final Page page);
+    String schemaLocations(final Grid grid);
 }

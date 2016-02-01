@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<page xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/fixedcols http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd" xmlns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<grid xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/fixedcols http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd" xmlns="http://isis.apache.org/schema/applib/layout/fixedcols" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 
     <left span="0">
@@ -38,4 +38,4 @@
             </right>
         </tab>
     </tabGroup>
-</page>
+</grid>

@@ -95,7 +95,7 @@ public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3T
     }
 
 
-    private boolean unreferencedActions;
+    private Boolean unreferencedActions;
 
     /**
      * Whether this column should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
@@ -105,16 +105,16 @@ public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3T
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedActions() {
+    public Boolean isUnreferencedActions() {
         return unreferencedActions;
     }
 
-    public void setUnreferencedActions(final boolean unreferencedActions) {
+    public void setUnreferencedActions(final Boolean unreferencedActions) {
         this.unreferencedActions = unreferencedActions;
     }
 
 
-    private boolean unreferencedProperties;
+    private Boolean unreferencedProperties;
     /**
      * Whether the first fieldset in this column should be used to hold any unreferenced properties (contributed or &quot;native&quot;).
      *
@@ -123,16 +123,16 @@ public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3T
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedProperties() {
+    public Boolean isUnreferencedProperties() {
         return unreferencedProperties;
     }
 
-    public void setUnreferencedProperties(final boolean unreferencedProperties) {
+    public void setUnreferencedProperties(final Boolean unreferencedProperties) {
         this.unreferencedProperties = unreferencedProperties;
     }
 
 
-    private boolean unreferencedCollections;
+    private Boolean unreferencedCollections;
     /**
      * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
@@ -141,11 +141,11 @@ public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3T
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean isUnreferencedCollections() {
+    public Boolean isUnreferencedCollections() {
         return unreferencedCollections;
     }
 
-    public void setUnreferencedCollections(final boolean unreferencedCollections) {
+    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
         this.unreferencedCollections = unreferencedCollections;
     }
 
