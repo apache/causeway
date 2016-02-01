@@ -53,7 +53,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class CollectionLayoutData implements MemberRegion, ActionOwner, Serializable {
+public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 

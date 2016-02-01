@@ -6,9 +6,9 @@
     </left>
     <tabGroup>
         <tab name="Properties">
-            <left span="8">
+            <left span="12">
                 <c:fieldSet name="General">
-                    <c:action id="delete"/>
+                    <c:action id="delete" position="PANEL_DROPDOWN"/>
                     <c:property id="name" labelPosition="TOP">
                         <c:action id="updateName">
                             <c:describedAs>This allows the name to be updated</c:describedAs>
@@ -16,18 +16,21 @@
                     </c:property>
                 </c:fieldSet>
             </left>
-            <middle span="4">
+        </tab>
+        <tab name="Metadata">
+            <left span="12">
                 <c:fieldSet name="Foo">
                     <c:action id="downloadJdoMetadata" position="PANEL"/>
                     <c:action id="downloadLayoutXml" position="PANEL"/>
                     <c:property id="versionSequence"/>
                 </c:fieldSet>
-            </middle>
+
+            </left>
         </tab>
     </tabGroup>
     <tabGroup>
         <tab name="Collections">
-            <left span="6">
+            <left span="12">
                 <c:collection id="similarTo" defaultView="table"/>
             </left>
             <right span="6">

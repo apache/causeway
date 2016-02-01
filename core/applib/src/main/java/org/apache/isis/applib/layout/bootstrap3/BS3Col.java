@@ -29,9 +29,11 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
+import org.apache.isis.applib.layout.common.MemberRegionOwner;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -60,9 +62,25 @@ import org.apache.isis.applib.layout.common.FieldSet;
             "collections",
         }
 )
-public class BS3Col extends BS3RowContent {
+public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, MemberRegionOwner, HasCssId {
 
     private static final long serialVersionUID = 1L;
+
+
+
+    private String id;
+
+    /**
+     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
+     */
+    @XmlAttribute(required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
 
 
     private int span;
@@ -87,7 +105,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean getUnreferencedActions() {
+    public boolean isUnreferencedActions() {
         return unreferencedActions;
     }
 
@@ -105,7 +123,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean getUnreferencedProperties() {
+    public boolean isUnreferencedProperties() {
         return unreferencedProperties;
     }
 
@@ -123,7 +141,7 @@ public class BS3Col extends BS3RowContent {
      * </p>
      */
     @XmlAttribute(required = false)
-    public boolean getUnreferencedCollections() {
+    public boolean isUnreferencedCollections() {
         return unreferencedCollections;
     }
 

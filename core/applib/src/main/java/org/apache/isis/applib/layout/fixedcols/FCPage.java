@@ -32,7 +32,7 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.ActionOwner;
+import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.Page;
@@ -55,7 +55,7 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "right"
         }
 )
-public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
+public class FCPage implements Page, Dto, ActionLayoutDataOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -115,10 +115,10 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
 
 
     interface Visitor {
-        void visit(final FCPage FCPage);
-        void visit(final FCTabGroup tabGroup);
-        void visit(final FCTab FCTab);
-        void visit(final FCColumn FCColumn);
+        void visit(final FCPage fcPage);
+        void visit(final FCTabGroup fcTabGroup);
+        void visit(final FCTab fcTab);
+        void visit(final FCColumn fcColumn);
         void visit(final FieldSet fieldSet);
         void visit(final PropertyLayoutData propertyLayoutData);
         void visit(final CollectionLayoutData collectionLayoutData);
@@ -127,13 +127,13 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
 
     public static class VisitorAdapter implements Visitor {
         @Override
-        public void visit(final FCPage FCPage) { }
+        public void visit(final FCPage fcPage) { }
         @Override
-        public void visit(final FCTabGroup tabGroup) { }
+        public void visit(final FCTabGroup fcTabGroup) { }
         @Override
-        public void visit(final FCTab FCTab) { }
+        public void visit(final FCTab fcTab) { }
         @Override
-        public void visit(final FCColumn FCColumn) { }
+        public void visit(final FCColumn fcColumn) { }
         @Override
         public void visit(final FieldSet fieldSet) {}
         @Override
@@ -149,39 +149,40 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
      * Visits all elements of the graph.  The {@link Visitor} implementation
      * can assume that all "owner" references are populated.
      */
-    public void visit(final Visitor visitor) {
+    public void visit(final FCPage.Visitor visitor) {
         visitor.visit(this);
         traverseActions(this, visitor);
         traverseColumn(getLeft(), this, visitor);
         final List<FCTabGroup> tabGroups = getTabGroups();
-        for (final FCTabGroup tabGroup : tabGroups) {
-            tabGroup.setOwner(this);
-            visitor.visit(tabGroup);
-            final List<FCTab> tabs = tabGroup.getTabs();
-            for (final FCTab FCTab : tabs) {
-                FCTab.setOwner(tabGroup);
-                visitor.visit(FCTab);
-                traverseColumn(FCTab.getLeft(), FCTab, visitor);
-                traverseColumn(FCTab.getMiddle(), FCTab, visitor);
-                traverseColumn(FCTab.getRight(), FCTab, visitor);
+        for (final FCTabGroup fcTabGroup : tabGroups) {
+            fcTabGroup.setOwner(this);
+            visitor.visit(fcTabGroup);
+            final List<FCTab> tabs = fcTabGroup.getTabs();
+            for (final FCTab fcTab : tabs) {
+                fcTab.setOwner(fcTabGroup);
+                visitor.visit(fcTab);
+                traverseColumn(fcTab.getLeft(), fcTab, visitor);
+                traverseColumn(fcTab.getMiddle(), fcTab, visitor);
+                traverseColumn(fcTab.getRight(), fcTab, visitor);
             }
         }
         traverseColumn(getRight(), this, visitor);
     }
 
-    private void traverseColumn(final FCColumn FCColumn, final FCColumnOwner FCColumnOwner, final Visitor visitor) {
-        if(FCColumn == null) {
+    private void traverseColumn(
+            final FCColumn fcColumn, final FCColumnOwner fcColumnOwner, final Visitor visitor) {
+        if(fcColumn == null) {
             return;
         }
-        FCColumn.setOwner(FCColumnOwner);
-        visitor.visit(FCColumn);
-        traversePropertyGroups(FCColumn, visitor);
-        traverseCollections(FCColumn, visitor);
+        fcColumn.setOwner(fcColumnOwner);
+        visitor.visit(fcColumn);
+        traverseFieldSets(fcColumn, visitor);
+        traverseCollections(fcColumn, visitor);
     }
 
-    private void traversePropertyGroups(final FCColumn FCColumn, final Visitor visitor) {
-        for (final FieldSet fieldSet : FCColumn.getFieldSets()) {
-            fieldSet.setOwner(FCColumn);
+    private void traverseFieldSets(final FCColumn fcColumn, final Visitor visitor) {
+        for (final FieldSet fieldSet : fcColumn.getFieldSets()) {
+            fieldSet.setOwner(fcColumn);
             visitor.visit(fieldSet);
             traverseActions(fieldSet, visitor);
             final List<PropertyLayoutData> properties = fieldSet.getProperties();
@@ -193,21 +194,21 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
         }
     }
 
-    private void traverseCollections(final FCColumn FCColumn, final Visitor visitor) {
-        for (final CollectionLayoutData collectionLayoutData : FCColumn.getCollections()) {
-            collectionLayoutData.setOwner(FCColumn);
+    private void traverseCollections(final FCColumn fcColumn, final Visitor visitor) {
+        for (final CollectionLayoutData collectionLayoutData : fcColumn.getCollections()) {
+            collectionLayoutData.setOwner(fcColumn);
             visitor.visit(collectionLayoutData);
             traverseActions(collectionLayoutData, visitor);
         }
     }
 
-    private void traverseActions(final ActionOwner actionOwner, final Visitor visitor) {
-        final List<ActionLayoutData> actionLayoutDatas = actionOwner.getActions();
+    private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner, final Visitor visitor) {
+        final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
         if(actionLayoutDatas == null) {
             return;
         }
         for (final ActionLayoutData actionLayoutData : actionLayoutDatas) {
-            actionLayoutData.setOwner(actionOwner);
+            actionLayoutData.setOwner(actionLayoutDataOwner);
             visitor.visit(actionLayoutData);
         }
     }
@@ -258,33 +259,32 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
 
     @Programmatic
     @XmlTransient
-    public LinkedHashMap<String, FCTab> getAllTabsByName() {
-        final LinkedHashMap<String, FCTab> tabsByName = Maps.newLinkedHashMap();
+    public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
+        final LinkedHashMap<String, FieldSet> fieldSetsByName = Maps.newLinkedHashMap();
 
         visit(new FCPage.VisitorAdapter() {
             @Override
-            public void visit(final FCTab FCTab) {
-                tabsByName.put(FCTab.getName(), FCTab);
+            public void visit(final FieldSet fieldSet) {
+                fieldSetsByName.put(fieldSet.getName(), fieldSet);
             }
         });
-        return tabsByName;
+        return fieldSetsByName;
     }
 
 
     @Programmatic
     @XmlTransient
-    public LinkedHashMap<String, FieldSet> getAllPropertyGroupsByName() {
-        final LinkedHashMap<String, FieldSet> propertyGroupsByName = Maps.newLinkedHashMap();
+    public LinkedHashMap<String, FCTab> getAllTabsByName() {
+        final LinkedHashMap<String, FCTab> tabsByName = Maps.newLinkedHashMap();
 
         visit(new FCPage.VisitorAdapter() {
             @Override
-            public void visit(final FieldSet fieldSet) {
-                propertyGroupsByName.put(fieldSet.getName(), fieldSet);
+            public void visit(final FCTab fcTab) {
+                tabsByName.put(fcTab.getName(), fcTab);
             }
         });
-        return propertyGroupsByName;
+        return tabsByName;
     }
-
 
 
 
@@ -300,5 +300,6 @@ public class FCPage implements Page, Dto, ActionOwner, Serializable, FCColumnOwn
     public void setNormalized(final boolean normalized) {
         this.normalized = normalized;
     }
+
 
 }

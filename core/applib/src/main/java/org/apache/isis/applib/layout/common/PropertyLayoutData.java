@@ -46,7 +46,7 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class PropertyLayoutData implements ActionOwner, Serializable, Owned<FieldSet> {
+public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, Owned<FieldSet> {
 
     private static final long serialVersionUID = 1L;
 

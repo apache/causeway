@@ -48,7 +48,7 @@ import org.apache.isis.applib.annotation.Where;
         , "metadataError"
     }
 )
-public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
+public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner> {
 
     private static final long serialVersionUID = 1L;
 
@@ -192,7 +192,7 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
 
 
 
-    private ActionOwner owner;
+    private ActionLayoutDataOwner owner;
     /**
      * Owner.
      *
@@ -201,11 +201,11 @@ public class ActionLayoutData implements Serializable, Owned<ActionOwner> {
      * </p>
      */
     @XmlTransient
-    public ActionOwner getOwner() {
+    public ActionLayoutDataOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final ActionOwner owner) {
+    public void setOwner(final ActionLayoutDataOwner owner) {
         this.owner = owner;
     }
 

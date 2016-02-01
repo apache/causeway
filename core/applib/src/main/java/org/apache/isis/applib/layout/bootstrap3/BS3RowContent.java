@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.bootstrap3;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  * Common superclass for any content of a row.
@@ -60,6 +61,25 @@ public abstract class BS3RowContent extends BS3ElementAbstract {
 
     public void setSize(final Size size) {
         this.size = size;
+    }
+
+
+    private BS3RowContentOwner owner;
+
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public BS3RowContentOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final BS3RowContentOwner owner) {
+        this.owner = owner;
     }
 
 }

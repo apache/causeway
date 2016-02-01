@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -33,7 +34,7 @@ import javax.xml.bind.annotation.XmlType;
             "tabs"
         }
 )
-public class BS3TabGroup extends BS3ElementAbstract{
+public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,4 +52,25 @@ public class BS3TabGroup extends BS3ElementAbstract{
     public void setTabs(final List<BS3Tab> tabs) {
         this.tabs = tabs;
     }
+
+
+    private BS3TabGroupOwner owner;
+
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public BS3TabGroupOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final BS3TabGroupOwner owner) {
+        this.owner = owner;
+    }
+
 }
+

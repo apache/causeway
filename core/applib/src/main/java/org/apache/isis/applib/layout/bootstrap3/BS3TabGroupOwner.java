@@ -16,10 +16,13 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.common;
+package org.apache.isis.applib.layout.bootstrap3;
 
 import java.util.List;
 
-public interface ActionOwner extends Owner {
-    List<ActionLayoutData> getActions();
+import org.apache.isis.applib.layout.common.Owner;
+
+public interface BS3TabGroupOwner extends Owner {
+
+    List<BS3TabGroup> getTabGroups();
 }

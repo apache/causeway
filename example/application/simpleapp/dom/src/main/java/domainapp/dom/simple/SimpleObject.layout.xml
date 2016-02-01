@@ -5,7 +5,8 @@
         <bs3:col span="8">
             <c:domainObject/>
         </bs3:col>
-        <bs3:col span="4" cssClass="foobar">
+        <bs3:col span="4" cssClass="foobar" unreferencedActions="true">
+            <c:action id="delete" cssClassFa="fa-trash"/>
         </bs3:col>
     </bs3:row>
 
@@ -16,7 +17,8 @@
                     <bs3:row>
                         <bs3:col span="12">
                             <c:fieldSet name="Metadata">
-                                <c:action id="downloadJdoMetadata" position="PANEL"/>
+                                <c:action id="downloadJdMetadata">
+                                </c:action>
                                 <c:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
                                 <c:property id="versionSequence">
                                 </c:property>

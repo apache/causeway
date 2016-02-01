@@ -18,6 +18,15 @@
  */
 package org.apache.isis.applib.layout.common;
 
+import java.util.LinkedHashMap;
+
+import javax.xml.bind.annotation.XmlTransient;
+
+import com.google.common.collect.Maps;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.fixedcols.FCPage;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.services.layout.PageService;
 
 /**
@@ -29,10 +38,20 @@ import org.apache.isis.applib.services.layout.PageService;
  */
 public interface Page {
 
-
     boolean isNormalized();
 
     void setNormalized(final boolean normalized);
 
+    @Programmatic
+    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
+
+    @Programmatic
+    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
+
+    @Programmatic
+    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
+
+    @Programmatic
+    LinkedHashMap<String, FieldSet> getAllFieldSetsByName();
 
 }

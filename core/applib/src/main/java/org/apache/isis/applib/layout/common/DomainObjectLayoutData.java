@@ -23,6 +23,7 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
@@ -154,6 +155,25 @@ public class DomainObjectLayoutData implements Serializable {
 
     public void setMetadataError(final String metadataError) {
         this.metadataError = metadataError;
+    }
+
+
+
+    private MemberRegionOwner owner;
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public MemberRegionOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final MemberRegionOwner owner) {
+        this.owner = owner;
     }
 
 

@@ -33,7 +33,7 @@ import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.common.MemberRegionOwner;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.ActionOwner;
+import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
@@ -125,8 +125,8 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
         // capture the first property group (if any) with the default name ('General')
         metadata.visit(new FCPage.VisitorAdapter() {
             @Override
-            public void visit(final FCColumn FCColumn) {
-                firstColumnRef.compareAndSet(null, FCColumn);
+            public void visit(final FCColumn fcColumn) {
+                firstColumnRef.compareAndSet(null, fcColumn);
             }
             @Override
             public void visit(final FieldSet fieldSet) {
@@ -135,8 +135,8 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
                 }
             }
             @Override
-            public void visit(final FCTabGroup tabGroup) {
-                lastTabGroupRef.set(tabGroup);
+            public void visit(final FCTabGroup fcTabGroup) {
+                lastTabGroupRef.set(fcTabGroup);
             }
         });
 
@@ -252,7 +252,7 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
 
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
-                final ActionOwner actionOwner = actionLayoutData.getOwner();
+                final ActionLayoutDataOwner actionLayoutDataOwner = actionLayoutData.getOwner();
                 final ObjectAction objectAction = objectActionById.get(actionLayoutData.getId());
                 if(objectAction == null) {
                     return;
@@ -260,18 +260,18 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
 
                 final String memberOrderName;
                 final int memberOrderSequence;
-                if(actionOwner instanceof FieldSet) {
-                    final FieldSet fieldSet = (FieldSet) actionOwner;
+                if(actionLayoutDataOwner instanceof FieldSet) {
+                    final FieldSet fieldSet = (FieldSet) actionLayoutDataOwner;
                     final List<PropertyLayoutData> properties = fieldSet.getProperties();
                     final PropertyLayoutData propertyLayoutData = properties.get(0); // any will do
                     memberOrderName = propertyLayoutData.getId();
                     memberOrderSequence = actionPropertyGroupSequence++;
-                } else if(actionOwner instanceof PropertyLayoutData) {
-                    final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionOwner;
+                } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
+                    final PropertyLayoutData propertyLayoutData = (PropertyLayoutData) actionLayoutDataOwner;
                     memberOrderName = propertyLayoutData.getId();
                     memberOrderSequence = actionPropertySequence++;
-                } else if(actionOwner instanceof CollectionLayoutData) {
-                    final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionOwner;
+                } else if(actionLayoutDataOwner instanceof CollectionLayoutData) {
+                    final CollectionLayoutData collectionLayoutData = (CollectionLayoutData) actionLayoutDataOwner;
                     memberOrderName = collectionLayoutData.getId();
                     memberOrderSequence = actionCollectionSequence++;
                 } else {
@@ -283,13 +283,13 @@ public class PageNormalizerFC extends PageNormalizerAbstract<FCPage> {
                         new MemberOrderFacetXml(memberOrderName, ""+memberOrderSequence, translationService, objectAction));
 
 
-                if(actionOwner instanceof FieldSet) {
+                if(actionLayoutDataOwner instanceof FieldSet) {
                     if(actionLayoutData.getPosition() == null ||
                             actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.BELOW ||
                             actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.RIGHT) {
                         actionLayoutData.setPosition(org.apache.isis.applib.annotation.ActionLayout.Position.PANEL);
                     }
-                } else if(actionOwner instanceof PropertyLayoutData) {
+                } else if(actionLayoutDataOwner instanceof PropertyLayoutData) {
                     if(actionLayoutData.getPosition() == null ||
                             actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL_DROPDOWN ||
                             actionLayoutData.getPosition() == org.apache.isis.applib.annotation.ActionLayout.Position.PANEL) {

@@ -21,8 +21,10 @@ package org.apache.isis.applib.layout.bootstrap3;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 /**
@@ -39,9 +41,26 @@ import javax.xml.bind.annotation.XmlType;
             "cols"
         }
 )
-public class BS3Row extends BS3ElementAbstract {
+public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowContentOwner {
 
     private static final long serialVersionUID = 1L;
+
+
+    private String id;
+
+    /**
+     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
+     */
+    @XmlAttribute(required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+
 
     private List<BS3RowContent> cols = new ArrayList<BS3RowContent>(){{
         add(new BS3Col());
@@ -59,6 +78,26 @@ public class BS3Row extends BS3ElementAbstract {
 
     public void setCols(final List<BS3RowContent> cols) {
         this.cols = cols;
+    }
+
+
+
+    private BS3RowOwner owner;
+
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public BS3RowOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final BS3RowOwner owner) {
+        this.owner = owner;
     }
 
 }

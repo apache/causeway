@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Predicate;
@@ -41,7 +42,7 @@ import com.google.common.base.Predicate;
             "rows"
         }
 )
-public class BS3Tab extends BS3ElementAbstract {
+public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -69,6 +70,26 @@ public class BS3Tab extends BS3ElementAbstract {
 
     public void setRows(final List<BS3Row> rows) {
         this.rows = rows;
+    }
+
+
+
+    private BS3TabOwner owner;
+
+    /**
+     * Owner.
+     *
+     * <p>
+     *     Set programmatically by framework after reading in from XML.
+     * </p>
+     */
+    @XmlTransient
+    public BS3TabOwner getOwner() {
+        return owner;
+    }
+
+    public void setOwner(final BS3TabOwner owner) {
+        this.owner = owner;
     }
 
 

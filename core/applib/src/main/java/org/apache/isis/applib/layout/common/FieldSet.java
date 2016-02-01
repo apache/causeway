@@ -51,7 +51,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 , "properties"
         }
 )
-public class FieldSet implements MemberRegion, ActionOwner, Serializable {
+public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializable {
 
     private static final long serialVersionUID = 1L;
 
