@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlTransient;
@@ -39,6 +40,7 @@ import javax.xml.bind.annotation.XmlType;
         name = "row"
         , propOrder = {
             "cols"
+            , "metadataError"
         }
 )
 public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowContentOwner {
@@ -80,6 +82,21 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
         this.cols = cols;
     }
 
+
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
 
 
     private BS3RowOwner owner;

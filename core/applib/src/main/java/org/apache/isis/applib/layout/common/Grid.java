@@ -19,8 +19,10 @@
 package org.apache.isis.applib.layout.common;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.bootstrap3.BS3Col;
 import org.apache.isis.applib.services.layout.GridService;
 
 /**
@@ -36,16 +38,37 @@ public interface Grid {
 
     void setNormalized(final boolean normalized);
 
-    @Programmatic
-    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
+    @Programmatic LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
 
-    @Programmatic
-    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
+    @Programmatic LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
 
-    @Programmatic
-    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
+    @Programmatic LinkedHashMap<String, ActionLayoutData> getAllActionsById();
 
-    @Programmatic
-    LinkedHashMap<String, FieldSet> getAllFieldSetsByName();
+    interface Visitor {
+        void visit(final DomainObjectLayoutData domainObjectLayoutData);
+
+        void visit(final ActionLayoutData actionLayoutData);
+
+        void visit(final PropertyLayoutData propertyLayoutData);
+
+        void visit(final CollectionLayoutData collectionLayoutData);
+
+        void visit(final FieldSet fieldSet);
+    }
+
+    class VisitorAdapter implements Visitor {
+        @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+        }
+        @Override public void visit(final ActionLayoutData actionLayoutData) {
+        }
+        @Override public void visit(final PropertyLayoutData propertyLayoutData) {
+        }
+        @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+        }
+        @Override public void visit(final FieldSet fieldSet) {
+        }
+    }
+
+    void visit(final Grid.Visitor visitor);
 
 }

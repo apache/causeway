@@ -31,10 +31,11 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
-import org.apache.isis.applib.layout.common.MemberRegionOwner;
+import org.apache.isis.applib.layout.common.FieldSetOwner;
 import org.apache.isis.applib.layout.common.Owned;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
 
 /**
  * The column contains a mixture of {@link FieldSet}s (of {@link PropertyLayoutData properties}) and also
@@ -52,7 +53,7 @@ import org.apache.isis.applib.layout.common.Owned;
                 , "collections"
         }
 )
-public class FCColumn implements Serializable, MemberRegionOwner, Owned<FCColumnOwner> {
+public class FCColumn implements Serializable, FieldSetOwner, CollectionLayoutDataOwner, Owned<FCColumnOwner> {
 
     private static final long serialVersionUID = 1L;
 

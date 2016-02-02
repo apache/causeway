@@ -16,22 +16,22 @@
  */
 package org.apache.isis.core.metamodel.services.grid;
 
-import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.common.Grid;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
-public interface GridNormalizerService<G extends Grid> {
+import com.google.common.collect.Lists;
 
-    @Programmatic
-    Class<? extends Grid> gridImplementation();
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-    @Programmatic
-    String tns();
+public class GridNormalizerUtil {
 
-    @Programmatic
-    String schemaLocation();
+    private GridNormalizerUtil(){}
 
-    @Programmatic
-    void normalize(G grid, Class<?> domainClass);
 
 
 

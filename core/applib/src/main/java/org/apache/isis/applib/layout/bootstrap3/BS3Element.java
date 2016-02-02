@@ -18,47 +18,21 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
-import org.apache.isis.applib.annotation.Programmatic;
-
-/**
- * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
- */
-public abstract class BS3ElementAbstract implements BS3Element {
-
-    private String cssClass;
+public interface BS3Element extends Serializable {
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,
      * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
      * custom styling.
      */
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
+    String getCssClass();
 
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
+    void setCssClass(final String cssClass);
 
 
-
-
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
+    String getPath();
+    void setPath(final String path);
 
 }

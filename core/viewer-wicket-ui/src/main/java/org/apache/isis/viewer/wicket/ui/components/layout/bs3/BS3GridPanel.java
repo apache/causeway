@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3ElementAbstract;
+import org.apache.isis.applib.layout.bootstrap3.BS3Element;
 import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.bootstrap3.BS3Row;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -49,8 +49,7 @@ public class BS3GridPanel extends PanelAbstract<EntityModel> {
 
         final RepeatingView rv = new RepeatingView(ID_ROWS);
 
-        final BS3ElementAbstract element = this.bs3Page;
-
+        final BS3Element element = this.bs3Page;
         for(final BS3Row bs3Row: this.bs3Page.getRows()) {
 
             final String id = rv.newChildId();

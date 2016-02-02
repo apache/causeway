@@ -21,6 +21,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 
 import org.apache.wicket.MarkupContainer;
 
+import org.apache.isis.applib.layout.bootstrap3.BS3Element;
 import org.apache.isis.applib.layout.bootstrap3.BS3ElementAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
@@ -28,7 +29,7 @@ public class Util {
 
     private Util(){}
 
-    public static void appendCssClassIfRequired(final MarkupContainer markupContainer, final BS3ElementAbstract element) {
+    public static void appendCssClassIfRequired(final MarkupContainer markupContainer, final BS3Element element) {
         final String cssClass = element.getCssClass();
         if(cssClass != null) {
             CssClassAppender.appendCssClassTo(markupContainer, cssClass);

@@ -19,23 +19,20 @@
 package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
-import com.google.common.collect.Maps;
-
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.common.GridAbstract;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
@@ -55,7 +52,7 @@ import org.apache.isis.applib.services.dto.Dto;
                 , "right"
         }
 )
-public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
+public class FCGrid extends GridAbstract implements Dto, ActionLayoutDataOwner, Serializable, FCColumnOwner, FCTabGroupOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -114,18 +111,15 @@ public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, F
     }
 
 
-    interface Visitor {
+
+    interface Visitor extends Grid.Visitor {
         void visit(final FCGrid fcPage);
         void visit(final FCTabGroup fcTabGroup);
         void visit(final FCTab fcTab);
         void visit(final FCColumn fcColumn);
-        void visit(final FieldSet fieldSet);
-        void visit(final PropertyLayoutData propertyLayoutData);
-        void visit(final CollectionLayoutData collectionLayoutData);
-        void visit(final ActionLayoutData actionLayoutData);
     }
 
-    public static class VisitorAdapter implements Visitor {
+    public static class VisitorAdapter extends Grid.VisitorAdapter implements Visitor {
         @Override
         public void visit(final FCGrid fcPage) { }
         @Override
@@ -134,8 +128,6 @@ public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, F
         public void visit(final FCTab fcTab) { }
         @Override
         public void visit(final FCColumn fcColumn) { }
-        @Override
-        public void visit(final FieldSet fieldSet) {}
         @Override
         public void visit(final PropertyLayoutData propertyLayoutData) {}
         @Override
@@ -149,18 +141,19 @@ public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, F
      * Visits all elements of the graph.  The {@link Visitor} implementation
      * can assume that all "owner" references are populated.
      */
-    public void visit(final FCGrid.Visitor visitor) {
-        visitor.visit(this);
+    public void visit(final Grid.Visitor visitor) {
+        FCGrid.Visitor fcVisitor = asFcVisitor(visitor);
+        fcVisitor.visit(this);
         traverseActions(this, visitor);
         traverseColumn(getLeft(), this, visitor);
         final List<FCTabGroup> tabGroups = getTabGroups();
         for (final FCTabGroup fcTabGroup : tabGroups) {
             fcTabGroup.setOwner(this);
-            visitor.visit(fcTabGroup);
+            fcVisitor.visit(fcTabGroup);
             final List<FCTab> tabs = fcTabGroup.getTabs();
             for (final FCTab fcTab : tabs) {
                 fcTab.setOwner(fcTabGroup);
-                visitor.visit(fcTab);
+                fcVisitor.visit(fcTab);
                 traverseColumn(fcTab.getLeft(), fcTab, visitor);
                 traverseColumn(fcTab.getMiddle(), fcTab, visitor);
                 traverseColumn(fcTab.getRight(), fcTab, visitor);
@@ -170,135 +163,41 @@ public class FCGrid implements Grid, Dto, ActionLayoutDataOwner, Serializable, F
     }
 
     private void traverseColumn(
-            final FCColumn fcColumn, final FCColumnOwner fcColumnOwner, final Visitor visitor) {
+            final FCColumn fcColumn,
+            final FCColumnOwner fcColumnOwner,
+            final Grid.Visitor visitor) {
         if(fcColumn == null) {
             return;
         }
+        FCGrid.Visitor fcVisitor = asFcVisitor(visitor);
         fcColumn.setOwner(fcColumnOwner);
-        visitor.visit(fcColumn);
+        fcVisitor.visit(fcColumn);
         traverseFieldSets(fcColumn, visitor);
         traverseCollections(fcColumn, visitor);
     }
 
-    private void traverseFieldSets(final FCColumn fcColumn, final Visitor visitor) {
-        for (final FieldSet fieldSet : fcColumn.getFieldSets()) {
-            fieldSet.setOwner(fcColumn);
-            visitor.visit(fieldSet);
-            traverseActions(fieldSet, visitor);
-            final List<PropertyLayoutData> properties = fieldSet.getProperties();
-            for (final PropertyLayoutData propertyLayoutData : properties) {
-                propertyLayoutData.setOwner(fieldSet);
+    private static Visitor asFcVisitor(final Grid.Visitor visitor) {
+        return visitor instanceof Visitor? (Visitor) visitor : new VisitorAdapter() {
+            @Override public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                visitor.visit(domainObjectLayoutData);
+            }
+
+            @Override public void visit(final ActionLayoutData actionLayoutData) {
+                visitor.visit(actionLayoutData);
+            }
+
+            @Override public void visit(final PropertyLayoutData propertyLayoutData) {
                 visitor.visit(propertyLayoutData);
-                traverseActions(propertyLayoutData, visitor);
             }
-        }
-    }
 
-    private void traverseCollections(final FCColumn fcColumn, final Visitor visitor) {
-        for (final CollectionLayoutData collectionLayoutData : fcColumn.getCollections()) {
-            collectionLayoutData.setOwner(fcColumn);
-            visitor.visit(collectionLayoutData);
-            traverseActions(collectionLayoutData, visitor);
-        }
-    }
-
-    private void traverseActions(final ActionLayoutDataOwner actionLayoutDataOwner, final Visitor visitor) {
-        final List<ActionLayoutData> actionLayoutDatas = actionLayoutDataOwner.getActions();
-        if(actionLayoutDatas == null) {
-            return;
-        }
-        for (final ActionLayoutData actionLayoutData : actionLayoutDatas) {
-            actionLayoutData.setOwner(actionLayoutDataOwner);
-            visitor.visit(actionLayoutData);
-        }
-    }
-
-
-    @Programmatic
-    @XmlTransient
-    public LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById() {
-        final LinkedHashMap<String, PropertyLayoutData> propertiesById = Maps.newLinkedHashMap();
-        visit(new FCGrid.VisitorAdapter() {
-            public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertiesById.put(propertyLayoutData.getId(), propertyLayoutData);
+            @Override public void visit(final CollectionLayoutData collectionLayoutData) {
+                visitor.visit(collectionLayoutData);
             }
-        });
-        return propertiesById;
-    }
 
-
-    @Programmatic
-    @XmlTransient
-    public LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById() {
-        final LinkedHashMap<String, CollectionLayoutData> collectionsById = Maps.newLinkedHashMap();
-
-        visit(new FCGrid.VisitorAdapter() {
-            @Override
-            public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionsById.put(collectionLayoutData.getId(), collectionLayoutData);
+            @Override public void visit(final FieldSet fieldSet) {
+                visitor.visit(fieldSet);
             }
-        });
-        return collectionsById;
-    }
-
-
-    @Programmatic
-    @XmlTransient
-    public LinkedHashMap<String, ActionLayoutData> getAllActionsById() {
-        final LinkedHashMap<String, ActionLayoutData> actionsById = Maps.newLinkedHashMap();
-
-        visit(new FCGrid.VisitorAdapter() {
-            @Override
-            public void visit(final ActionLayoutData actionLayoutData) {
-                actionsById.put(actionLayoutData.getId(), actionLayoutData);
-            }
-        });
-        return actionsById;
-    }
-
-
-    @Programmatic
-    @XmlTransient
-    public LinkedHashMap<String, FieldSet> getAllFieldSetsByName() {
-        final LinkedHashMap<String, FieldSet> fieldSetsByName = Maps.newLinkedHashMap();
-
-        visit(new FCGrid.VisitorAdapter() {
-            @Override
-            public void visit(final FieldSet fieldSet) {
-                fieldSetsByName.put(fieldSet.getName(), fieldSet);
-            }
-        });
-        return fieldSetsByName;
-    }
-
-
-    @Programmatic
-    @XmlTransient
-    public LinkedHashMap<String, FCTab> getAllTabsByName() {
-        final LinkedHashMap<String, FCTab> tabsByName = Maps.newLinkedHashMap();
-
-        visit(new FCGrid.VisitorAdapter() {
-            @Override
-            public void visit(final FCTab fcTab) {
-                tabsByName.put(fcTab.getName(), fcTab);
-            }
-        });
-        return tabsByName;
-    }
-
-
-
-    private boolean normalized;
-
-    @Programmatic
-    @XmlTransient
-    public boolean isNormalized() {
-        return normalized;
-    }
-
-    @Programmatic
-    public void setNormalized(final boolean normalized) {
-        this.normalized = normalized;
+        };
     }
 
 

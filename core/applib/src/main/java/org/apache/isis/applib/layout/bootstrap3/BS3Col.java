@@ -31,9 +31,10 @@ import com.google.common.collect.Lists;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.MemberRegionOwner;
+import org.apache.isis.applib.layout.common.FieldSetOwner;
 
 /**
  * A column within a row which, depending on its {@link #getSpan()}, could be as narrow as 1/12th of the page's width, all the way up to spanning the entire page.
@@ -60,9 +61,12 @@ import org.apache.isis.applib.layout.common.MemberRegionOwner;
             "tabGroups",
             "fieldSets",
             "collections",
+            "metadataError"
         }
 )
-public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, MemberRegionOwner, HasCssId {
+public class BS3Col extends BS3RowContent
+        implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, FieldSetOwner, HasCssId,
+        CollectionLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 
@@ -239,8 +243,26 @@ public class BS3Col extends BS3RowContent implements ActionLayoutDataOwner, BS3T
 
 
 
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
+
+
+
     public String toCssClass() {
         final Size size = getSize() != null? getSize(): Size.MD;
         return "col-" + size.toCssClassFragment() + "-" + getSpan();
     }
+
 }
