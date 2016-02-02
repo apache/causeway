@@ -59,7 +59,7 @@ public class Object_downloadLayoutXml {
         final String xml = jaxbService.toXml(grid,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
-                        gridService.schemaLocations(grid)
+                        gridService.tnsAndSchemaLocation(grid)
                 ));
 
         return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);

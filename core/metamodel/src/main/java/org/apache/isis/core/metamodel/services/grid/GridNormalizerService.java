@@ -14,22 +14,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.grid.normalizer;
+package org.apache.isis.core.metamodel.services.grid;
 
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public abstract class GridNormalizerAbstract<P extends Grid> implements GridNormalizer<P> {
+public interface GridNormalizerService {
 
-    protected final SpecificationLoader specificationLookup;
-    protected final TranslationService translationService;
+    @Programmatic
+    Class<? extends Grid> gridImplementation();
 
-    public GridNormalizerAbstract(
-            final TranslationService translationService,
-            final SpecificationLoader specificationLookup) {
-        this.specificationLookup = specificationLookup;
-        this.translationService = translationService;
-    }
+    @Programmatic
+    String tns();
+
+    @Programmatic
+    String schemaLocation();
+
+    @Programmatic
+    void normalize(Grid grid, Class<?> domainClass);
 
 }

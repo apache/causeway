@@ -42,5 +42,5 @@ public interface GridService {
      */
     @Programmatic Grid toGrid(Class<?> domainClass);
 
-    String schemaLocations(final Grid grid);
+    String tnsAndSchemaLocation(final Grid grid);
 }

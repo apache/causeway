@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
+import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 
 public class GridFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 

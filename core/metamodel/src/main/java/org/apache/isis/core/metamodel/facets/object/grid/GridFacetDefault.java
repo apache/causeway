@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
+import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class GridFacetDefault

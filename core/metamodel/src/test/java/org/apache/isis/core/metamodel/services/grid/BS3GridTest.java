@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.layout.bootstrap3;
+package org.apache.isis.core.metamodel.services.grid;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
@@ -40,7 +41,7 @@ import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridNormalizerServiceBS3;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -49,10 +50,15 @@ import static org.junit.Assert.assertThat;
 public class BS3GridTest {
 
     private JaxbService jaxbService;
+    private GridServiceDefault gridServiceDefault;
+    private GridNormalizerServiceBS3 gridNormalizerServiceBS3;
 
     @Before
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple();
+        gridServiceDefault = new GridServiceDefault();
+        gridNormalizerServiceBS3 = new GridNormalizerServiceBS3();
+        gridServiceDefault.gridNormalizerServices = Arrays.<GridNormalizerService>asList(gridNormalizerServiceBS3);
     }
 
     @After
@@ -63,10 +69,10 @@ public class BS3GridTest {
     @Test
     public void xxx() throws Exception {
 
-        final BS3Grid bs3Page = new BS3Grid();
+        final BS3Grid bs3Grid = new BS3Grid();
 
         // header
-        final BS3Row headerRow = bs3Page.getRows().get(0);
+        final BS3Row headerRow = bs3Grid.getRows().get(0);
         final BS3Col headerCol = (BS3Col) headerRow.getCols().get(0);
         headerCol.setSpan(12);
 
@@ -80,7 +86,7 @@ public class BS3GridTest {
 
         // content
         final BS3Row contentRow = new BS3Row();
-        bs3Page.getRows().add(contentRow);
+        bs3Grid.getRows().add(contentRow);
 
         final BS3Col contentCol = (BS3Col) contentRow.getCols().get(0);
         contentCol.setSpan(12);
@@ -122,9 +128,8 @@ public class BS3GridTest {
         tabRightCol.getCollections().add(similarToColl);
         similarToColl.setId("similarTo");
 
-
-        final String schemaLocations = new GridNormalizerServiceDefault().schemaLocationsFor(bs3Page);
-        String xml = jaxbService.toXml(bs3Page,
+        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(bs3Grid);
+        String xml = jaxbService.toXml(bs3Grid,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);
 
@@ -136,7 +141,7 @@ public class BS3GridTest {
 
         System.out.println("==========");
 
-        dumpXsd(bs3Page);
+        dumpXsd(bs3Grid);
     }
 
     protected void dumpXsd(final BS3Grid bs3Page) {

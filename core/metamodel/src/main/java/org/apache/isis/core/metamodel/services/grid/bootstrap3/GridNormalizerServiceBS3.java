@@ -14,26 +14,58 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.grid.normalizer;
+package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
+import javax.inject.Inject;
+
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
-public class GridNormalizerBS3 extends GridNormalizerAbstract<BS3Grid> {
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+public class GridNormalizerServiceBS3 implements GridNormalizerService {
 
     public static final String TNS = "http://isis.apache.org/schema/applib/layout/bootstrap3";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd";
 
 
-    public GridNormalizerBS3(
-            final TranslationService translationService,
-            final SpecificationLoader specificationLookup) {
-        super(translationService, specificationLookup);
+
+    @Programmatic
+    @Override
+    public Class<? extends Grid> gridImplementation() {
+        return BS3Grid.class;
+    }
+
+    @Programmatic
+    @Override
+    public String tns() {
+        return TNS;
+    }
+
+    @Programmatic
+    @Override
+    public String schemaLocation() {
+        return SCHEMA_LOCATION;
     }
 
     @Override
-    public void normalize(final BS3Grid page, final Class<?> domainClass) {
+    public void normalize(final Grid grid, final Class<?> domainClass) {
+        BS3Grid bs3Grid = (BS3Grid) grid;
 
+        // TODO
     }
+
+
+    @Inject
+    SpecificationLoader specificationLookup;
+    @Inject
+    TranslationService translationService;
+
 }

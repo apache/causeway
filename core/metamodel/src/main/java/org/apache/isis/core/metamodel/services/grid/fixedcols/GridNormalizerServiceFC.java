@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.grid.normalizer;
+package org.apache.isis.core.metamodel.services.grid.fixedcols;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -22,21 +22,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.inject.Inject;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.FieldSet;
+import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.common.MemberRegionOwner;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
 import org.apache.isis.applib.layout.fixedcols.FCGrid;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
-import org.apache.isis.applib.layout.common.MemberRegionOwner;
-import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
@@ -63,6 +69,7 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLine
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
+import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -72,20 +79,39 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
-public class GridNormalizerFC extends GridNormalizerAbstract<FCGrid> {
+@DomainService(
+        nature = NatureOfService.DOMAIN
+)
+public class GridNormalizerServiceFC implements GridNormalizerService {
 
     public static final String TNS = "http://isis.apache.org/schema/applib/layout/fixedcols";
     public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/fixedcols/fixedcols.xsd";
 
 
-    public GridNormalizerFC(
-            final TranslationService translationService,
-            final SpecificationLoader specificationLookup) {
-        super(translationService, specificationLookup);
+    @Programmatic
+    @Override
+    public Class<? extends Grid> gridImplementation() {
+        return FCGrid.class;
     }
 
+    @Programmatic
     @Override
-    public void normalize(final FCGrid page, final Class<?> domainClass) {
+    public String tns() {
+        return TNS;
+    }
+
+    @Programmatic
+    @Override
+    public String schemaLocation() {
+        return SCHEMA_LOCATION;
+    }
+
+
+    @Programmatic
+    @Override
+    public void normalize(final Grid grid, final Class<?> domainClass) {
+
+        final FCGrid fcGrid = (FCGrid) grid;
 
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
@@ -96,8 +122,8 @@ public class GridNormalizerFC extends GridNormalizerAbstract<FCGrid> {
         final Map<String, ObjectAction> objectActionById =
                 ObjectMember.Util.mapById(objectSpec.getObjectActions(Contributed.INCLUDED));
 
-        derive(page, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
-        overwrite(page, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+        derive(fcGrid, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
+        overwrite(fcGrid, oneToOneAssociationById, oneToManyAssociationById, objectActionById);
     }
 
     /**
@@ -395,5 +421,11 @@ public class GridNormalizerFC extends GridNormalizerAbstract<FCGrid> {
         List associations = objectSpec.getAssociations(Contributed.INCLUDED, ObjectAssociation.Filters.COLLECTIONS);
         return associations;
     }
+
+    @Inject
+    SpecificationLoader specificationLookup;
+    @Inject
+    TranslationService translationService;
+
 
 }

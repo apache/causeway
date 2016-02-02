@@ -16,8 +16,9 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.core.metamodel.layout.fixedcols;
+package org.apache.isis.core.metamodel.services.grid;
 
+import java.util.Arrays;
 import java.util.Map;
 
 import javax.xml.bind.Marshaller;
@@ -29,16 +30,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCGrid;
-import org.apache.isis.applib.layout.fixedcols.FCTab;
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.applib.layout.fixedcols.FCGrid;
+import org.apache.isis.applib.layout.fixedcols.FCTab;
+import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
-import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerServiceDefault;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.GridNormalizerServiceFC;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -47,10 +48,15 @@ import static org.junit.Assert.assertThat;
 public class FCGridTest {
 
     private JaxbService jaxbService;
+    private GridServiceDefault gridServiceDefault;
+    private GridNormalizerServiceFC gridNormalizerServiceFC;
 
     @Before
     public void setUp() throws Exception {
         jaxbService = new JaxbService.Simple();
+        gridServiceDefault = new GridServiceDefault();
+        gridNormalizerServiceFC = new GridNormalizerServiceFC();
+        gridServiceDefault.gridNormalizerServices = Arrays.<GridNormalizerService>asList(gridNormalizerServiceFC);
     }
 
     @After
@@ -94,7 +100,7 @@ public class FCGridTest {
         fcPage.setActions(Lists.<ActionLayoutData>newArrayList());
         fcPage.getActions().add(deleteActionLayoutData);
 
-        final String schemaLocations = new GridNormalizerServiceDefault().schemaLocationsFor(fcPage);
+        final String schemaLocations = gridServiceDefault.tnsAndSchemaLocation(fcPage);
         String xml = jaxbService.toXml(fcPage,
                 ImmutableMap.<String,Object>of(Marshaller.JAXB_SCHEMA_LOCATION, schemaLocations));
         System.out.println(xml);

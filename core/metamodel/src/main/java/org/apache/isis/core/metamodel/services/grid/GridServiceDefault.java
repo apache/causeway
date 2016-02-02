@@ -23,9 +23,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.xml.bind.JAXBContext;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.io.Resources;
 
@@ -41,7 +46,6 @@ import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
-import org.apache.isis.core.metamodel.services.grid.normalizer.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -53,6 +57,9 @@ public class GridServiceDefault
         implements GridService, SpecificationLoaderAware, DeploymentCategoryAware {
 
     private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
+
+    public static final String COMMON_TNS = "http://isis.apache.org/schema/applib/layout/common";
+    public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/common/common.xsd";
 
     // for better logging messages (used only in prototyping mode)
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();
@@ -107,7 +114,15 @@ public class GridServiceDefault
 
         try {
             // all known implementations of Page
-            List<Class<? extends Grid>> pageImplementations = gridNormalizerService.pageImplementations();
+            List<Class<? extends Grid>> pageImplementations =
+                    FluentIterable.from(gridNormalizerServices)
+                    .transform(new Function<GridNormalizerService, Class<? extends Grid>>() {
+                        @Override
+                        public Class<? extends Grid> apply(final GridNormalizerService gridNormalizer) {
+                            return gridNormalizer.gridImplementation();
+                        }
+                    })
+                    .toList();
             final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(new Class[0]));
 
             final Grid metadata = (Grid) jaxbService.fromXml(context, xml);
@@ -156,8 +171,20 @@ public class GridServiceDefault
 
 
     @Override
-    public String schemaLocations(final Grid grid) {
-        return gridNormalizerService.schemaLocationsFor(grid);
+    public String tnsAndSchemaLocation(final Grid grid) {
+        final List<String> parts = Lists.newArrayList();
+        parts.add(COMMON_TNS);
+        parts.add(COMMON_SCHEMA_LOCATION);
+        FluentIterable.from(gridNormalizerServices)
+                .transform(new Function<GridNormalizerService, Void>() {
+                    @Nullable @Override
+                    public Void apply(final GridNormalizerService gridNormalizerService) {
+                        parts.add(gridNormalizerService.tns());
+                        parts.add(gridNormalizerService.schemaLocation());
+                        return null;
+                    }
+                });
+        return Joiner.on(" ").join(parts);
     }
 
     ////////////////////////////////////////////////////////
@@ -183,7 +210,7 @@ public class GridServiceDefault
     JaxbService jaxbService;
 
     @Inject
-    GridNormalizerService gridNormalizerService;
+    List<GridNormalizerService> gridNormalizerServices;
     //endregion
 
 }
