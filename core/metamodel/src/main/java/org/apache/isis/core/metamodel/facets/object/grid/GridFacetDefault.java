@@ -104,6 +104,9 @@ public class GridFacetDefault
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
 
         gridNormalizerService.normalize(grid, domainClass);
+
+        grid.setNormalized(true);
+
         return grid;
     }
 

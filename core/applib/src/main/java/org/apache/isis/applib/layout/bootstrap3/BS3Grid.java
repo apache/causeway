@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -28,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -54,8 +54,8 @@ import org.apache.isis.applib.services.dto.Dto;
 @XmlType(
         name = "grid"
         , propOrder = {
-            "rows"
-            , "metadataErrors"
+            "rows",
+            "metadataErrors"
         }
 )
 public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwner {
@@ -91,9 +91,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
-        add(new BS3Row());
-    }};
+    private List<BS3Row> rows = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = true)
@@ -104,6 +102,27 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     public void setRows(final List<BS3Row> rows) {
         this.rows = rows;
     }
+
+
+
+    private List<String> metadataErrors = Lists.newArrayList();
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(name = "metadataError", required = false)
+    public List<String> getMetadataErrors() {
+        return metadataErrors;
+    }
+
+    public void setMetadataErrors(final List<String> metadataErrors) {
+        this.metadataErrors = metadataErrors;
+    }
+
+
+
+
+    private BS3RowOwner owner;
 
 
 

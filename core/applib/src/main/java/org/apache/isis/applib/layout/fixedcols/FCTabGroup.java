@@ -19,7 +19,6 @@
 package org.apache.isis.applib.layout.fixedcols;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -28,6 +27,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.Owned;
@@ -42,13 +42,10 @@ public class FCTabGroup implements FCColumnOwner, Serializable, Owned<FCTabGroup
 
     private static final long serialVersionUID = 1L;
 
-    // must be at least one tab.
-    private List<FCTab> tabs = new ArrayList<FCTab>(){{
-        add(new FCTab());
-    }};
+    private List<FCTab> tabs = Lists.newArrayList();
 
     // no wrapper
-    @XmlElement(name = "tab", required = true)
+    @XmlElement(name = "tab", required = false)
     public List<FCTab> getTabs() {
         return tabs;
     }

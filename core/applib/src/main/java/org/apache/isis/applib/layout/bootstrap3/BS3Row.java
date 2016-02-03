@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,6 +26,8 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlElementRefs;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import com.google.common.collect.Lists;
 
 /**
  * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
@@ -64,9 +65,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
 
-    private List<BS3RowContent> cols = new ArrayList<BS3RowContent>(){{
-        add(new BS3Col());
-    }};
+    private List<BS3RowContent> cols = Lists.newArrayList();
 
     // no wrapper
     @XmlElementRefs({
@@ -80,6 +79,13 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
     public void setCols(final List<BS3RowContent> cols) {
         this.cols = cols;
+    }
+
+
+
+    @Override
+    public String getPath() {
+        return getId() != null? getId(): super.getPath();
     }
 
 
@@ -100,6 +106,7 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
     private BS3RowOwner owner;
+
 
     /**
      * Owner.

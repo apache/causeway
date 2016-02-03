@@ -72,8 +72,10 @@ public class BS3GridTest {
         final BS3Grid bs3Grid = new BS3Grid();
 
         // header
-        final BS3Row headerRow = bs3Grid.getRows().get(0);
-        final BS3Col headerCol = (BS3Col) headerRow.getCols().get(0);
+        final BS3Row headerRow = new BS3Row();
+        bs3Grid.getRows().add(headerRow);
+        final BS3Col headerCol = new BS3Col();
+        headerRow.getCols().add(headerCol);
         headerCol.setSpan(12);
 
         final DomainObjectLayoutData objectLayoutData = new DomainObjectLayoutData();
@@ -88,18 +90,22 @@ public class BS3GridTest {
         final BS3Row contentRow = new BS3Row();
         bs3Grid.getRows().add(contentRow);
 
-        final BS3Col contentCol = (BS3Col) contentRow.getCols().get(0);
+        final BS3Col contentCol = new BS3Col();
+        contentRow.getCols().add(contentCol);
         contentCol.setSpan(12);
 
         // a tabgroup containing a 'Common' tab
         final BS3TabGroup tabGroup = new BS3TabGroup();
         contentCol.getTabGroups().add(tabGroup);
-        BS3Tab bs3Tab = tabGroup.getTabs().get(0);
+        BS3Tab bs3Tab = new BS3Tab();
+        tabGroup.getTabs().add(bs3Tab);
         bs3Tab.setName("Common");
 
         // with a left col...
-        final BS3Row tabRow = bs3Tab.getRows().get(0);
-        final BS3Col tabLeftCol = (BS3Col) tabRow.getCols().get(0);
+        final BS3Row tabRow = new BS3Row();
+        bs3Tab.getRows().add(tabRow);
+        final BS3Col tabLeftCol = new BS3Col();
+        tabRow.getCols().add(tabLeftCol);
         tabLeftCol.setSpan(6);
 
         // containing a fieldset
@@ -109,7 +115,8 @@ public class BS3GridTest {
         leftPropGroup.setName("General");
 
         // with a single property
-        final PropertyLayoutData namePropertyLayoutData = leftPropGroup.getProperties().get(0);
+        final PropertyLayoutData namePropertyLayoutData = new PropertyLayoutData();
+        leftPropGroup.getProperties().add(namePropertyLayoutData);
         namePropertyLayoutData.setNamed("name");
 
         // and its associated action
@@ -119,7 +126,8 @@ public class BS3GridTest {
         namePropertyLayoutData.getActions().add(updateNameActionLayoutData);
 
         // and the tab also has a right col...
-        final BS3Col tabRightCol = (BS3Col) tabRow.getCols().get(0);
+        final BS3Col tabRightCol = new BS3Col();
+        tabRow.getCols().add(tabRightCol);
         tabRightCol.setSpan(6);
 
         // containing a collection

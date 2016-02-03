@@ -18,12 +18,14 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
+
+import com.google.common.collect.Lists;
 
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.
@@ -31,7 +33,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(
         name = "tabGroup"
         , propOrder = {
-            "tabs"
+            "tabs",
+            "metadataError"
         }
 )
 public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
@@ -39,12 +42,31 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
     private static final long serialVersionUID = 1L;
 
 
-    private List<BS3Tab> tabs = new ArrayList<BS3Tab>(){{
-        add(new BS3Tab());
-    }};
 
-    // no wrapper
-    @XmlElement(name = "tab", required = true)
+    private Boolean unreferencedCollections;
+    /**
+     * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one column that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public Boolean isUnreferencedCollections() {
+        return unreferencedCollections;
+    }
+
+    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
+        this.unreferencedCollections = unreferencedCollections;
+    }
+
+
+
+
+    private List<BS3Tab> tabs = Lists.newArrayList();
+
+    // no wrapper; required=false because may be auto-generated
+    @XmlElement(name = "tab", required = false)
     public List<BS3Tab> getTabs() {
         return tabs;
     }
@@ -71,6 +93,24 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
     public void setOwner(final BS3TabGroupOwner owner) {
         this.owner = owner;
     }
+
+
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
+
+
 
 }
 

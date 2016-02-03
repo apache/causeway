@@ -27,7 +27,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
 import org.apache.isis.applib.services.layout.GridService;
 
 /**
@@ -37,6 +36,7 @@ import org.apache.isis.applib.services.layout.GridService;
  *     It is used by the {@link GridService} as a common based type for any layouts read in from XML.
  * </p>
  */
+@XmlTransient // ignore this class
 public abstract class GridAbstract implements Grid {
 
     private boolean normalized;

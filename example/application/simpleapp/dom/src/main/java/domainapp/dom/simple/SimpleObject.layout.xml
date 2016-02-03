@@ -1,64 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bs3:grid xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <bs3:row cssClass="bishbosh">
-        <bs3:col span="8">
+<!--
+    <bs3:row>
+        <bs3:col span="8" unreferencedActions="false">
             <c:domainObject/>
-        </bs3:col>
-        <bs3:col span="4" cssClass="foobar" unreferencedActions="true">
-            <c:action id="delete" cssClassFa="fa-trash"/>
         </bs3:col>
     </bs3:row>
 
     <bs3:row>
         <bs3:col span="12">
             <bs3:tabGroup>
-                <bs3:tab name="Metadata">
+                <bs3:tab name="Properties">
                     <bs3:row>
-                        <bs3:col span="12">
+                        <bs3:col span="6">
+                            <c:fieldSet name="General" unreferencedProperties="true" unreferencedActions="true"/>
+                        </bs3:col>
+                        <bs3:col span="6">
                             <c:fieldSet name="Metadata">
-                                <c:action id="downloadJdMetadata"/>
+                                <c:action id="downloadJdoMetadata"/>
                                 <c:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
                                 <c:property id="versionSequence"/>
                             </c:fieldSet>
                         </bs3:col>
-                        <bs3:col span="6">
-                            <c:fieldSet name="Xxx">
-                                <c:property id="name" labelPosition="TOP">
-                                    <c:action id="updateName">
-                                        <c:describedAs>This allows the name to be updated</c:describedAs>
-                                    </c:action>
-                                </c:property>
-                            </c:fieldSet>
-                        </bs3:col>
-                        <bs3:col span="6">
-                            <c:fieldSet name="Xxx">
-                                <c:property id="name" labelPosition="TOP">
-                                    <c:action id="updateName">
-                                        <c:describedAs>This allows the name to be updated</c:describedAs>
-                                    </c:action>
-                                </c:property>
-                            </c:fieldSet>
-                        </bs3:col>
                     </bs3:row>
                 </bs3:tab>
             </bs3:tabGroup>
-            <bs3:tabGroup>
-                <bs3:tab name="SimilarTo">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:collection id="similarTo" defaultView="table"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-                <bs3:tab name="Others">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:collection id="others" defaultView="hide"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="12">
+            <bs3:tabGroup unreferencedCollections="true"/>
+        </bs3:col>
+    </bs3:row>
+-->
+    <bs3:row>
+        <bs3:col span="12" unreferencedActions="true">
+            <c:domainObject/>
+        </bs3:col>
+    </bs3:row>
+    <bs3:row>
+        <bs3:col span="6">
+            <c:fieldSet name="Properties" unreferencedProperties="true"/>
+        </bs3:col>
+        <bs3:col span="6">
+            <bs3:tabGroup unreferencedCollections="true"/>
         </bs3:col>
     </bs3:row>
 </bs3:grid>

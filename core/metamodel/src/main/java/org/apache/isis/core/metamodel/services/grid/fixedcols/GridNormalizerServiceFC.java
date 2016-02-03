@@ -21,57 +21,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.inject.Inject;
-
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.layout.common.MemberRegionOwner;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
 import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
 import org.apache.isis.applib.layout.fixedcols.FCGrid;
 import org.apache.isis.applib.layout.fixedcols.FCTab;
 import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
-import org.apache.isis.applib.services.i18n.TranslationService;
-import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facets.actions.layout.ActionPositionFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.BookmarkPolicyFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFaFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.CssClassFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.DescribedAsFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.HiddenFacetForActionLayoutXml;
-import org.apache.isis.core.metamodel.facets.actions.layout.NamedFacetForActionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.CssClassFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.DefaultViewFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.DescribedAsFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.HiddenFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.NamedFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.PagedFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.collections.layout.SortedByFacetForCollectionXml;
-import org.apache.isis.core.metamodel.facets.members.order.annotprop.MemberOrderFacetXml;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.CssClassFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.DescribedAsFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.HiddenFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.LabelAtFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLineFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
-import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
 import org.apache.isis.core.metamodel.services.grid.GridNormalizerServiceAbstract;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -98,7 +63,7 @@ public class GridNormalizerServiceFC extends GridNormalizerServiceAbstract {
             final Grid grid,
             final Map oneToOneAssociationById,
             final Map oneToManyAssociationById,
-            final Map objectActionById) {
+            final Map objectActionById, final ObjectSpecification objectSpec) {
 
         final FCGrid fcGrid = (FCGrid) grid;
 

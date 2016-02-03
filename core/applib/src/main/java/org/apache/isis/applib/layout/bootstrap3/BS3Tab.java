@@ -18,7 +18,6 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,6 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 /**
  * Represents a tab within a {@link BS3TabGroup tab group}.
@@ -57,10 +57,7 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
     }
 
 
-    // at least one row
-    private List<BS3Row> rows = new ArrayList<BS3Row>(){{
-        add(new BS3Row());
-    }};
+    private List<BS3Row> rows = Lists.newArrayList();
 
     // no wrapper
     @XmlElement(name = "row", required = true)

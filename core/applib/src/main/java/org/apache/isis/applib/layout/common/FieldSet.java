@@ -19,7 +19,6 @@
 package org.apache.isis.applib.layout.common;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -49,6 +48,7 @@ import org.apache.isis.applib.annotation.Programmatic;
                 "name"
                 , "actions"
                 , "properties"
+                , "metadataError"
         }
 )
 public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializable {
@@ -61,6 +61,63 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
     public FieldSet(final String name) {
         setName(name);
     }
+
+
+
+    private String id;
+
+    /**
+     * As per &lt;div id=&quot;...&quot;&gt;...&lt;/div&gt; : must be unique across entire page.
+     */
+    @XmlAttribute(required = false)
+    public String getId() {
+        return id;
+    }
+
+    public void setId(final String id) {
+        this.id = id;
+    }
+
+
+
+    private Boolean unreferencedActions;
+
+    /**
+     * Whether this fieldset should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one fieldset that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public Boolean isUnreferencedActions() {
+        return unreferencedActions;
+    }
+
+    public void setUnreferencedActions(final Boolean unreferencedActions) {
+        this.unreferencedActions = unreferencedActions;
+    }
+
+
+    private Boolean unreferencedProperties;
+    /**
+     * Whether this fieldset should be used to hold any unreferenced properties (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any grid layout must have precisely one fieldset that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public Boolean isUnreferencedProperties() {
+        return unreferencedProperties;
+    }
+
+    public void setUnreferencedProperties(final Boolean unreferencedProperties) {
+        this.unreferencedProperties = unreferencedProperties;
+    }
+
+
+
 
     private String name;
 
@@ -92,11 +149,10 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
 
 
 
-    private List<PropertyLayoutData> properties = new ArrayList<PropertyLayoutData>() {{
-        add(new PropertyLayoutData());
-    }};
+    private List<PropertyLayoutData> properties = Lists.newArrayList();
 
-    @XmlElement(name = "property", required = true)
+    // no wrapper; required=false because may be auto-generated
+    @XmlElement(name = "property", required = false)
     public List<PropertyLayoutData> getProperties() {
         return properties;
     }
@@ -139,6 +195,21 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
         this.path = path;
     }
 
+
+
+    private String metadataError;
+
+    /**
+     * For diagnostics; populated by the framework if and only if a metadata error.
+     */
+    @XmlElement(required = false)
+    public String getMetadataError() {
+        return metadataError;
+    }
+
+    public void setMetadataError(final String metadataError) {
+        this.metadataError = metadataError;
+    }
 
 
 

@@ -118,43 +118,6 @@ public class BS3Col extends BS3RowContent
     }
 
 
-    private Boolean unreferencedProperties;
-    /**
-     * Whether the first fieldset in this column should be used to hold any unreferenced properties (contributed or &quot;native&quot;).
-     *
-     * <p>
-     *     Any layout must have precisely one column that has this attribute set, and that column must have at least one {@link FieldSet}.
-     * </p>
-     */
-    @XmlAttribute(required = false)
-    public Boolean isUnreferencedProperties() {
-        return unreferencedProperties;
-    }
-
-    public void setUnreferencedProperties(final Boolean unreferencedProperties) {
-        this.unreferencedProperties = unreferencedProperties;
-    }
-
-
-    private Boolean unreferencedCollections;
-    /**
-     * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
-     *
-     * <p>
-     *     Any layout must have precisely one column that has this attribute set.
-     * </p>
-     */
-    @XmlAttribute(required = false)
-    public Boolean isUnreferencedCollections() {
-        return unreferencedCollections;
-    }
-
-    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
-        this.unreferencedCollections = unreferencedCollections;
-    }
-
-
-
 
     private DomainObjectLayoutData domainObject;
 
@@ -241,6 +204,10 @@ public class BS3Col extends BS3RowContent
     }
 
 
+    @Override
+    public String getPath() {
+        return getId() != null? getId(): super.getPath();
+    }
 
 
 
