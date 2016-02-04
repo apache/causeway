@@ -122,11 +122,13 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         // unreferencedActions, unreferencedProperties and unreferencedCollections attribute set.
 
         final AtomicReference<BS3Col> colForUnreferencedActionsRef = new AtomicReference<>();
+        final AtomicReference<BS3Col> colForUnreferencedCollectionsRef = new AtomicReference<>();
         final AtomicReference<FieldSet> fieldSetForUnreferencedActionsRef = new AtomicReference<>();
         final AtomicReference<FieldSet> fieldSetForUnreferencedPropertiesRef = new AtomicReference<>();
         final AtomicReference<BS3TabGroup> tabGroupForUnreferencedCollectionsRef = new AtomicReference<>();
 
         bs3Grid.visit(new BS3Grid.VisitorAdapter(){
+
             @Override
             public void visit(final BS3Col bs3Col) {
                 if(isSet(bs3Col.isUnreferencedActions())) {
@@ -136,6 +138,15 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                         bs3Col.setMetadataError("Already found a fieldset with 'unreferencedActions' attribute set");
                     } else {
                         colForUnreferencedActionsRef.set(bs3Col);
+                    }
+                }
+                if(isSet(bs3Col.isUnreferencedCollections())) {
+                    if(colForUnreferencedCollectionsRef.get() != null) {
+                        bs3Col.setMetadataError("More than one col with 'unreferencedCollections' attribute set");
+                    } else if(tabGroupForUnreferencedCollectionsRef.get() != null) {
+                        bs3Col.setMetadataError("Already found a tabgroup with 'unreferencedCollections' attribute set");
+                    } else {
+                        colForUnreferencedCollectionsRef.set(bs3Col);
                     }
                 }
             }
@@ -165,6 +176,8 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 if(isSet(bs3TabGroup.isUnreferencedCollections())) {
                     if(tabGroupForUnreferencedCollectionsRef.get() != null) {
                         bs3TabGroup.setMetadataError("More than one tabgroup with 'unreferencedCollections' attribute set");
+                    } else if(colForUnreferencedCollectionsRef.get() != null) {
+                        bs3TabGroup.setMetadataError("Already found a column with 'unreferencedCollections' attribute set");
                     } else {
                         tabGroupForUnreferencedCollectionsRef.set(bs3TabGroup);
                     }
@@ -173,18 +186,18 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         });
 
         if(colForUnreferencedActionsRef.get() == null && fieldSetForUnreferencedActionsRef.get() == null) {
-            bs3Grid.getMetadataErrors().add("No column and no fieldset has the 'unreferencedActions' attribute set");
+            bs3Grid.getMetadataErrors().add("No column and also no fieldset found with the 'unreferencedActions' attribute set");
         }
         if(fieldSetForUnreferencedPropertiesRef.get() == null) {
-            bs3Grid.getMetadataErrors().add("No fieldset has the 'unreferencedProperties' attribute set");
+            bs3Grid.getMetadataErrors().add("No fieldset found with the 'unreferencedProperties' attribute set");
         }
-        if(tabGroupForUnreferencedCollectionsRef.get() == null) {
-            bs3Grid.getMetadataErrors().add("No tabgroup has the 'unreferencedCollections' attribute set");
+        if(colForUnreferencedCollectionsRef.get() == null && tabGroupForUnreferencedCollectionsRef.get() == null) {
+            bs3Grid.getMetadataErrors().add("No column and also no tabgroup found with the 'unreferencedCollections' attribute set");
         }
 
         if(     colForUnreferencedActionsRef.get() == null && fieldSetForUnreferencedActionsRef.get() == null ||
                 fieldSetForUnreferencedPropertiesRef.get() == null ||
-                tabGroupForUnreferencedCollectionsRef.get() == null) {
+                colForUnreferencedCollectionsRef.get() == null && tabGroupForUnreferencedCollectionsRef.get() == null) {
             return false;
         }
 
@@ -219,6 +232,11 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             final BS3TabGroup bs3TabGroup = tabGroupForUnreferencedCollectionsRef.get();
             if(bs3TabGroup != null) {
                 addMissingCollectionsTo(bs3TabGroup, missingCollectionIds, objectSpec);
+            } else {
+                final BS3Col bs3Col = colForUnreferencedCollectionsRef.get();
+                if(bs3Col != null) {
+                    addMissingCollectionsTo(bs3Col, missingCollectionIds);
+                }
             }
         }
 
@@ -290,6 +308,16 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         List<ActionLayoutData> actions = fieldSet.getActions();
         for (String actionId : missingActionIds) {
             actions.add(new ActionLayoutData(actionId));
+        }
+    }
+
+    protected void addMissingCollectionsTo(
+            final BS3Col tabRowCol,
+            final List<String> missingCollectionIds) {
+        for (final String collectionId : missingCollectionIds) {
+            final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
+            layoutMetadata.setDefaultView("table");
+            tabRowCol.getCollections().add(layoutMetadata);
         }
     }
 

@@ -63,8 +63,15 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
         super(id, entityModel);
 
         selectedItemSessionAttribute = ScopedSessionAttribute.create(
-                entityModel, this, EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
+                entityModel, this,  EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
 
+    }
+
+    /**
+     * Build UI only after added to parent.
+     */
+    public void onInitialize() {
+        super.onInitialize();
         buildGui();
     }
 
@@ -86,7 +93,6 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
         collectionRvContainer.add(fieldSet);
 
         final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
-        fieldSet.addOrReplace(collectionPanel);
 
         Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
         final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
@@ -110,8 +116,9 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
         if (componentFactories.size() <= 1) {
             permanentlyHide(ID_SELECTOR_DROPDOWN);
         } else {
-            CollectionSelectorPanel selectorDropdownPanel;
-            selectorDropdownPanel = new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN, entityCollectionModel, selectedItemSessionAttribute);
+            CollectionSelectorPanel selectorDropdownPanel =
+                    new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
+                    entityCollectionModel, selectedItemSessionAttribute);
 
             final Model<ComponentFactory> componentFactoryModel = new Model<>();
 
@@ -125,5 +132,8 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
 
             collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
         }
+        fieldSet.addOrReplace(collectionPanel);
     }
+
+
 }

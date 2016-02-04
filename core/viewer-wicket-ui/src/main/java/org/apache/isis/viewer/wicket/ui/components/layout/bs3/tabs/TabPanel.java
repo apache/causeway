@@ -5,12 +5,13 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
+import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
-public class TabPanel extends PanelAbstract {
+public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
 
     private static final long serialVersionUID = 1L;
     private final BS3Tab bs3Tab;
@@ -20,6 +21,14 @@ public class TabPanel extends PanelAbstract {
 
         this.bs3Tab = bs3Tab;
         buildGui(model, bs3Tab);
+    }
+
+    /**
+     * when tabs are rendered, they don't distinguish within the path hierarchy: even if on different tabs, the first
+     * panel will have the same Wicket path hierarchy.  This property allows us to distinguish.
+     */
+    public String getHintDisambiguator() {
+        return bs3Tab.getName();
     }
 
     protected void buildGui(final EntityModel model, final BS3Tab bs3Tab) {

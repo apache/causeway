@@ -55,6 +55,7 @@
                 <xs:attribute name="id" type="xs:string"/>
                 <xs:attribute name="span" type="xs:int" use="required"/>
                 <xs:attribute name="unreferencedActions" type="xs:boolean"/>
+                <xs:attribute name="unreferencedCollections" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

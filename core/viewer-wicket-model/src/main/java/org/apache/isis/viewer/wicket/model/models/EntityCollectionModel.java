@@ -486,6 +486,19 @@ public class EntityCollectionModel extends ModelAbstract<List<ObjectAdapter>> im
     }
 
 
+    @Override
+    protected void doSetHint(final String scopeKey, final String attributeName, final String value) {
+        if(isParented()) {
+            // same logic as in EntityModel's similar override
+            ScopedSessionAttribute scopedSessionAttribute = scopedSessionAttributeByName.get(attributeName);
+            if(scopedSessionAttribute == null) {
+                scopedSessionAttribute = ScopedSessionAttribute.create(parentObjectAdapterMemento, scopeKey, attributeName);
+            }
+            scopedSessionAttribute.set(value);
+        }
+    }
+
+
     // //////////////////////////////////////
 
     private static AdapterManager getAdapterManagerStatic() {

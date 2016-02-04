@@ -105,7 +105,7 @@ public class BS3Col extends BS3RowContent
      * Whether this column should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one column that has this attribute set.
+     *     Any layout must have precisely one column or {@link FieldSet} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)
@@ -116,6 +116,26 @@ public class BS3Col extends BS3RowContent
     public void setUnreferencedActions(final Boolean unreferencedActions) {
         this.unreferencedActions = unreferencedActions;
     }
+
+
+    private Boolean unreferencedCollections;
+    /**
+     * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
+     *
+     * <p>
+     *     Any layout must have precisely one column or {@link BS3TabGroup tabgroup} that has this attribute set.
+     * </p>
+     */
+    @XmlAttribute(required = false)
+    public Boolean isUnreferencedCollections() {
+        return unreferencedCollections;
+    }
+
+    public void setUnreferencedCollections(final Boolean unreferencedCollections) {
+        this.unreferencedCollections = unreferencedCollections;
+    }
+
+
 
 
 

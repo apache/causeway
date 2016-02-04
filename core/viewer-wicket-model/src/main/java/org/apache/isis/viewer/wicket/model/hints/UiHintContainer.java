@@ -51,7 +51,10 @@ public interface UiHintContainer {
 
 
         public static String hintPathFor(Component component) {
-            return Strings.afterFirstPathComponent(fullHintPathFor(component), Component.PATH_SEPARATOR);
+            final String fullHintPath = fullHintPathFor(component);
+            final String firstPathComponent =
+                    Strings.afterFirstPathComponent(fullHintPath, Component.PATH_SEPARATOR);
+            return firstPathComponent;
         }
 
         private static String fullHintPathFor(Component component) {
@@ -60,11 +63,20 @@ public interface UiHintContainer {
                 if (buffer.length() > 0) {
                     buffer.prepend(Component.PATH_SEPARATOR);
                 }
+                final Class<? extends Component> aClass = c.getClass();
+                if(HasUiHintDisambiguator.class.isAssignableFrom(aClass)) {
+                    final HasUiHintDisambiguator hasUiHintDisambiguator = (HasUiHintDisambiguator) c;
+                    buffer.prepend(hasUiHintDisambiguator.getHintDisambiguator());
+                    buffer.prepend("-");
+                }
                 buffer.prepend(c.getId());
             }
-            return buffer.toString();
+            final String fullHintPath = buffer.toString();
+            return fullHintPath;
         }
 
 
     }
+
+
 }

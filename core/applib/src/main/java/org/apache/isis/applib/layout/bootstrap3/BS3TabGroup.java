@@ -45,10 +45,10 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
 
     private Boolean unreferencedCollections;
     /**
-     * Whether this column should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
+     * Whether this tab group should be used to hold any unreferenced collections (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one column that has this attribute set.
+     *     Any layout must have precisely one tab group or {@link BS3Col col} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)

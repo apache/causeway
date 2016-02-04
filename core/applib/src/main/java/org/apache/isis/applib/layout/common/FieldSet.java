@@ -33,6 +33,7 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.bootstrap3.BS3Col;
 
 /**
  * A {@link MemberRegion region} of the page containing a set of
@@ -86,7 +87,7 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
      * Whether this fieldset should be used to hold any unreferenced actions (contributed or &quot;native&quot;).
      *
      * <p>
-     *     Any layout must have precisely one fieldset that has this attribute set.
+     *     Any layout must have precisely one fieldset or {@link BS3Col col} that has this attribute set.
      * </p>
      */
     @XmlAttribute(required = false)
