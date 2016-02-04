@@ -54,26 +54,18 @@ public class CollectionContentsMultipleViewsPanel
 
     private static final String UIHINT_VIEW = "view";
 
-    private final ComponentFactory ignoreFactory;
-
-    private final ComponentType componentType;
     private final String underlyingIdPrefix;
     private final CollectionSelectorHelper selectorHelper;
 
-    private ComponentFactory selectedComponentFactory;
     private Component selectedComponent;
 
     private Component[] underlyingViews;
-    private CollectionSelectorPanel selectorDropdownPanel;
 
     public CollectionContentsMultipleViewsPanel(
             final String id,
-            final EntityCollectionModel model,
-            final ComponentFactory ignoreFactory) {
+            final EntityCollectionModel model) {
         super(id, model);
-        this.ignoreFactory = ignoreFactory;
         this.underlyingIdPrefix = ComponentType.COLLECTION_CONTENTS.toString();
-        this.componentType = ignoreFactory.getComponentType();
         selectorHelper = new CollectionSelectorHelper(model, getComponentFactoryRegistry(), model.<Integer>getSessionAttribute(EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM));
     }
 
@@ -168,7 +160,6 @@ public class CollectionContentsMultipleViewsPanel
                     component.setDefaultModel(isSelected? getModel(): dummyModel);
                 }
 
-                this.selectedComponentFactory = ignoreFactory;
                 this.selectedComponent = underlyingViews[underlyingViewNum];
 
 
