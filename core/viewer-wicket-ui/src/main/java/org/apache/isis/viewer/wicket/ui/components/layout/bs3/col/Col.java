@@ -145,56 +145,49 @@ public class Col extends PanelAbstract<EntityModel> {
 
         // rows
         final List<BS3Row> rows = Lists.newArrayList(this.bs3Col.getRows());
-        final List<BS3TabGroup> tabGroups = bs3Col.getTabGroups();
-        final List<BS3TabGroup> tabGroupsWithTabs =
-                FluentIterable.from(bs3Col.getTabGroups())
-                .filter(new Predicate<BS3TabGroup>() {
-                    @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
-                        return !bs3TabGroup.getTabs().isEmpty();
-                    }
-                }).toList();
-        BS3Tab singleTabIfAny = null;
-        if(tabGroupsWithTabs.size() == 1) {
-            final BS3TabGroup firstTabGroup = tabGroupsWithTabs.get(0);
-            final List<BS3Tab> firstTabGroupTabs = firstTabGroup.getTabs();
-            if(firstTabGroupTabs.size() == 1) {
-                singleTabIfAny = firstTabGroupTabs.get(0);
-            }
-        }
-        if(singleTabIfAny != null) {
-            rows.addAll(singleTabIfAny.getRows());
-        }
-
         if(!rows.isEmpty()) {
-            final RepeatingView rowRv = new RepeatingView(ID_ROWS);
-
-            for(final BS3Row bs3Row: rows) {
-
-                final String id = rowRv.newChildId();
-                final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
-
-                final WebMarkupContainer row = new Row(id, entityModelWithHints);
-
-                rowRv.add(row);
-            }
-            div.add(rowRv);
+            final RepeatingView rowsRv = buildRows(ID_ROWS, rows);
+            div.add(rowsRv);
         } else {
             Components.permanentlyHide(div, ID_ROWS);
         }
 
 
         // tab groups
-        if(!tabGroupsWithTabs.isEmpty() && singleTabIfAny == null) {
+        final List<BS3TabGroup> tabGroupsWithTabs =
+                FluentIterable.from(bs3Col.getTabGroups())
+                        .filter(new Predicate<BS3TabGroup>() {
+                            @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
+                                return !bs3TabGroup.getTabs().isEmpty();
+                            }
+                        }).toList();
+        if(!tabGroupsWithTabs.isEmpty()) {
             final RepeatingView tabGroupRv = new RepeatingView(ID_TAB_GROUPS);
 
             for (BS3TabGroup bs3TabGroup : tabGroupsWithTabs) {
 
                 final String id = tabGroupRv.newChildId();
-                final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3TabGroup);
+                final List<BS3Tab> tabs = bs3TabGroup.getTabs();
+                switch (tabs.size()) {
+                case 0:
+                    // shouldn't occur; previously have filtered these out
+                    throw new IllegalStateException("Cannot render tabGroup with no tabs");
+                case 1:
+                    final BS3Tab bs3Tab = tabs.get(0);
+                    // render the rows of the one-and-only tab of this tab group.
+                    final List<BS3Row> tabRows = bs3Tab.getRows();
+                    final RepeatingView rowsRv = buildRows(id, tabRows);
+                    tabGroupRv.add(rowsRv);
+                    break;
+                default:
+                    final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3TabGroup);
 
-                final WebMarkupContainer tabGroup = new TabGroupPanel(id, entityModelWithHints);
+                    final WebMarkupContainer tabGroup = new TabGroupPanel(id, entityModelWithHints);
 
-                tabGroupRv.add(tabGroup);
+                    tabGroupRv.add(tabGroup);
+                    break;
+                }
+
             }
             div.add(tabGroupRv);
         } else {
@@ -243,7 +236,20 @@ public class Col extends PanelAbstract<EntityModel> {
 
     }
 
+    private RepeatingView buildRows(final String owningId, final List<BS3Row> rows) {
+        final RepeatingView rowRv = new RepeatingView(owningId);
 
+        for(final BS3Row bs3Row: rows) {
+
+            final String id = rowRv.newChildId();
+            final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
+
+            final WebMarkupContainer row = new Row(id, entityModelWithHints);
+
+            rowRv.add(row);
+        }
+        return rowRv;
+    }
 
     ///////////////////////////////////////////////////////
     // Dependencies (from context)

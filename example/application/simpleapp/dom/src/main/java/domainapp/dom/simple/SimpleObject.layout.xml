@@ -45,13 +45,21 @@
                 <bs3:tab name="General">
                     <bs3:row>
                         <bs3:col span="12">
-                            <c:fieldSet name="Properties" unreferencedProperties="true"/>
+                            <c:fieldSet name="Properties">
+                                <c:property id="name"/>
+                            </c:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Other">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <c:fieldSet name="Other" unreferencedProperties="true"/>
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
             </bs3:tabGroup>
             <bs3:tabGroup>
-
             </bs3:tabGroup>
         </bs3:col>
         <bs3:col span="6">
