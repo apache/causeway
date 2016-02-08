@@ -132,22 +132,6 @@ public class FCTab implements FCColumnOwner, Serializable, Owned<FCTabGroup> {
 
 
 
-
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
-
-
     private static void appendContent(final List<MemberRegion> contents, final FCColumn FCColumn) {
         if(FCColumn == null) {
             return;

@@ -154,20 +154,29 @@ public class Col extends PanelAbstract<EntityModel> {
 
 
         // tab groups
-        final List<BS3TabGroup> tabGroupsWithTabs =
+        final List<BS3TabGroup> tabGroupsWithNonEmptyTabs =
                 FluentIterable.from(bs3Col.getTabGroups())
                         .filter(new Predicate<BS3TabGroup>() {
                             @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
-                                return !bs3TabGroup.getTabs().isEmpty();
+                                final List<BS3Tab> bs3TabsWithRows =
+                                        FluentIterable
+                                                .from(bs3TabGroup.getTabs())
+                                                .filter(BS3Tab.Predicates.notEmpty())
+                                                .toList();
+                                return !bs3TabsWithRows.isEmpty();
                             }
                         }).toList();
-        if(!tabGroupsWithTabs.isEmpty()) {
+        if(!tabGroupsWithNonEmptyTabs.isEmpty()) {
             final RepeatingView tabGroupRv = new RepeatingView(ID_TAB_GROUPS);
 
-            for (BS3TabGroup bs3TabGroup : tabGroupsWithTabs) {
+            for (BS3TabGroup bs3TabGroup : tabGroupsWithNonEmptyTabs) {
 
                 final String id = tabGroupRv.newChildId();
-                final List<BS3Tab> tabs = bs3TabGroup.getTabs();
+                final List<BS3Tab> tabs =
+                        FluentIterable
+                                .from(bs3TabGroup.getTabs())
+                                .filter(BS3Tab.Predicates.notEmpty())
+                                .toList();
                 switch (tabs.size()) {
                 case 0:
                     // shouldn't occur; previously have filtered these out
@@ -197,11 +206,16 @@ public class Col extends PanelAbstract<EntityModel> {
 
 
         // fieldsets
-        final List<FieldSet> fieldSets = bs3Col.getFieldSets();
-        if(!fieldSets.isEmpty()) {
+        final List<FieldSet> fieldSetsWithProperties = FluentIterable.from(bs3Col.getFieldSets())
+                .filter(new Predicate<FieldSet>() {
+                    @Override public boolean apply(@Nullable final FieldSet fieldSet) {
+                        return !fieldSet.getProperties().isEmpty();
+                    }
+                }).toList();
+        if(!fieldSetsWithProperties.isEmpty()) {
             final RepeatingView fieldSetRv = new RepeatingView(ID_FIELD_SETS);
 
-            for (FieldSet fieldSet : fieldSets) {
+            for (FieldSet fieldSet : fieldSetsWithProperties) {
 
                 final String id = fieldSetRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(fieldSet);

@@ -29,7 +29,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.Owned;
 
 @XmlType(
@@ -76,19 +75,6 @@ public class FCTabGroup implements FCColumnOwner, Serializable, Owned<FCTabGroup
 
 
 
-
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
 
 
 

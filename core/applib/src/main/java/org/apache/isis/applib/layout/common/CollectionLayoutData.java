@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Function;
 
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -233,20 +232,6 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
 
 
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
-
 
     public static class Functions {
         private Functions(){}
@@ -259,5 +244,11 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
                 }
             };
         }
+    }
+
+    @Override public String toString() {
+        return "CollectionLayoutData{" +
+                "id='" + id + '\'' +
+                '}';
     }
 }

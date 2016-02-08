@@ -76,19 +76,6 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
 
 
     private List<BS3Row> rows = Lists.newArrayList();
@@ -127,41 +114,64 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
     interface Visitor extends Grid.Visitor {
-        void visit(final BS3Grid bs3Page);
+        void preVisit(final BS3Grid bs3Grid);
+        void visit(final BS3Grid bs3Grid);
+        void postVisit(final BS3Grid bs3Grid);
+        void preVisit(final BS3Row bs3Row);
         void visit(final BS3Row bs3Row);
+        void postVisit(final BS3Row bs3Row);
+        void preVisit(final BS3Col bs3Col);
         void visit(final BS3Col bs3Col);
+        void postVisit(final BS3Col bs3Col);
         void visit(final BS3ClearFix bs3ClearFix);
+        void preVisit(final BS3TabGroup bs3TabGroup);
         void visit(final BS3TabGroup bs3TabGroup);
+        void postVisit(final BS3TabGroup bs3TabGroup);
+        void preVisit(final BS3Tab bs3Tab);
         void visit(final BS3Tab bs3Tab);
+        void postVisit(final BS3Tab bs3Tab);
     }
 
     public static class VisitorAdapter extends Grid.VisitorAdapter implements Visitor {
-        @Override
-        public void visit(final BS3Grid bs3Grid) { }
-        @Override
-        public void visit(final BS3Row bs3Row) { }
-        @Override
-        public void visit(final BS3Col bs3Col) { }
-        @Override
-        public void visit(final BS3ClearFix bs3ClearFix) { }
-        @Override
-        public void visit(final BS3TabGroup bs3TabGroup) { }
-        @Override
-        public void visit(final BS3Tab bs3Tab) { }
+        @Override public void preVisit(final BS3Grid bs3Grid) { }
+        @Override public void visit(final BS3Grid bs3Grid) { }
+        @Override public void postVisit(final BS3Grid bs3Grid) { }
+
+        @Override public void preVisit(final BS3Row bs3Row) { }
+        @Override public void visit(final BS3Row bs3Row) { }
+        @Override public void postVisit(final BS3Row bs3Row) { }
+
+        @Override public void preVisit(final BS3Col bs3Col) { }
+        @Override public void visit(final BS3Col bs3Col) { }
+        @Override public void postVisit(final BS3Col bs3Col) { }
+
+        @Override public void visit(final BS3ClearFix bs3ClearFix) { }
+
+        @Override public void preVisit(final BS3TabGroup bs3TabGroup) { }
+        @Override public void visit(final BS3TabGroup bs3TabGroup) { }
+        @Override public void postVisit(final BS3TabGroup bs3TabGroup) { }
+
+        @Override public void preVisit(final BS3Tab bs3Tab) { }
+        @Override public void visit(final BS3Tab bs3Tab) { }
+        @Override public void postVisit(final BS3Tab bs3Tab) { }
     }
 
     public void visit(final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
+        bs3Visitor.preVisit(this);
         bs3Visitor.visit(this);
         traverseRows(this, visitor);
+        bs3Visitor.postVisit(this);
     }
 
     protected void traverseRows(final BS3RowOwner rowOwner, final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         for (BS3Row bs3Row : rowOwner.getRows()) {
             bs3Row.setOwner(this);
+            bs3Visitor.preVisit(bs3Row);
             bs3Visitor.visit(bs3Row);
             traverseCols(visitor, bs3Row);
+            bs3Visitor.postVisit(bs3Row);
         }
     }
 
@@ -172,6 +182,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             rowContent.setOwner(bs3Row);
             if(rowContent instanceof BS3Col) {
                 final BS3Col bs3Col = (BS3Col) rowContent;
+                bs3Visitor.preVisit(bs3Col);
                 bs3Visitor.visit(bs3Col);
                 traverseDomainObject(bs3Col, visitor);
                 traverseTabGroups(bs3Col, visitor);
@@ -179,6 +190,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
                 traverseFieldSets(bs3Col, visitor);
                 traverseCollections(bs3Col, visitor);
                 traverseRows(bs3Col, visitor);
+                bs3Visitor.postVisit(bs3Col);
             } else if (rowContent instanceof BS3ClearFix) {
                 final BS3ClearFix bs3ClearFix = (BS3ClearFix) rowContent;
                 bs3Visitor.visit(bs3ClearFix);
@@ -205,8 +217,10 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
         final List<BS3TabGroup> tabGroups = bs3TabGroupOwner.getTabGroups();
         for (BS3TabGroup bs3TabGroup : tabGroups) {
             bs3TabGroup.setOwner(bs3TabGroupOwner);
+            bs3Visitor.preVisit(bs3TabGroup);
             bs3Visitor.visit(bs3TabGroup);
             traverseTabs(bs3TabGroup, visitor);
+            bs3Visitor.postVisit(bs3TabGroup);
         }
     }
 
@@ -217,8 +231,10 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
         final List<BS3Tab> tabs = bs3TabOwner.getTabs();
         for (BS3Tab tab : tabs) {
             tab.setOwner(bs3TabOwner);
+            bs3Visitor.preVisit(tab);
             bs3Visitor.visit(tab);
             traverseRows(tab, visitor);
+            bs3Visitor.postVisit(tab);
         }
     }
 
@@ -275,6 +291,13 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             }
         });
         return divsByCssId;
+    }
+
+    @Override
+    @Programmatic
+    @XmlTransient
+    public BS3Grid getGrid() {
+        return this;
     }
 
 }

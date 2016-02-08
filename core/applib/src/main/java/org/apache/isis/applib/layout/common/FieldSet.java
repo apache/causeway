@@ -32,7 +32,6 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberOrder;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.bootstrap3.BS3Col;
 
 /**
@@ -183,20 +182,6 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
 
 
 
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
-    }
-
-
 
     private String metadataError;
 
@@ -224,6 +209,12 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
                 }
             };
         }
+    }
+
+    @Override public String toString() {
+        return "FieldSet{" +
+                "id='" + id + '\'' +
+                '}';
     }
 
 }

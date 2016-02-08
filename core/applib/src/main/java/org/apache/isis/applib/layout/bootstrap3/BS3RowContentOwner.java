@@ -20,6 +20,6 @@ package org.apache.isis.applib.layout.bootstrap3;
 
 import org.apache.isis.applib.layout.common.Owner;
 
-public interface BS3RowContentOwner extends Owner {
+public interface BS3RowContentOwner extends Owner, WithinGrid {
 
 }

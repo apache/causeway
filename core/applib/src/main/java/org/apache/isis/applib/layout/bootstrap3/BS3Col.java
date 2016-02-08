@@ -224,12 +224,6 @@ public class BS3Col extends BS3RowContent
     }
 
 
-    @Override
-    public String getPath() {
-        return getId() != null? getId(): super.getPath();
-    }
-
-
 
     private String metadataError;
 
@@ -250,6 +244,13 @@ public class BS3Col extends BS3RowContent
     public String toCssClass() {
         final Size size = getSize() != null? getSize(): Size.MD;
         return "col-" + size.toCssClassFragment() + "-" + getSpan();
+    }
+
+
+    @Override public String toString() {
+        return "BS3Col{" +
+                "id='" + id + '\'' +
+                '}';
     }
 
 }

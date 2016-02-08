@@ -19,6 +19,7 @@
 package org.apache.isis.applib.layout.bootstrap3;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -27,6 +28,12 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.common.CollectionLayoutData;
+import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.common.PropertyLayoutData;
 
 /**
  * Represents a tab within a {@link BS3TabGroup tab group}.
@@ -92,13 +99,79 @@ public class BS3Tab extends BS3ElementAbstract implements BS3RowOwner {
 
     public static class Predicates {
         public static Predicate<BS3Tab> notEmpty() {
+            final AtomicBoolean visitingTheNode = new AtomicBoolean(false);
+            final AtomicBoolean foundContent = new AtomicBoolean(false);
+
             return new Predicate<BS3Tab>() {
                 @Override
-                public boolean apply(final BS3Tab bs3Tab) {
-                    return !bs3Tab.getRows().isEmpty();
+                public boolean apply(final BS3Tab thisBs3Tab) {
+                    final BS3Grid owningGrid = thisBs3Tab.getGrid();
+                    owningGrid.visit(new BS3Grid.VisitorAdapter() {
+
+                        /**
+                         * if found the tab, then reset 'foundContent' to false, and then use 'visitingTheNode' as
+                         * a marker to indicate that the visitor is now being passed to the nodes underneath the tab.
+                         * In those children, if visited (with the 'visitingTheNode' flag enabled), then simply set the
+                         * 'foundContent' flag.
+                         */
+                        @Override
+                        public void preVisit(final BS3Tab bs3Tab) {
+                            if(bs3Tab == thisBs3Tab) {
+                                foundContent.set(false);
+                                visitingTheNode.set(true);
+                            }
+                        }
+
+                        @Override public void postVisit(final BS3Tab bs3Tab) {
+                            if(bs3Tab == thisBs3Tab) {
+                                visitingTheNode.set(false);
+                            }
+                        }
+
+                        @Override
+                        public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                            if(visitingTheNode.get()) {
+                                foundContent.set(true);
+                            }
+                        }
+
+                        @Override
+                        public void visit(final ActionLayoutData actionLayoutData) {
+                            if(visitingTheNode.get()) {
+                                foundContent.set(true);
+                            }
+                        }
+
+                        @Override
+                        public void visit(final PropertyLayoutData propertyLayoutData) {
+                            if(visitingTheNode.get()) {
+                                foundContent.set(true);
+                            }
+                        }
+
+                        @Override
+                        public void visit(final CollectionLayoutData collectionLayoutData) {
+                            if(visitingTheNode.get()) {
+                                foundContent.set(true);
+                            }
+                        }
+                    });
+                    return foundContent.get();
                 }
             };
         }
     }
 
+    @Override
+    @XmlTransient
+    @Programmatic
+    public BS3Grid getGrid() {
+        return getOwner().getGrid();
+    }
+
+    @Override public String toString() {
+        return "BS3Tab{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

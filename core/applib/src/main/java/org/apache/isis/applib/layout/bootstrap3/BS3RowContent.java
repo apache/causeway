@@ -21,6 +21,8 @@ package org.apache.isis.applib.layout.bootstrap3;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Common superclass for any content of a row.
  *
@@ -81,5 +83,13 @@ public abstract class BS3RowContent extends BS3ElementAbstract {
     public void setOwner(final BS3RowContentOwner owner) {
         this.owner = owner;
     }
+
+    @Override
+    @XmlTransient
+    @Programmatic
+    public BS3Grid getGrid() {
+        return getOwner().getGrid();
+    }
+
 
 }

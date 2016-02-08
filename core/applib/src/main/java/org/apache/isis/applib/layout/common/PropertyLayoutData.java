@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.isis.applib.annotation.LabelPosition;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.annotation.Where;
 
 /**
@@ -231,17 +230,10 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
 
 
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
+    @Override public String toString() {
+        return "PropertyLayoutData{" +
+                "id='" + id + '\'' +
+                '}';
     }
 
 

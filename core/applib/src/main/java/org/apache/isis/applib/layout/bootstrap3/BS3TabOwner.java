@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.layout.common.Owner;
 
-public interface BS3TabOwner extends Owner {
+public interface BS3TabOwner extends Owner, WithinGrid {
 
     List<BS3Tab> getTabs();
 }

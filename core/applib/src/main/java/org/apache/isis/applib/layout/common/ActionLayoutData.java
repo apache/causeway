@@ -226,5 +226,11 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
 
 
+    @Override public String toString() {
+        return "ActionLayoutData{" +
+                "id='" + id + '\'' +
+                '}';
+    }
+
 
 }

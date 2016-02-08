@@ -29,6 +29,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Contains a row of content, either on the top-level {@link BS3Grid page} or at any other lower-level element that can
  * contain rows, eg {@link BS3Tab tabs}.
@@ -83,12 +85,6 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
 
 
 
-    @Override
-    public String getPath() {
-        return getId() != null? getId(): super.getPath();
-    }
-
-
 
     private String metadataError;
 
@@ -123,5 +119,22 @@ public class BS3Row extends BS3ElementAbstract implements HasCssId, BS3RowConten
     public void setOwner(final BS3RowOwner owner) {
         this.owner = owner;
     }
+
+
+
+    @Override
+    @XmlTransient
+    @Programmatic
+    public BS3Grid getGrid() {
+        return getOwner().getGrid();
+    }
+
+
+    @Override public String toString() {
+        return "BS3Row{" +
+                "id='" + id + '\'' +
+                '}';
+    }
+
 
 }

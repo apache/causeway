@@ -18,29 +18,10 @@
  */
 package org.apache.isis.applib.layout.bootstrap3;
 
-import javax.xml.bind.annotation.XmlAttribute;
+import org.apache.isis.applib.annotation.Programmatic;
 
-/**
- * Superclass for all layout classes, factoring out the common {@link #getCssClass()} attribute.
- */
-public abstract class BS3ElementAbstract implements BS3Element {
+public interface WithinGrid {
 
-    private String cssClass;
-
-    /**
-     * Any additional CSS classes to render on the page element corresponding to this object,
-     * eg as per the <a href="http://getbootstrap.com/css/#grid-less">Bootstrap mixins</a> or just for
-     * custom styling.
-     */
-    @XmlAttribute(required = false)
-    public String getCssClass() {
-        return cssClass;
-    }
-
-    public void setCssClass(final String cssClass) {
-        this.cssClass = cssClass;
-    }
-
-
-
+    @Programmatic
+    BS3Grid getGrid();
 }

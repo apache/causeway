@@ -35,4 +35,5 @@ public class BS3ClearFixHidden extends BS3ClearFix {
     public String toCssClass() {
         return "clearfix hidden-" + getSize().toCssClassFragment();
     }
+
 }

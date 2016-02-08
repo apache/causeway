@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.apache.isis.applib.layout.common.Owner;
 
-public interface BS3RowOwner extends Owner {
+public interface BS3RowOwner extends Owner, WithinGrid {
 
     List<BS3Row> getRows();
 }

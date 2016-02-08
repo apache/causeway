@@ -20,7 +20,7 @@ package org.apache.isis.applib.layout.bootstrap3;
 
 import java.io.Serializable;
 
-public interface BS3Element extends Serializable {
+public interface BS3Element extends WithinGrid, Serializable {
 
     /**
      * Any additional CSS classes to render on the page element corresponding to this object,
@@ -31,8 +31,5 @@ public interface BS3Element extends Serializable {
 
     void setCssClass(final String cssClass);
 
-
-    String getPath();
-    void setPath(final String path);
 
 }

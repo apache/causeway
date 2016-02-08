@@ -29,7 +29,6 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
-import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.CollectionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.FieldSet;
@@ -118,21 +117,6 @@ public class FCColumn implements Serializable, FieldSetOwner, CollectionLayoutDa
 
     public void setOwner(final FCColumnOwner owner) {
         this.owner = owner;
-    }
-
-
-
-    private String path;
-
-    @Programmatic
-    @XmlTransient
-    public String getPath() {
-        return path;
-    }
-
-    @Programmatic
-    public void setPath(final String path) {
-        this.path = path;
     }
 
 

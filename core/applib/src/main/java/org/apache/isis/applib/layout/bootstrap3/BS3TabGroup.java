@@ -27,6 +27,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
+import org.apache.isis.applib.annotation.Programmatic;
+
 /**
  * Represents a tab group containing one or more {@link BS3Tab tab}s.
  */
@@ -110,7 +112,12 @@ public class BS3TabGroup extends BS3ElementAbstract implements BS3TabOwner {
         this.metadataError = metadataError;
     }
 
-
+    @Override
+    @XmlTransient
+    @Programmatic
+    public BS3Grid getGrid() {
+        return getOwner().getGrid();
+    }
 
 }
 
