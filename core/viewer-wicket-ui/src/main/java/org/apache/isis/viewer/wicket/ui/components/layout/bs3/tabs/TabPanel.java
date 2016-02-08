@@ -14,6 +14,10 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
 
     private static final long serialVersionUID = 1L;
+
+    private static final String ID_TAB_PANEL = "tabPanel";
+    private static final String ID_ROWS = "rows";
+
     private final BS3Tab bs3Tab;
 
     public TabPanel(String id, final EntityModel model, final BS3Tab bs3Tab) {
@@ -33,9 +37,11 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
 
     protected void buildGui(final EntityModel model, final BS3Tab bs3Tab) {
 
+        final WebMarkupContainer container = new WebMarkupContainer(ID_TAB_PANEL);
+
         Util.appendCssClassIfRequired(this, bs3Tab);
 
-        final RepeatingView rv = new RepeatingView("rows");
+        final RepeatingView rv = new RepeatingView(ID_ROWS);
 
         for(final BS3Row bs3Row: bs3Tab.getRows()) {
 
@@ -46,6 +52,7 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
 
             rv.add(row);
         }
-        add(rv);
+        container.add(rv);
+        add(container);
     }
 }

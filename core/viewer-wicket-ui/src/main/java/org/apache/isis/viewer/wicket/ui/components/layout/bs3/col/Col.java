@@ -23,14 +23,18 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.bootstrap3.BS3TabGroup;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
@@ -48,6 +52,7 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Enti
 import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
@@ -58,6 +63,11 @@ public class Col extends PanelAbstract<EntityModel> {
     private static final long serialVersionUID = 1L;
 
     private static final String ID_COL = "col";
+    private static final String ID_ENTITY_HEADER_PANEL = "entityHeaderPanel";
+    private static final String ID_ROWS = "rows";
+    private static final String ID_TAB_GROUPS = "tabGroups";
+    private static final String ID_FIELD_SETS = "fieldSets";
+    private static final String ID_COLLECTIONS = "collections";
 
     private final BS3Col bs3Col;
 
@@ -79,7 +89,7 @@ public class Col extends PanelAbstract<EntityModel> {
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
 
         CssClassAppender.appendCssClassTo(div, bs3Col.toCssClass());
-        Util.appendCssClass(div, bs3Col, "col");
+        Util.appendCssClass(div, bs3Col, ID_COL);
 
         this.addOrReplace(div);
 
@@ -90,7 +100,7 @@ public class Col extends PanelAbstract<EntityModel> {
         final String actionIdToUse;
         final String actionIdToHide;
         if(domainObject != null) {
-            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer("entityHeaderPanel");
+            final WebMarkupContainer entityHeaderPanel = new WebMarkupContainer(ID_ENTITY_HEADER_PANEL);
             div.add(entityHeaderPanel);
             final ComponentFactory componentFactory =
                     getComponentFactoryRegistry().findComponentFactory(ComponentType.ENTITY_ICON_TITLE_AND_COPYLINK, getModel());
@@ -101,7 +111,7 @@ public class Col extends PanelAbstract<EntityModel> {
             actionIdToUse = "entityActions";
             actionIdToHide = "actions";
         } else {
-            Components.permanentlyHide(div, "entityHeaderPanel");
+            Components.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
             actionOwner = div;
             actionIdToUse = "actions";
             actionIdToHide = null;
@@ -133,23 +143,62 @@ public class Col extends PanelAbstract<EntityModel> {
 
 
 
-        // tab groups
+        // rows
+        final List<BS3Row> rows = Lists.newArrayList(this.bs3Col.getRows());
         final List<BS3TabGroup> tabGroups = bs3Col.getTabGroups();
-        if(!tabGroups.isEmpty()) {
-            final RepeatingView rv = new RepeatingView("tabGroups");
+        final List<BS3TabGroup> tabGroupsWithTabs =
+                FluentIterable.from(bs3Col.getTabGroups())
+                .filter(new Predicate<BS3TabGroup>() {
+                    @Override public boolean apply(@Nullable final BS3TabGroup bs3TabGroup) {
+                        return !bs3TabGroup.getTabs().isEmpty();
+                    }
+                }).toList();
+        BS3Tab singleTabIfAny = null;
+        if(tabGroupsWithTabs.size() == 1) {
+            final BS3TabGroup firstTabGroup = tabGroupsWithTabs.get(0);
+            final List<BS3Tab> firstTabGroupTabs = firstTabGroup.getTabs();
+            if(firstTabGroupTabs.size() == 1) {
+                singleTabIfAny = firstTabGroupTabs.get(0);
+            }
+        }
+        if(singleTabIfAny != null) {
+            rows.addAll(singleTabIfAny.getRows());
+        }
 
-            for (BS3TabGroup bs3TabGroup : tabGroups) {
+        if(!rows.isEmpty()) {
+            final RepeatingView rowRv = new RepeatingView(ID_ROWS);
 
-                final String id = rv.newChildId();
+            for(final BS3Row bs3Row: rows) {
+
+                final String id = rowRv.newChildId();
+                final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
+
+                final WebMarkupContainer row = new Row(id, entityModelWithHints);
+
+                rowRv.add(row);
+            }
+            div.add(rowRv);
+        } else {
+            Components.permanentlyHide(div, ID_ROWS);
+        }
+
+
+        // tab groups
+        if(!tabGroupsWithTabs.isEmpty() && singleTabIfAny == null) {
+            final RepeatingView tabGroupRv = new RepeatingView(ID_TAB_GROUPS);
+
+            for (BS3TabGroup bs3TabGroup : tabGroupsWithTabs) {
+
+                final String id = tabGroupRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3TabGroup);
 
                 final WebMarkupContainer tabGroup = new TabGroupPanel(id, entityModelWithHints);
 
-                rv.add(tabGroup);
+                tabGroupRv.add(tabGroup);
             }
-            div.add(rv);
+            div.add(tabGroupRv);
         } else {
-            Components.permanentlyHide(div, "tabGroups");
+            Components.permanentlyHide(div, ID_TAB_GROUPS);
         }
 
 
@@ -157,19 +206,19 @@ public class Col extends PanelAbstract<EntityModel> {
         // fieldsets
         final List<FieldSet> fieldSets = bs3Col.getFieldSets();
         if(!fieldSets.isEmpty()) {
-            final RepeatingView rv = new RepeatingView("fieldSets");
+            final RepeatingView fieldSetRv = new RepeatingView(ID_FIELD_SETS);
 
             for (FieldSet fieldSet : fieldSets) {
 
-                final String id = rv.newChildId();
+                final String id = fieldSetRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(fieldSet);
 
                 final WebMarkupContainer propertyGroup = new PropertyGroup(id, entityModelWithHints);
-                rv.add(propertyGroup);
+                fieldSetRv.add(propertyGroup);
             }
-            div.add(rv);
+            div.add(fieldSetRv);
         } else {
-            Components.permanentlyHide(div, "fieldSets");
+            Components.permanentlyHide(div, ID_FIELD_SETS);
         }
 
 
@@ -177,19 +226,19 @@ public class Col extends PanelAbstract<EntityModel> {
         // collections
         final List<CollectionLayoutData> collections = bs3Col.getCollections();
         if(!collections.isEmpty()) {
-            final RepeatingView rv = new RepeatingView("collections");
+            final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
 
             for (CollectionLayoutData collection : collections) {
 
-                final String id = rv.newChildId();
+                final String id = collectionRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(collection);
 
                 final WebMarkupContainer collectionPanel = new EntityCollectionPanel(id, entityModelWithHints);
-                rv.add(collectionPanel);
+                collectionRv.add(collectionPanel);
             }
-            div.add(rv);
+            div.add(collectionRv);
         } else {
-            Components.permanentlyHide(div, "collections");
+            Components.permanentlyHide(div, ID_COLLECTIONS);
         }
 
     }

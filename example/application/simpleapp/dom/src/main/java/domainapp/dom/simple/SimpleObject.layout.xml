@@ -40,10 +40,21 @@
         </bs3:col>
     </bs3:row>
     <bs3:row>
-        <bs3:col span="4">
-            <c:fieldSet name="Properties" unreferencedProperties="true"/>
+        <bs3:col span="6">
+            <bs3:tabGroup>
+                <bs3:tab name="General">
+                    <bs3:row>
+                        <bs3:col span="12">
+                            <c:fieldSet name="Properties" unreferencedProperties="true"/>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+            </bs3:tabGroup>
+            <bs3:tabGroup>
+
+            </bs3:tabGroup>
         </bs3:col>
-        <bs3:col span="8">
+        <bs3:col span="6">
             <bs3:tabGroup  unreferencedCollections="true">
                 <bs3:tab name="Others">
                     <bs3:row>
@@ -52,13 +63,16 @@
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
+            </bs3:tabGroup>
+            <bs3:tabGroup>
                 <bs3:tab name="Similar To">
                     <bs3:row>
                         <bs3:col span="12">
-                            <c:collection id="similarTo"/>
+
                         </bs3:col>
                     </bs3:row>
                 </bs3:tab>
+
             </bs3:tabGroup>
         </bs3:col>
     </bs3:row>
