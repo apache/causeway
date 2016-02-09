@@ -22,13 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class GridFacetDefault
@@ -45,15 +43,11 @@ public class GridFacetDefault
 
     public static GridFacet create(
             final FacetHolder facetHolder,
-            final TranslationService translationService,
             final GridService gridService,
-            final GridNormalizerService gridNormalizerService, final DeploymentCategory deploymentCategory) {
-        return new GridFacetDefault(facetHolder, translationService, gridService, gridNormalizerService,
-                deploymentCategory);
+            final DeploymentCategory deploymentCategory) {
+        return new GridFacetDefault(facetHolder, gridService, deploymentCategory);
     }
 
-    private final TranslationService translationService;
-    private final GridNormalizerService gridNormalizerService;
     private final DeploymentCategory deploymentCategory;
     private final GridService gridService;
 
@@ -62,14 +56,10 @@ public class GridFacetDefault
 
     private GridFacetDefault(
             final FacetHolder facetHolder,
-            final TranslationService translationService,
             final GridService gridService,
-            final GridNormalizerService gridNormalizerService,
             final DeploymentCategory deploymentCategory) {
         super(GridFacetDefault.type(), facetHolder, Derivation.NOT_DERIVED);
         this.gridService = gridService;
-        this.translationService = translationService;
-        this.gridNormalizerService = gridNormalizerService;
         this.deploymentCategory = deploymentCategory;
     }
 
@@ -93,27 +83,14 @@ public class GridFacetDefault
         if(grid == null) {
             return null;
         }
-
-        // if have .layout.json and then add a .layout.xml without restarting, then note that
-        // the changes won't be picked up.  Normalizing would be required
-        // in order to trample over the .layout.json's original facets
-        if(grid.isNormalized()) {
-            return grid;
-        }
-
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
 
-        gridNormalizerService.normalize(grid, domainClass);
-
-        grid.setNormalized(true);
-
-        return grid;
+        return gridService.normalize(grid, domainClass);
     }
 
     private ObjectSpecification getSpecification() {
         return (ObjectSpecification) getFacetHolder();
     }
-
 
 
 }

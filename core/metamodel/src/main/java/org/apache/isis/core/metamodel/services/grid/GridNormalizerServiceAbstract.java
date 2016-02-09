@@ -31,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
@@ -38,10 +39,10 @@ import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.layout.common.MemberRegionOwner;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCColumnOwner;
-import org.apache.isis.applib.layout.fixedcols.FCGrid;
-import org.apache.isis.applib.layout.fixedcols.FCTab;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumnOwner;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -119,6 +120,10 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
     @Override
     public void normalize(final G grid, final Class<?> domainClass) {
 
+        if(!gridImplementation.isAssignableFrom(grid.getClass())) {
+            // ignore any other grid implementations
+            return;
+        }
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
         final Map<String, OneToOneAssociation> oneToOneAssociationById =
@@ -142,6 +147,19 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
         }
     }
 
+    @Programmatic
+    @Override
+    public void complete(final G grid, final Class<?> domainClass) {
+        // TODO: do some different logic here...
+        normalize(grid, domainClass);
+    }
+
+    @Programmatic
+    @Override
+    public void minimal(final G grid, final Class<?> domainClass) {
+        // TODO: do some different logic here...
+        normalize(grid, domainClass);
+    }
     /**
      * Ensures that all object members (properties, collections and actions) are in the metadata.
      */

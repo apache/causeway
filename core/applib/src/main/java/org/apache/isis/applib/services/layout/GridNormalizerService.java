@@ -14,13 +14,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.services.grid;
+package org.apache.isis.applib.services.layout;
 
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.common.Grid;
 
+/**
+ * Provides implementation of {@link Grid}.
+ * @param <G>
+ */
 public interface GridNormalizerService<G extends Grid> {
 
+    /**
+     * Which grid implementation is understood by this.
+     */
     @Programmatic
     Class<? extends Grid> gridImplementation();
 
@@ -33,6 +40,9 @@ public interface GridNormalizerService<G extends Grid> {
     @Programmatic
     void normalize(G grid, Class<?> domainClass);
 
+    @Programmatic
+    void complete(G grid, Class<?> domainClass);
 
-
+    @Programmatic
+    void minimal(G grid, Class<?> domainClass);
 }

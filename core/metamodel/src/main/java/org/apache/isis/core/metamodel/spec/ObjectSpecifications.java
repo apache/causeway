@@ -25,7 +25,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 
 

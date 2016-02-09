@@ -30,14 +30,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.PropertyLayoutData;
-import org.apache.isis.applib.layout.fixedcols.FCColumn;
-import org.apache.isis.applib.layout.fixedcols.FCGrid;
-import org.apache.isis.applib.layout.fixedcols.FCTab;
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTabGroup;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.GridNormalizerServiceFC;
 

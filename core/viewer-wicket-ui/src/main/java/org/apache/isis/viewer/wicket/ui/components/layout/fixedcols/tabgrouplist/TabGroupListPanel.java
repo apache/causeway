@@ -24,7 +24,7 @@ import java.util.List;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabs.TabGroupPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

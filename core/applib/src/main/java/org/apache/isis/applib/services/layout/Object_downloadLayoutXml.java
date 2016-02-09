@@ -54,8 +54,9 @@ public class Object_downloadLayoutXml {
     @MemberOrder(sequence = "550.1")
     public Object $$(
             @ParameterLayout(named = "File name")
-            final String fileName) {
-        final Grid grid = getPage();
+            final String fileName,
+            final GridService.Style style) {
+        final Grid grid = getGrid(style);
         final String xml = jaxbService.toXml(grid,
                 ImmutableMap.<String,Object>of(
                         Marshaller.JAXB_SCHEMA_LOCATION,
@@ -66,14 +67,18 @@ public class Object_downloadLayoutXml {
     }
 
     public boolean hide$$() {
-        return getPage() == null;
+        // can use either style to determine whether this action should be hidden
+        return getGrid(GridService.Style.COMPLETE) == null;
     }
     public String default0$$() {
         return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
     }
+    public GridService.Style default1$$() {
+        return GridService.Style.NORMALIZED;
+    }
 
-    protected Grid getPage() {
-        return gridService.toGrid(object);
+    protected Grid getGrid(final GridService.Style style) {
+        return gridService.toGrid(object, style);
     }
 
     @Inject

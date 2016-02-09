@@ -108,7 +108,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             final OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (final ObjectSpecification objectSpec : domainObjectSpecs) {
                 final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final Grid grid = gridService.toGrid(domainClass);
+                final Grid grid = gridService.toGrid(domainClass, GridService.Style.NORMALIZED);
                 if(grid != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
                     String xml = jaxbService.toXml(grid);

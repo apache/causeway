@@ -16,10 +16,10 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.applib.layout.fixedcols;
+package org.apache.isis.core.metamodel.services.grid.fixedcols.applib;
 
 import org.apache.isis.applib.layout.common.Owner;
 
-public interface FCColumnOwner extends Owner {
+public interface FCTabGroupOwner extends Owner {
 
 }

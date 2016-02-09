@@ -24,7 +24,7 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.layout.fixedcols.FCGrid;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;

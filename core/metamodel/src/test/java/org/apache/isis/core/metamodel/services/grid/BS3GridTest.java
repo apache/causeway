@@ -30,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.layout.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.bootstrap3.BS3Row;

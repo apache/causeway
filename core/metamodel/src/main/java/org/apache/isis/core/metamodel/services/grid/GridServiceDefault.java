@@ -29,6 +29,7 @@ import javax.xml.bind.JAXBContext;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -40,6 +41,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.GridService;
@@ -146,6 +148,48 @@ public class GridServiceDefault
         }
     }
 
+    @Override
+    @Programmatic
+    public Grid normalize(final Grid grid, final Class<?> domainClass) {
+
+        // if have .layout.json and then add a .layout.xml without restarting, then note that
+        // the changes won't be picked up.  Normalizing would be required
+        // in order to trample over the .layout.json's original facets
+        if(grid.isNormalized()) {
+            return grid;
+        }
+
+        for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
+            gridNormalizerService.normalize(grid, domainClass);
+        }
+
+        grid.setNormalized(true);
+
+        return grid;
+    }
+
+    @Override
+    @Programmatic
+    public Grid complete(final Grid grid, final Class<?> domainClass) {
+
+        for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
+            gridNormalizerService.complete(grid, domainClass);
+        }
+
+        return grid;
+    }
+
+    @Override
+    @Programmatic
+    public Grid minimal(final Grid grid, final Class<?> domainClass) {
+
+        for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
+            gridNormalizerService.minimal(grid, domainClass);
+        }
+
+        return grid;
+    }
+
     private static String resourceContentOf(final Class<?> cls, final String resourceName) throws IOException {
         final URL url = Resources.getResource(cls, resourceName);
         return Resources.toString(url, Charset.defaultCharset());
@@ -158,17 +202,39 @@ public class GridServiceDefault
 
     @Override
     @Programmatic
-    public Grid toGrid(final Object domainObject) {
-        return toGrid(domainObject.getClass());
+    public Grid toGrid(final Object domainObject, final Style style) {
+        return toGrid(domainObject.getClass(), style);
     }
 
     @Override
-    public Grid toGrid(final Class<?> domainClass) {
-        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
-        final GridFacet facet = objectSpec.getFacet(GridFacet.class);
-        return facet != null? facet.getGrid(): null;
+    public Grid toGrid(final Class<?> domainClass, final Style style) {
+        switch (style) {
+        case NORMALIZED:
+            // obtain the already normalized grid, if available.
+            // (if there is none, then the facet will delegate back to this service to do the normalization,
+            // but then will cache it for any subsequent requests).
+            final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+            final GridFacet facet = objectSpec.getFacet(GridFacet.class);
+            return facet != null? facet.getGrid(): null;
+        case COMPLETE:
+            return completeGridFor(domainClass);
+        case MINIMAL:
+            return minimalGridFor(domainClass);
+        default:
+            throw new IllegalArgumentException("unsupported style");
+        }
     }
 
+    protected Grid minimalGridFor(final Class<?> domainClass) {
+        Grid grid = fromXml(domainClass);
+        return grid;
+    }
+
+    protected Grid completeGridFor(final Class<?> domainClass) {
+        Grid grid = fromXml(domainClass);
+        grid = normalize(grid, domainClass);
+        return grid;
+    }
 
     @Override
     public String tnsAndSchemaLocation(final Grid grid) {
@@ -185,6 +251,38 @@ public class GridServiceDefault
                     }
                 });
         return Joiner.on(" ").join(parts);
+    }
+
+    ////////////////////////////////////////////////////////
+
+    private List<GridNormalizerService<?>> filteredGridNormalizerServices;
+
+    /**
+     * For all of the available {@link GridNormalizerService}s available, return only the first one for any that
+     * are for the same grid implementation.
+     */
+    @Programmatic
+    public List<GridNormalizerService<?>> gridNormalizerServices() {
+
+        if (filteredGridNormalizerServices == null) {
+            List<GridNormalizerService<?>> services = Lists.newArrayList();
+
+            for (GridNormalizerService gridNormalizerService : this.gridNormalizerServices) {
+                final Class gridImplementation = gridNormalizerService.gridImplementation();
+                final boolean notSeenBefore = FluentIterable.from(services).filter(new Predicate<GridNormalizerService<?>>() {
+                    @Override public boolean apply(@Nullable final GridNormalizerService<?> gridNormalizerService) {
+                        return gridNormalizerService.gridImplementation() == gridImplementation;
+                    }
+                }).isEmpty();
+                if(notSeenBefore) {
+                    services.add(gridNormalizerService);
+                }
+            }
+
+            filteredGridNormalizerServices = services;
+
+        }
+        return filteredGridNormalizerServices;
     }
 
     ////////////////////////////////////////////////////////

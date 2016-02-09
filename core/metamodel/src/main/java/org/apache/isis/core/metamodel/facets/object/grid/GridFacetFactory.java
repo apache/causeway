@@ -16,10 +16,12 @@
  * under the License. */
 package org.apache.isis.core.metamodel.facets.object.grid;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.apache.isis.applib.services.i18n.TranslationService;
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -27,7 +29,6 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjector;
 import org.apache.isis.core.metamodel.runtimecontext.ServicesInjectorAware;
-import org.apache.isis.core.metamodel.services.grid.GridNormalizerService;
 
 public class GridFacetFactory extends FacetFactoryAbstract implements ServicesInjectorAware {
 
@@ -41,16 +42,12 @@ public class GridFacetFactory extends FacetFactoryAbstract implements ServicesIn
     public void process(final ProcessClassContext processClassContext) {
         final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        final TranslationService translationService =
-                servicesInjector.lookupService(TranslationService.class);
         final GridService gridService =
                 servicesInjector.lookupService(GridService.class);
-        final GridNormalizerService gridNormalizerService =
-                servicesInjector.lookupService(GridNormalizerService.class);
 
         FacetUtil.addFacet(
                 GridFacetDefault.create(facetHolder,
-                        translationService, gridService, gridNormalizerService, getDeploymentCategory()));
+                        gridService, getDeploymentCategory()));
     }
 
     private ServicesInjector servicesInjector;

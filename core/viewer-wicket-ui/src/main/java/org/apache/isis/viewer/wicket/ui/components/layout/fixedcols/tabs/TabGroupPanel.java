@@ -29,8 +29,8 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.applib.layout.fixedcols.FCTab;
-import org.apache.isis.applib.layout.fixedcols.FCTabGroup;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
 

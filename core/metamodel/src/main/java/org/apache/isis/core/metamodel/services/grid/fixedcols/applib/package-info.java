@@ -18,6 +18,15 @@
  */
 
 /**
+ * THIS STUFF ALL WORKS, BUT REMOVED FROM PUBLIC APPLIB BECAUSE IT LOOKS
+ * LIKE THE BOOTSTRAP3 GRID WILL BE SUFFICIENT.
+ *
+ * The benefit of keeping this stuff around is that it reinforces where
+ * separation of responsibilities are for grid components (tab etc)
+ * vs common components (fieldset, action, property, collection, domainobject).
+ *
+ * --------------------
+ *
  * The classes in this package define how to layout the properties, collections and actions of a domain object - the
  * building blocks - as defined in the <code>members.v1</code> package.
  *
@@ -32,4 +41,4 @@
         namespace = "http://isis.apache.org/schema/applib/layout/fixedcols",
         elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED
 )
-package org.apache.isis.applib.layout.fixedcols;
+package org.apache.isis.core.metamodel.services.grid.fixedcols.applib;

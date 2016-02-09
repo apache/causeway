@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.tabs;
 
-import org.apache.isis.applib.layout.fixedcols.FCTab;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

@@ -51,16 +51,16 @@ public class Object_viewLayout {
     )
     @MemberOrder(sequence = "550.2")
     public Grid $$() {
-        return getPage();
+        return getGrid(GridService.Style.NORMALIZED);
     }
 
     @Programmatic // TODO ... excluded for now (getting an Isis framework exception in the view model rendering).
     public boolean hide$$() {
-        return getPage() == null;
+        return getGrid(GridService.Style.NORMALIZED) == null;
     }
 
-    protected Grid getPage() {
-        return gridService.toGrid(object);
+    protected Grid getGrid(final GridService.Style style) {
+        return gridService.toGrid(object, style);
     }
 
 
