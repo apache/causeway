@@ -92,11 +92,13 @@
         <datanucleus-rdbms.version>4.1.9</datanucleus-rdbms.version>
 
         <datanucleus-jodatime.version>4.1.0-release</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>4.0.1</datanucleus-maven-plugin.version>
 	<!--
+	    ISIS-1288: seen integration tests to fail;
+	    domain object date holding 1-Aug-2015 after xactn retrieved as 31-Jul-2015
+
         <datanucleus-jodatime.version>4.1.1</datanucleus-jodatime.version>
-        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
 	-->
+        <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>
 
         <shiro.version>1.2.3</shiro.version>
 
