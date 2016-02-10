@@ -31,10 +31,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.layout.GridNormalizerService;
-import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
@@ -73,9 +73,10 @@ public class FCGridTest {
         fcPage.setTabGroups(Lists.<FCTabGroup>newArrayList());
         fcPage.getTabGroups().add(new FCTabGroup());
         FCTabGroup tabGroup = fcPage.getTabGroups().get(0);
-        FCTab FCTab = tabGroup.getTabs().get(0);
-        FCTab.setName("Common");
-        FCColumn left = FCTab.getLeft();
+        FCTab fcTab = new FCTab();
+        tabGroup.getTabs().add(fcTab);
+        fcTab.setName("Common");
+        FCColumn left = fcTab.getLeft();
 
         FieldSet leftPropGroup = new FieldSet();
         left.setFieldSets(Lists.<FieldSet>newArrayList());

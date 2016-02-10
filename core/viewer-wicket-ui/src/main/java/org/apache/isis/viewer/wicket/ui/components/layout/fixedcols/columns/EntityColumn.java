@@ -31,8 +31,8 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;

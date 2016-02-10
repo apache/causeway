@@ -26,14 +26,14 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.layout.common.GridAbstract;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutDataOwner;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.component.GridAbstract;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.dto.Dto;
 
 /**

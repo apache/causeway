@@ -19,7 +19,7 @@
 package org.apache.isis.core.metamodel.facets.object.grid;
 
 
-import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**

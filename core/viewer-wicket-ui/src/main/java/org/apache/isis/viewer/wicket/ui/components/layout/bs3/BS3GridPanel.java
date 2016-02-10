@@ -22,8 +22,8 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

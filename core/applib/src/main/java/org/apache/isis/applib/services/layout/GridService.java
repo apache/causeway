@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.component.Grid;
 
 public interface GridService {
 

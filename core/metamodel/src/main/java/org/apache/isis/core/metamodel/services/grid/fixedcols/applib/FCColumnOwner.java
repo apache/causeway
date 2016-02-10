@@ -18,7 +18,7 @@
  */
 package org.apache.isis.core.metamodel.services.grid.fixedcols.applib;
 
-import org.apache.isis.applib.layout.common.Owner;
+import org.apache.isis.applib.layout.component.Owner;
 
 public interface FCColumnOwner extends Owner {
 

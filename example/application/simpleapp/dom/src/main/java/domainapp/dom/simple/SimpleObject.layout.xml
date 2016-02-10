@@ -1,54 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<bs3:grid xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-
-<!--
-    <bs3:row>
-        <bs3:col span="8" unreferencedActions="false">
-            <c:domainObject/>
-        </bs3:col>
-    </bs3:row>
+<bs3:grid xsi:schemaLocation="http://isis.apache.org/applib/layout/component http://isis.apache.org/applib/layout/component/component.xsd http://isis.apache.org/applib/layout/grid/bootstrap3 http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/applib/layout/component" xmlns:bs3="http://isis.apache.org/applib/layout/grid/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <bs3:row>
-        <bs3:col span="12">
-            <bs3:tabGroup>
-                <bs3:tab name="Properties">
-                    <bs3:row>
-                        <bs3:col span="6">
-                            <c:fieldSet name="General" unreferencedProperties="true" unreferencedActions="true"/>
-                        </bs3:col>
-                        <bs3:col span="6">
-                            <c:fieldSet name="Metadata">
-                                <c:action id="downloadJdoMetadata"/>
-                                <c:action id="downloadLayoutXml" position="PANEL_DROPDOWN"/>
-                                <c:property id="versionSequence"/>
-                            </c:fieldSet>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
-        </bs3:col>
-    </bs3:row>
-    <bs3:row>
-        <bs3:col span="12">
-            <bs3:tabGroup unreferencedCollections="true"/>
-        </bs3:col>
-    </bs3:row>
--->
-
-    <bs3:row>
-        <bs3:col span="12" unreferencedActions="false">
+        <bs3:col span="12" unreferencedActions="true">
             <c:domainObject/>
         </bs3:col>
     </bs3:row>
     <bs3:row>
         <bs3:col span="6">
             <bs3:tabGroup>
-                <bs3:tab name="General" cssClass="bar">
-                    <bs3:row cssClass="foo">
+                <bs3:tab name="General">
+                    <bs3:row>
                         <bs3:col span="12">
-                            <c:fieldSet name="Properties" unreferencedActions="true">
+                            <c:fieldSet name="Properties">
                                 <c:property id="name"/>
+                            </c:fieldSet>
+                            <c:fieldSet name="Misc">
                                 <c:property id="versionSequence"/>
                             </c:fieldSet>
                         </bs3:col>
@@ -67,23 +34,6 @@
         </bs3:col>
         <bs3:col span="6">
             <bs3:tabGroup  unreferencedCollections="true">
-                <bs3:tab name="Others">
-                    <bs3:row>
-                        <bs3:col span="12">
-                            <c:collection id="others" defaultView="table"/>
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-            </bs3:tabGroup>
-            <bs3:tabGroup>
-                <bs3:tab name="Similar To">
-                    <bs3:row>
-                        <bs3:col span="12">
-
-                        </bs3:col>
-                    </bs3:row>
-                </bs3:tab>
-
             </bs3:tabGroup>
         </bs3:col>
     </bs3:row>

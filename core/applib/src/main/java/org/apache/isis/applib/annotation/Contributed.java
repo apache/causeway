@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
  * The means by which a domain service action will be contributed to a domain object.
  */
 @XmlType(
-        namespace = "http://isis.apache.org/schema/applib/layout/common"
+        namespace = "http://isis.apache.org/applib/layout/component"
 )
 public enum Contributed {
     /**

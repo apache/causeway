@@ -29,12 +29,12 @@ import javax.xml.bind.annotation.XmlType;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.annotation.MemberGroupLayout;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.CollectionLayoutDataOwner;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.FieldSetOwner;
-import org.apache.isis.applib.layout.common.Owned;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutDataOwner;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.FieldSetOwner;
+import org.apache.isis.applib.layout.component.Owned;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 
 /**
  * The column contains a mixture of {@link FieldSet}s (of {@link PropertyLayoutData properties}) and also

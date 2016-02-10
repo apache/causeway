@@ -29,7 +29,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.layout.common.Owned;
+import org.apache.isis.applib.layout.component.Owned;
 
 @XmlType(
         propOrder = {

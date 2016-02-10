@@ -75,7 +75,7 @@ public @interface ActionLayout {
     CssClassFaPosition cssClassFaPosition() default CssClassFaPosition.LEFT;
 
     @XmlType(
-            namespace = "http://isis.apache.org/schema/applib/layout/common"
+            namespace = "http://isis.apache.org/applib/layout/component"
     )
     enum CssClassFaPosition {
         LEFT, RIGHT
@@ -115,7 +115,7 @@ public @interface ActionLayout {
     Position position() default Position.BELOW;
 
     @XmlType(
-            namespace = "http://isis.apache.org/schema/applib/layout/common"
+            namespace = "http://isis.apache.org/applib/layout/component"
     )
     enum Position {
         BELOW,

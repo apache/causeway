@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.actions.layout;
 
 import com.google.common.base.Strings;
 
-import org.apache.isis.applib.layout.common.ActionLayoutData;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacetAbstract;

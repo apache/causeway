@@ -3,8 +3,8 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;

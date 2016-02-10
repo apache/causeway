@@ -42,7 +42,7 @@ import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.services.layout.GridNormalizerService;
-import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
@@ -60,8 +60,8 @@ public class GridServiceDefault
 
     private static final Logger LOG = LoggerFactory.getLogger(GridServiceDefault.class);
 
-    public static final String COMMON_TNS = "http://isis.apache.org/schema/applib/layout/common";
-    public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/common/common.xsd";
+    public static final String COMMON_TNS = "http://isis.apache.org/applib/layout/component";
+    public static final String COMMON_SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/component/component.xsd";
 
     // for better logging messages (used only in prototyping mode)
     private final Map<Class<?>, String> badXmlByClass = Maps.newHashMap();

@@ -30,17 +30,17 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
-import org.apache.isis.applib.layout.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.bootstrap3.BS3RowContent;
-import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.Grid;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.services.grid.GridNormalizerServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -53,8 +53,8 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 )
 public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3Grid> {
 
-    public static final String TNS = "http://isis.apache.org/schema/applib/layout/bootstrap3";
-    public static final String SCHEMA_LOCATION = "http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd";
+    public static final String TNS = "http://isis.apache.org/applib/layout/grid/bootstrap3";
+    public static final String SCHEMA_LOCATION = "http://isis.apache.org/applib/layout/grid/bootstrap3/bootstrap3.xsd";
 
     public GridNormalizerServiceBS3() {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);

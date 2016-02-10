@@ -31,16 +31,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import org.apache.isis.applib.services.layout.GridNormalizerService;
-import org.apache.isis.applib.layout.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.layout.common.ActionLayoutData;
-import org.apache.isis.applib.layout.common.CollectionLayoutData;
-import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
-import org.apache.isis.applib.layout.common.FieldSet;
-import org.apache.isis.applib.layout.common.PropertyLayoutData;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.jaxb.JaxbService;
 import org.apache.isis.core.metamodel.services.grid.bootstrap3.GridNormalizerServiceBS3;
 

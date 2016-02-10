@@ -23,8 +23,8 @@ import com.google.common.base.Strings;
 
 import org.apache.wicket.MarkupContainer;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3Element;
-import org.apache.isis.applib.layout.bootstrap3.BS3ElementAbstract;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Element;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3ElementAbstract;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 public class Util {

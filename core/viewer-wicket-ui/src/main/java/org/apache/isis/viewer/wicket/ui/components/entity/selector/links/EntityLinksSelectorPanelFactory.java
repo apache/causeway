@@ -22,8 +22,8 @@ package org.apache.isis.viewer.wicket.ui.components.entity.selector.links;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3Grid;
-import org.apache.isis.applib.layout.common.Grid;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
+import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

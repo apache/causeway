@@ -21,10 +21,10 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.row;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.bootstrap3.BS3ClearFix;
-import org.apache.isis.applib.layout.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.bootstrap3.BS3RowContent;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
