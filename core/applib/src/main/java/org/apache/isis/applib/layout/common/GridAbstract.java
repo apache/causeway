@@ -39,6 +39,23 @@ import org.apache.isis.applib.services.layout.GridService;
 @XmlTransient // ignore this class
 public abstract class GridAbstract implements Grid {
 
+
+    private Class<?> domainClass;
+
+    @Programmatic
+    @XmlTransient
+    public Class<?> getDomainClass() {
+        return domainClass;
+    }
+
+    @Programmatic
+    @XmlTransient
+    public void setDomainClass(final Class<?> domainClass) {
+        this.domainClass = domainClass;
+    }
+
+
+
     private boolean normalized;
 
     @Programmatic

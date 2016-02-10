@@ -242,13 +242,11 @@ public class PropertyLayoutData
     }
 
 
-
-
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return "PropertyLayoutData{" +
                 "id='" + id + '\'' +
                 '}';
     }
-
 
 }

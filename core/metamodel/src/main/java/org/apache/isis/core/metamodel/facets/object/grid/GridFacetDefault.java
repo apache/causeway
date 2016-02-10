@@ -85,7 +85,7 @@ public class GridFacetDefault
         }
         final Class<?> domainClass = getSpecification().getCorrespondingClass();
 
-        return gridService.normalize(grid, domainClass);
+        return gridService.normalize(grid);
     }
 
     private ObjectSpecification getSpecification() {

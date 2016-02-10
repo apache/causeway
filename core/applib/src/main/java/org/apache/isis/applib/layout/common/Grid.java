@@ -19,10 +19,8 @@
 package org.apache.isis.applib.layout.common;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.layout.bootstrap3.BS3Col;
 import org.apache.isis.applib.services.layout.GridService;
 
 /**
@@ -34,15 +32,26 @@ import org.apache.isis.applib.services.layout.GridService;
  */
 public interface Grid {
 
+    @Programmatic
+    Class<?> getDomainClass();
+
+    @Programmatic
+    void setDomainClass(final Class<?> domainClass);
+
+    @Programmatic
     boolean isNormalized();
 
+    @Programmatic
     void setNormalized(final boolean normalized);
 
-    @Programmatic LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
+    @Programmatic
+    LinkedHashMap<String, PropertyLayoutData> getAllPropertiesById();
 
-    @Programmatic LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
+    @Programmatic
+    LinkedHashMap<String, CollectionLayoutData> getAllCollectionsById();
 
-    @Programmatic LinkedHashMap<String, ActionLayoutData> getAllActionsById();
+    @Programmatic
+    LinkedHashMap<String, ActionLayoutData> getAllActionsById();
 
     interface Visitor {
         void visit(final DomainObjectLayoutData domainObjectLayoutData);
@@ -69,6 +78,7 @@ public interface Grid {
         }
     }
 
+    @Programmatic
     void visit(final Grid.Visitor visitor);
 
 }

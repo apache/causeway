@@ -127,11 +127,12 @@ public class GridServiceDefault
                     .toList();
             final JAXBContext context = JAXBContext.newInstance(pageImplementations.toArray(new Class[0]));
 
-            final Grid metadata = (Grid) jaxbService.fromXml(context, xml);
+            final Grid grid = (Grid) jaxbService.fromXml(context, xml);
+            grid.setDomainClass(domainClass);
             if(!deploymentCategory.isProduction()) {
-                pageByXml.put(xml, metadata);
+                pageByXml.put(xml, grid);
             }
-            return metadata;
+            return grid;
         } catch(Exception ex) {
 
             if(!deploymentCategory.isProduction()) {
@@ -150,7 +151,7 @@ public class GridServiceDefault
 
     @Override
     @Programmatic
-    public Grid normalize(final Grid grid, final Class<?> domainClass) {
+    public Grid normalize(final Grid grid) {
 
         // if have .layout.json and then add a .layout.xml without restarting, then note that
         // the changes won't be picked up.  Normalizing would be required
@@ -158,6 +159,8 @@ public class GridServiceDefault
         if(grid.isNormalized()) {
             return grid;
         }
+
+        final Class<?> domainClass = grid.getDomainClass();
 
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
             gridNormalizerService.normalize(grid, domainClass);
@@ -170,8 +173,9 @@ public class GridServiceDefault
 
     @Override
     @Programmatic
-    public Grid complete(final Grid grid, final Class<?> domainClass) {
+    public Grid complete(final Grid grid) {
 
+        final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
             gridNormalizerService.complete(grid, domainClass);
         }
@@ -181,8 +185,9 @@ public class GridServiceDefault
 
     @Override
     @Programmatic
-    public Grid minimal(final Grid grid, final Class<?> domainClass) {
+    public Grid minimal(final Grid grid) {
 
+        final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
             gridNormalizerService.minimal(grid, domainClass);
         }
@@ -217,23 +222,12 @@ public class GridServiceDefault
             final GridFacet facet = objectSpec.getFacet(GridFacet.class);
             return facet != null? facet.getGrid(): null;
         case COMPLETE:
-            return completeGridFor(domainClass);
+            return complete(fromXml(domainClass));
         case MINIMAL:
-            return minimalGridFor(domainClass);
+            return minimal(fromXml(domainClass));
         default:
             throw new IllegalArgumentException("unsupported style");
         }
-    }
-
-    protected Grid minimalGridFor(final Class<?> domainClass) {
-        Grid grid = fromXml(domainClass);
-        return grid;
-    }
-
-    protected Grid completeGridFor(final Class<?> domainClass) {
-        Grid grid = fromXml(domainClass);
-        grid = normalize(grid, domainClass);
-        return grid;
     }
 
     @Override
