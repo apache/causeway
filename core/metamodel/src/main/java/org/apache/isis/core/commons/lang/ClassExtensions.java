@@ -20,6 +20,7 @@
 package org.apache.isis.core.commons.lang;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,7 +29,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Properties;
 
-import com.google.common.io.ByteSource;
+import com.google.common.io.InputSupplier;
 import com.google.common.io.Resources;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -155,9 +156,9 @@ public final class ClassExtensions {
     public static Properties resourceProperties(final Class<?> extendee, final String suffix) {
         try {
             final URL url = Resources.getResource(extendee, extendee.getSimpleName()+suffix);
-            final ByteSource byteSource = Resources.asByteSource(url);
+            final InputSupplier<InputStream> inputSupplier = com.google.common.io.Resources.newInputStreamSupplier(url);
             final Properties properties = new Properties();
-            properties.load(byteSource.openStream());
+            properties.load(inputSupplier.getInput());
             return properties;
         } catch (Exception e) {
             return null;

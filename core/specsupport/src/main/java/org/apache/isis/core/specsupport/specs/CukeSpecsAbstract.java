@@ -16,16 +16,15 @@
  */
 package org.apache.isis.core.specsupport.specs;
 
-import org.junit.runner.RunWith;
-
-import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;
+
+import org.junit.runner.RunWith;
 
 /**
  * Base class for all Cucumber specs run at unit-scope; runs the spec as a JUnit test.
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(
+@Cucumber.Options(
         format = {
                 "html:target/cucumber-html-report"
                 // addHook causes an exception to be thrown if this reporter is registered...

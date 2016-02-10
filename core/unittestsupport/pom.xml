@@ -58,7 +58,7 @@
             <dependency>
                 <groupId>javax.jdo</groupId>
                 <artifactId>jdo-api</artifactId>
-                <version>${jdo-api.version}</version>
+                <version>3.0.1</version>
                 <optional>true</optional>
             </dependency>
 
