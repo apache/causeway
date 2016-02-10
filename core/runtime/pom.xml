@@ -18,9 +18,9 @@
   under the License.
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
+    <parent>
 		<groupId>org.apache.isis.core</groupId>
 		<artifactId>isis</artifactId>
         <version>1.12.0-SNAPSHOT</version>
@@ -143,24 +143,26 @@
         <profile>
             <id>email-notification-service</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skip.email-notification-service</name>
+                </property>
             </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.apache.commons</groupId>
                     <artifactId>commons-email</artifactId>
-                    <version>1.3.3</version>
+                    <version>${commons-email.version}</version>
                     <exclusions>
                         <exclusion>
-                            <groupId>javax.mail</groupId>
-                            <artifactId>mail</artifactId>
+                            <groupId>com.sun.mail</groupId>
+                            <artifactId>javax.mail</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
                 <dependency>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                    <version>1.4.7</version>
+                    <groupId>com.sun.mail</groupId>
+                    <artifactId>javax.mail</artifactId>
+                    <version>${com-sun-mail.version}</version>
                     <exclusions>
                         <exclusion>
                             <groupId>javax.activation</groupId>
@@ -178,13 +180,15 @@
         <profile>
             <id>axon-event-bus</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>!skip.axon-event-bus</name>
+                </property>
             </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.axonframework</groupId>
                     <artifactId>axon-core</artifactId>
-                    <version>2.4</version>
+                    <version>${axon-core.version}</version>
                 </dependency>
             </dependencies>
         </profile>

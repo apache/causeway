@@ -103,29 +103,37 @@
 
         <hamcrest.version>1.3</hamcrest.version>
 
-        <objenesis.version>1.4</objenesis.version>
-        <javassist.version>3.19.0-GA</javassist.version>
-        <reflections.version>0.9.9</reflections.version>
+        <objenesis.version>2.2</objenesis.version>
+        <javassist.version>3.20.0-GA</javassist.version>
+        <reflections.version>0.9.10</reflections.version>
 
-        <commons-logging.version>1.1.2</commons-logging.version>
-        <commons-cli.version>1.2</commons-cli.version>
+        <commons-logging.version>1.2</commons-logging.version>
+        <commons-cli.version>1.3.1</commons-cli.version>
         <commons-httpclient.version>3.1</commons-httpclient.version>
-        <commons-codec.version>1.9</commons-codec.version>
+        <commons-codec.version>1.10</commons-codec.version>
+        <commons-email.version>1.4</commons-email.version>
+        <com-sun-mail.version>1.5.2</com-sun-mail.version>
 
-        <jackson.version>2.5.0</jackson.version>
-        <gson.version>2.3.1</gson.version>
+        <axon-core.version>2.4</axon-core.version>
+
+        <jackson.version>2.6.4</jackson.version>
+        <gson.version>2.5</gson.version>
+        <swagger-core.version>1.5.5</swagger-core.version>
+        <swagger-ui.version>2.1.3</swagger-ui.version>
+        <webjars-servlet-2.x.version>1.4</webjars-servlet-2.x.version>
 
         <!-- using 2.3.2 throws strange error about not finding org.hsqldb.jdbcDriver -->
+        <!-- using 2.3.3 throws SQL exception in simpleapp integtests -->
         <hsqldb.version>2.3.1</hsqldb.version>
         <log4jdbc-remix.version>0.2.7</log4jdbc-remix.version>
-        <resteasy-jaxrs.version>3.0.11.Final</resteasy-jaxrs.version>
+        <resteasy-jaxrs.version>3.0.14.Final</resteasy-jaxrs.version>
 
         <jetty.version>9.3.6.v20151106</jetty.version>
 
         <wicket.version>6.20.0</wicket.version>
         <wicketstuff.version>6.20.0</wicketstuff.version>
 
-        <wicket-webjars.version>0.4.7</wicket-webjars.version>
+        <wicket-webjars.version>0.4.8</wicket-webjars.version>
         <wicket-bootstrap.version>0.9.15</wicket-bootstrap.version>
         <wicket-source.version>6.0.0.8</wicket-source.version>
 
@@ -133,15 +141,16 @@
         <select2.version>3.5.2</select2.version>
         <jquery-ui.version>1.11.4</jquery-ui.version>
 
-        <guice.version>3.0</guice.version>
-        <picocontainer.version>2.14.3</picocontainer.version>
+        <guice.version>4.0</guice.version>
+        <picocontainer.version>2.15</picocontainer.version>
 
         <dom4j.version>1.6.1</dom4j.version>
         <jdom.version>2.0.2</jdom.version>
-        <xstream.version>1.4.7</xstream.version>
+        <xstream.version>1.4.8</xstream.version>
         <htmlparser.version>2.1</htmlparser.version>
 
         <junit.version>4.12</junit.version>
+        <!-- 2.8.1 depends on cglib-nodep 3.1 whereas axonframework depends on 2.2.2 -->
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
         <cucumber.version>1.2.4</cucumber.version>
@@ -155,7 +164,11 @@
         <geronimo-javamail_1.4_spec.version>1.7.1</geronimo-javamail_1.4_spec.version>
         <geronimo-atinject_1.0_spec.version>1.0</geronimo-atinject_1.0_spec.version>
         <geronimo-jcdi_1.0_spec.version>1.0</geronimo-jcdi_1.0_spec.version>
+
         <validation-api.version>1.1.0.Final</validation-api.version>
+
+        <javax-mail.version>1.4.7</javax-mail.version>
+
     </properties>
 
     <scm>
@@ -1855,6 +1868,7 @@ ${license.additional-notes}
             </dependency>
 
 
+
             <!-- javax APIs -->
             <dependency>
                 <groupId>javax.validation</groupId>
@@ -1894,7 +1908,30 @@ ${license.additional-notes}
                 <artifactId>datanucleus-jodatime</artifactId>
                 <version>${datanucleus-jodatime.version}</version>
             </dependency>
- 
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-core</artifactId>
+                <version>${swagger-core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-lang3</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>swagger-ui</artifactId>
+                <version>${swagger-ui.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>webjars-servlet-2.x</artifactId>
+                <version>${webjars-servlet-2.x.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
