@@ -144,7 +144,7 @@
         <junit.version>4.12</junit.version>
         <jmock.version>2.6.0</jmock.version>
         <easymock.version>2.5.2</easymock.version>
-        <cucumber.version>1.1.5</cucumber.version>
+        <cucumber.version>1.2.4</cucumber.version>
 
         <geronimo-jsp_2.1_spec.version>1.0.1</geronimo-jsp_2.1_spec.version>
         <geronimo-jta_1.1_spec.version>1.1.1</geronimo-jta_1.1_spec.version>
