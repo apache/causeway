@@ -43,7 +43,7 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
             , "metadataError"
         }
 )
-public class DomainObjectLayoutData implements Serializable,
+public class DomainObjectLayoutData implements Serializable, Owned<DomainObjectLayoutDataOwner>,
         HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
     private static final long serialVersionUID = 1L;
@@ -185,7 +185,7 @@ public class DomainObjectLayoutData implements Serializable,
 
 
 
-    private MemberRegionOwner owner;
+    private DomainObjectLayoutDataOwner owner;
     /**
      * Owner.
      *
@@ -194,11 +194,11 @@ public class DomainObjectLayoutData implements Serializable,
      * </p>
      */
     @XmlTransient
-    public MemberRegionOwner getOwner() {
+    public DomainObjectLayoutDataOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final MemberRegionOwner owner) {
+    public void setOwner(final DomainObjectLayoutDataOwner owner) {
         this.owner = owner;
     }
 

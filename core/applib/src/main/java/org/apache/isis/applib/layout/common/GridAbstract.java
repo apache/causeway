@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.Programmatic;
@@ -49,7 +50,6 @@ public abstract class GridAbstract implements Grid {
     }
 
     @Programmatic
-    @XmlTransient
     public void setDomainClass(final Class<?> domainClass) {
         this.domainClass = domainClass;
     }
@@ -80,7 +80,7 @@ public abstract class GridAbstract implements Grid {
         if(actionLayoutDatas == null) {
             return;
         }
-        for (final ActionLayoutData actionLayoutData : actionLayoutDatas) {
+        for (final ActionLayoutData actionLayoutData : Lists.newArrayList(actionLayoutDatas)) {
             actionLayoutData.setOwner(actionLayoutDataOwner);
             visitor.visit(actionLayoutData);
         }
@@ -92,12 +92,12 @@ public abstract class GridAbstract implements Grid {
      */
     protected void traverseFieldSets(final FieldSetOwner fieldSetOwner, final GridAbstract.Visitor visitor) {
         final List<FieldSet> fieldSets = fieldSetOwner.getFieldSets();
-        for (FieldSet fieldSet : fieldSets) {
+        for (FieldSet fieldSet : Lists.newArrayList(fieldSets)) {
             fieldSet.setOwner(fieldSetOwner);
             visitor.visit(fieldSet);
             traverseActions(fieldSet, visitor);
             final List<PropertyLayoutData> properties = fieldSet.getProperties();
-            for (final PropertyLayoutData property : properties) {
+            for (final PropertyLayoutData property : Lists.newArrayList(properties)) {
                 property.setOwner(fieldSet);
                 visitor.visit(property);
                 traverseActions(property, visitor);
@@ -112,7 +112,7 @@ public abstract class GridAbstract implements Grid {
     protected void traverseCollections(
             final CollectionLayoutDataOwner owner, final GridAbstract.Visitor visitor) {
         final List<CollectionLayoutData> collections = owner.getCollections();
-        for (CollectionLayoutData collection : collections) {
+        for (CollectionLayoutData collection : Lists.newArrayList(collections)) {
             collection.setOwner(owner);
             visitor.visit(collection);
             traverseActions(collection, visitor);

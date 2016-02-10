@@ -103,7 +103,7 @@ public interface GridService {
     /**
      * For all of the available {@link GridNormalizerService}s available, return only the first one for any that
      * are for the same grid implementation.
-     * 
+     *
      * <p>
      *   This allows default implementations (eg for bootstrap3) to be overridden while also allowing for the more
      *   general idea of multiple implementations.

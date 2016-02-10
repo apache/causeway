@@ -20,4 +20,6 @@ package org.apache.isis.applib.layout.common;
 
 public interface DomainObjectLayoutDataOwner extends Owner {
 
+    DomainObjectLayoutData getDomainObject();
+    void setDomainObject(DomainObjectLayoutData domainObjectLayoutData);
 }

@@ -48,7 +48,7 @@ import org.apache.isis.applib.annotation.Where;
         , "metadataError"
     }
 )
-public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner>,HasCssClass, HasCssClassFa,
+public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner>, HasCssClass, HasCssClassFa,
         HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
 
     private static final long serialVersionUID = 1L;

@@ -153,6 +153,10 @@ public class GridServiceDefault
     @Programmatic
     public Grid normalize(final Grid grid) {
 
+        if(grid == null) {
+            return null;
+        }
+
         // if have .layout.json and then add a .layout.xml without restarting, then note that
         // the changes won't be picked up.  Normalizing would be required
         // in order to trample over the .layout.json's original facets
@@ -175,6 +179,10 @@ public class GridServiceDefault
     @Programmatic
     public Grid complete(final Grid grid) {
 
+        if(grid == null) {
+            return null;
+        }
+
         final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
             gridNormalizerService.complete(grid, domainClass);
@@ -186,6 +194,10 @@ public class GridServiceDefault
     @Override
     @Programmatic
     public Grid minimal(final Grid grid) {
+
+        if(grid == null) {
+            return null;
+        }
 
         final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <bs3:grid xsi:schemaLocation="http://isis.apache.org/schema/applib/layout/common http://isis.apache.org/schema/applib/layout/common/common.xsd http://isis.apache.org/schema/applib/layout/bootstrap3 http://isis.apache.org/schema/applib/layout/bootstrap3/bootstrap3.xsd" xmlns:c="http://isis.apache.org/schema/applib/layout/common" xmlns:bs3="http://isis.apache.org/schema/applib/layout/bootstrap3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+
 <!--
     <bs3:row>
         <bs3:col span="8" unreferencedActions="false">
@@ -34,6 +35,7 @@
         </bs3:col>
     </bs3:row>
 -->
+
     <bs3:row>
         <bs3:col span="12" unreferencedActions="false">
             <c:domainObject/>

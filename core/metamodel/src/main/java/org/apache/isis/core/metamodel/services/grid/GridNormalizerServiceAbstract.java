@@ -40,6 +40,7 @@ import org.apache.isis.applib.layout.common.ActionLayoutData;
 import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.common.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.Grid;
 import org.apache.isis.applib.layout.common.HasBookmarking;
@@ -180,6 +181,8 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
     @Override
     public void complete(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
+        if(true) {
+
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
         grid.visit(new FCGrid.VisitorAdapter() {
@@ -233,6 +236,7 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
                 setPluralIfAny(domainObjectLayoutData, objectSpec);
             }
         });
+        }
     }
 
     private static boolean isDoOp(final Facet facet) {
@@ -348,9 +352,11 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
         final NamedFacet namedFacet = facetHolder.getFacet(NamedFacet.class);
         if(isDoOp(namedFacet)) {
             final String named = namedFacet.value();
-            final boolean escaped = namedFacet.escaped();
             if(!Strings.isNullOrEmpty(named)){
                 hasNamed.setNamed(named);
+            }
+            final boolean escaped = namedFacet.escaped();
+            if(!escaped) {
                 hasNamed.setNamedEscaped(escaped);
             }
         }
@@ -438,12 +444,20 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
                 actionLayoutData.getOwner().getActions().remove(actionLayoutData);
             }
 
-            @Override public void visit(final CollectionLayoutData collectionLayoutData) {
-                collectionLayoutData.getOwner().getCollections().remove(this);
+            @Override
+            public void visit(final CollectionLayoutData collectionLayoutData) {
+                collectionLayoutData.getOwner().getCollections().remove(collectionLayoutData);
             }
 
-            @Override public void visit(final PropertyLayoutData propertyLayoutData) {
-                propertyLayoutData.getOwner().getProperties().remove(this);
+            @Override
+            public void visit(final PropertyLayoutData propertyLayoutData) {
+                propertyLayoutData.getOwner().getProperties().remove(propertyLayoutData);
+            }
+
+            @Override
+            public void visit(final DomainObjectLayoutData domainObjectLayoutData) {
+                final DomainObjectLayoutDataOwner owner = domainObjectLayoutData.getOwner();
+                owner.setDomainObject(new DomainObjectLayoutData());
             }
         });
     }

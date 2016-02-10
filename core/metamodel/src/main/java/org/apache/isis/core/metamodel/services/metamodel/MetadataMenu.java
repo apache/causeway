@@ -91,7 +91,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             cssClassFa = "fa-download"
     )
     @MemberOrder(sequence="500.400.1")
-    public Blob downloadLayouts() {
+    public Blob downloadLayouts(final GridService.Style style) {
         final Collection<ObjectSpecification> allSpecs = specificationLoader.allSpecifications();
         final Collection<ObjectSpecification> domainObjectSpecs = Collections2
                 .filter(allSpecs, new Predicate<ObjectSpecification>(){
@@ -108,7 +108,7 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             final OutputStreamWriter writer = new OutputStreamWriter(zos);
             for (final ObjectSpecification objectSpec : domainObjectSpecs) {
                 final Class<?> domainClass = objectSpec.getCorrespondingClass();
-                final Grid grid = gridService.toGrid(domainClass, GridService.Style.NORMALIZED);
+                final Grid grid = gridService.toGrid(domainClass, style);
                 if(grid != null) {
                     zos.putNextEntry(new ZipEntry(zipEntryNameFor(objectSpec)));
                     String xml = jaxbService.toXml(grid);
@@ -118,7 +118,8 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
                 }
             }
             writer.close();
-            return new Blob("layouts.zip", mimeTypeApplicationZip, baos.toByteArray());
+            final String fileName = "layouts." + style.name().toLowerCase() + ".zip";
+            return new Blob(fileName, mimeTypeApplicationZip, baos.toByteArray());
         } catch (final IOException ex) {
             throw new FatalException("Unable to create zip of layouts", ex);
         }

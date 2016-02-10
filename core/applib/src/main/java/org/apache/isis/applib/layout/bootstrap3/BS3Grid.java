@@ -166,7 +166,8 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
     protected void traverseRows(final BS3RowOwner rowOwner, final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
-        for (BS3Row bs3Row : rowOwner.getRows()) {
+        final List<BS3Row> rows = rowOwner.getRows();
+        for (BS3Row bs3Row : Lists.newArrayList(rows)) {
             bs3Row.setOwner(this);
             bs3Visitor.preVisit(bs3Row);
             bs3Visitor.visit(bs3Row);
@@ -178,7 +179,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
     private void traverseCols(final Grid.Visitor visitor, final BS3Row bs3Row) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3RowContent> cols = bs3Row.getCols();
-        for (BS3RowContent rowContent : cols) {
+        for (BS3RowContent rowContent : Lists.newArrayList(cols)) {
             rowContent.setOwner(bs3Row);
             if(rowContent instanceof BS3Col) {
                 final BS3Col bs3Col = (BS3Col) rowContent;
@@ -215,7 +216,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3TabGroup> tabGroups = bs3TabGroupOwner.getTabGroups();
-        for (BS3TabGroup bs3TabGroup : tabGroups) {
+        for (BS3TabGroup bs3TabGroup : Lists.newArrayList(tabGroups)) {
             bs3TabGroup.setOwner(bs3TabGroupOwner);
             bs3Visitor.preVisit(bs3TabGroup);
             bs3Visitor.visit(bs3TabGroup);
@@ -229,7 +230,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
             final Grid.Visitor visitor) {
         final BS3Grid.Visitor bs3Visitor = asBs3Visitor(visitor);
         final List<BS3Tab> tabs = bs3TabOwner.getTabs();
-        for (BS3Tab tab : tabs) {
+        for (BS3Tab tab : Lists.newArrayList(tabs)) {
             tab.setOwner(bs3TabOwner);
             bs3Visitor.preVisit(tab);
             bs3Visitor.visit(tab);

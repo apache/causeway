@@ -33,6 +33,7 @@ import org.apache.isis.applib.layout.common.ActionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.CollectionLayoutData;
 import org.apache.isis.applib.layout.common.CollectionLayoutDataOwner;
 import org.apache.isis.applib.layout.common.DomainObjectLayoutData;
+import org.apache.isis.applib.layout.common.DomainObjectLayoutDataOwner;
 import org.apache.isis.applib.layout.common.FieldSet;
 import org.apache.isis.applib.layout.common.FieldSetOwner;
 
@@ -66,7 +67,7 @@ import org.apache.isis.applib.layout.common.FieldSetOwner;
 )
 public class BS3Col extends BS3RowContent
         implements ActionLayoutDataOwner, BS3TabGroupOwner, BS3RowOwner, FieldSetOwner, HasCssId,
-        CollectionLayoutDataOwner {
+        CollectionLayoutDataOwner, DomainObjectLayoutDataOwner {
 
     private static final long serialVersionUID = 1L;
 

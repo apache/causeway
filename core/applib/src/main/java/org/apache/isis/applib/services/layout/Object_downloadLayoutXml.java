@@ -63,15 +63,15 @@ public class Object_downloadLayoutXml {
                         gridService.tnsAndSchemaLocation(grid)
                 ));
 
-        return new Clob(Util.withSuffix(fileName, "xml"), "text/xml", xml);
+        return new Clob(Util.withSuffix(fileName, style.name().toLowerCase() + ".xml"), "text/xml", xml);
     }
 
     public boolean hide$$() {
         // can use either style to determine whether this action should be hidden
-        return getGrid(GridService.Style.COMPLETE) == null;
+        return getGrid(GridService.Style.NORMALIZED) == null;
     }
     public String default0$$() {
-        return Util.withSuffix(object.getClass().getSimpleName(), "layout.xml");
+        return Util.withSuffix(object.getClass().getSimpleName(), "layout");
     }
     public GridService.Style default1$$() {
         return GridService.Style.NORMALIZED;
