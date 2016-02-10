@@ -21,5 +21,6 @@ package org.apache.isis.applib.layout.common;
 import java.util.List;
 
 public interface CollectionLayoutDataOwner extends MemberRegionOwner {
+
     List<CollectionLayoutData> getCollections();
 }

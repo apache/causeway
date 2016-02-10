@@ -52,7 +52,11 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner, Serializable {
+public class CollectionLayoutData
+        implements MemberRegion<CollectionLayoutDataOwner>,
+                   ActionLayoutDataOwner,
+                   Serializable,
+                   HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -81,11 +85,13 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
     private String cssClass;
 
+    @Override
     @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
 
+    @Override
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
@@ -94,11 +100,13 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
     private String describedAs;
 
+    @Override
     @XmlElement(required = false)
     public String getDescribedAs() {
         return describedAs;
     }
 
+    @Override
     public void setDescribedAs(String describedAs) {
         this.describedAs = describedAs;
     }
@@ -123,11 +131,13 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
     private Where hidden;
 
+    @Override
     @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
 
+    @Override
     public void setHidden(Where hidden) {
         this.hidden = hidden;
     }
@@ -135,11 +145,13 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
     private String named;
 
+    @Override
     @XmlElement(required = false)
     public String getNamed() {
         return named;
     }
 
+    @Override
     public void setNamed(String named) {
         this.named = named;
     }
@@ -147,11 +159,13 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
     private Boolean namedEscaped;
 
+    @Override
     @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
 
+    @Override
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }
@@ -197,7 +211,7 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
 
 
 
-    private MemberRegionOwner owner;
+    private CollectionLayoutDataOwner owner;
     /**
      * Owner.
      *
@@ -206,11 +220,11 @@ public class CollectionLayoutData implements MemberRegion, ActionLayoutDataOwner
      * </p>
      */
     @XmlTransient
-    public MemberRegionOwner getOwner() {
+    public CollectionLayoutDataOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final MemberRegionOwner owner) {
+    public void setOwner(final CollectionLayoutDataOwner owner) {
         this.owner = owner;
     }
 

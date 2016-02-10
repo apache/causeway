@@ -113,7 +113,7 @@ public class BS3Grid extends GridAbstract implements BS3Element, Dto, BS3RowOwne
 
 
 
-    interface Visitor extends Grid.Visitor {
+    public interface Visitor extends Grid.Visitor {
         void preVisit(final BS3Grid bs3Grid);
         void visit(final BS3Grid bs3Grid);
         void postVisit(final BS3Grid bs3Grid);

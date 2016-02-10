@@ -72,4 +72,28 @@ public enum CssClassFaPosition {
         }
         throw new IllegalArgumentException("not recognized: " + cssClassFaPosition);
     }
+    @Deprecated
+    public DomainObjectLayout.CssClassFaPosition toDomainObjectLayoutPosition() {
+        if (this == CssClassFaPosition.LEFT) {
+            return DomainObjectLayout.CssClassFaPosition.LEFT;
+        } else {
+            return DomainObjectLayout.CssClassFaPosition.RIGHT;
+        }
+    }
+    @Deprecated
+    public ViewModelLayout.CssClassFaPosition toViewModelLayoutPosition() {
+        if (this == CssClassFaPosition.LEFT) {
+            return ViewModelLayout.CssClassFaPosition.LEFT;
+        } else {
+            return ViewModelLayout.CssClassFaPosition.RIGHT;
+        }
+    }
+    @Deprecated
+    public ActionLayout.CssClassFaPosition toActionLayoutPosition() {
+        if (this == CssClassFaPosition.LEFT) {
+            return ActionLayout.CssClassFaPosition.LEFT;
+        } else {
+            return ActionLayout.CssClassFaPosition.RIGHT;
+        }
+    }
 }

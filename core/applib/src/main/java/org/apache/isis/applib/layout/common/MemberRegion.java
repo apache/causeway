@@ -27,7 +27,7 @@ package org.apache.isis.applib.layout.common;
  *     (containing a single collection and associated actions)
  * </p>
  */
-public interface MemberRegion extends Owned<MemberRegionOwner> {
+public interface MemberRegion<T extends MemberRegionOwner> extends Owned<T> {
 
 
 }

@@ -43,7 +43,8 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
             , "metadataError"
         }
 )
-public class DomainObjectLayoutData implements Serializable {
+public class DomainObjectLayoutData implements Serializable,
+        HasBookmarking, HasCssClass, HasCssClassFa, HasDescribedAs, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -125,6 +126,19 @@ public class DomainObjectLayoutData implements Serializable {
         this.named = named;
     }
 
+
+    private Boolean namedEscaped;
+
+    @Override
+    @XmlAttribute(required = false)
+    public Boolean getNamedEscaped() {
+        return namedEscaped;
+    }
+
+    @Override
+    public void setNamedEscaped(Boolean namedEscaped) {
+        this.namedEscaped = namedEscaped;
+    }
 
 
 

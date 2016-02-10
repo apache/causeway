@@ -45,7 +45,11 @@ import org.apache.isis.applib.annotation.Where;
                 , "metadataError"
         }
 )
-public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, Owned<FieldSet> {
+public class PropertyLayoutData
+        implements ActionLayoutDataOwner,
+                   Serializable,
+                   Owned<FieldSet>,
+                   HasCssClass, HasDescribedAs, HasHidden, HasNamed {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,11 +78,13 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
     private String cssClass;
 
+    @Override
     @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
 
+    @Override
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
@@ -86,11 +92,13 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
     private String describedAs;
 
+    @Override
     @XmlElement(required = false)
     public String getDescribedAs() {
         return describedAs;
     }
 
+    @Override
     public void setDescribedAs(String describedAs) {
         this.describedAs = describedAs;
     }
@@ -98,11 +106,13 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
     private Where hidden;
 
+    @Override
     @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
 
+    @Override
     public void setHidden(Where hidden) {
         this.hidden = hidden;
     }
@@ -134,11 +144,13 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
     private String named;
 
+    @Override
     @XmlElement(required = false)
     public String getNamed() {
         return named;
     }
 
+    @Override
     public void setNamed(String named) {
         this.named = named;
     }
@@ -146,11 +158,13 @@ public class PropertyLayoutData implements ActionLayoutDataOwner, Serializable, 
 
     private Boolean namedEscaped;
 
+    @Override
     @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
 
+    @Override
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }

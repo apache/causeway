@@ -51,7 +51,10 @@ import org.apache.isis.applib.layout.bootstrap3.BS3Col;
                 , "metadataError"
         }
 )
-public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializable {
+public class FieldSet
+        implements MemberRegion<FieldSetOwner>,
+                   ActionLayoutDataOwner,
+                   Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -162,7 +165,7 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
     }
 
 
-    private MemberRegionOwner owner;
+    private FieldSetOwner owner;
     /**
      * Owner.
      *
@@ -171,11 +174,11 @@ public class FieldSet implements MemberRegion, ActionLayoutDataOwner, Serializab
      * </p>
      */
     @XmlTransient
-    public MemberRegionOwner getOwner() {
+    public FieldSetOwner getOwner() {
         return owner;
     }
 
-    public void setOwner(final MemberRegionOwner owner) {
+    public void setOwner(final FieldSetOwner owner) {
         this.owner = owner;
     }
 

@@ -48,7 +48,8 @@ import org.apache.isis.applib.annotation.Where;
         , "metadataError"
     }
 )
-public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner> {
+public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwner>,HasCssClass, HasCssClassFa,
+        HasDescribedAs, HasHidden, HasNamed, HasBookmarking {
 
     private static final long serialVersionUID = 1L;
 
@@ -79,11 +80,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private BookmarkPolicy bookmarking;
 
+    @Override
     @XmlAttribute(required = false)
     public BookmarkPolicy getBookmarking() {
         return bookmarking;
     }
 
+    @Override
     public void setBookmarking(BookmarkPolicy bookmarking) {
         this.bookmarking = bookmarking;
     }
@@ -91,11 +94,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private String cssClass;
 
+    @Override
     @XmlAttribute(required = false)
     public String getCssClass() {
         return cssClass;
     }
 
+    @Override
     public void setCssClass(String cssClass) {
         this.cssClass = cssClass;
     }
@@ -103,11 +108,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private String cssClassFa;
 
+    @Override
     @XmlAttribute(required = false)
     public String getCssClassFa() {
         return cssClassFa;
     }
 
+    @Override
     public void setCssClassFa(String cssClassFa) {
         this.cssClassFa = cssClassFa;
     }
@@ -116,11 +123,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition;
 
+    @Override
     @XmlAttribute(required = false)
     public org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition getCssClassFaPosition() {
         return cssClassFaPosition;
     }
 
+    @Override
     public void setCssClassFaPosition(org.apache.isis.applib.annotation.ActionLayout.CssClassFaPosition cssClassFaPosition) {
         this.cssClassFaPosition = cssClassFaPosition;
     }
@@ -128,11 +137,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private String describedAs;
 
+    @Override
     @XmlElement(required = false)
     public String getDescribedAs() {
         return describedAs;
     }
 
+    @Override
     public void setDescribedAs(String describedAs) {
         this.describedAs = describedAs;
     }
@@ -141,11 +152,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private Where hidden;
 
+    @Override
     @XmlAttribute(required = false)
     public Where getHidden() {
         return hidden;
     }
 
+    @Override
     public void setHidden(Where hidden) {
         this.hidden = hidden;
     }
@@ -154,11 +167,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private String named;
 
+    @Override
     @XmlElement(required = false)
     public String getNamed() {
         return named;
     }
 
+    @Override
     public void setNamed(String named) {
         this.named = named;
     }
@@ -167,11 +182,13 @@ public class ActionLayoutData implements Serializable, Owned<ActionLayoutDataOwn
 
     private Boolean namedEscaped;
 
+    @Override
     @XmlAttribute(required = false)
     public Boolean getNamedEscaped() {
         return namedEscaped;
     }
 
+    @Override
     public void setNamedEscaped(Boolean namedEscaped) {
         this.namedEscaped = namedEscaped;
     }
