@@ -247,11 +247,10 @@ public class BS3Col extends BS3RowContent
         return "col-" + size.toCssClassFragment() + "-" + getSpan();
     }
 
-
     @Override public String toString() {
         return "BS3Col{" +
                 "id='" + id + '\'' +
+                ", span=" + span +
                 '}';
     }
-
 }

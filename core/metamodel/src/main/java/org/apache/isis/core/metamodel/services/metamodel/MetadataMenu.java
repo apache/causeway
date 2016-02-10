@@ -88,7 +88,8 @@ public class MetadataMenu implements SpecificationLoaderSpiAware {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+            cssClassFa = "fa-download",
+            named = "Download Layouts (XML)"
     )
     @MemberOrder(sequence="500.400.1")
     public Blob downloadLayouts(final GridService.Style style) {

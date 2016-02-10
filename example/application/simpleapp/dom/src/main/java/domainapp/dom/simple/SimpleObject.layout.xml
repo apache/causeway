@@ -15,6 +15,12 @@
                             <c:fieldSet name="Properties">
                                 <c:property id="name"/>
                             </c:fieldSet>
+                        </bs3:col>
+                    </bs3:row>
+                </bs3:tab>
+                <bs3:tab name="Misc">
+                    <bs3:row>
+                        <bs3:col span="12">
                             <c:fieldSet name="Misc">
                                 <c:property id="versionSequence"/>
                             </c:fieldSet>

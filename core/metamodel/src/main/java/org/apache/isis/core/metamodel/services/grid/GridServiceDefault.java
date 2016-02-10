@@ -41,13 +41,14 @@ import org.slf4j.LoggerFactory;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.annotation.Programmatic;
-import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.services.jaxb.JaxbService;
+import org.apache.isis.applib.services.layout.GridNormalizerService;
 import org.apache.isis.applib.services.layout.GridService;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategoryAware;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
+import org.apache.isis.core.metamodel.layoutmetadata.json.LayoutMetadataReaderFromJson;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -68,6 +69,8 @@ public class GridServiceDefault
 
     // cache (used only in prototyping mode)
     private final Map<String, Grid> pageByXml = Maps.newHashMap();
+
+    private LayoutMetadataReaderFromJson layoutMetadataReaderFromJson = new LayoutMetadataReaderFromJson();
 
     @Override
     @Programmatic
@@ -93,7 +96,6 @@ public class GridServiceDefault
             LOG.debug(message);
             return null;
         }
-
 
         if(!deploymentCategory.isProduction()) {
             final Grid grid = pageByXml.get(xml);

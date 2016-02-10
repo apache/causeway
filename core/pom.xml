@@ -96,6 +96,8 @@
 	    ISIS-1288: seen integration tests to fail;
 	    domain object date holding 1-Aug-2015 after xactn retrieved as 31-Jul-2015
 
+        https://github.com/datanucleus/datanucleus-jodatime/commit/b85795a1bf5f92909a95d2c8f8822bba2ba38b5f
+
         <datanucleus-jodatime.version>4.1.1</datanucleus-jodatime.version>
 	-->
         <datanucleus-maven-plugin.version>4.0.2</datanucleus-maven-plugin.version>

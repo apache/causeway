@@ -86,6 +86,11 @@ public class Col extends PanelAbstract<EntityModel> {
 
         setRenderBodyOnly(true);
 
+        if(bs3Col.getSpan() == 0) {
+            Components.permanentlyHide(this, ID_COL);
+            return;
+        }
+
         final WebMarkupContainer div = new WebMarkupContainer(ID_COL);
 
         CssClassAppender.appendCssClassTo(div, bs3Col.toCssClass());

@@ -415,7 +415,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, Serv
         }
 
         try {
-            final GridService gridService = getObjectLayoutMetadataService();
+            final GridService gridService = getGridService();
             if(gridService.exists(domainClass)) {
                 blacklisted.add(domainClass);
                 return null;
@@ -699,7 +699,7 @@ public class LayoutMetadataReaderFromJson implements LayoutMetadataReader2, Serv
 
 
 
-    private GridService getObjectLayoutMetadataService() {
+    private GridService getGridService() {
         return servicesInjector.lookupService(GridService.class);
     }
 
