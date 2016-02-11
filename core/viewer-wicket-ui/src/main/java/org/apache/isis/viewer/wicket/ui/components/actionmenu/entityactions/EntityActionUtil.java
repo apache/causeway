@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import com.google.common.base.Function;
+import com.google.common.base.Predicates;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import org.apache.wicket.Session;
 import org.apache.isis.applib.annotation.Where;
@@ -107,6 +109,11 @@ public final class EntityActionUtil {
      * Converts an {@link org.apache.isis.viewer.wicket.model.models.EntityModel} and a (subset of its) {@link org.apache.isis.core.metamodel.spec.feature.ObjectAction}s into a
      * list of {@link org.apache.isis.viewer.wicket.model.links.LinkAndLabel}s intended to be apassed
      * to the {@link AdditionalLinksPanel}.
+     *
+     * <p>
+     *     The length of the list returned may smaller than the inbound actions; any null links
+     *     (for invisible actions) will be discarded.
+     * </p>
      */
     public static List<LinkAndLabel> asLinkAndLabelsForAdditionalLinksPanel(
             final EntityModel entityModel,
@@ -116,13 +123,16 @@ public final class EntityActionUtil {
         final ActionLinkFactory linkFactory = new EntityActionLinkFactory(entityModel);
 
         final ObjectAdapterMemento adapterMemento = entityModel.getObjectAdapterMemento();
-        return Lists.transform(actions, new Function<ObjectAction, LinkAndLabel>() {
+        return FluentIterable.from(actions)
+                .transform(new Function<ObjectAction, LinkAndLabel>() {
 
-            @Override
-            public LinkAndLabel apply(ObjectAction objectAction) {
-                return linkFactory.newLink(linkId, adapterMemento, objectAction);
-            }
-        });
+                    @Override
+                    public LinkAndLabel apply(ObjectAction objectAction) {
+                        return linkFactory.newLink(linkId, adapterMemento, objectAction);
+                    }
+                })
+                .filter(Predicates.<LinkAndLabel>notNull())
+                .toList();
     }
 
     private static List<ObjectAction> addActions(
