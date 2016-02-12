@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 import org.apache.isis.core.runtime.fixturedomainservice.ObjectFixtureService;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.SystemConstants;

@@ -18,7 +18,6 @@
  */
 package org.apache.isis.core.metamodel.facets.actions.layout;
 
-import java.lang.reflect.Method;
 import java.util.Properties;
 
 import org.apache.isis.applib.annotation.ActionLayout;
@@ -133,9 +132,8 @@ public class ActionLayoutFacetFactory extends FacetFactoryAbstract implements Co
     }
 
     protected boolean isContributingServiceOrMixinObject(final ProcessMethodContext processMethodContext) {
-        final Method method = processMethodContext.getMethod();
-        final Class<?> declaringClass = method.getDeclaringClass();
-        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(declaringClass);
+        final Class<?> cls =  processMethodContext.getCls();
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(cls);
 
         return isContributingService(spec) || isMixinObject(spec);
     }

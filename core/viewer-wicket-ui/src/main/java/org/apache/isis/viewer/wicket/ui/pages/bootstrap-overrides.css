@@ -469,6 +469,8 @@ div.additionalLinkList {
     padding-bottom: 10px;
 }
 
+.collections div.additionalLinkList,
+.collections ul.additionalLinkList,
 .standaloneCollectionPanel div.additionalLinkList,
 .standaloneCollectionPanel ul.additionalLinkList,
 .entityCollectionsPanel div.additionalLinkList,

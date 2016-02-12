@@ -17,7 +17,7 @@
  *  under the License.
  */
 
-package org.apache.isis.core.runtime.services;
+package org.apache.isis.core.metamodel.util;
 
 import java.util.Comparator;
 import java.util.List;

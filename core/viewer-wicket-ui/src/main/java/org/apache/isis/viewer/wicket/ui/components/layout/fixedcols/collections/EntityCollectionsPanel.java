@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.runtime.services.DeweyOrderComparator;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.collection.EntityCollectionPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

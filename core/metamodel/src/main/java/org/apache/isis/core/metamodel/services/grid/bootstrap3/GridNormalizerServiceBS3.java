@@ -16,6 +16,7 @@
  */
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,30 +24,34 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.layout.component.ActionLayoutData;
+import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.component.Grid;
+import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
-import org.apache.isis.applib.layout.component.ActionLayoutData;
-import org.apache.isis.applib.layout.component.CollectionLayoutData;
-import org.apache.isis.applib.layout.component.FieldSet;
-import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.services.grid.GridNormalizerServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -80,6 +85,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
 
         final LinkedHashMap<String, BS3Row> rowIds = Maps.newLinkedHashMap();
         final LinkedHashMap<String, BS3Col> colIds = Maps.newLinkedHashMap();
+        final LinkedHashMap<String, FieldSet> fieldSetIds = Maps.newLinkedHashMap();
 
         final AtomicReference<Boolean> duplicateIdDetected = new AtomicReference<>(false);
 
@@ -110,6 +116,20 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                     return;
                 }
                 colIds.put(id, bs3Col);
+            }
+
+            @Override
+            public void visit(final FieldSet fieldSet) {
+                final String id = fieldSet.getId();
+                if(id == null) {
+                    return;
+                }
+                if(rowIds.containsKey(id) || fieldSetIds.containsKey(id)) {
+                    fieldSet.setMetadataError("There is another fieldset with this id");
+                    duplicateIdDetected.set(true);
+                    return;
+                }
+                fieldSetIds.put(id, fieldSet);
             }
         });
 
@@ -212,9 +232,43 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
 
         if(!missingPropertyIds.isEmpty()) {
-            final FieldSet fieldSet = fieldSetForUnreferencedPropertiesRef.get();
-            if(fieldSet != null) {
-                addMissingPropertiesTo(fieldSet, missingPropertyIds);
+            final Map<String, List<OneToOneAssociation>> boundAssociationsByFieldSetId = Maps.newHashMap();
+            final List<String> unboundPropertyIds = Lists.newArrayList(missingPropertyIds);
+            for (String missingPropertyId : missingPropertyIds) {
+                final OneToOneAssociation otoa = oneToOneAssociationById.get(missingPropertyId);
+                final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
+                if(memberOrderFacet != null) {
+                    final String name = memberOrderFacet.name();
+                    if(fieldSetIds.containsKey(name)) {
+                        List<OneToOneAssociation> boundAssociations =
+                                boundAssociationsByFieldSetId.get(name);
+                        if(boundAssociations == null) {
+                            boundAssociations = Lists.newArrayList();
+                            boundAssociationsByFieldSetId.put(name, boundAssociations);
+                        }
+                        boundAssociations.add(otoa);
+                        unboundPropertyIds.remove(missingPropertyId);
+                    }
+                }
+            }
+
+            for (String fieldSetId : boundAssociationsByFieldSetId.keySet()) {
+                final FieldSet fieldSet = fieldSetIds.get(fieldSetId);
+                final List<OneToOneAssociation> associations =
+                        boundAssociationsByFieldSetId.get(fieldSetId);
+
+                associations.sort(byMemberOrderSequence());
+                addPropertiesTo(fieldSet,
+                        FluentIterable.from(associations)
+                                      .transform(ObjectAssociation.Functions.toId())
+                                      .toList());
+            }
+
+            if(!unboundPropertyIds.isEmpty()) {
+                final FieldSet fieldSet = fieldSetForUnreferencedPropertiesRef.get();
+                if(fieldSet != null) {
+                    addPropertiesTo(fieldSet, unboundPropertyIds);
+                }
             }
         }
 
@@ -229,13 +283,25 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
 
         if(!missingCollectionIds.isEmpty()) {
+            List<OneToManyAssociation> sortedCollections = Lists.newArrayList(
+                    FluentIterable.from(missingCollectionIds)
+                    .transform(new Function<String, OneToManyAssociation>() {
+                        @Nullable @Override public OneToManyAssociation apply(@Nullable final String collectionId) {
+                            return oneToManyAssociationById.get(collectionId);
+                        }
+                    })
+                    .toSortedList(byMemberOrderSequence())
+
+            );
+            final ImmutableList<String> sortedMissingCollectionIds = FluentIterable.from(sortedCollections)
+                    .transform(ObjectAssociation.Functions.toId()).toList();
             final BS3TabGroup bs3TabGroup = tabGroupForUnreferencedCollectionsRef.get();
             if(bs3TabGroup != null) {
-                addMissingCollectionsTo(bs3TabGroup, missingCollectionIds, objectSpec);
+                addCollectionsTo(bs3TabGroup, sortedMissingCollectionIds, objectSpec);
             } else {
                 final BS3Col bs3Col = colForUnreferencedCollectionsRef.get();
                 if(bs3Col != null) {
-                    addMissingCollectionsTo(bs3Col, missingCollectionIds);
+                    addCollectionsTo(bs3Col, sortedMissingCollectionIds);
                 }
             }
         }
@@ -273,11 +339,11 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         if(!missingActionIds.isEmpty()) {
             final BS3Col bs3Col = colForUnreferencedActionsRef.get();
             if(bs3Col != null) {
-                addMissingActionsTo(bs3Col, missingActionIds);
+                addActionsTo(bs3Col, missingActionIds);
             } else {
                 final FieldSet fieldSet = fieldSetForUnreferencedActionsRef.get();
                 if(fieldSet != null) {
-                    addMissingActionsTo(fieldSet, missingActionIds);
+                    addActionsTo(fieldSet, missingActionIds);
                 }
             }
         }
@@ -285,15 +351,29 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         return true;
     }
 
-    protected void addMissingPropertiesTo(
+    private static Comparator<ObjectAssociation> byMemberOrderSequence() {
+        return new Comparator<ObjectAssociation>() {
+            private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
+            @Override
+            public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
+                final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
+                final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                return o1Facet == null? +1:
+                        o2Facet == null? -1:
+                                deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
+            }
+        };
+    }
+
+    protected void addPropertiesTo(
             final FieldSet fieldSet,
-            final List<String> missingPropertyIds) {
-        for (final String propertyId : missingPropertyIds) {
+            final List<String> propertyIds) {
+        for (final String propertyId : propertyIds) {
             fieldSet.getProperties().add(new PropertyLayoutData(propertyId));
         }
     }
 
-    protected void addMissingActionsTo(final BS3Col bs3Col, final List<String> missingActionIds) {
+    protected void addActionsTo(final BS3Col bs3Col, final List<String> missingActionIds) {
         for (String actionId : missingActionIds) {
             List<ActionLayoutData> actions = bs3Col.getActions();
             if(actions == null) {
@@ -304,28 +384,28 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
     }
 
-    protected void addMissingActionsTo(final FieldSet fieldSet, final List<String> missingActionIds) {
+    protected void addActionsTo(final FieldSet fieldSet, final List<String> missingActionIds) {
         List<ActionLayoutData> actions = fieldSet.getActions();
         for (String actionId : missingActionIds) {
             actions.add(new ActionLayoutData(actionId));
         }
     }
 
-    protected void addMissingCollectionsTo(
+    protected void addCollectionsTo(
             final BS3Col tabRowCol,
-            final List<String> missingCollectionIds) {
-        for (final String collectionId : missingCollectionIds) {
+            final List<String> collectionIds) {
+        for (final String collectionId : collectionIds) {
             final CollectionLayoutData layoutMetadata = new CollectionLayoutData(collectionId);
             layoutMetadata.setDefaultView("table");
             tabRowCol.getCollections().add(layoutMetadata);
         }
     }
 
-    protected void addMissingCollectionsTo(
+    protected void addCollectionsTo(
             final BS3TabGroup tabGroup,
-            final List<String> missingCollectionIds,
+            final List<String> collectionIds,
             final ObjectSpecification objectSpec) {
-        for (final String collectionId : missingCollectionIds) {
+        for (final String collectionId : collectionIds) {
             final BS3Tab bs3Tab = new BS3Tab();
             bs3Tab.setName(objectSpec.getAssociation(collectionId).getName());
             tabGroup.getTabs().add(bs3Tab);

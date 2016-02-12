@@ -149,7 +149,9 @@ public class GridFacetDefault
             propsRow.getCols().add(col);
             final List<String> leftMemberGroups = memberGroupNames;
             for (String memberGroup : leftMemberGroups) {
-                final FieldSet fieldSet = new FieldSet(memberGroup);
+                final FieldSet fieldSet = new FieldSet();
+                fieldSet.setId(memberGroup); // to bind to later via @MemberOrder#name()
+                fieldSet.setName(memberGroup);
                 if(unreferencedProperties && col.getFieldSets().isEmpty()) {
                     fieldSet.setUnreferencedProperties(true);
                 }
@@ -164,7 +166,7 @@ public class GridFacetDefault
         if(grid == null) {
             return null;
         }
-        final Class<?> domainClass = getSpecification().getCorrespondingClass();
+        // unused... final Class<?> domainClass = getSpecification().getCorrespondingClass();
 
         return gridService.normalize(grid);
     }
