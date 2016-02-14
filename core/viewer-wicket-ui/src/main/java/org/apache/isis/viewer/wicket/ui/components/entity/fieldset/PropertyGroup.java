@@ -27,10 +27,13 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.annotation.ActionLayout;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -81,6 +84,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
         final List<PropertyLayoutData> properties = fieldSet.getProperties();
         for (PropertyLayoutData property : properties) {
             final ObjectAssociation association = adapter.getSpecification().getAssociation(property.getId());
+            final Consent visibility = association.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+            if(visibility.isVetoed()) {
+                continue;
+            }
 
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.add(propertyRvContainer);
