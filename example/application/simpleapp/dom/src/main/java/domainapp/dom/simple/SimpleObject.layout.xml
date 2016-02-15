@@ -21,7 +21,7 @@
                 <bs3:tab name="Misc">
                     <bs3:row>
                         <bs3:col span="12">
-                            <c:fieldSet name="Misc">
+                            <c:fieldSet name="Metadata">
                                 <c:property id="versionSequence"/>
                             </c:fieldSet>
                         </bs3:col>

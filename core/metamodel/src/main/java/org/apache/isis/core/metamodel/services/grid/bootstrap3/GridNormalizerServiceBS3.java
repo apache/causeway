@@ -20,17 +20,20 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
@@ -239,30 +242,67 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             propertyIds.get(surplusPropertyId).setMetadataError("No such property");
         }
 
-        final Map<String, List<OneToOneAssociation>> boundAssociationsByFieldSetId = Maps.newHashMap();
-        if(!missingPropertyIds.isEmpty()) {
-            final List<String> unboundPropertyIds = Lists.newArrayList(missingPropertyIds);
-            for (String missingPropertyId : missingPropertyIds) {
-                final OneToOneAssociation otoa = oneToOneAssociationById.get(missingPropertyId);
-                final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
-                if(memberOrderFacet != null) {
-                    final String id = asId(memberOrderFacet.name());
-                    if(fieldSetIds.containsKey(id)) {
-                        List<OneToOneAssociation> boundAssociations = boundAssociationsByFieldSetId.get(id);
-                        if(boundAssociations == null) {
-                            boundAssociations = Lists.newArrayList();
-                            boundAssociationsByFieldSetId.put(id, boundAssociations);
-                        }
-                        boundAssociations.add(otoa);
-                        unboundPropertyIds.remove(missingPropertyId);
+        // catalog which associations are bound to an existing field set
+        // so that (below) we can determine which missing property ids are not unbound vs which should be included
+        // in the fieldset that they are bound to.
+        final Map<String, Set<String>> boundAssociationIdsByFieldSetId = Maps.newHashMap();
+
+        // all those explicitly in the grid
+        for (FieldSet fieldSet : fieldSetIds.values()) {
+            final String fieldSetId = fieldSet.getId();
+            Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+            if(boundAssociationIds == null) {
+                boundAssociationIds = Sets.newLinkedHashSet();
+                boundAssociationIds.addAll(
+                        FluentIterable.from(fieldSet.getProperties()).transform(
+                                new Function<PropertyLayoutData, String>() {
+                                    @Override
+                                    public String apply(@Nullable final PropertyLayoutData propertyLayoutData) {
+                                        return propertyLayoutData.getId();
+                                    }
+                                }).toList());
+                boundAssociationIdsByFieldSetId.put(fieldSetId, boundAssociationIds);
+            }
+        }
+        // along with any specified by existing metadata
+        for (OneToOneAssociation otoa : oneToOneAssociationById.values()) {
+            final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
+            if(memberOrderFacet != null) {
+                final String id = asId(memberOrderFacet.name());
+                if(fieldSetIds.containsKey(id)) {
+                    Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
+                    if(boundAssociationIds == null) {
+                        boundAssociationIds = Sets.newLinkedHashSet();
+                        boundAssociationIdsByFieldSetId.put(id, boundAssociationIds);
                     }
+                    boundAssociationIds.add(otoa.getId());
                 }
             }
+        }
 
-            for (String fieldSetId : boundAssociationsByFieldSetId.keySet()) {
+        if(!missingPropertyIds.isEmpty()) {
+
+            final List<String> unboundPropertyIds = Lists.newArrayList(missingPropertyIds);
+
+            for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
+                final Set<String> boundPropertyIds = boundAssociationIdsByFieldSetId.get(fieldSetId);
+                unboundPropertyIds.removeAll(boundPropertyIds);
+            }
+
+            for (final String fieldSetId : boundAssociationIdsByFieldSetId.keySet()) {
                 final FieldSet fieldSet = fieldSetIds.get(fieldSetId);
-                final List<OneToOneAssociation> associations =
-                        boundAssociationsByFieldSetId.get(fieldSetId);
+                final Set<String> associationIds =
+                        boundAssociationIdsByFieldSetId.get(fieldSetId);
+
+                final List<OneToOneAssociation> associations = Lists.newArrayList(
+                        FluentIterable.from(associationIds)
+                        .transform(new Function<String, OneToOneAssociation>() {
+                            @Nullable @Override public OneToOneAssociation apply(final String propertyId) {
+                                return oneToOneAssociationById.get(propertyId);
+                            }
+                        })
+                        .filter(Predicates.<OneToOneAssociation>notNull())
+                );
 
                 associations.sort(byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
@@ -341,18 +381,14 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                                 if (oneToManyAssociationById.containsKey(id)) {
                                     return false;
                                 }
-                                // if the @MemberOrder references a field set, then don't mark it as missing, but
-                                // instead explicitly add it to the list of actions of that fieldset.
-                                // (note we only do this provided we already know that
-                                // there is at least one property for said fieldset)
-                                if(boundAssociationsByFieldSetId.containsKey(id)) {
-                                    final List<OneToOneAssociation> oneToOneAssociations =
-                                            boundAssociationsByFieldSetId.get(id);
-                                    if(!oneToOneAssociations.isEmpty()) {
-                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
-                                        actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
-                                        fieldSetIds.get(id).getActions().add(actionLayoutData);
-                                    }
+                                // if the @MemberOrder for the action references a field set (that has bound
+                                // associations), then don't mark it as missing, butinstead explicitly add it to the
+                                // list of actions of that fieldset.
+                                final Set<String> boundAssociationIds = boundAssociationIdsByFieldSetId.get(id);
+                                if(boundAssociationIds != null && !boundAssociationIds.isEmpty()) {
+                                    final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                                    actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                                    fieldSetIds.get(id).getActions().add(actionLayoutData);
                                     return false;
                                 }
                                 // is missing after all.
