@@ -365,6 +365,7 @@ div.entityHeaderPanel .iconAndTitle{
 
 div.entityHeaderPanel .iconAndTitleLabel {
     float: left;
+    margin-bottom: 10px;
 }
 
 div.entityHeaderPanel .entityActions .cssMenuPanel .cssMenuItems:first-child {
@@ -756,4 +757,12 @@ tr.headers th form input {
 
 .tabbable {
     padding-bottom: 10px;
+}
+
+.additionalLinkListDropDown ul.dropdown-menu li.additionalLinkItem {
+    width: 100%;
+}
+.additionalLinkListDropDown ul.dropdown-menu {
+    padding-top: 0%;
+    padding-bottom: 0%;
 }

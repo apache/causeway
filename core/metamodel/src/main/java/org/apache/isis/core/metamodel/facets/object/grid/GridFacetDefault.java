@@ -150,8 +150,9 @@ public class GridFacetDefault
             final List<String> leftMemberGroups = memberGroupNames;
             for (String memberGroup : leftMemberGroups) {
                 final FieldSet fieldSet = new FieldSet();
-                fieldSet.setId(memberGroup); // to bind to later via @MemberOrder#name()
                 fieldSet.setName(memberGroup);
+                // fieldSet's id will be derived from the name later
+                // during normalization phase.
                 if(unreferencedProperties && col.getFieldSets().isEmpty()) {
                     fieldSet.setUnreferencedProperties(true);
                 }

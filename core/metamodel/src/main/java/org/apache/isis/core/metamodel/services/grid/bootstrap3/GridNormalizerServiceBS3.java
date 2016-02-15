@@ -26,11 +26,13 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Strings;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
 import org.apache.isis.applib.annotation.NatureOfService;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
@@ -71,7 +73,8 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             final Grid grid,
             final Map<String, OneToOneAssociation> oneToOneAssociationById,
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
-            final Map<String, ObjectAction> objectActionById, final ObjectSpecification objectSpec) {
+            final Map<String, ObjectAction> objectActionById,
+            final ObjectSpecification objectSpec) {
 
         final BS3Grid bs3Grid = (BS3Grid) grid;
 
@@ -83,6 +86,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         // find all row and col ids
         // ensure that all Ids are different
 
+        final List<String> gridIds = Lists.newArrayList();
         final LinkedHashMap<String, BS3Row> rowIds = Maps.newLinkedHashMap();
         final LinkedHashMap<String, BS3Col> colIds = Maps.newLinkedHashMap();
         final LinkedHashMap<String, FieldSet> fieldSetIds = Maps.newLinkedHashMap();
@@ -96,12 +100,13 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 if(id == null) {
                     return;
                 }
-                if(rowIds.containsKey(id) || colIds.containsKey(id)) {
-                    bs3Row.setMetadataError("There is another col with this id");
+                if(gridIds.contains(id)) {
+                    bs3Row.setMetadataError("There is another element in the grid with this id");
                     duplicateIdDetected.set(true);
                     return;
                 }
                 rowIds.put(id, bs3Row);
+                gridIds.add(id);
             }
 
             @Override
@@ -110,26 +115,29 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                 if(id == null) {
                     return;
                 }
-                if(rowIds.containsKey(id) || colIds.containsKey(id)) {
-                    bs3Col.setMetadataError("There is another col with this id");
+                if(gridIds.contains(id)) {
+                    bs3Col.setMetadataError("There is another element in the grid with this id");
                     duplicateIdDetected.set(true);
                     return;
                 }
                 colIds.put(id, bs3Col);
+                gridIds.add(id);
             }
 
             @Override
             public void visit(final FieldSet fieldSet) {
-                final String id = fieldSet.getId();
+                String id = fieldSet.getId();
                 if(id == null) {
-                    return;
+                    final String name = fieldSet.getName();
+                    fieldSet.setId(id = asId(name));
                 }
-                if(rowIds.containsKey(id) || fieldSetIds.containsKey(id)) {
-                    fieldSet.setMetadataError("There is another fieldset with this id");
+                if(gridIds.contains(id)) {
+                    fieldSet.setMetadataError("There is another element in the grid with this id");
                     duplicateIdDetected.set(true);
                     return;
                 }
                 fieldSetIds.put(id, fieldSet);
+                gridIds.add(id);
             }
         });
 
@@ -231,20 +239,19 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
             propertyIds.get(surplusPropertyId).setMetadataError("No such property");
         }
 
+        final Map<String, List<OneToOneAssociation>> boundAssociationsByFieldSetId = Maps.newHashMap();
         if(!missingPropertyIds.isEmpty()) {
-            final Map<String, List<OneToOneAssociation>> boundAssociationsByFieldSetId = Maps.newHashMap();
             final List<String> unboundPropertyIds = Lists.newArrayList(missingPropertyIds);
             for (String missingPropertyId : missingPropertyIds) {
                 final OneToOneAssociation otoa = oneToOneAssociationById.get(missingPropertyId);
                 final MemberOrderFacet memberOrderFacet = otoa.getFacet(MemberOrderFacet.class);
                 if(memberOrderFacet != null) {
-                    final String name = memberOrderFacet.name();
-                    if(fieldSetIds.containsKey(name)) {
-                        List<OneToOneAssociation> boundAssociations =
-                                boundAssociationsByFieldSetId.get(name);
+                    final String id = asId(memberOrderFacet.name());
+                    if(fieldSetIds.containsKey(id)) {
+                        List<OneToOneAssociation> boundAssociations = boundAssociationsByFieldSetId.get(id);
                         if(boundAssociations == null) {
                             boundAssociations = Lists.newArrayList();
-                            boundAssociationsByFieldSetId.put(name, boundAssociations);
+                            boundAssociationsByFieldSetId.put(id, boundAssociations);
                         }
                         boundAssociations.add(otoa);
                         unboundPropertyIds.remove(missingPropertyId);
@@ -316,7 +323,8 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         final List<String> missingActionIds =
                 FluentIterable.from(actionIdTuple.second)
                         .filter(new Predicate<String>() {
-                            @Override public boolean apply(@Nullable final String actionId) {
+                            @Override
+                            public boolean apply(final String actionId) {
                                 final ObjectAction oa = objectActionById.get(actionId);
                                 final MemberOrderFacet memberOrderFacet = oa.getFacet(MemberOrderFacet.class);
                                 if(memberOrderFacet == null) {
@@ -326,8 +334,29 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                                 if (memberOrderName == null) {
                                     return true;
                                 }
-                                return  !oneToOneAssociationById.containsKey(memberOrderName) &&
-                                        !oneToManyAssociationById.containsKey(memberOrderName);
+                                final String id = asId(memberOrderName);
+                                if (oneToOneAssociationById.containsKey(id)) {
+                                    return false;
+                                }
+                                if (oneToManyAssociationById.containsKey(id)) {
+                                    return false;
+                                }
+                                // if the @MemberOrder references a field set, then don't mark it as missing, but
+                                // instead explicitly add it to the list of actions of that fieldset.
+                                // (note we only do this provided we already know that
+                                // there is at least one property for said fieldset)
+                                if(boundAssociationsByFieldSetId.containsKey(id)) {
+                                    final List<OneToOneAssociation> oneToOneAssociations =
+                                            boundAssociationsByFieldSetId.get(id);
+                                    if(!oneToOneAssociations.isEmpty()) {
+                                        final ActionLayoutData actionLayoutData = new ActionLayoutData(actionId);
+                                        actionLayoutData.setPosition(ActionLayout.Position.PANEL_DROPDOWN);
+                                        fieldSetIds.get(id).getActions().add(actionLayoutData);
+                                    }
+                                    return false;
+                                }
+                                // is missing after all.
+                                return true;
                             }
                         })
                         .toList();
@@ -349,6 +378,14 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
 
         return true;
+    }
+
+    static String asId(final String str) {
+        if(Strings.isNullOrEmpty(str)) {
+            return str;
+        }
+        final char c = str.charAt(0);
+        return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
     }
 
     private static Comparator<ObjectAssociation> byMemberOrderSequence() {

@@ -49,9 +49,10 @@ public class Object_downloadLayoutXml {
             restrictTo = RestrictTo.PROTOTYPING
     )
     @ActionLayout(
-            cssClassFa = "fa-download"
+            cssClassFa = "fa-download",
+            position = ActionLayout.Position.PANEL_DROPDOWN
     )
-    @MemberOrder(sequence = "550.1")
+    @MemberOrder(name = "Metadata", sequence = "550.1")
     public Object $$(
             @ParameterLayout(named = "File name")
             final String fileName,
