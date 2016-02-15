@@ -26,7 +26,10 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.Model;
 
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.members.cssclass.CssClassFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -39,14 +42,16 @@ import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.Addi
 import org.apache.isis.viewer.wicket.ui.components.collection.CollectionPanel;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorHelper;
 import org.apache.isis.viewer.wicket.ui.components.collection.selector.CollectionSelectorPanel;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 /**
  * {@link PanelAbstract Panel} representing the properties of an entity, as per
  * the provided {@link EntityModel}.
  */
-public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
+public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
@@ -59,81 +64,99 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> {
 
     private final ScopedSessionAttribute<Integer> selectedItemSessionAttribute;
 
+    final WebMarkupContainer div;
+
     public EntityCollectionPanel(final String id, final EntityModel entityModel) {
         super(id, entityModel);
 
         selectedItemSessionAttribute = ScopedSessionAttribute.create(
                 entityModel, this,  EntityCollectionModel.SESSION_ATTRIBUTE_SELECTED_ITEM);
 
+        div = buildGui();
     }
 
     /**
-     * Build UI only after added to parent.
+     * Attach UI only after added to parent.
      */
     public void onInitialize() {
         super.onInitialize();
-        buildGui();
+
+        final WebMarkupContainer panel = this;
+        if(contentDynamicallyVisible) {
+            panel.add(div);
+        } else {
+            Components.permanentlyHide(panel, div.getId());
+        }
+
     }
 
-    private void buildGui() {
-
-        final WebMarkupContainer collectionRvContainer = this;
+    private WebMarkupContainer buildGui() {
+        final WebMarkupContainer div = new WebMarkupContainer(ID_COLLECTION_GROUP);
 
         final EntityCollectionModel entityCollectionModel = EntityCollectionModel.createParented(getModel());
         final OneToManyAssociation association = entityCollectionModel.getCollectionMemento().getCollection();
+        final ObjectAdapter objectAdapter = getModel().getObject();
+        final Consent visibility = association.isVisible(objectAdapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
 
-        final CssClassFacet facet = association.getFacet(CssClassFacet.class);
-        if(facet != null) {
-            final ObjectAdapter objectAdapter = getModel().getObject();
-            final String cssClass = facet.cssClass(objectAdapter);
-            CssClassAppender.appendCssClassTo(collectionRvContainer, cssClass);
+        if(visibility.isAllowed()) {
+
+            contentDynamicallyVisible = true;
+
+            final CssClassFacet facet = association.getFacet(CssClassFacet.class);
+            if(facet != null) {
+                final String cssClass = facet.cssClass(objectAdapter);
+                CssClassAppender.appendCssClassTo(div, cssClass);
+            }
+
+            final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
+
+            Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
+            final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
+            labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
+            div.add(labelComponent);
+
+            final String description = association.getDescription();
+            if(description != null) {
+                labelComponent.add(new AttributeAppender("title", Model.of(description)));
+            }
+
+            final List<LinkAndLabel> links = entityCollectionModel.getLinks();
+            AdditionalLinksPanel.addAdditionalLinks (div,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
+
+            final CollectionSelectorHelper selectorHelper =
+                    new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(),
+                            selectedItemSessionAttribute);
+
+            final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
+
+            if (componentFactories.size() <= 1) {
+                permanentlyHide(ID_SELECTOR_DROPDOWN);
+            } else {
+                CollectionSelectorPanel selectorDropdownPanel =
+                        new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
+                                entityCollectionModel, selectedItemSessionAttribute);
+
+                final Model<ComponentFactory> componentFactoryModel = new Model<>();
+
+                final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
+
+                ComponentFactory selectedComponentFactory = componentFactories.get(selected);
+                componentFactoryModel.setObject(selectedComponentFactory);
+
+                this.setOutputMarkupId(true);
+                div.addOrReplace(selectorDropdownPanel);
+
+                collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
+            }
+            div.addOrReplace(collectionPanel);
         }
-
-        final WebMarkupContainer fieldSet = new WebMarkupContainer(ID_COLLECTION_GROUP);
-        collectionRvContainer.add(fieldSet);
-
-        final CollectionPanel collectionPanel = new CollectionPanel(ID_COLLECTION, entityCollectionModel);
-
-        Label labelComponent = collectionPanel.createLabel(ID_COLLECTION_NAME, association.getName());
-        final NamedFacet namedFacet = association.getFacet(NamedFacet.class);
-        labelComponent.setEscapeModelStrings(namedFacet == null || namedFacet.escaped());
-        fieldSet.add(labelComponent);
-
-        final String description = association.getDescription();
-        if(description != null) {
-            labelComponent.add(new AttributeAppender("title", Model.of(description)));
-        }
-
-        final List<LinkAndLabel> links = entityCollectionModel.getLinks();
-        AdditionalLinksPanel.addAdditionalLinks (fieldSet,ID_ADDITIONAL_LINKS, links, AdditionalLinksPanel.Style.INLINE_LIST);
-
-        final CollectionSelectorHelper selectorHelper =
-                new CollectionSelectorHelper(entityCollectionModel, getComponentFactoryRegistry(),
-                        selectedItemSessionAttribute);
-
-        final List<ComponentFactory> componentFactories = selectorHelper.getComponentFactories();
-
-        if (componentFactories.size() <= 1) {
-            permanentlyHide(ID_SELECTOR_DROPDOWN);
-        } else {
-            CollectionSelectorPanel selectorDropdownPanel =
-                    new CollectionSelectorPanel(ID_SELECTOR_DROPDOWN,
-                    entityCollectionModel, selectedItemSessionAttribute);
-
-            final Model<ComponentFactory> componentFactoryModel = new Model<>();
-
-            final int selected = selectorHelper.honourViewHintElseDefault(selectorDropdownPanel);
-
-            ComponentFactory selectedComponentFactory = componentFactories.get(selected);
-            componentFactoryModel.setObject(selectedComponentFactory);
-
-            this.setOutputMarkupId(true);
-            fieldSet.addOrReplace(selectorDropdownPanel);
-
-            collectionPanel.setSelectorDropdownPanel(selectorDropdownPanel);
-        }
-        fieldSet.addOrReplace(collectionPanel);
+        return div;
     }
 
+    private boolean contentDynamicallyVisible = false;
+    @Override
+    public boolean isContentDynamicallyVisible() {
+        return contentDynamicallyVisible;
+    }
 
 }

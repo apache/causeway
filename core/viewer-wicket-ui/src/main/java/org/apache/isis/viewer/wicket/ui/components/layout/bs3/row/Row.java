@@ -19,7 +19,6 @@
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3.row;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3ClearFix;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
@@ -31,9 +30,12 @@ import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.clearfix.ClearFix;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.Col;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class Row extends PanelAbstract<EntityModel> {
+public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,9 +56,8 @@ public class Row extends PanelAbstract<EntityModel> {
 
     private void buildGui() {
 
-        Util.appendCssClass(this, bs3Row, "row");
-
-        final RepeatingView rv = new RepeatingView(ID_ROW_CONTENTS);
+        final RepeatingViewWithDynamicallyVisibleContent rv =
+                new RepeatingViewWithDynamicallyVisibleContent(ID_ROW_CONTENTS);
 
         for(final BS3RowContent bs3RowContent: bs3Row.getCols()) {
 
@@ -65,7 +66,10 @@ public class Row extends PanelAbstract<EntityModel> {
 
             final WebMarkupContainer rowContent;
             if(bs3RowContent instanceof BS3Col) {
-                rowContent = new Col(id, entityModelWithHints);
+                Col col = new Col(id, entityModelWithHints);
+                contentDynamicallyVisible = contentDynamicallyVisible || col.isContentDynamicallyVisible();
+                rowContent = col;
+
             } else if (bs3RowContent instanceof BS3ClearFix) {
                 rowContent = new ClearFix(id, entityModelWithHints);
             } else {
@@ -75,7 +79,21 @@ public class Row extends PanelAbstract<EntityModel> {
             rv.add(rowContent);
         }
 
-        add(rv);
+        final WebMarkupContainer panel = this;
+        if(contentDynamicallyVisible) {
+            Util.appendCssClass(panel, bs3Row, "row");
+            panel.add(rv);
+        } else {
+            Components.permanentlyHide(panel, rv.getId());
+        }
+
+    }
+
+
+    private boolean contentDynamicallyVisible = false;
+    @Override
+    public boolean isContentDynamicallyVisible() {
+        return contentDynamicallyVisible;
     }
 
     ///////////////////////////////////////////////////////

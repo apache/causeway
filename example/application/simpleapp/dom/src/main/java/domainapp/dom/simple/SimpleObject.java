@@ -28,6 +28,7 @@ import javax.jdo.annotations.VersionStrategy;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.annotation.Action;
 import org.apache.isis.applib.annotation.BookmarkPolicy;
+import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
 import org.apache.isis.applib.annotation.Editing;
@@ -139,6 +140,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return (java.sql.Timestamp) JDOHelper.getVersion(this);
     }
 
+    public boolean hideVersionSequence() {
+        return getName().contains("ob");
+    }
 
     @Override
     public int compareTo(final SimpleObject other) {
@@ -155,6 +159,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return simpleObjects.findByName(getName().substring(0,1));
     }
 
+    @CollectionLayout(
+            defaultView = "table"
+    )
     public List<SimpleObject> getOthers() {
         return simpleObjects.listAll();
     }

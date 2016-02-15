@@ -20,6 +20,7 @@ package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 
@@ -33,10 +34,12 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.util.ScopedSessionAttribute;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
-public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
+// hmmm... not sure how to make this implement HasDynamicallyVisibleContent
+public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
     public static final String SESSION_ATTR_SELECTED_TAB = "selectedTab";
 
@@ -53,12 +56,18 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
                 .toList();
 
         for (final BS3Tab bs3Tab : tablist) {
+            final RepeatingViewWithDynamicallyVisibleContent rv = TabPanel.newRows(entityModel, bs3Tab);
             tabs.add(new AbstractTab(Model.of(bs3Tab.getName())) {
                 private static final long serialVersionUID = 1L;
 
                 @Override
                 public Panel getPanel(String panelId) {
-                    return new TabPanel(panelId, entityModel, bs3Tab);
+                    return new TabPanel(panelId, entityModel, bs3Tab, rv);
+                }
+
+                @Override
+                public boolean isVisible() {
+                    return rv.isContentDynamicallyVisible();
                 }
             });
         }
@@ -93,5 +102,15 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel {
                 ajaxBootstrapTabbedPanel.setSelectedTab(tabIndex);
             }
         }
+    }
+
+    @Override
+    public boolean isVisible() {
+        return FluentIterable.<AbstractTab>from(getTabs()).anyMatch(new Predicate<AbstractTab>() {
+            @Override
+            public boolean apply(final AbstractTab tab) {
+                return tab.isVisible();
+            }
+        });
     }
 }

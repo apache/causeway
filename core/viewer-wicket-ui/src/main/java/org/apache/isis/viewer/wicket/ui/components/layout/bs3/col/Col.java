@@ -30,16 +30,18 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
-import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Col;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
+import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
@@ -54,11 +56,12 @@ import org.apache.isis.viewer.wicket.ui.components.entity.fieldset.PropertyGroup
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs.TabGroupPanel;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
-public class Col extends PanelAbstract<EntityModel> {
+public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
@@ -96,8 +99,6 @@ public class Col extends PanelAbstract<EntityModel> {
         CssClassAppender.appendCssClassTo(div, bs3Col.toCssClass());
         Util.appendCssClass(div, bs3Col, ID_COL);
 
-        this.addOrReplace(div);
-
         // icon/title
         final DomainObjectLayoutData domainObject = bs3Col.getDomainObject();
 
@@ -115,6 +116,8 @@ public class Col extends PanelAbstract<EntityModel> {
             actionOwner = entityHeaderPanel;
             actionIdToUse = "entityActions";
             actionIdToHide = "actions";
+
+            contentDynamicallyVisible = true;
         } else {
             Components.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
             actionOwner = div;
@@ -126,19 +129,28 @@ public class Col extends PanelAbstract<EntityModel> {
         // actions
         // (rendering depends on whether also showing the icon/title)
         final List<ActionLayoutData> actionLayoutDatas = bs3Col.getActions();
-            final List<ObjectAction> objectActions =
-                FluentIterable.from(actionLayoutDatas)
-                        .transform(new Function<ActionLayoutData, ObjectAction>() {
-                            @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
-                                return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
-                            }
-                        })
-                        .filter(Predicates.<ObjectAction>notNull())
-                        .toList();
-        final List<LinkAndLabel> entityActionLinks = EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(getModel(), objectActions);
+        final List<ObjectAction> visibleActions =
+            FluentIterable.from(actionLayoutDatas)
+                    .transform(new Function<ActionLayoutData, ObjectAction>() {
+                        @Nullable @Override public ObjectAction apply(@Nullable final ActionLayoutData actionLayoutData) {
+                            return getModel().getTypeOfSpecification().getObjectAction(actionLayoutData.getId());
+                        }
+                    })
+                    .filter(Predicates.<ObjectAction>notNull())
+                    .filter(new Predicate<ObjectAction>() {
+                        @Override public boolean apply(@Nullable final ObjectAction objectAction) {
+                            final Consent visibility = objectAction
+                                    .isVisible(getModel().getObject(), InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                            return visibility.isAllowed();
+                        }
+                    })
+                    .toList();
+        final List<LinkAndLabel> entityActionLinks =
+                EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(getModel(), visibleActions);
 
         if(!entityActionLinks.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
+            contentDynamicallyVisible = true;
         } else {
             Components.permanentlyHide(actionOwner, actionIdToUse);
         }
@@ -151,8 +163,9 @@ public class Col extends PanelAbstract<EntityModel> {
         // rows
         final List<BS3Row> rows = Lists.newArrayList(this.bs3Col.getRows());
         if(!rows.isEmpty()) {
-            final RepeatingView rowsRv = buildRows(ID_ROWS, rows);
+            final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
+            contentDynamicallyVisible = contentDynamicallyVisible || rowsRv.isContentDynamicallyVisible();
         } else {
             Components.permanentlyHide(div, ID_ROWS);
         }
@@ -172,7 +185,8 @@ public class Col extends PanelAbstract<EntityModel> {
                             }
                         }).toList();
         if(!tabGroupsWithNonEmptyTabs.isEmpty()) {
-            final RepeatingView tabGroupRv = new RepeatingView(ID_TAB_GROUPS);
+            final RepeatingViewWithDynamicallyVisibleContent tabGroupRv =
+                    new RepeatingViewWithDynamicallyVisibleContent(ID_TAB_GROUPS);
 
             for (BS3TabGroup bs3TabGroup : tabGroupsWithNonEmptyTabs) {
 
@@ -190,7 +204,7 @@ public class Col extends PanelAbstract<EntityModel> {
                     final BS3Tab bs3Tab = tabs.get(0);
                     // render the rows of the one-and-only tab of this tab group.
                     final List<BS3Row> tabRows = bs3Tab.getRows();
-                    final RepeatingView rowsRv = buildRows(id, tabRows);
+                    final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(id, tabRows);
                     tabGroupRv.add(rowsRv);
                     break;
                 default:
@@ -204,6 +218,7 @@ public class Col extends PanelAbstract<EntityModel> {
 
             }
             div.add(tabGroupRv);
+            contentDynamicallyVisible = contentDynamicallyVisible || tabGroupRv.isContentDynamicallyVisible();
         } else {
             Components.permanentlyHide(div, ID_TAB_GROUPS);
         }
@@ -218,56 +233,75 @@ public class Col extends PanelAbstract<EntityModel> {
                     }
                 }).toList();
         if(!fieldSetsWithProperties.isEmpty()) {
-            final RepeatingView fieldSetRv = new RepeatingView(ID_FIELD_SETS);
+            final RepeatingViewWithDynamicallyVisibleContent fieldSetRv =
+                    new RepeatingViewWithDynamicallyVisibleContent(ID_FIELD_SETS);
 
             for (FieldSet fieldSet : fieldSetsWithProperties) {
 
                 final String id = fieldSetRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(fieldSet);
 
-                final WebMarkupContainer propertyGroup = new PropertyGroup(id, entityModelWithHints);
+                final PropertyGroup propertyGroup = new PropertyGroup(id, entityModelWithHints);
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
+            contentDynamicallyVisible = contentDynamicallyVisible || fieldSetRv.isContentDynamicallyVisible();
         } else {
             Components.permanentlyHide(div, ID_FIELD_SETS);
         }
 
 
-
         // collections
         final List<CollectionLayoutData> collections = bs3Col.getCollections();
         if(!collections.isEmpty()) {
-            final RepeatingView collectionRv = new RepeatingView(ID_COLLECTIONS);
+            final RepeatingViewWithDynamicallyVisibleContent collectionRv =
+                    new RepeatingViewWithDynamicallyVisibleContent(ID_COLLECTIONS);
 
             for (CollectionLayoutData collection : collections) {
 
                 final String id = collectionRv.newChildId();
                 final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(collection);
 
-                final WebMarkupContainer collectionPanel = new EntityCollectionPanel(id, entityModelWithHints);
+                final EntityCollectionPanel collectionPanel = new EntityCollectionPanel(id, entityModelWithHints);
                 collectionRv.add(collectionPanel);
             }
             div.add(collectionRv);
+            contentDynamicallyVisible = contentDynamicallyVisible || collectionRv.isContentDynamicallyVisible();
         } else {
             Components.permanentlyHide(div, ID_COLLECTIONS);
         }
 
+
+        final WebMarkupContainer panel = this;
+        if(contentDynamicallyVisible) {
+            panel.add(div);
+        } else {
+            Components.permanentlyHide(panel, div.getId());
+        }
+
     }
 
-    private RepeatingView buildRows(final String owningId, final List<BS3Row> rows) {
-        final RepeatingView rowRv = new RepeatingView(owningId);
+    private RepeatingViewWithDynamicallyVisibleContent buildRows(final String owningId, final List<BS3Row> rows) {
+        final RepeatingViewWithDynamicallyVisibleContent rowRv =
+                new RepeatingViewWithDynamicallyVisibleContent(owningId);
 
         for(final BS3Row bs3Row: rows) {
 
             final String id = rowRv.newChildId();
             final EntityModel entityModelWithHints = getModel().cloneWithLayoutMetadata(bs3Row);
 
-            final WebMarkupContainer row = new Row(id, entityModelWithHints);
+            final Row row = new Row(id, entityModelWithHints);
 
             rowRv.add(row);
         }
         return rowRv;
+    }
+
+
+    private boolean contentDynamicallyVisible = false;
+    @Override
+    public boolean isContentDynamicallyVisible() {
+        return contentDynamicallyVisible;
     }
 
     ///////////////////////////////////////////////////////

@@ -20,6 +20,12 @@ package org.apache.isis.viewer.wicket.ui.components.entity.fieldset;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -44,10 +50,13 @@ import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class PropertyGroup extends PanelAbstract<EntityModel> {
+public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDynamicallyVisibleContent {
 
+    private static final String ID_MEMBER_GROUP = "memberGroup";
     private static final String ID_MEMBER_GROUP_NAME = "memberGroupName";
 
     private static final String ID_ASSOCIATED_ACTION_LINKS_PANEL = "associatedActionLinksPanel";
@@ -70,30 +79,43 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
     }
 
     private void buildGui() {
-        String groupName = fieldSet.getName();
+
+        final List<PropertyLayoutData> properties = fieldSet.getProperties();
+
         // changed to NO_CHECK because more complex BS3 layouts trip concurrency exception (haven't investigated as to why).
         final ObjectAdapter adapter = getModel().load(AdapterManager.ConcurrencyChecking.NO_CHECK);
 
-        add(new Label(ID_MEMBER_GROUP_NAME, groupName));
+        final WebMarkupContainer div = new WebMarkupContainer(ID_MEMBER_GROUP);
+
+        String groupName = fieldSet.getName();
+
+        div.add(new Label(ID_MEMBER_GROUP_NAME, groupName));
 
         final List<LinkAndLabel> memberGroupActions = Lists.newArrayList();
 
         final RepeatingView propertyRv = new RepeatingView(ID_PROPERTIES);
-        add(propertyRv);
+        div.add(propertyRv);
 
-        final List<PropertyLayoutData> properties = fieldSet.getProperties();
-        for (PropertyLayoutData property : properties) {
-            final ObjectAssociation association = adapter.getSpecification().getAssociation(property.getId());
-            final Consent visibility = association.isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
-            if(visibility.isVetoed()) {
-                continue;
-            }
+        final ImmutableList<ObjectAssociation> visibleAssociations = FluentIterable.from(properties)
+                .transform(new Function<PropertyLayoutData, ObjectAssociation>() {
+                    @Override public ObjectAssociation apply(final PropertyLayoutData propertyLayoutData) {
+                        return adapter.getSpecification().getAssociation(propertyLayoutData.getId());
+                    }
+                })
+                .filter(new Predicate<ObjectAssociation>() {
+                    @Override public boolean apply(@Nullable final ObjectAssociation objectAssociation) {
+                        final Consent visibility =
+                                objectAssociation .isVisible(adapter, InteractionInitiatedBy.USER, Where.OBJECT_FORMS);
+                        return visibility.isAllowed();
+                    }
+                })
+                .toList();
 
+        for (final ObjectAssociation association : visibleAssociations) {
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.add(propertyRvContainer);
-
-            addPropertyToForm(getModel(), (OneToOneAssociation) association, propertyRvContainer,
-                    memberGroupActions);
+            addPropertyToForm(getModel(), (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
+            contentDynamicallyVisible = true;
         }
 
         final List<LinkAndLabel> actionsPanel = LinkAndLabel
@@ -102,13 +124,20 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
                 .positioned(memberGroupActions, ActionLayout.Position.PANEL_DROPDOWN);
 
         AdditionalLinksPanel.addAdditionalLinks(
-                this, ID_ASSOCIATED_ACTION_LINKS_PANEL,
+                div, ID_ASSOCIATED_ACTION_LINKS_PANEL,
                 actionsPanel,
                 AdditionalLinksPanel.Style.INLINE_LIST);
         AdditionalLinksPanel.addAdditionalLinks(
-                this, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
+                div, ID_ASSOCIATED_ACTION_LINKS_PANEL_DROPDOWN,
                 actionsPanelDropDown,
                 AdditionalLinksPanel.Style.DROPDOWN);
+
+        // either add the built content, or hide entire
+        if(!contentDynamicallyVisible) {
+            Components.permanentlyHide(this, div.getId());
+        } else {
+            this.add(div);
+        }
     }
 
     private void addPropertyToForm(
@@ -128,4 +157,12 @@ public class PropertyGroup extends PanelAbstract<EntityModel> {
         entityActions.addAll(
                 EntityActionUtil.asLinkAndLabelsForAdditionalLinksPanel(entityModel, associatedActions));
     }
+
+
+    private boolean contentDynamicallyVisible = false;
+    @Override
+    public boolean isContentDynamicallyVisible() {
+        return contentDynamicallyVisible;
+    }
+
 }

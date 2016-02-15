@@ -1,17 +1,19 @@
 package org.apache.isis.viewer.wicket.ui.components.layout.bs3.tabs;
 
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Row;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.viewer.wicket.model.hints.HasUiHintDisambiguator;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.Util;
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.RepeatingViewWithDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row;
+import org.apache.isis.viewer.wicket.ui.panels.HasDynamicallyVisibleContent;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 
-public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
+public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator, HasDynamicallyVisibleContent {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,10 +23,14 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
     private final BS3Tab bs3Tab;
 
     public TabPanel(String id, final EntityModel model, final BS3Tab bs3Tab) {
+        this(id, model, bs3Tab, null);
+    }
+
+    public TabPanel(String id, final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent repeatingViewWithDynamicallyVisibleContent) {
         super(id);
 
         this.bs3Tab = bs3Tab;
-        buildGui(model, bs3Tab);
+        buildGui(model, bs3Tab, repeatingViewWithDynamicallyVisibleContent);
     }
 
     /**
@@ -35,24 +41,47 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator {
         return bs3Tab.getName();
     }
 
-    protected void buildGui(final EntityModel model, final BS3Tab bs3Tab) {
+    protected void buildGui(final EntityModel model, final BS3Tab bs3Tab, final RepeatingViewWithDynamicallyVisibleContent rvIfAny) {
 
-        final WebMarkupContainer container = new WebMarkupContainer(ID_TAB_PANEL);
+        final WebMarkupContainer div = new WebMarkupContainer(ID_TAB_PANEL);
 
-        Util.appendCssClassIfRequired(this, bs3Tab);
+        final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bs3Tab);
+        div.add(rv);
+        contentDynamicallyVisible = contentDynamicallyVisible || rv.isContentDynamicallyVisible();
 
-        final RepeatingView rv = new RepeatingView(ID_ROWS);
+        final WebMarkupContainer panel = this;
+        if(contentDynamicallyVisible) {
+            Util.appendCssClassIfRequired(panel, bs3Tab);
+            panel.add(div);
+        } else {
+            Components.permanentlyHide(panel, div.getId());
+        }
+
+    }
+
+    public static RepeatingViewWithDynamicallyVisibleContent newRows(final EntityModel model, final BS3Tab bs3Tab) {
+        final RepeatingViewWithDynamicallyVisibleContent rv = new RepeatingViewWithDynamicallyVisibleContent(ID_ROWS);
 
         for(final BS3Row bs3Row: bs3Tab.getRows()) {
 
             final String newChildId = rv.newChildId();
             final EntityModel entityModelWithHints = model.cloneWithLayoutMetadata(bs3Row);
 
-            final WebMarkupContainer row = new Row(newChildId, entityModelWithHints);
+            final Row row = new Row(newChildId, entityModelWithHints);
 
             rv.add(row);
         }
-        container.add(rv);
-        add(container);
+        return rv;
+    }
+
+    private boolean contentDynamicallyVisible = false;
+    @Override
+    public boolean isContentDynamicallyVisible() {
+        return contentDynamicallyVisible;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return isContentDynamicallyVisible();
     }
 }
