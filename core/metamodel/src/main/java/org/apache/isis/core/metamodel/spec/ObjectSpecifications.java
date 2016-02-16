@@ -25,9 +25,8 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
-
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 
 public final class ObjectSpecifications {
 
@@ -37,7 +36,7 @@ public final class ObjectSpecifications {
     public static List<String> orderByMemberGroups(
             final ObjectSpecification objSpec,
             final Set<String> groupNamesToOrder,
-            final FCColumn.Hint hint) {
+            final Hint hint) {
 
         final MemberGroupLayoutFacet facet = objSpec.getFacet(MemberGroupLayoutFacet.class);
         final List<String> leftColumnGroupNames = Lists.newArrayList(groupNamesToOrder);
@@ -47,10 +46,10 @@ public final class ObjectSpecifications {
             return leftColumnGroupNames;
         }
         
-        if(hint == FCColumn.Hint.MIDDLE) {
+        if(hint == Hint.MIDDLE) {
             return facet.getColumnSpans().getMiddle()>0? facet.getMiddle(): Collections.<String>emptyList();
         }
-        if(hint == FCColumn.Hint.RIGHT) {
+        if(hint == Hint.RIGHT) {
             return facet.getColumnSpans().getRight()>0? facet.getRight(): Collections.<String>emptyList();
         }
         

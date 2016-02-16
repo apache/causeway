@@ -45,7 +45,7 @@ import org.apache.isis.applib.annotation.Where;
 import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn.Hint;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizer;
 import org.apache.isis.applib.services.exceprecog.ExceptionRecognizerComposite;

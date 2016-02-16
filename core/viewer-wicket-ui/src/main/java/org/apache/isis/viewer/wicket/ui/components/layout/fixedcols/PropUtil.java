@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.feature.Contributed;
@@ -43,7 +44,7 @@ public final class PropUtil {
 
     public static List<String> propertyGroupNames(
             final EntityModel entityModel,
-            final FCColumn.Hint hint, final FCColumn columnMetaDataIfAny) {
+            final Hint hint, final FCColumn columnMetaDataIfAny) {
         final ObjectAdapter adapter = entityModel.getObject();
         final ObjectSpecification objSpec = adapter.getSpecification();
 

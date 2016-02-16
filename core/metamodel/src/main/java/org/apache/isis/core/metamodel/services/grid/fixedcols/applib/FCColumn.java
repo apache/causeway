@@ -28,7 +28,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutDataOwner;
 import org.apache.isis.applib.layout.component.FieldSet;
@@ -133,29 +132,4 @@ public class FCColumn implements Serializable, FieldSetOwner, CollectionLayoutDa
         this.hint = hint;
     }
 
-
-
-    public enum Hint {
-        LEFT,
-        MIDDLE,
-        RIGHT;
-
-        public int from(MemberGroupLayout.ColumnSpans columnSpans) {
-            if(this == LEFT) return columnSpans.getLeft();
-            if(this == MIDDLE) return columnSpans.getMiddle();
-            if(this == RIGHT) return columnSpans.getRight();
-            throw new IllegalStateException();
-        }
-
-        public FCColumn from(final FCTab fcTab) {
-            if(fcTab == null) {
-                return null;
-            }
-            if(this == LEFT) return fcTab.getLeft();
-            if(this == MIDDLE) return fcTab.getMiddle();
-            if(this == RIGHT) return fcTab.getRight();
-            throw new IllegalStateException();
-        }
-
-    }
 }

@@ -70,7 +70,7 @@ public class FCTab implements FCColumnOwner, Serializable, Owned<FCTabGroup> {
 
     public void setLeft(final FCColumn left) {
         this.left = left;
-        left.setHint(FCColumn.Hint.LEFT);
+        left.setHint(Hint.LEFT);
     }
 
 
@@ -83,7 +83,7 @@ public class FCTab implements FCColumnOwner, Serializable, Owned<FCTabGroup> {
 
     public void setMiddle(final FCColumn middle) {
         this.middle = middle;
-        middle.setHint(FCColumn.Hint.MIDDLE);
+        middle.setHint(Hint.MIDDLE);
     }
 
 
@@ -96,7 +96,7 @@ public class FCTab implements FCColumnOwner, Serializable, Owned<FCTabGroup> {
 
     public void setRight(final FCColumn right) {
         this.right = right;
-        right.setHint(FCColumn.Hint.RIGHT);
+        right.setHint(Hint.RIGHT);
     }
 
 

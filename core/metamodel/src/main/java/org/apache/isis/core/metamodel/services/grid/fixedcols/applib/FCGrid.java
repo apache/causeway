@@ -79,7 +79,7 @@ public class FCGrid extends GridAbstract implements Dto, ActionLayoutDataOwner, 
 
     public void setLeft(final FCColumn left) {
         this.left = left;
-        left.setHint(FCColumn.Hint.LEFT);
+        left.setHint(Hint.LEFT);
     }
 
 
@@ -107,7 +107,7 @@ public class FCGrid extends GridAbstract implements Dto, ActionLayoutDataOwner, 
 
     public void setRight(final FCColumn right) {
         this.right = right;
-        right.setHint(FCColumn.Hint.RIGHT);
+        right.setHint(Hint.RIGHT);
     }
 
 

@@ -29,7 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.isis.applib.annotation.BookmarkPolicy;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn.Hint;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.applib.services.memento.MementoService.Memento;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager.ConcurrencyChecking;

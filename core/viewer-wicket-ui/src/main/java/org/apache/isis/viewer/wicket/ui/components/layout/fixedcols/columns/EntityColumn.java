@@ -36,6 +36,7 @@ import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
+import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.Hint;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecifications;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -54,7 +55,7 @@ import org.apache.isis.viewer.wicket.ui.util.Components;
  * <p>
  *     If {@link FCColumn} is present, then only those properties and collections for that
  *     column metadata are rendered.   Otherwise the {@link MemberGroupLayoutFacet} on the
- *     {@link ObjectSpecification} in conjunction with the provided {@link FCColumn.Hint} is
+ *     {@link ObjectSpecification} in conjunction with the provided {@link Hint} is
  *     used to filter down to just those properties/collections in the column.
  * </p>
  */
@@ -69,9 +70,9 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
     private final FCColumn columnMetaDataIfAny;
 
     // which column to render (populated for EntityEditablePanel, not required and so absent for EntityTabbedPanel)
-    final FCColumn.Hint hint;
+    final Hint hint;
 
-    private static FCColumn.Hint hintFrom(final EntityModel entityModel) {
+    private static Hint hintFrom(final EntityModel entityModel) {
         final FCColumn fcColumn = (FCColumn) entityModel.getLayoutMetadata();
         return fcColumn.getHint();
     }
@@ -87,7 +88,7 @@ public class EntityColumn extends PanelAbstract<EntityModel> {
     public EntityColumn(
             final String id,
             final EntityModel entityModel,
-            final FCColumn.Hint hint) {
+            final Hint hint) {
 
         super(id, entityModel);
 
