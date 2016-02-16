@@ -67,7 +67,7 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             final WebMarkupContainer rowContent;
             if(bs3RowContent instanceof BS3Col) {
                 Col col = new Col(id, entityModelWithHints);
-                contentDynamicallyVisible = contentDynamicallyVisible || col.isContentDynamicallyVisible();
+                visible = visible || col.isVisible();
                 rowContent = col;
 
             } else if (bs3RowContent instanceof BS3ClearFix) {
@@ -80,7 +80,7 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         }
 
         final WebMarkupContainer panel = this;
-        if(contentDynamicallyVisible) {
+        if(visible) {
             Util.appendCssClass(panel, bs3Row, "row");
             panel.add(rv);
         } else {
@@ -90,10 +90,10 @@ public class Row extends PanelAbstract<EntityModel> implements HasDynamicallyVis
     }
 
 
-    private boolean contentDynamicallyVisible = false;
+    private boolean visible = false;
     @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
+    public boolean isVisible() {
+        return visible;
     }
 
     ///////////////////////////////////////////////////////

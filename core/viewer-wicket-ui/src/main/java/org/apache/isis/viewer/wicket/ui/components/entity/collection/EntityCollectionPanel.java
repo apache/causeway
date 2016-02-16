@@ -82,7 +82,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         super.onInitialize();
 
         final WebMarkupContainer panel = this;
-        if(contentDynamicallyVisible) {
+        if(visible) {
             panel.add(div);
         } else {
             Components.permanentlyHide(panel, div.getId());
@@ -100,7 +100,7 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
 
         if(visibility.isAllowed()) {
 
-            contentDynamicallyVisible = true;
+            visible = true;
 
             final CssClassFacet facet = association.getFacet(CssClassFacet.class);
             if(facet != null) {
@@ -153,10 +153,10 @@ public class EntityCollectionPanel extends PanelAbstract<EntityModel> implements
         return div;
     }
 
-    private boolean contentDynamicallyVisible = false;
+    private boolean visible = false;
     @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
+    public boolean isVisible() {
+        return visible;
     }
 
 }

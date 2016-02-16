@@ -117,7 +117,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
             actionIdToUse = "entityActions";
             actionIdToHide = "actions";
 
-            contentDynamicallyVisible = true;
+            visible = true;
         } else {
             Components.permanentlyHide(div, ID_ENTITY_HEADER_PANEL);
             actionOwner = div;
@@ -150,7 +150,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
         if(!entityActionLinks.isEmpty()) {
             AdditionalLinksPanel.addAdditionalLinks(actionOwner, actionIdToUse, entityActionLinks, AdditionalLinksPanel.Style.INLINE_LIST);
-            contentDynamicallyVisible = true;
+            visible = true;
         } else {
             Components.permanentlyHide(actionOwner, actionIdToUse);
         }
@@ -165,7 +165,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
         if(!rows.isEmpty()) {
             final RepeatingViewWithDynamicallyVisibleContent rowsRv = buildRows(ID_ROWS, rows);
             div.add(rowsRv);
-            contentDynamicallyVisible = contentDynamicallyVisible || rowsRv.isContentDynamicallyVisible();
+            visible = visible || rowsRv.isVisible();
         } else {
             Components.permanentlyHide(div, ID_ROWS);
         }
@@ -218,7 +218,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
 
             }
             div.add(tabGroupRv);
-            contentDynamicallyVisible = contentDynamicallyVisible || tabGroupRv.isContentDynamicallyVisible();
+            visible = visible || tabGroupRv.isVisible();
         } else {
             Components.permanentlyHide(div, ID_TAB_GROUPS);
         }
@@ -245,7 +245,7 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 fieldSetRv.add(propertyGroup);
             }
             div.add(fieldSetRv);
-            contentDynamicallyVisible = contentDynamicallyVisible || fieldSetRv.isContentDynamicallyVisible();
+            visible = visible || fieldSetRv.isVisible();
         } else {
             Components.permanentlyHide(div, ID_FIELD_SETS);
         }
@@ -266,14 +266,14 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
                 collectionRv.add(collectionPanel);
             }
             div.add(collectionRv);
-            contentDynamicallyVisible = contentDynamicallyVisible || collectionRv.isContentDynamicallyVisible();
+            visible = visible || collectionRv.isVisible();
         } else {
             Components.permanentlyHide(div, ID_COLLECTIONS);
         }
 
 
         final WebMarkupContainer panel = this;
-        if(contentDynamicallyVisible) {
+        if(visible) {
             panel.add(div);
         } else {
             Components.permanentlyHide(panel, div.getId());
@@ -298,10 +298,10 @@ public class Col extends PanelAbstract<EntityModel> implements HasDynamicallyVis
     }
 
 
-    private boolean contentDynamicallyVisible = false;
+    private boolean visible = false;
     @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
+    public boolean isVisible() {
+        return visible;
     }
 
     ///////////////////////////////////////////////////////

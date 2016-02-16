@@ -159,11 +159,19 @@ public class SimpleObject implements Comparable<SimpleObject> {
         return simpleObjects.findByName(getName().substring(0,1));
     }
 
+    public boolean hideSimilarTo() {
+        return getName().contains("ob");
+    }
+
     @CollectionLayout(
             defaultView = "table"
     )
     public List<SimpleObject> getOthers() {
         return simpleObjects.listAll();
+    }
+
+    public boolean hideOthers() {
+        return getName().contains("ob");
     }
 
     @Inject

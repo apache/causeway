@@ -115,7 +115,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
             final WebMarkupContainer propertyRvContainer = new WebMarkupContainer(propertyRv.newChildId());
             propertyRv.add(propertyRvContainer);
             addPropertyToForm(getModel(), (OneToOneAssociation) association, propertyRvContainer, memberGroupActions);
-            contentDynamicallyVisible = true;
+            visible = true;
         }
 
         final List<LinkAndLabel> actionsPanel = LinkAndLabel
@@ -133,7 +133,7 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
                 AdditionalLinksPanel.Style.DROPDOWN);
 
         // either add the built content, or hide entire
-        if(!contentDynamicallyVisible) {
+        if(!visible) {
             Components.permanentlyHide(this, div.getId());
         } else {
             this.add(div);
@@ -159,10 +159,10 @@ public class PropertyGroup extends PanelAbstract<EntityModel> implements HasDyna
     }
 
 
-    private boolean contentDynamicallyVisible = false;
+    private boolean visible = false;
     @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
+    public boolean isVisible() {
+        return visible;
     }
 
 }

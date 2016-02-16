@@ -67,7 +67,7 @@ public class TabGroupPanel extends AjaxBootstrapTabbedPanel  {
 
                 @Override
                 public boolean isVisible() {
-                    return rv.isContentDynamicallyVisible();
+                    return rv.isVisible();
                 }
             });
         }

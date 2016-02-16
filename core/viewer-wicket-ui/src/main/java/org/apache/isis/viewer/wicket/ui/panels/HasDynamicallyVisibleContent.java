@@ -19,8 +19,18 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import org.apache.isis.viewer.wicket.ui.components.layout.bs3.col.Col;
+
+/**
+ * Implemented by all Wicket UI components that contain other content which may or
+ * may not be visible, eg per user, or per imperative hideXxx() method.
+ *
+ * <p>
+ *     The {@link Col}, {@link org.apache.isis.viewer.wicket.ui.components.layout.bs3.row.Row} etc components that implement this interface cascade their visibility up to their parent component; so for example if a tabpanel contains a tab that contains a single fieldset that contains a single property, and that property is invisible, then the entire tab is invisible.
+ * </p>
+ */
 public interface HasDynamicallyVisibleContent {
 
-    boolean isContentDynamicallyVisible();
+    boolean isVisible();
 
 }

@@ -36,19 +36,19 @@ public class RepeatingViewWithDynamicallyVisibleContent extends RepeatingView im
         for (Component child : children) {
             if(child instanceof HasDynamicallyVisibleContent) {
                 final HasDynamicallyVisibleContent hasDynamicallyVisibleContent = (HasDynamicallyVisibleContent) child;
-                contentDynamicallyVisible = contentDynamicallyVisible || hasDynamicallyVisibleContent.isContentDynamicallyVisible();
+                visible = visible || hasDynamicallyVisibleContent.isVisible();
             } else {
-                contentDynamicallyVisible = true;
+                visible = true;
             }
         }
         return component;
     }
 
-    private boolean contentDynamicallyVisible = false;
+    private boolean visible = false;
 
     @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
+    public boolean isVisible() {
+        return visible;
     }
 
 }

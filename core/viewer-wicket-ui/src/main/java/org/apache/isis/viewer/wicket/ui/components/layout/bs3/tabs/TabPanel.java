@@ -47,10 +47,10 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator, H
 
         final RepeatingViewWithDynamicallyVisibleContent rv = rvIfAny != null ? rvIfAny : newRows(model, bs3Tab);
         div.add(rv);
-        contentDynamicallyVisible = contentDynamicallyVisible || rv.isContentDynamicallyVisible();
+        visible = visible || rv.isVisible();
 
         final WebMarkupContainer panel = this;
-        if(contentDynamicallyVisible) {
+        if(visible) {
             Util.appendCssClassIfRequired(panel, bs3Tab);
             panel.add(div);
         } else {
@@ -74,14 +74,9 @@ public class TabPanel extends PanelAbstract implements HasUiHintDisambiguator, H
         return rv;
     }
 
-    private boolean contentDynamicallyVisible = false;
-    @Override
-    public boolean isContentDynamicallyVisible() {
-        return contentDynamicallyVisible;
-    }
-
+    private boolean visible = false;
     @Override
     public boolean isVisible() {
-        return isContentDynamicallyVisible();
+        return visible;
     }
 }
