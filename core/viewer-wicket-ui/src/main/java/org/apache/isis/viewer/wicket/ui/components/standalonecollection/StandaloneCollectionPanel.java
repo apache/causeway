@@ -114,7 +114,7 @@ public class StandaloneCollectionPanel extends PanelAbstract<EntityCollectionMod
     //region > ActionPromptModalWindowProvider
 
     public ActionPromptModalWindow getActionPrompt() {
-        return ActionPromptModalWindow.getActionPromptModalWindowIfEnabled(actionPromptModalWindow);
+        return actionPromptModalWindow;
     }
 
     //endregion

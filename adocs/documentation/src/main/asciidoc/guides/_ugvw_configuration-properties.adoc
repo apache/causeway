@@ -50,9 +50,7 @@ If you prefer you can place all configuration properties into `WEB-INF/isis.prop
 |`isis.viewer.wicket.` +
 `disableModalDialogs`
 | `true`,`false` (`_false_`)
-| By default the Apache Isis Wicket viewer uses a modal dialog for action parameters.  Before this feature was implemented (prior to 1.4.0), Apache Isis rendered action parameters on its own page.  This property re-enables the old behaviour.
-
-Note that action pages are still used for bookmarked actions.
+|(`1.12.0-SNAPSHOT`), no longer supported.
 
 |`isis.viewer.wicket.` +
 `maxTitleLengthInParentedTables`
