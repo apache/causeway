@@ -21,7 +21,9 @@ package org.apache.isis.viewer.wicket.ui.components.scalars;
 
 import java.io.Serializable;
 import java.util.List;
+
 import com.google.common.base.Strings;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -36,11 +38,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.maxlen.MaxLengthFacet;
+import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.EntityActionUtil;
@@ -239,6 +242,12 @@ public abstract class ScalarPanelTextFieldAbstract<T extends Serializable> exten
     protected void onBeforeRenderWhenViewMode() {
         super.onBeforeRenderWhenViewMode();
         textField.setEnabled(false);
+
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+        if(disableReasonIfAny == null) {
+            CssClassAppender.appendCssClassTo(this, "editable");
+        }
+
         setTitleAttribute("");
     }
 

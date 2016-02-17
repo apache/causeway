@@ -31,7 +31,6 @@ import org.apache.isis.applib.annotation.BookmarkPolicy;
 import org.apache.isis.applib.annotation.CollectionLayout;
 import org.apache.isis.applib.annotation.DomainObject;
 import org.apache.isis.applib.annotation.DomainObjectLayout;
-import org.apache.isis.applib.annotation.Editing;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Parameter;
 import org.apache.isis.applib.annotation.ParameterLayout;
@@ -86,7 +85,7 @@ public class SimpleObject implements Comparable<SimpleObject> {
             length = NAME_LENGTH
     )
     @Property(
-            editing = Editing.DISABLED
+            //editing = Editing.DISABLED
     )
     @PropertyLayout(
             namedEscaped = false
@@ -99,6 +98,9 @@ public class SimpleObject implements Comparable<SimpleObject> {
         this.name = name;
     }
 
+    public TranslatableString validateName(final String name) {
+        return name != null && name.contains("!")? TranslatableString.tr("Exclamation mark is not allowed"): null;
+    }
 
 
     public static class UpdateNameDomainEvent extends ActionDomainEvent<SimpleObject> {}

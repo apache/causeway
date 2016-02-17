@@ -95,6 +95,10 @@ public enum ComponentType {
      */
     PARAMETERS,
     /**
+     * The edit form (property value and buttons) of an property.
+     */
+    PROPERTY_EDIT_FORM,
+    /**
      * Info details for an action, eg to display the target, a resubmit button,
      * any description or help text, and so on.
      */
@@ -103,6 +107,10 @@ public enum ComponentType {
      * Used to display the parameters of an action.
      */
     ACTION_PROMPT,
+    /**
+     * Used to display a single property for editing.
+     */
+    PROPERTY_EDIT_PROMPT,
     /**
      * Top-level component for rendering a standalone collection (ie as returned by
      * an action).

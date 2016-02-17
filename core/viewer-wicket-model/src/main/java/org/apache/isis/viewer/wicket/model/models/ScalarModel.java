@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
 import org.apache.isis.core.metamodel.deployment.DeploymentCategory;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.facets.objectvalue.typicallen.TypicalLengthFacet;
@@ -765,6 +766,62 @@ public class ScalarModel extends EntityModel implements LinksProvider {
             }
         };
     }
+
+
+    private PropertyEditExecutor executor;
+    public PropertyEditExecutor getExecutor() {
+        return executor;
+    }
+    public void setExecutor(final PropertyEditExecutor executor) {
+        this.executor = executor;
+    }
+
+    @Override
+    public String getReasonInvalidIfAny() {
+        final OneToOneAssociation property = getPropertyMemento().getProperty();
+
+        final ObjectAdapter adapter = getParentObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
+
+        final ObjectAdapter associate = getObject();
+
+        final Consent validity = property.isAssociationValid(adapter, associate, InteractionInitiatedBy.USER);
+        return validity.isAllowed() ? null : validity.getReason();
+    }
+
+    public void applyValue(final ObjectAdapter adapter) {
+        final OneToOneAssociation property = getPropertyMemento().getProperty();
+
+        //
+        // previously there was a guard here to only apply changes provided:
+        //
+        // property.containsDoOpFacet(NotPersistedFacet.class) == null
+        //
+        // however, that logic is wrong; although a property may not be directly
+        // persisted so far as JDO is concerned, it may be indirectly persisted
+        // as the result of business logic in the setter.
+        //
+        // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
+        //
+
+        //
+        // on the other hand, we mustn't attempt to apply changes for disabled properties...
+        // even if the property is persisted (it might be written to by an action), it is never updated by
+        // an edit.
+        //
+        // Fundamentally, then, any non-disabled property (whether persisted or not) should be updated in the
+        // Isis runtime.
+        //
+
+        if(property.containsDoOpFacet(DisabledFacet.class)) {
+            // skip, as per comments above
+            return;
+        }
+
+        final ObjectAdapter associate = getObject();
+        property.set(adapter, associate, InteractionInitiatedBy.USER);
+    }
+
+
 
 
     // //////////////////////////////////////

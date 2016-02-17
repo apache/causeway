@@ -38,13 +38,11 @@ import org.apache.isis.core.metamodel.adapter.oid.RootOid;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
-import org.apache.isis.core.metamodel.facets.members.disabled.DisabledFacet;
 import org.apache.isis.core.metamodel.facets.object.bookmarkpolicy.BookmarkPolicyFacet;
 import org.apache.isis.core.metamodel.facets.object.viewmodel.ViewModelFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecId;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderSpi;
-import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.services.memento.MementoServiceDefault;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.common.PageParametersUtils;
@@ -505,36 +503,7 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
     public ObjectAdapter apply() {
         ObjectAdapter adapter = getObjectAdapterMemento().getObjectAdapter(ConcurrencyChecking.CHECK);
         for (final ScalarModel scalarModel : propertyScalarModels.values()) {
-            final OneToOneAssociation property = scalarModel.getPropertyMemento().getProperty();
-
-            //
-            // previously there was a guard here to only apply changes provided:
-            //
-            // property.containsDoOpFacet(NotPersistedFacet.class) == null
-            //
-            // however, that logic is wrong; although a property may not be directly
-            // persisted so far as JDO is concerned, it may be indirectly persisted
-            // as the result of business logic in the setter.
-            //
-            // for example, see ExampleTaggableEntity (in isisaddons-module-tags).
-            //
-
-            //
-            // on the other hand, we mustn't attempt to apply changes for disabled properties...
-            // even if the property is persisted (it might be written to by an action), it is never updated by
-            // an edit.
-            //
-            // Fundamentally, then, any non-disabled property (whether persisted or not) should be updated in the
-            // Isis runtime.
-            //
-
-            if(property.containsDoOpFacet(DisabledFacet.class)) {
-                // skip, as per comments above
-                continue;
-            }
-
-            final ObjectAdapter associate = scalarModel.getObject();
-            property.set(adapter, associate, InteractionInitiatedBy.USER);
+            scalarModel.applyValue(adapter);
         }
 
         final ViewModelFacet recreatableObjectFacet = adapter.getSpecification().getFacet(ViewModelFacet.class);
@@ -552,7 +521,6 @@ public class EntityModel extends BookmarkableModel<ObjectAdapter> {
 
         return adapter;
     }
-
 
     // //////////////////////////////////////////////////////////
     // Pending

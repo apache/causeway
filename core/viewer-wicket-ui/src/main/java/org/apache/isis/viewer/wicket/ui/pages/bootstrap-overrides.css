@@ -533,6 +533,7 @@ div.label-left label.control-label {
     text-align: left;
 }
 
+.propertyEditForm .label-left label.control-label,
 .actionParametersForm .label-left label.control-label {
     padding-left: 10px;
 }
@@ -607,7 +608,8 @@ div.label-right .scalarValueWrapper .control-label{
 /* Labels on the left/top/none END */
 
 
-.form-horizontal.actionParametersForm .form-group {
+.form-horizontal.actionParametersForm .form-group,
+.form-horizontal.propertyEditForm .form-group {
     margin-left: -5px;
 }
 
@@ -661,6 +663,7 @@ div.referencePanel.scalarNameAndValueComponentType {
     font-style: italic;
 }
 
+.propertyEditForm .buttons,
 .actionParametersForm .buttons {
     padding-top: 20px;
 }
@@ -765,4 +768,9 @@ tr.headers th form input {
 .additionalLinkListDropDown ul.dropdown-menu {
     padding-top: 0%;
     padding-bottom: 0%;
+}
+
+/* cheap and nasty; ought really to suppress in Java code ... */
+.propertyEditForm .additionalLinkList {
+    display: none;
 }

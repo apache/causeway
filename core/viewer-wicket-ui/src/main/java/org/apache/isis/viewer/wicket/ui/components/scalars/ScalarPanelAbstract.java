@@ -25,11 +25,13 @@ import com.google.common.collect.Lists;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.feedback.ComponentFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.Model;
@@ -44,11 +46,17 @@ import org.apache.isis.core.metamodel.facets.objectvalue.labelat.LabelAtFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.links.LinkAndLabel;
+import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
+import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
 import org.apache.isis.viewer.wicket.model.models.EntityModel.RenderingHint;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
+import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.actionmenu.entityactions.AdditionalLinksPanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanel;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPromptHeaderPanel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.TextFieldValueModel.ScalarModelProvider;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
+import org.apache.isis.viewer.wicket.ui.util.Components;
 import org.apache.isis.viewer.wicket.ui.util.CssClassAppender;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.common.NotificationPanel;
@@ -74,6 +82,7 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
     private static final String ID_ASSOCIATED_ACTION_LINKS_BELOW = "associatedActionLinksBelow";
     private static final String ID_ASSOCIATED_ACTION_LINKS_RIGHT = "associatedActionLinksRight";
 
+    private static final String ID_EDIT_PROPERTY = "editProperty";
     private static final String ID_FEEDBACK = "feedback";
 
     public enum CompactType {
@@ -193,11 +202,13 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
                 guiForceBuilt = false;
             }
         }
+
         final ScalarModel scalarModel = getModel();
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+
         if (scalarModel.isViewMode()) {
             onBeforeRenderWhenViewMode();
         } else {
-            final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
             if (disableReasonIfAny != null) {
                 onBeforeRenderWhenDisabled(disableReasonIfAny);
             } else {
@@ -294,6 +305,41 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
     protected void addFeedbackTo(MarkupContainer markupContainer, Component component) {
         markupContainer.addOrReplace(new NotificationPanel(ID_FEEDBACK, component, new ComponentFeedbackMessageFilter(component)));
+
+        final String disableReasonIfAny = scalarModel.disable(getRendering().getWhere());
+        if (disableReasonIfAny == null && scalarModel.isViewMode()) {
+            final WebMarkupContainer editProperty = new WebMarkupContainer(ID_EDIT_PROPERTY);
+
+            editProperty.setOutputMarkupId(true);
+
+            editProperty.add(new AjaxEventBehavior("click") {
+                protected void onEvent(AjaxRequestTarget target) {
+
+                    final ActionPrompt prompt = ActionPromptProvider.Util
+                            .getFrom(ScalarPanelAbstract.this).getActionPrompt();
+
+                    PropertyEditPromptHeaderPanel titlePanel = new PropertyEditPromptHeaderPanel(prompt.getTitleId(),
+                            scalarModel);
+
+                    final PropertyEditPanel propertyEditPanel =
+                            (PropertyEditPanel) getComponentFactoryRegistry().createComponent(
+                                    ComponentType.PROPERTY_EDIT_PROMPT, prompt.getContentId(), scalarModel);
+
+                    propertyEditPanel.setShowHeader(false);
+
+                    prompt.setTitle(titlePanel, target);
+                    prompt.setPanel(propertyEditPanel, target);
+                    propertyEditPanel.setActionPrompt(prompt);
+                    prompt.showPrompt(target);
+
+                }
+            });
+
+            markupContainer.addOrReplace(editProperty);
+        } else {
+            Components.permanentlyHide(markupContainer, ID_EDIT_PROPERTY);
+        }
+
     }
 
 

@@ -74,7 +74,6 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     private static final String ID_ACTION_PARAMETERS = "parameters";
 
     private final ActionExecutor actionExecutor;
-    //private final ActionPrompt actionPromptIfAny;
 
     public ActionParametersFormPanel(final String id, final ActionModel model) {
         super(id, model);

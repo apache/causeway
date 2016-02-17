@@ -39,15 +39,17 @@ import org.apache.isis.viewer.wicket.ui.components.collectioncontents.multiple.C
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.summary.CollectionContentsAsSummaryFactory;
 import org.apache.isis.viewer.wicket.ui.components.collectioncontents.unresolved.CollectionContentsAsUnresolvedPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.empty.EmptyCollectionPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.collections.EntityCollectionsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.header.EntityHeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconAndTitlePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTitleAndCopyLinkPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls.EntityPropsAndCollsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.EntityPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.EntityPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.collections.EntityCollectionsPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls.EntityPropsAndCollsPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisClobPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisColorPanelFactory;
@@ -135,6 +137,7 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         addComponentFactoriesForActionInfo(componentFactories);
         addComponentFactoriesForAction(componentFactories);
         addComponentFactoriesForActionLink(componentFactories);
+        addComponentFactoriesForPropertyEdit(componentFactories);
         addComponentFactoriesForEntityCollection(componentFactories);
         addComponentFactoriesForEntityCollectionContents(componentFactories);
         addComponentFactoriesForEmptyCollection(componentFactories);
@@ -263,6 +266,11 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     protected void addComponentFactoriesForAction(final ComponentFactoryList componentFactories) {
         componentFactories.add(new ActionPanelFactory());
         componentFactories.add(new StandaloneCollectionPanelFactory());
+    }
+
+    protected void addComponentFactoriesForPropertyEdit(final ComponentFactoryList componentFactories) {
+        componentFactories.add(new PropertyEditPanelFactory());
+        componentFactories.add(new PropertyEditFormPanelFactory());
     }
 
     protected void addComponentFactoriesForActionLink(final ComponentFactoryList componentFactories) {
