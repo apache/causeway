@@ -768,14 +768,6 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     }
 
 
-    private PropertyEditExecutor executor;
-    public PropertyEditExecutor getExecutor() {
-        return executor;
-    }
-    public void setExecutor(final PropertyEditExecutor executor) {
-        this.executor = executor;
-    }
-
     @Override
     public String getReasonInvalidIfAny() {
         final OneToOneAssociation property = getPropertyMemento().getProperty();
@@ -822,6 +814,24 @@ public class ScalarModel extends EntityModel implements LinksProvider {
     }
 
 
+
+
+    // //////////////////////////////////////
+
+
+    private ExecutingPanel executingPanel;
+
+    /**
+     * A hint passed from one Wicket UI component to another.
+     *
+     * Mot actually used by the model itself.
+     */
+    public ExecutingPanel getExecutingPanel() {
+        return executingPanel;
+    }
+    public void setExecutingPanel(final ExecutingPanel executingPanel) {
+        this.executingPanel = executingPanel;
+    }
 
 
     // //////////////////////////////////////

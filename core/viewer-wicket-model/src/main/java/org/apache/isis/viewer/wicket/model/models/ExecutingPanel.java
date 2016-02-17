@@ -25,11 +25,18 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.form.Form;
 
 /**
- * Decouples the {@link ScalarModel}, which needs to delegate the actual
- * editing of an property, from its implementor.
+ * Passed through the {@link ActionModel} or {@link ScalarModel}, allowing
+ * two different Wicket UI components (eg owning <code>ActionPanel</code> and
+ * <code>ActionParametersFormPanel</code> to interact.
+ *
+ * <p>
+ *     REVIEW: this is a rather clunky design.  The executing panel
+ *     isn't used by the model, and one panel is parent/creates of the other;
+ *     is it necessary to decouple them to this degree?
+ * </p>
  */
-public interface PropertyEditExecutor extends Serializable {
+public interface ExecutingPanel extends Serializable {
 
-    boolean editAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
+    boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm);
 
 }

@@ -264,7 +264,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
      * Lazily populated in {@link #getArgumentModel(ActionParameterMemento)}
      */
     private final Map<Integer, ScalarModel> arguments = Maps.newHashMap();
-    private ActionExecutor executor;
 
 
     private ActionModel(final PageParameters pageParameters) {
@@ -327,7 +326,7 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
             setArgument(argumentModel.getKey(), argumentModel.getValue().getObject());
         }
 
-        this.executor = actionModel.executor;
+        this.executingPanel = actionModel.executingPanel;
     }
 
     private void setArgumentsIfPossible(final PageParameters pageParameters) {
@@ -510,14 +509,6 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         }
         return arguments;
     }
-    
-    public ActionExecutor getExecutor() {
-        return executor;
-    }
-
-    public void setExecutor(final ActionExecutor executor) {
-        this.executor = executor;
-    }
 
     public void reset() {
         this.actionMode = determineMode(actionMemento.getAction());
@@ -664,6 +655,24 @@ public class ActionModel extends BookmarkableModel<ObjectAdapter> {
         // reference to a non-serializable object
         return Lists.newArrayList(parameterMementoList);
     }
+
+    //////////////////////////////////////////////////
+
+    private ExecutingPanel executingPanel;
+
+    /**
+     * A hint passed from one Wicket UI component to another.
+     *
+     * Mot actually used by the model itself.
+     */
+    public ExecutingPanel getExecutingPanel() {
+        return executingPanel;
+    }
+
+    public void setExecutingPanel(final ExecutingPanel executingPanel) {
+        this.executingPanel = executingPanel;
+    }
+
 
     //////////////////////////////////////////////////
     // Dependencies (from context)

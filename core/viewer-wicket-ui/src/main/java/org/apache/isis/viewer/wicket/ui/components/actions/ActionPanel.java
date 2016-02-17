@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
+import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.BookmarkableModel;
@@ -63,7 +63,7 @@ import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
  * <p>
  * TODO: on results panel, have a button to resubmit?
  */
-public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExecutor {
+public class ActionPanel extends PanelAbstract<ActionModel> implements ExecutingPanel {
 
     private static final long serialVersionUID = 1L;
 
@@ -80,7 +80,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     public ActionPanel(final String id, final ActionModel actionModel) {
         super(id, actionModel);
-        actionModel.setExecutor(this);
+        actionModel.setExecutingPanel(this);
         buildGui(getActionModel());
     }
 
@@ -160,7 +160,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
 
     private void buildGuiForNoParameters(final ActionModel actionModel) {
 
-        boolean succeeded = executeActionAndProcessResults(null, null);
+        boolean succeeded = executeAndProcessResults(null, null);
         if(succeeded) {
             // nothing to do
         } else {
@@ -193,7 +193,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * @return 
      */
     @Override
-    public boolean executeActionAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
+    public boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
 
         permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
 
@@ -202,7 +202,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
             targetAdapter = getModel().getTargetAdapter();
 
             // no concurrency exception, so continue...
-            return executeActionOnTargetAndProcessResults(targetAdapter, target, feedbackForm);
+            return executeActionOnTargetAndProcessResults(target, feedbackForm);
 
         } catch (ConcurrencyException ex) {
 
@@ -226,8 +226,7 @@ public class ActionPanel extends PanelAbstract<ActionModel> implements ActionExe
      * @return whether to clear args or not (they aren't if there was a validation exception)
      */
     private boolean executeActionOnTargetAndProcessResults(
-            final ObjectAdapter targetAdapter, 
-            final AjaxRequestTarget target, 
+            final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
         
         final ActionModel actionModel = getActionModel();

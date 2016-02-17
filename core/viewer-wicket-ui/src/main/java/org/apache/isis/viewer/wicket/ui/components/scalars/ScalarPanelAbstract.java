@@ -329,7 +329,6 @@ public abstract class ScalarPanelAbstract extends PanelAbstract<ScalarModel> imp
 
                     prompt.setTitle(titlePanel, target);
                     prompt.setPanel(propertyEditPanel, target);
-                    propertyEditPanel.setActionPrompt(prompt);
                     prompt.showPrompt(target);
 
                 }

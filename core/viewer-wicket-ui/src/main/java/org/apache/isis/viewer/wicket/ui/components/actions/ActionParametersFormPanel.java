@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisActionCompletedEvent;
 import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
+import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
@@ -73,15 +73,14 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
     private static final String ID_CANCEL_BUTTON = "cancelButton";
     private static final String ID_ACTION_PARAMETERS = "parameters";
 
-    private final ActionExecutor actionExecutor;
+    private final ExecutingPanel executingPanel;
 
     public ActionParametersFormPanel(final String id, final ActionModel model) {
         super(id, model);
 
-        Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
+        Ensure.ensureThatArg(model.getExecutingPanel(), is(not(nullValue())));
 
-        this.actionExecutor = model.getExecutor();
-        //this.actionPromptIfAny = model.getActionPrompt();
+        this.executingPanel = model.getExecutingPanel();
         buildGui();
     }
 
@@ -148,7 +147,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 
                 @Override
                 public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    boolean succeeded = actionExecutor.executeActionAndProcessResults(target, form);
+                    boolean succeeded = executingPanel.executeAndProcessResults(target, form);
                     if(succeeded) {
                         // the Wicket ajax callbacks will have just started to hide the veil
                         // we now show it once more, so that a veil continues to be shown until the

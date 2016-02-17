@@ -33,7 +33,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.hints.IsisPropertyEditCompletedEvent;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.ActionPromptProvider;
-import org.apache.isis.viewer.wicket.model.models.PropertyEditExecutor;
+import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarModelSubscriber;
@@ -61,14 +61,14 @@ public class PropertyEditFormPanel extends PanelAbstract<ScalarModel> {
 
     private static final String ID_PROPERTY = "property";
 
-    private final PropertyEditExecutor propertyEditExecutor;
+    private final ExecutingPanel executingPanel;
 
     public PropertyEditFormPanel(final String id, final ScalarModel model) {
         super(id, model);
 
-        Ensure.ensureThatArg(model.getExecutor(), is(not(nullValue())));
+        Ensure.ensureThatArg(model.getExecutingPanel(), is(not(nullValue())));
 
-        this.propertyEditExecutor = model.getExecutor();
+        this.executingPanel = model.getExecutingPanel();
 
         buildGui();
     }
@@ -125,7 +125,7 @@ public class PropertyEditFormPanel extends PanelAbstract<ScalarModel> {
 
                 @Override
                 public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    boolean succeeded = propertyEditExecutor.editAndProcessResults(target, form);
+                    boolean succeeded = executingPanel.executeAndProcessResults(target, form);
                     if(succeeded) {
                         // the Wicket ajax callbacks will have just started to hide the veil
                         // we now show it once more, so that a veil continues to be shown until the

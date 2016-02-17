@@ -41,7 +41,7 @@ import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
-import org.apache.isis.viewer.wicket.model.models.PropertyEditExecutor;
+import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.actionresponse.ActionResultResponseHandlingStrategy;
@@ -49,16 +49,13 @@ import org.apache.isis.viewer.wicket.ui.pages.entity.EntityPage;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 
 public class PropertyEditPanel extends PanelAbstract<ScalarModel>
-        implements PropertyEditExecutor {
+        implements ExecutingPanel {
 
     private static final long serialVersionUID = 1L;
 
     private static final String ID_HEADER = "header";
 
     private static final String ID_PROPERTY_NAME = "propertyName";
-    private static final String ID_PROPERTY = "property";
-
-    private ActionPrompt actionPrompt;
 
     /**
      * Gives a chance to hide the header part of this action panel, e.g. when shown in an action prompt
@@ -67,15 +64,8 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
 
     public PropertyEditPanel(final String id, final ScalarModel scalarModel) {
         super(id, new ScalarModel(scalarModel.getParentObjectAdapterMemento(), scalarModel.getPropertyMemento()));
-        getScalarModel().setExecutor(this);
+        getScalarModel().setExecutingPanel(this);
         buildGui(getScalarModel());
-    }
-
-    /**
-     * Sets the owning action prompt (modal window), if any.
-     */
-    public void setActionPrompt(ActionPrompt actionPrompt) {
-        this.actionPrompt = actionPrompt;
     }
 
     @Override
@@ -150,7 +140,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
      * @return
      */
     @Override
-    public boolean editAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
+    public boolean executeAndProcessResults(AjaxRequestTarget target, Form<?> feedbackForm) {
 
         permanentlyHide(ComponentType.ENTITY_ICON_AND_TITLE);
 
@@ -160,7 +150,7 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
                     AdapterManager.ConcurrencyChecking.CHECK);
 
             // no concurrency exception, so continue...
-            return editTargetAndProcessResults(targetAdapter, target, feedbackForm);
+            return editTargetAndProcessResults(target, feedbackForm);
 
         } catch (ConcurrencyException ex) {
 
@@ -183,7 +173,6 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
 
 
     private boolean editTargetAndProcessResults(
-            final ObjectAdapter targetAdapter,
             final AjaxRequestTarget target,
             final Form<?> feedbackForm) {
 
