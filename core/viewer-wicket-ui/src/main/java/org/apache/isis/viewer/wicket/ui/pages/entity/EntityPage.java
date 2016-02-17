@@ -143,12 +143,12 @@ public class EntityPage extends PageAbstract {
             // just enough to ask for the metadata.
             // This will cause the current ObjectSpec to be updated as a side effect.
             final Grid grid = facet.getGrid();
-
-            // if none, then fallback to invalidating entire cache
-            // (this is the original LayoutMetadataFromJson behaviour)
-            if(grid == null && !getDeploymentType().isProduction()) {
-                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
-            }
+//
+//            // if none, then fallback to invalidating entire cache
+//            // (this is the original LayoutMetadataFromJson behaviour)
+//            if(grid == null && !getDeploymentType().isProduction()) {
+//                getSpecificationLoader().invalidateCacheFor(objectAdapter.getObject());
+//            }
         }
 
 

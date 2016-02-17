@@ -69,14 +69,6 @@ public enum ComponentType {
      */
     ENTITY_SUMMARY,
     /**
-     * The set of properties for a single entity.
-     */
-    ENTITY_PROPERTIES,
-    /**
-     * The set of collections of a single entity, designed to be standalone outside of a form.
-     */
-    ENTITY_COLLECTIONS,
-    /**
      * A single standalone value, as might be returned from an action.
      */
     VALUE,

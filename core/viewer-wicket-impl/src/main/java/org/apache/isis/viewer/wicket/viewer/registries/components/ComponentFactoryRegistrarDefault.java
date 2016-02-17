@@ -45,7 +45,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.icontitle.EntityIconTi
 import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityLinksSelectorPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.EntityPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
@@ -165,9 +164,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
     }
 
     protected void addComponentFactoriesForEntity(final ComponentFactoryList componentFactories) {
-
-        // top-level
-        componentFactories.add(new EntityPanelFactory());
 
         // lower-level
         componentFactories.add(new EntityIconAndTitlePanelFactory());
