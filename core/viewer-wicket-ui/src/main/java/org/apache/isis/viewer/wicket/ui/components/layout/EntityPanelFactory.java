@@ -27,10 +27,9 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.layout.fallback.EntityEditablePanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCGridPanel;
 
 /**
- * {@link ComponentFactory} for {@link FCGridPanel}.
+ * {@link ComponentFactory} for {@link EntityEditablePanel}.
  */
 public class EntityPanelFactory extends EntityComponentFactoryAbstract {
 
