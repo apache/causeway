@@ -24,7 +24,6 @@ import org.apache.wicket.model.IModel;
 
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Grid;
 import org.apache.isis.applib.layout.component.Grid;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
 import org.apache.isis.core.metamodel.facets.object.grid.GridFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -32,7 +31,6 @@ import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.entity.EntityComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.components.layout.bs3.BS3GridPanel;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.FCGridPanel;
 
 /**
  * {@link ComponentFactory} for {@link EntityLinksSelectorPanel}.
@@ -55,9 +53,6 @@ public class EntityLinksSelectorPanelFactory extends EntityComponentFactoryAbstr
         final Grid grid = facet.getGrid();
         if (grid != null) {
             final EntityModel entityModelWithLayoutMetadata = entityModel.cloneWithLayoutMetadata(grid);
-            if(grid instanceof FCGrid) {
-                return new FCGridPanel(id, entityModelWithLayoutMetadata);
-            }
             if(grid instanceof BS3Grid) {
                 return new BS3GridPanel(id, entityModelWithLayoutMetadata);
             }

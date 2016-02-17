@@ -46,8 +46,6 @@ import org.apache.isis.viewer.wicket.ui.components.entity.selector.links.EntityL
 import org.apache.isis.viewer.wicket.ui.components.footer.FooterPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.header.HeaderPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.layout.EntityPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.collections.EntityCollectionsPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.layout.fixedcols.propsandcolls.EntityPropsAndCollsPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditFormPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.property.PropertyEditPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.isisapplib.IsisBlobPanelFactory;
@@ -175,8 +173,6 @@ public class ComponentFactoryRegistrarDefault implements ComponentFactoryRegistr
         componentFactories.add(new EntityIconAndTitlePanelFactory());
         componentFactories.add(new EntityIconTitleAndCopyLinkPanelFactory());
         componentFactories.add(new EntityHeaderPanelFactory());
-        componentFactories.add(new EntityPropsAndCollsPanelFactory());
-        componentFactories.add(new EntityCollectionsPanelFactory());
     }
 
     protected void addComponentFactoriesForEntityCollectionContents(final ComponentFactoryList componentFactories) {

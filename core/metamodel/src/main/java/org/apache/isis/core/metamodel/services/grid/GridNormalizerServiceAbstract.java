@@ -96,10 +96,6 @@ import org.apache.isis.core.metamodel.facets.properties.propertylayout.MultiLine
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.NamedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.RenderedAdjustedFacetForPropertyXml;
 import org.apache.isis.core.metamodel.facets.properties.propertylayout.TypicalLengthFacetForPropertyXml;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumn;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCColumnOwner;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCGrid;
-import org.apache.isis.core.metamodel.services.grid.fixedcols.applib.FCTab;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
@@ -185,7 +181,7 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
 
         final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
 
-        grid.visit(new FCGrid.VisitorAdapter() {
+        grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 final ObjectAction objectAction = objectSpec.getObjectAction(actionLayoutData.getId());
@@ -438,7 +434,7 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
     @Override
     public void minimal(final G grid, final Class<?> domainClass) {
         normalize(grid, domainClass);
-        grid.visit(new FCGrid.VisitorAdapter() {
+        grid.visit(new Grid.VisitorAdapter() {
             @Override
             public void visit(final ActionLayoutData actionLayoutData) {
                 actionLayoutData.getOwner().getActions().remove(actionLayoutData);
@@ -485,7 +481,7 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
             final Map<String, ObjectAction> objectActionById) {
 
         final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
-        fcGrid.visit(new FCGrid.VisitorAdapter() {
+        fcGrid.visit(new Grid.VisitorAdapter() {
             private int collectionSequence = 1;
 
             private int actionDomainObjectSequence = 1;
@@ -602,20 +598,6 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
                 final String sequence = "" + collectionSequence++;
                 FacetUtil.addOrReplaceFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToManyAssociation));
-
-                // if there is only a single column and no other contents, then copy the collection Id onto the tab'
-                final MemberRegionOwner memberRegionOwner = collectionLayoutData.getOwner();
-                if(memberRegionOwner instanceof FCColumn) {
-                    final FCColumn FCColumn = (FCColumn) memberRegionOwner;
-                    final FCColumnOwner holder = FCColumn.getOwner();
-                    if(holder instanceof FCTab) {
-                        final FCTab FCTab = (FCTab) holder;
-                        if(FCTab.getContents().size() == 1 && Strings.isNullOrEmpty(FCTab.getName()) ) {
-                            final String collectionName = oneToManyAssociation.getName();
-                            FCTab.setName(collectionName);
-                        }
-                    }
-                }
             }
         });
     }

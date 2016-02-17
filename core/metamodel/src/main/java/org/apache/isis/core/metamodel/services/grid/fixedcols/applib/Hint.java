@@ -35,17 +35,5 @@ public enum Hint {
         throw new IllegalStateException();
     }
 
-    public FCColumn from(final FCTab fcTab) {
-        if (fcTab == null) {
-            return null;
-        }
-        if (this == LEFT)
-            return fcTab.getLeft();
-        if (this == MIDDLE)
-            return fcTab.getMiddle();
-        if (this == RIGHT)
-            return fcTab.getRight();
-        throw new IllegalStateException();
-    }
 
 }
