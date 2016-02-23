@@ -23,6 +23,8 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -43,12 +45,19 @@ public class PropertyEditPromptHeaderPanel extends PanelAbstract<ScalarModel> {
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-        add(new Label(ID_PROPERTY_NAME, new AbstractReadOnlyModel<String>() {
+        final Label label = new Label(ID_PROPERTY_NAME, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                return model.getPropertyMemento().getProperty().getName();
+                final OneToOneAssociation property = model.getPropertyMemento().getProperty();
+                return property.getName();
             }
-        }));
+        });
+        final OneToOneAssociation property = model.getPropertyMemento().getProperty();
+        final NamedFacet namedFacet = property.getFacet(NamedFacet.class);
+        if(namedFacet != null) {
+            label.setEscapeModelStrings(namedFacet.escaped());
+        }
+        add(label);
     }
 
 }
