@@ -554,7 +554,7 @@ div.label-left .scalarValueWrapper {
 }
 
 div.label-left.actions-right .scalarValueWrapper {
-    width: 62%;
+    /*width: 62%;*/
 }
 
 .actions-right .additionalLinkListDropDown {
@@ -787,7 +787,7 @@ tr.headers th form input {
 }
 
 .associatedActionLinksRight .additionalLinkListDropDown {
-    padding-right: 10px;
+    padding-right: 11px;
 }
 
 .editing .edit {
@@ -795,3 +795,22 @@ tr.headers th form input {
     float: right;
     margin-bottom: 10px;
 }
+
+.actions-right .scalarPlaceholder .scalarValueInput {
+    width: 90%;
+    float: left;
+}
+
+.actions-right .additionalLinkListInline {
+    margin-top: -22px;
+}
+
+.booleanPanel .actions-right .additionalLinkListInline {
+    margin-top: 0px;
+}
+
+.referencePanel .actions-right .additionalLinkListInline,
+.isisBlobPanel .actions-right .additionalLinkListInline {
+    margin-top: 5px;
+}
+
