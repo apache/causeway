@@ -36,6 +36,8 @@ import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInitiatedBy;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.WhenAndWhereValueFacet;
 import org.apache.isis.core.metamodel.facets.all.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
 import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
@@ -351,11 +353,18 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
             return new Filter<ObjectAssociation>() {
                 @Override
                 public boolean accept(final ObjectAssociation association) {
-                    final HiddenFacet facet = association.getFacet(HiddenFacet.class);
-                    if(facet == null) {
-                        return true;
+                    final List<Facet> facets = association.getFacets(new Filter<Facet>() {
+                        @Override public boolean accept(final Facet facet) {
+                            return facet instanceof WhenAndWhereValueFacet && facet instanceof HiddenFacet;
+                        }
+                    });
+                    for (Facet facet : facets) {
+                        final WhenAndWhereValueFacet wawF = (WhenAndWhereValueFacet) facet;
+                        if (wawF.where().includes(context) && wawF.when() == When.ALWAYS) {
+                            return false;
+                        }
                     }
-                    return !(facet.where().includes(context) && facet.when() == When.ALWAYS);
+                    return true;
                 }
             };
         }

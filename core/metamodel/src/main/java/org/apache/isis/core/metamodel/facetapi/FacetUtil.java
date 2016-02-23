@@ -165,6 +165,11 @@ public final class FacetUtil {
     }
 
     public static void copyFacets(final FacetHolder source, final FacetHolder target) {
+        final Class<? extends Facet>[] facetTypes = source.getFacetTypes();
+        for (Class<? extends Facet> facetType : facetTypes) {
+            final Facet facet = source.getFacet(facetType);
+
+        }
         List<Facet> facets = source.getFacets(org.apache.isis.applib.filter.Filters.<Facet>any());
         for (Facet facet : facets) {
             target.addFacet(facet);
