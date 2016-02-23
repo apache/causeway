@@ -809,6 +809,7 @@ tr.headers th form input {
     margin-top: 0px;
 }
 
+.valueChoicesSelect2Panel .actions-right .additionalLinkListInline,
 .referencePanel .actions-right .additionalLinkListInline,
 .isisBlobPanel .actions-right .additionalLinkListInline {
     margin-top: 5px;
