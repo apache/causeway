@@ -292,10 +292,18 @@ public final class Annotations  {
         if(methodName == null) {
             return Collections.emptyList();
         }
-        if(!methodName.startsWith("get")) {
+        int beginIndex;
+        if (methodName.startsWith("get")) {
+            beginIndex = 3;
+        } else if (methodName.startsWith("is")) {
+            beginIndex = 2;
+        } else {
+            beginIndex = -1;
+        }
+        if(beginIndex == -1) {
             return Collections.emptyList();
         }
-        final String suffix = methodName.substring(3);
+        final String suffix = methodName.substring(beginIndex);
         if(suffix.length() == 0) {
             return Collections.emptyList();
         }
