@@ -21,6 +21,8 @@ package org.apache.isis.viewer.wicket.ui.components.actionprompt;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -40,12 +42,22 @@ public class ActionPromptHeaderPanel extends PanelAbstract<ActionModel> {
 
         getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-        add(new Label(ID_ACTION_NAME, new AbstractReadOnlyModel<String>() {
+
+        final Label label = new Label(ID_ACTION_NAME, new AbstractReadOnlyModel<String>() {
             @Override
             public String getObject() {
-                return model.getActionMemento().getAction().getName();
+                final ObjectAction action = model.getActionMemento().getAction();
+                return action.getName();
             }
-        }));
+        });
+
+        final ObjectAction action = model.getActionMemento().getAction();
+        NamedFacet namedFacet = action.getFacet(NamedFacet.class);
+        if (namedFacet != null) {
+            label.setEscapeModelStrings(namedFacet.escaped());
+        }
+
+        add(label);
     }
 
 }

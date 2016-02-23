@@ -37,9 +37,10 @@ import org.apache.isis.core.commons.authentication.MessageBroker;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.mgr.AdapterManager;
 import org.apache.isis.core.metamodel.adapter.version.ConcurrencyException;
+import org.apache.isis.core.metamodel.facets.all.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.system.context.IsisContext;
 import org.apache.isis.core.runtime.system.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.wicket.model.models.ActionPrompt;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ExecutingPanel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
@@ -102,8 +103,16 @@ public class PropertyEditPanel extends PanelAbstract<ScalarModel>
             getComponentFactoryRegistry().addOrReplaceComponent(this, ComponentType.PROPERTY_EDIT_FORM, getScalarModel());
             getComponentFactoryRegistry().addOrReplaceComponent(header, ComponentType.ENTITY_ICON_AND_TITLE, new EntityModel(targetAdapter));
 
-            final String propertyName = getScalarModel().getPropertyMemento().getProperty().getName();
-            header.add(new Label(ID_PROPERTY_NAME, Model.of(propertyName)));
+            final OneToOneAssociation property = getScalarModel().getPropertyMemento().getProperty();
+            final String propertyName = property.getName();
+            final Label label = new Label(ID_PROPERTY_NAME, Model.of(propertyName));
+
+            NamedFacet namedFacet = property.getFacet(NamedFacet.class);
+            if (namedFacet != null) {
+                label.setEscapeModelStrings(namedFacet.escaped());
+            }
+
+            header.add(label);
 
         } catch (final ConcurrencyException ex) {
 
