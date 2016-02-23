@@ -24,23 +24,30 @@
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
                     <span class="scalarValueWrapper">
-                        <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
-                        <span class="scalarValue text-right">
+                        <div class="scalarPlaceholder">
+                            <span class="scalarValueInput">
+                                <span class="editing">
+                                    <img class="scalarImage text-center" width="200px" wicket:id="scalarImage"/>
+                                    <span class="scalarValue text-right">
 
-                            <span class="uploadFile help-block">
-                                <input type="file" name="scalarValue" wicket:id="scalarValue" />
+                                        <span class="uploadFile help-block">
+                                            <input type="file" name="scalarValue" wicket:id="scalarValue" />
+                                        </span>
+                                        <a wicket:id="scalarIfRegularClear" class="btn btn-primary btn-sm"><span class="clearTitle">Clear</span></a>
+
+                                        <a class="download btn btn-sm btn-primary" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
+                                        <span class="fileName" wicket:id="fileName">[filename]</span><span>&nbsp;</span>
+                                    </span>
+                                    <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+                                </span>
                             </span>
-                            <a wicket:id="scalarIfRegularClear" class="btn btn-primary btn-sm"><span class="clearTitle">Clear</span></a>
-
-                            <a class="download btn btn-sm btn-primary" wicket:id="scalarIfRegularDownload"><span class="downloadTitle">Download</span></a>
-                            <span class="fileName" wicket:id="fileName">[filename]</span><span>&nbsp;</span>
-                        </span>
+                        </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <span wicket:id="associatedActionLinksRight"></span>
+                    <span wicket:id="associatedActionLinksRight"  class="associatedActionLinksRight">[drop down]</span>
+                    <div class="clearfix"/>
                 </div>
-
                 <span wicket:id="scalarIfCompact">
                     <a wicket:id="scalarIfCompactDownload"><span class="fileName" wicket:id="fileNameIfCompact"></span></a>
                 </span>

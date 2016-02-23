@@ -20,6 +20,7 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +42,7 @@ import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayo
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 import org.apache.isis.core.metamodel.specloader.specimpl.ContributeeMember;
+import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 /**
  * Provides reflective access to a field on a domain object.
@@ -388,6 +390,27 @@ public interface ObjectAssociation extends ObjectMember, CurrentHolder {
                 public boolean accept(final ObjectAssociation objectAssociation) {
                     final Consent usable = objectAssociation.isUsable(adapter, interactionInitiatedBy, where);
                     return usable.isAllowed();
+                }
+            };
+        }
+
+    }
+
+    // //////////////////////////////////////////////////////
+    // Comparators
+    // //////////////////////////////////////////////////////
+
+    public static class Comparators {
+        public static Comparator<ObjectAssociation> byMemberOrderSequence() {
+            return new Comparator<ObjectAssociation>() {
+                private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
+                @Override
+                public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
+                    final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
+                    final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
+                    return o1Facet == null? +1:
+                            o2Facet == null? -1:
+                                    deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
                 }
             };
         }

@@ -50,6 +50,8 @@ public interface GridService {
 
     Grid minimal(Grid grid);
 
+    Grid defaultGrid(Class<?> domainClass);
+
     enum Style {
 
         /**

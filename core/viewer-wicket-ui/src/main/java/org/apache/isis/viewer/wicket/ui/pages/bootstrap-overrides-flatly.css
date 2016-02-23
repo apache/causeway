@@ -26,3 +26,8 @@
 .select2-container.select2-container-disabled .select2-choices {
     background-color: #ecf0f1;
 }
+
+.list-inline > li {
+    padding-left: 0px;
+    padding-right: 0px;
+}

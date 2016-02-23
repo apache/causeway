@@ -28,11 +28,18 @@
                 <div class="form-group" wicket:id="scalarIfRegular">
                     <label wicket:id="scalarName" class="scalarName control-label">[Label text]</label>
                     <span class="scalarValueWrapper">
-                        <span class="editing"><wicket:child/><a wicket:id="editProperty" href="#" class="btn btn-link btn-xs" style="float: right;">edit</a></span>
+                        <div class="scalarPlaceholder">
+                            <span class="scalarValueInput">
+                                <span class="editing">
+                                    <wicket:child/>
+                                    <a wicket:id="editProperty" href="#" class="edit fa fa-pencil-square-o"/>
+                                </span>
+                            </span>
+                        </div>
                         <span wicket:id="feedback" class="help-block"></span>
                         <span wicket:id="associatedActionLinksBelow"></span>
                     </span>
-                    <span wicket:id="associatedActionLinksRight"></span>
+                    <span wicket:id="associatedActionLinksRight" class="associatedActionLinksRight">[drop down]</span>
                     <div class="clearfix"/>
                 </div>
                 <wicket:container wicket:id="scalarIfCompact"></wicket:container>

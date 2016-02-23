@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.metamodel.services.grid.bootstrap3;
 
-import java.util.Comparator;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +37,12 @@ import com.google.common.collect.Sets;
 
 import org.apache.isis.applib.annotation.ActionLayout;
 import org.apache.isis.applib.annotation.DomainService;
+import org.apache.isis.applib.annotation.MemberGroupLayout;
 import org.apache.isis.applib.annotation.NatureOfService;
+import org.apache.isis.applib.annotation.Programmatic;
 import org.apache.isis.applib.layout.component.ActionLayoutData;
 import org.apache.isis.applib.layout.component.CollectionLayoutData;
+import org.apache.isis.applib.layout.component.DomainObjectLayoutData;
 import org.apache.isis.applib.layout.component.FieldSet;
 import org.apache.isis.applib.layout.component.Grid;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
@@ -50,13 +53,14 @@ import org.apache.isis.applib.layout.grid.bootstrap3.BS3RowContent;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3Tab;
 import org.apache.isis.applib.layout.grid.bootstrap3.BS3TabGroup;
 import org.apache.isis.core.metamodel.facets.members.order.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.object.membergroups.MemberGroupLayoutFacet;
 import org.apache.isis.core.metamodel.services.grid.GridNormalizerServiceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.Contributed;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.util.DeweyOrderComparator;
 
 @DomainService(
         nature = NatureOfService.DOMAIN
@@ -69,6 +73,84 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
     public GridNormalizerServiceBS3() {
         super(BS3Grid.class, TNS, SCHEMA_LOCATION);
     }
+
+
+    @Programmatic
+    @Override
+    public Grid defaultGrid(final Class<?> domainClass) {
+        final BS3Grid bs3Grid = new BS3Grid();
+
+        final ObjectSpecification objectSpec = specificationLookup.loadSpecification(domainClass);
+        bs3Grid.setDomainClass(domainClass);
+
+        final BS3Row headerRow = new BS3Row();
+        bs3Grid.getRows().add(headerRow);
+        final BS3Col headerRowCol = new BS3Col();
+        headerRowCol.setSpan(12);
+        headerRowCol.setUnreferencedActions(true);
+        headerRowCol.setDomainObject(new DomainObjectLayoutData());
+        headerRow.getCols().add(headerRowCol);
+
+        final BS3Row propsRow = new BS3Row();
+        bs3Grid.getRows().add(propsRow);
+
+        final MemberGroupLayoutFacet memberGroupLayoutFacet =
+                objectSpec.getFacet(MemberGroupLayoutFacet.class);
+        if(memberGroupLayoutFacet != null) {
+            // if have @MemberGroupLayout (or equally, a .layout.json file)
+            final MemberGroupLayout.ColumnSpans columnSpans = memberGroupLayoutFacet.getColumnSpans();
+            addFieldSetsToColumn(propsRow, columnSpans.getLeft(), memberGroupLayoutFacet.getLeft(), true);
+            addFieldSetsToColumn(propsRow, columnSpans.getMiddle(), memberGroupLayoutFacet.getMiddle(), false);
+            addFieldSetsToColumn(propsRow, columnSpans.getRight(), memberGroupLayoutFacet.getRight(), false);
+
+            final BS3Col col = new BS3Col();
+            final int collectionSpan = columnSpans.getCollections();
+            col.setUnreferencedCollections(true);
+            col.setSpan(collectionSpan > 0? collectionSpan: 12);
+            propsRow.getCols().add(col);
+
+            // will already be sorted per @MemberOrder
+            final List<OneToManyAssociation> collections = objectSpec.getCollections(Contributed.INCLUDED);
+            for (OneToManyAssociation collection : collections) {
+                col.getCollections().add(new CollectionLayoutData(collection.getId()));
+            }
+        } else {
+
+            // if no layout hints other than @MemberOrder
+            addFieldSetsToColumn(propsRow, 4, Arrays.asList("General"), true);
+
+            final BS3Col col = new BS3Col();
+            col.setUnreferencedCollections(true);
+            col.setSpan(12);
+            propsRow.getCols().add(col);
+        }
+        return bs3Grid;
+    }
+
+    void addFieldSetsToColumn(
+            final BS3Row propsRow,
+            final int span,
+            final List<String> memberGroupNames,
+            final boolean unreferencedProperties) {
+
+        if(span > 0 || unreferencedProperties) {
+            final BS3Col col = new BS3Col();
+            col.setSpan(span); // in case we are here because of 'unreferencedProperties' needs setting
+            propsRow.getCols().add(col);
+            final List<String> leftMemberGroups = memberGroupNames;
+            for (String memberGroup : leftMemberGroups) {
+                final FieldSet fieldSet = new FieldSet();
+                fieldSet.setName(memberGroup);
+                // fieldSet's id will be derived from the name later
+                // during normalization phase.
+                if(unreferencedProperties && col.getFieldSets().isEmpty()) {
+                    fieldSet.setUnreferencedProperties(true);
+                }
+                col.getFieldSets().add(fieldSet);
+            }
+        }
+    }
+
 
 
     @Override
@@ -304,7 +386,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                         .filter(Predicates.<OneToOneAssociation>notNull())
                 );
 
-                associations.sort(byMemberOrderSequence());
+                associations.sort(ObjectAssociation.Comparators.byMemberOrderSequence());
                 addPropertiesTo(fieldSet,
                         FluentIterable.from(associations)
                                       .transform(ObjectAssociation.Functions.toId())
@@ -337,7 +419,7 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
                             return oneToManyAssociationById.get(collectionId);
                         }
                     })
-                    .toSortedList(byMemberOrderSequence())
+                    .toSortedList(ObjectAssociation.Comparators.byMemberOrderSequence())
 
             );
             final ImmutableList<String> sortedMissingCollectionIds = FluentIterable.from(sortedCollections)
@@ -422,20 +504,6 @@ public class GridNormalizerServiceBS3 extends GridNormalizerServiceAbstract<BS3G
         }
         final char c = str.charAt(0);
         return Character.toLowerCase(c) + str.substring(1).replaceAll("\\s+", "");
-    }
-
-    private static Comparator<ObjectAssociation> byMemberOrderSequence() {
-        return new Comparator<ObjectAssociation>() {
-            private final DeweyOrderComparator deweyOrderComparator = new DeweyOrderComparator();
-            @Override
-            public int compare(final ObjectAssociation o1, final ObjectAssociation o2) {
-                final MemberOrderFacet o1Facet = o1.getFacet(MemberOrderFacet.class);
-                final MemberOrderFacet o2Facet = o2.getFacet(MemberOrderFacet.class);
-                return o1Facet == null? +1:
-                        o2Facet == null? -1:
-                                deweyOrderComparator.compare(o1Facet.sequence(), o2Facet.sequence());
-            }
-        };
     }
 
     protected void addPropertiesTo(

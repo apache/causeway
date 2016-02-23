@@ -467,6 +467,7 @@ span .fa {
 
 ul.additionalLinkList,
 div.additionalLinkList {
+    margin-right: -10px;
     padding-bottom: 10px;
 }
 
@@ -539,8 +540,8 @@ div.label-left label.control-label {
 }
 
 div.label-top label.control-label {
-    padding-left: 10px;
-    padding-bottom: 4px;
+    /*padding-left: 10px;*/
+    /*padding-bottom: 4px;*/
 }
 
 div.label-none label.control-label {
@@ -564,10 +565,10 @@ div.label-left.actions-right .scalarValueWrapper {
 
 div.label-top .scalarValueWrapper,
 div.label-none .scalarValueWrapper {
-    width: 99.5%;
+    /*width: 99.5%;*/
     display: block;
-    padding-left: 8px;
-    padding-right: 20px;
+    /*padding-left: 8px;*/
+    /*padding-right: 20px;*/
 }
 
 .modal-body div.label-top .scalarValueWrapper,
@@ -680,12 +681,17 @@ div.referencePanel.scalarNameAndValueComponentType {
 }
 
 .additionalLinks.pull-right {
-    margin-right: 5px;
+    /*margin-right: 5px;*/
 }
 
 .additionalLinks.pull-right div {
     display: inline-block;
-    margin-left: 5px;
+    /*margin-left: 5px;*/
+}
+
+.additionalLinks.pull-right div .additionalLinkListDropDown {
+    margin-left: 10px;
+    margin-right: 0px;
 }
 
 
@@ -773,4 +779,19 @@ tr.headers th form input {
 /* cheap and nasty; ought really to suppress in Java code ... */
 .propertyEditForm .additionalLinkList {
     display: none;
+}
+
+.choicesScalarValue {
+    width: 95%;
+    display: inline-block;
+}
+
+.associatedActionLinksRight .additionalLinkListDropDown {
+    padding-right: 10px;
+}
+
+.editing .edit {
+    padding-top: 2px;
+    float: right;
+    margin-bottom: 10px;
 }

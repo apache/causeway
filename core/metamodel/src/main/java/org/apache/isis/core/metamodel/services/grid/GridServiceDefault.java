@@ -152,12 +152,20 @@ public class GridServiceDefault
     }
 
     @Override
+    public Grid defaultGrid(Class<?> domainClass) {
+
+        for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
+            Grid grid = gridNormalizerService.defaultGrid(domainClass);
+            if(grid != null) {
+                return grid;
+            }
+        }
+        throw new IllegalStateException("No GridNormalizerService available to create grid for '" + domainClass.getName() + "'");
+    }
+
+    @Override
     @Programmatic
     public Grid normalize(final Grid grid) {
-
-        if(grid == null) {
-            return null;
-        }
 
         // if have .layout.json and then add a .layout.xml without restarting, then note that
         // the changes won't be picked up.  Normalizing would be required
@@ -181,10 +189,6 @@ public class GridServiceDefault
     @Programmatic
     public Grid complete(final Grid grid) {
 
-        if(grid == null) {
-            return null;
-        }
-
         final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {
             gridNormalizerService.complete(grid, domainClass);
@@ -196,10 +200,6 @@ public class GridServiceDefault
     @Override
     @Programmatic
     public Grid minimal(final Grid grid) {
-
-        if(grid == null) {
-            return null;
-        }
 
         final Class<?> domainClass = grid.getDomainClass();
         for (GridNormalizerService gridNormalizerService : gridNormalizerServices()) {

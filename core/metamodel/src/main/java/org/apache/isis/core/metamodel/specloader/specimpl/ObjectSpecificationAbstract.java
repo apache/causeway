@@ -29,6 +29,7 @@ import java.util.Set;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -709,7 +710,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     public List<ObjectAssociation> getAssociations(Contributed contributed, final Filter<ObjectAssociation> filter) {
         final List<ObjectAssociation> allAssociations = getAssociations(contributed);
         return Lists.newArrayList(
-                Iterables.filter(allAssociations, Filters.asPredicate(filter)));
+                FluentIterable.from(allAssociations)
+                        .filter(Filters.asPredicate(filter))
+                        .toSortedList(ObjectAssociation.Comparators.byMemberOrderSequence())
+        );
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })

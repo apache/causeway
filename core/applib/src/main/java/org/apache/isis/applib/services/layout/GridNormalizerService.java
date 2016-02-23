@@ -45,4 +45,7 @@ public interface GridNormalizerService<G extends Grid> {
 
     @Programmatic
     void minimal(G grid, Class<?> domainClass);
+
+    @Programmatic
+    Grid defaultGrid(Class<?> domainClass);
 }

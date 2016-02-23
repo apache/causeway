@@ -20,12 +20,13 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +50,6 @@ import org.apache.isis.applib.layout.component.HasCssClassFa;
 import org.apache.isis.applib.layout.component.HasDescribedAs;
 import org.apache.isis.applib.layout.component.HasHidden;
 import org.apache.isis.applib.layout.component.HasNamed;
-import org.apache.isis.applib.layout.component.MemberRegionOwner;
 import org.apache.isis.applib.layout.component.PropertyLayoutData;
 import org.apache.isis.applib.services.i18n.TranslationService;
 import org.apache.isis.applib.services.jaxb.JaxbService;
@@ -480,7 +480,7 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
             final Map<String, OneToManyAssociation> oneToManyAssociationById,
             final Map<String, ObjectAction> objectActionById) {
 
-        final Map<String, int[]> propertySequenceByGroup = Maps.newHashMap();
+        final AtomicInteger propertySequence = new AtomicInteger(0);
         fcGrid.visit(new Grid.VisitorAdapter() {
             private int collectionSequence = 1;
 
@@ -569,9 +569,11 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
                 FacetUtil.addOrReplaceFacet(TypicalLengthFacetForPropertyXml.create(propertyLayoutData, oneToOneAssociation));
 
                 // @MemberOrder#name based on owning property group, @MemberOrder#sequence monotonically increasing
+                // nb for any given field set the sequence won't reset to zero; however this is what we want so that
+                // table columns are shown correctly (by fieldset, then property order within that fieldset).
                 final FieldSet fieldSet = propertyLayoutData.getOwner();
                 final String groupName = fieldSet.getName();
-                final String sequence = nextInSequenceFor(groupName, propertySequenceByGroup);
+                final String sequence = "" + (propertySequence.incrementAndGet());
                 FacetUtil.addOrReplaceFacet(
                         new MemberOrderFacetXml(groupName, sequence, translationService, oneToOneAssociation));
             }
@@ -653,20 +655,19 @@ public abstract class GridNormalizerServiceAbstract<G extends Grid>
     }
 
 
-    SpecificationLoader specificationLookup;
+    protected SpecificationLoader specificationLookup;
 
     public void setSpecificationLoader(final SpecificationLoader specificationLookup) {
         this.specificationLookup = specificationLookup;
     }
 
     @Inject
-    TranslationService translationService;
+    protected TranslationService translationService;
 
     @Inject
-    JaxbService jaxbService;
+    protected JaxbService jaxbService;
 
     @Inject
-    DomainObjectContainer container;
-
+    protected DomainObjectContainer container;
 
 }
